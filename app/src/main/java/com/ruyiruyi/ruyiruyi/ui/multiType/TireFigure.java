@@ -2,6 +2,7 @@ package com.ruyiruyi.ruyiruyi.ui.multiType;
 
 public class TireFigure {
     public boolean isCheck ;
+    public int tuijian;
     public String titleStr;
     public String oneImage;
     public String twoImage;
@@ -11,8 +12,9 @@ public class TireFigure {
     public TireFigure() {
     }
 
-    public TireFigure(boolean isCheck, String titleStr, String oneImage, String twoImage, String threeImage, String contentStr) {
+    public TireFigure(boolean isCheck,int tuijian, String titleStr, String oneImage, String twoImage, String threeImage, String contentStr) {
         this.isCheck = isCheck;
+        this.tuijian = tuijian;
         this.titleStr = titleStr;
         this.oneImage = oneImage;
         this.twoImage = twoImage;

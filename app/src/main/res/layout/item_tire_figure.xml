@@ -15,6 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_recommend"
+            android:visibility="gone"
             />
         <TextView
             android:id="@+id/title_name_text"
@@ -37,6 +38,7 @@
         android:id="@+id/content_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="wrap_content"

@@ -1,5 +1,7 @@
 package com.ruyiruyi.ruyiruyi.ui.multiType;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,11 +13,28 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
 import me.drakeet.multitype.ItemViewProvider;
+import rx.functions.Action1;
 
 public class TireFigureViewBinder extends ItemViewProvider<TireFigure, TireFigureViewBinder.ViewHolder> {
+    private Context context;
+    public OnFigureItemClick listener;
+
+    public void setListener(OnFigureItemClick listener) {
+        this.listener = listener;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public TireFigureViewBinder(Context context) {
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -25,10 +44,53 @@ public class TireFigureViewBinder extends ItemViewProvider<TireFigure, TireFigur
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull TireFigure tireFigure) {
+    protected void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull final TireFigure tireFigure) {
         if (tireFigure.isCheck) {
-
+            holder.contentLayout.setVisibility(View.VISIBLE);
+            holder.titleLayout.setBackgroundResource(R.color.theme_primary);
+            holder.titleImage.setImageResource(R.drawable.ic_down);
+            holder.titleName.setTextColor(Color.WHITE);
+        }else {
+            holder.contentLayout.setVisibility(View.GONE);
+            holder.titleLayout.setBackgroundColor(Color.WHITE);
+            holder.titleImage.setImageResource(R.drawable.ic_right_car);
+            holder.titleName.setTextColor(Color.rgb(100, 100, 100));
         }
+        holder.titleName.setText(tireFigure.getTitleStr());
+        Glide.with(context).load(tireFigure.getOneImage()).into(holder.oneImage);
+        Glide.with(context).load(tireFigure.getTwoImage()).into(holder.twoImage);
+        Glide.with(context).load(tireFigure.getThreeImage()).into(holder.threeImage);
+        Glide.with(context).load(tireFigure.getOneImage()).into(holder.bigImage);
+        holder.contentText.setText(tireFigure.getContentStr());
+        RxViewAction.clickNoDouble(holder.titleLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        listener.onFigureClickListener(tireFigure.getTitleStr());
+                    }
+                });
+        RxViewAction.clickNoDouble(holder.oneImage)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Glide.with(context).load(tireFigure.getOneImage()).into(holder.bigImage);
+                    }
+                });
+        RxViewAction.clickNoDouble(holder.twoImage)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Glide.with(context).load(tireFigure.getTwoImage()).into(holder.bigImage);
+                    }
+                });
+        RxViewAction.clickNoDouble(holder.threeImage)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Glide.with(context).load(tireFigure.getThreeImage()).into(holder.bigImage);
+                    }
+                });
+
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -59,5 +121,9 @@ public class TireFigureViewBinder extends ItemViewProvider<TireFigure, TireFigur
 
 
         }
+    }
+
+    public interface OnFigureItemClick{
+        void onFigureClickListener(String name);
     }
 }
