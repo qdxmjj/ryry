@@ -73,7 +73,8 @@
         <activity android:name=".ui.activity.CarTypeActivity" />
         <activity android:name=".ui.activity.RoadConditionActivity" />
         <activity android:name=".ui.activity.TireSizeActivity" />
-        <activity android:name=".ui.activity.CarFigureActivity"></activity>
+        <activity android:name=".ui.activity.CarFigureActivity" />
+        <activity android:name=".ui.activity.LaunchActivity"></activity>
     </application>
 
 </manifest>
