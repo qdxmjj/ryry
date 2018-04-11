@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.ruyiruyi.ruyiruyi.ui.activity.CityChooseActivity">
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/my_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <me.yokeyword.indexablerv.IndexableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        app:indexBar_selectedTextColor="@color/theme_primary"
+        app:indexBar_textColor="@color/c5"
+        app:indexBar_layout_width="40dp"
+        app:indexBar_textSize="14sp"
+        app:indexBar_textSpace="5dp"
+        />
+</LinearLayout>

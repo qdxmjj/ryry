@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+        android:id="@+id/road_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/road_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
+            android:src="@drawable/ic_choose"/>
+
+        <ImageView
+            android:id="@+id/road_image"
+            android:layout_width="180dp"
+            android:layout_height="100dp"
+            android:scaleType="fitXY"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="255dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/road_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="高速公路"
+                android:textSize="13sp"
+                android:textColor="@color/c6"/>
+            <TextView
+                android:id="@+id/road_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/c5"
+                android:maxLines="5"
+                android:text="最高设置车速在50-80公里之间经过良好辅装，与非机动车行人的混个同行路线，如国道省道"/>
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+
+</FrameLayout>

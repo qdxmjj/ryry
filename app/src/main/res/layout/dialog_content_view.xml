@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <com.ruyiruyi.rylibrary.ui.cell.WheelView
+            android:id="@+id/wheel_view_provice"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            app:textColorCenter="@color/theme_primary"
+            app:lineSpaceingDimens="10dp"
+            app:itemVisibleNum="5"
+            app:lineColor="@color/theme_primary"
+            app:textSizeCenter="22dp"
+            app:textSizeOuter="14dp"
+            app:isLoop="true"
+            app:textColorOuter="@android:color/darker_gray"
+            />
+        <com.ruyiruyi.rylibrary.ui.cell.WheelView
+            android:id="@+id/wheel_view_city"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            app:textColorCenter="@color/theme_primary"
+            app:lineSpaceingDimens="10dp"
+            app:itemVisibleNum="5"
+            app:lineColor="@color/theme_primary"
+            app:textSizeCenter="22dp"
+            app:textSizeOuter="14dp"
+            app:isLoop="true"
+            app:textColorOuter="@android:color/darker_gray"
+            />
+
+        <EditText
+            android:id="@+id/car_numbe_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="20sp"
+            android:hint="输入新的车牌号"
+            android:textSize="16sp"
+            android:inputType="text" />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
