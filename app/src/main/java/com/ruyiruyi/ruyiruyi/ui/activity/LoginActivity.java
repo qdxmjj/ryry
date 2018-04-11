@@ -362,12 +362,14 @@ public class LoginActivity extends BaseActivity {
                     String msg = jsonObject.getString("msg");
                     Log.e(TAG, "onSuccess: " + status);
                     if(status.equals("111111")){
+                        Log.e(TAG, "onSuccess: ---------------------------------------------");
                         JSONObject data = jsonObject.getJSONObject("data");
                         saveUserToDb(data);
+                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                     }else {
-                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+
                     }
 
 
