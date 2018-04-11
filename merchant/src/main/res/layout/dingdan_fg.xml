@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ruyiruyi.merchant.MainActivity">
+
+
+        <RelativeLayout
+            android:id="@+id/rl_top"
+            android:layout_width="match_parent"
+            android:layout_height="220dp">
+
+            <ImageView
+                android:id="@+id/img_top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_ground" />
+            <TextView
+                android:id="@+id/tv_text_top"
+                android:text="订单"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_zdd_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textStyle="bold"
+                android:text="1234"
+                android:textColor="#ffffff"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/tv_zdd_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_zdd_num"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:text="总订单 (单)"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_mid"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_below="@+id/rl_top"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-30dp"
+            android:background="@drawable/ic_box"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <View
+                    android:id="@+id/v_in_henga"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/tv_wwcdd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/v_in_henga"
+                    android:gravity="center"
+                    android:text="未完成订单"
+                    android:textColor="@color/c7"
+                    android:textSize="14sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_wwcdd"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_wwcdd_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="48902"
+                        android:textColor="@color/c8"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/tv_wwcdd_dan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="2dp"
+                        android:layout_toRightOf="@+id/tv_wwcdd_num"
+                        android:text="(单)"
+                        android:textColor="@color/c8"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <View
+                    android:id="@+id/v_in_hengb"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/tv_ywcdd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/v_in_hengb"
+                    android:gravity="center"
+                    android:text="已完成订单"
+                    android:textColor="@color/c7"
+                    android:textSize="14sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_ywcdd"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_ywcdd_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="66648902"
+                        android:textColor="@color/c8"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/tv_ywcdd_dan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="2dp"
+                        android:layout_toRightOf="@+id/tv_ywcdd_num"
+                        android:text="(单)"
+                        android:textColor="@color/c8"
+                        android:textSize="14sp" />
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/v_mid_shu"
+            android:layout_width="0.5dp"
+            android:layout_height="70dp"
+            android:layout_alignTop="@+id/ll_mid"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@color/c2" />
+
+
+     <android.support.v7.widget.RecyclerView
+         android:id="@+id/rlv_dingdan"
+         android:layout_below="@+id/ll_mid"
+         android:layout_marginLeft="20dp"
+         android:layout_marginRight="20dp"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"/>
+
+</RelativeLayout>

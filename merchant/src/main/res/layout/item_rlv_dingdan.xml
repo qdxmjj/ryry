@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+
+
+        <ImageView
+            android:id="@+id/dingdan_rlv_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_baoyang" />
+
+        <TextView
+            android:id="@+id/dingdan_tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/dingdan_rlv_img"
+            android:text="汽车保养"
+            android:textColor="@color/c7"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/dingdan_tv_carnum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="鲁 B 12345"
+            android:textColor="@color/c6"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/dingdan_img_jiantou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/ic_jiantou" />
+
+        <ImageView
+            android:id="@+id/dingdan_img_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/dingdan_img_jiantou"
+            android:src="@drawable/ic_yidu" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="0.5dp"
+        android:background="@color/c2" />
+
+</RelativeLayout>
