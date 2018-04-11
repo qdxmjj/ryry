@@ -8,11 +8,11 @@ import android.view.View;
 
 /*步骤：自定义Listener实现RecyclerView.OnItemTouchListener接口 ；
         实现实现接口的三个方法并添加抽象方法onItemClick；*/
-public abstract class OnDingDanItemTouchListener implements RecyclerView.OnItemTouchListener {
+public abstract class OnMyItemTouchListener implements RecyclerView.OnItemTouchListener {
     private GestureDetectorCompat mGestureDetectorCompat;
     private RecyclerView mRecyclerView;
     //构造
-    public OnDingDanItemTouchListener(RecyclerView mRecyclerView) {
+    public OnMyItemTouchListener(RecyclerView mRecyclerView) {
         this.mRecyclerView = mRecyclerView;
         /*实例化GestureDetectorCompat类其中第二个参数是手势监听OnGestureListener，但我们不需要使用它，我们可以实现它的一个简单的
     封装类SimpleOnGestureListener它里面实现的都的空操作，所以我们可以自己实现特定的方法来执行我们的操作。*/

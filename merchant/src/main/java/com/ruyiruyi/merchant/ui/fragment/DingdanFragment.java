@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.ui.multiType.DingdanItemViewProvider;
-import com.ruyiruyi.merchant.ui.multiType.listener.OnDingDanItemTouchListener;
+import com.ruyiruyi.merchant.ui.multiType.listener.OnMyItemTouchListener;
 import com.ruyiruyi.merchant.ui.multiType.modle.Dingdan;
 
 import java.util.ArrayList;
@@ -54,8 +54,8 @@ public class DingdanFragment extends Fragment {
         //测试绑定
         assertHasTheSameAdapter(mRecyclerView,multiTypeAdapter);
         initDataAndRfTest();
-
-        mRecyclerView.addOnItemTouchListener(new OnDingDanItemTouchListener(mRecyclerView) {
+        //设置item监听
+        mRecyclerView.addOnItemTouchListener(new OnMyItemTouchListener(mRecyclerView) {
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh) {
                 //操作
@@ -63,6 +63,8 @@ public class DingdanFragment extends Fragment {
                 Toast.makeText(getActivity(),"AdapterPosition:"+vh.getAdapterPosition(),Toast.LENGTH_SHORT).show();
             }
         });
+//        mRecyclerView.set
+
 
     }
 
