@@ -14,7 +14,7 @@ public class BaseActivityb extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //去除标题栏
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
         //去除状态栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_base_activityb);

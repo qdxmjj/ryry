@@ -22,7 +22,7 @@ public class DbConfig {
                 .setDbName("merchant.db")
                 .setAllowTransaction(true)
                 .setDbDir(Environment.getExternalStorageDirectory())
-                .setDbVersion(5);
+                .setDbVersion(1);
         return daoConfig;
     }
 

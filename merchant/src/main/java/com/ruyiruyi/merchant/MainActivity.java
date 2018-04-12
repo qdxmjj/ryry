@@ -51,8 +51,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         content = new FrameLayout(this);
-        //去除标题栏
-        getSupportActionBar().hide();
+
         setContentView(content, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         viewPager = new NoCanSlideViewPager(this);

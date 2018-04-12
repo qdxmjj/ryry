@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "27.0.3"
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+
 
     defaultConfig {
         applicationId "com.ruyiruyi.merchant"
@@ -22,8 +23,13 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    def system_dependencies = rootProject.ext.system_dependencies
+    compile system_dependencies.support_v4
     compile system_dependencies.appcompat_v7
-
+    compile system_dependencies.cardview_v7
+    compile system_dependencies.palette_v7
+    compile system_dependencies.recyclerview_v7
+    compile system_dependencies.design
     compile system_dependencies.xutils
 
     compile project(':rylibrary')
