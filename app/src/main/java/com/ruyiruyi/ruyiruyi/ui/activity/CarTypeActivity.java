@@ -201,6 +201,7 @@ public class CarTypeActivity extends BaseActivity implements CarTypeViewBinder.O
                 int id = carTireInfoList.get(0).getId();
                 Intent intent = new Intent(this, CarInfoActivity.class);
                 intent.putExtra("CARTIREIINFO",id);
+                intent.putExtra("FROM",0);
                 startActivity(intent);
             } catch (DbException e) {
 
