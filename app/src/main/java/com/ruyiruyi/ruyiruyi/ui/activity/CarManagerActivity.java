@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -151,12 +152,17 @@ public class CarManagerActivity extends BaseActivity {
         adapter = new ListAdapter();
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {//点击查看车辆信息
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Car car = carList.get(position);
                 int carId = car.getCarId();
                 Log.e(TAG, "onItemClick:------- " + carId);
+                Intent intent = new Intent(getApplicationContext(), CarInfoActivity.class);
+                intent.putExtra("CARID" ,carId);
+                intent.putExtra("FROM",1);
+                intent.putExtra("CANCLICK",1);
+                startActivity(intent);
             }
         });
         SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -183,11 +189,13 @@ public class CarManagerActivity extends BaseActivity {
                 Car car = carList.get(position);
                 int carId = car.getCarId();
                 switch (index){
-                    case 0:
+                    case 0:             //设为默认
                         Log.e(TAG, "onMenuItemClick: " + carId);
+                        setMorenCar(carId);
                         break;
-                    case 1:
+                    case 1:         //删除
                         Log.e(TAG, "onMenuItemClick: " + carId);
+                        deleteCar(carId);
                         break;
                 }
                 return false;
@@ -198,9 +206,106 @@ public class CarManagerActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getApplicationContext(),CarInfoActivity.class));
+                        Intent intent = new Intent(getApplicationContext(), CarInfoActivity.class);
+                        intent.putExtra("CANCLICK",0);
+                        intent.putExtra("FROM",3);
+                        startActivity(intent);
                     }
                 });
+    }
+
+    private void deleteCar(int carId) {
+        int userId = new DbConfig().getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId",userId);
+            jsonObject.put("carId",carId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "deleteCar");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    Toast.makeText(CarManagerActivity.this,msg , Toast.LENGTH_SHORT).show();
+                    if (status.equals("1")){
+                        initDataFromService();//修改完成后更新数据
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void setMorenCar(int carId) {
+        int userId = new DbConfig().getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId",userId);
+            jsonObject.put("carId",carId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "changeDefaultCar");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    Toast.makeText(CarManagerActivity.this,msg , Toast.LENGTH_SHORT).show();
+                    if (status.equals("1")){
+                        initDataFromService();//修改完成后更新数据
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     /**

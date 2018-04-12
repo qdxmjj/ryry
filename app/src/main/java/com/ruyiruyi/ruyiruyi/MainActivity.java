@@ -26,6 +26,7 @@ import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.TireType;
 import com.ruyiruyi.ruyiruyi.ui.activity.ActionBarActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.HomeFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
@@ -68,6 +69,7 @@ public class MainActivity extends BaseActivity {
     private List<String> titles;
     private HomePagerAdapeter pagerAdapter;
     private static boolean isExit = false;
+    private long time = 0;
     private static Handler mHandler = new Handler() {
 
         @Override
@@ -113,17 +115,19 @@ public class MainActivity extends BaseActivity {
         });
 
         //获取车辆品牌数据
-        initCarDataIntoDb();
+       // initCarDataIntoDb();
         //获取车辆图标数据
-        initCarBrand();
+       // initCarBrand();
         //获取车辆型号数据
-        initCarVerhicle();
+       // initCarVerhicle();
         //获取车辆轮胎和排量数据
-        initCarrTireInfo();
+       // initCarrTireInfo();
         //获取轮胎型号
-        initTireType();
+       // initTireType();
         //获取省市县
-        initProvice();
+       // initProvice();
+
+
 
     }
 
@@ -211,6 +215,7 @@ public class MainActivity extends BaseActivity {
         } catch (DbException e) {
 
         }
+
     }
 
     private void initTireType() {
@@ -717,9 +722,18 @@ public class MainActivity extends BaseActivity {
             // 利用handler延迟发送更改状态信息
             mHandler.sendEmptyMessageDelayed(0, 2000);
         } else {
+            Log.e(TAG, "exit: -----" );
+           /* Intent intent = new Intent("qd.xmjj.baseActivity");
+            intent.putExtra("closeAll", 1);
+            sendBroadcast(intent);//发送广播*/
+            //removeALLActivity();
+            Intent intent = new Intent("qd.xmjj.baseActivity");
+            intent.putExtra("closeAll", 1);
+            sendBroadcast(intent);//发送广播*/
 
-
-            this.finish();
+           // this.finish();
+            //System.exit(0);
         }
     }
+
 }

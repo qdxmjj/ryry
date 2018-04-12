@@ -244,4 +244,9 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
 
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }

@@ -21,4 +21,8 @@ public class YcxFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }

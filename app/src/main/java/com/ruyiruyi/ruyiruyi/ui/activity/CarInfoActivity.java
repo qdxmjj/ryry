@@ -38,6 +38,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarTireInfo;
@@ -46,6 +47,7 @@ import com.ruyiruyi.ruyiruyi.db.model.TireType;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChoose;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -154,16 +156,19 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
     private List<String> shengList;
     private List<String> shiList;
     private List<String> xianList;
-    public static String currentSheng = "北京市";
-    public static String currentShi = "北京市";
-    public static String currentXian = "东城区";
-    public static int currentShengPosition = 1;
-    public static int currentShiPosition = 1;
-    public static int currentXianPosition = 1;
+    public  String currentSheng = "北京市";
+    public  String currentShi = "北京市";
+    public  String currentXian = "东城区";
+    public  int currentShengPosition = 0;
+    public  int currentShiPosition = 0;
+    public  int currentXianPosition = 0;
     private WheelView shengWv;
     private WheelView shiWv;
     private WheelView xianWv;
-    private static int areaId = 0;
+    private  int areaId = 0;
+    private int carId;
+
+    private  int canClick = 0;
 
 
     @Override
@@ -183,10 +188,25 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 }
             }
         });
+
+
         Intent intent = getIntent();
-        if (intent!=null){
+        canClick = intent.getIntExtra("CANCLICK", 0);
+        Log.e(TAG, "onCreate: " +canClick);
+
+        int from = intent.getIntExtra("FROM",0); // 0是车型选择返回  1是carManagetActivity返回
+        if (from == 0){ //车型选择
             carTiteInfoId = intent.getIntExtra("CARTIREIINFO",0);
+        }else if (from == 1){//查看车辆信息
+            carId = intent.getIntExtra("CARID",0);
+            initDataByUseridAndCarId();
         }
+
+
+
+        initView();
+
+
 
         date = new StringBuffer();
         endDate = new StringBuffer();
@@ -197,13 +217,131 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         shengList  = new ArrayList<>();
         shiList  = new ArrayList<>();
         xianList  = new ArrayList<>();
-        initView();
+
         initData();
         initDateTime();
         initLichengbiao();
         getSheng();
         getShi();
         getXian();
+       // viewCanClick();
+    }
+
+  /*  private void viewCanClick() {
+        saveCatButton.setClickable(canClick);
+        carFontLayout.setClickable(canClick);
+        carRearLayout.setClickable(canClick);
+        roadConditionLayout.setClickable(canClick);
+        lichengbiaoLayout.setClickable(canClick);
+        xszRegidterTimeLayout.setClickable(canClick);
+        carTypeChooseLayout.setClickable(canClick);
+        addFuyeLayout.setClickable(canClick);
+        addZhuyeLayout.setClickable(canClick);
+        addLichengbiaoLayout.setClickable(canClick);
+        zhuyeImageDelete.setClickable(canClick);
+        fuyeImageDelete.setClickable(canClick);
+        lcbImageDelete.setClickable(canClick);
+        isEnergySwich.setClickable(canClick);
+
+
+
+    }*/
+
+    /**
+     * 根据userId跟carId获取车辆信息
+     */
+    private void initDataByUseridAndCarId() {
+        int uesrId = new DbConfig().getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId",uesrId);
+            jsonObject.put("carId",carId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarByUserIdAndCarId");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: re" + result );
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        String carName = data.getString("carName");
+                        int isNewenergy = data.getInt("isNewenergy");
+                        String platNumber = data.getString("platNumber");
+                        String proCityName = data.getString("proCityName");
+                        String font = data.getString("font");
+                        String rear = data.getString("rear");
+                        Long drivingLicenseDate = data.getLong("drivingLicenseDate");
+                        String xszRegisterTime = new UtilsRY().getTimestampToString(drivingLicenseDate);
+                        Long serviceEndDate = data.getLong("serviceEndDate");
+                        String xszEndTime = new UtilsRY().getTimestampToString(serviceEndDate);
+                        String traveledImgInverse = data.getString("traveledImgInverse");
+                        String traveledImgObverse = data.getString("traveledImgObverse");
+                        String traveled = data.getString("traveled");
+                        String maturityImg = data.getString("maturityImg");
+                        String roadTxt = data.getString("roadTxt");
+                        carTypeChoose.setText(carName);
+                        if (isNewenergy == 0){//燃油
+                            isEnergySwich.setChecked(false);
+                        }else {//xin能源
+                            isEnergySwich.setChecked(true);
+                        }
+                        carNumberText.setText(platNumber);
+                        provinceText.setText(proCityName);
+                        carFontText.setText(font);
+                        carRearText.setText(rear);
+                        xszRegisterTimeText.setText(xszRegisterTime);
+                        xszEndTimeText.setText(xszEndTime);
+                        hasZhuye = true;
+                        initZhuyeLayou();
+                        Glide.with(getApplicationContext()).load(traveledImgInverse).into(zhuyeImage);
+                        hasFuye = true;
+                        initFuyeLayou();;
+                        Glide.with(getApplicationContext()).load(traveledImgObverse).into(fuyeImage);
+                        if (traveled.equals("1000000")){
+                            hasLichengbiao = false;
+                            initLichengbiao();
+                        }else {
+                            hasLichengbiao = true;
+                            initLichengbiao();
+                            lichengEdit.setText(traveled);
+                            hasLcb = true;
+                            initLcbLayou();
+                            Glide.with(getApplicationContext()).load(maturityImg).into(lcbImage);
+                        }
+                        roadConditionText.setText(roadTxt);
+                        saveCatButton.setText("暂不可修改");
+
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void getXian() {
@@ -297,6 +435,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 String rear = carTireInfo.getRear();
 
                 carFontText.setText(font);
+                carFontText.setText(font);
                 carRearText.setText(rear);
 
                 carTypeChoose.setText(brand);
@@ -344,12 +483,19 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         provinceText = (TextView) findViewById(R.id.province_text);
 
         // xszRegidterTimeLayout.setOnClickListener(this);
+
         carNumberLayout.setOnClickListener(this);
         provinceLayout.setOnClickListener(this);
+        lichengEdit.setClickable(canClick == 1 ?false : true);
+
+
 
         isEnergySwich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (canClick == 1){
+                    return;
+                }
                 if (isChecked){
                     isEnergy = true;
                 }else {
@@ -370,6 +516,15 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 0){
+                            Log.e(TAG, "call: +-------------------true"  );
+                        }else {
+                            Log.e(TAG, "call: +-------------------false"  );
+                        }
+
+                        if (canClick == 1){
+                            return;
+                        }
                         if (carTiteInfoId == 0){
                             Toast.makeText(CarInfoActivity.this, "请选择车型", Toast.LENGTH_SHORT).show();
                             return;
@@ -394,10 +549,14 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                         uploadPic();
                     }
                 });
+
         RxViewAction.clickNoDouble(carFontLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         if (carFontText.getText().toString().isEmpty()){
                             Toast.makeText(CarInfoActivity.this, "请先选择车型", Toast.LENGTH_SHORT).show();
                             return;
@@ -413,6 +572,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         if (carRearText.getText().toString().isEmpty()){
                             Toast.makeText(CarInfoActivity.this, "请先选择车型", Toast.LENGTH_SHORT).show();
                             return;
@@ -430,6 +592,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         startActivityForResult(new Intent(getApplicationContext(),RoadConditionActivity.class),ROAD_CONDITITION);
                     }
                 });
@@ -437,6 +602,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         if (hasLichengbiao){
                             hasLichengbiao = false;
                         }else {
@@ -450,6 +618,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         showDataDialog();
                     }
                 });
@@ -460,6 +631,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         startActivity(new Intent(getApplicationContext(),CarBrandActivity.class));
                     }
                 });
@@ -468,6 +642,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         currentImage = 1;
                         showChoosePicDialog();
                     }
@@ -477,6 +654,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         Log.e(TAG, "call: 1");
                         currentImage = 0;
                         showChoosePicDialog();
@@ -486,6 +666,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         currentImage = 2;
                         showChoosePicDialog();
                     }
@@ -494,6 +677,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         hasZhuye = false;
                         initZhuyeLayou();
                     }
@@ -502,6 +688,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         hasFuye = false;
                         initFuyeLayou(); ;
                     }
@@ -510,6 +699,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         hasLcb = false;
                         initLcbLayou() ;
                     }
@@ -620,9 +812,11 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         try {
             jsonObject.put("user_id",id);
             jsonObject.put("car_id",carTiteInfoId);
+            jsonObject.put("car_name",carTypeChoose.getText());
             jsonObject.put("xinnengyuan",isEnergy);
             jsonObject.put("plat_number",carNumberText.getText().toString());
             jsonObject.put("pro_city_id",areaId);
+            jsonObject.put("proCityName",provinceText.getText());
             jsonObject.put("font",carFontText.getText().toString());
             jsonObject.put("rear",carRearText.getText().toString());
             jsonObject.put("driving_license_date",xszRegisterTimeText.getText().toString());
@@ -694,6 +888,21 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),CarManagerActivity.class));
+                    }else {
+                        Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+
+                }
+
             }
 
             @Override
@@ -1027,6 +1236,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.car_number_layout:
+                if (canClick == 1){
+                    return;
+                }
                 View outerView = LayoutInflater.from(this).inflate(R.layout.dialog_content_view, null);
                 final WheelView city = (WheelView) outerView.findViewById(R.id.wheel_view_city);
                 city.setItems(getCity(),currentCity);//init selected position is 0 初始选中位置为0
@@ -1098,6 +1310,9 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
 
                 break;
             case R.id.province_layout:
+                if (canClick == 1){
+                    return;
+                }
                 Log.e(TAG, "onClick: 1");
                 View proView = LayoutInflater.from(this).inflate(R.layout.dialog_province_view, null);
                 shengWv = (WheelView) proView.findViewById(R.id.wheel_view_sheng);
