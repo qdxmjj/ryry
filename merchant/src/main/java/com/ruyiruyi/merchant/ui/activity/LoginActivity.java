@@ -175,7 +175,7 @@ public class LoginActivity extends BaseActivityb {
                         startActivity(intent);
                         LoginActivity.this.finish();
                     }else {
-
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                     }
 
                 } catch (JSONException e) {

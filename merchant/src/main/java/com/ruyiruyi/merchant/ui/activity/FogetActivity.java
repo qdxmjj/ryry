@@ -225,7 +225,7 @@ public class FogetActivity extends BaseActivityb {
         public void onFinish() {
             tv_code.setText("重新获取");
             tv_code.setClickable(true);
-            tv_code.setBackgroundResource(R.drawable.login_button);
+            tv_code.setBackgroundResource(R.drawable.login_code_button);
         }
     }
 

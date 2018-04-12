@@ -7,30 +7,11 @@
     android:orientation="vertical"
     android:scrollbars="none">
 
-    <RelativeLayout
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/acbar_rigister"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/theme_primary"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/img_back"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:onClick="registerclick"
-            android:src="@drawable/ic_back" />
-
-        <TextView
-            android:id="@+id/tv_head"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="门店注册"
-            android:textColor="#ffffff"
-            android:textSize="15sp" />
-
-    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -53,7 +34,9 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
                     android:hint="请输入您名字"
+                    android:maxLength="18"
                     android:paddingLeft="100dp"
+                    android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -80,6 +63,9 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
                     android:hint="请输入您的手机号"
+                    android:maxLength="11"
+                    android:singleLine="true"
+                    android:inputType="number"
                     android:paddingLeft="100dp"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
@@ -120,7 +106,10 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
                     android:hint="请输入验证码"
+                    android:singleLine="true"
                     android:paddingLeft="100dp"
+                    android:inputType="number"
+                    android:maxLength="6"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -141,7 +130,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="70dp"
+                    android:layout_marginRight="60dp"
+                    android:visibility="invisible"
                     android:src="@drawable/ic_wrong" />
             </RelativeLayout>
 
@@ -157,7 +147,9 @@
                     android:background="@drawable/edit_background_noline"
                     android:hint="请设置您的登录密码"
                     android:inputType="textPassword"
+                    android:singleLine="true"
                     android:paddingLeft="100dp"
+                    android:maxLength="18"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -185,6 +177,8 @@
                     android:background="@drawable/edit_background_noline"
                     android:hint="请再次确认您的登录密码"
                     android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:maxLength="18"
                     android:paddingLeft="100dp"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
@@ -219,6 +213,8 @@
                     android:background="@drawable/edit_background_noline"
                     android:hint="请输入门店名称"
                     android:paddingLeft="100dp"
+                    android:singleLine="true"
+                    android:maxLength="18"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -273,6 +269,9 @@
                     android:background="@drawable/edit_background_noline"
                     android:hint="请输入您店里的电话"
                     android:paddingLeft="100dp"
+                    android:maxLength="18"
+                    android:singleLine="true"
+                    android:inputType="number"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -328,7 +327,7 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="100dp"
                     android:text="     省     市     区"
-                    android:textColor="@color/c7"
+                    android:textColor="@color/c6"
                     android:textSize="15sp" />
 
                 <TextView
@@ -354,6 +353,7 @@
                     android:background="@drawable/edit_background_noline"
                     android:hint="请补充您的详细地址 街道、门牌号等"
                     android:paddingLeft="100dp"
+                    android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -374,21 +374,30 @@
                 android:layout_height="50dp">
 
                 <TextView
-                    android:id="@+id/et_shoppoint"
+                    android:id="@+id/tv_shoppoint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
                     android:gravity="center_vertical"
-                    android:paddingLeft="100dp"
-                    android:text="预留定位"
+                    android:paddingLeft="130dp"
+                    android:singleLine="true"
+                    android:text="点击自动定位"
                     android:textColor="@color/c5"
                     android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_shoppoint"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="100dp"
+                    android:src="@drawable/ic_position" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/et_shoppoint"
+                    android:layout_alignLeft="@+id/tv_shoppoint"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
                     android:text="门店定位"
@@ -436,27 +445,38 @@
                     android:layout_marginTop="10dp"
                     android:weightSum="3">
 
-                    <ImageView
-                        android:id="@+id/img_yyzz"
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_alignLeft="@+id/tv_yyzz"
-                        android:layout_weight="1"
-                        android:background="@drawable/img_bg_dark"
-                        android:padding="20dp"
-                        android:src="@drawable/ic_add" />
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/img_yyzz"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/img_bg_dark"
+                            android:padding="25dp"
+                            android:src="@drawable/ic_add" />
+
+                        <ImageView
+                            android:id="@+id/img_yyzz_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
 
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_alignLeft="@+id/tv_yyzz"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1" />
 
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_alignLeft="@+id/tv_yyzz"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1" />
                 </LinearLayout>
@@ -503,37 +523,73 @@
                     android:layout_marginTop="10dp"
                     android:weightSum="3">
 
-                    <ImageView
-                        android:id="@+id/img_mdpic_a"
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_alignLeft="@+id/tv_mdpic"
-                        android:layout_weight="1"
-                        android:background="@drawable/img_bg_dark"
-                        android:padding="20dp"
-                        android:src="@drawable/ic_add" />
+                        android:layout_weight="1">
 
-                    <ImageView
-                        android:id="@+id/img_mdpic_b"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignLeft="@+id/tv_mdpic"
-                        android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/img_bg_dark"
-                        android:padding="20dp"
-                        android:src="@drawable/ic_add" />
+                        <ImageView
+                            android:id="@+id/img_mdpic_a"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/img_bg_dark"
+                            android:padding="25dp"
+                            android:src="@drawable/ic_add" />
 
-                    <ImageView
-                        android:id="@+id/img_mdpic_c"
+                        <ImageView
+                            android:id="@+id/img_mdpic_a_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_alignLeft="@+id/tv_mdpic"
                         android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/img_bg_dark"
-                        android:padding="20dp"
-                        android:src="@drawable/ic_add" />
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/img_mdpic_b"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/img_bg_dark"
+                            android:padding="25dp"
+                            android:src="@drawable/ic_add" />
+
+                        <ImageView
+                            android:id="@+id/img_mdpic_b_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/img_mdpic_c"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/img_bg_dark"
+                            android:padding="25dp"
+                            android:src="@drawable/ic_add" />
+
+                        <ImageView
+                            android:id="@+id/img_mdpic_c_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+                    </FrameLayout>
                 </LinearLayout>
             </RelativeLayout>
 
@@ -577,15 +633,27 @@
                     android:layout_marginTop="10dp"
                     android:weightSum="3">
 
-                    <ImageView
-                        android:id="@+id/img_shou_a"
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_alignLeft="@+id/tv_yyzz"
-                        android:layout_weight="1"
-                        android:background="@drawable/img_bg_dark"
-                        android:padding="20dp"
-                        android:src="@drawable/ic_add" />
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/img_shou_a"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/img_bg_dark"
+                            android:padding="25dp"
+                            android:src="@drawable/ic_add" />
+
+                        <ImageView
+                            android:id="@+id/img_shou_a_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+                    </FrameLayout>
 
                     <ImageView
                         android:id="@+id/img_shou_b"
@@ -679,9 +747,9 @@
                     android:id="@+id/ll_hezuo_b"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
                     android:layout_alignLeft="@+id/tv_hezuo"
                     android:layout_below="@+id/ll_hezuo_a"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <CheckBox

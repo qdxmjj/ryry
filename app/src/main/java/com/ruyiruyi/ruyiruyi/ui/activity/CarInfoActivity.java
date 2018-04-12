@@ -176,7 +176,6 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info,R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("我的宝驹");;
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
             @Override

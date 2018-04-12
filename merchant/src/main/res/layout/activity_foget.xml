@@ -32,6 +32,8 @@
                 android:gravity="center_vertical"
                 android:hint="请输入您的手机号"
                 android:inputType="number"
+                android:maxLength="11"
+                android:singleLine="true"
                 android:paddingLeft="30dp"
                 android:textCursorDrawable="@drawable/edit_cursor_color"
                 android:textSize="15sp" />
@@ -60,6 +62,8 @@
                 android:gravity="center_vertical"
                 android:hint="请输入您验证码"
                 android:inputType="number"
+                android:maxLength="6"
+                android:singleLine="true"
                 android:paddingLeft="30dp"
                 android:textCursorDrawable="@drawable/edit_cursor_color"
                 android:textSize="15sp" />
@@ -102,6 +106,7 @@
                 android:background="@drawable/edit_background_noline"
                 android:gravity="center_vertical"
                 android:hint="请重新设置您的密码"
+                android:singleLine="true"
                 android:paddingLeft="30dp"
                 android:inputType="textPassword"
                 android:textCursorDrawable="@drawable/edit_cursor_color"
@@ -130,6 +135,7 @@
                 android:background="@drawable/edit_background_noline"
                 android:gravity="center_vertical"
                 android:hint="请重新设置您的密码"
+                android:singleLine="true"
                 android:paddingLeft="30dp"
                 android:inputType="textPassword"
                 android:textCursorDrawable="@drawable/edit_cursor_color"
