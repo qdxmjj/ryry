@@ -3,6 +3,7 @@ package com.ruyiruyi.merchant.ui.activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import com.google.gson.JsonObject;
 import com.jakewharton.rxbinding.view.RxView;
 import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.db.model.Car;
 import com.ruyiruyi.merchant.db.model.User;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
@@ -57,6 +59,23 @@ public class LoginActivity extends BaseActivityb {
 
     private int status = 1;
     private String msg = null;
+/*
+   2   private DbManager.DaoConfig daoConfig = new  DbManager.DaoConfig()
+            // 设置数据库名字
+            .setDbName("abc.db")
+            // 设置数据库版本
+            .setDbVersion(1)
+            // 设置数据库的路径
+             .setDbDir(Environment.getExternalStorageDirectory())
+            // 设置数据库允许事务
+            .setAllowTransaction(true)
+            // 升级监听
+            .setDbUpgradeListener(new DbManager.DbUpgradeListener() {
+                @Override
+                public void onUpgrade(DbManager db, int oldVersion, int newVersion) {
+                    // 进行表或是数据的变更
+                }
+            });*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +84,12 @@ public class LoginActivity extends BaseActivityb {
         setContentView(R.layout.activity_login);
 
         initView();
+/*    2    DbManager db = x.getDb(daoConfig);
+        try {
+            db.save(new Car(1,"asa"));
+        } catch (DbException e) {
+
+        }*/
     }
 
     private void initView() {
@@ -97,9 +122,9 @@ public class LoginActivity extends BaseActivityb {
                                 return;
                             }
                             //login ！！
-//                            loginByPassWord(phone, password);
+                            loginByPassWord(phone, password);
                             //测试用登录成功
-                            loginTest();
+//                            loginTest();
                         } catch (NoSuchAlgorithmException e) {
 
                         } catch (UnsupportedEncodingException e) {
@@ -137,17 +162,20 @@ public class LoginActivity extends BaseActivityb {
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String msg = jsonObject1.getString("msg");
-                    int status = jsonObject1.getInt("status");
-                    if (status==111111){
+                    String status = jsonObject1.getString("status");
+                    if (status.equals("111111")){
+                        Log.e(TAG, "onSuccess: 登录？？？？？？？？？？？？？？" );
                         JSONObject data = jsonObject1.getJSONObject("data");
+                        // 存储用户信息
                         saveUserToDb(data);
+                        Log.e(TAG, "onSuccess: 登录 ？？  data.length() == "+data.length() );
                         //login
-                        Toast.makeText(LoginActivity.this,"登陆成功",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this,msg,Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(intent);
                         LoginActivity.this.finish();
                     }else {
-                        Toast.makeText(LoginActivity.this,msg,Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                     }
 
                 } catch (JSONException e) {
@@ -193,7 +221,11 @@ public class LoginActivity extends BaseActivityb {
             user.setFirstAddCar(data.getInt("firstAddCar"));
             user.setIsLogin("1");
             DbConfig dbConfig = new DbConfig();
+
             DbManager db = dbConfig.getDbManager();
+
+//     2       DbManager db = x.getDb(daoConfig);
+
             db.saveOrUpdate(user);
         } catch (JSONException e) {
         } catch (DbException e) {

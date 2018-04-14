@@ -1,139 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.ruyiruyi.merchant.ui.activity.LoginActivity">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_head" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp">
-
-        <EditText
-            android:id="@+id/et_zhanghao"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/edit_bg_select_noline"
-            android:hint="请输入您的账号"
-            android:inputType="number"
-            android:paddingLeft="40dp"
-            android:textColorHint="@color/c5"
-            android:textCursorDrawable="@drawable/edit_cursor_color"
-            android:textSize="15sp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/et_zhanghao"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_zhanghao" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-
-        <EditText
-            android:id="@+id/et_pass"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/edit_bg_select_noline"
-            android:hint="请输入您的密码"
-            android:inputType="textPassword"
-            android:paddingLeft="40dp"
-            android:textColorHint="@color/c5"
-            android:textCursorDrawable="@drawable/edit_cursor_color"
-            android:textSize="15sp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/et_pass"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_mima" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tv_foget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="50dp"
-            android:layout_marginTop="5dp"
-            android:text="忘记密码?"
-            android:onClick="myclick"
-            android:textColor="@color/theme_primary"
-            android:textSize="12sp" />
-
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/tv_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/login_button"
-        android:gravity="center"
-        android:paddingBottom="7dp"
-        android:paddingTop="7dp"
-        android:text="登录"
-        android:textColor="#ffffff"
-        android:textSize="17sp" />
-
-    <TextView
-        android:id="@+id/tv_register"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/register_w_button"
-        android:gravity="center"
-        android:paddingBottom="7dp"
-        android:paddingTop="7dp"
-        android:text="注册"
-        android:onClick="myclick"
-        android:textColor="@color/c6"
-        android:textSize="17sp" />
-
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_head" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+
+            <EditText
+                android:id="@+id/et_zhanghao"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:singleLine="true"
+                android:maxLength="11"
+                android:background="@drawable/edit_bg_select_noline"
+                android:hint="请输入您的账号"
+                android:inputType="number"
+                android:paddingLeft="40dp"
+                android:textColorHint="@color/c5"
+                android:textCursorDrawable="@drawable/edit_cursor_color"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/et_zhanghao"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/ic_zhanghao" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/et_pass"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:background="@drawable/edit_bg_select_noline"
+                android:hint="请输入您的密码"
+                android:singleLine="true"
+                android:inputType="textPassword"
+                android:paddingLeft="40dp"
+                android:textColorHint="@color/c5"
+                android:textCursorDrawable="@drawable/edit_cursor_color"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/et_pass"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/ic_mima" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_foget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="5dp"
+                android:text="忘记密码?"
+                android:onClick="myclick"
+                android:textColor="@color/theme_primary"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
 
         <TextView
-            android:id="@+id/tv_version"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_login"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
-            android:text="小马驾驾V1.0商家版"
-            android:textColor="@color/c5"
-            android:textSize="12sp" />
-    </RelativeLayout>
-</LinearLayout>
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/login_button"
+            android:gravity="center"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:text="登录"
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/tv_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/register_w_button"
+            android:gravity="center"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:text="注册"
+            android:onClick="myclick"
+            android:textColor="@color/c6"
+            android:textSize="17sp" />
+
+        <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+                android:text="小马驾驾V1.0商家版"
+                android:textColor="@color/c5"
+                android:textSize="12sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>

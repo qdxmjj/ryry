@@ -5,7 +5,7 @@ import org.xutils.db.annotation.Table;
 
 import java.math.BigDecimal;
 
-@Table(name = "user")
+@Table(name = "usermerchant")
 public class User {
     @Column(name = "id",isId = true,autoGen = false)
     private int id;
