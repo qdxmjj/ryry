@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.media.Image;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +16,39 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.OnFigureItemInterface;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.drakeet.multitype.ItemViewProvider;
+import me.drakeet.multitype.MultiTypeAdapter;
 import rx.functions.Action1;
+
+import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
+import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class TireFigureViewBinder extends ItemViewProvider<TireFigure, TireFigureViewBinder.ViewHolder> {
     private Context context;
-    public OnFigureItemClick listener;
+   // public OnFigureItemClick listener;
+    //public TireRankViewBinder.OnTireRankClick ranklistener;
+    private List<Object> items = new ArrayList<>();
+    private MultiTypeAdapter adapter;
+    private List<TireRank> tireRankList;
+    public OnFigureItemInterface listener;
 
-    public void setListener(OnFigureItemClick listener) {
+    public void setListener(OnFigureItemInterface listener) {
         this.listener = listener;
     }
+
+    /*public void setRanklistener(TireRankViewBinder.OnTireRankClick ranklistener) {
+        TireRankViewBinder.OnTireRankClic
+    }*/
+
+  /*  public void setListener(OnFigureItemClick listener) {
+        this.listener = listener;
+    }*/
 
     public void setContext(Context context) {
         this.context = context;
@@ -62,10 +84,13 @@ public class TireFigureViewBinder extends ItemViewProvider<TireFigure, TireFigur
         Glide.with(context).load(tireFigure.getThreeImage()).into(holder.threeImage);
         Glide.with(context).load(tireFigure.getOneImage()).into(holder.bigImage);
         holder.contentText.setText(tireFigure.getContentStr());
+
+
         RxViewAction.clickNoDouble(holder.titleLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+
                         listener.onFigureClickListener(tireFigure.getTitleStr());
                     }
                 });
@@ -91,7 +116,40 @@ public class TireFigureViewBinder extends ItemViewProvider<TireFigure, TireFigur
                     }
                 });
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        holder.listView.setLayoutManager(linearLayoutManager);
+        adapter = new MultiTypeAdapter(items);
+        register();
+
+        holder.listView.setAdapter(adapter);
+        assertHasTheSameAdapter(holder.listView, adapter);
+        tireRankList = tireFigure.getTireRankList();
+        setData();
+
     }
+
+    private void setData() {
+        items.clear();
+        for (int i = 0; i < tireRankList.size(); i++) {
+            items.add(tireRankList.get(i));
+        }
+        assertAllRegistered(adapter,items);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void register() {
+        TireRankViewBinder tireRankViewBinder = new TireRankViewBinder();
+        tireRankViewBinder.setListener(listener);
+        adapter.register(TireRank.class, tireRankViewBinder);
+    }
+
+   /* *//**
+     * 速度级别点击回掉
+     *//*
+    @Override
+    public void onTireRankClickListener(String name) {
+       listener.onRankClickListener(name);
+    }*/
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -123,7 +181,8 @@ public class TireFigureViewBinder extends ItemViewProvider<TireFigure, TireFigur
         }
     }
 
-    public interface OnFigureItemClick{
+   /* public interface OnFigureItemClick{
         void onFigureClickListener(String name);
-    }
+        void onRankClickListener(String rankName);
+    }*/
 }

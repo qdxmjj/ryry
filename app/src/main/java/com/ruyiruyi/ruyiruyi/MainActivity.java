@@ -63,6 +63,8 @@ public class MainActivity extends BaseActivity {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    public static int HOMEFRAGMENT_RESULT = 0;
+    public static int MYFRAGMENT_RESULT = 1;
     private FrameLayout content;
     private NoCanSlideViewPager viewPager;
     private HomeTabsCell tabsCell;

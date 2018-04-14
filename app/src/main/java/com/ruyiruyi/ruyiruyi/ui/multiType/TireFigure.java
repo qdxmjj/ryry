@@ -1,5 +1,7 @@
 package com.ruyiruyi.ruyiruyi.ui.multiType;
 
+import java.util.List;
+
 public class TireFigure {
     public boolean isCheck ;
     public int tuijian;
@@ -8,11 +10,12 @@ public class TireFigure {
     public String twoImage;
     public String threeImage;
     public String contentStr;
+    public List<TireRank> tireRankList;
 
     public TireFigure() {
     }
 
-    public TireFigure(boolean isCheck,int tuijian, String titleStr, String oneImage, String twoImage, String threeImage, String contentStr) {
+    public TireFigure(boolean isCheck, int tuijian, String titleStr, String oneImage, String twoImage, String threeImage, String contentStr, List<TireRank> tireRankList) {
         this.isCheck = isCheck;
         this.tuijian = tuijian;
         this.titleStr = titleStr;
@@ -20,6 +23,23 @@ public class TireFigure {
         this.twoImage = twoImage;
         this.threeImage = threeImage;
         this.contentStr = contentStr;
+        this.tireRankList = tireRankList;
+    }
+
+    public int getTuijian() {
+        return tuijian;
+    }
+
+    public void setTuijian(int tuijian) {
+        this.tuijian = tuijian;
+    }
+
+    public List<TireRank> getTireRankList() {
+        return tireRankList;
+    }
+
+    public void setTireRankList(List<TireRank> tireRankList) {
+        this.tireRankList = tireRankList;
     }
 
     public boolean isCheck() {

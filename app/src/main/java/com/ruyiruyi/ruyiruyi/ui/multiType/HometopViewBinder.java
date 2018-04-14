@@ -22,7 +22,12 @@ import rx.functions.Action1;
 
 public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBinder.ViewHolder> {
 
+    public Context context;
     public OnHomeTopItemClickListener listener;
+
+    public HometopViewBinder(Context context) {
+        this.context = context;
+    }
 
     public void setListener(OnHomeTopItemClickListener listener) {
         this.listener = listener;
@@ -36,7 +41,7 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull Hometop hometop) {
+    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Hometop hometop) {
         holder.mBanner.setPages(new CustomBanner.ViewCreator<String>() {
             @Override
             public View createView(Context context, int position) {
@@ -67,6 +72,7 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
         }else if (hometop.state == 1){  //未添加车辆
             holder.carImage.setImageResource(R.drawable.ic_add );
         }else {     //已添加车辆
+            Glide.with(context).load(hometop.carImage).into(holder.carImage);
 
         }
 
@@ -75,6 +81,13 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
                     @Override
                     public void call(Void aVoid) {
                         listener.onCityLayoutClickListener();
+                    }
+                });
+        RxViewAction.clickNoDouble(holder.carLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        listener.onCarItemClickListener(hometop.state);
                     }
                 });
     }
@@ -86,6 +99,7 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
         private final TextView carContent;
         private final CustomBanner mBanner;
         private final LinearLayout cityLayout;
+        private final LinearLayout carLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -94,10 +108,12 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
             carTitle = ((TextView) itemView.findViewById(R.id.home_car_title));
             carContent = ((TextView) itemView.findViewById(R.id.home_car_content));
             cityLayout = ((LinearLayout) itemView.findViewById(R.id.city_layout));
+            carLayout = ((LinearLayout) itemView.findViewById(R.id.car_layout));
         }
     }
 
     public interface OnHomeTopItemClickListener{
         void onCityLayoutClickListener();
+        void onCarItemClickListener(int state);
     }
 }

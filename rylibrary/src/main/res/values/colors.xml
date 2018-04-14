@@ -99,4 +99,6 @@
     <color name="c26">#424455</color>
     <color name="c27">#15B3ED</color>
     <color name="c28"> #0F8AC3</color>
+
+    <color name="divider">#ffd2d2d2</color>
 </resources>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.ruyiruyi.ruyiruyi.ui.activity.TireCountActivity">
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/my_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner
+                    android:id="@+id/car_count_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    app:indicatorStyle="ORDINARY"
+                    app:indicatorGravity="CENTER"
+                    app:indicatorSelectRes="@drawable/shape_point_select"
+                    app:indicatorUnSelectRes="@drawable/shape_point_unselect"
+                    app:indicatorInterval="5dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textSize="17sp"
+                    android:textColor="@color/c7"
+                    android:layout_marginTop="10dp"
+                    android:text="东风轮胎 195/55R15 适用于别克凯越大众奇瑞A65轿车 舒适静音型 省油环保"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/c20"
+                    android:layout_marginTop="5dp"
+                    android:text="官方授权 正品保障 免费安装"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/c20"
+                    android:layout_marginTop="5dp"
+                    android:text="一次购买四条轮胎赠送畅行无忧"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="￥600"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textSize="27sp"
+                    android:textColor="@color/c20"
+                    android:layout_marginTop="15dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/c2"
+                    android:layout_marginTop="15dp"/>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="前轮数量"
+                        android:textSize="17sp"
+                        android:textColor="@color/c6"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"/>
+
+                    <com.ruyiruyi.rylibrary.cell.AmountView
+                        android:id="@+id/amount_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
+                        app:btnTextSize="14sp"
+                        app:btnWidth="36dp"
+                        app:tvWidth="50dp"/>
+                </FrameLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/c2" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_plus"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="增值服务"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="17sp"
+                        android:layout_marginLeft="10dp"/>
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="畅行无忧"
+                            android:textSize="17sp"
+                            android:textColor="@color/c6"
+                            android:layout_marginLeft="10dp"/>
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/c2"
+                            android:layout_marginLeft="10dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="￥200/次"
+                            android:textSize="17sp"
+                            android:textColor="@color/c6"
+                            android:layout_marginLeft="10dp"/>
+                    </LinearLayout>
+
+
+                    <com.ruyiruyi.rylibrary.cell.AmountView
+                        android:id="@+id/changxingwuyou_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
+                        app:btnTextSize="14sp"
+                        app:btnWidth="36dp"
+                        app:tvWidth="50dp"/>
+                </FrameLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="此处是对畅行无忧的描述"
+                    android:layout_marginTop="5dp"
+                    android:textSize="15sp"
+                    />
+
+            </LinearLayout>
+        </ScrollView>
+        <TextView
+            android:id="@+id/tire_count_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="下一步"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:layout_gravity="bottom"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button"/>
+    </FrameLayout>
+
+
+
+
+
+
+</LinearLayout>

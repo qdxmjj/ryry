@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,12 +15,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Lunbo;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarFigureActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.CarInfoActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CityChooseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.LoginActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.TirePlaceActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Function;
 import com.ruyiruyi.ruyiruyi.ui.multiType.FunctionViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Hometop;
@@ -58,7 +64,15 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
     private RecyclerView listView;
     private List<Object> items = new ArrayList<>();
     private MultiTypeAdapter adapter;
+    private boolean tireSame;
+    private String rearSize;
+    private String fontSize;
+    private String carName;
+    private int carId;
+    private String carImage;
     private List<Lunbo> lunbos;
+    private SwipeRefreshLayout refreshLayout;
+
 
     @Nullable
     @Override
@@ -82,10 +96,17 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
         listView.setAdapter(adapter);
         assertHasTheSameAdapter(listView, adapter);
         lunbos = new ArrayList<>();
+        refreshLayout = ((SwipeRefreshLayout) getView().findViewById(R.id.home_refresh));
+        refreshLayout.setProgressViewEndTarget(true, 200);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initdataFromService();
+                refreshLayout.setRefreshing(false);
+            }
+        });
 
-
-
-       // initdata();
+        // initdata();
 
         initdataFromService();
 
@@ -106,22 +127,43 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getAndroidHomeDate");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
+
+
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: " + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
-                    JSONObject data = jsonObject1.getJSONObject("data");
-                    JSONArray lunboList = data.getJSONArray("lunbo_infos");
-                    for (int i = 0; i < lunboList.length(); i++) {
-                        JSONObject object = lunboList.getJSONObject(i);
-                        String contentImageUrl = object.getString("contentImageUrl");
-                        String contentText = object.getString("contentText");
-                        int id1 = object.getInt("id");
-                        Lunbo lunbo = new Lunbo(id1, contentImageUrl, contentText);
-                        lunbos.add(lunbo);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        //获取轮播数据
+                        JSONArray lunboList = data.getJSONArray("lunbo_infos");
+                        for (int i = 0; i < lunboList.length(); i++) {
+                            JSONObject object = lunboList.getJSONObject(i);
+                            String contentImageUrl = object.getString("contentImageUrl");
+                            String contentText = object.getString("contentText");
+                            int id1 = object.getInt("id");
+                            Lunbo lunbo = new Lunbo(id1, contentImageUrl, contentText);
+                            lunbos.add(lunbo);
+                        }
+
+                        //获取车辆数据
+                        JSONObject carObject = data.getJSONObject("androidHomeData_cars");
+                        carImage = carObject.getString("car_brand_url");
+                        carName = carObject.getString("car_verhicle");
+                        fontSize = carObject.getString("font");
+                        rearSize = carObject.getString("rear");
+                        tireSame = carObject.getBoolean("same");
+                        carId = carObject.getInt("car_id");
+
+                        saveLunboInToDb();
+
+                        initdata();
                     }
-                    saveLunboInToDb();
+
+
 
                 } catch (JSONException e) {
 
@@ -153,12 +195,12 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
         } catch (DbException e) {
 
         }
-        initdata();
+
     }
 
 
     private void register() {
-        HometopViewBinder hometopViewBinder = new HometopViewBinder();
+        HometopViewBinder hometopViewBinder = new HometopViewBinder(getContext());
         hometopViewBinder.setListener(this);
         adapter.register(Hometop.class, hometopViewBinder);
         FunctionViewBinder functionViewBinder = new FunctionViewBinder();
@@ -186,7 +228,9 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
             if (firstAddCar1 == 0){
                 items.add(new Hometop(images,"添加我的宝驹","邀请好友绑定车辆可免费洗车",1));
             }else {
-                items.add(new Hometop(images,"宝马X6","飞一般的感觉",2));
+                Hometop carInfo = new Hometop(images, carName, "一次性购买四条轮胎送洗车券", 2);
+                carInfo.setCarImage(carImage);
+                items.add(carInfo);
             }
         }else {//未登陆
             items.add(new Hometop(images,"新人注册享好礼","注册享受价格1000元大礼包",0));
@@ -232,10 +276,40 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
         startActivity(new Intent(getContext(), CityChooseActivity.class));
     }
 
+    /**
+     * 车辆item的点击事件
+     * @param state
+     */
+    @Override
+    public void onCarItemClickListener(int state) {
+        if (state == 0){        //未登陆
+            startActivity(new Intent(getContext(), LoginActivity.class));
+        }else if (state == 1){  //未添加车辆
+            Intent intent = new Intent(getContext(), CarInfoActivity.class);
+            intent.putExtra("CANCLICK",0);
+            intent.putExtra("FROM",3);
+            startActivity(intent);
+        }else {         //已添加车辆
+            Intent intent = new Intent(getContext(), CarManagerActivity.class);
+            intent.putExtra("FRAGMENT","HOMEFRAGMENT");
+            startActivityForResult(intent, MainActivity.HOMEFRAGMENT_RESULT);
+        }
+    }
+
     @Override
     public void onFunctionClickListener(int type) {
         if (type == 0){
-            startActivity(new Intent(getContext(), CarFigureActivity.class));
+            if (tireSame){  //前后轮一样
+                Intent intent = new Intent(getContext(), CarFigureActivity.class);
+                intent.putExtra("TIRESIZE",fontSize);
+                startActivity(intent);
+            }else {         //前后轮不一样
+                Intent intent = new Intent(getContext(), TirePlaceActivity.class);
+                intent.putExtra("FONTSIZE",fontSize);
+                intent.putExtra("REARSIZE",rearSize);
+                startActivity(intent);
+            }
+
         }else if (type==1){
 
         }else if (type == 2){

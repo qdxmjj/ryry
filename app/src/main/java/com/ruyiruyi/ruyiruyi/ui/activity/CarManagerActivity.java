@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,6 +17,7 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.cell.CarInfoCell;
@@ -46,6 +48,8 @@ public class CarManagerActivity extends BaseActivity {
     private final List<Car> carList = new ArrayList<>();
     private ListAdapter adapter;
     private String actionType;
+    public static int CARMANAMGER_RESULT = 0;
+    private String fromFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,8 @@ public class CarManagerActivity extends BaseActivity {
                 }
             }
         });
+        Intent intent = getIntent();
+        fromFragment = intent.getStringExtra("FRAGMENT");
 
         initView();
 
@@ -100,11 +106,12 @@ public class CarManagerActivity extends BaseActivity {
                         carList.clear();
                         for (int i = 0; i < data.length(); i++) { ;
                             int car_id = data.getJSONObject(i).getInt("car_id");
+                            int uesrCarId = data.getJSONObject(i).getInt("user_car_id");
                             int moren = data.getJSONObject(i).getInt("is_default");
                             String name = data.getJSONObject(i).getString("car_name");
                             String number = data.getJSONObject(i).getString("plat_number");
                             String icon = data.getJSONObject(i).getString("car_brand");
-                            carList.add(new Car(car_id,name,number,icon,moren));
+                            carList.add(new Car(car_id,uesrCarId,name,number,icon,moren));
                         }
                         Log.e(TAG, "onSuccess: " + carList.size());
                     }
@@ -134,7 +141,7 @@ public class CarManagerActivity extends BaseActivity {
     }
 
     private void initData() {
-        carList.clear();
+     /*   carList.clear();
         Car car = new Car(10, "大众" , "鲁F56123", "http://180.76.243.205:8111/images/car_brand/aerfaluomiou.png", 1);
         carList.add(car);
         for (int i = 0; i < 8; i++) {
@@ -142,7 +149,7 @@ public class CarManagerActivity extends BaseActivity {
             carList.add(ca1r);
         }
 
-        adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();*/
     }
 
     private void initView() {
@@ -156,10 +163,10 @@ public class CarManagerActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Car car = carList.get(position);
-                int carId = car.getCarId();
-                Log.e(TAG, "onItemClick:------- " + carId);
+                int uesrCarId = car.getUserCarId();
+                Log.e(TAG, "onItemClick:------- " + uesrCarId);
                 Intent intent = new Intent(getApplicationContext(), CarInfoActivity.class);
-                intent.putExtra("CARID" ,carId);
+                intent.putExtra("USERCARID" ,uesrCarId);
                 intent.putExtra("FROM",1);
                 intent.putExtra("CANCLICK",1);
                 startActivity(intent);
@@ -187,15 +194,15 @@ public class CarManagerActivity extends BaseActivity {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 Car car = carList.get(position);
-                int carId = car.getCarId();
+                int userCarId = car.getUserCarId();
                 switch (index){
                     case 0:             //设为默认
-                        Log.e(TAG, "onMenuItemClick: " + carId);
-                        setMorenCar(carId);
+                        Log.e(TAG, "onMenuItemClick: " + userCarId);
+                        setMorenCar(userCarId);
                         break;
                     case 1:         //删除
-                        Log.e(TAG, "onMenuItemClick: " + carId);
-                        deleteCar(carId);
+                        Log.e(TAG, "onMenuItemClick: " + userCarId);
+                        deleteCar(userCarId);
                         break;
                 }
                 return false;
@@ -209,17 +216,17 @@ public class CarManagerActivity extends BaseActivity {
                         Intent intent = new Intent(getApplicationContext(), CarInfoActivity.class);
                         intent.putExtra("CANCLICK",0);
                         intent.putExtra("FROM",3);
-                        startActivity(intent);
+                        startActivityForResult(intent,CARMANAMGER_RESULT);
                     }
                 });
     }
 
-    private void deleteCar(int carId) {
+    private void deleteCar(int userCarId) {
         int userId = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId",userId);
-            jsonObject.put("carId",carId);
+            jsonObject.put("userCarId",userCarId);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "deleteCar");
@@ -261,12 +268,12 @@ public class CarManagerActivity extends BaseActivity {
         });
     }
 
-    private void setMorenCar(int carId) {
+    private void setMorenCar(int userCarId) {
         int userId = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId",userId);
-            jsonObject.put("carId",carId);
+            jsonObject.put("userCarId",userCarId);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "changeDefaultCar");
@@ -344,4 +351,27 @@ public class CarManagerActivity extends BaseActivity {
             return convertView;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+       startActivity(new Intent(getApplicationContext(),MainActivity.class));
+    }
+    /*
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+           if (fromFragment.equals("HOMEFRAGMENT")){   //从homefragment进来
+               Intent intent = new Intent();
+               setResult(MainActivity.HOMEFRAGMENT_RESULT,intent);
+               finish();
+           }else {//从MyFragment进来
+               Intent intent = new Intent();
+               setResult(MainActivity.MYFRAGMENT_RESULT,intent);
+               finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }*/
+
 }

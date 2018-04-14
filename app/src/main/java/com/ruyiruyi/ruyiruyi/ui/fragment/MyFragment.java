@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
@@ -38,6 +40,7 @@ public class MyFragment extends Fragment {
     private LinearLayout shezhiLayout;
     private RequestManager glideRequest;
     private LinearLayout myCarLayout;
+    private LinearLayout tireWaitLayout;
 
     @Nullable
     @Override
@@ -111,6 +114,7 @@ public class MyFragment extends Fragment {
         noLoginLayout = ((LinearLayout) getView().findViewById(R.id.no_login_layout));
         shezhiLayout = (LinearLayout) getView().findViewById(R.id.shezhi_layout);
         myCarLayout = ((LinearLayout) getView().findViewById(R.id.my_car_layout));
+        tireWaitLayout = (LinearLayout) getView().findViewById(R.id.tire_wait_layout);
 
 
         DbConfig dbConfig = new DbConfig();
@@ -146,11 +150,22 @@ public class MyFragment extends Fragment {
 
                     }
                 });
+        //我的宝驹的点击
         RxViewAction.clickNoDouble(myCarLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getContext(), CarManagerActivity.class));
+                        Intent intent = new Intent(getContext(), CarManagerActivity.class);
+                        intent.putExtra("FRAGMENT","HOMEFRAGMENT");
+                        startActivityForResult(intent, MainActivity.MYFRAGMENT_RESULT);
+                    }
+                });
+        //待更换轮胎的点击
+        RxViewAction.clickNoDouble(tireWaitLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getContext(), TireWaitChangeActivity.class));
                     }
                 });
 
