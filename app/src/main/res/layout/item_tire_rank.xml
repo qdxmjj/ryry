@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    >
+
+
+     <TextView
+         android:id="@+id/tire_rank_text"
+         android:layout_width="250dp"
+         android:layout_height="wrap_content"
+         android:text="(载重1000公斤)/200K/￥200"
+         android:textSize="16sp"
+         android:background="@drawable/bg_price_no_click"
+         android:gravity="center"
+         android:paddingTop="5dp"
+         android:paddingBottom="5dp"  />
+
+</LinearLayout>

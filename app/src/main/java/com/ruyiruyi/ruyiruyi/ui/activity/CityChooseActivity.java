@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.ui.adapter.CYBChangeCityGridViewAdapter;
@@ -30,6 +31,7 @@ import java.util.List;
 import me.yokeyword.indexablerv.IndexableAdapter;
 import me.yokeyword.indexablerv.IndexableHeaderAdapter;
 import me.yokeyword.indexablerv.IndexableLayout;
+import rx.functions.Action1;
 
 public class CityChooseActivity extends BaseActivity {
     private ContactAdapter mAdapter;
@@ -144,14 +146,24 @@ public class CityChooseActivity extends BaseActivity {
                     finish();
                 }
             });
-            vh.item_header_city_dw.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    intent.putExtra("city", vh.item_header_city_dw.getText().toString());
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            });
+            //此处有问题
+//            vh.item_header_city_dw.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    intent.putExtra("city", vh.item_header_city_dw.getText().toString());
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                }
+//            });
+            RxViewAction.clickNoDouble(vh.item_header_city_dw)
+                    .subscribe(new Action1<Void>() {
+                        @Override
+                        public void call(Void aVoid) {
+                            intent.putExtra("city", vh.item_header_city_dw.getText().toString());
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+                    });
 
         }
 
@@ -161,7 +173,7 @@ public class CityChooseActivity extends BaseActivity {
             public VH(View itemView) {
                 super(itemView);
                 head_home_change_city_gridview =(QGridView)itemView.findViewById(R.id.item_header_city_gridview);
-                item_header_city_dw = (TextView) itemView.findViewById(R.id.item_header_city_dw);
+                item_header_city_dw = (TextView) itemView.findViewById(R.id.item_header_city_text);
             }
         }
     }

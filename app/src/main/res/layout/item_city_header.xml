@@ -14,7 +14,7 @@
         android:textColor="@color/black"
         />
     <TextView
-        android:id="@+id/item_header_city_dw"
+        android:id="@+id/item_header_city_text"
         android:layout_width="80dp"
         android:layout_height="35dp"
         android:textColor="@color/black"
@@ -43,7 +43,7 @@
             android:textSize="18sp"
             android:textColor="@color/black"
             android:text="热门城市"/>
-        <com.example.administrator.android003.Utils.QGridView
+        <com.ruyiruyi.rylibrary.ui.cell.QGridView
             android:id="@+id/item_header_city_gridview"
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
@@ -54,8 +54,7 @@
             android:stretchMode="columnWidth"
             android:columnWidth="60dp"
             android:verticalSpacing="10dp"
-            android:horizontalSpacing="15dp">
-        </com.example.administrator.android003.Utils.QGridView>
+            android:horizontalSpacing="15dp"/>
     </LinearLayout>
 
     <View

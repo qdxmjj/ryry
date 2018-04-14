@@ -157,8 +157,8 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
     private List<String> shiList;
     private List<String> xianList;
     public  String currentSheng = "北京市";
-    public  String currentShi = "北京市";
-    public  String currentXian = "东城区";
+    public  String currentShi = "";
+    public  String currentXian = "";
     public  int currentShengPosition = 0;
     public  int currentShiPosition = 0;
     public  int currentXianPosition = 0;
@@ -166,7 +166,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
     private WheelView shiWv;
     private WheelView xianWv;
     private  int areaId = 0;
-    private int carId;
+    private int userCarId;
 
     private  int canClick = 0;
 
@@ -175,7 +175,6 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info,R.id.my_action);
-        actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("我的宝驹");;
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
@@ -198,7 +197,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         if (from == 0){ //车型选择
             carTiteInfoId = intent.getIntExtra("CARTIREIINFO",0);
         }else if (from == 1){//查看车辆信息
-            carId = intent.getIntExtra("CARID",0);
+            userCarId = intent.getIntExtra("USERCARID",0);
             initDataByUseridAndCarId();
         }
 
@@ -255,7 +254,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId",uesrId);
-            jsonObject.put("carId",carId);
+            jsonObject.put("userCarId",userCarId);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarByUserIdAndCarId");
@@ -895,7 +894,12 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
                         Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        /*Intent intent = new Intent();
+                        setResult(CarManagerActivity.CARMANAMGER_RESULT,intent);
+                        finish();*/
                         startActivity(new Intent(getApplicationContext(),CarManagerActivity.class));
+
+
                     }else {
                         Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }

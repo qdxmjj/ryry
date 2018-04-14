@@ -27,39 +27,46 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait">
-             <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
-        <activity android:name=".ui.activity.TestActivity"
+        <activity
+            android:name=".ui.activity.TestActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".ui.service.CodeTimerService"
             android:enabled="true"
             android:exported="true"
             android:process="system" />
+
         <activity android:name=".ui.activity.LaunchActivity">
-             <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.activity.ActionBarActivity"
+        <activity
+            android:name=".ui.activity.ActionBarActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.LoginActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait">
@@ -71,26 +78,31 @@
             </intent-filter>
             -->
         </activity>
-        <activity android:name=".ui.activity.RegisterActivity"
+        <activity
+            android:name=".ui.activity.RegisterActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.ForgetPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ForgetPasswordActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.CityChooseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CityChooseActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.CarManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CarManagerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.CarInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CarInfoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -102,31 +114,46 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".ui.activity.CarBrandActivity"
+        <activity
+            android:name=".ui.activity.CarBrandActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.CarDemioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CarDemioActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.CarTypeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CarTypeActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.RoadConditionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.RoadConditionActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.TireSizeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.TireSizeActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.activity.CarFigureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CarFigureActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.TirePlaceActivity" />
+        <activity android:name=".ui.activity.TireCountActivity" />
+        <activity android:name=".ui.activity.QcActivity" />
+        <activity android:name=".ui.activity.BuyFlowActivity" />
+        <activity android:name=".ui.activity.OrderAffirmActivity" />
+        <activity android:name=".ui.activity.PaymentActivity" />
+        <activity android:name=".ui.activity.PendingOrderActivity" />
+        <activity android:name=".ui.activity.PaySuccessActivity" />
+        <activity android:name=".ui.activity.TireWaitChangeActivity" />
+        <activity android:name=".ui.activity.FirstChangeActivity"></activity>
     </application>
 
 </manifest>
