@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     android:scrollbars="none">
 
@@ -458,17 +460,24 @@
                             android:id="@+id/img_yyzz"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/img_bg_dark"
-                            android:padding="25dp"
-                            android:src="@drawable/ic_add" />
+                            android:onClick="registerPicClick"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
 
                         <ImageView
                             android:id="@+id/img_yyzz_delete"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
+                            android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
+                        <ImageView
+                            android:id="@+id/img_yyzz_center"
+                            android:src="@drawable/ic_add"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
                     </FrameLayout>
 
 
@@ -536,9 +545,9 @@
                             android:id="@+id/img_mdpic_a"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/img_bg_dark"
-                            android:padding="25dp"
-                            android:src="@drawable/ic_add" />
+                            android:onClick="registerPicClick"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
 
                         <ImageView
                             android:id="@+id/img_mdpic_a_delete"
@@ -546,7 +555,14 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
                             android:src="@drawable/ic_delete"
+                            android:onClick="registerPicClick"
                             android:visibility="gone" />
+                        <ImageView
+                            android:id="@+id/img_mdpic_a_center"
+                            android:src="@drawable/ic_add"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
                     </FrameLayout>
 
                     <FrameLayout
@@ -559,17 +575,24 @@
                             android:id="@+id/img_mdpic_b"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/img_bg_dark"
-                            android:padding="25dp"
-                            android:src="@drawable/ic_add" />
+                            android:onClick="registerPicClick"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
 
                         <ImageView
                             android:id="@+id/img_mdpic_b_delete"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:onClick="registerPicClick"
                             android:layout_gravity="right|top"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
+                        <ImageView
+                            android:id="@+id/img_mdpic_b_center"
+                            android:src="@drawable/ic_add"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
                     </FrameLayout>
 
                     <FrameLayout
@@ -582,17 +605,24 @@
                             android:id="@+id/img_mdpic_c"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/img_bg_dark"
-                            android:padding="25dp"
-                            android:src="@drawable/ic_add" />
+                            android:onClick="registerPicClick"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
 
                         <ImageView
                             android:id="@+id/img_mdpic_c_delete"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
+                            android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
+                        <ImageView
+                            android:id="@+id/img_mdpic_c_center"
+                            android:src="@drawable/ic_add"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
                     </FrameLayout>
                 </LinearLayout>
             </RelativeLayout>
@@ -646,24 +676,30 @@
                             android:id="@+id/img_shou_a"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/img_bg_dark"
-                            android:padding="25dp"
-                            android:src="@drawable/ic_add" />
+                            android:onClick="registerPicClick"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
 
                         <ImageView
                             android:id="@+id/img_shou_a_delete"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:onClick="registerPicClick"
                             android:layout_gravity="right|top"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
+                        <ImageView
+                            android:id="@+id/img_shou_a_center"
+                            android:src="@drawable/ic_add"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
                     </FrameLayout>
 
                     <ImageView
                         android:id="@+id/img_shou_b"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_alignLeft="@+id/tv_yyzz"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1" />
 
@@ -671,7 +707,6 @@
                         android:id="@+id/img_shou_c"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_alignLeft="@+id/tv_yyzz"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1" />
                 </LinearLayout>

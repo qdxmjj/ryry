@@ -12,12 +12,21 @@ import com.ruyiruyi.merchant.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpnCategoryAdapter extends BaseAdapter {
+public class SpnStringAdapter extends BaseAdapter {
     List<String> datas = new ArrayList<>();
     Context context;
 
-    public SpnCategoryAdapter(Context context) {
+    public SpnStringAdapter(List<String> datas, Context context) {
+        this.datas = datas;
         this.context = context;
+    }
+
+    public void updataAndSetData(List<String> list){
+        if (!list.isEmpty()) {
+            datas.clear();
+            datas.addAll(list);
+        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -41,7 +50,7 @@ public class SpnCategoryAdapter extends BaseAdapter {
         if (convertView == null) {
             hodler=new ViewHodler();
             convertView = LayoutInflater.from(context).inflate(R.layout.dialog_item_category,null);
-            hodler.mTextView = (TextView) convertView;
+            hodler.mTextView = (TextView) convertView.findViewById(R.id.tv_spnitem_category);
             convertView.setTag(hodler);
         }else {
             hodler = (ViewHodler) convertView.getTag();

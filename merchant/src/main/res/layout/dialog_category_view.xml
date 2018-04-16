@@ -3,11 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <Spinner
-        android:id="@+id/spn_category"
+
+    <com.ruyiruyi.rylibrary.ui.cell.WheelView
+        android:id="@+id/whv_category"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:gravity="center" />
+        app:isLoop="true"
+        android:layout_marginRight="60dp"
+        app:itemVisibleNum="3"
+        android:layout_marginLeft="30dp"
+        app:lineColor="@color/theme_primary"
+        app:lineSpaceingDimens="10dp"
+        app:textColorCenter="@color/theme_primary"
+        app:textColorOuter="@color/c3"
+        app:textSizeCenter="12dp"
+        app:textSizeOuter="10dp"
+        android:layout_height="100dp" />
 </LinearLayout>
