@@ -35,6 +35,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/tire_name_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -64,6 +65,7 @@
                     android:layout_marginTop="5dp"
                     android:text="一次购买四条轮胎赠送畅行无忧"/>
                 <TextView
+                    android:id="@+id/tire_price_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="￥600"

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -41,6 +43,7 @@ public class MyFragment extends Fragment {
     private RequestManager glideRequest;
     private LinearLayout myCarLayout;
     private LinearLayout tireWaitLayout;
+    private LinearLayout testLayout;
 
     @Nullable
     @Override
@@ -115,6 +118,15 @@ public class MyFragment extends Fragment {
         shezhiLayout = (LinearLayout) getView().findViewById(R.id.shezhi_layout);
         myCarLayout = ((LinearLayout) getView().findViewById(R.id.my_car_layout));
         tireWaitLayout = (LinearLayout) getView().findViewById(R.id.tire_wait_layout);
+        testLayout = (LinearLayout) getView().findViewById(R.id.test_layout);
+
+        RxViewAction.clickNoDouble(testLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getContext(), TestActivity.class));
+                    }
+                });
 
 
         DbConfig dbConfig = new DbConfig();

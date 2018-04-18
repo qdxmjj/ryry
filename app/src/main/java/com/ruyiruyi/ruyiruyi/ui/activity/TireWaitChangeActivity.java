@@ -69,7 +69,9 @@ public class TireWaitChangeActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getApplicationContext(),FirstChangeActivity.class));
+                        Intent intent = new Intent(getApplicationContext(), TireChangeActivity.class);
+                        intent.putExtra(TireChangeActivity.CHANGE_TIRE,0);
+                        startActivity(intent);
                     }
                 });
 

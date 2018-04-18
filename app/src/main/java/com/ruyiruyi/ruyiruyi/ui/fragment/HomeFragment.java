@@ -25,6 +25,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CarInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CityChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.LoginActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.TireChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TirePlaceActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Function;
 import com.ruyiruyi.ruyiruyi.ui.multiType.FunctionViewBinder;
@@ -72,6 +73,8 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
     private String carImage;
     private List<Lunbo> lunbos;
     private SwipeRefreshLayout refreshLayout;
+    public final static int CITY_CHOOSE = 1;
+    public String currentCity = "选择城市";
 
 
     @Nullable
@@ -226,14 +229,14 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
         if (!(user == null)){
             int firstAddCar1 = user.getFirstAddCar();
             if (firstAddCar1 == 0){
-                items.add(new Hometop(images,"添加我的宝驹","邀请好友绑定车辆可免费洗车",1));
+                items.add(new Hometop(images,"添加我的宝驹","邀请好友绑定车辆可免费洗车",1,currentCity));
             }else {
-                Hometop carInfo = new Hometop(images, carName, "一次性购买四条轮胎送洗车券", 2);
+                Hometop carInfo = new Hometop(images, carName, "一次性购买四条轮胎送洗车券", 2,currentCity);
                 carInfo.setCarImage(carImage);
                 items.add(carInfo);
             }
         }else {//未登陆
-            items.add(new Hometop(images,"新人注册享好礼","注册享受价格1000元大礼包",0));
+            items.add(new Hometop(images,"新人注册享好礼","注册享受价格1000元大礼包",0,currentCity));
         }
 
 
@@ -271,9 +274,23 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
                 .startTurning(5000);
     }
 
+    /**
+     * 城市选择
+     */
     @Override
     public void onCityLayoutClickListener() {
-        startActivity(new Intent(getContext(), CityChooseActivity.class));
+        Intent intent = new Intent(getContext(), CityChooseActivity.class);
+        startActivityForResult(intent,CITY_CHOOSE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CITY_CHOOSE){
+            String city = data.getStringExtra("CITY");
+            currentCity = city;
+            initdata();
+            Log.e(TAG, "onActivityResult:-----------*----------- " + city);
+        }
     }
 
     /**
@@ -298,10 +315,11 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
 
     @Override
     public void onFunctionClickListener(int type) {
-        if (type == 0){
+        if (type == 0){//轮胎购买
             if (tireSame){  //前后轮一样
                 Intent intent = new Intent(getContext(), CarFigureActivity.class);
                 intent.putExtra("TIRESIZE",fontSize);
+                intent.putExtra("FONTREARFLAG","0");
                 startActivity(intent);
             }else {         //前后轮不一样
                 Intent intent = new Intent(getContext(), TirePlaceActivity.class);
@@ -310,8 +328,10 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
                 startActivity(intent);
             }
 
-        }else if (type==1){
-
+        }else if (type==1){//免费更换
+            Intent intent = new Intent(getContext(), TireChangeActivity.class);
+            intent.putExtra(TireChangeActivity.CHANGE_TIRE,1);
+            startActivity(intent);
         }else if (type == 2){
 
         }else if (type ==3){

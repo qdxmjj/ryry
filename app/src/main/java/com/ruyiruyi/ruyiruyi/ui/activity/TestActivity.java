@@ -17,6 +17,7 @@ import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Newest;
 import com.ruyiruyi.ruyiruyi.db.model.UserTest;
 import com.ruyiruyi.ruyiruyi.ui.service.CodeTimerService;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.utils.LayoutHelper;
 
@@ -27,11 +28,14 @@ import org.xutils.x;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.functions.Action1;
+
 public class TestActivity extends BaseActivity {
 
     private static final String TAG = TestActivity.class.getSimpleName();
     private LinearLayout content;
     private Button btnCountdown;
+    private Button dituButton;
 
 
     @Override
@@ -40,8 +44,10 @@ public class TestActivity extends BaseActivity {
         content = new LinearLayout(this);
 
         setContentView(content);
+        content.setOrientation(LinearLayout.VERTICAL);
 
         btnCountdown = new Button(this);
+        btnCountdown.setText("时间测试");
         content.addView(btnCountdown, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT));
 
         btnCountdown.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +56,17 @@ public class TestActivity extends BaseActivity {
                 startService(new Intent(getApplication(),CodeTimerService.class));
             }
         });
+
+        dituButton = new Button(this);
+        dituButton.setText("百度地图");
+        content.addView(dituButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT));
+        RxViewAction.clickNoDouble(dituButton)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getApplicationContext(),BaiduActivity.class));
+                    }
+                });
 
     }
 
@@ -89,14 +106,14 @@ public class TestActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         // 注册广播
-        registerReceiver(mUpdateReceiver, updateIntentFilter());
+      //  registerReceiver(mUpdateReceiver, updateIntentFilter());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         // 移除注册
-        unregisterReceiver(mUpdateReceiver);
+      //  unregisterReceiver(mUpdateReceiver);
     }
 
     private void initDataFromDb() {

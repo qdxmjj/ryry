@@ -21,7 +21,7 @@
         android:gravity="center"
         android:layout_marginLeft="15dp"
         android:background="@drawable/sylayout_shop"
-        android:text="东莞"/>
+        android:text="定位中..."/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

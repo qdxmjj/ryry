@@ -3,6 +3,13 @@ apply plugin: 'com.android.application'
 def VERSION_CODE = 1
 def VERSION_NAME = "1.0"
 
+
+repositories {
+    flatDir {
+        dir 'libs'
+    }
+}
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
@@ -23,10 +30,20 @@ android {
     task clean(type: Delete) {
         delete rootProject.buildDir
     }
+    sourceSets{
+        main{
+            jniLibs.srcDir 'libs'
+            jni.srcDirs = []
+        }
+        instrumentTest.setRoot('tests')
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/BaiduLBS_Android.jar')
     testCompile 'junit:junit:4.12'
     def system_dependencies = rootProject.ext.system_dependencies
     compile system_dependencies.support_v4

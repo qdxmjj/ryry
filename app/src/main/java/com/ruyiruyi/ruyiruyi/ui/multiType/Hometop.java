@@ -8,12 +8,22 @@ public class Hometop {
     public String carImage;
     public String carContent;
     public int state;  //0未登陆  1未添加车辆  2已添加车辆
+    public String cityName;
 
-    public Hometop(List<String> imageList, String carTitle, String carContent, int state) {
+    public Hometop(List<String> imageList, String carTitle, String carContent, int state,String cityName) {
         this.imageList = imageList;
         this.carTitle = carTitle;
         this.carContent = carContent;
         this.state = state;
+        this.cityName = cityName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public List<String> getImageList() {

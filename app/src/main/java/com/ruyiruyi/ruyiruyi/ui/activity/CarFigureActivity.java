@@ -48,6 +48,7 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
     private MultiTypeAdapter adapter;
     private List<TireFigure> tireFigureList ;
     private String tiresize;
+    private String fontrearflag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
 
         Intent intent = getIntent();
         tiresize = intent.getStringExtra("TIRESIZE");
+        fontrearflag = intent.getStringExtra("FONTREARFLAG");
         //getData();
         getDataFromService();
 
@@ -210,9 +212,11 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
                                     if (tireRankList.get(j).isCheck) {
                                         int shoeId = tireRankList.get(j).getId();
                                         String price = tireRankList.get(j).getPrice();
+                                        Log.e(TAG, "call: ---------*--------" + shoeId);
                                         Intent intent = new Intent(getApplicationContext(), TireCountActivity.class);
                                         intent.putExtra("SHOEID",shoeId);
                                         intent.putExtra("PRICE",price);
+                                        intent.putExtra("FONTREARFLAG",fontrearflag);
                                         startActivity(intent);
                                     }
                                 }

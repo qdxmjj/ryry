@@ -3,6 +3,7 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,9 +16,33 @@ import com.ruyiruyi.rylibrary.cell.ActionBar;
 import rx.functions.Action1;
 
 public class OrderAffirmActivity extends BaseActivity {
+    private static final String TAG = OrderAffirmActivity.class.getSimpleName();
     private ActionBar actionBar;
     private TextView tireBuyButton;
-    private ImageView tireImage;
+    private String fontrearflag;
+    private int tirecount;
+    private String tireprice;
+    private String tirepname;
+    private int cxwycount;
+    private String cxwyprice;
+    private TextView tireNameText;
+    private TextView tirePriceText;
+    private TextView tireCountText;
+    private TextView cxwy_count_text;
+    private TextView tireAllPriceText;
+    private TextView cxwyAllPriceText;
+    private double tirePriceAll;
+    private double allPrice;
+    private TextView allPriceText;
+    private double cxwyPriceAll;
+    private String username;
+    private String userphone;
+    private String carnumber;
+    private String tireimage;
+    private TextView userNameText;
+    private TextView userPhoneText;
+    private TextView carNumberText;
+    private ImageView tireImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +61,68 @@ public class OrderAffirmActivity extends BaseActivity {
             }
         });
 
+        Intent intent = getIntent();
+        fontrearflag = intent.getStringExtra("FONTREARFLAG");
+        tirecount = intent.getIntExtra("TIRECOUNT",0);
+        tireprice = intent.getStringExtra("TIREPRICE");
+        tirepname = intent.getStringExtra("TIREPNAME");
+        cxwycount = intent.getIntExtra("CXWYCOUNT",0);
+        cxwyprice = intent.getStringExtra("CXWYPRICE");
+        username = intent.getStringExtra("USERNAME");
+        userphone = intent.getStringExtra("USERPHONE");
+        carnumber = intent.getStringExtra("CARNUMBER");
+        tireimage = intent.getStringExtra("TIREIMAGE");
+        Log.e(TAG, "onCreate:1- " + fontrearflag);
+        Log.e(TAG, "onCreate: 2-" + tirecount);
+        Log.e(TAG, "onCreate: 3-" + tireprice);
+        Log.e(TAG, "onCreate: 4-" + tirepname);
+        Log.e(TAG, "onCreate: 5-" + cxwycount);
+        Log.e(TAG, "onCreate: 6-" + cxwyprice);
+
         initView();
     }
 
     private void initView() {
         tireBuyButton = (TextView) findViewById(R.id.tire_buy_button);
-        tireImage = (ImageView) findViewById(R.id.tire_image);
+        tireNameText = (TextView) findViewById(R.id.tire_name_text_oder);
+        tirePriceText = (TextView) findViewById(R.id.tire_price_text_order);
+        tireCountText = (TextView) findViewById(R.id.tire_count_order);
+        cxwy_count_text = (TextView) findViewById(R.id.cxwy_count_text);
+        tireAllPriceText = (TextView) findViewById(R.id.tire_all_price_text);
+        cxwyAllPriceText = (TextView) findViewById(R.id.cxwy_all_price_text);
+        allPriceText = (TextView) findViewById(R.id.all_price_text);
+        userNameText = (TextView) findViewById(R.id.user_name_text);
+        userPhoneText = (TextView) findViewById(R.id.user_phone_text);
+        carNumberText = (TextView) findViewById(R.id.car_number_text);
+        tireImageView = (ImageView) findViewById(R.id.tire_image);
 
-        Glide.with(this).load("http://180.76.243.205:8111/images/flgure/9F5CD167-866A-C9B3-4406-7E0E36A4D003.jpg").into(tireImage);
+        Glide.with(this).load(tireimage).into(tireImageView);
+
+        carNumberText.setText(carnumber);
+        userPhoneText.setText(userphone);
+        userNameText.setText(username);
+
+        cxwy_count_text.setText("×" + cxwycount);
+        tireCountText.setText("×" + tirecount);
+        tireNameText.setText(tirepname);
+        tirePriceText.setText("￥" +tireprice);
+
+
+        double tirePriceDouble = Double.parseDouble(tireprice);
+        double cxwyPriceDouble = Double.parseDouble(cxwyprice);
+
+
+        tirePriceAll = tirePriceDouble * tirecount;
+        cxwyPriceAll = cxwyPriceDouble * cxwycount;
+        tireAllPriceText.setText("￥"+tirePriceAll);
+        cxwyAllPriceText.setText("￥"+cxwyPriceAll);
+
+        allPrice = tirePriceAll + cxwyPriceAll;
+        allPriceText.setText("￥"+allPrice);
+
+
+
+      //  Glide.with(this).load("http://180.76.243.205:8111/images/flgure/9F5CD167-866A-C9B3-4406-7E0E36A4D003.jpg").into(tireImage);
 
         RxViewAction.clickNoDouble(tireBuyButton)
                 .subscribe(new Action1<Void>() {

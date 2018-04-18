@@ -12,11 +12,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.cell.AmountView;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +35,6 @@ public class TireCountActivity extends BaseActivity {
     private static final String TAG = TireCountActivity.class.getSimpleName();
     private ActionBar actionBar;
     private CustomBanner mBanner;
-    private String shoeId;
     private String price;
     private AmountView tireAmountView;
     public static int maxCount = 10;
@@ -35,6 +42,17 @@ public class TireCountActivity extends BaseActivity {
     public int cxwyCurrentCount = 0;
     private AmountView cxwyAmountView;
     private TextView tireCountButton;
+    private TextView tirePriceText;
+    private TextView tireNameText;
+    private String fontrearflag;
+    private String tireSize;
+    private String cxwyPrice;
+    private int shoeId;
+    private String tireName;
+    private String tireImage;
+    private String carNumber;
+    private String userPhone;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +72,98 @@ public class TireCountActivity extends BaseActivity {
         });
 
         Intent intent = getIntent();
-        shoeId = intent.getStringExtra("SHOEID");
+        shoeId = intent.getIntExtra("SHOEID",0);
         price = intent.getStringExtra("PRICE");
+        fontrearflag = intent.getStringExtra("FONTREARFLAG");
+        Log.e(TAG, "onCreate: --------*---------" + shoeId);
 
         initView();
+
+        initDataFromService();
+    }
+
+    private void initDataFromService() {
+        int userId = new DbConfig().getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("shoeId",shoeId);
+            jsonObject.put("userId",userId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getShoeDetailByShoeId");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+
+
+
+
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess:------ " + result );
+                try {
+                    JSONObject jsonObject1 = new JSONObject(result);
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        tireName = data.getString("detailStr");
+                        cxwyPrice = data.getString("finalCxwyPrice");
+                        userName = data.getString("userName");
+                        userPhone = data.getString("userPhone");
+                        carNumber = data.getString("carNumber");
+                        tireImage = data.getString("shoeDownImg");
+                        String image2 = data.getString("shoeLeftImg");
+                        String image3 = data.getString("shoeLeftImg");
+                        String image4 = data.getString("shoeLeftImg");
+                        String image5 = data.getString("shoeLeftImg");
+                        tireSize = data.getString("size");
+                        List<String> imageList = new ArrayList<>();
+                        imageList.add(tireImage);
+                        imageList.add(image2);
+                        imageList.add(image3);
+                        imageList.add(image4);
+                        imageList.add(image5);
+                        mBanner.setPages(new CustomBanner.ViewCreator<String>() {
+                            @Override
+                            public View createView(Context context, int position) {
+                                ImageView imageView = new ImageView(context);
+                                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                                return imageView;
+                            }
+
+                            @Override
+                            public void updateUI(Context context, View view, int position, String entity) {
+                                Glide.with(context).load(entity).into((ImageView) view);
+                            }
+                        },imageList)
+                                //设置自动翻页
+                                .startTurning(5000);
+                        tireNameText.setText(tireName);
+
+                    }
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initView() {
@@ -65,6 +171,10 @@ public class TireCountActivity extends BaseActivity {
         tireAmountView = (AmountView) findViewById(R.id.amount_view);
         cxwyAmountView = (AmountView) findViewById(R.id.changxingwuyou_count);
         tireCountButton = (TextView) findViewById(R.id.tire_count_button);
+        tirePriceText = (TextView) findViewById(R.id.tire_price_text);
+        tireNameText = (TextView) findViewById(R.id.tire_name_text);
+
+        tirePriceText.setText(price);
 
         tireAmountView.setGoods_storage(maxCount);
         tireAmountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
@@ -99,39 +209,26 @@ public class TireCountActivity extends BaseActivity {
                             return;
                         }
                         Intent intent = new Intent(getApplicationContext(), QcActivity.class);
+                        intent.putExtra("FONTREARFLAG",fontrearflag);   //前后轮标识
+                        intent.putExtra("TIRECOUNT",tireCurrentCount);//轮胎数量
+                        intent.putExtra("TIREPRICE",price);     //轮胎单价
+                        intent.putExtra("TIREPNAME",tireName);  //轮胎名称
+                        intent.putExtra("CXWYCOUNT",cxwyCurrentCount);  //畅行无忧数量
+                        intent.putExtra("CXWYPRICE",cxwyPrice);  //畅行无忧名称
+                        intent.putExtra("USERNAME",userName);  //用户名
+                        intent.putExtra("USERPHONE",userPhone);  //手机号
+                        intent.putExtra("CARNUMBER",carNumber);  //车牌号
+                        intent.putExtra("TIREIMAGE",tireImage);  //轮胎图片
+
+
                         startActivity(intent);
                     }
                 });
 
 
-        List<String> imageList = new ArrayList<>();
-
-        imageList.add("http://180.76.243.205:8111/images/Advertisement/cxwy.png");
-        imageList.add("http://180.76.243.205:8111/images/Advertisement/cxwy1000.png");
-        imageList.add("http://180.76.243.205:8111/images/Advertisement/cxwy1000.png");
 
 
-        mBanner.setPages(new CustomBanner.ViewCreator<String>() {
-            @Override
-            public View createView(Context context, int position) {
-                ImageView imageView = new ImageView(context);
-                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                return imageView;
-            }
 
-            @Override
-            public void updateUI(Context context, View view, int position, String entity) {
-                Glide.with(context).load(entity).into((ImageView) view);
-            }
-        },imageList)//                //设置指示器为普通指示器
-//                .setIndicatorStyle(CustomBanner.IndicatorStyle.ORDINARY)
-//                //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
-//                .setIndicatorRes(R.drawable.shape_point_select, R.drawable.shape_point_unselect)
-//                //设置指示器的方向
-//                .setIndicatorGravity(CustomBanner.IndicatorGravity.CENTER)
-//                //设置指示器的指示点间隔
-//                .setIndicatorInterval(20)
-                //设置自动翻页
-                .startTurning(5000);
+
     }
 }

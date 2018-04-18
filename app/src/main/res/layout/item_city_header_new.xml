@@ -26,7 +26,6 @@
             android:textColor="@color/black"
             android:text="热门城市"/>
         <com.ruyiruyi.rylibrary.ui.cell.QGridView
-            android:id="@+id/item_header_city_gridview"
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

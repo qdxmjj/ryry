@@ -37,7 +37,7 @@
                     android:textSize="15sp"
                     android:textColor="@color/c6"/>
                 <TextView
-                    android:id="@+id/car_number"
+                    android:id="@+id/user_name_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="有人爱吃手手"
@@ -60,6 +60,7 @@
                     android:textSize="15sp"
                     android:textColor="@color/c6"/>
                 <TextView
+                    android:id="@+id/user_phone_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="13589342270"
@@ -82,6 +83,7 @@
                     android:textSize="15sp"
                     android:textColor="@color/c6"/>
                 <TextView
+                    android:id="@+id/car_number_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="鲁B15616"
@@ -110,23 +112,28 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <TextView
+                        android:id="@+id/tire_name_text_oder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="如驿如意夏季胎 205/55R16 适用于卡罗拉麦克斯宝来马良东岳寺死于抓地强 耐高温 正品"
                         android:textColor="@color/c7"
                         android:textSize="16sp"
+                        android:layout_marginLeft="5dp"
                         android:maxLines="3"/>
                    <FrameLayout
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
                        android:layout_marginTop="25dp">
                        <TextView
+                           android:id="@+id/tire_price_text_order"
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
                            android:text="￥888.00"
+                           android:layout_marginLeft="5dp"
                            android:textColor="@color/theme_primary"
                            android:textSize="19sp"/>
                        <TextView
+                           android:id="@+id/tire_count_order"
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
                            android:text="×4"
@@ -163,6 +170,7 @@
                         android:textSize="16sp"/>
                 </LinearLayout>
                 <TextView
+                    android:id="@+id/cxwy_count_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="×4"
@@ -194,6 +202,7 @@
                     android:textSize="15sp"
                     android:textColor="@color/c6"/>
                 <TextView
+                    android:id="@+id/tire_all_price_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="￥888"
@@ -211,11 +220,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="联系电话"
+                    android:text="畅行无忧"
                     android:layout_gravity="left"
                     android:textSize="15sp"
                     android:textColor="@color/c6"/>
                 <TextView
+                    android:id="@+id/cxwy_all_price_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="￥888"
@@ -242,6 +252,7 @@
                         android:textSize="16sp"
                         android:text="合计："/>
                     <TextView
+                        android:id="@+id/all_price_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"

@@ -67,6 +67,7 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
 
         holder.carTitle.setText(hometop.carTitle);
         holder.carContent.setText(hometop.carContent);
+        holder.cityText.setText(hometop.getCityName());
         if (hometop.state == 0){    //未登陆
             holder.carImage.setImageResource(R.drawable.ic_one_register);
         }else if (hometop.state == 1){  //未添加车辆
@@ -100,6 +101,7 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
         private final CustomBanner mBanner;
         private final LinearLayout cityLayout;
         private final LinearLayout carLayout;
+        private final TextView cityText;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -109,6 +111,7 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
             carContent = ((TextView) itemView.findViewById(R.id.home_car_content));
             cityLayout = ((LinearLayout) itemView.findViewById(R.id.city_layout));
             carLayout = ((LinearLayout) itemView.findViewById(R.id.car_layout));
+            cityText = ((TextView) itemView.findViewById(R.id.city_text));
         }
     }
 

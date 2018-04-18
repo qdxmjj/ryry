@@ -17,6 +17,16 @@ public class QcActivity extends BaseActivity {
     private ActionBar actionBar;
     private FrameLayout tireFlowLayout;
     private TextView qcNextButton;
+    private String fontrearflag;
+    private int tirecount;
+    private String tireprice;
+    private String tirepname;
+    private int cxwycount;
+    private String cxwyprice;
+    private String username;
+    private String userphone;
+    private String carnumber;
+    private String tireimage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +44,19 @@ public class QcActivity extends BaseActivity {
                 }
             }
         });
+
+        Intent intent = getIntent();
+        fontrearflag = intent.getStringExtra("FONTREARFLAG");
+        tirecount = intent.getIntExtra("TIRECOUNT",0);
+        tireprice = intent.getStringExtra("TIREPRICE");
+        tirepname = intent.getStringExtra("TIREPNAME");
+        cxwycount = intent.getIntExtra("CXWYCOUNT",0);
+        cxwyprice = intent.getStringExtra("CXWYPRICE");
+        username = intent.getStringExtra("USERNAME");
+        userphone = intent.getStringExtra("USERPHONE");
+        carnumber = intent.getStringExtra("CARNUMBER");
+        tireimage = intent.getStringExtra("TIREIMAGE");
+
 
         initView();
     }
@@ -54,6 +77,17 @@ public class QcActivity extends BaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), OrderAffirmActivity.class);
+                        intent.putExtra("FONTREARFLAG",fontrearflag);   //前后轮标识
+                        intent.putExtra("TIRECOUNT",tirecount);//轮胎数量
+                        intent.putExtra("TIREPRICE",tireprice);     //轮胎单价
+                        intent.putExtra("TIREPNAME",tirepname);  //轮胎名称
+                        intent.putExtra("CXWYCOUNT",cxwycount);  //畅行无忧数量
+                        intent.putExtra("CXWYPRICE",cxwyprice);  //畅行无忧名称
+                        intent.putExtra("USERNAME",username);  //用户名
+                        intent.putExtra("USERPHONE",userphone);  //手机号
+                        intent.putExtra("CARNUMBER",carnumber);  //车牌号
+                        intent.putExtra("TIREIMAGE",tireimage);  //轮胎图片
+
                         startActivity(intent);
                     }
                 });

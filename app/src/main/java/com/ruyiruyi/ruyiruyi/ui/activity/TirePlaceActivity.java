@@ -61,6 +61,7 @@ public class TirePlaceActivity extends BaseActivity {
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
                         intent.putExtra("TIRESIZE",fontsize);
+                        intent.putExtra("FONTREARFLAG","1");
                         startActivity(intent);
                     }
                 });
@@ -70,6 +71,7 @@ public class TirePlaceActivity extends BaseActivity {
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
                         intent.putExtra("TIRESIZE",rearsize);
+                        intent.putExtra("FONTREARFLAG","2");
                         startActivity(intent);
                     }
                 });
