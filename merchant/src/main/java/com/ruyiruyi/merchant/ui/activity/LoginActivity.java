@@ -1,34 +1,25 @@
 package com.ruyiruyi.merchant.ui.activity;
 
-import android.app.Dialog;
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Environment;
-import android.os.StrictMode;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.util.Util;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
-import com.jakewharton.rxbinding.view.RxView;
 import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.db.DbConfig;
-import com.ruyiruyi.merchant.db.model.Car;
 import com.ruyiruyi.merchant.db.model.User;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.rylibrary.utils.TripleDESUtil;
@@ -82,7 +73,29 @@ public class LoginActivity extends BaseActivityb {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
-
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this,"请授权读写手机存储权限",Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this,"请授权读写手机存储权限",Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this,"请授权相机权限",Toast.LENGTH_SHORT).show();
+            finish();
+        }  if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this,"请授权定位权限",Toast.LENGTH_SHORT).show();
+            finish();
+        }
         initView();
 /*    2    DbManager db = x.getDb(daoConfig);
         try {
@@ -104,6 +117,7 @@ public class LoginActivity extends BaseActivityb {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+//     3                   startActivity(new Intent(getApplicationContext(),RegisterMapActivity.class));
                         String phone = et_zhanghao.getText().toString();
                         String pass = et_pass.getText().toString();
                         byte[] md5 = new byte[0];
@@ -111,13 +125,15 @@ public class LoginActivity extends BaseActivityb {
                             md5 = TripleDESUtil.MD5(pass);
                             String password = TripleDESUtil.bytes2HexString(md5);
 
-                            if (phone.isEmpty() ) {
+                            if (phone.isEmpty()) {
                                 showDialog("手机号不能为空");
                                 return;
-                            } if (!UtilsRY.isMobile(phone)) {
+                            }
+                            if (!UtilsRY.isMobile(phone)) {
                                 showDialog("手机号格式错误");
                                 return;
-                            }if (pass.isEmpty() ) {
+                            }
+                            if (pass.isEmpty()) {
                                 showDialog("密码不能为空");
                                 return;
                             }
@@ -138,12 +154,12 @@ public class LoginActivity extends BaseActivityb {
 
     //测试用 登录成功
     private void loginTest() {
-        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         LoginActivity.this.finish();
     }
 
-//登录
+    //登录
     private void loginByPassWord(final String phone, final String pass) {
         final JSONObject jsonObject = new JSONObject();
         try {
@@ -152,8 +168,8 @@ public class LoginActivity extends BaseActivityb {
         } catch (JSONException e) {
 
         }
-        Log.e(TAG, "loginByPassWord:111 ph"+phone+"mm"+pass);
-        RequestParams params = new RequestParams(UtilsURL.LOGIN_PASS_REQUEST_URL + "pwdLogin");
+        Log.e(TAG, "loginByPassWord:111 ph" + phone + "mm" + pass);
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storePwdLogin");
         params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -163,19 +179,19 @@ public class LoginActivity extends BaseActivityb {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String msg = jsonObject1.getString("msg");
                     String status = jsonObject1.getString("status");
-                    if (status.equals("111111")){
-                        Log.e(TAG, "onSuccess: 登录？？？？？？？？？？？？？？" );
+                    if (status.equals("111111")) {
+                        Log.e(TAG, "onSuccess: 登录？？？？？？？？？？？？？？ result = " + result);
                         JSONObject data = jsonObject1.getJSONObject("data");
                         // 存储用户信息
                         saveUserToDb(data);
-                        Log.e(TAG, "onSuccess: 登录 ？？  data.length() == "+data.length() );
+                        Log.e(TAG, "onSuccess: 登录 ？？  data.length() == " + data.length());
                         //login
-                        Toast.makeText(LoginActivity.this,msg,Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         LoginActivity.this.finish();
-                    }else {
-                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    } else {
+                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -200,7 +216,8 @@ public class LoginActivity extends BaseActivityb {
             }
         });
     }
-//保存用户到数据库
+
+    //保存用户到数据库
     private void saveUserToDb(JSONObject data) {
 
         User user = new User();
@@ -232,10 +249,11 @@ public class LoginActivity extends BaseActivityb {
 
         }
     }
+
     /**
      * 保存用户到数据库
      */
-    private void savaUserDb(String phone ,String token) {
+    private void savaUserDb(String phone, String token) {
         DbConfig dbConfig = new DbConfig();
         DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
         DbManager db = x.getDb(daoConfig);
@@ -264,7 +282,7 @@ public class LoginActivity extends BaseActivityb {
                 startActivity(intent);
                 break;
             default:
-               break;
+                break;
         }
     }
 
@@ -274,7 +292,7 @@ public class LoginActivity extends BaseActivityb {
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_head);
+        dialog.setIcon(R.drawable.ic_logo);
         dialog.setView(dialogView);
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override

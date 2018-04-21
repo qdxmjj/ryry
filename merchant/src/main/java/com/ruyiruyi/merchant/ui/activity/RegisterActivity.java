@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -29,11 +31,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.ruyiruyi.merchant.MyApplication;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.XiangmusBean;
 import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.db.model.Category;
 import com.ruyiruyi.merchant.db.model.Province;
-import com.ruyiruyi.merchant.ui.adapter.SpnStringAdapter;
+import com.ruyiruyi.merchant.db.model.ServiceType;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -41,6 +49,7 @@ import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
+import com.ruyiruyi.rylibrary.utils.TripleDESUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +62,8 @@ import org.xutils.x;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -89,12 +100,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private ImageView img_mdpic_b_center;
     private ImageView img_mdpic_c_center;
     private ImageView img_shou_a_center;
-    private CheckBox ckbox_a;
-    private CheckBox ckbox_b;
-    private CheckBox ckbox_c;
-    private CheckBox ckbox_d;
-    private CheckBox ckbox_e;
-    private CheckBox ckbox_f;
     private CheckBox ckbox_sl;
     private CheckBox ckbox_bsl;
     private TextView tv_save;
@@ -104,13 +109,13 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private Spinner spn_category;
     //test !!!
     private LinearLayout ll_xms;
-    private List<String> list_xms = new ArrayList<>();
+    private List<XiangmusBean> list_xms = new ArrayList<>();
 
     private ActionBar mActionBar;
     private TimeCount mTimeCount;
     private String TAG = RegisterActivity.class.getSimpleName();
-    private String user_name, user_phone, code, password_a, password_b, shop_name, shop_phone, shop_location;
     private List<String> shengList;
+    private List<String> categoryList;
     private List<String> shiList;
     private List<String> xianList;
     public String currentSheng = "北京市";
@@ -123,12 +128,12 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     public int currentXianPosition = 0;
     public int currentlTimePosition = 0;
     public int currentrTimePosition = 0;
-    private int areaId = 0;
+    private int areaId=9999;
     private Date date;
+    private Date date_category;
+    private Date date_serviceType;
     private List<String> lTime_list;
     private List<String> rTime_list;
-    private String shopTimeL;
-    private String shopTimeR;
     private String shopTimes;
     private int currentImage = 0;//3-yyzz,0-mdpica,1-mdpicb,2-mdpicc,4-shou;
     private boolean hasPic_yyzz = false;
@@ -144,7 +149,52 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private Bitmap yyzzPicBitmap;
     private Bitmap shouPicBitmap;
     protected static Uri tempUri;
-
+    public static final int MAP_REUEST_CODE = 2;
+    private double latitude_double;
+    private double longitude_double;
+    private LocationClient mLocationClient;
+    private String cityAddress;
+    private List<String> serviceTypeList = new ArrayList<String>();
+    //提交参数---<
+    private String persionName;
+    private String persionPhone;
+    private String code;
+    private String passWord_a;
+    private String passWord_b;
+    private String shopName;
+    private String shopCategoryId;
+    private String shopPhone;
+    private String shopTime;
+    private String shopTimeL;
+    private String shopTimeR;
+    private String cityId;
+    private String shopLocation;
+    private String longitude;
+    private String latitude;
+    private String yyzzPath;
+    private String mdpicaPath;
+    private String mdpicbPath;
+    private String mdpiccPath;
+    private String shouPath;
+    private String serviceTypeListString;
+    private int isShoulian;//
+    private int isRightCode = 0;// 0 wrong 1 right;
+    //提交参数>---
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    img_CodeRight.setVisibility(View.VISIBLE);
+                    img_CodeRight.setImageResource(R.drawable.ic_right);
+                    et_Code.setFocusable(false);
+                    et_userPhone.setFocusable(false);
+                    isRightCode = 1;
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +212,11 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 }
             }
         });
-        initProvinceData();
+
+//        //下载数据
+//        initRegisterCategoryData();
+//        initRegisterServiceTypeData();
+//        initProvinceData();
         initView();
         textAddXMView();
         shengList = new ArrayList<>();
@@ -175,90 +229,54 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         bindView();
     }
 
+
     private void textAddXMView() {
-        for (int i = 0; i < 10; i++) {
-            list_xms.add("轮胎服务" + i);
-        }
-        ll_xms = (LinearLayout) findViewById(R.id.ll_xiangmus);
-        for (int i = 0; i < (list_xms.size() % 3 == 0 ? (list_xms.size() / 3) : (list_xms.size() / 3 + 1)); i++) {
-            View view = LayoutInflater.from(RegisterActivity.this).inflate(R.layout.register_xm_add_item, null);
-            CheckBox checkBoxa = (CheckBox) view.findViewById(R.id.checkbox_a);
-            CheckBox checkBoxb = (CheckBox) view.findViewById(R.id.checkbox_b);
-            CheckBox checkBoxc = (CheckBox) view.findViewById(R.id.checkbox_c);
-            checkBoxa.setText(list_xms.get(i * 3 + 0));
-            checkBoxa.setTag(new XiangmusBean(i * 3 + 0, list_xms.get(i * 3 + 0)));
-            checkBoxa.setOnCheckedChangeListener(this);
-
-            checkBoxb.setText((i * 3 + 1 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 1));
-            checkBoxb.setVisibility((i * 3 + 1 >= list_xms.size()) ? View.GONE : View.VISIBLE);
-            checkBoxb.setTag(new XiangmusBean(i * 3 + 1, (i * 3 + 1 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 1)));
-            checkBoxb.setOnCheckedChangeListener(this);
-
-            checkBoxc.setText((i * 3 + 2 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 2));
-            checkBoxc.setVisibility((i * 3 + 2 >= list_xms.size()) ? View.GONE : View.VISIBLE);
-            checkBoxc.setTag(new XiangmusBean(i * 3 + 2, (i * 3 + 2 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 2)));
-            checkBoxc.setOnCheckedChangeListener(this);
-
-            ll_xms.addView(view);
-        }
-    }
-
-    private void initProvinceData() {
-        date = new Date();
-        List<Province> provinceList = null;
         try {
-            provinceList = new DbConfig().getDbManager().selector(Province.class).orderBy("time").findAll();
-        } catch (DbException e) {
-
-        }
-        JSONObject jsonObject = new JSONObject();
-        try {
-            //时间请求 ！！
-            if (provinceList == null) {
-                jsonObject.put("time", "2000-00-00 00:00:00");
+            List<ServiceType> all_ServiceType = new DbConfig().getDbManager().selector(ServiceType.class).findAll();
+            if (all_ServiceType == null) {
+                Toast.makeText(RegisterActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
             } else {
-                String time = provinceList.get(provinceList.size() - 1).getTime();
-                jsonObject.put("time", time);
-                Log.e(TAG, "initProvinceData: time = " + time);
-            }
+                XiangmusBean xiangmusBean;
 
-        } catch (JSONException e) {
+                for (int i = 0; i < all_ServiceType.size(); i++) {
+                    xiangmusBean = new XiangmusBean();
+                    xiangmusBean.setId(all_ServiceType.get(i).getId());
+                    Log.e(TAG, "textAddXMView:  xiangmusBean.getId()  == " + xiangmusBean.getId());
+                    xiangmusBean.setName(all_ServiceType.get(i).getName());
+                    xiangmusBean.setColor(all_ServiceType.get(i).getColor());
+                    xiangmusBean.setTime(all_ServiceType.get(i).getTime());
+                    list_xms.add(xiangmusBean);
+                    Log.e(TAG, "textAddXMView:   list_xms.toString()   == " + list_xms.toString());
+                }
+                ll_xms = (LinearLayout) findViewById(R.id.ll_xiangmus);
+                for (int i = 0; i < (list_xms.size() % 3 == 0 ? (list_xms.size() / 3) : (list_xms.size() / 3 + 1)); i++) {
+                    View view = LayoutInflater.from(RegisterActivity.this).inflate(R.layout.register_xm_add_item, null);
+                    CheckBox checkBoxa = (CheckBox) view.findViewById(R.id.checkbox_a);
+                    CheckBox checkBoxb = (CheckBox) view.findViewById(R.id.checkbox_b);
+                    CheckBox checkBoxc = (CheckBox) view.findViewById(R.id.checkbox_c);
+                    checkBoxa.setText(list_xms.get(i * 3 + 0).getName());
+                    Log.e(TAG, "textAddXMView: check a == " + list_xms.get(i * 3 + 0).getName());
+                    checkBoxa.setTag(list_xms.get(i * 3 + 0));
+                    checkBoxa.setOnCheckedChangeListener(this);
 
-        }
-        RequestParams params = new RequestParams(UtilsURL.LOGIN_PASS_REQUEST_URL + "getAllPositon");
-        params.addBodyParameter("reqJson", jsonObject.toString());
-        Log.e(TAG, "initProvinceData: params = " + params);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: " + result);
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(result);
-                    String status = jsonObject.getString("status");
-                    String msg = jsonObject.getString("msg");
-                    JSONArray data = jsonObject.getJSONArray("data");
-                    Log.e(TAG, "onSuccess: getData and To Db ??  status = " + status + "msg = " + msg + "data = " + data.toString());
-                    saveProvinceToDb(data);
-                } catch (JSONException e) {
+                    checkBoxb.setText((i * 3 + 1 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 1).getName());
+                    Log.e(TAG, "textAddXMView: check b == " + list_xms.get(i * 3 + 1).getName());
+                    checkBoxb.setVisibility((i * 3 + 1 >= list_xms.size()) ? View.GONE : View.VISIBLE);
+                    checkBoxb.setTag((i * 3 + 1 >= list_xms.size()) ? null : list_xms.get(i * 3 + 1));
+                    checkBoxb.setOnCheckedChangeListener(this);
+
+                    checkBoxc.setText((i * 3 + 2 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 2).getName());
+                    Log.e(TAG, "textAddXMView: check c == " + list_xms.get(i * 3 + 2).getName());
+                    checkBoxc.setVisibility((i * 3 + 2 >= list_xms.size()) ? View.GONE : View.VISIBLE);
+                    checkBoxc.setTag((i * 3 + 2 >= list_xms.size()) ? null : list_xms.get(i * 3 + 2));
+                    checkBoxc.setOnCheckedChangeListener(this);
+
+                    ll_xms.addView(view);
                 }
             }
 
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                Log.e(TAG, "onError: getData and To Db ?? ");
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-                Log.e(TAG, "onCancelled: getData and To Db ??");
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
+        } catch (DbException e) {
+        }
     }
 
     private void saveProvinceToDb(JSONArray data) {
@@ -268,12 +286,62 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             province = new Province();
             try {
                 JSONObject obj = (JSONObject) data.get(i);
+                //保存并转换time请求的time
+                long time = obj.getLong("time");
+                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
+                province.setTime(timestampToStringAll);
                 province.setDefinition(obj.getInt("definition"));
                 province.setFid(obj.getInt("fid"));
                 province.setId(obj.getInt("id"));
                 province.setName(obj.getString("name"));
                 Log.e(TAG, "saveProvinceToDb: definition==>" + province.getDefinition());
                 db.saveOrUpdate(province);
+            } catch (JSONException e) {
+
+            } catch (DbException e) {
+
+            }
+        }
+    }
+
+    private void saveServiceTypeToDb(JSONArray data) {
+        ServiceType serviceType;
+        DbManager db = (new DbConfig()).getDbManager();
+        for (int i = 0; i < data.length(); i++) {
+            serviceType = new ServiceType();
+            try {
+                JSONObject obj = (JSONObject) data.get(i);
+                long time = obj.getLong("time");
+                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
+                Log.e(TAG, "saveServiceTypeToDb-------: timestampToStringAll ==" + timestampToStringAll);
+                serviceType.setTime(timestampToStringAll);
+                serviceType.setColor(obj.getString("color"));
+                serviceType.setId(obj.getInt("id"));
+                serviceType.setName(obj.getString("name"));
+                db.saveOrUpdate(serviceType);
+            } catch (JSONException e) {
+
+            } catch (DbException e) {
+
+            }
+        }
+    }
+
+    private void saveCategoryToDb(JSONArray data) {
+        Category category;
+        DbManager db = (new DbConfig()).getDbManager();
+        for (int i = 0; i < data.length(); i++) {
+            category = new Category();
+            try {
+                JSONObject obj = (JSONObject) data.get(i);
+                long time = obj.getLong("time");
+                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
+                category.setTime(timestampToStringAll);
+                category.setColor(obj.getString("color"));
+                category.setId(obj.getInt("id"));
+                category.setName(obj.getString("name"));
+                Log.e(TAG, "saveCategoryToDb: category.getName() ==" + category.getName());
+                db.saveOrUpdate(category);
             } catch (JSONException e) {
 
             } catch (DbException e) {
@@ -311,8 +379,57 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             @Override
             public void afterTextChanged(Editable s) {
                 if (et_Code.getText().length() == 6) {
-                    img_CodeRight.setImageResource(R.drawable.ic_right);
-                    img_CodeRight.setVisibility(View.VISIBLE);
+                    persionPhone = et_userPhone.getText().toString();
+                    code = et_Code.getText().toString();
+                    Log.e(TAG, "afterTextChanged: code------------" + code + " persionPhone " + persionPhone);
+                    JSONObject object = new JSONObject();
+                    try {
+                        object.put("phone", persionPhone);
+                        object.put("code", code);
+                    } catch (JSONException e) {
+                    }
+                    RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "verificationCode");
+                    params.addBodyParameter("reqJson", object.toString());
+                    Log.e(TAG, "afterTextChanged:---------------------------- " + params.toString());
+                    x.http().post(params, new Callback.CommonCallback<String>() {
+                        @Override
+                        public void onSuccess(String result) {
+                            Log.e(TAG, "onSuccess: -----------------------------------" + result);
+                            JSONObject jsonObject = null;
+                            try {
+                                jsonObject = new JSONObject(result);
+                            } catch (JSONException e) {
+                            }
+                            String status = null;
+                            try {
+                                status = jsonObject.getString("status");
+                                String msg = jsonObject.getString("msg");
+                                if (status.equals("1")) {
+                                    Message message = Message.obtain();
+                                    message.what = 0;
+                                    mHandler.sendMessage(message);
+                                }
+                            } catch (JSONException e) {
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(Throwable ex, boolean isOnCallback) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(CancelledException cex) {
+
+                        }
+
+                        @Override
+                        public void onFinished() {
+
+                        }
+                    });
+
                 } else if (et_Code.getText().length() == 0) {
                     img_CodeRight.setVisibility(View.GONE);
                 } else {
@@ -358,7 +475,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     return;
                 }
                 currentImage = 4;
-                showPicInputDialog();
+                showPicInputDialogShou();
                 break;
 
 
@@ -393,6 +510,20 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 hasPic_shou_a = false;
                 break;
         }
+    }
+
+    private void showPicInputDialogShou() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("上传照片");
+        String[] items = {"拍照"};
+        builder.setNegativeButton("取消", null);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                takePicture();
+            }
+        });
+        builder.create().show();
     }
 
     private void showPicInputDialog() {
@@ -464,6 +595,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e(TAG, "onActivityResult:resultCode " + resultCode + "requestcode" + requestCode);
+        if (resultCode == MAP_REUEST_CODE) {
+            longitude = data.getStringExtra("longitude");
+            latitude = data.getStringExtra("latitude");
+            cityAddress = data.getStringExtra("cityAddress");
+            tv_ShopPoint.setText(cityAddress);
+//            Toast.makeText(this, "经度=" + longitude + "纬度=" + latitude + "cityAddress=" + cityAddress, Toast.LENGTH_SHORT).show();
+        }
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case CHOOSE_PICTURE:
@@ -473,6 +612,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 case TAKE_PICTURE:
                     setImageToViewFromPhone(tempUri);
                     break;
+
             }
         }
     }
@@ -558,6 +698,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 tv_ShopCategory.setText(whv_category.getSelectedItem());
+                                shopCategoryId = (whv_category.getSelectedPosition() + 1) + "";
                             }
                         })
                         .show();
@@ -700,6 +841,11 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         .show();
                 break;
             case R.id.tv_shoppoint:
+                Intent intent = new Intent(RegisterActivity.this, RegisterMapActivity.class);
+                intent.putExtra("longitude_double", longitude_double);
+                intent.putExtra("latitude_double", latitude_double);
+                Log.e(TAG, "registerclick22222: " + "longitude_double" + longitude_double + "latitude_double" + latitude_double);
+                startActivityForResult(intent, MAP_REUEST_CODE);
                 break;
         }
     }
@@ -713,17 +859,33 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private List<String> getStrLTime() {
         lTime_list = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
-            lTime_list.add(i + ":00");
+            if (i < 10) {
+                lTime_list.add("0" + i + ":00:00");
+            } else {
+                lTime_list.add(i + ":00:00");
+            }
         }
         return lTime_list;
     }
 
     private List<String> getSpnList() {
-        List<String> spn_getlist = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            spn_getlist.add("门店类别" + i);
+        categoryList = new ArrayList<>();
+        List<Category> categorydata = new ArrayList<>();
+
+        DbManager db = new DbConfig().getDbManager();
+        try {
+            categorydata = db.selector(Category.class)
+                    .findAll();
+        } catch (DbException e) {
+
         }
-        return spn_getlist;
+        if (categorydata != null) {
+            for (int i = 0; i < categorydata.size(); i++) {
+                categoryList.add(categorydata.get(i).getName());
+            }
+        }
+
+        return categoryList;
     }
 
     private void getSheng() {
@@ -816,7 +978,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             jsonObject.put("phone", phoneNumber);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(UtilsURL.LOGIN_PASS_REQUEST_URL + "sendMsg");
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "sendMsg");
         params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             private String status;
@@ -858,6 +1020,28 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     }
 
     private void initView() {
+        //获取经纬度
+        mLocationClient = new LocationClient(this);
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true);                                //打开gps
+        option.setCoorType("bd09ll");                           //设置坐标类型为bd09ll 百度需要的坐标，也可以返回其他type类型，大家可以查看下
+        option.setPriority(LocationClientOption.NetWorkFirst);  //设置网络优先
+//        option.setScanSpan(50000);                               //定时定位，每隔5秒钟定位一次。这个就看大家的需求了
+
+        mLocationClient.setLocOption(option);
+        mLocationClient.start();//这句代码百度api上给的没有，没有这个代码下面的回调方法不会执行的
+
+        mLocationClient.registerLocationListener(new BDLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation bdLocation) {
+                //  这里可以获取经纬度，这是回调方法
+                longitude_double = bdLocation.getLongitude();
+                latitude_double = bdLocation.getLatitude();
+                Log.e(TAG, "registerclick11111: " + "longitude_double" + longitude_double + "latitude_double" + latitude_double);
+            }
+        });
+
+
         et_userName = (EditText) findViewById(R.id.et_person);
         et_userPhone = (EditText) findViewById(R.id.et_phone);
         tv_getCode = (TextView) findViewById(R.id.tv_getcode);
@@ -887,13 +1071,240 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         img_mdpic_b_center = (ImageView) findViewById(R.id.img_mdpic_b_center);
         img_mdpic_c_center = (ImageView) findViewById(R.id.img_mdpic_c_center);
         img_shou_a_center = (ImageView) findViewById(R.id.img_shou_a_center);
-        ckbox_a = (CheckBox) findViewById(R.id.checkbox_a);
-        ckbox_b = (CheckBox) findViewById(R.id.checkbox_b);
-        ckbox_c = (CheckBox) findViewById(R.id.checkbox_c);
         ckbox_sl = (CheckBox) findViewById(R.id.checkbox_sl);
+        ckbox_sl.setChecked(true);//默认熟练
+        isShoulian = 1;
         ckbox_bsl = (CheckBox) findViewById(R.id.checkbox_bsl);
+        CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                switch (buttonView.getId()) {
+                    case R.id.checkbox_sl:
+                        if (isChecked) {
+                            ckbox_bsl.setChecked(false);
+                            isShoulian = 1;
+                        } else {
+                            ckbox_bsl.setChecked(true);
+                            isShoulian = 0;
+                        }
+                        break;
+                    case R.id.checkbox_bsl:
+                        if (isChecked) {
+                            ckbox_sl.setChecked(false);
+                            isShoulian = 0;
+                        } else {
+                            ckbox_sl.setChecked(true);
+                            isShoulian = 1;
+                        }
+                        break;
+                }
+            }
+        };
+        ckbox_sl.setOnCheckedChangeListener(listener);
+        ckbox_bsl.setOnCheckedChangeListener(listener);
         tv_save = (TextView) findViewById(R.id.tv_save);
         mTimeCount = new TimeCount(60000, 1000);
+
+        RxViewAction.clickNoDouble(tv_save).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Log.e(TAG, "call: et_userName.getText()" + et_userName.getText());
+                if (et_userName.getText() == null || et_userName.getText().length() == 0) {
+                    Toast.makeText(RegisterActivity.this, "请输入您的名字", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    persionName = et_userName.getText().toString();
+                }
+                if (isRightCode == 0) {
+                    Toast.makeText(RegisterActivity.this, "请验证手机号", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (et_Passworda.getText() == null || et_Passworda.getText().length() == 0) {
+                    Toast.makeText(RegisterActivity.this, "请输入登录密码", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    byte[] md5 = new byte[0];
+                    try {
+                        md5 = TripleDESUtil.MD5(et_Passworda.getText().toString());
+                    } catch (NoSuchAlgorithmException e) {
+                    } catch (UnsupportedEncodingException e) {
+                    }
+                    passWord_a = TripleDESUtil.bytes2HexString(md5);
+                }
+                if (et_Passwordb.getText() == null || et_Passwordb.getText().length() == 0) {
+                    Toast.makeText(RegisterActivity.this, "请输入确认密码", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    byte[] md5 = new byte[0];
+                    try {
+                        md5 = TripleDESUtil.MD5(et_Passwordb.getText().toString());
+                    } catch (NoSuchAlgorithmException e) {
+                    } catch (UnsupportedEncodingException e) {
+                    }
+                    passWord_b = TripleDESUtil.bytes2HexString(md5);
+                }
+                if (!passWord_a.equals(passWord_b)) {
+                    Toast.makeText(RegisterActivity.this, "两次输入密码不一致", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (et_Shopname.getText() == null || et_Shopname.getText().length() == 0) {
+                    Toast.makeText(RegisterActivity.this, "请输入门店名称", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    shopName = et_Shopname.getText().toString();
+                }
+                if (shopCategoryId == null) {
+                    Toast.makeText(RegisterActivity.this, "请选择您的门店类别", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (et_ShopPhone.getText() == null || et_ShopPhone.getText().length() == 0) {
+                    Toast.makeText(RegisterActivity.this, "请输入您店里的电话", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    shopPhone = et_ShopPhone.getText().toString();
+                }
+                if (shopTimeL == null||shopTimeR==null) {
+                    Toast.makeText(RegisterActivity.this, "请选择您的营业时间", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (areaId==9999) {
+                    Toast.makeText(RegisterActivity.this, "请选择您的店铺所在城市", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "call: cityId = " + cityId);
+                    return;
+                } else {
+                    cityId = areaId + "";
+                }
+                if (et_ShopLocation.getText() == null || et_ShopLocation.getText().length() == 0) {
+                    Toast.makeText(RegisterActivity.this, "请补充您的门店位置", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    shopLocation = et_ShopLocation.getText().toString();
+                }
+                if (latitude == null || longitude == null) {
+                    Toast.makeText(RegisterActivity.this, "请点击定位", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (yyzzPicBitmap == null) {
+                    Toast.makeText(RegisterActivity.this, "请上传营业执照", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    yyzzPath = ImageUtils.savePhoto(yyzzPicBitmap, Environment
+                            .getExternalStorageDirectory().getAbsolutePath(), "yyzzPic");
+                    Log.e(TAG, "call: yyzzPath == " + yyzzPath);
+                }
+                if (mdPicaBitmap == null || mdPicbBitmap == null || mdPiccBitmap == null) {
+                    Toast.makeText(RegisterActivity.this, "请上传门店照片", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    mdpicaPath = ImageUtils.savePhoto(mdPicaBitmap, Environment
+                            .getExternalStorageDirectory().getAbsolutePath(), "mdPica");
+                    mdpicbPath = ImageUtils.savePhoto(mdPicbBitmap, Environment
+                            .getExternalStorageDirectory().getAbsolutePath(), "mdPicb");
+                    mdpiccPath = ImageUtils.savePhoto(mdPiccBitmap, Environment
+                            .getExternalStorageDirectory().getAbsolutePath(), "mdPicc");
+                }
+                if (shouPicBitmap == null) {
+                    Toast.makeText(RegisterActivity.this, "请上传手持身份证照片", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    shouPath = ImageUtils.savePhoto(shouPicBitmap, Environment
+                            .getExternalStorageDirectory().getAbsolutePath(), "shouPic");
+                }
+                if (serviceTypeList == null || serviceTypeList.size() == 0) {
+                    Toast.makeText(RegisterActivity.this, "请选择合作项目", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    serviceTypeListString = "";
+                    for (int i = 0; i < serviceTypeList.size(); i++) {
+                        if (i == serviceTypeList.size() - 1) {
+                            serviceTypeListString = serviceTypeListString + serviceTypeList.get(i);
+                        } else {
+                            serviceTypeListString = serviceTypeListString + serviceTypeList.get(i) + ",";
+                        }
+                        Log.e(TAG, "call:--++- " + serviceTypeListString);
+                    }
+                }
+                /*    //提交参数---<
+                private String persionName;
+                private String persionPhone;
+                private String code;
+                private String passWord_a;
+                private String passWord_b;
+                private String shopName;
+                private String shopCategoryId;
+                private String shopPhone;
+                private String shopTime;
+                private String cityId;
+                private String shopLocation;
+                private String longitude;
+                private String latitude;
+                private String serviceTypeListString;
+                private boolean isShoulian;
+                //提交参数>---*/
+                JSONObject obj = new JSONObject();
+                try {
+                    obj.put("producerName", persionName);
+                    obj.put("phone", persionPhone);
+                    obj.put("password", passWord_a);
+                    obj.put("storeName", shopName);
+                    obj.put("storeTypeId", shopCategoryId);
+                    obj.put("tel", shopPhone);
+                    obj.put("startTime", "2000-01-01T" + shopTimeL + ".000+0800");
+                    obj.put("endTime", "2000-01-01T" + shopTimeR + ".000+0800");
+                    obj.put("positionId", cityId);
+                    obj.put("address", shopLocation);
+                    obj.put("longitude", longitude);
+                    obj.put("latitude", latitude);
+                    //  obj.put("serviceTypeList",serviceTypeListString);
+                    obj.put("appExpert", isShoulian);
+
+                } catch (JSONException e) {
+                }
+                RequestParams pa = new RequestParams(UtilsURL.REQUEST_URL + "registerStore");
+                pa.addBodyParameter("reqJson", obj.toString());
+                pa.addBodyParameter("serviceTypeList", serviceTypeListString);
+                pa.addBodyParameter("business_license_img", new File(yyzzPath));
+                pa.addBodyParameter("location_img", new File(mdpicaPath));
+                pa.addBodyParameter("indoor_img", new File(mdpicbPath));
+                pa.addBodyParameter("factory_img", new File(mdpiccPath));
+                pa.addBodyParameter("id_img", new File(shouPath));
+                x.http().post(pa, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        try {
+                            int status = new JSONObject(result).getInt("status");
+                            String msg = new JSONObject(result).getString("msg");
+                            if (status>0) {
+                                Toast.makeText(RegisterActivity.this, msg , Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                                startActivity(intent);
+                                RegisterActivity.this.finish();
+                            }else {
+                                Toast.makeText(RegisterActivity.this, msg , Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+                        Toast.makeText(RegisterActivity.this, "网络错误提交失败", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                });
+            }
+        });
+
     }
 
     private void showDialog(String error) {
@@ -902,7 +1313,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_head);
+        dialog.setIcon(R.drawable.ic_logo);
         dialog.setView(dialogView);
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
@@ -916,7 +1327,29 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         XiangmusBean bean = (XiangmusBean) buttonView.getTag();
-        Toast.makeText(this, " id= " + bean.getId() + " text = " + bean.getText() + " ", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, " id= " + bean.getId() + " text = " + bean.getName() + " ", Toast.LENGTH_SHORT).show();
+        if (isChecked) {
+            if (serviceTypeList == null || serviceTypeList.size() == 0) {
+                serviceTypeList.add(bean.getId() + "");
+            } else {
+                for (int i = 0; i < serviceTypeList.size(); i++) {
+                    if (serviceTypeList.get(i).equals(bean.getId() + "")) {
+                        serviceTypeList.remove(bean.getId() + "");
+                    }
+                }
+                serviceTypeList.add(bean.getId() + "");
+            }
+        } else { //noChecked
+            if (serviceTypeList == null || serviceTypeList.size() == 0) {
+
+            } else {
+                for (int i = 0; i < serviceTypeList.size(); i++) {
+                    if (serviceTypeList.get(i).equals(bean.getId() + "")) {
+                        serviceTypeList.remove(bean.getId() + "");
+                    }
+                }
+            }
+        }
     }
 
     class TimeCount extends CountDownTimer {

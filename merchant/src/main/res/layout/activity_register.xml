@@ -387,8 +387,8 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="130dp"
                     android:onClick="registerclick"
-                    android:singleLine="true"
                     android:text="点击自动定位"
+                    android:lines="2"
                     android:textColor="@color/c5"
                     android:textSize="15sp" />
 
