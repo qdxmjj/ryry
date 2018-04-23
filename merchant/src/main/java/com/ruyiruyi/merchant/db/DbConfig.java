@@ -72,19 +72,6 @@ public class DbConfig {
         return null;
     }
 
-    //    public List<Lunbo> getLunbo(){
-//        DbManager.DaoConfig daoConfig = getDaoConfig();
-//        DbManager db = x.getDb(daoConfig);
-//        List<Lunbo> lunbos = new ArrayList<>();
-//        try {
-//            lunbos= db.selector(Lunbo.class)
-//                    .findAll();
-//        } catch (DbException e1) {
-//        }
-//
-//        return lunbos;
-//    }
-//
     public Boolean getIsLogin() {
         DbManager.DaoConfig daoConfig = getDaoConfig();
         DbManager db = x.getDb(daoConfig);

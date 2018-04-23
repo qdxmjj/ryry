@@ -180,11 +180,11 @@ public class LoginActivity extends BaseActivityb {
                     String msg = jsonObject1.getString("msg");
                     String status = jsonObject1.getString("status");
                     if (status.equals("111111")) {
-                        Log.e(TAG, "onSuccess: 登录？？？？？？？？？？？？？？ result = " + result);
+                        Log.e(TAG, "LoginActivity =-->onSuccess: 登录请求？？？？？？  result = " + result);
                         JSONObject data = jsonObject1.getJSONObject("data");
                         // 存储用户信息
                         saveUserToDb(data);
-                        Log.e(TAG, "onSuccess: 登录 ？？  data.length() == " + data.length());
+                        Log.e(TAG, "LoginActivity =-->onSuccess: 登录请求 ？？  data.length() == " + data.length());
                         //login
                         Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -202,17 +202,17 @@ public class LoginActivity extends BaseActivityb {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Log.w(TAG, "onError: 登录请求 onError ??");
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
-
+                Log.w(TAG, "onCancelled: 登录请求 onCancelled ??");
             }
 
             @Override
             public void onFinished() {
-
+                Log.w(TAG, "onFinished: 登录请求 onFinished ??");
             }
         });
     }
@@ -223,25 +223,17 @@ public class LoginActivity extends BaseActivityb {
         User user = new User();
         try {
             user.setId(data.getInt("id"));
-            user.setNick(data.getString("nick"));
-            user.setPassword(data.getString("password"));
-            user.setPhone(data.getString("phone"));
-            user.setAge(data.getString("age"));
-            long birthday = data.getLong("birthday");
-            String birthdayStr = new UtilsRY().getTimestampToString(birthday);
-            user.setBirthday(birthdayStr);
-            user.setEmail(data.getString("email"));
-            user.setGender(data.getInt("gender"));
-            user.setHeadimgurl(data.getString("headimgurl"));
+            user.setStoreName(data.getString("storeName"));
+            user.setStatus(data.getInt("status"));
+            user.setStoreImgUrl(data.getString("storeImgUrl"));
+            Log.e(TAG, "saveUserToDb: storeImgUrl == >"+user.getStoreImgUrl());
+            user.setStoreLoginName(data.getString("storeLoginName"));
             user.setToken(data.getString("token"));
-            user.setStatus(data.getString("status"));
-            user.setFirstAddCar(data.getInt("firstAddCar"));
+            user.setUpdateTime(data.getString("updateTime"));
             user.setIsLogin("1");
             DbConfig dbConfig = new DbConfig();
-
             DbManager db = dbConfig.getDbManager();
 
-//     2       DbManager db = x.getDb(daoConfig);
 
             db.saveOrUpdate(user);
         } catch (JSONException e) {

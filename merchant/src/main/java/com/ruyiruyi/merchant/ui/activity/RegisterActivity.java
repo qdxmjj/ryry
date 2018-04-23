@@ -177,7 +177,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private String mdpiccPath;
     private String shouPath;
     private String serviceTypeListString;
-    private int isShoulian;//
+    private int isShoulian;//0 no 1 yes ;
     private int isRightCode = 0;// 0 wrong 1 right;
     //提交参数>---
     private Handler mHandler = new Handler() {
@@ -276,77 +276,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             }
 
         } catch (DbException e) {
-        }
-    }
-
-    private void saveProvinceToDb(JSONArray data) {
-        Province province;
-        DbManager db = (new DbConfig()).getDbManager();
-        for (int i = 0; i < data.length(); i++) {
-            province = new Province();
-            try {
-                JSONObject obj = (JSONObject) data.get(i);
-                //保存并转换time请求的time
-                long time = obj.getLong("time");
-                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-                province.setTime(timestampToStringAll);
-                province.setDefinition(obj.getInt("definition"));
-                province.setFid(obj.getInt("fid"));
-                province.setId(obj.getInt("id"));
-                province.setName(obj.getString("name"));
-                Log.e(TAG, "saveProvinceToDb: definition==>" + province.getDefinition());
-                db.saveOrUpdate(province);
-            } catch (JSONException e) {
-
-            } catch (DbException e) {
-
-            }
-        }
-    }
-
-    private void saveServiceTypeToDb(JSONArray data) {
-        ServiceType serviceType;
-        DbManager db = (new DbConfig()).getDbManager();
-        for (int i = 0; i < data.length(); i++) {
-            serviceType = new ServiceType();
-            try {
-                JSONObject obj = (JSONObject) data.get(i);
-                long time = obj.getLong("time");
-                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-                Log.e(TAG, "saveServiceTypeToDb-------: timestampToStringAll ==" + timestampToStringAll);
-                serviceType.setTime(timestampToStringAll);
-                serviceType.setColor(obj.getString("color"));
-                serviceType.setId(obj.getInt("id"));
-                serviceType.setName(obj.getString("name"));
-                db.saveOrUpdate(serviceType);
-            } catch (JSONException e) {
-
-            } catch (DbException e) {
-
-            }
-        }
-    }
-
-    private void saveCategoryToDb(JSONArray data) {
-        Category category;
-        DbManager db = (new DbConfig()).getDbManager();
-        for (int i = 0; i < data.length(); i++) {
-            category = new Category();
-            try {
-                JSONObject obj = (JSONObject) data.get(i);
-                long time = obj.getLong("time");
-                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-                category.setTime(timestampToStringAll);
-                category.setColor(obj.getString("color"));
-                category.setId(obj.getInt("id"));
-                category.setName(obj.getString("name"));
-                Log.e(TAG, "saveCategoryToDb: category.getName() ==" + category.getName());
-                db.saveOrUpdate(category);
-            } catch (JSONException e) {
-
-            } catch (DbException e) {
-
-            }
         }
     }
 
@@ -1255,14 +1184,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     obj.put("address", shopLocation);
                     obj.put("longitude", longitude);
                     obj.put("latitude", latitude);
-                    //  obj.put("serviceTypeList",serviceTypeListString);
+                    //  obj.put("serviceTypeList",serviceTypeListString); 下面平级添加；
                     obj.put("appExpert", isShoulian);
 
                 } catch (JSONException e) {
                 }
                 RequestParams pa = new RequestParams(UtilsURL.REQUEST_URL + "registerStore");
                 pa.addBodyParameter("reqJson", obj.toString());
-                pa.addBodyParameter("serviceTypeList", serviceTypeListString);
+                pa.addBodyParameter("serviceTypeList", serviceTypeListString);//serviceTypeList
                 pa.addBodyParameter("business_license_img", new File(yyzzPath));
                 pa.addBodyParameter("location_img", new File(mdpicaPath));
                 pa.addBodyParameter("indoor_img", new File(mdpicbPath));

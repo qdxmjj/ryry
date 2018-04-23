@@ -35,7 +35,9 @@
             android:value="XtlGuahX7H7TsAQ6m7Mk1zb73h2tXmTT" />
 
         <activity android:name=".MainActivity" />
-        <activity android:name=".ui.activity.LoginActivity"></activity>
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:launchMode="singleTask"></activity>
         <activity android:name=".ui.activity.FogetActivity" />
         <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.BaseActivityb" />
@@ -58,7 +60,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.StartPermisionActivity"></activity>
+        <activity android:name=".ui.activity.StartPermisionActivity" />
+        <activity android:name=".ui.activity.MyGoodsActivity"></activity>
     </application>
 
 </manifest>

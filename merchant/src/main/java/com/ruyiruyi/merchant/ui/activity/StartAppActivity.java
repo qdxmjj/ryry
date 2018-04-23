@@ -44,6 +44,14 @@ public class StartAppActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_app);
         //权限获取
         requestPower();
+        //initIsLogin
+        DbConfig dbConfig = new DbConfig();
+        if (dbConfig.getIsLogin()) {
+            isLogin=1;
+        }else {
+            isLogin=0;
+        }
+
         mTimeCount = new TimeCount(3000, 1000);
         mTimeCount.start();
 
@@ -53,6 +61,7 @@ public class StartAppActivity extends AppCompatActivity {
 
 
     }
+
     private void initRegisterCategoryData() {
 // 0       date_category = new Date();
         List<Category> categoryList = null;

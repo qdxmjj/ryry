@@ -7,227 +7,336 @@ import java.math.BigDecimal;
 
 @Table(name = "usermerchant")
 public class User {
-    @Column(name = "id",isId = true,autoGen = false)
+    @Column(name = "id", isId = true, autoGen = false)
     private int id;
 
-    @Column(name = "nick")
-    private String nick;
+    @Column(name = "producerName")
+    private String producerName;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "producerId")
+    private int producerId;
 
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "age")
-    private String age;
+    @Column(name = "password")
+    private String password;
 
-    @Column(name = "birthday")
-    private String birthday;
+    @Column(name = "storeName")
+    private String storeName;
 
+    @Column(name = "storeTypeId")
+    private String storeTypeId;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "tel")
+    private String tel;
 
-    @Column(name = "gender")
-    private int gender;
+    @Column(name = "startTime")
+    private int startTime;
 
-    @Column(name = "headimgurl")
-    private String headimgurl;
+    @Column(name = "endTime")
+    private String endTime;
 
-    @Column(name = "ml")
-    private BigDecimal ml;
+    @Column(name = "positionId")
+    private String positionId;
 
-    @Column(name = "paypwd")
-    private String payPwd;
+    @Column(name = "address")
+    private String address;
 
-    @Column(name = "remark")
-    private String remark;
+    @Column(name = "longitude")
+    private String longitude;
 
-    @Column(name = "creeatetime")
-    private String creeateTime;
+    @Column(name = "latitude")
+    private String latitude;
 
-    @Column(name = "updatetime")
+    @Column(name = "storeImgUrl")
+    private String storeImgUrl;
+
+    @Column(name = "businessLicenseUrl")
+    private String businessLicenseUrl;
+
+    @Column(name = "factoryImgUrl")
+    private String factoryImgUrl;
+
+    @Column(name = "indoorImgUrl")
+    private String indoorImgUrl;
+
+    @Column(name = "locationImgUrl")
+    private String locationImgUrl;
+
+    @Column(name = "idImgUrl")
+    private String idImgUrl;
+
+    @Column(name = "appExpert")
+    private String appExpert;
+
+    @Column(name = "balance")
+    private String balance;
+
+    @Column(name = "cityId")
+    private int cityId;
+
+    @Column(name = "createTime")
+    private String createTime;
+
+    @Column(name = "situation")
+    private String situation;
+
+    @Column(name = "storeLoginName")
+    private String storeLoginName;
+
+    @Column(name = "updateTime")
     private String updateTime;
 
     @Column(name = "token")
     private String token;
 
-    @Column(name = "qqinfoId")
-    private String qqInfoId;
-
-    @Column(name = "wxinfoId")
-    private String wxInfoId;
-
     @Column(name = "status")
-    private String status;  //用户状态 1 已锁定 2 未锁定 默认 2
+    private int status;  //用户状态 1 已锁定 2 未锁定 默认 2
 
     @Column(name = "islogin")
     private String isLogin; //0未登陆  1已登陆
 
-    @Column(name = "firstaddcar") //0 未添加 1已添加
-    private int firstAddCar;
-
     public User() {
     }
 
-    public int getId() {
-        return id;
+    public void setStoreImgUrl(String storeImgUrl) {
+        this.storeImgUrl = storeImgUrl;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getStoreImgUrl() {
+        return storeImgUrl;
     }
 
-    public String getNick() {
-        return nick;
+    public void setProducerName(String producerName) {
+        this.producerName = producerName;
     }
 
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPhone() {
-        return phone;
+    public void setProducerId(int producerId) {
+        this.producerId = producerId;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public String getAge() {
-        return age;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setAge(String age) {
-        this.age = age;
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
-    public String getBirthday() {
-        return birthday;
+    public void setStoreTypeId(String storeTypeId) {
+        this.storeTypeId = storeTypeId;
     }
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
+    public void setTel(String tel) {
+        this.tel = tel;
     }
 
-    public String getEmail() {
-        return email;
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
-    public int getGender() {
-        return gender;
+    public void setPositionId(String positionId) {
+        this.positionId = positionId;
     }
 
-    public void setGender(int gender) {
-        this.gender = gender;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getHeadimgurl() {
-        return headimgurl;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
-    public void setHeadimgurl(String headimgurl) {
-        this.headimgurl = headimgurl;
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
-    public BigDecimal getMl() {
-        return ml;
+    public void setBusinessLicenseUrl(String businessLicenseUrl) {
+        this.businessLicenseUrl = businessLicenseUrl;
     }
 
-    public void setMl(BigDecimal ml) {
-        this.ml = ml;
+    public void setFactoryImgUrl(String factoryImgUrl) {
+        this.factoryImgUrl = factoryImgUrl;
     }
 
-    public String getPayPwd() {
-        return payPwd;
+    public void setIndoorImgUrl(String indoorImgUrl) {
+        this.indoorImgUrl = indoorImgUrl;
     }
 
-    public void setPayPwd(String payPwd) {
-        this.payPwd = payPwd;
+    public void setLocationImgUrl(String locationImgUrl) {
+        this.locationImgUrl = locationImgUrl;
     }
 
-    public String getRemark() {
-        return remark;
+    public void setIdImgUrl(String idImgUrl) {
+        this.idImgUrl = idImgUrl;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setAppExpert(String appExpert) {
+        this.appExpert = appExpert;
     }
 
-    public String getCreeateTime() {
-        return creeateTime;
+    public void setBalance(String balance) {
+        this.balance = balance;
     }
 
-    public void setCreeateTime(String creeateTime) {
-        this.creeateTime = creeateTime;
+    public void setCityId(int cityId) {
+        this.cityId = cityId;
     }
 
-    public String getUpdateTime() {
-        return updateTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setSituation(String situation) {
+        this.situation = situation;
+    }
+
+    public void setStoreLoginName(String storeLoginName) {
+        this.storeLoginName = storeLoginName;
     }
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
-    public String getToken() {
-        return token;
-    }
-
     public void setToken(String token) {
         this.token = token;
     }
 
-    public String getQqInfoId() {
-        return qqInfoId;
-    }
-
-    public void setQqInfoId(String qqInfoId) {
-        this.qqInfoId = qqInfoId;
-    }
-
-    public String getWxInfoId() {
-        return wxInfoId;
-    }
-
-    public void setWxInfoId(String wxInfoId) {
-        this.wxInfoId = wxInfoId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
-    }
-
-    public String getIsLogin() {
-        return isLogin;
     }
 
     public void setIsLogin(String isLogin) {
         this.isLogin = isLogin;
     }
 
-    public int getFirstAddCar() {
-        return firstAddCar;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setFirstAddCar(int firstAddCar) {
-        this.firstAddCar = firstAddCar;
+    public int getId() {
+        return id;
+    }
+
+    public String getProducerName() {
+        return producerName;
+    }
+
+    public int getProducerId() {
+        return producerId;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public String getStoreTypeId() {
+        return storeTypeId;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public String getPositionId() {
+        return positionId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String getBusinessLicenseUrl() {
+        return businessLicenseUrl;
+    }
+
+    public String getFactoryImgUrl() {
+        return factoryImgUrl;
+    }
+
+    public String getIndoorImgUrl() {
+        return indoorImgUrl;
+    }
+
+    public String getLocationImgUrl() {
+        return locationImgUrl;
+    }
+
+    public String getIdImgUrl() {
+        return idImgUrl;
+    }
+
+    public String getAppExpert() {
+        return appExpert;
+    }
+
+    public String getBalance() {
+        return balance;
+    }
+
+    public int getCityId() {
+        return cityId;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public String getSituation() {
+        return situation;
+    }
+
+    public String getStoreLoginName() {
+        return storeLoginName;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getIsLogin() {
+        return isLogin;
     }
 }

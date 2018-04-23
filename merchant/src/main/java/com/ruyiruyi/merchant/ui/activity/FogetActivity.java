@@ -255,6 +255,7 @@ public class FogetActivity extends BaseActivityb {
                     if (status.equals("1")){
                         Toast.makeText(FogetActivity.this, msg, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                        FogetActivity.this.finish();
                     }else {
                         Toast.makeText(FogetActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
