@@ -30,7 +30,7 @@ public class ShopGoodActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_good,R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("测试");;
+        actionBar.setTitle("测试");
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
             @Override
             public void onItemClick(int var1) {

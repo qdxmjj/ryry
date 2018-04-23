@@ -63,9 +63,9 @@ public class WodeFragment extends Fragment {
         tv_mid_wddd = (TextView) getView().findViewById(R.id.tv_mid_wddd);
         tv_mid_gldp = (TextView) getView().findViewById(R.id.tv_mid_gldp);
         rl_wdfw = (RelativeLayout) getView().findViewById(R.id.rl_wdfw);
-        rl_wdfw = (RelativeLayout) getView().findViewById(R.id.rl_wdsp);
-        rl_wdfw = (RelativeLayout) getView().findViewById(R.id.rl_tgjl);
-        rl_wdfw = (RelativeLayout) getView().findViewById(R.id.rl_dzyhs);
+        rl_wdsp = (RelativeLayout) getView().findViewById(R.id.rl_wdsp);
+        rl_tgjl = (RelativeLayout) getView().findViewById(R.id.rl_tgjl);
+        rl_dzyhs = (RelativeLayout) getView().findViewById(R.id.rl_dzyhs);
 
         RxViewAction.clickNoDouble(tv_username).subscribe(new Action1<Void>() {
             @Override

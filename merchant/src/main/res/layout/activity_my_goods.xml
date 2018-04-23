@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/c1"
+    android:orientation="vertical"
     tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
 
     <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/mygoods_acbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" />
 
-    </com.ruyiruyi.rylibrary.cell.ActionBar>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/mygoods_tab"
+        android:background="#ffffff"
+        android:layout_marginTop="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
 
-</RelativeLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/mygoods_vpager"
+        android:background="#ffffff"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
