@@ -6,12 +6,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import rx.functions.Action1;
 
@@ -43,6 +52,7 @@ public class OrderAffirmActivity extends BaseActivity {
     private TextView userPhoneText;
     private TextView carNumberText;
     private ImageView tireImageView;
+    private int shoeid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +82,7 @@ public class OrderAffirmActivity extends BaseActivity {
         userphone = intent.getStringExtra("USERPHONE");
         carnumber = intent.getStringExtra("CARNUMBER");
         tireimage = intent.getStringExtra("TIREIMAGE");
+        shoeid = intent.getIntExtra("SHOEID",0);
         Log.e(TAG, "onCreate:1- " + fontrearflag);
         Log.e(TAG, "onCreate: 2-" + tirecount);
         Log.e(TAG, "onCreate: 3-" + tireprice);
@@ -128,9 +139,67 @@ public class OrderAffirmActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Intent intent = new Intent(getApplicationContext(),PaymentActivity.class);
-                        startActivity(intent);
+                        postOrder();
+
                     }
                 });
+    }
+
+    private void postOrder() {
+        int userId = new DbConfig().getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("shoeId",shoeid);
+            jsonObject.put("userId",userId);
+            jsonObject.put("fontRearFlag",fontrearflag);
+            jsonObject.put("amount",tirecount);
+            jsonObject.put("shoeName",tirepname);
+            jsonObject.put("shoeTotalPrice",tirePriceAll+"");
+            jsonObject.put("shoePrice",tireprice);
+            jsonObject.put("cxwyAmout",cxwycount);
+            jsonObject.put("cxwyPrice",cxwyprice);
+            jsonObject.put("cxwyTotalPrice",cxwyPriceAll+"");
+            jsonObject.put("totalPrice",allPrice);
+            jsonObject.put("orderImg",tireimage);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addShoeCxwyOrder");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess:------ " + result );
+                try {
+                    JSONObject jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Intent intent = new Intent(getApplicationContext(),PaymentActivity.class);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(OrderAffirmActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

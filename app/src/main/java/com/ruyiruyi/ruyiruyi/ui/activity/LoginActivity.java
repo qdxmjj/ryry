@@ -183,7 +183,7 @@ public class LoginActivity extends BaseActivity {
             jsonObject.put("code",code);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "verificationCode");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "verificationCode");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -291,7 +291,7 @@ public class LoginActivity extends BaseActivity {
             jsonObject.put("phone",phoneNumber);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "sendMsg");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "sendMsg");
         params.addBodyParameter("reqJson",jsonObject.toString());
         params.addParameter("token","f1b47d968e3a4197afb8297476b02556");
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -349,7 +349,7 @@ public class LoginActivity extends BaseActivity {
 
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "pwdLogin");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "pwdLogin");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

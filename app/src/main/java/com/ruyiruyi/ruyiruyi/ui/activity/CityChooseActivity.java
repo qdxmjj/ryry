@@ -21,8 +21,12 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.Poi;
 import com.baidu.mapapi.SDKInitializer;
+import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.MyApplication;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.Location;
+import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.ui.fragment.HomeFragment;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -32,6 +36,9 @@ import com.ruyiruyi.rylibrary.ui.adapter.CYBChangeCityGridViewAdapter;
 import com.ruyiruyi.rylibrary.ui.adapter.ContactAdapter;
 import com.ruyiruyi.rylibrary.ui.bean.UserEntity;
 import com.ruyiruyi.rylibrary.ui.cell.QGridView;
+
+import org.xutils.DbManager;
+import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +62,8 @@ public class CityChooseActivity extends BaseActivity {
     private LocationService locationService;
     private TextView dingweiText;
     public String currentCity="";
+    private double weidu;
+    private double jingdu;
 
 
     @Override
@@ -115,9 +124,18 @@ public class CityChooseActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        intent.putExtra("CITY",currentCity);
-                        setResult(HomeFragment.CITY_CHOOSE, intent);
-                        finish();
+                        Location location1 = new Location(1, currentCity, jingdu, weidu);
+                        DbManager db = new DbConfig().getDbManager();
+                        try {
+                            db.saveOrUpdate(location1);
+                        } catch (DbException e) {
+
+                        }
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                     //   CityChooseActivity.this.intent.putExtra("CITY",currentCity);
+                       // setResult(HomeFragment.CITY_CHOOSE, CityChooseActivity.this.intent);
+                       // finish();
                     }
                 });
 
@@ -136,9 +154,18 @@ public class CityChooseActivity extends BaseActivity {
             @Override
             public void onItemClick(View v, int originalPosition, int currentPosition, UserEntity entity) {
                 if (originalPosition >= 0) {
-                    intent.putExtra("CITY", entity.getNick());
+                    Location location1 = new Location(1, entity.getNick(), 0.00, 0.00);
+                    DbManager db = new DbConfig().getDbManager();
+                    try {
+                        db.saveOrUpdate(location1);
+                    } catch (DbException e) {
+
+                    }
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                  /*  intent.putExtra("CITY", entity.getNick());
                     setResult(HomeFragment.CITY_CHOOSE, intent);
-                    finish();
+                    finish();*/
                 } else {
                     Toast.makeText(CityChooseActivity.this, "选中Header/Footer:" + entity.getNick() + "  当前位置:" + currentPosition, Toast.LENGTH_SHORT).show();
                   //  ToastUtil.showShort(CityPickerActivity.this, "选中Header/Footer:" + entity.getNick() + "  当前位置:" + currentPosition);
@@ -224,12 +251,28 @@ public class CityChooseActivity extends BaseActivity {
     }
 
     private List<UserEntity> initDatas() {
+        DbManager db = new DbConfig().getDbManager();
+        List<Province> provinceList = new ArrayList<>();
+        try {
+            provinceList  = db.selector(Province.class)
+                    .where("definition" , "=" , "2")
+                    .findAll();
+        } catch (DbException e) {
+        }
+        List<String> contactStrings  = new ArrayList<>();
+        for (int i = 0; i < provinceList.size(); i++) {
+            String name = provinceList.get(i).getName();
+            contactStrings.add(name);
+        }
         List<UserEntity> list = new ArrayList<>();
+
+
+       /* List<UserEntity> list = new ArrayList<>();
         // 初始化数据
         List<String> contactStrings = Arrays.asList(getResources().getStringArray(R.array.provinces));
-        List<String> mobileStrings = Arrays.asList(getResources().getStringArray(R.array.provinces));
+        List<String> mobileStrings = Arrays.asList(getResources().getStringArray(R.array.provinces));*/
         for (int i = 0; i < contactStrings.size(); i++) {
-            UserEntity contactEntity = new UserEntity(contactStrings.get(i), mobileStrings.get(i));
+            UserEntity contactEntity = new UserEntity(contactStrings.get(i), contactStrings.get(i));
             list.add(contactEntity);
         }
         return list;
@@ -241,6 +284,8 @@ public class CityChooseActivity extends BaseActivity {
      *
      */
     private BDAbstractLocationListener mListener = new BDAbstractLocationListener() {
+
+
 
         @Override
         public void onReceiveLocation(BDLocation location) {
@@ -329,6 +374,8 @@ public class CityChooseActivity extends BaseActivity {
                 locationService.unregisterListener(mListener); //注销掉监听
                 locationService.stop(); //停止定位服务
                 currentCity = location.getCity();
+                jingdu = location.getLongitude();
+                weidu = location.getLatitude();
                 dingweiText.setText(location.getCity());
             }
         }

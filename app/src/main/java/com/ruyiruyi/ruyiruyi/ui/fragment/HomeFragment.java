@@ -14,10 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.Poi;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.MainActivity;
+import com.ruyiruyi.ruyiruyi.MyApplication;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.Lunbo;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarFigureActivity;
@@ -25,8 +30,10 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CarInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CityChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.LoginActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.ShopChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TirePlaceActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.TireRepairActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Function;
 import com.ruyiruyi.ruyiruyi.ui.multiType.FunctionViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Hometop;
@@ -35,6 +42,7 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.OneEvent;
 import com.ruyiruyi.ruyiruyi.ui.multiType.OneEventViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ThreeEvent;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ThreeEventViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
 
@@ -57,7 +65,8 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTopItemClickListener,FunctionViewBinder.OnFunctionItemClick{
+public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTopItemClickListener,FunctionViewBinder.OnFunctionItemClick
+        ,ThreeEventViewBinder.OnEventItemClickListener {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
     private CustomBanner<String> mBanner;
@@ -75,6 +84,11 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
     private SwipeRefreshLayout refreshLayout;
     public final static int CITY_CHOOSE = 1;
     public String currentCity = "选择城市";
+    private double jingdu;
+    private double weidu;
+    private LocationService locationService;
+    private int fromFragment;
+    private int ischoos;
 
 
     @Nullable
@@ -93,6 +107,10 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         listView.setLayoutManager(linearLayoutManager);
         adapter = new MultiTypeAdapter(items);
+        Bundle bundle = getArguments();
+        currentCity = bundle.getString("city");
+        ischoos = bundle.getInt("ischoos", 0); //1是选择返回
+
 
         register();
 
@@ -108,14 +126,26 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
                 refreshLayout.setRefreshing(false);
             }
         });
-
         // initdata();
 
+
+        //获取位置
+        Location location = new DbConfig().getLocation();
+        if (location!=null){
+            currentCity = location.getCity();
+            jingdu = location.getJingdu();
+            weidu = location.getWeidu();
+            Log.e(TAG, "onActivityCreated: --" + currentCity);
+            Log.e(TAG, "onActivityCreated: --" + jingdu);
+            Log.e(TAG, "onActivityCreated: --" + weidu);
+        }
+
         initdataFromService();
-
-
-
     }
+
+
+
+
 
     private void initdataFromService() {
         DbConfig dbConfig = new DbConfig();
@@ -127,7 +157,7 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
         } catch (JSONException e) {
         }
         lunbos.clear();
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getAndroidHomeDate");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAndroidHomeDate");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
 
@@ -206,10 +236,14 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
         HometopViewBinder hometopViewBinder = new HometopViewBinder(getContext());
         hometopViewBinder.setListener(this);
         adapter.register(Hometop.class, hometopViewBinder);
+
         FunctionViewBinder functionViewBinder = new FunctionViewBinder();
         functionViewBinder.setListener(this);
         adapter.register(Function.class, functionViewBinder);
-        adapter.register(ThreeEvent.class,new ThreeEventViewBinder());
+
+        ThreeEventViewBinder threeEventViewBinder = new ThreeEventViewBinder();
+        threeEventViewBinder.setListener(this);
+        adapter.register(ThreeEvent.class, threeEventViewBinder);
         adapter.register(OneEvent.class,new OneEventViewBinder());
     }
 
@@ -285,7 +319,7 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CITY_CHOOSE){
+        if (resultCode == CITY_CHOOSE){
             String city = data.getStringExtra("CITY");
             currentCity = city;
             initdata();
@@ -332,8 +366,8 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
             Intent intent = new Intent(getContext(), TireChangeActivity.class);
             intent.putExtra(TireChangeActivity.CHANGE_TIRE,1);
             startActivity(intent);
-        }else if (type == 2){
-
+        }else if (type == 2){//轮胎修补
+            startActivity(new Intent(getContext(), TireRepairActivity.class));
         }else if (type ==3){
 
         }
@@ -342,5 +376,21 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+
+    @Override
+    public void onEventClickListener(String tag) {
+        if (tag.equals("cxwy")){
+
+        }else if (tag.equals("qcby")){//3
+            Intent intent = new Intent(getContext(), ShopChooseActivity.class);
+            intent.putExtra(MerchantFragment.SHOP_TYPE,3);
+            startActivity(intent);
+        }else if (tag.equals("mrqx")){//2
+            Intent intent = new Intent(getContext(), ShopChooseActivity.class);
+            intent.putExtra(MerchantFragment.SHOP_TYPE,2);
+            startActivity(intent);
+        }
     }
 }

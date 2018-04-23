@@ -80,6 +80,13 @@ public class MainActivity extends BaseActivity {
             isExit = false;
         }
     };
+    private String city = "";
+    private double jingdu = 0.00;
+    private double weidu = 0.00;
+    private int hasjingweidu = 10; //0来自fragment
+    private Intent intent;
+    private int ischoos = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,7 +161,7 @@ public class MainActivity extends BaseActivity {
         } catch (JSONException e) {
 
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getAllPositon");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAllPositon");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -243,7 +250,7 @@ public class MainActivity extends BaseActivity {
 
         }
 
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getTireType");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getTireType");
         params.addBodyParameter("reqJson",jsonObject.toString());
 
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -333,7 +340,7 @@ public class MainActivity extends BaseActivity {
             }
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarTireInfoData");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarTireInfoData");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -427,7 +434,7 @@ public class MainActivity extends BaseActivity {
             }
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarVerhicleData");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarVerhicleData");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -513,7 +520,7 @@ public class MainActivity extends BaseActivity {
             }
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarBrandData");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarBrandData");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -601,7 +608,7 @@ public class MainActivity extends BaseActivity {
             }
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarFactoryData");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarFactoryData");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -663,10 +670,17 @@ public class MainActivity extends BaseActivity {
     }
 
     private List<Fragment> initFragment(){
+        Log.e(TAG, "initFragment: -2-" + ischoos);
         List<Fragment> fragments = new ArrayList<>();
         HomeFragment homeFragment = new HomeFragment();
+        Bundle bundle = new Bundle();
+        homeFragment.setArguments(bundle);
         fragments.add(homeFragment);
-        fragments.add(new MerchantFragment());
+        MerchantFragment merchantFragment = new MerchantFragment();
+        Bundle bundleMerchant = new Bundle();
+        bundleMerchant.putInt(MerchantFragment.SHOP_TYPE,0);
+        merchantFragment.setArguments(bundleMerchant);
+        fragments.add(merchantFragment);
         fragments.add(new YcxFragment());
         fragments.add(new MyFragment());
 

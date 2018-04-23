@@ -90,15 +90,11 @@ public class TireCountActivity extends BaseActivity {
             jsonObject.put("userId",userId);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getShoeDetailByShoeId");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getShoeDetailByShoeId");
         params.addBodyParameter("reqJson",jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
-
-
-
-
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess:------ " + result );
@@ -113,7 +109,7 @@ public class TireCountActivity extends BaseActivity {
                         cxwyPrice = data.getString("finalCxwyPrice");
                         userName = data.getString("userName");
                         userPhone = data.getString("userPhone");
-                        carNumber = data.getString("carNumber");
+                        carNumber = data.getString("platNumber");
                         tireImage = data.getString("shoeDownImg");
                         String image2 = data.getString("shoeLeftImg");
                         String image3 = data.getString("shoeLeftImg");
@@ -219,6 +215,8 @@ public class TireCountActivity extends BaseActivity {
                         intent.putExtra("USERPHONE",userPhone);  //手机号
                         intent.putExtra("CARNUMBER",carNumber);  //车牌号
                         intent.putExtra("TIREIMAGE",tireImage);  //轮胎图片
+                        intent.putExtra("SHOEID",shoeId);  //轮胎id
+                        Log.e(TAG, "call: " + carNumber );
 
 
                         startActivity(intent);

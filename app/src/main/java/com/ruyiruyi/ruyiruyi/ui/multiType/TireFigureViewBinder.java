@@ -2,7 +2,6 @@ package com.ruyiruyi.ruyiruyi.ui.multiType;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.OnFigureItemInterface;
+import com.ruyiruyi.ruyiruyi.ui.listener.OnFigureItemInterface;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
 import java.util.ArrayList;

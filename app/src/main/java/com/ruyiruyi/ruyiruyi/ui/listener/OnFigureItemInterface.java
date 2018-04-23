@@ -1,4 +1,4 @@
-package com.ruyiruyi.ruyiruyi.ui;
+package com.ruyiruyi.ruyiruyi.ui.listener;
 
 public interface OnFigureItemInterface {
     void onFigureClickListener(String name);

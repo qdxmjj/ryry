@@ -257,7 +257,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
             jsonObject.put("userCarId",userCarId);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarByUserIdAndCarId");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarByUserIdAndCarId");
         params.addBodyParameter("reqJson",jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
@@ -794,17 +794,14 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 return;
             }
             lcbPath = ImageUtils.savePhoto(lcbBitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), String
-                    .valueOf(System.currentTimeMillis()));
+                    .getExternalStorageDirectory().getAbsolutePath(),"lichengbiao");
         }
 
        String zhuyePath = ImageUtils.savePhoto(zhuyeBitmap, Environment
-                .getExternalStorageDirectory().getAbsolutePath(), String
-                .valueOf(System.currentTimeMillis()));
+                .getExternalStorageDirectory().getAbsolutePath(), "zhuye");
 
        String fuyePath = ImageUtils.savePhoto(fuyeBitmap, Environment
-                .getExternalStorageDirectory().getAbsolutePath(), String
-                .valueOf(System.currentTimeMillis()));
+                .getExternalStorageDirectory().getAbsolutePath(), "fuye");
 
         int id = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
@@ -873,7 +870,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
 
         }
 
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "addUserCar");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserCar");
         params.addBodyParameter("reqJson",jsonObject.toString());
         params.addBodyParameter("jiashizhengzhuye" ,new File(zhuyePath) );
         params.addBodyParameter("jiashizhengfuye" ,new File(fuyePath) );

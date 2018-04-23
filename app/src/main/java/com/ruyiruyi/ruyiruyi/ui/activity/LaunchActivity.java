@@ -9,17 +9,23 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.Poi;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.MainActivity;
+import com.ruyiruyi.ruyiruyi.MyApplication;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarBrand;
 import com.ruyiruyi.ruyiruyi.db.model.CarFactory;
 import com.ruyiruyi.ruyiruyi.db.model.CarTireInfo;
 import com.ruyiruyi.ruyiruyi.db.model.CarVerhicle;
+import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.TireType;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
@@ -40,6 +46,10 @@ public class LaunchActivity extends BaseActivity {
 
     private static final String TAG = LaunchActivity.class.getSimpleName();
     private ImageView launchImage;
+    public String currentCity="";
+    private double jingdu  = 0.00;
+    private double weidu = 0.00;
+    private LocationService locationService;
 
     private Handler handler = new Handler() {
         @Override
@@ -51,7 +61,8 @@ public class LaunchActivity extends BaseActivity {
     };
 
     private void goMain() {
-        //获取车辆品牌数据
+
+
         initCarDataIntoDb();
         //获取车辆图标数据
         initCarBrand();
@@ -63,10 +74,23 @@ public class LaunchActivity extends BaseActivity {
         initTireType();
         //获取省市县
         initProvice();
+        initDingwei();
+        //获取车辆品牌数据
+        Log.e(TAG, "goMain: --+--+-" + currentCity);
         Intent intent = new Intent(this, MainActivity.class);
+
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+
+    private void initDingwei() {
+        locationService = ((MyApplication) getApplication()).locationService;
+        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
+        locationService.registerListener(mListener);
+        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
+        locationService.start();// 定位SDK
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +117,13 @@ public class LaunchActivity extends BaseActivity {
 
 
 
+
     private void initView() {
         launchImage = (ImageView) findViewById(R.id.launch_image);
         Glide.with(this).load("http://180.76.243.205:8111/images/launch/launch.jpg").into(launchImage);
     }
+
+
 
     private void initCarDataIntoDb() {
         DbConfig dbConfig = new DbConfig();
@@ -121,7 +148,7 @@ public class LaunchActivity extends BaseActivity {
             }
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarFactoryData");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarFactoryData");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -205,7 +232,7 @@ public class LaunchActivity extends BaseActivity {
             }
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarBrandData");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarBrandData");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -294,7 +321,7 @@ public class LaunchActivity extends BaseActivity {
             }
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarVerhicleData");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarVerhicleData");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -381,7 +408,7 @@ public class LaunchActivity extends BaseActivity {
             }
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarTireInfoData");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarTireInfoData");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -472,7 +499,7 @@ public class LaunchActivity extends BaseActivity {
 
         }
 
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getTireType");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getTireType");
         params.addBodyParameter("reqJson",jsonObject.toString());
 
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -557,7 +584,7 @@ public class LaunchActivity extends BaseActivity {
         } catch (JSONException e) {
 
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getAllPositon");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAllPositon");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -610,6 +637,38 @@ public class LaunchActivity extends BaseActivity {
             }
         });
     }
+    /*****
+     *
+     * 定位结果回调，重写onReceiveLocation方法，可以直接拷贝如下代码到自己工程中修改
+     *
+     */
+    private BDAbstractLocationListener mListener = new BDAbstractLocationListener() {
+
+        private double weidu;
+        private double jingdu;
+
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            // TODO Auto-generated method stub
+            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+
+                locationService.unregisterListener(mListener); //注销掉监听
+                locationService.stop(); //停止定位服务
+                currentCity = location.getCity();
+                jingdu = location.getLongitude();
+                weidu = location.getLatitude();
+                Location location1 = new Location(1, currentCity, jingdu, weidu);
+                DbManager db = new DbConfig().getDbManager();
+                try {
+                    db.saveOrUpdate(location1);
+                } catch (DbException e) {
+
+                }
+            }
+        }
+
+    };
+
 
     private void saveProvinceIntoDb(List<Province> provinceArrayList) {
         DbConfig dbConfig = new DbConfig();
