@@ -213,7 +213,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
             jsonObject.put("password",password1);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "registerUser");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "registerUser");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

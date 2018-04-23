@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.OnFigureItemInterface;
+import com.ruyiruyi.ruyiruyi.ui.listener.OnFigureItemInterface;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
 import me.drakeet.multitype.ItemViewProvider;

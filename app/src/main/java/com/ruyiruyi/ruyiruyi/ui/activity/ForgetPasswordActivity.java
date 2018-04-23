@@ -156,7 +156,7 @@ public class ForgetPasswordActivity extends BaseActivity {
             jsonObject.put("password",password);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "changeUserPwd");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "changeUserPwd");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -204,7 +204,7 @@ public class ForgetPasswordActivity extends BaseActivity {
             jsonObject.put("phone",phoneNumber);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "sendMsgChangePwd");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "sendMsgChangePwd");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             private String status;

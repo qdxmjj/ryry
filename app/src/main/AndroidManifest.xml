@@ -34,9 +34,9 @@
         android:smallScreens="true" />
 
     <!-- OpenGLES 2.0 -->
-    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
-
-
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <application
         android:name=".MyApplication"
@@ -47,7 +47,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="QFmIGivPmyy3YIjlGhMLLD0ejsY4pofy"></meta-data>
+            android:value="QFmIGivPmyy3YIjlGhMLLD0ejsY4pofy" />
 
         <activity
             android:name=".MainActivity"
@@ -185,11 +185,15 @@
             android:enabled="true"
             android:process=":remote" />
 
-
-
-        <activity android:name=".ui.activity.BaiduActivity"
+        <activity
+            android:name=".ui.activity.BaiduActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.TireRepairActivity" />
+        <activity android:name=".ui.activity.SearchActivity" />
+        <activity android:name=".ui.activity.ShopChooseActivity" />
+        <activity android:name=".ui.activity.ShopHomeActivity" />
+        <activity android:name=".ui.activity.ShopGoodActivity"></activity>
     </application>
 
 </manifest>

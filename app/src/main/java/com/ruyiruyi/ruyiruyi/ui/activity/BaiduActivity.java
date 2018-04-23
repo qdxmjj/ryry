@@ -89,6 +89,7 @@ public class BaiduActivity extends Activity {
 
     }
 
+
     private BDAbstractLocationListener mListener = new BDAbstractLocationListener() {
 
 

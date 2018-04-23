@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.cell.ShopChooseCell;
+import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
@@ -31,6 +34,8 @@ import rx.functions.Action1;
 
 public class TireChangeActivity extends BaseActivity {
     public final static String CHANGE_TIRE = "CHANGE_TIRE";
+    public static final int CHOOSE_SHOP = 2;
+    private static final String TAG = TireChangeActivity.class.getSimpleName() ;
     public int currentChangeType = 0;  //0是首次更换  1是免费更换
 
     private ActionBar actionBar;
@@ -49,6 +54,14 @@ public class TireChangeActivity extends BaseActivity {
     private AmountView fontAmountView;
     private AmountView rearAmountView;
     private FrameLayout tireLiuchengLayout;
+    private LinearLayout reasonOneLayout;
+    private LinearLayout reasonTwoLayout;
+    public boolean oneReasonCheck = false;
+    public boolean twoReasonCheck = false;
+    private ImageView reasonOneImage;
+    private ImageView reasonTwoImage;
+    private ShopChooseCell shopChooseView;
+    private LayoutInflater mInflater;
 
 
     @Override
@@ -82,7 +95,15 @@ public class TireChangeActivity extends BaseActivity {
         initData();
 
         initView();
+        initReasonView();
     }
+
+    private void initReasonView() {
+        reasonOneImage.setImageResource(oneReasonCheck ? R.drawable.ic_check : R.drawable.ic_check_no);
+        reasonTwoImage.setImageResource(twoReasonCheck ? R.drawable.ic_check : R.drawable.ic_check_no);
+    }
+
+
     private void initData() {
         typeList = new ArrayList<>();
         typeList.add(new StoreType(1,"快修店"));
@@ -92,28 +113,58 @@ public class TireChangeActivity extends BaseActivity {
     }
 
     private void initView() {
-        final LayoutInflater mInflater = LayoutInflater.from(this);
-        typeFlowLayout = (TagFlowLayout) findViewById(R.id.type_flowlayout);
+        mInflater = LayoutInflater.from(this);
+        //typeFlowLayout = (TagFlowLayout) findViewById(R.id.type_flowlayout);
         mBanner = (CustomBanner) findViewById(R.id.tire_change_banner);
         freeChangeLayout = (LinearLayout) findViewById(R.id.free_change_layout);
         fontAmountView = (AmountView) findViewById(R.id.font_amount_view);
         rearAmountView = (AmountView) findViewById(R.id.area_amount_view);
         tireLiuchengLayout = (FrameLayout) findViewById(R.id.tire_liucheng_layout);
+        reasonOneLayout = (LinearLayout) findViewById(R.id.reason_one_layout);
+        reasonTwoLayout = (LinearLayout) findViewById(R.id.reason_two_layout);
+        reasonOneImage = (ImageView) findViewById(R.id.reason_one_image);
+        reasonTwoImage = (ImageView) findViewById(R.id.reason_two_image);
+        shopChooseView = (ShopChooseCell) findViewById(R.id.shop_choose_cell);
+        shopChooseView.setValue("青岛汽车总店","http://180.76.243.205:8111/images/flgure/970FB91D-D680-437D-606D-0AFAEC4E5F10.jpg",
+                "青岛市城阳区天安数码城","15km",typeList,mInflater);
+
+        RxViewAction.clickNoDouble(shopChooseView)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(getApplicationContext(), ShopChooseActivity.class);
+                        intent.putExtra(MerchantFragment.SHOP_TYPE,1);
+                        startActivityForResult(intent,CHOOSE_SHOP);
+                    }
+                });
+
 
         freeChangeLayout.setVisibility(currentChangeType == 0? View.GONE:View.VISIBLE);
 
-        fontAmountView.setGoods_storage(2);
+        if (currentChangeType == 0){//首次更换  当轮胎数量大于2时最大数量为2  小于2时为最小数量
+
+            if (hasFontCount >2){
+                fontAmountView.setGoods_storage(2);
+            }else {
+                fontAmountView.setGoods_storage(hasFontCount);
+            }
+        }else { //免费再换前后轮最多各可选择两条轮胎
+            fontAmountView.setGoods_storage(2);
+        }
+
         fontAmountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
                 if (currentChangeType == 0){//首次
                     if (amount == hasFontCount){
                         Toast.makeText(TireChangeActivity.this,"轮胎数量已达到购买上限", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                     currentFontCount =amount;
                 }else if(currentChangeType == 1){//mianfei
                     if (amount == 2){
                         Toast.makeText(TireChangeActivity.this,"轮胎数量已达到购买上限", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                     currentFontCount =amount;
                 }
@@ -121,7 +172,17 @@ public class TireChangeActivity extends BaseActivity {
 
             }
         });
-        rearAmountView.setGoods_storage(2);
+        if (currentChangeType == 0){//首次更换  当轮胎数量大于2时最大数量为2  小于2时为最小数量
+            if (hasRearCount >2){
+                rearAmountView.setGoods_storage(2);
+            }else {
+                rearAmountView.setGoods_storage(hasRearCount);
+            }
+        }else { //免费再换前后轮最多各可选择两条轮胎
+            rearAmountView.setGoods_storage(2);
+        }
+
+       // rearAmountView.setGoods_storage(2);
         rearAmountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
@@ -173,7 +234,7 @@ public class TireChangeActivity extends BaseActivity {
                 //设置自动翻页
                 .startTurning(5000);
 
-
+/*
         typeFlowLayout.setAdapter(new TagAdapter<StoreType>(typeList) {
 
 
@@ -199,7 +260,7 @@ public class TireChangeActivity extends BaseActivity {
             public void onClick(View v) {
                 //Toast.makeText(getActivity(), "FlowLayout Clicked", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
         RxViewAction.clickNoDouble(tireLiuchengLayout)
                 .subscribe(new Action1<Void>() {
@@ -209,5 +270,30 @@ public class TireChangeActivity extends BaseActivity {
                     }
                 });
 
+
+        RxViewAction.clickNoDouble(reasonOneLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        oneReasonCheck = !oneReasonCheck;
+                        initReasonView();
+                    }
+                });
+        RxViewAction.clickNoDouble(reasonTwoLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        twoReasonCheck = !twoReasonCheck;
+                        initReasonView();
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == CHOOSE_SHOP){
+            int shopid = data.getIntExtra("SHOPID", 0);
+            Log.e(TAG, "onActivityResult: ---+----" + shopid);
+        }
     }
 }

@@ -80,7 +80,7 @@ public class RoadConditionActivity extends BaseActivity implements RoadChooseVie
     }
 
     private void initDataFromService() {
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getAllRoad");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAllRoad");
         params.addBodyParameter("reqJson","");
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

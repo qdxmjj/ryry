@@ -89,7 +89,7 @@ public class CarManagerActivity extends BaseActivity {
         } catch (JSONException e) {
 
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getCarListByUserId");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarListByUserId");
         params.addBodyParameter("reqJson",jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
@@ -200,7 +200,7 @@ public class CarManagerActivity extends BaseActivity {
                         Log.e(TAG, "onMenuItemClick: " + userCarId);
                         setMorenCar(userCarId);
                         break;
-                    case 1:         //删除
+                    case 1:         //clear
                         Log.e(TAG, "onMenuItemClick: " + userCarId);
                         deleteCar(userCarId);
                         break;
@@ -229,7 +229,7 @@ public class CarManagerActivity extends BaseActivity {
             jsonObject.put("userCarId",userCarId);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "deleteCar");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "deleteCar");
         params.addBodyParameter("reqJson",jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
@@ -276,7 +276,7 @@ public class CarManagerActivity extends BaseActivity {
             jsonObject.put("userCarId",userCarId);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "changeDefaultCar");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "changeDefaultCar");
         params.addBodyParameter("reqJson",jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);

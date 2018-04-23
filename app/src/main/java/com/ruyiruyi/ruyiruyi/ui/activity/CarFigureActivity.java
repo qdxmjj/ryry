@@ -1,7 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +9,10 @@ import android.widget.TextView;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.db.model.CarTireInfo;
-import com.ruyiruyi.ruyiruyi.ui.OnFigureItemInterface;
+import com.ruyiruyi.ruyiruyi.ui.listener.OnFigureItemInterface;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireFigure;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireFigureViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireRank;
-import com.ruyiruyi.ruyiruyi.ui.multiType.TireRankViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TitleStr;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TitleStrViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
@@ -88,7 +85,7 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
         } catch (JSONException e) {
 
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_TEST + "getShoeBySize");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getShoeBySize");
         params.addBodyParameter("reqJson",jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);

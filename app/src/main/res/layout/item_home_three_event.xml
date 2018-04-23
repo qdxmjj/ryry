@@ -6,6 +6,7 @@
     android:background="@color/background_coloe">
 
     <ImageView
+        android:id="@+id/cxwy_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -17,11 +18,13 @@
         android:layout_marginTop="5dp"
         android:orientation="vertical">
         <ImageView
+            android:id="@+id/qcby_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
             android:src="@drawable/ic_qcby"/>
         <ImageView
+            android:id="@+id/mrqx_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"

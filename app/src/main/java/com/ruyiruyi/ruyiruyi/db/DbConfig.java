@@ -2,6 +2,7 @@ package com.ruyiruyi.ruyiruyi.db;
 
         import android.os.Environment;
 
+        import com.ruyiruyi.ruyiruyi.db.model.Location;
         import com.ruyiruyi.ruyiruyi.db.model.Lunbo;
         import com.ruyiruyi.ruyiruyi.db.model.TireType;
         import com.ruyiruyi.ruyiruyi.db.model.User;
@@ -21,7 +22,7 @@ public class DbConfig {
                 .setDbName("ruyiruyi.db")
                 .setAllowTransaction(true)
                 .setDbDir(Environment.getExternalStorageDirectory())
-                .setDbVersion(6);
+                .setDbVersion(8);
         return daoConfig;
     }
     public DbManager getDbManager(){
@@ -63,6 +64,21 @@ public class DbConfig {
                         return user;
                     }
                 }
+            }
+
+        } catch (DbException e) {
+        }
+        return null;
+    }
+    public Location getLocation(){
+        DbManager.DaoConfig daoConfig = getDaoConfig();
+        DbManager db = x.getDb(daoConfig);
+        try {
+            List<Location> locations = db.selector(Location.class)
+                    .findAll();
+            if (locations != null){
+                Location location = locations.get(0);
+                return location;
             }
 
         } catch (DbException e) {

@@ -27,6 +27,7 @@ public class QcActivity extends BaseActivity {
     private String userphone;
     private String carnumber;
     private String tireimage;
+    private int shoeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class QcActivity extends BaseActivity {
         userphone = intent.getStringExtra("USERPHONE");
         carnumber = intent.getStringExtra("CARNUMBER");
         tireimage = intent.getStringExtra("TIREIMAGE");
+        shoeId = intent.getIntExtra("SHOEID",0);
 
 
         initView();
@@ -87,6 +89,7 @@ public class QcActivity extends BaseActivity {
                         intent.putExtra("USERPHONE",userphone);  //手机号
                         intent.putExtra("CARNUMBER",carnumber);  //车牌号
                         intent.putExtra("TIREIMAGE",tireimage);  //轮胎图片
+                        intent.putExtra("SHOEID",shoeId);  //轮胎id
 
                         startActivity(intent);
                     }
