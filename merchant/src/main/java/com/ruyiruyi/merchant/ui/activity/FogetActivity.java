@@ -132,7 +132,7 @@ public class FogetActivity extends BaseActivityb {
             jsonObject.put("phone",phoneNumber);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(UtilsURL.LOGIN_PASS_REQUEST_URL + "sendMsgChangePwd");
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "sendMsgChangePwd");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             private String status;
@@ -179,7 +179,7 @@ public class FogetActivity extends BaseActivityb {
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版" );
-        dialog.setIcon(R.drawable.ic_head);
+        dialog.setIcon(R.drawable.ic_logo);
         dialog.setView(dialogView);
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
@@ -243,7 +243,7 @@ public class FogetActivity extends BaseActivityb {
             jsonObject.put("password",password);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(UtilsURL.LOGIN_PASS_REQUEST_URL + "changeUserPwd");
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "changeStorePwd");
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -253,8 +253,9 @@ public class FogetActivity extends BaseActivityb {
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
-                        Toast.makeText(FogetActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FogetActivity.this, msg, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                        FogetActivity.this.finish();
                     }else {
                         Toast.makeText(FogetActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
@@ -265,7 +266,7 @@ public class FogetActivity extends BaseActivityb {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(FogetActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
             }
 
             @Override

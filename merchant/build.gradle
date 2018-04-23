@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+repositories {
+    flatDir {
+        dir 'libs'
+    }
+}
+
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
@@ -12,6 +19,15 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    sourceSets{
+        main{
+            jniLibs.srcDir 'libs'
+            jni.srcDirs = []
+        }
+        instrumentTest.setRoot('tests')
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -21,8 +37,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile files('libs/BaiduLBS_Android.jar')
     def system_dependencies = rootProject.ext.system_dependencies
     compile system_dependencies.support_v4
     compile system_dependencies.appcompat_v7
@@ -31,6 +48,6 @@ dependencies {
     compile system_dependencies.recyclerview_v7
     compile system_dependencies.design
     compile system_dependencies.xutils
-
     compile project(':rylibrary')
+    compile files('libs/BaiduLBS_Android.jar')
 }

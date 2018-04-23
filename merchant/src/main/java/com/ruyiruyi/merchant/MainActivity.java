@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
+
     private FrameLayout content;
     private NoCanSlideViewPager viewPager;
     private HomeTabsCell tabsCell;
@@ -81,7 +82,20 @@ public class MainActivity extends BaseActivity {
         });
         viewPager.setCurrentItem(2);
         tabsCell.setSelected(2);
-//        pagerAdapter.notifyDataSetChanged();
+
+
+        initView();
+        initData();
+
+
+    }
+
+    private void initData() {
+
+    }
+
+    private void initView() {
+
     }
 
     private List<Fragment> initFragment() {
