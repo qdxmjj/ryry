@@ -3,12 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
-
-    <com.ruyiruyi.rylibrary.cell.ActionBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </com.ruyiruyi.rylibrary.cell.ActionBar>
+    tools:context="com.ruyiruyi.merchant.ui.activity.MyServiceActivity">
 
 </RelativeLayout>
