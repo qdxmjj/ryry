@@ -41,6 +41,8 @@
         <activity android:name=".ui.activity.FogetActivity" />
         <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.BaseActivityb" />
+        <activity android:name=".ui.activity.StoreManageActivity" />
+        <activity android:name=".ui.activity.MyOrderActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

@@ -3,13 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/c1"
     android:orientation="vertical"
     tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
+
+    <View
+        android:background="@color/c1"
+        android:layout_width="match_parent"
+        android:layout_height="6dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
+        android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -17,7 +27,6 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_head" />
 
@@ -25,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="2dp"
             android:orientation="vertical">
 
             <TextView
@@ -40,7 +49,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -62,12 +71,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="6dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:text="已售:"
                     android:textColor="@color/c6"
                     android:textSize="12sp" />
@@ -77,7 +85,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
                     android:text="111"
                     android:textColor="@color/c6"
                     android:textSize="12sp" />
@@ -87,12 +94,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:layout_marginTop="5dp">
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_vertical"
                     android:text="¥"
                     android:textColor="@color/c6"
                     android:textSize="12sp" />
@@ -102,7 +110,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
                     android:text="66"
                     android:textColor="@color/c20"
                     android:textSize="18sp" />
@@ -113,16 +120,16 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="3dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
         android:background="@color/c1" />
 
     <LinearLayout
-        android:padding="3dp"
-        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_margin="10dp"
         android:orientation="horizontal"
+        android:padding="3dp"
         android:weightSum="3">
 
         <TextView
@@ -152,4 +159,7 @@
             android:textColor="#ffffff"
             android:textSize="16sp" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
 </LinearLayout>

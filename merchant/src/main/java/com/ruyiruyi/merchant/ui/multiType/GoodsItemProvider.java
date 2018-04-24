@@ -1,4 +1,4 @@
-package com.ruyiruyi.merchant.ui.multiType.modle;
+package com.ruyiruyi.merchant.ui.multiType;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.GoodsBean;
+
+import org.xutils.common.util.DensityUtil;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import me.drakeet.multitype.ItemViewProvider;
@@ -29,7 +32,12 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsBean, GoodsItemProv
         holder.tv_kucun.setText(goodsBean.getKucun());
         holder.tv_yishou.setText(goodsBean.getYishou());
         holder.tv_price.setText(goodsBean.getMoney());
-        x.image().bind(holder.img_goods,goodsBean.getImg_url());
+
+        ImageOptions options = new ImageOptions.Builder()
+                .setRadius(DensityUtil.dip2px(2))
+                .setSquare(true)// setSquare和build为必须设置
+                .build();
+        x.image().bind(holder.img_goods,goodsBean.getImg_url(),options);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

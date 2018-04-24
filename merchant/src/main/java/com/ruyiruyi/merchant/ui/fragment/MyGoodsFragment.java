@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.GoodsBean;
-import com.ruyiruyi.merchant.ui.multiType.modle.GoodsItemProvider;
+import com.ruyiruyi.merchant.ui.multiType.GoodsItemProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,12 @@ public class MyGoodsFragment extends Fragment {
     private MultiTypeAdapter multiTypeAdapter;
     private List<Object> items = new ArrayList<>();
     private String TAG = MyGoodsFragment.class.getSimpleName();
+
+    private LinearLayout ll_bottom;
+    private TextView tv_addgoods;
+    private TextView tv_type;
+    private TextView tv_all_type;
+    private ImageView img_bottom;
 
     @Nullable
     @Override
@@ -58,25 +67,27 @@ public class MyGoodsFragment extends Fragment {
                 for (int i = 0; i < 10; i++) {
                     GoodsBean bean = new GoodsBean();
                     bean.setGoods_id(i);
-                    bean.setImg_url("http://180.76.243.205:8111/images/userHeadimgurl/defaultHead.png");
+                    bean.setImg_url("http://192.168.0.167/images/store/storeImg/18254262176/mdPicb.png");
                     bean.setKucun(i + "");
                     bean.setTxt("清仓大甩卖" + i);
                     bean.setYishou(i + "");
                     bean.setMoney(888 + "");
                     goodsBeenList.add(bean);
                 }
+                ll_bottom.setVisibility(View.VISIBLE);
                 break;
             case "NOSALE":
                 for (int i = 0; i < 10; i++) {
                     GoodsBean bean = new GoodsBean();
                     bean.setGoods_id(i);
-                    bean.setImg_url("http://180.76.243.205:8111/images/userHeadimgurl/defaultHead.png");
+                    bean.setImg_url("http://192.168.0.167/images/store/storeImg/18254262176/mdPicb.png");
                     bean.setKucun(i + "");
                     bean.setTxt("已下架" + i);
                     bean.setYishou(i + "");
                     bean.setMoney(888 + "");
                     goodsBeenList.add(bean);
                 }
+                ll_bottom.setVisibility(View.GONE);
                 break;
         }
 
@@ -90,6 +101,11 @@ public class MyGoodsFragment extends Fragment {
 
     private void initView() {
         mRlv = (RecyclerView) getView().findViewById(R.id.mygoods_rlv);
+        ll_bottom = (LinearLayout) getView().findViewById(R.id.ll_bottom);
+        tv_addgoods = (TextView) getView().findViewById(R.id.tv_addgoods);
+        tv_type = (TextView) getView().findViewById(R.id.tv_type);
+        tv_all_type = (TextView) getView().findViewById(R.id.tv_all_type);
+        img_bottom = (ImageView) getView().findViewById(R.id.img_bottom);
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRlv.setLayoutManager(manager);

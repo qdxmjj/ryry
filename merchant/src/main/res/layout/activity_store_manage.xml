@@ -4,26 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ruyiruyi.merchant.ui.activity.MyServiceActivity">
+    tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
 
     <com.ruyiruyi.rylibrary.cell.ActionBar
-        android:id="@+id/myservice_acbar"
+        android:id="@+id/mygoods_acbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/myservice_tab"
+        android:id="@+id/mygoods_tab"
+        android:layout_marginTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="60dp" />
-
     <View
         android:background="@color/c1"
         android:layout_width="match_parent"
         android:layout_height="6dp"/>
-
     <android.support.v4.view.ViewPager
-        android:id="@+id/myservice_vp"
+        android:id="@+id/mygoods_vpager"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 </LinearLayout>

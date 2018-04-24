@@ -19,6 +19,9 @@ import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.User;
 import com.ruyiruyi.merchant.ui.activity.LoginActivity;
 import com.ruyiruyi.merchant.ui.activity.MyGoodsActivity;
+import com.ruyiruyi.merchant.ui.activity.MyOrderActivity;
+import com.ruyiruyi.merchant.ui.activity.MyServiceActivity;
+import com.ruyiruyi.merchant.ui.activity.StoreManageActivity;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
@@ -73,8 +76,8 @@ public class WodeFragment extends Fragment {
                 //Test退出登录
                 DbConfig dbConfig = new DbConfig();
                 User user = dbConfig.getUser();
-                Log.e(TAG, "call:   user ==>id" + user.getId()+"is"+user.getIsLogin() );
-                if (user!=null) {
+                Log.e(TAG, "call:   user ==>id" + user.getId() + "is" + user.getIsLogin());
+                if (user != null) {
                     user.setIsLogin("0");
                     DbManager dbManager = dbConfig.getDbManager();
                     try {
@@ -96,15 +99,40 @@ public class WodeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        RxViewAction.clickNoDouble(rl_wdfw).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), MyServiceActivity.class);
+                startActivity(intent);
+            }
+        });
+        RxViewAction.clickNoDouble(tv_mid_gldp).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), StoreManageActivity.class);
+                startActivity(intent);
+            }
+        });
+        RxViewAction.clickNoDouble(tv_mid_wddd).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), MyOrderActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initDataFromDbAndSetView() {
         DbConfig dbConfig = new DbConfig();
         User user = dbConfig.getUser();
-        Log.e(TAG, "initDataFromDbAndSetView: user.getId() ==>"+ user.getId());
+        Log.e(TAG, "initDataFromDbAndSetView: user.getId() ==>" + user.getId());
         String topimgurl = user.getStoreImgUrl();
-        Log.e(TAG, "initDataFromDbAndSetView: topimgurl ==>"+ topimgurl);
+        Log.e(TAG, "initDataFromDbAndSetView: topimgurl ==>" + topimgurl);
         String storeName = user.getStoreName();
+        //glide 转换圆形图片
         glideReq = Glide.with(this);
         glideReq.load(topimgurl).transform(new GlideCircleTransform(getContext())).into(img_user);
         tv_username.setText(storeName);
