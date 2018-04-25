@@ -106,8 +106,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private WheelView whv_sheng, whv_shi, whv_xian;
     private WheelView whv_category;
     private WheelView whv_lTime, whv_rTime;
-    private Spinner spn_category;
-    //test !!!
+    //add XMs  !!!
     private LinearLayout ll_xms;
     private List<XiangmusBean> list_xms = new ArrayList<>();
 
@@ -129,9 +128,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     public int currentlTimePosition = 0;
     public int currentrTimePosition = 0;
     private int areaId=9999;
-    private Date date;
-    private Date date_category;
-    private Date date_serviceType;
     private List<String> lTime_list;
     private List<String> rTime_list;
     private String shopTimes;
@@ -164,7 +160,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private String shopName;
     private String shopCategoryId;
     private String shopPhone;
-    private String shopTime;
     private String shopTimeL;
     private String shopTimeR;
     private String cityId;

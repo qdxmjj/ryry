@@ -9,19 +9,6 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/myservice_rlv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/tv_myservice_save" />
-
-    <TextView
-        android:id="@+id/tv_myservice_save"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-        android:background="@drawable/login_code_button"
-        android:gravity="center"
-        android:text="保存"
-        android:textColor="#ffffff"
-        android:textSize="20sp" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

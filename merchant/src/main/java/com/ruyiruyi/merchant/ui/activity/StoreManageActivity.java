@@ -6,15 +6,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.ui.fragment.MyGoodsFragment;
 import com.ruyiruyi.merchant.ui.fragment.StorePingJiaFragment;
 import com.ruyiruyi.merchant.ui.fragment.StoreXiangQingFragment;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.functions.Action1;
 
 public class StoreManageActivity extends AppCompatActivity {
     private ActionBar mActionBar;
@@ -45,6 +52,7 @@ public class StoreManageActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        //--<
         mTab = (TabLayout) findViewById(R.id.mygoods_tab);
         mVPager = (ViewPager) findViewById(R.id.mygoods_vpager);
         fragments = getFragments();
@@ -72,6 +80,7 @@ public class StoreManageActivity extends AppCompatActivity {
             }
         });
         mTab.setupWithViewPager(mVPager);
+        //-->
 
     }
 

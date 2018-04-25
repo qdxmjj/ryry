@@ -65,7 +65,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
-                android:src="@drawable/ic_back" />
+                android:src="@drawable/ic_downwhite" />
         </LinearLayout>
     </LinearLayout>
 

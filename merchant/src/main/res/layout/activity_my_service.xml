@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,16 +14,33 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/myservice_tab"
         android:layout_width="match_parent"
-        android:layout_height="60dp" />
+        android:layout_height="60dp"
+        android:layout_below="@+id/myservice_acbar" />
 
     <View
-        android:background="@color/c1"
+        android:id="@+id/myservice_v"
         android:layout_width="match_parent"
-        android:layout_height="6dp"/>
+        android:layout_height="6dp"
+        android:layout_below="@+id/myservice_tab"
+        android:background="@color/c1" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/myservice_vp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tv_myservice_save"
+        android:layout_below="@+id/myservice_v" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_myservice_save"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/login_code_button"
+        android:gravity="center"
+        android:text="保存"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+</RelativeLayout>

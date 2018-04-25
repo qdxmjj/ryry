@@ -6,11 +6,6 @@
     android:orientation="vertical"
     tools:context="com.ruyiruyi.merchant.ui.activity.StartAppActivity">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:background="@color/c1" />
-
     <ScrollView
         android:id="@+id/scview"
         android:layout_width="match_parent"
@@ -19,41 +14,35 @@
         android:layout_marginTop="6dp">
 
         <LinearLayout
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical"
             tools:context="com.ruyiruyi.merchant.ui.activity.RegisterActivity">
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:background="@color/c1" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
-                <EditText
-                    android:id="@+id/et_shopname"
+                <TextView
+                    android:id="@+id/tv_shopname"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
-                    android:hint="请输入门店名称"
-                    android:maxLength="18"
+                    android:gravity="center_vertical"
                     android:paddingLeft="100dp"
                     android:singleLine="true"
-                    android:textColorHint="@color/c5"
+                    android:text="门店名称"
+                    android:textColor="@color/c6"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/et_shopname"
+                    android:layout_alignLeft="@+id/tv_shopname"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
                     android:text="门店名称"
@@ -73,8 +62,8 @@
                     android:background="@drawable/edit_background_noline"
                     android:gravity="center_vertical"
                     android:paddingLeft="100dp"
-                    android:text="请选择您的门店类别"
-                    android:textColor="@color/c5"
+                    android:text="您的门店类别"
+                    android:textColor="@color/c6"
                     android:textSize="15sp" />
 
                 <TextView
@@ -92,25 +81,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
-                <EditText
-                    android:id="@+id/et_shopphone"
+                <TextView
+                    android:id="@+id/tv_shopphone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
-                    android:hint="请输入您店里的电话"
-                    android:inputType="number"
-                    android:maxLength="18"
+                    android:gravity="center_vertical"
                     android:paddingLeft="100dp"
                     android:singleLine="true"
-                    android:textColorHint="@color/c5"
+                    android:text="您店里的电话"
+                    android:textColor="@color/c6"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/et_shopphone"
+                    android:layout_alignLeft="@+id/tv_shopphone"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
                     android:text="联系电话"
@@ -130,7 +118,7 @@
                     android:background="@drawable/edit_background_noline"
                     android:gravity="center_vertical"
                     android:paddingLeft="100dp"
-                    android:text="请选择您的营业时间"
+                    android:text="营业时间"
                     android:textColor="@color/c5"
                     android:textSize="15sp" />
 
@@ -157,7 +145,7 @@
                     android:background="@drawable/edit_background_noline"
                     android:gravity="center_vertical"
                     android:paddingLeft="100dp"
-                    android:text="     省     市     区"
+                    android:text="xx省xx市xx区"
                     android:textColor="@color/c6"
                     android:textSize="15sp" />
 
@@ -176,23 +164,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
-                <EditText
-                    android:id="@+id/et_shoplocation"
+                <TextView
+                    android:id="@+id/tv_shoplocation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
-                    android:hint="请补充您的详细地址 街道、门牌号等"
+                    android:gravity="center_vertical"
                     android:paddingLeft="100dp"
                     android:singleLine="true"
-                    android:textColorHint="@color/c5"
+                    android:text="您的详细地址 街道、门牌号"
+                    android:textColor="@color/c6"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/et_shoplocation"
+                    android:layout_alignLeft="@+id/tv_shoplocation"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
                     android:text="门店位置"
@@ -200,41 +189,6 @@
                     android:textSize="15sp" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
-
-                <TextView
-                    android:id="@+id/tv_shoppoint"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="20dp"
-                    android:background="@drawable/edit_background_noline"
-                    android:gravity="center_vertical"
-                    android:lines="2"
-                    android:paddingLeft="130dp"
-                    android:text="点击自动定位"
-                    android:textColor="@color/c5"
-                    android:textSize="15sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/tv_shoppoint"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="100dp"
-                    android:src="@drawable/ic_position" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/tv_shoppoint"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
-                    android:text="门店定位"
-                    android:textColor="@color/c7"
-                    android:textSize="15sp" />
-            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -299,91 +253,35 @@
                     android:layout_marginTop="10dp"
                     android:weightSum="3">
 
-                    <FrameLayout
+
+                    <ImageView
+                        android:id="@+id/img_mdpic_a"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/img_bg_dark" />
 
-                        <ImageView
-                            android:id="@+id/img_mdpic_a"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/img_bg_dark" />
 
-                        <ImageView
-                            android:id="@+id/img_mdpic_a_delete"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|top"
-                            android:src="@drawable/ic_delete"
-                            android:visibility="gone" />
-
-                        <ImageView
-                            android:id="@+id/img_mdpic_a_center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_add" />
-                    </FrameLayout>
-
-                    <FrameLayout
+                    <ImageView
+                        android:id="@+id/img_mdpic_b"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/img_bg_dark" />
 
-                        <ImageView
-                            android:id="@+id/img_mdpic_b"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/img_bg_dark" />
 
-                        <ImageView
-                            android:id="@+id/img_mdpic_b_delete"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|top"
-                            android:src="@drawable/ic_delete"
-                            android:visibility="gone" />
-
-                        <ImageView
-                            android:id="@+id/img_mdpic_b_center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_add" />
-                    </FrameLayout>
-
-                    <FrameLayout
+                    <ImageView
+                        android:id="@+id/img_mdpic_c"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/img_bg_dark" />
 
-                        <ImageView
-                            android:id="@+id/img_mdpic_c"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/img_bg_dark" />
-
-                        <ImageView
-                            android:id="@+id/img_mdpic_c_delete"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|top"
-                            android:src="@drawable/ic_delete"
-                            android:visibility="gone" />
-
-                        <ImageView
-                            android:id="@+id/img_mdpic_c_center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_add" />
-                    </FrameLayout>
                 </LinearLayout>
             </RelativeLayout>
 
