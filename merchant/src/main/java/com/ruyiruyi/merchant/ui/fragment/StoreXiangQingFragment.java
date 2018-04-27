@@ -27,6 +27,7 @@ import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.ServiceType;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
+import com.ruyiruyi.rylibrary.utils.glide.GlideRoundTransform;
 
 import org.xutils.common.util.DensityUtil;
 import org.xutils.ex.DbException;
@@ -120,9 +121,15 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         x.image().bind(img_mdpic_a, mdPic_a_url, myOptions);
         x.image().bind(img_mdpic_b, mdPic_b_url, myOptions);
         x.image().bind(img_mdpic_c, mdPic_c_url, myOptions);*/
-        Glide.with(getActivity()).load(mdPic_a_url).into(img_mdpic_a);
-        Glide.with(getActivity()).load(mdPic_b_url).into(img_mdpic_b);
-        Glide.with(getActivity()).load(mdPic_c_url).into(img_mdpic_c);
+        Glide.with(getActivity()).load(mdPic_a_url)
+                .transform(new GlideRoundTransform(getActivity(), 5))
+                .into(img_mdpic_a);
+        Glide.with(getActivity()).load(mdPic_b_url)
+                .transform(new GlideRoundTransform(getActivity(), 5))
+                .into(img_mdpic_b);
+        Glide.with(getActivity()).load(mdPic_c_url)
+                .transform(new GlideRoundTransform(getActivity(), 5))
+                .into(img_mdpic_c);
 
     }
 
@@ -272,18 +279,15 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                     CheckBox checkBoxb = (CheckBox) view.findViewById(R.id.checkbox_b);
                     CheckBox checkBoxc = (CheckBox) view.findViewById(R.id.checkbox_c);
                     checkBoxa.setText(list_xms.get(i * 3 + 0).getName());
-                    Log.e(TAG, "textAddXMView: check a == " + list_xms.get(i * 3 + 0).getName());
                     checkBoxa.setTag(list_xms.get(i * 3 + 0));
                     checkBoxa.setOnCheckedChangeListener(this);
 
                     checkBoxb.setText((i * 3 + 1 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 1).getName());
-                    Log.e(TAG, "textAddXMView: check b == " + list_xms.get(i * 3 + 1).getName());
                     checkBoxb.setVisibility((i * 3 + 1 >= list_xms.size()) ? View.GONE : View.VISIBLE);
                     checkBoxb.setTag((i * 3 + 1 >= list_xms.size()) ? null : list_xms.get(i * 3 + 1));
                     checkBoxb.setOnCheckedChangeListener(this);
 
                     checkBoxc.setText((i * 3 + 2 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 2).getName());
-                    Log.e(TAG, "textAddXMView: check c == " + list_xms.get(i * 3 + 2).getName());
                     checkBoxc.setVisibility((i * 3 + 2 >= list_xms.size()) ? View.GONE : View.VISIBLE);
                     checkBoxc.setTag((i * 3 + 2 >= list_xms.size()) ? null : list_xms.get(i * 3 + 2));
                     checkBoxc.setOnCheckedChangeListener(this);
@@ -316,20 +320,27 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
 
     private void showPicDialog(String pic_url) {
 
-        AlertDialog  dialog = new AlertDialog.Builder(getActivity()).create();
-        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_picture,null);
+        AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_picture, null);
         ImageView img_dialog_pic = (ImageView) dialogView.findViewById(R.id.img_dialog_pic);
+//        //设置imageView 宽高
+//        WindowManager manager = getActivity().getWindowManager();
+//        Display display = manager.getDefaultDisplay();//为获取屏幕宽高
+//        LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) img_dialog_pic.getLayoutParams();
+//        linearParams.width = (int) (display.getWidth() * 0.9);
+//        linearParams.height = (int) (display.getHeight() * 0.9);
+
         ImageOptions myOptions = new ImageOptions.Builder()
                 .setCircular(false)
                 .setPlaceholderScaleType(ImageView.ScaleType.FIT_XY)
                 .setSquare(true)// setSquare和build为必须设置
                 .build();
-        x.image().bind(img_dialog_pic, pic_url,myOptions);
-        Log.e(TAG, "showPicDialog: " +pic_url );
+        x.image().bind(img_dialog_pic, pic_url, myOptions);
+        Log.e(TAG, "showPicDialog: " + pic_url);
         dialog.setView(dialogView);
         //Glide.with(getActivity()).load(pic_url).into(img_dialog_pic);
 
-        dialog.setButton(DialogInterface.BUTTON_POSITIVE,"返回", new DialogInterface.OnClickListener() {
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "返回", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

@@ -13,9 +13,10 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"/>
+        android:layout_height="3dp" />
 
     <FrameLayout
+        android:id="@+id/service_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
@@ -29,12 +30,13 @@
             android:textColor="@color/c6"
             android:textSize="14sp" />
 
-        <CheckBox
-            android:id="@+id/ck_service_item"
+        <ImageView
+            android:id="@+id/img_service_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="15dp" />
+            android:layout_marginRight="15dp"
+            android:src="@drawable/ic_notcheck" />
     </FrameLayout>
 
     <View

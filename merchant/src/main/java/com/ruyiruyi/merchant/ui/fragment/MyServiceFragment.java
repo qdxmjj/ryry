@@ -14,7 +14,17 @@ import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.ServicesBean;
+import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.ui.activity.MyServiceActivity;
 import com.ruyiruyi.merchant.ui.multiType.ServiceItemProvider;
+import com.ruyiruyi.merchant.utils.UtilsURL;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +34,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class MyServiceFragment extends Fragment {
+public class MyServiceFragment extends Fragment implements ServiceItemProvider.OnServiceItemClick {
     public static String SALE_TYPE = "SALE_TYPE";
     private String sale_type;
     private RecyclerView mRlv;
@@ -33,12 +43,20 @@ public class MyServiceFragment extends Fragment {
     private MultiTypeAdapter multiTypeAdapter;
     private List<Object> items = new ArrayList<>();
     private String TAG = MyServiceFragment.class.getSimpleName();
+    private View parentView;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.myservice_list_fg, container, false);
+        if (parentView == null){
+            parentView = inflater.inflate(R.layout.myservice_list_fg, container, false);
+        }else {
+            ViewGroup viewGroup = (ViewGroup) parentView.getParent();
+            if (viewGroup != null)
+                viewGroup.removeView(parentView);
+        }
+        return parentView;
     }
 
     @Override
@@ -57,60 +75,81 @@ public class MyServiceFragment extends Fragment {
 
     private void initData() {
         switch (sale_type) {
-            case "QCBY":
-                for (int i = 0; i < 10; i++) {
-                    ServicesBean bean = new ServicesBean();
-                    bean.setService_id(i);
-                    bean.setServiceInfo("汽车保养" + i);
-                    if (i == 0) {
-                        bean.setIsChecked(1);
-                    } else {
-                        bean.setIsChecked(0);
-                    }
-                    servicesBean.add(bean);
-                }
+            case "QCBY"://id 2
+                myRequestPostForDataBy("2");
                 break;
-            case "MRQX":
-                for (int i = 0; i < 10; i++) {
-                    ServicesBean bean = new ServicesBean();
-                    bean.setService_id(i);
-                    bean.setServiceInfo("美容清洗" + i);
-                    if (i == 0) {
-                        bean.setIsChecked(1);
-                    } else {
-                        bean.setIsChecked(0);
-                    }
-                    servicesBean.add(bean);
-                }
+            case "MRQX"://id 3
+                myRequestPostForDataBy("3");
                 break;
-            case "AZ":
-                for (int i = 0; i < 10; i++) {
-                    ServicesBean bean = new ServicesBean();
-                    bean.setService_id(i);
-                    bean.setServiceInfo("安装" + i);
-                    if (i == 0) {
-                        bean.setIsChecked(1);
-                    } else {
-                        bean.setIsChecked(0);
-                    }
-                    servicesBean.add(bean);
-                }
+            case "AZ"://id 4
+                myRequestPostForDataBy("4");
                 break;
-            case "LTFW":
-                for (int i = 0; i < 10; i++) {
-                    ServicesBean bean = new ServicesBean();
-                    bean.setService_id(i);
-                    bean.setServiceInfo("轮胎服务" + i);
-                    if (i == 0) {
-                        bean.setIsChecked(1);
-                    } else {
-                        bean.setIsChecked(0);
-                    }
-                    servicesBean.add(bean);
-                }
+            case "LTFW"://id 5
+                myRequestPostForDataBy("5");
                 break;
         }
 
+    }
+
+    //封装的四个Fragment 请求 获取servicesBean 这个list ；
+    private void myRequestPostForDataBy(String s) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            String storeId = new DbConfig().getId() + "";
+            jsonObject.put("storeId", storeId);
+            jsonObject.put("serviceTypeId", s);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreServices");
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        Log.e(TAG, "myRequestPostForDataBy: params.toString()==>" + params.toString());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject object = new JSONObject(result);
+                    JSONArray data = object.getJSONArray("data");
+                    String msg = object.getString("msg");
+                    int status = object.getInt("status");
+                    if (data != null && data.length() != 0) {
+                        for (int i = 0; i < data.length(); i++) {
+                            ServicesBean bean = new ServicesBean();
+                            JSONObject obj = (JSONObject) data.get(i);
+                            bean.setService_id(obj.getInt("id"));
+                            bean.setServiceInfo(obj.getString("name"));
+                            bean.setIsChecked(0);
+                            servicesBean.add(bean);
+                        }
+                    }
+
+                    if (servicesBean == null || servicesBean.size() == 0) {
+                        Log.e(TAG, "initData: servicesBean 是空的？==》" + servicesBean);
+                    } else {
+                        updataAdapter();
+                    }
+
+                } catch (JSONException e) {
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void updataAdapter() {
         items.clear();
         for (int i = 0; i < servicesBean.size(); i++) {
             items.add(servicesBean.get(i));
@@ -126,8 +165,25 @@ public class MyServiceFragment extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRlv.setLayoutManager(manager);
         multiTypeAdapter = new MultiTypeAdapter(items);
-        multiTypeAdapter.register(ServicesBean.class, new ServiceItemProvider());
+        ServiceItemProvider serviceItemProvider = new ServiceItemProvider();
+        serviceItemProvider.setListener(this);
+        multiTypeAdapter.register(ServicesBean.class, serviceItemProvider);
         mRlv.setAdapter(multiTypeAdapter);
         assertHasTheSameAdapter(mRlv, multiTypeAdapter);
+    }
+
+    @Override
+    public void onServiceItemClickListener(int id) {
+        for (int i = 0; i < servicesBean.size(); i++) {
+            if (servicesBean.get(i).getService_id() == id) {
+                int isChecked = servicesBean.get(i).getIsChecked();
+                if (isChecked == 0) {
+                    servicesBean.get(i).setIsChecked(1);
+                } else {
+                    servicesBean.get(i).setIsChecked(0);
+                }
+            }
+        }
+        updataAdapter();
     }
 }

@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,12 +17,15 @@ import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.GoodsBean;
+import com.ruyiruyi.merchant.ui.activity.GoodsInfoActivity;
 import com.ruyiruyi.merchant.ui.multiType.GoodsItemProvider;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.drakeet.multitype.MultiTypeAdapter;
+import rx.functions.Action1;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
@@ -75,6 +79,14 @@ public class MyGoodsFragment extends Fragment {
                     goodsBeenList.add(bean);
                 }
                 ll_bottom.setVisibility(View.VISIBLE);
+                //添加商品 跳转
+                RxViewAction.clickNoDouble(tv_addgoods).subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(getActivity(), GoodsInfoActivity.class);
+                        startActivity(intent);
+                    }
+                });
                 break;
             case "NOSALE":
                 for (int i = 0; i < 10; i++) {

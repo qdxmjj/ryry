@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:orientation="vertical"
     android:scrollbars="none">
 
     <com.ruyiruyi.rylibrary.cell.ActionBar
@@ -17,7 +16,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tv_save"
+        android:layout_below="@+id/acbar_rigister">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,10 +66,10 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
                     android:hint="请输入您的手机号"
-                    android:maxLength="11"
-                    android:singleLine="true"
                     android:inputType="number"
+                    android:maxLength="11"
                     android:paddingLeft="100dp"
+                    android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -108,10 +109,10 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
                     android:hint="请输入验证码"
-                    android:singleLine="true"
-                    android:paddingLeft="100dp"
                     android:inputType="number"
                     android:maxLength="6"
+                    android:paddingLeft="100dp"
+                    android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -133,8 +134,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="60dp"
-                    android:visibility="invisible"
-                    android:src="@drawable/ic_wrong" />
+                    android:src="@drawable/ic_wrong"
+                    android:visibility="invisible" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -149,9 +150,9 @@
                     android:background="@drawable/edit_background_noline"
                     android:hint="请设置您的登录密码"
                     android:inputType="textPassword"
-                    android:singleLine="true"
-                    android:paddingLeft="100dp"
                     android:maxLength="18"
+                    android:paddingLeft="100dp"
+                    android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -179,9 +180,9 @@
                     android:background="@drawable/edit_background_noline"
                     android:hint="请再次确认您的登录密码"
                     android:inputType="textPassword"
-                    android:singleLine="true"
                     android:maxLength="18"
                     android:paddingLeft="100dp"
+                    android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -214,9 +215,9 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
                     android:hint="请输入门店名称"
+                    android:maxLength="18"
                     android:paddingLeft="100dp"
                     android:singleLine="true"
-                    android:maxLength="18"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -243,8 +244,8 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
                     android:gravity="center_vertical"
-                    android:paddingLeft="100dp"
                     android:onClick="registerclick"
+                    android:paddingLeft="100dp"
                     android:text="请选择您的门店类别"
                     android:textColor="@color/c5"
                     android:textSize="15sp" />
@@ -271,10 +272,10 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
                     android:hint="请输入您店里的电话"
-                    android:paddingLeft="100dp"
-                    android:maxLength="18"
-                    android:singleLine="true"
                     android:inputType="number"
+                    android:maxLength="18"
+                    android:paddingLeft="100dp"
+                    android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
                     android:textSize="15sp" />
@@ -301,8 +302,8 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
                     android:gravity="center_vertical"
-                    android:paddingLeft="100dp"
                     android:onClick="registerclick"
+                    android:paddingLeft="100dp"
                     android:text="请选择您的营业时间"
                     android:textColor="@color/c5"
                     android:textSize="15sp" />
@@ -385,10 +386,10 @@
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
                     android:gravity="center_vertical"
-                    android:paddingLeft="130dp"
-                    android:onClick="registerclick"
-                    android:text="点击自动定位"
                     android:lines="2"
+                    android:onClick="registerclick"
+                    android:paddingLeft="130dp"
+                    android:text="点击自动定位"
                     android:textColor="@color/c5"
                     android:textSize="15sp" />
 
@@ -472,12 +473,13 @@
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
+
                         <ImageView
                             android:id="@+id/img_yyzz_center"
-                            android:src="@drawable/ic_add"
-                            android:layout_gravity="center"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_add" />
                     </FrameLayout>
 
 
@@ -554,15 +556,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
-                            android:src="@drawable/ic_delete"
                             android:onClick="registerPicClick"
+                            android:src="@drawable/ic_delete"
                             android:visibility="gone" />
+
                         <ImageView
                             android:id="@+id/img_mdpic_a_center"
-                            android:src="@drawable/ic_add"
-                            android:layout_gravity="center"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_add" />
                     </FrameLayout>
 
                     <FrameLayout
@@ -583,16 +586,17 @@
                             android:id="@+id/img_mdpic_b_delete"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:onClick="registerPicClick"
                             android:layout_gravity="right|top"
+                            android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
+
                         <ImageView
                             android:id="@+id/img_mdpic_b_center"
-                            android:src="@drawable/ic_add"
-                            android:layout_gravity="center"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_add" />
                     </FrameLayout>
 
                     <FrameLayout
@@ -617,12 +621,13 @@
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
+
                         <ImageView
                             android:id="@+id/img_mdpic_c_center"
-                            android:src="@drawable/ic_add"
-                            android:layout_gravity="center"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_add" />
                     </FrameLayout>
                 </LinearLayout>
             </RelativeLayout>
@@ -684,16 +689,17 @@
                             android:id="@+id/img_shou_a_delete"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:onClick="registerPicClick"
                             android:layout_gravity="right|top"
+                            android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
+
                         <ImageView
                             android:id="@+id/img_shou_a_center"
-                            android:src="@drawable/ic_add"
-                            android:layout_gravity="center"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_add" />
                     </FrameLayout>
 
                     <ImageView
@@ -797,48 +803,57 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <CheckBox
+                    android:id="@+id/ckbox_xieyi"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="提交即表示同意"
-                        android:textColor="@color/c6"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tv_xieyi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dp"
-                        android:text="《小马驾驾用户协议》"
-                        android:textColor="@color/c27"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:button="@drawable/xieyi_checkbox_selector"
+                    android:gravity="center_vertical" />
 
                 <TextView
-                    android:id="@+id/tv_save"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/login_code_button"
-                    android:gravity="center"
-                    android:text="保存"
-                    android:textColor="#ffffff"
-                    android:textSize="20sp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical"
+                    android:text="提交即表示同意"
+                    android:textColor="@color/c6"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_xieyi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:gravity="center_vertical"
+                    android:text="《小马驾驾用户协议》"
+                    android:textColor="@color/c27"
+                    android:textSize="12sp" />
+
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_save"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/login_code_button"
+        android:gravity="center"
+        android:text="保存"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+</RelativeLayout>

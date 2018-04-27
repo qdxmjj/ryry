@@ -64,7 +64,8 @@
         </activity>
         <activity android:name=".ui.activity.StartPermisionActivity" />
         <activity android:name=".ui.activity.MyGoodsActivity" />
-        <activity android:name=".ui.activity.GoodsInfoActivity" />
+        <activity
+            android:name=".ui.activity.GoodsInfoActivity"/>
         <activity android:name=".ui.activity.StoreManagementActivity" />
         <activity android:name=".ui.activity.MyServiceActivity"></activity>
     </application>
