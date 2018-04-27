@@ -19,6 +19,7 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
@@ -44,6 +45,11 @@ public class MyFragment extends Fragment {
     private LinearLayout myCarLayout;
     private LinearLayout tireWaitLayout;
     private LinearLayout testLayout;
+    private TextView orderAllText;
+    private LinearLayout dzfLayout;
+    private LinearLayout dfhLayout;
+    private LinearLayout dfwLayout;
+    private LinearLayout ywcLayout;
 
     @Nullable
     @Override
@@ -106,8 +112,6 @@ public class MyFragment extends Fragment {
         glideRequest.load(headimgurl).transform(new GlideCircleTransform(getContext())).into(myImage);
         userNameView.setText(userName);
 
-
-
     }
 
     private void initView() {
@@ -119,12 +123,62 @@ public class MyFragment extends Fragment {
         myCarLayout = ((LinearLayout) getView().findViewById(R.id.my_car_layout));
         tireWaitLayout = (LinearLayout) getView().findViewById(R.id.tire_wait_layout);
         testLayout = (LinearLayout) getView().findViewById(R.id.test_layout);
+        orderAllText = (TextView) getView().findViewById(R.id.order_all_text);
+        dzfLayout = (LinearLayout) getView().findViewById(R.id.dzf_layout);
+        dfhLayout = (LinearLayout) getView().findViewById(R.id.dfh_layout);
+        dfwLayout = (LinearLayout) getView().findViewById(R.id.dfw_layout);
+        ywcLayout = (LinearLayout) getView().findViewById(R.id.ywc_layout);
 
         RxViewAction.clickNoDouble(testLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
                         startActivity(new Intent(getContext(), TestActivity.class));
+                    }
+                });
+        RxViewAction.clickNoDouble(orderAllText)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(getContext(), OrderActivity.class);
+                        intent.putExtra(OrderFragment.ORDER_TYPE,"ALL");
+                        startActivity(intent);
+                    }
+                });
+        RxViewAction.clickNoDouble(dzfLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(getContext(), OrderActivity.class);
+                        intent.putExtra(OrderFragment.ORDER_TYPE,"DZF");
+                        startActivity(intent);
+                    }
+                });
+        RxViewAction.clickNoDouble(dfhLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(getContext(), OrderActivity.class);
+                        intent.putExtra(OrderFragment.ORDER_TYPE,"DFH");
+                        startActivity(intent);
+                    }
+                });
+        RxViewAction.clickNoDouble(dfwLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(getContext(), OrderActivity.class);
+                        intent.putExtra(OrderFragment.ORDER_TYPE,"DFW");
+                        startActivity(intent);
+                    }
+                });
+        RxViewAction.clickNoDouble(ywcLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(getContext(), OrderActivity.class);
+                        intent.putExtra(OrderFragment.ORDER_TYPE,"YWC");
+                        startActivity(intent);
                     }
                 });
 

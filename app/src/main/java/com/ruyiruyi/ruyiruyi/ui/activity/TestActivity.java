@@ -36,6 +36,7 @@ public class TestActivity extends BaseActivity {
     private LinearLayout content;
     private Button btnCountdown;
     private Button dituButton;
+    private Button evaluateButton;
 
 
     @Override
@@ -67,6 +68,18 @@ public class TestActivity extends BaseActivity {
                         startActivity(new Intent(getApplicationContext(),BaiduActivity.class));
                     }
                 });
+
+        evaluateButton = new Button(this);
+        evaluateButton.setText("评价");
+        content.addView(evaluateButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT));
+        RxViewAction.clickNoDouble(evaluateButton)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getApplicationContext(),EvaluateActivity.class));
+                    }
+                });
+
 
     }
 

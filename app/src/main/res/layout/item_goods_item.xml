@@ -9,6 +9,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#ffffff"
         android:padding="20dp">
         <TextView
             android:id="@+id/good_class_name_text"
@@ -34,6 +35,10 @@
                 android:src="@drawable/ic_weixuan"/>
         </LinearLayout>
     </FrameLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/goods_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

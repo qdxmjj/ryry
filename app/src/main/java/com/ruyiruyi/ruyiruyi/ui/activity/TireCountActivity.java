@@ -44,7 +44,7 @@ public class TireCountActivity extends BaseActivity {
     private TextView tireCountButton;
     private TextView tirePriceText;
     private TextView tireNameText;
-    private String fontrearflag;
+    private String fontrearflag;//0是一致  1前轮 2后轮
     private String tireSize;
     private String cxwyPrice;
     private int shoeId;
@@ -53,6 +53,8 @@ public class TireCountActivity extends BaseActivity {
     private String carNumber;
     private String userPhone;
     private String userName;
+    private TextView tireLocationText;
+    private TextView cxwyPriceText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +141,8 @@ public class TireCountActivity extends BaseActivity {
                                 .startTurning(5000);
                         tireNameText.setText(tireName);
 
+                        cxwyPriceText.setText("￥" + cxwyPrice);
+
                     }
                 } catch (JSONException e) {
 
@@ -169,6 +173,16 @@ public class TireCountActivity extends BaseActivity {
         tireCountButton = (TextView) findViewById(R.id.tire_count_button);
         tirePriceText = (TextView) findViewById(R.id.tire_price_text);
         tireNameText = (TextView) findViewById(R.id.tire_name_text);
+        tireLocationText = (TextView) findViewById(R.id.tire_location_text);
+        cxwyPriceText = (TextView) findViewById(R.id.cxwy_price_text);
+
+        if (fontrearflag.equals("0")){
+            tireLocationText.setText("轮胎数量");
+        }else if (fontrearflag.equals("1")){
+            tireLocationText.setText("前轮数量");
+        }else {
+            tireLocationText.setText("后轮数量");
+        }
 
         tirePriceText.setText(price);
 

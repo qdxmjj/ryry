@@ -253,7 +253,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="行驶证截止日期"
+                        android:text="服务截止日期"
                         android:layout_gravity="left"
                         android:textSize="15sp"
                         android:textColor="@color/c6"/>

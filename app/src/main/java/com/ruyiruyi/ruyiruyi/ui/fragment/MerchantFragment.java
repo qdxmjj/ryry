@@ -329,7 +329,7 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
         if (shopType == 1){//轮胎服务  点击传值给Activity  做forResult返回
             listener.onShopItemClickListener();
         }else {
-            startActivity(new Intent(getContext(), ShopGoodActivity.class));
+            startActivity(new Intent(getContext(), ShopHomeActivity.class));
         }
     }
 

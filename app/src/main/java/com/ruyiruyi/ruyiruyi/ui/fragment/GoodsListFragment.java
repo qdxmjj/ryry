@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsHorizontal;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsItem;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsItemViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.FullyLinearLayoutManager;
@@ -48,16 +49,34 @@ public class GoodsListFragment extends Fragment {
         Log.e(TAG, "onActivityCreated: -" + shopServiceType);
         goodsItemList = new ArrayList<>();
 
+
+
+        createData();
+
+
         initView();
 
         initData();
 
     }
 
-    private void initData() {
+    private void createData() {
         goodsItemList.clear();
         if (shopServiceType.equals("QCBY")){
-            goodsItemList.add( new GoodsItem("汽车保养" ,true));
+            GoodsItem goodsItem = new GoodsItem("汽车保养", true);
+            List<GoodsHorizontal> goodsHorizontalList = new ArrayList<>();
+            for (int i = 0; i < 6; i++) {
+                GoodsHorizontal goodsHorizontal = new GoodsHorizontal();
+                goodsHorizontal.setGoodsId(i);
+                goodsHorizontal.setGoodsCount(2);
+                goodsHorizontal.setGoodsImage("http://180.76.243.205:8111/images/flgure/543BFCB7-57C3-03F4-398A-ADDA0CEE50D6.jpg");
+                goodsHorizontal.setGoodsName("汽车保养"+i);
+                goodsHorizontal.setGoodsStock(10);
+                goodsHorizontalList.add(goodsHorizontal);
+            }
+            goodsItem.setGoodsList(goodsHorizontalList);
+            goodsItemList.add(goodsItem);
+
             for (int i = 0; i < 10; i++) {
                 goodsItemList.add( new GoodsItem("汽车保养" + i,false));
             }
@@ -75,6 +94,10 @@ public class GoodsListFragment extends Fragment {
                 goodsItemList.add( new GoodsItem("轮胎服务" + i,false));
             }
         }
+    }
+
+    private void initData() {
+
 
         items.clear();
         for (int i = 0; i <goodsItemList.size() ; i++) {
@@ -86,7 +109,7 @@ public class GoodsListFragment extends Fragment {
 
     private void initView() {
         listView = (RecyclerView) getView().findViewById(R.id.goods_listview);
-        FullyLinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         listView.setLayoutManager(linearLayoutManager);
         adapter = new MultiTypeAdapter(items);
         register();
@@ -97,6 +120,6 @@ public class GoodsListFragment extends Fragment {
     }
 
     private void register() {
-        adapter.register(GoodsItem.class,new GoodsItemViewBinder());
+        adapter.register(GoodsItem.class,new GoodsItemViewBinder(getContext()));
     }
 }

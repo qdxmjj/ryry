@@ -88,6 +88,7 @@
                     android:layout_height="wrap_content"
                     android:padding="20dp">
                     <TextView
+                        android:id="@+id/tire_location_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="前轮数量"
@@ -152,6 +153,7 @@
                             android:background="@color/c2"
                             android:layout_marginLeft="10dp"/>
                         <TextView
+                            android:id="@+id/cxwy_price_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="￥200/次"
