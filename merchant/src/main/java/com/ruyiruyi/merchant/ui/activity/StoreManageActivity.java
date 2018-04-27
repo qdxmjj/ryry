@@ -1,24 +1,29 @@
 package com.ruyiruyi.merchant.ui.activity;
 
-import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.ui.fragment.MyGoodsFragment;
+import com.ruyiruyi.merchant.ui.fragment.StorePingJiaFragment;
+import com.ruyiruyi.merchant.ui.fragment.StoreXiangQingFragment;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyGoodsActivity extends AppCompatActivity {
+import rx.functions.Action1;
+
+public class StoreManageActivity extends AppCompatActivity {
     private ActionBar mActionBar;
     private TabLayout mTab;
     private ViewPager mVPager;
@@ -28,9 +33,9 @@ public class MyGoodsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_goods);
+        setContentView(R.layout.activity_store_manage);
         mActionBar = (ActionBar) findViewById(R.id.mygoods_acbar);
-        mActionBar.setTitle("商品管理");
+        mActionBar.setTitle("店铺信息");
         mActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
@@ -47,6 +52,7 @@ public class MyGoodsActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        //--<
         mTab = (TabLayout) findViewById(R.id.mygoods_tab);
         mVPager = (ViewPager) findViewById(R.id.mygoods_vpager);
         fragments = getFragments();
@@ -74,29 +80,24 @@ public class MyGoodsActivity extends AppCompatActivity {
             }
         });
         mTab.setupWithViewPager(mVPager);
+        //-->
 
     }
 
     private List<String> getTitles() {
         title_list = new ArrayList();
-        title_list.add("出售中");
-        title_list.add("已下架");
+        title_list.add("店铺详情");
+        title_list.add("店铺评价");
         return title_list;
     }
 
     private List<Fragment> getFragments() {
         fragments = new ArrayList();
-        MyGoodsFragment onsale_fragment = new MyGoodsFragment();
-        Bundle bundle_onSale = new Bundle();
-        bundle_onSale.putString(MyGoodsFragment.SALE_TYPE, "ONSALE");
-        onsale_fragment.setArguments(bundle_onSale);
-        fragments.add(onsale_fragment);
+        StoreXiangQingFragment storeXiangQingFragment = new StoreXiangQingFragment();
+        fragments.add(storeXiangQingFragment);
 
-        MyGoodsFragment nosale_fragment = new MyGoodsFragment();
-        Bundle bundle_noSale = new Bundle();
-        bundle_noSale.putString(MyGoodsFragment.SALE_TYPE, "NOSALE");
-        nosale_fragment.setArguments(bundle_noSale);
-        fragments.add(nosale_fragment);
+        StorePingJiaFragment storePingJiaFragment = new StorePingJiaFragment();
+        fragments.add(storePingJiaFragment);
 
         return fragments;
     }

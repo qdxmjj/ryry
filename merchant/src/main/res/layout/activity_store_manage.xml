@@ -16,7 +16,10 @@
         android:layout_marginTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="60dp" />
-
+    <View
+        android:background="@color/c1"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"/>
     <android.support.v4.view.ViewPager
         android:id="@+id/mygoods_vpager"
         android:layout_marginTop="5dp"

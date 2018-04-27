@@ -37,10 +37,12 @@
         <activity android:name=".MainActivity" />
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask" />
         <activity android:name=".ui.activity.FogetActivity" />
         <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.BaseActivityb" />
+        <activity android:name=".ui.activity.StoreManageActivity" />
+        <activity android:name=".ui.activity.MyOrderActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -61,7 +63,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.StartPermisionActivity" />
-        <activity android:name=".ui.activity.MyGoodsActivity"></activity>
+        <activity android:name=".ui.activity.MyGoodsActivity" />
+        <activity android:name=".ui.activity.GoodsInfoActivity" />
+        <activity android:name=".ui.activity.StoreManagementActivity" />
+        <activity android:name=".ui.activity.MyServiceActivity"></activity>
     </application>
 
 </manifest>

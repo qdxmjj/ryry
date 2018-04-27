@@ -28,7 +28,7 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 public class DianpuFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private MultiTypeAdapter multiTypeAdapter;
-    private List<Object> items = new ArrayList<>();
+    private List<Object> items = new ArrayList<>();//Object!!!!!!!!!!
     private List<Dianpu> list;
     private String TAG = DianpuFragment.class.getSimpleName();
 
