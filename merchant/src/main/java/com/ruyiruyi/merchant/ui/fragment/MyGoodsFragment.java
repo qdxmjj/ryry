@@ -39,12 +39,6 @@ public class MyGoodsFragment extends Fragment {
     private List<Object> items = new ArrayList<>();
     private String TAG = MyGoodsFragment.class.getSimpleName();
 
-    private LinearLayout ll_bottom;
-    private TextView tv_addgoods;
-    private TextView tv_type;
-    private TextView tv_all_type;
-    private ImageView img_bottom;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,15 +72,6 @@ public class MyGoodsFragment extends Fragment {
                     bean.setMoney(888 + "");
                     goodsBeenList.add(bean);
                 }
-                ll_bottom.setVisibility(View.VISIBLE);
-                //添加商品 跳转
-                RxViewAction.clickNoDouble(tv_addgoods).subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        Intent intent = new Intent(getActivity(), GoodsInfoActivity.class);
-                        startActivity(intent);
-                    }
-                });
                 break;
             case "NOSALE":
                 for (int i = 0; i < 10; i++) {
@@ -99,7 +84,6 @@ public class MyGoodsFragment extends Fragment {
                     bean.setMoney(888 + "");
                     goodsBeenList.add(bean);
                 }
-                ll_bottom.setVisibility(View.GONE);
                 break;
         }
 
@@ -113,11 +97,6 @@ public class MyGoodsFragment extends Fragment {
 
     private void initView() {
         mRlv = (RecyclerView) getView().findViewById(R.id.mygoods_rlv);
-        ll_bottom = (LinearLayout) getView().findViewById(R.id.ll_bottom);
-        tv_addgoods = (TextView) getView().findViewById(R.id.tv_addgoods);
-        tv_type = (TextView) getView().findViewById(R.id.tv_type);
-        tv_all_type = (TextView) getView().findViewById(R.id.tv_all_type);
-        img_bottom = (ImageView) getView().findViewById(R.id.img_bottom);
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRlv.setLayoutManager(manager);

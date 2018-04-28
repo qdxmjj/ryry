@@ -196,6 +196,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             }
         }
     };
+    private String areStr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -855,7 +856,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String areStr = "";
                                 String sheng = whv_sheng.getSelectedItem();
                                 String shi = whv_shi.getSelectedItem();
                                 String xian = whv_xian.getSelectedItem();
@@ -1406,6 +1406,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     obj.put("endTime", "2000-01-01T" + shopTimeR + ".000+0800");
                     obj.put("positionId", positionId_xian);
                     obj.put("cityId", cityId);
+                    obj.put("storeLocation", areStr);
                     obj.put("address", shopLocation);
                     obj.put("longitude", longitude);
                     obj.put("latitude", latitude);

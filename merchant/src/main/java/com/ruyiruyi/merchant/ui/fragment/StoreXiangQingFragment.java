@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,12 +28,19 @@ import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.XiangmusBean;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.ServiceType;
+import com.ruyiruyi.merchant.utils.UtilsRY;
+import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
 import com.ruyiruyi.rylibrary.utils.glide.GlideRoundTransform;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
 import org.xutils.common.util.DensityUtil;
 import org.xutils.ex.DbException;
+import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
@@ -57,6 +67,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     private ImageView img_mdpic_a;
     private ImageView img_mdpic_b;
     private ImageView img_mdpic_c;
+    private Switch mSwitch;
 
     private WheelView whv_lTime, whv_rTime;
 
@@ -85,6 +96,21 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     private String mdPic_a_url;
     private String mdPic_b_url;
     private String mdPic_c_url;
+    private int isOpen = 1; //默认开店营业
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 111:
+                    bindView();
+                    getData();
+                    break;
+                case 222:
+                    setData();
+                    break;
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -96,11 +122,11 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         initView();
-        bindView();
-        getData();//暂用假数据 缺接口
-        setData();
+        initRegisterServiceTypeData();
+        /*bindView();
+        getData();       已移至handler 中
+        setData();*/
 
     }
 
@@ -130,22 +156,82 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         Glide.with(getActivity()).load(mdPic_c_url)
                 .transform(new GlideRoundTransform(getActivity(), 5))
                 .into(img_mdpic_c);
+        if (isOpen == 1) {
+            mSwitch.setChecked(true);
+        } else {
+            mSwitch.setChecked(false);
+        }
 
     }
 
     private void getData() {
-        storeServiceList_old.add("0");
-        storeServiceList_old.add("3");
-        storeTimeL_old = "08:00:00";
-        storeTimeR_old = "21:00:00";
-        storeName = "小马驾驾";
-        storeCategory = "4S店";
-        storePhone = "05328888888";
-        storeCity = "山东省青岛市城阳区";
-        storeLocation = "天安数码城23号楼";
-        mdPic_a_url = "http://192.168.0.167/images/store/storeImg/18254262176/mdPica.png";
-        mdPic_b_url = "http://192.168.0.167/images/store/storeImg/18254262176/mdPicb.png";
-        mdPic_c_url = "http://180.76.243.205:8111/images/userHeadimgurl/defaultHead.png";
+        String id_ = new DbConfig().getId() + "";
+        JSONObject object = new JSONObject();
+        try {
+            object.put("storeId", id_);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreInfoByStoreId");
+        params.addBodyParameter("reqJson", object.toString());
+        Log.e(TAG, "getData: 10086 params.toString()" + params.toString());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject data = jsonObject.getJSONObject("data");
+                    storeName = data.getString("storeName");
+                    JSONArray storeServcieList = data.getJSONArray("storeServcieList");
+                    for (int i = 0; i < storeServcieList.length(); i++) {
+                        JSONObject storeServcie = (JSONObject) storeServcieList.get(i);
+                        storeServiceList_old.add(storeServcie.getInt("serviceType") + "");
+                    }
+                    storeCategory = data.getString("storeType");
+                    storePhone = data.getString("storePhone");
+                    isOpen = data.getInt("status");
+                    storeTimeL_old = data.getString("storeStartTime").substring(11, 19);//"storeStartTime": "2000-01-01 08:00:00.0",
+                    storeTimeR_old = data.getString("storeEndTime").substring(11, 19);
+                    storeCity = data.getString("storeLocation");
+                    storeLocation = data.getString("storeAddress");
+                    mdPic_a_url = data.getString("locationImgUrl");
+                    mdPic_b_url = data.getString("indoorImgUrl");
+                    mdPic_c_url = data.getString("factoryImgUrl");
+
+                    Log.e(TAG, "onSuccess:10086 list_xms.size()" + list_xms.size());
+                    for (int i = 0; i < list_xms.size(); i++) {
+                        for (int y = 0; y < storeServiceList_old.size(); y++) {
+                            if ((list_xms.get(i).getId() + "").equals(storeServiceList_old.get(y))) {
+                                list_xms.get(i).setIsChecked(1);
+                            } else {
+
+                            }
+                        }
+                    }
+                    Log.e(TAG, "onSuccess:10086 list_xms.size()" + list_xms.size());
+                    textAddXMView();
+
+                    Message message = new Message();
+                    message.what = 222;// 第二次
+                    mHandler.sendMessage(message);
+                } catch (JSONException e) {
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
 
     }
 
@@ -192,8 +278,8 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                         }).show();
             }
         });
-        //initXMs
-        textAddXMView();
+
+
         //提交
         RxViewAction.clickNoDouble(tv_save).subscribe(new Action1<Void>() {
             @Override
@@ -252,52 +338,54 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         img_mdpic_a = (ImageView) getView().findViewById(R.id.img_mdpic_a);
         img_mdpic_b = (ImageView) getView().findViewById(R.id.img_mdpic_b);
         img_mdpic_c = (ImageView) getView().findViewById(R.id.img_mdpic_c);
+        mSwitch = (Switch) getView().findViewById(R.id.swch_isopen);
 
     }
 
     private void textAddXMView() {
-        try {
-            List<ServiceType> all_ServiceType = new DbConfig().getDbManager().selector(ServiceType.class).findAll();
-            if (all_ServiceType == null) {
-                Toast.makeText(getActivity(), "请检查网络", Toast.LENGTH_SHORT).show();
-            } else {
-                XiangmusBean xiangmusBean;
 
-                for (int i = 0; i < all_ServiceType.size(); i++) {
-                    xiangmusBean = new XiangmusBean();
-                    xiangmusBean.setId(all_ServiceType.get(i).getId());
-                    Log.e(TAG, "textAddXMView:  xiangmusBean.getId()  == " + xiangmusBean.getId());
-                    xiangmusBean.setName(all_ServiceType.get(i).getName());
-                    xiangmusBean.setColor(all_ServiceType.get(i).getColor());
-                    xiangmusBean.setTime(all_ServiceType.get(i).getTime());
-                    list_xms.add(xiangmusBean);
-                    Log.e(TAG, "textAddXMView:   list_xms.toString()   == " + list_xms.toString());
-                }
-                for (int i = 0; i < (list_xms.size() % 3 == 0 ? (list_xms.size() / 3) : (list_xms.size() / 3 + 1)); i++) {
-                    View view = LayoutInflater.from(getActivity()).inflate(R.layout.register_xm_add_item, null);
-                    CheckBox checkBoxa = (CheckBox) view.findViewById(R.id.checkbox_a);
-                    CheckBox checkBoxb = (CheckBox) view.findViewById(R.id.checkbox_b);
-                    CheckBox checkBoxc = (CheckBox) view.findViewById(R.id.checkbox_c);
-                    checkBoxa.setText(list_xms.get(i * 3 + 0).getName());
-                    checkBoxa.setTag(list_xms.get(i * 3 + 0));
-                    checkBoxa.setOnCheckedChangeListener(this);
-
-                    checkBoxb.setText((i * 3 + 1 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 1).getName());
-                    checkBoxb.setVisibility((i * 3 + 1 >= list_xms.size()) ? View.GONE : View.VISIBLE);
-                    checkBoxb.setTag((i * 3 + 1 >= list_xms.size()) ? null : list_xms.get(i * 3 + 1));
-                    checkBoxb.setOnCheckedChangeListener(this);
-
-                    checkBoxc.setText((i * 3 + 2 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 2).getName());
-                    checkBoxc.setVisibility((i * 3 + 2 >= list_xms.size()) ? View.GONE : View.VISIBLE);
-                    checkBoxc.setTag((i * 3 + 2 >= list_xms.size()) ? null : list_xms.get(i * 3 + 2));
-                    checkBoxc.setOnCheckedChangeListener(this);
-
-                    ll_xiangmus.addView(view);
-                }
-            }
-
-        } catch (DbException e) {
+        for (int i = 0; i < list_xms.size(); i++) {
+            Log.e(TAG, "textAddXMView: 10086  IsChecked() " + "i=" + i + "  " + list_xms.get(i).getIsChecked());
         }
+
+        if (list_xms == null) {
+            Toast.makeText(getActivity(), "请检查网络", Toast.LENGTH_SHORT).show();
+        } else {
+            for (int i = 0; i < (list_xms.size() % 3 == 0 ? (list_xms.size() / 3) : (list_xms.size() / 3 + 1)); i++) {
+                View view = LayoutInflater.from(getActivity()).inflate(R.layout.register_xm_add_item, null);
+                CheckBox checkBoxa = (CheckBox) view.findViewById(R.id.checkbox_a);
+                CheckBox checkBoxb = (CheckBox) view.findViewById(R.id.checkbox_b);
+                CheckBox checkBoxc = (CheckBox) view.findViewById(R.id.checkbox_c);
+                checkBoxa.setText(list_xms.get(i * 3 + 0).getName());
+                Log.e(TAG, "textAddXMView:10086 1");
+                Log.e(TAG, "textAddXMView: a10086 getIsChecked()" + list_xms.get(i * 3 + 0).getIsChecked());
+                checkBoxa.setChecked(list_xms.get(i * 3 + 0).getIsChecked() == 1 ? true : false);
+                checkBoxa.setTag(list_xms.get(i * 3 + 0));
+                checkBoxa.setOnCheckedChangeListener(this);
+
+                checkBoxb.setText((i * 3 + 1 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 1).getName());
+                Log.e(TAG, "textAddXMView:10086 2");
+                if (!(i * 3 + 1 >= list_xms.size())) {
+                    checkBoxb.setChecked(list_xms.get(i * 3 + 1).getIsChecked() == 1 ? true : false);
+                }
+                checkBoxb.setVisibility((i * 3 + 1 >= list_xms.size()) ? View.GONE : View.VISIBLE);
+                checkBoxb.setTag((i * 3 + 1 >= list_xms.size()) ? null : list_xms.get(i * 3 + 1));
+                checkBoxb.setOnCheckedChangeListener(this);
+
+                checkBoxc.setText((i * 3 + 2 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 2).getName());
+                Log.e(TAG, "textAddXMView:10086 3");
+                if (!(i * 3 + 2 >= list_xms.size())) {
+                    checkBoxc.setChecked(list_xms.get(i * 3 + 2).getIsChecked() == 1 ? true : false);
+                }
+
+                checkBoxc.setVisibility((i * 3 + 2 >= list_xms.size()) ? View.GONE : View.VISIBLE);
+                checkBoxc.setTag((i * 3 + 2 >= list_xms.size()) ? null : list_xms.get(i * 3 + 2));
+                checkBoxc.setOnCheckedChangeListener(this);
+
+                ll_xiangmus.addView(view);
+            }
+        }
+
     }
 
     private List<String> getStrLTime() {
@@ -356,6 +444,89 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         params.width = (int) (display.getWidth()*0.9);
         dialog.getWindow().setAttributes(params);//设置参数生效*/
 
+    }
+
+    private void initRegisterServiceTypeData() {
+//   0     date_serviceType = new Date();
+        List<ServiceType> serviceTypeList = null;
+        try {
+            serviceTypeList = new DbConfig().getDbManager().selector(ServiceType.class).orderBy("time").findAll();
+
+        } catch (DbException e) {
+        }
+        JSONObject object = new JSONObject();
+
+        try {
+            if (serviceTypeList == null) {
+                object.put("time", "2000-00-00 00:00:00");
+            } else {
+                String time = serviceTypeList.get(serviceTypeList.size() - 1).getTime();
+                object.put("time", time);
+
+            }
+        } catch (JSONException e) {
+        }
+
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreServiceType");
+        params.addBodyParameter("reqJson", object.toString());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(result);
+                            String status = jsonObject.getString("status");
+                            String msg = jsonObject.getString("msg");
+                            JSONArray data = jsonObject.getJSONArray("data");
+                            saveServiceType(data);
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                }
+
+        );
+    }
+
+    private void saveServiceType(JSONArray data) {
+        Log.e(TAG, "saveServiceType: data.toString() 0= " + data.toString());
+        XiangmusBean xiangmusBean;
+        for (int i = 0; i < data.length(); i++) {
+            xiangmusBean = new XiangmusBean();
+            try {
+                JSONObject obj = (JSONObject) data.get(i);
+                long time = obj.getLong("time");
+                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
+                xiangmusBean.setTime(timestampToStringAll);
+                xiangmusBean.setColor(obj.getString("color"));
+                xiangmusBean.setId(obj.getInt("id"));
+                xiangmusBean.setIsChecked(0);//0为false （此为总列表 默认全部未选）
+                xiangmusBean.setName(obj.getString("name"));
+//                Log.e(TAG, "saveServiceType: xiangmusBean.getName() = "+xiangmusBean.getName() );
+                list_xms.add(xiangmusBean);
+//                Log.e(TAG, "saveServiceType: list_xms.toString()0 = " +list_xms.toString() );
+            } catch (JSONException e) {
+            }
+        }
+        //2 下载数据完成后再动态添加View
+//    2  textAddXMView();
+        Message msg = new Message();
+        msg.what = 111;//第一次
+        mHandler.sendMessage(msg);   //下载完默认ServiceType列表之后再进行接下来操作
     }
 
     private void showMyDialog(String error) {

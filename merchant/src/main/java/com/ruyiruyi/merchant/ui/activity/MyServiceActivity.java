@@ -17,6 +17,7 @@ import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.ServicesBean;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.fragment.MyServiceFragment;
+import com.ruyiruyi.merchant.ui.multiType.ServiceItemProvider;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -35,7 +36,7 @@ import java.util.Set;
 
 import rx.functions.Action1;
 
-public class MyServiceActivity extends AppCompatActivity implements View.OnClickListener {
+public class MyServiceActivity extends AppCompatActivity implements MyServiceFragment.StartFragmentPasstoActivity {
     private static final String TAG = MyServiceActivity.class.getSimpleName();
     private ActionBar mAcBar;
     private TabLayout mTab;
@@ -46,10 +47,7 @@ public class MyServiceActivity extends AppCompatActivity implements View.OnClick
     private List<String> title_list;
 
     private List<String> selectServicesList = new ArrayList<>();
-    private String selectServicesListString;
-
-
-
+    private String selectServicesListString = "";
 
 
     @Override
@@ -69,6 +67,7 @@ public class MyServiceActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
+
         initView();
         bindView();
     }
@@ -78,7 +77,7 @@ public class MyServiceActivity extends AppCompatActivity implements View.OnClick
         RxViewAction.clickNoDouble(tv_saveService).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-
+                Log.e(TAG, "call: 000servicesBeanList_all = >" + "all" + "<--" + selectServicesList.size());
                 JSONObject object = new JSONObject();
                 String storeId = new DbConfig().getId() + "";
                 for (int i = 0; i < selectServicesList.size(); i++) {
@@ -164,6 +163,7 @@ public class MyServiceActivity extends AppCompatActivity implements View.OnClick
         mTab.setupWithViewPager(mVp);
         mVp.setCurrentItem(0);
         mVp.setOffscreenPageLimit(3);
+
     }
 
     private void getTitles() {
@@ -179,24 +179,28 @@ public class MyServiceActivity extends AppCompatActivity implements View.OnClick
 
         fragments = new ArrayList();
         MyServiceFragment qcby_fragment = new MyServiceFragment();
+        qcby_fragment.setListener(this);
         Bundle bundle_qcby = new Bundle();
         bundle_qcby.putString(MyServiceFragment.SALE_TYPE, "QCBY");//id 2
         qcby_fragment.setArguments(bundle_qcby);
         fragments.add(qcby_fragment);
 
         MyServiceFragment mrqx_fragment = new MyServiceFragment();
+        mrqx_fragment.setListener(this);
         Bundle bundle_mrqx = new Bundle();
         bundle_mrqx.putString(MyServiceFragment.SALE_TYPE, "MRQX");//id 3
         mrqx_fragment.setArguments(bundle_mrqx);
         fragments.add(mrqx_fragment);
 
         MyServiceFragment az_fragment = new MyServiceFragment();
+        az_fragment.setListener(this);
         Bundle bundle_az = new Bundle();
         bundle_az.putString(MyServiceFragment.SALE_TYPE, "AZ");//id 4
         az_fragment.setArguments(bundle_az);
         fragments.add(az_fragment);
 
         MyServiceFragment ltfw_fragment = new MyServiceFragment();
+        ltfw_fragment.setListener(this);
         Bundle bundle_ltfw = new Bundle();
         bundle_ltfw.putString(MyServiceFragment.SALE_TYPE, "LTFW");//id 5
         ltfw_fragment.setArguments(bundle_ltfw);
@@ -204,9 +208,8 @@ public class MyServiceActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-//Test
-    @Override
-    public void onClick(View buttonView) {
+    //Test false 0.0
+    public void onTestClick(View buttonView) {
         Toast.makeText(MyServiceActivity.this, "0000000000000000", Toast.LENGTH_SHORT);
         ServicesBean bean = (ServicesBean) buttonView.getTag();
         if (bean.getIsChecked() == 0) {//添加
@@ -236,6 +239,38 @@ public class MyServiceActivity extends AppCompatActivity implements View.OnClick
                         //不存在 不操作
                     }
                 }
+            }
+        }
+    }
+
+
+    @Override
+    public void startFragmentPasstoActivityListener(String s, List<String> checkedList) {
+        selectServicesList.addAll(checkedList);
+
+    }
+
+    @Override
+    public void onServiceItemClickToActivityListener(int id) {
+        if (selectServicesList == null || selectServicesList.size() == 0) {//原来选择的为空 则直接添加
+            selectServicesList.add(id + "");
+        } else {//原来选择的不为空 则判断id是否已存在
+            int sizea = selectServicesList.size();
+            boolean isadd = true;
+            for (int i = 0; i < sizea; i++) {
+                if (selectServicesList.get(i).equals(id + "")) {//如果该id已存在 则移除
+                    isadd =false;
+                 /*   Log.e(TAG, "onServiceItemClickToActivityListener000: ++++++++" );
+                    selectServicesList.remove(i);
+                    return;*/
+                }/* else {//如果该id不存在 则添加
+                    selectServicesList.add(id + "");
+                }*/
+            }
+            if (isadd){//添加
+                selectServicesList.add(id + "");
+            }else {
+                selectServicesList.remove(id+"");
             }
         }
     }

@@ -58,11 +58,10 @@ public class ServiceItemProvider extends ItemViewProvider<ServicesBean, ServiceI
         holder.tv_service_item.setText(servicesBean.getServiceInfo());
         Log.w(TAG, "onBindViewHolder: servicesBean.getServiceInfo()" + servicesBean.getServiceInfo());
         holder.img_service_item.setTag(servicesBean);
-//        holder.img_service_item.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener) context);
         RxViewAction.clickNoDouble(holder.service_layout).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                listener.onServiceItemClickListener(servicesBean.getService_id());
+                listener.onServiceItemClickListener(servicesBean.getService_id());//传递给Fragment
             }
         });
         if (servicesBean.getIsChecked() == 1) {
@@ -88,7 +87,10 @@ public class ServiceItemProvider extends ItemViewProvider<ServicesBean, ServiceI
         }
     }
 
-    public interface OnServiceItemClick {
+    public interface OnServiceItemClick {//传至Fragment
+
         void onServiceItemClickListener(int id);
+
     }
+
 }

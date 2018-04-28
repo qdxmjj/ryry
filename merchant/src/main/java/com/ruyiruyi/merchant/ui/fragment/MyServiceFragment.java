@@ -44,14 +44,19 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
     private List<Object> items = new ArrayList<>();
     private String TAG = MyServiceFragment.class.getSimpleName();
     private View parentView;
+    public StartFragmentPasstoActivity listener;
+    private List<String> checkedList = new ArrayList<>();
 
+    public void setListener(StartFragmentPasstoActivity listener) {
+        this.listener = listener;
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (parentView == null){
+        if (parentView == null) {
             parentView = inflater.inflate(R.layout.myservice_list_fg, container, false);
-        }else {
+        } else {
             ViewGroup viewGroup = (ViewGroup) parentView.getParent();
             if (viewGroup != null)
                 viewGroup.removeView(parentView);
@@ -92,7 +97,7 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
     }
 
     //封装的四个Fragment 请求 获取servicesBean 这个list ；
-    private void myRequestPostForDataBy(String s) {
+    private void myRequestPostForDataBy(final String s) {
         JSONObject jsonObject = new JSONObject();
         try {
             String storeId = new DbConfig().getId() + "";
@@ -100,7 +105,7 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
             jsonObject.put("serviceTypeId", s);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreServices");
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreServicesAndState");
         params.addBodyParameter("reqJson", jsonObject.toString());
         Log.e(TAG, "myRequestPostForDataBy: params.toString()==>" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -116,18 +121,28 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
                             ServicesBean bean = new ServicesBean();
                             JSONObject obj = (JSONObject) data.get(i);
                             bean.setService_id(obj.getInt("id"));
+                            bean.setIsChecked(Integer.parseInt(obj.getString("selectState")));
                             bean.setServiceInfo(obj.getString("name"));
-                            bean.setIsChecked(0);
                             servicesBean.add(bean);
                         }
                     }
 
                     if (servicesBean == null || servicesBean.size() == 0) {
-                        Log.e(TAG, "initData: servicesBean 是空的？==》" + servicesBean);
+                        Log.e(TAG, "initData: servicesBean 是空的？=00=》" + servicesBean);
                     } else {
                         updataAdapter();
                     }
 
+                    //循环列出已选中的服务选项的id列表（String型list）
+                    checkedList.clear();
+                    for (int i = 0; i < servicesBean.size(); i++) {
+                        if (servicesBean.get(i).getIsChecked() == 1) {
+                            checkedList.add(servicesBean.get(i).getService_id() + "");
+                        }
+                    }
+
+                    listener.startFragmentPasstoActivityListener(s, checkedList); //此时传递数据 原始
+                    Log.e(TAG, "onSuccess: 000servicesBean.size()-->" + s + "<--" + servicesBean.size());
                 } catch (JSONException e) {
                 }
             }
@@ -166,7 +181,7 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
         mRlv.setLayoutManager(manager);
         multiTypeAdapter = new MultiTypeAdapter(items);
         ServiceItemProvider serviceItemProvider = new ServiceItemProvider();
-        serviceItemProvider.setListener(this);
+        serviceItemProvider.setListener(this);// 绑定adapter-->fragment接口
         multiTypeAdapter.register(ServicesBean.class, serviceItemProvider);
         mRlv.setAdapter(multiTypeAdapter);
         assertHasTheSameAdapter(mRlv, multiTypeAdapter);
@@ -185,5 +200,11 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
             }
         }
         updataAdapter();
+        listener.onServiceItemClickToActivityListener(id);//传递给Activity 后选
+    }
+
+    public interface StartFragmentPasstoActivity {
+        void startFragmentPasstoActivityListener(String s, List<String> checkedList);//传至Activity 原始
+        void onServiceItemClickToActivityListener(int id);//传至Activity 后选
     }
 }

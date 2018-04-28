@@ -111,6 +111,42 @@
                 android:layout_height="50dp">
 
                 <TextView
+                    android:id="@+id/tv_shop_is_open"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/edit_background_noline"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="100dp"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textColor="@color/c6"
+                    android:textCursorDrawable="@drawable/edit_cursor_color"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_shop_is_open"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:text="是否营业"
+                    android:textColor="@color/c7"
+                    android:textSize="15sp" />
+                <Switch
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/swch_isopen"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <TextView
                     android:id="@+id/tv_shoptime"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
