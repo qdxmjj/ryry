@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="5"
+    android:orientation="horizontal">
+
+
+    <com.ruyiruyi.rylibrary.ui.cell.WheelView
+        android:id="@+id/whv_left"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="100dp"
+        android:layout_marginLeft="30dp"
+        app:isLoop="true"
+        app:itemVisibleNum="3"
+        app:lineColor="@color/theme_primary"
+        app:lineSpaceingDimens="10dp"
+        app:textColorCenter="@color/theme_primary"
+        app:textColorOuter="@color/c3"
+        app:textSizeCenter="12dp"
+        app:textSizeOuter="10dp" />
+    <TextView
+        android:textSize="15sp"
+        android:textColor="@color/theme_primary"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+    <com.ruyiruyi.rylibrary.ui.cell.WheelView
+        android:id="@+id/whv_right"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="100dp"
+        android:layout_marginRight="30dp"
+        app:isLoop="true"
+        app:itemVisibleNum="3"
+        app:lineColor="@color/theme_primary"
+        app:lineSpaceingDimens="10dp"
+        app:textColorCenter="@color/theme_primary"
+        app:textColorOuter="@color/c3"
+        app:textSizeCenter="12dp"
+        app:textSizeOuter="10dp" />
+</LinearLayout>

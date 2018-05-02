@@ -1,4 +1,4 @@
-package com.ruyiruyi.merchant.ui.multiType.modle;
+package com.ruyiruyi.merchant.bean;
 
 public class XiaoService {
     public String serviceId;

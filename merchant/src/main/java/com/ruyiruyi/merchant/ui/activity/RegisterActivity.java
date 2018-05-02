@@ -763,6 +763,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
                     }
                 });
+                whv_category.setIsLoop(false);
                 new AlertDialog.Builder(this)
                         .setTitle("选择门店类别")
                         .setView(v_category)
@@ -803,6 +804,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         shopTimes = shopTimeL + "  至  " + shopTimeR;
                     }
                 });
+                whv_lTime.setIsLoop(false);
+                whv_rTime.setIsLoop(false);
                 new AlertDialog.Builder(this)
                         .setTitle("选择营业时间")
                         .setView(v_shoptime)
@@ -850,6 +853,9 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         currentXianPosition = whv_xian.getSelectedPosition();
                     }
                 });
+                whv_sheng.setIsLoop(false);
+                whv_shi.setIsLoop(false);
+                whv_xian.setIsLoop(false);
                 new AlertDialog.Builder(this)
                         .setTitle("选择所在城市")
                         .setView(v_city)

@@ -1,4 +1,6 @@
-package com.ruyiruyi.merchant.ui.multiType.modle;
+package com.ruyiruyi.merchant.bean;
+
+import com.ruyiruyi.merchant.bean.XiaoService;
 
 import java.util.List;
 

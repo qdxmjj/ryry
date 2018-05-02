@@ -44,6 +44,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,15 +72,15 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
 
     private WheelView whv_lTime, whv_rTime;
 
-    public String currentlTime = "8:00";
-    public String currentrTime = "18:00";
+    public String currentlTime = "请选择";
+    public String currentrTime = "请选择";
     public int currentlTimePosition = 0;
     public int currentrTimePosition = 0;
     private List<String> lTime_list;
     private List<String> rTime_list;
     private String shopTimes;
     private List<XiangmusBean> list_xms = new ArrayList<>();
-    private List<String> serviceTypeList = new ArrayList<String>();
+    private List<String> serviceTypeList = new ArrayList<>();
     private String serviceTypeListString;
 
     private String shopTimeL;
@@ -88,6 +89,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     private String storeTimeL_old;
     private String storeTimeR_old;
     private List<String> storeServiceList_old = new ArrayList<>();
+    private String storeServiceList_old_String;
     private String storeName;
     private String storeCategory;
     private String storePhone;
@@ -96,7 +98,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     private String mdPic_a_url;
     private String mdPic_b_url;
     private String mdPic_c_url;
-    private int isOpen = 1; //默认开店营业
+    private int isOpen = 2; //默认开店营业 1 不营业 2 营业
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -106,6 +108,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                     getData();
                     break;
                 case 222:
+                    textAddXMView();//设置项目控件（此时含用户选择状态）
                     setData();
                     break;
             }
@@ -156,11 +159,23 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         Glide.with(getActivity()).load(mdPic_c_url)
                 .transform(new GlideRoundTransform(getActivity(), 5))
                 .into(img_mdpic_c);
-        if (isOpen == 1) {
+        if (isOpen == 2) {
             mSwitch.setChecked(true);
         } else {
             mSwitch.setChecked(false);
         }
+
+        //mSwitch 绑定点击事件
+        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    isOpen = 2;//1 不营业  2 营业
+                } else {
+                    isOpen = 1;
+                }
+            }
+        });
 
     }
 
@@ -186,9 +201,18 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                         JSONObject storeServcie = (JSONObject) storeServcieList.get(i);
                         storeServiceList_old.add(storeServcie.getInt("serviceType") + "");
                     }
+                    for (int i = 0; i < storeServiceList_old.size(); i++) {//顺便保存原来所选 转换为String
+                        if (i == storeServiceList_old.size() - 1) {
+                            storeServiceList_old_String = storeServiceList_old_String + storeServiceList_old.get(i);
+                        } else {
+                            storeServiceList_old_String = storeServiceList_old_String + storeServiceList_old.get(i) + ",";
+                        }
+                    }
                     storeCategory = data.getString("storeType");
                     storePhone = data.getString("storePhone");
-                    isOpen = data.getInt("status");
+                    isOpen = Integer.parseInt(data.getString("status"));
+                    Log.e(TAG, "onSuccess:request10010 isOpen = " + isOpen);
+                    Log.e(TAG, "onSuccess:request10010 data.getstatus= " + data.getString("status"));
                     storeTimeL_old = data.getString("storeStartTime").substring(11, 19);//"storeStartTime": "2000-01-01 08:00:00.0",
                     storeTimeR_old = data.getString("storeEndTime").substring(11, 19);
                     storeCity = data.getString("storeLocation");
@@ -196,6 +220,8 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                     mdPic_a_url = data.getString("locationImgUrl");
                     mdPic_b_url = data.getString("indoorImgUrl");
                     mdPic_c_url = data.getString("factoryImgUrl");
+                    shopTimeL = storeTimeL_old;//设置默认提交时间与原时间一致
+                    shopTimeR = storeTimeR_old;
 
                     Log.e(TAG, "onSuccess:10086 list_xms.size()" + list_xms.size());
                     for (int i = 0; i < list_xms.size(); i++) {
@@ -203,15 +229,13 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                             if ((list_xms.get(i).getId() + "").equals(storeServiceList_old.get(y))) {
                                 list_xms.get(i).setIsChecked(1);
                             } else {
-
                             }
                         }
                     }
                     Log.e(TAG, "onSuccess:10086 list_xms.size()" + list_xms.size());
-                    textAddXMView();
 
                     Message message = new Message();
-                    message.what = 222;// 第二次
+                    message.what = 222;// 第二次  （这里可以不用Handler 只是便于修改）
                     mHandler.sendMessage(message);
                 } catch (JSONException e) {
                 }
@@ -236,6 +260,8 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     }
 
     private void bindView() {
+        //mSwitch 点击事件在数据获取之后 绑定 （在setData方法中）
+
         //shopTime
         RxViewAction.clickNoDouble(tv_shoptime).subscribe(new Action1<Void>() {
             @Override
@@ -284,9 +310,17 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         RxViewAction.clickNoDouble(tv_save).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                if (serviceTypeList == null || serviceTypeList.size() == 0) {
-                    Toast.makeText(getActivity(), "请选择合作项目", Toast.LENGTH_SHORT).show();
+        /* isOpen
+        shoptimeL    shoptimeR
+        storeServiceList_old_String --> serviceTypeListString */
+                if (tv_shoptime.getText() == null || tv_shoptime.length() == 0) {
+                    Toast.makeText(getActivity(), "请选择营业时间", Toast.LENGTH_SHORT).show();
                     return;
+                }
+                if (serviceTypeList == null || serviceTypeList.size() == 0) {
+                    for (int i = 0; i < storeServiceList_old.size(); i++) {//原始值 转给 要提交的参数list(未点击)
+                        serviceTypeList.add(storeServiceList_old.get(i));
+                    }
                 } else {
                     serviceTypeListString = "";
                     for (int i = 0; i < serviceTypeList.size(); i++) {
@@ -298,6 +332,10 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                     }
                     Log.e(TAG, "call: XiangQing serviceTypeListString" + serviceTypeListString);
                 }
+
+
+                showSaveDialog();
+
 
             }
         });
@@ -322,6 +360,82 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                 showPicDialog(mdPic_c_url);
             }
         });
+    }
+
+    private void showSaveDialog() {
+        android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(getActivity()).create();
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_save_commit, null);
+        TextView error_text = (TextView) dialogView.findViewById(R.id.save_text);
+        error_text.setText("确定提交保存吗");
+        dialog.setTitle("如意如驿商家版");
+        dialog.setIcon(R.drawable.ic_logo);
+        dialog.setView(dialogView);
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //确认提交 请求提交数据
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "是的", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String storeId = new DbConfig().getId() + "";
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("id", storeId);
+                    object.put("status", isOpen + "");
+                    Log.e(TAG, "showd:10010 isOpen = " + isOpen);
+                    object.put("startTime", "2000-01-01T" + shopTimeL + ".000+0800");
+                    object.put("endTime", "2000-01-01T" + shopTimeR + ".000+0800");
+
+                } catch (JSONException e) {
+                }
+                RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreInfoByStoreId");
+                params.addBodyParameter("reqJson", object.toString());
+                params.addBodyParameter("serviceTypeList", serviceTypeListString);
+                x.http().post(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {//提交请求
+                        try {
+                            JSONObject object1 = new JSONObject(result);
+                            int status = object1.getInt("status");
+                            if (status == 1) {
+                                Toast.makeText(getActivity(), "更新店铺成功", Toast.LENGTH_SHORT).show();
+                                getActivity().finish();
+                            } else {
+                                Toast.makeText(getActivity(), "更新店铺失败", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                });
+            }
+        });
+
+        dialog.show();
+        //设置按钮颜色
+        dialog.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+        dialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+
+
     }
 
     private void initView() {
@@ -447,23 +561,10 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     }
 
     private void initRegisterServiceTypeData() {
-//   0     date_serviceType = new Date();
-        List<ServiceType> serviceTypeList = null;
-        try {
-            serviceTypeList = new DbConfig().getDbManager().selector(ServiceType.class).orderBy("time").findAll();
-
-        } catch (DbException e) {
-        }
         JSONObject object = new JSONObject();
-
         try {
-            if (serviceTypeList == null) {
-                object.put("time", "2000-00-00 00:00:00");
-            } else {
-                String time = serviceTypeList.get(serviceTypeList.size() - 1).getTime();
-                object.put("time", time);
+            object.put("time", "2000-00-00 00:00:00");
 
-            }
         } catch (JSONException e) {
         }
 
@@ -549,25 +650,40 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         XiangmusBean bean = (XiangmusBean) buttonView.getTag();
-        if (isChecked) {
+        boolean isRemove = false;
+        for (int i = 0; i < storeServiceList_old.size(); i++) {//原始值 转给 要提交的参数list(已点击)
+            serviceTypeList.add(storeServiceList_old.get(i));
+        }
+        if (isChecked) { //isChecked   添加
             if (serviceTypeList == null || serviceTypeList.size() == 0) {
                 serviceTypeList.add(bean.getId() + "");
             } else {
                 for (int i = 0; i < serviceTypeList.size(); i++) {
                     if (serviceTypeList.get(i).equals(bean.getId() + "")) {
-                        serviceTypeList.remove(bean.getId() + "");
+                        isRemove = true;
                     }
                 }
-                serviceTypeList.add(bean.getId() + "");
+                if (isRemove) {
+                    //点击完为选中状态时有相同的则不添加
+                    isRemove = false;
+                } else {
+                    serviceTypeList.add(bean.getId() + "");
+                }
             }
-        } else { //noChecked
+        } else { //noChecked  清除
             if (serviceTypeList == null || serviceTypeList.size() == 0) {
 
             } else {
                 for (int i = 0; i < serviceTypeList.size(); i++) {
                     if (serviceTypeList.get(i).equals(bean.getId() + "")) {
-                        serviceTypeList.remove(bean.getId() + "");
+                        isRemove = true;
                     }
+                }
+                if (isRemove) {
+                    serviceTypeList.remove(bean.getId() + "");
+                    isRemove = false;
+                } else {
+                    //点击完为未选中状态时没有相同的则不清除
                 }
             }
         }
