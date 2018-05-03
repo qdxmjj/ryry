@@ -6,18 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.bean.GoodsBean;
 import com.ruyiruyi.merchant.bean.StorePingJiaBean;
-import com.ruyiruyi.merchant.ui.multiType.GoodsItemProvider;
 import com.ruyiruyi.merchant.ui.multiType.StorePingJiaItemProvider;
 
 import java.util.ArrayList;

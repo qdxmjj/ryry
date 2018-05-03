@@ -98,7 +98,8 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     private String mdPic_a_url;
     private String mdPic_b_url;
     private String mdPic_c_url;
-    private int isOpen = 2; //默认开店营业 1 不营业 2 营业
+    private boolean isClicked = false;
+    private int isOpen = 1; //默认开店营业 2 不营业 1 营业
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -160,9 +161,9 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                 .transform(new GlideRoundTransform(getActivity(), 5))
                 .into(img_mdpic_c);
         if (isOpen == 2) {
-            mSwitch.setChecked(true);
-        } else {
             mSwitch.setChecked(false);
+        } else {
+            mSwitch.setChecked(true);
         }
 
         //mSwitch 绑定点击事件
@@ -170,9 +171,9 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    isOpen = 2;//1 不营业  2 营业
+                    isOpen = 1;//2 不营业  1 营业
                 } else {
-                    isOpen = 1;
+                    isOpen = 2;
                 }
             }
         });
@@ -201,6 +202,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                         JSONObject storeServcie = (JSONObject) storeServcieList.get(i);
                         storeServiceList_old.add(storeServcie.getInt("serviceType") + "");
                     }
+                    storeServiceList_old_String = "";
                     for (int i = 0; i < storeServiceList_old.size(); i++) {//顺便保存原来所选 转换为String
                         if (i == storeServiceList_old.size() - 1) {
                             storeServiceList_old_String = storeServiceList_old_String + storeServiceList_old.get(i);
@@ -208,6 +210,11 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                             storeServiceList_old_String = storeServiceList_old_String + storeServiceList_old.get(i) + ",";
                         }
                     }
+                    serviceTypeList.clear();
+                    for (int i = 0; i < storeServiceList_old.size(); i++) {//原始值 转给 要提交的参数list 点击之前
+                        serviceTypeList.add(storeServiceList_old.get(i));
+                    }
+
                     storeCategory = data.getString("storeType");
                     storePhone = data.getString("storePhone");
                     isOpen = Integer.parseInt(data.getString("status"));
@@ -317,10 +324,9 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                     Toast.makeText(getActivity(), "请选择营业时间", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (serviceTypeList == null || serviceTypeList.size() == 0) {
-                    for (int i = 0; i < storeServiceList_old.size(); i++) {//原始值 转给 要提交的参数list(未点击)
-                        serviceTypeList.add(storeServiceList_old.get(i));
-                    }
+                if (serviceTypeList == null || serviceTypeList.size() == 0) {//为空 一定点击过XM  为全部未选  则提示
+                    Toast.makeText(getActivity(), "请选择合作项目", Toast.LENGTH_SHORT).show();
+                    return;
                 } else {
                     serviceTypeListString = "";
                     for (int i = 0; i < serviceTypeList.size(); i++) {
@@ -395,6 +401,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreInfoByStoreId");
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("serviceTypeList", serviceTypeListString);
+                Log.e(TAG, "onClick:110 serviceTypeListString = " + serviceTypeListString);
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {//提交请求
@@ -651,9 +658,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         XiangmusBean bean = (XiangmusBean) buttonView.getTag();
         boolean isRemove = false;
-        for (int i = 0; i < storeServiceList_old.size(); i++) {//原始值 转给 要提交的参数list(已点击)
-            serviceTypeList.add(storeServiceList_old.get(i));
-        }
+
         if (isChecked) { //isChecked   添加
             if (serviceTypeList == null || serviceTypeList.size() == 0) {
                 serviceTypeList.add(bean.getId() + "");

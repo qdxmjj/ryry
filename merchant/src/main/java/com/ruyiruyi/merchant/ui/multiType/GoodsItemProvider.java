@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.bean.GoodsBean;
+import com.ruyiruyi.merchant.bean.GoodsItemBean;
 
 import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
@@ -17,7 +17,7 @@ import org.xutils.x;
 
 import me.drakeet.multitype.ItemViewProvider;
 
-public class GoodsItemProvider extends ItemViewProvider<GoodsBean, GoodsItemProvider.ViewHolder> {
+public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItemProvider.ViewHolder> {
 
     @NonNull
     @Override
@@ -27,17 +27,17 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsBean, GoodsItemProv
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull GoodsBean goodsBean) {
-        holder.tv_title.setText(goodsBean.getTxt());
-        holder.tv_kucun.setText(goodsBean.getKucun());
-        holder.tv_yishou.setText(goodsBean.getYishou());
-        holder.tv_price.setText(goodsBean.getMoney());
+    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull GoodsItemBean goodsItemBean) {
+        holder.tv_title.setText(goodsItemBean.getName());
+        holder.tv_kucun.setText(goodsItemBean.getAmount()+"");
+        holder.tv_yishou.setText(goodsItemBean.getSoldNo()+"");
+        holder.tv_price.setText(goodsItemBean.getPrice()+"");
 
         ImageOptions options = new ImageOptions.Builder()
                 .setRadius(DensityUtil.dip2px(2))
                 .setSquare(true)// setSquare和build为必须设置
                 .build();
-        x.image().bind(holder.img_goods,goodsBean.getImg_url(),options);
+        x.image().bind(holder.img_goods,goodsItemBean.getImgUrl(),options);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

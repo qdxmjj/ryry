@@ -7,13 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.bean.GoodsBean;
 import com.ruyiruyi.merchant.bean.StorePingJiaBean;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 

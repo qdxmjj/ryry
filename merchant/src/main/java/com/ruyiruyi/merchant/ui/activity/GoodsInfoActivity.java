@@ -76,7 +76,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
     private int currentLeftPosition = 0;
     private int currentRightPosition = 0;
     private int currentForId = 0;
-    private int currentSale = 2;  //1 已下架   2在售
+    private int currentSale = 1;  //2 已下架   1在售
     private String currentSaleString = "请选择";
     private String currentSaleForIdString = "请选择";
     private String currentLeftString = "请选择";
@@ -306,7 +306,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
 
     }
 
-    private void commitData(int type ) {
+    private void commitData(int type) {
         if (imgBitmap != null) {
             img_Path = ImageUtils.savePhoto(imgBitmap, Environment
                     .getExternalStorageDirectory().getAbsolutePath(), "addgoodsimg");
@@ -315,19 +315,33 @@ public class GoodsInfoActivity extends AppCompatActivity {
             return;
         }
         Log.e(TAG, "call: 888 mGoodsName.getText()" + mGoodsName.getText());
-        if (mGoodsName.getText() == null || mGoodsName.getText().length()==0 ) {
+        if (mGoodsName.getText() == null || mGoodsName.getText().length() == 0) {
             Toast.makeText(GoodsInfoActivity.this, "请输入商品名称", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (mGoodsPrice.getText() == null || mGoodsPrice.getText().length()==0) {
+        if (mGoodsPrice.getText() == null || mGoodsPrice.getText().length() == 0) {
             Toast.makeText(GoodsInfoActivity.this, "请输入商品单价", Toast.LENGTH_SHORT).show();
+            return;
+        }
+       String txt_price  = mGoodsPrice.getText().toString();
+        int int_price = 0;
+        for (int i = 0; i < txt_price.length(); i++) {//两个以上小数点情况
+            if (( txt_price.substring(i,i+1) ).equals(".")) {
+                int_price++;
+            }
+        }
+        if (   ( txt_price.substring(0,1) ).equals(".") || ( txt_price.substring(txt_price.length()-1,txt_price.length()) ).equals(".")   ) {//首尾为小数点情况
+            int_price+=2;
+        }
+        if (int_price>1) {
+            Toast.makeText(GoodsInfoActivity.this, "请输入合理的商品单价", Toast.LENGTH_SHORT).show();
             return;
         }
         if (leftTypeId == null || leftTypeId.equals("") || rightTypeId == null || rightTypeId.equals("")) {
             Toast.makeText(GoodsInfoActivity.this, "请选择商品分类", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (mGoodsKucun.getText() == null || mGoodsKucun.getText().length()==0) {
+        if (mGoodsKucun.getText() == null || mGoodsKucun.getText().length() == 0) {
             Toast.makeText(GoodsInfoActivity.this, "请输入商品库存", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -347,7 +361,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
         mGoodsType.setText("请在此选择商品分类");
         mGoodsKucun.setText("");
         mGoodsStatus.setText("请选择商品状态");
-        currentSale = 2;//原始值
+        currentSale = 1;//原始值
 
     }
 
@@ -385,7 +399,7 @@ public class GoodsInfoActivity extends AppCompatActivity {
                     object.put("serviceId", rightTypeId);
                     object.put("amount", mGoodsKucun.getText());
                     object.put("price", mGoodsPrice.getText());
-                    object.put("status", currentSale);//1 下架  2 在售
+                    object.put("status", currentSale);//2 下架  1 在售
                 } catch (JSONException e) {
                 }
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "addStock");
@@ -451,7 +465,12 @@ public class GoodsInfoActivity extends AppCompatActivity {
         oneWheel.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
-                currentSale = selectedIndex + 1;
+                if (selectedIndex == 0) {
+                    currentSale = 2;
+                } else {
+                    currentSale = 1;
+                }
+
                 currentSaleString = item;
             }
         });
@@ -465,9 +484,9 @@ public class GoodsInfoActivity extends AppCompatActivity {
                         currentSaleForIdString = currentSaleString;
                         mGoodsStatus.setText(currentSaleForIdString);
                         if (currentSaleForIdString.equals("出售中")) {
-                            currentSale = 2;
-                        } else {
                             currentSale = 1;
+                        } else {
+                            currentSale = 2;
                         }
                     }
                 }).show();
