@@ -90,7 +90,6 @@ public class OrderFragment extends Fragment {
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
-                        orderList.clear();
                         JSONArray data = jsonObject1.getJSONArray("data");
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject object = data.getJSONObject(i);

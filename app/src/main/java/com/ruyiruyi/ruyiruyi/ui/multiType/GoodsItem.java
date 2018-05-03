@@ -8,9 +8,16 @@ public class GoodsItem {
     public int goodsClassId;
     public String goodClassName;
     public Boolean isChooseGood;
+    public String price;
     public List<GoodsHorizontal> goodsList;
 
     public GoodsItem(String goodClassName, Boolean isChooseGood) {
+        this.goodClassName = goodClassName;
+        this.isChooseGood = isChooseGood;
+    }
+
+    public GoodsItem(int goodsClassId, String goodClassName, Boolean isChooseGood) {
+        this.goodsClassId = goodsClassId;
         this.goodClassName = goodClassName;
         this.isChooseGood = isChooseGood;
     }
@@ -20,6 +27,15 @@ public class GoodsItem {
         this.goodClassName = goodClassName;
         this.isChooseGood = isChooseGood;
         this.goodsList = goodsList;
+    }
+
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public List<GoodsHorizontal> getGoodsList() {

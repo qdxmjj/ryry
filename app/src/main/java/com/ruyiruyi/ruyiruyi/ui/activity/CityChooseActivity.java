@@ -154,7 +154,7 @@ public class CityChooseActivity extends BaseActivity {
             @Override
             public void onItemClick(View v, int originalPosition, int currentPosition, UserEntity entity) {
                 if (originalPosition >= 0) {
-                    Location location1 = new Location(1, entity.getNick(), 0.00, 0.00);
+                    Location location1 = new Location(1, entity.getNick(),jingdu, weidu);
                     DbManager db = new DbConfig().getDbManager();
                     try {
                         db.saveOrUpdate(location1);

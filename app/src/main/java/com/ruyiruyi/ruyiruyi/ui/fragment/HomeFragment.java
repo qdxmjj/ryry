@@ -383,13 +383,13 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
     public void onEventClickListener(String tag) {
         if (tag.equals("cxwy")){
 
-        }else if (tag.equals("qcby")){//3
+        }else if (tag.equals("qcby")){//3  //门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
             Intent intent = new Intent(getContext(), ShopChooseActivity.class);
-            intent.putExtra(MerchantFragment.SHOP_TYPE,3);
+            intent.putExtra(MerchantFragment.SHOP_TYPE,2);
             startActivity(intent);
         }else if (tag.equals("mrqx")){//2
             Intent intent = new Intent(getContext(), ShopChooseActivity.class);
-            intent.putExtra(MerchantFragment.SHOP_TYPE,2);
+            intent.putExtra(MerchantFragment.SHOP_TYPE,3);
             startActivity(intent);
         }
     }

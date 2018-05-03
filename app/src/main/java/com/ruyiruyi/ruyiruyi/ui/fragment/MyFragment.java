@@ -50,6 +50,7 @@ public class MyFragment extends Fragment {
     private LinearLayout dfhLayout;
     private LinearLayout dfwLayout;
     private LinearLayout ywcLayout;
+    public static String FROM_FRAGMENT = "FROM_FRAGMENT";
 
     @Nullable
     @Override
@@ -222,7 +223,7 @@ public class MyFragment extends Fragment {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getContext(), CarManagerActivity.class);
-                        intent.putExtra("FRAGMENT","HOMEFRAGMENT");
+                        intent.putExtra(FROM_FRAGMENT,"MYFRAGMENT");
                         startActivityForResult(intent, MainActivity.MYFRAGMENT_RESULT);
                     }
                 });

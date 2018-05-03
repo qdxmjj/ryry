@@ -61,7 +61,7 @@
                 android:layout_weight="1"
                 android:gravity="right">
                 <TextView
-                    android:id="@+id/az_count_text"
+                    android:id="@+id/gz_count_text"
                     android:layout_width="17dp"
                     android:layout_height="17dp"
                     android:background="@drawable/ic_mark"

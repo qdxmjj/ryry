@@ -17,13 +17,14 @@ import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsListFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+import com.ruyiruyi.rylibrary.cell.NoCanSlideViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderActivity extends BaseActivity {
     private ActionBar actionBar;
-    private  ViewPager viewPager;
+    private NoCanSlideViewPager viewPager;
     private  TabLayout tabLayout;
     private SimpleFragmentPagerAdapter pagerAdapter;
     private String orderType;
@@ -51,8 +52,9 @@ public class OrderActivity extends BaseActivity {
     }
 
     private void initView() {
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = (NoCanSlideViewPager) findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        viewPager.setOffscreenPageLimit(4);
 
         getFragments();
         getTitles();
