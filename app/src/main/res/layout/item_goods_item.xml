@@ -7,8 +7,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
+        android:id="@+id/goods_class_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#ffffff"
         android:padding="20dp">
         <TextView
             android:id="@+id/good_class_name_text"
@@ -23,6 +25,7 @@
             android:layout_gravity="right|center_vertical"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/goods_price_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="￥800"/>
@@ -34,6 +37,10 @@
                 android:src="@drawable/ic_weixuan"/>
         </LinearLayout>
     </FrameLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/goods_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

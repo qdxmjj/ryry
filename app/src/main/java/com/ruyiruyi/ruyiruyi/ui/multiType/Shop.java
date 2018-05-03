@@ -16,6 +16,16 @@ public class Shop {
 
     public List<ServiceType> serviceTypeList;
 
+    public Shop(int storeId, String storeTypeName, String storeTypreColoe, String storeName, String storeImage, String storeAddress, String storeDistence) {
+        this.storeId = storeId;
+        this.storeTypeName = storeTypeName;
+        this.storeTypreColoe = storeTypreColoe;
+        this.storeName = storeName;
+        this.storeImage = storeImage;
+        this.storeAddress = storeAddress;
+        this.storeDistence = storeDistence;
+    }
+
     public Shop(int storeId, String storeTypeName, String storeTypreColoe, String storeName, String storeImage, String storeAddress, String storeDistence, List<ServiceType> serviceTypeList) {
         this.storeId = storeId;
         this.storeTypeName = storeTypeName;

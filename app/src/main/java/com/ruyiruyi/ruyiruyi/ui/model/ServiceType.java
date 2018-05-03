@@ -2,10 +2,18 @@ package com.ruyiruyi.ruyiruyi.ui.model;
 
 public class ServiceType {
     public String serviceName;
-    public int serviceColor;
+    public String serviceColor;
 
-    public ServiceType(String serviceName, int serviceColor) {
+    public ServiceType(String serviceName, String serviceColor) {
         this.serviceName = serviceName;
+        this.serviceColor = serviceColor;
+    }
+
+    public String getServiceColor() {
+        return serviceColor;
+    }
+
+    public void setServiceColor(String serviceColor) {
         this.serviceColor = serviceColor;
     }
 
@@ -20,11 +28,5 @@ public class ServiceType {
         this.serviceName = serviceName;
     }
 
-    public int getServiceColor() {
-        return serviceColor;
-    }
 
-    public void setServiceColor(int serviceColor) {
-        this.serviceColor = serviceColor;
-    }
 }

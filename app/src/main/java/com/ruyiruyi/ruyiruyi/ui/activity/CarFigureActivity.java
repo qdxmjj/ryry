@@ -83,7 +83,6 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
             jsonObject.put("shoeSize",tiresize);
             jsonObject.put("userId",uesrId);
         } catch (JSONException e) {
-
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getShoeBySize");
         params.addBodyParameter("reqJson",jsonObject.toString());
@@ -100,8 +99,6 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
                         JSONArray data = jsonObject1.getJSONArray("data");
-
-
                         for (int i = 0; i < data.length(); i++) {
                             String description = data.getJSONObject(i).getString("description");
                             String imgLeftUrl = data.getJSONObject(i).getString("imgLeftUrl");

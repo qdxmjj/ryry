@@ -86,13 +86,21 @@ public class MainActivity extends BaseActivity {
     private int hasjingweidu = 10; //0来自fragment
     private Intent intent;
     private int ischoos = 0;
+    private String fromFragment = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         content = new FrameLayout(this);
         setContentView(content,LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.MATCH_PARENT));
+        Intent intent = getIntent();
 
+        if (intent!=null){
+            fromFragment = intent.getStringExtra(MyFragment.FROM_FRAGMENT);
+        }else {
+            fromFragment = "";
+        }
+        Log.e(TAG, "onCreate: -----------" + fromFragment);
         viewPager = new NoCanSlideViewPager(this);
         content.addView(viewPager,LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.MATCH_PARENT,Gravity.TOP,0,0,0, AndroidUtilities.dp(HomeTabsCell.CELL_HEIGHT)));
 
@@ -103,8 +111,7 @@ public class MainActivity extends BaseActivity {
         initTitle();
         pagerAdapter = new HomePagerAdapeter(getSupportFragmentManager(),initPagerTitle(),initFragment());
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(0);
-        tabsCell.setSelected(0);
+
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -122,6 +129,14 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+        if (fromFragment == null){
+            viewPager.setCurrentItem(0);
+            tabsCell.setSelected(0);
+        }else if (fromFragment.equals("MYFRAGMENT")){
+            viewPager.setCurrentItem(3);
+            tabsCell.setSelected(3);
+        }
+
 
         //获取车辆品牌数据
        // initCarDataIntoDb();

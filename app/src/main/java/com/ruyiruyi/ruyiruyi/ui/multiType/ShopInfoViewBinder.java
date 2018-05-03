@@ -1,6 +1,7 @@
 package com.ruyiruyi.ruyiruyi.ui.multiType;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +38,18 @@ public class ShopInfoViewBinder extends ItemViewProvider<ShopInfo, ShopInfoViewB
     @Override
     protected void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull ShopInfo shopInfo) {
         final LayoutInflater inflater = LayoutInflater.from(context);
+        holder.storeNameText.setText(shopInfo.getStoreName());
+        holder.storeTypeText.setText(shopInfo.getStoreTypeName());
+        int typeColor = Color.parseColor(shopInfo.getStoreTypeColor());
+        GradientDrawable drawable = (GradientDrawable) holder.storeTypeText.getBackground();
+        drawable.setStroke(2,typeColor);
+        drawable.setColor(typeColor );
+        holder.storeAddressText.setText("地址："  + shopInfo.getStoreAddress());
+        holder.storeContentText.setText(shopInfo.getStoreDescribe());
+        holder.storePhoneText.setText("联系方式: " + shopInfo.getStorePhone());
+        holder.storeDistence.setText(shopInfo.getStoreDistence() + "m");
+
+
         holder.mBanner.setPages(new CustomBanner.ViewCreator<String>() {
             @Override
             public View createView(Context context, int position) {
@@ -58,10 +71,11 @@ public class ShopInfoViewBinder extends ItemViewProvider<ShopInfo, ShopInfoViewB
             public View getView(FlowLayout parent, int position, ServiceType serviceType) {
                 TextView tv = (TextView) inflater.inflate(R.layout.item_type,
                         holder.mTagLayout, false);
-                tv.setTextColor(serviceType.getServiceColor());
+                int parseColor = Color.parseColor(serviceType.getServiceColor());
+                tv.setTextColor(parseColor);
                 tv.setText(serviceType.getServiceName());
                 GradientDrawable drawable = (GradientDrawable) tv.getBackground();
-                drawable.setStroke(2,serviceType.getServiceColor());
+                drawable.setStroke(2,parseColor);
 
                 return tv;
             }
@@ -71,11 +85,23 @@ public class ShopInfoViewBinder extends ItemViewProvider<ShopInfo, ShopInfoViewB
     static class ViewHolder extends RecyclerView.ViewHolder {
         private final TagFlowLayout mTagLayout;
         private final CustomBanner mBanner;
+        private final TextView storeNameText;
+        private final TextView storeTypeText;
+        private final TextView storeAddressText;
+        private final TextView storePhoneText;
+        private final TextView storeContentText;
+        private final TextView storeDistence;
 
         ViewHolder(View itemView) {
             super(itemView);
             mTagLayout = ((TagFlowLayout) itemView.findViewById(R.id.shop_tag_layout));
             mBanner = (CustomBanner) itemView.findViewById(R.id.shop_info_banner);
+            storeNameText = (TextView) itemView.findViewById(R.id.store_name_text);
+            storeTypeText = (TextView) itemView.findViewById(R.id.store_type_name);
+            storeAddressText = (TextView) itemView.findViewById(R.id.store_addresee_text);
+            storePhoneText = (TextView) itemView.findViewById(R.id.store_phone_text);
+            storeContentText = (TextView) itemView.findViewById(R.id.store_content_text);
+            storeDistence = (TextView) itemView.findViewById(R.id.store_distence_text);
         }
     }
 }

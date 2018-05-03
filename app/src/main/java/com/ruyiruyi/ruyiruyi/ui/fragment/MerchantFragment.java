@@ -1,6 +1,7 @@
 package com.ruyiruyi.ruyiruyi.ui.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -32,13 +34,23 @@ import com.ruyiruyi.ruyiruyi.ui.adapter.MenuListAdapter;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
+import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
+import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMore;
 import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMoreViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Shop;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ShopViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.DropDownMenu;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,9 +73,9 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
     private MultiTypeAdapter adapter;
     public List<ServiceType> typeList;
     public List<Shop> shopList;
-    private String shops[] = {"全部门店", "快修店", "维修厂", "美容店", "4S"};
+    private String shops[] = {"全部门店", "快修店", "维修厂", "美容店", "4S店"};
 
-    private String paixu[] = {"默认排序", "附近优先", "评分最高", "累计安装"};
+    private String paixu[] = {"默认排序", "附近优先"};
    // private String shaixuan[] = {"全部", "汽车保养", "美容清洗", "改装", "安装"};
     public List<String> shaixuan;
     private DropDownMenu mDropDownMenu;
@@ -93,6 +105,17 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
     private ImageView backLayout;
     public OnMerchantViewClick listener;
     private TextView fragmentTitle;
+    public int currentPage = 1;
+    public int currentPageCount = 10;
+    private int total;
+    private int allPager = 0;
+    public String currentStoreType = "";//门店类型0:全部门店  1:4S店   2:快修店  3:维修厂  4:美容店
+    public String currentRankType = "0"; //0:默认排序  1：附近优先
+    public String currentServiceType = "";//门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
+
+
+    public boolean isCleanData =  false;
+
 
     public void setListener(OnMerchantViewClick listener) {
         this.listener = listener;
@@ -112,6 +135,7 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
 
 
         shaixuan = new ArrayList<>();
+        isCleanData = true;
 
         //获取位置
         Location location = new DbConfig().getLocation();
@@ -121,8 +145,11 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
             weidu = location.getWeidu();
         }
         initView();
-
+        shopList = new ArrayList<>();
         typeList = new ArrayList<>();
+
+
+       /* typeList = new ArrayList<>();
         typeList.add(new ServiceType("汽车保养",0xffff3f7e));
         typeList.add(new ServiceType("美容清洗",0xff00a600));
         typeList.add(new ServiceType("安装",0xff007cf0));
@@ -132,24 +159,144 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
             Shop shop = new Shop();
             shop.setServiceTypeList(typeList);
             shopList.add(shop);
-        }
+        }*/
 
-        initData();
+        initDataFromService("");
+
 
     }
 
-    private void initData() {
+    private void initDataFromService(String searchStr) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("page",currentPage);
+            jsonObject.put("rows",10);
+            jsonObject.put("cityName",currentCity);
+            jsonObject.put("storeName",searchStr);
+            Log.e(TAG, "initDataFromService: currentStoreType==" +currentStoreType );
+            jsonObject.put("storeType",currentStoreType);//门店类型  1:4S店   2:快修店  3:维修厂  4:美容店
 
+            jsonObject.put("rankType",currentRankType);//排序方式  0:默认排序  1：附近优先
+            Log.e(TAG, "initDataFromService:currentServiceType== " +currentServiceType );
+            if(shopType!=0){//门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
+                jsonObject.put("serviceType",shopType); //针对性门店
+            }else {
+                jsonObject.put("serviceType",currentServiceType);
+            }
+
+            jsonObject.put("longitude",jingdu + "");
+            jsonObject.put("latitude",weidu + "");
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "selectStoreByCondition");
+        Log.e(TAG, "initDataFromService:---------- " + jsonObject.toString() );
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    Log.e(TAG, "onSuccess: " + result);
+                    JSONObject jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        total = data.getInt("total");
+                        //页数计算
+                        if (total % currentPageCount > 0) {
+                            allPager = (total / currentPageCount) +1;
+                        }else {
+                            allPager = total / currentPageCount;
+                        }
+                        Log.e(TAG, "onSuccess: +" + total);
+                        Log.e(TAG, "onSuccess: +" + allPager);
+                        shopList.clear();
+                        JSONArray storeQuaryResVos = data.getJSONArray("storeQuaryResVos");
+                        for (int i = 0; i < storeQuaryResVos.length(); i++) {
+                            JSONObject storeObjecct = storeQuaryResVos.getJSONObject(i);
+                            String distance = storeObjecct.getString("distance");
+                            String storeAddress = storeObjecct.getString("storeAddress");
+                            String storeId = storeObjecct.getString("storeId");
+                            int storeIdInt = Integer.parseInt(storeId);
+                            String storeImg = storeObjecct.getString("storeImg");
+                            String storeName = storeObjecct.getString("storeName");
+                            String storeType = storeObjecct.getString("storeType");
+                            String storeTypeColor = storeObjecct.getString("storeTypeColor");
+                            JSONArray serviceArray = storeObjecct.getJSONArray("storeServcieList");
+                            List<ServiceType> serviceTypeList = new ArrayList<ServiceType>();
+                            for (int j = 0; j < serviceArray.length(); j++) {
+                                JSONObject serviceObject = serviceArray.getJSONObject(j);
+                                JSONObject service = serviceObject.getJSONObject("service");
+                                String color = service.getString("color");
+                                String name = service.getString("name");
+                                serviceTypeList.add(new ServiceType(name,color));
+                           }
+                            Shop shop = new Shop(storeIdInt,storeType,storeTypeColor,storeName,storeImg,storeAddress,distance);
+                            shop.setServiceTypeList(serviceTypeList);
+                            shopList.add(shop);
+                          //  typeList.clear();
+                        }
+
+                        initData();
+                    }else {
+                        shopList.clear();
+                        initData();
+                    }
+
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void initData() {
+        if (isCleanData) {
+            items.clear();
+        }
+
+        if (shopList.size() == 0 && currentPage ==1){
+            items.add(new Empty());
+        }else {
+            if (items.size() > 0 ){
+                items.remove(items.size()-1);
+            }
+            for (int i = 0; i < shopList.size(); i++) {
+                items.add(shopList.get(i));
+            }
+
+            Log.e(TAG, "initData:---" + currentPage);
+            Log.e(TAG, "initData: ---" + allPager);
+            if (allPager>1 ){
+                if (allPager ==  currentPage){
+                    items.add(new LoadMore("全部加载完毕！"));
+                }else {
+                    items.add(new LoadMore("加载更多...."));
+                }
+            }
+        }
+        isCleanData = false;
 
        // items.clear();
-        if (items.size() > 0){
-            items.remove(items.size()-1);
-        }
-        for (int i = 0; i < shopList.size(); i++) {
-            items.add(shopList.get(i));
-        }
 
-        items.add(new LoadMore());
         assertAllRegistered(adapter,items);
         adapter.notifyDataSetChanged();
 
@@ -168,10 +315,10 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
             shaixuan.add("汽车保养");
             shaixuan.add("美容清洗");
             shaixuan.add("改装");
-            shaixuan.add("轮胎");
+            shaixuan.add("轮胎服务");
         }else if (shopType ==1 ){
             fragmentTitle.setText("轮胎服务");
-            shaixuan.add("轮胎");
+            shaixuan.add("轮胎服务");
         }else if (shopType ==2 ){
             fragmentTitle.setText("美容清洗");
             shaixuan.add("美容清洗");
@@ -206,31 +353,66 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
         popupViews.add(listView1);
         popupViews.add(listView2);
         popupViews.add(listView3);
-
         listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
+                isCleanData = true;
+                currentPage = 1;
+                //门店类型0:全部门店  1:4S店   2:快修店  3:维修厂  4:美容店
+                if (shops[position].equals("4S店")) {
+                    currentStoreType = "1";
+                }else if (shops[position].equals("快修店")){
+                    currentStoreType = "2";
+                }else if (shops[position].equals("维修厂")){
+                    currentStoreType = "3";
+                }else if (shops[position].equals("美容店")){
+                    currentStoreType = "4";
+                }else {
+                    currentStoreType = "";
+                }
                 mDropDownMenu.setTabText(shops[position]);
                 mDropDownMenu.closeMenu();
+                initDataFromService("");
             }
         });
 
         listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
+                isCleanData = true;
+                currentPage = 1;
+                if (paixu[position].equals("默认排序")) {
+                    currentRankType = "0";
+                }else if (paixu[position].equals("附近优先")){
+                    currentRankType = "1";
+                }
                 mDropDownMenu.setTabText(paixu[position]);
                 mDropDownMenu.closeMenu();
+                initDataFromService("");
             }
         });
 
         listView3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
+                Log.e(TAG, "onItemClick: ---"+shaixuan.get(position) );
+                isCleanData = true;
+                currentPage = 1;
+                //门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
+                if (shaixuan.get(position).equals("汽车保养")) {
+                    currentServiceType = "2";
+                }else if (shaixuan.get(position).equals("美容清洗")) {
+                    currentServiceType = "3";
+                }else if (shaixuan.get(position).equals("改装")) {
+                    currentServiceType = "4";
+                }else if (shaixuan.get(position).equals("轮胎服务")) {
+                    currentServiceType = "5";
+                }else {
+                    currentServiceType = "";
+                }
                 mDropDownMenu.setTabText(shaixuan.get(position));
                 mDropDownMenu.closeMenu();
+                initDataFromService("");
             }
         });
 
@@ -241,7 +423,9 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //initdataFromService();
+                isCleanData = true;
+                currentPage = 1;
+                initDataFromService("");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -251,8 +435,12 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
         listView.setOnScrollListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                Log.e(TAG, "onLoadMore: " + 1111 );
-                initData();
+
+                if (allPager > currentPage){
+                    currentPage += 1;
+                    isCleanData = false;
+                    initDataFromService("");
+                }
             }
         });
 
@@ -289,7 +477,6 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Log.e(TAG, "call: --1--");
                         listener.onBackViewClickListener();
                     }
                 });
@@ -300,6 +487,7 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
         shopViewBinder.setListener(this);
         adapter.register(Shop.class, shopViewBinder);
         adapter.register(LoadMore.class,new LoadMoreViewBinder());
+        adapter.register(Empty.class,new EmptyViewBinder());
     }
 
     @Override
@@ -307,12 +495,16 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
         if (resultCode == HomeFragment.CITY_CHOOSE){
             String city = data.getStringExtra("CITY");
             currentCity = city;
-            Log.e(TAG, "onActivityResult: " + currentCity);
             cityText.setText(currentCity);
         }
         if (resultCode == SEARCH_CODE){
+            //搜索结果的返回
             String search_str = data.getStringExtra("SEARCH_STR");
-            Log.e(TAG, "onActivityResult: -----------+++++---------" + search_str);
+            isCleanData = true;
+            currentPage = 1;
+            currentStoreType = "";
+            currentServiceType = "";
+            initDataFromService(search_str);
         }
     }
 
@@ -325,11 +517,13 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
      * item的点击回调
      */
     @Override
-    public void onShopItemClickListener() {
+    public void onShopItemClickListener(int storeId) {
         if (shopType == 1){//轮胎服务  点击传值给Activity  做forResult返回
             listener.onShopItemClickListener();
         }else {
-            startActivity(new Intent(getContext(), ShopGoodActivity.class));
+            Intent intent = new Intent(getContext(), ShopHomeActivity.class);
+            intent.putExtra("STOREID",storeId);
+            startActivity(intent);
         }
     }
 

@@ -46,6 +46,7 @@ import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.TireType;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChoose;
+import com.ruyiruyi.ruyiruyi.ui.multiType.Shop;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -169,6 +170,10 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
     private int userCarId;
 
     private  int canClick = 0;
+
+    private WheelView whv_lTime, whv_rTime;
+    private String endYear;
+    private int currentRtime = 0;
 
 
     @Override
@@ -706,6 +711,14 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                     }
                 });
 
+        RxViewAction.clickNoDouble(xszEndTimeLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        chooseServiceTime();
+                    }
+                });
+
 
       /*  RxViewAction.clickNoDouble(saveCatButton)
                 .subscribe(new Action1<Void>() {
@@ -755,6 +768,67 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
             yaoqingmaLayout.setVisibility(View.GONE);
         }
 
+    }
+
+    private void chooseServiceTime() {
+        View v_shoptime = LayoutInflater.from(this).inflate(R.layout.dialog_choose_time, null);
+        whv_lTime = (WheelView) v_shoptime.findViewById(R.id.whv_ltime);
+        whv_rTime = (WheelView) v_shoptime.findViewById(R.id.whv_rtime);
+        whv_lTime.setItems(getStrLTime(), 0);
+        whv_rTime.setItems(getRTimeList(), currentRtime);
+        whv_lTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int selectedIndex, String item) {
+
+            }
+        });
+
+        whv_rTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
+
+
+
+
+            @Override
+            public void onItemSelected(int selectedIndex, String item) {
+                currentRtime = whv_rTime.getSelectedPosition();
+                endYear = whv_rTime.getSelectedItem();
+            }
+        });
+        new android.support.v7.app.AlertDialog.Builder(this)
+                .setTitle("选择汽车服务时间")
+                .setView(v_shoptime)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (endDate.length()>0){
+                            endDate.delete(0,endDate.length());
+                        }
+                        xszEndTimeText.setText(endDate.append(endYear + "-12" + "-31"));
+                    }
+                }).show();
+    }
+
+    private List<String> getRTimeList() {
+        List<String> rTime_list = new ArrayList<String>();
+        int xszYear = Integer.parseInt(date.substring(0, 4));
+        Log.e(TAG, "getRTimeList: ----" + xszYear);
+        int xszEndYear = xszYear + 15;
+        List<String> lTime_list = new ArrayList<>();
+        Calendar date = Calendar.getInstance();
+        String year = String.valueOf(date.get(Calendar.YEAR));
+        int currentYear = Integer.parseInt(year);
+        for (int i = 0; i < xszEndYear - currentYear; i++) {
+            rTime_list.add(currentYear + i+"");
+        }
+        return rTime_list;
+    }
+
+    private List<String> getStrLTime() {
+        List<String> lTime_list = new ArrayList<>();
+        Calendar date = Calendar.getInstance();
+        String year = String.valueOf(date.get(Calendar.YEAR));
+        lTime_list.add(year);
+        return lTime_list;
     }
 
     private void postData() {
@@ -1435,12 +1509,14 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                     endDate.delete(0, endDate.length());
                 }
                 xszRegisterTimeText.setText(date.append(String.valueOf(year)).append("-").append(String.valueOf(month +1)).append("-").append(day));
-                if (month == 1 && day == 29){
+
+               /* if (month == 1 && day == 29){
                     xszEndTimeText.setText(endDate.append(String.valueOf(year + 15)).append("-").append(String.valueOf(month +2)).append("-").append(1));
                 }else {
                     xszEndTimeText.setText(endDate.append(String.valueOf(year + 15)).append("-").append(String.valueOf(month +1)).append("-").append(day));
-                }
+                }*/
                 dialog.dismiss();
+                chooseServiceTime();
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {

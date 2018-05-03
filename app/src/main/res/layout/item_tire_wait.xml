@@ -17,6 +17,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/tire_image_view"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:src="@drawable/ic_launcher"
@@ -27,6 +28,7 @@
                 android:layout_marginLeft="10dp"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/tire_title_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="205/55R16 静音舒适性 适用东风标致适用东风标致"
@@ -35,6 +37,7 @@
                     android:textColor="@color/c6"
                     android:ellipsize="end"/>
                 <TextView
+                    android:id="@+id/username_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="联系人： 有人爱吃手"
@@ -43,6 +46,7 @@
                     android:textColor="@color/c6"
                     android:ellipsize="end"/>
                 <TextView
+                    android:id="@+id/tire_count_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="购买数量： 4"
@@ -51,6 +55,7 @@
                     android:textColor="@color/c6"
                     android:ellipsize="end"/>
                 <TextView
+                    android:id="@+id/car_number_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="服务对象： 东风本田"
@@ -59,6 +64,7 @@
                     android:textColor="@color/c6"
                     android:ellipsize="end"/>
                 <TextView
+                    android:id="@+id/tire_place_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="位置： 前轮"
@@ -67,6 +73,7 @@
                     android:textColor="@color/c6"
                     android:ellipsize="end"/>
                 <TextView
+                    android:id="@+id/order_no_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="订单编号： 123456789"
@@ -79,6 +86,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/caozuo_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="退货"

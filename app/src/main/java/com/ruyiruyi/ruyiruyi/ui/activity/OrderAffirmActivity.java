@@ -156,14 +156,15 @@ public class OrderAffirmActivity extends BaseActivity {
             jsonObject.put("shoeName",tirepname);
             jsonObject.put("shoeTotalPrice",tirePriceAll+"");
             jsonObject.put("shoePrice",tireprice);
-            jsonObject.put("cxwyAmout",cxwycount);
+            jsonObject.put("cxwyAmount",cxwycount);
             jsonObject.put("cxwyPrice",cxwyprice);
             jsonObject.put("cxwyTotalPrice",cxwyPriceAll+"");
             jsonObject.put("totalPrice",allPrice);
+            Log.e(TAG, "postOrder: ------------------------------" + tireimage);
             jsonObject.put("orderImg",tireimage);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addShoeCxwyOrder");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserShoeOrder");
         params.addBodyParameter("reqJson",jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
@@ -176,7 +177,12 @@ public class OrderAffirmActivity extends BaseActivity {
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        String orderNo = data.getString("orderNo");
+
                         Intent intent = new Intent(getApplicationContext(),PaymentActivity.class);
+                        intent.putExtra(PaymentActivity.ALL_PRICE,allPrice);
+                        intent.putExtra(PaymentActivity.ORDERNO,orderNo);
                         startActivity(intent);
                     }else {
                         Toast.makeText(OrderAffirmActivity.this, msg, Toast.LENGTH_SHORT).show();

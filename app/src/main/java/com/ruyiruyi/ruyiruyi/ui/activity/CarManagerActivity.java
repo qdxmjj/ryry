@@ -21,6 +21,7 @@ import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.cell.CarInfoCell;
+import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
 import com.ruyiruyi.ruyiruyi.ui.model.Car;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -49,7 +50,7 @@ public class CarManagerActivity extends BaseActivity {
     private ListAdapter adapter;
     private String actionType;
     public static int CARMANAMGER_RESULT = 0;
-    private String fromFragment;
+    private String fromFragment = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,10 @@ public class CarManagerActivity extends BaseActivity {
             }
         });
         Intent intent = getIntent();
-        fromFragment = intent.getStringExtra("FRAGMENT");
+        if (intent!=null){
+            fromFragment = intent.getStringExtra(MyFragment.FROM_FRAGMENT);
+        }
+
 
         initView();
 
@@ -354,7 +358,9 @@ public class CarManagerActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-       startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra(MyFragment.FROM_FRAGMENT,fromFragment);
+        startActivity(intent);
     }
     /*
     @Override

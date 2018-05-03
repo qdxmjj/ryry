@@ -10,7 +10,14 @@
         android:id="@+id/my_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp"/>
+    </FrameLayout>
 
 
 
