@@ -5,15 +5,17 @@ public class XiangmusBean {
     private String color;
     private String name;
     private String time;
+    private int isChecked;
 
     public XiangmusBean() {
     }
 
-    public XiangmusBean(int id, String color, String name, String time) {
+    public XiangmusBean(int id, String color, String name, String time, int isChecked) {
         this.id = id;
         this.color = color;
         this.name = name;
         this.time = time;
+        this.isChecked = isChecked;
     }
 
     public void setId(int id) {
@@ -32,8 +34,11 @@ public class XiangmusBean {
         this.time = time;
     }
 
-    public int getId() {
+    public void setIsChecked(int isChecked) {
+        this.isChecked = isChecked;
+    }
 
+    public int getId() {
         return id;
     }
 
@@ -47,5 +52,9 @@ public class XiangmusBean {
 
     public String getTime() {
         return time;
+    }
+
+    public int getIsChecked() {
+        return isChecked;
     }
 }

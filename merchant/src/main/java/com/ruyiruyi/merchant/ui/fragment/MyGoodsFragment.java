@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,12 +17,15 @@ import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.GoodsBean;
+import com.ruyiruyi.merchant.ui.activity.GoodsInfoActivity;
 import com.ruyiruyi.merchant.ui.multiType.GoodsItemProvider;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.drakeet.multitype.MultiTypeAdapter;
+import rx.functions.Action1;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
@@ -34,12 +38,6 @@ public class MyGoodsFragment extends Fragment {
     private MultiTypeAdapter multiTypeAdapter;
     private List<Object> items = new ArrayList<>();
     private String TAG = MyGoodsFragment.class.getSimpleName();
-
-    private LinearLayout ll_bottom;
-    private TextView tv_addgoods;
-    private TextView tv_type;
-    private TextView tv_all_type;
-    private ImageView img_bottom;
 
     @Nullable
     @Override
@@ -74,7 +72,6 @@ public class MyGoodsFragment extends Fragment {
                     bean.setMoney(888 + "");
                     goodsBeenList.add(bean);
                 }
-                ll_bottom.setVisibility(View.VISIBLE);
                 break;
             case "NOSALE":
                 for (int i = 0; i < 10; i++) {
@@ -87,7 +84,6 @@ public class MyGoodsFragment extends Fragment {
                     bean.setMoney(888 + "");
                     goodsBeenList.add(bean);
                 }
-                ll_bottom.setVisibility(View.GONE);
                 break;
         }
 
@@ -101,11 +97,6 @@ public class MyGoodsFragment extends Fragment {
 
     private void initView() {
         mRlv = (RecyclerView) getView().findViewById(R.id.mygoods_rlv);
-        ll_bottom = (LinearLayout) getView().findViewById(R.id.ll_bottom);
-        tv_addgoods = (TextView) getView().findViewById(R.id.tv_addgoods);
-        tv_type = (TextView) getView().findViewById(R.id.tv_type);
-        tv_all_type = (TextView) getView().findViewById(R.id.tv_all_type);
-        img_bottom = (ImageView) getView().findViewById(R.id.img_bottom);
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRlv.setLayoutManager(manager);

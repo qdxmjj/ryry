@@ -22,6 +22,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -114,7 +115,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private TimeCount mTimeCount;
     private String TAG = RegisterActivity.class.getSimpleName();
     private List<String> shengList;
-    private List<String> categoryList;
+    private List<Category> categoryList;
     private List<String> shiList;
     private List<String> xianList;
     public String currentSheng = "北京市";
@@ -127,7 +128,9 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     public int currentXianPosition = 0;
     public int currentlTimePosition = 0;
     public int currentrTimePosition = 0;
-    private int areaId=9999;
+    private boolean isChecdXieyi = false;
+    private int areaId = 9999;
+    private int areaId_shi = 8888;
     private List<String> lTime_list;
     private List<String> rTime_list;
     private String shopTimes;
@@ -144,6 +147,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private Bitmap mdPiccBitmap;
     private Bitmap yyzzPicBitmap;
     private Bitmap shouPicBitmap;
+    private CheckBox checkbox_xieyi;
     protected static Uri tempUri;
     public static final int MAP_REUEST_CODE = 2;
     private double latitude_double;
@@ -151,6 +155,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private LocationClient mLocationClient;
     private String cityAddress;
     private List<String> serviceTypeList = new ArrayList<String>();
+    private List<ServiceType> all_ServiceType;
     //提交参数---<
     private String persionName;
     private String persionPhone;
@@ -162,6 +167,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private String shopPhone;
     private String shopTimeL;
     private String shopTimeR;
+    private String positionId_xian;
     private String cityId;
     private String shopLocation;
     private String longitude;
@@ -190,11 +196,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             }
         }
     };
+    private String areStr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_register);
+
         mActionBar = (ActionBar) findViewById(R.id.acbar_rigister);
         mActionBar.setTitle("门店注册");
         mActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -208,10 +217,9 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             }
         });
 
-//        //下载数据
-//        initRegisterCategoryData();
-//        initRegisterServiceTypeData();
-//        initProvinceData();
+        //下载数据
+        initRegisterCategoryData();
+        initRegisterServiceTypeData();
         initView();
         textAddXMView();
         shengList = new ArrayList<>();
@@ -224,54 +232,194 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         bindView();
     }
 
-
-    private void textAddXMView() {
+    private void initRegisterCategoryData() {
+// 0       date_category = new Date();
+        List<Category> categoryList = null;
         try {
-            List<ServiceType> all_ServiceType = new DbConfig().getDbManager().selector(ServiceType.class).findAll();
-            if (all_ServiceType == null) {
-                Toast.makeText(RegisterActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
-            } else {
-                XiangmusBean xiangmusBean;
-
-                for (int i = 0; i < all_ServiceType.size(); i++) {
-                    xiangmusBean = new XiangmusBean();
-                    xiangmusBean.setId(all_ServiceType.get(i).getId());
-                    Log.e(TAG, "textAddXMView:  xiangmusBean.getId()  == " + xiangmusBean.getId());
-                    xiangmusBean.setName(all_ServiceType.get(i).getName());
-                    xiangmusBean.setColor(all_ServiceType.get(i).getColor());
-                    xiangmusBean.setTime(all_ServiceType.get(i).getTime());
-                    list_xms.add(xiangmusBean);
-                    Log.e(TAG, "textAddXMView:   list_xms.toString()   == " + list_xms.toString());
-                }
-                ll_xms = (LinearLayout) findViewById(R.id.ll_xiangmus);
-                for (int i = 0; i < (list_xms.size() % 3 == 0 ? (list_xms.size() / 3) : (list_xms.size() / 3 + 1)); i++) {
-                    View view = LayoutInflater.from(RegisterActivity.this).inflate(R.layout.register_xm_add_item, null);
-                    CheckBox checkBoxa = (CheckBox) view.findViewById(R.id.checkbox_a);
-                    CheckBox checkBoxb = (CheckBox) view.findViewById(R.id.checkbox_b);
-                    CheckBox checkBoxc = (CheckBox) view.findViewById(R.id.checkbox_c);
-                    checkBoxa.setText(list_xms.get(i * 3 + 0).getName());
-                    Log.e(TAG, "textAddXMView: check a == " + list_xms.get(i * 3 + 0).getName());
-                    checkBoxa.setTag(list_xms.get(i * 3 + 0));
-                    checkBoxa.setOnCheckedChangeListener(this);
-
-                    checkBoxb.setText((i * 3 + 1 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 1).getName());
-                    Log.e(TAG, "textAddXMView: check b == " + list_xms.get(i * 3 + 1).getName());
-                    checkBoxb.setVisibility((i * 3 + 1 >= list_xms.size()) ? View.GONE : View.VISIBLE);
-                    checkBoxb.setTag((i * 3 + 1 >= list_xms.size()) ? null : list_xms.get(i * 3 + 1));
-                    checkBoxb.setOnCheckedChangeListener(this);
-
-                    checkBoxc.setText((i * 3 + 2 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 2).getName());
-                    Log.e(TAG, "textAddXMView: check c == " + list_xms.get(i * 3 + 2).getName());
-                    checkBoxc.setVisibility((i * 3 + 2 >= list_xms.size()) ? View.GONE : View.VISIBLE);
-                    checkBoxc.setTag((i * 3 + 2 >= list_xms.size()) ? null : list_xms.get(i * 3 + 2));
-                    checkBoxc.setOnCheckedChangeListener(this);
-
-                    ll_xms.addView(view);
-                }
-            }
+            categoryList = new DbConfig().getDbManager().selector(Category.class).orderBy("time").findAll();
 
         } catch (DbException e) {
         }
+        JSONObject object = new JSONObject();
+
+        try {
+            if (categoryList == null) {
+                object.put("time", "2000-00-00 00:00:00");
+            } else {
+                String time = categoryList.get(categoryList.size() - 1).getTime();
+                object.put("time", time);
+
+            }
+        } catch (JSONException e) {
+        }
+
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreType");
+        params.addBodyParameter("reqJson", object.toString());
+//        Log.e(TAG, "initRegisterCategoryData: ------------1");
+        x.http().post(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+//                        Log.e(TAG, "initRegisterCategoryData: ------------2 result = " + result);
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(result);
+                            String status = jsonObject.getString("status");
+                            String msg = jsonObject.getString("msg");
+                            JSONArray data = jsonObject.getJSONArray("data");
+                            saveCategory(data);
+//                            Log.e(TAG, "initRegisterCategoryData: ------------3 data = " + data);
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                }
+
+        );
+    }
+
+    private void saveCategory(JSONArray data) {
+        categoryList = new ArrayList<>();
+        Category category;
+        for (int i = 0; i < data.length(); i++) {
+            category = new Category();
+            try {
+                JSONObject obj = (JSONObject) data.get(i);
+                long time = obj.getLong("time");
+                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
+                category.setTime(timestampToStringAll);
+                category.setColor(obj.getString("color"));
+                category.setId(obj.getInt("id"));
+                category.setName(obj.getString("name"));
+                categoryList.add(category);
+            } catch (JSONException e) {
+            }
+        }
+    }
+
+    private void initRegisterServiceTypeData() {
+//   0     date_serviceType = new Date();
+        List<ServiceType> serviceTypeList = null;
+        try {
+            serviceTypeList = new DbConfig().getDbManager().selector(ServiceType.class).orderBy("time").findAll();
+
+        } catch (DbException e) {
+        }
+        JSONObject object = new JSONObject();
+
+        try {
+            if (serviceTypeList == null) {
+                object.put("time", "2000-00-00 00:00:00");
+            } else {
+                String time = serviceTypeList.get(serviceTypeList.size() - 1).getTime();
+                object.put("time", time);
+
+            }
+        } catch (JSONException e) {
+        }
+
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreServiceType");
+        params.addBodyParameter("reqJson", object.toString());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(result);
+                            String status = jsonObject.getString("status");
+                            String msg = jsonObject.getString("msg");
+                            JSONArray data = jsonObject.getJSONArray("data");
+                            saveServiceType(data);
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                }
+
+        );
+    }
+
+    private void saveServiceType(JSONArray data) {
+        Log.e(TAG, "saveServiceType: data.toString() 0= " + data.toString());
+        XiangmusBean xiangmusBean;
+        for (int i = 0; i < data.length(); i++) {
+            xiangmusBean = new XiangmusBean();
+            try {
+                JSONObject obj = (JSONObject) data.get(i);
+                long time = obj.getLong("time");
+                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
+                xiangmusBean.setTime(timestampToStringAll);
+                xiangmusBean.setColor(obj.getString("color"));
+                xiangmusBean.setId(obj.getInt("id"));
+                xiangmusBean.setName(obj.getString("name"));
+//                Log.e(TAG, "saveServiceType: xiangmusBean.getName() = "+xiangmusBean.getName() );
+                list_xms.add(xiangmusBean);
+//                Log.e(TAG, "saveServiceType: list_xms.toString()0 = " +list_xms.toString() );
+            } catch (JSONException e) {
+            }
+        }
+        //下载数据完成后再动态添加View
+        textAddXMView();
+    }
+
+    private void textAddXMView() {
+
+        if (list_xms == null) {
+//            Log.e(TAG, "textAddXMView: list_xms.toString()3 = " +list_xms.toString() );
+            Toast.makeText(RegisterActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+        } else {
+//            Log.e(TAG, "textAddXMView: list_xms.toString()4 = " +list_xms.toString() );
+            ll_xms = (LinearLayout) findViewById(R.id.ll_xiangmus);
+            for (int i = 0; i < (list_xms.size() % 3 == 0 ? (list_xms.size() / 3) : (list_xms.size() / 3 + 1)); i++) {
+                View view = LayoutInflater.from(RegisterActivity.this).inflate(R.layout.register_xm_add_item, null);
+                CheckBox checkBoxa = (CheckBox) view.findViewById(R.id.checkbox_a);
+                CheckBox checkBoxb = (CheckBox) view.findViewById(R.id.checkbox_b);
+                CheckBox checkBoxc = (CheckBox) view.findViewById(R.id.checkbox_c);
+                checkBoxa.setText(list_xms.get(i * 3 + 0).getName());
+                checkBoxa.setTag(list_xms.get(i * 3 + 0));
+                checkBoxa.setOnCheckedChangeListener(this);
+
+                checkBoxb.setText((i * 3 + 1 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 1).getName());
+                checkBoxb.setVisibility((i * 3 + 1 >= list_xms.size()) ? View.GONE : View.VISIBLE);
+                checkBoxb.setTag((i * 3 + 1 >= list_xms.size()) ? null : list_xms.get(i * 3 + 1));
+                checkBoxb.setOnCheckedChangeListener(this);
+
+                checkBoxc.setText((i * 3 + 2 >= list_xms.size()) ? "" : list_xms.get(i * 3 + 2).getName());
+                checkBoxc.setVisibility((i * 3 + 2 >= list_xms.size()) ? View.GONE : View.VISIBLE);
+                checkBoxc.setTag((i * 3 + 2 >= list_xms.size()) ? null : list_xms.get(i * 3 + 2));
+                checkBoxc.setOnCheckedChangeListener(this);
+
+                ll_xms.addView(view);
+            }
+        }
+
     }
 
     private void bindView() {
@@ -608,13 +756,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             case R.id.tv_shopcategory:
                 View v_category = LayoutInflater.from(this).inflate(R.layout.dialog_category_view, null);
                 whv_category = (WheelView) v_category.findViewById(R.id.whv_category);
-                whv_category.setItems(getSpnList(), 0);
+                whv_category.setItems(categorylistToStringlist(categoryList), 0);
                 whv_category.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(int selectedIndex, String item) {
 
                     }
                 });
+                whv_category.setIsLoop(false);
                 new AlertDialog.Builder(this)
                         .setTitle("选择门店类别")
                         .setView(v_category)
@@ -655,6 +804,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         shopTimes = shopTimeL + "  至  " + shopTimeR;
                     }
                 });
+                whv_lTime.setIsLoop(false);
+                whv_rTime.setIsLoop(false);
                 new AlertDialog.Builder(this)
                         .setTitle("选择营业时间")
                         .setView(v_shoptime)
@@ -702,13 +853,15 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         currentXianPosition = whv_xian.getSelectedPosition();
                     }
                 });
+                whv_sheng.setIsLoop(false);
+                whv_shi.setIsLoop(false);
+                whv_xian.setIsLoop(false);
                 new AlertDialog.Builder(this)
                         .setTitle("选择所在城市")
                         .setView(v_city)
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String areStr = "";
                                 String sheng = whv_sheng.getSelectedItem();
                                 String shi = whv_shi.getSelectedItem();
                                 String xian = whv_xian.getSelectedItem();
@@ -721,8 +874,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                                 tv_ShopCity.setText(areStr);
 
                                 if (xian.equals("无") || xian.equals("")) {
-                                    if (shi.equals("无") || shi.equals("")) {//没有市 没有县  获取省Id
-                                        DbManager db = new DbConfig().getDbManager();
+                                    if (shi.equals("无") || shi.equals("")) {  //没有县  没有市 获取省Id
+                                       /* DbManager db = new DbConfig().getDbManager();
                                         List<Province> provinceList = new ArrayList<>();
                                         try {
                                             provinceList = db.selector(Province.class)
@@ -732,8 +885,10 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                                         }
                                         if (provinceList != null) {
                                             areaId = provinceList.get(0).getId();
-                                        }
-                                    } else {     //没有县获取市id
+                                        }*/
+                                        areaId = 0;//没县 没市 全部默认0  省id 暂时忽略；
+                                        areaId_shi = 0;
+                                    } else {     //没有县 有市 获取市id
                                         DbManager db = new DbConfig().getDbManager();
                                         List<Province> provinceList = new ArrayList<>();
                                         try {
@@ -743,21 +898,30 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                                         } catch (DbException e) {
                                         }
                                         if (provinceList != null) {
-                                            areaId = provinceList.get(0).getId();
+                                            areaId_shi = provinceList.get(0).getId();
                                         }
+                                        areaId = 0;//没有县 默认0；
 
                                     }
                                 } else {//获取县id
                                     DbManager db = new DbConfig().getDbManager();
                                     List<Province> provinceList = new ArrayList<>();
+                                    List<Province> provinceListCity = new ArrayList<>();
                                     try {
                                         provinceList = db.selector(Province.class)
                                                 .where("name", "=", xian)
                                                 .findAll();
+                                        provinceListCity = db.selector(Province.class)
+                                                .where("name", "=", shi)
+                                                .findAll();
+
                                     } catch (DbException e) {
                                     }
                                     if (provinceList != null) {
                                         areaId = provinceList.get(0).getId();
+                                    }
+                                    if (provinceListCity != null) {
+                                        areaId_shi = provinceListCity.get(0).getId();
                                     }
                                 }
                             }
@@ -772,6 +936,16 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 startActivityForResult(intent, MAP_REUEST_CODE);
                 break;
         }
+    }
+
+    private List<String> categorylistToStringlist(List<Category> categoryList) {
+        List<String> categoryStringlist = new ArrayList<>();
+        if (categoryList != null) {
+            for (int i = 0; i < categoryList.size(); i++) {
+                categoryStringlist.add(categoryList.get(i).getName());
+            }
+        }
+        return categoryStringlist;
     }
 
     public List<String> getRTimeList(int selectedIndex) {
@@ -792,25 +966,25 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         return lTime_list;
     }
 
-    private List<String> getSpnList() {
-        categoryList = new ArrayList<>();
-        List<Category> categorydata = new ArrayList<>();
-
-        DbManager db = new DbConfig().getDbManager();
-        try {
-            categorydata = db.selector(Category.class)
-                    .findAll();
-        } catch (DbException e) {
-
-        }
-        if (categorydata != null) {
-            for (int i = 0; i < categorydata.size(); i++) {
-                categoryList.add(categorydata.get(i).getName());
-            }
-        }
-
-        return categoryList;
-    }
+//    private List<String> getSpnList() {
+//        categoryList = new ArrayList<>();
+//        List<Category> categorydata = new ArrayList<>();
+//
+//        DbManager db = new DbConfig().getDbManager();
+//        try {
+//            categorydata = db.selector(Category.class)
+//                    .findAll();
+//        } catch (DbException e) {
+//
+//        }
+//        if (categorydata != null) {
+//            for (int i = 0; i < categorydata.size(); i++) {
+//                categoryList.add(categorydata.get(i).getName());
+//            }
+//        }
+//
+//        return categoryList;
+//    }
 
     private void getSheng() {
         shengList.clear();
@@ -965,7 +1139,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             }
         });
 
-
         et_userName = (EditText) findViewById(R.id.et_person);
         et_userPhone = (EditText) findViewById(R.id.et_phone);
         tv_getCode = (TextView) findViewById(R.id.tv_getcode);
@@ -999,6 +1172,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         ckbox_sl.setChecked(true);//默认熟练
         isShoulian = 1;
         ckbox_bsl = (CheckBox) findViewById(R.id.checkbox_bsl);
+        checkbox_xieyi = (CheckBox) findViewById(R.id.ckbox_xieyi);
         CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1021,11 +1195,21 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                             isShoulian = 1;
                         }
                         break;
+                    case R.id.ckbox_xieyi:
+                        if (isChecked) {
+                            ckbox_sl.setChecked(true);
+                            isChecdXieyi = true;
+                        } else {
+                            ckbox_sl.setChecked(false);
+                            isChecdXieyi = false;
+                        }
+                        break;
                 }
             }
         };
         ckbox_sl.setOnCheckedChangeListener(listener);
         ckbox_bsl.setOnCheckedChangeListener(listener);
+        checkbox_xieyi.setOnCheckedChangeListener(listener);
         tv_save = (TextView) findViewById(R.id.tv_save);
         mTimeCount = new TimeCount(60000, 1000);
 
@@ -1087,16 +1271,17 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 } else {
                     shopPhone = et_ShopPhone.getText().toString();
                 }
-                if (shopTimeL == null||shopTimeR==null) {
+                if (shopTimeL == null || shopTimeR == null) {
                     Toast.makeText(RegisterActivity.this, "请选择您的营业时间", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (areaId==9999) {
+                if (areaId == 9999) {
                     Toast.makeText(RegisterActivity.this, "请选择您的店铺所在城市", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "call: cityId = " + cityId);
                     return;
                 } else {
-                    cityId = areaId + "";
+                    positionId_xian = areaId + "";
+                    cityId = areaId_shi + "";
+
                 }
                 if (et_ShopLocation.getText() == null || et_ShopLocation.getText().length() == 0) {
                     Toast.makeText(RegisterActivity.this, "请补充您的门店位置", Toast.LENGTH_SHORT).show();
@@ -1148,7 +1333,57 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         Log.e(TAG, "call:--++- " + serviceTypeListString);
                     }
                 }
-                /*    //提交参数---<
+                if (!isChecdXieyi) {
+                    showDialog("请同意《小马驾驾用户协议》");
+                    return;
+                }
+
+                showSaveDialog("确定提交吗？");
+
+            }
+        });
+
+    }
+
+    private void showDialog(String error) {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
+        TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
+        error_text.setText(error);
+        dialog.setTitle("如意如驿商家版");
+        dialog.setIcon(R.drawable.ic_logo);
+        dialog.setView(dialogView);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        //设置按钮颜色
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+    }
+
+    private void showSaveDialog(String error) {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_save_commit, null);
+        TextView error_text = (TextView) dialogView.findViewById(R.id.save_text);
+        error_text.setText(error);
+        dialog.setTitle("如意如驿商家版");
+        dialog.setIcon(R.drawable.ic_logo);
+        dialog.setView(dialogView);
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //确认提交 请求提交数据
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "是的", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                 /*    //提交参数---<
                 private String persionName;
                 private String persionPhone;
                 private String code;
@@ -1158,7 +1393,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 private String shopCategoryId;
                 private String shopPhone;
                 private String shopTime;
-                private String cityId;
+                private String positionId_xian;
                 private String shopLocation;
                 private String longitude;
                 private String latitude;
@@ -1175,11 +1410,13 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     obj.put("tel", shopPhone);
                     obj.put("startTime", "2000-01-01T" + shopTimeL + ".000+0800");
                     obj.put("endTime", "2000-01-01T" + shopTimeR + ".000+0800");
-                    obj.put("positionId", cityId);
+                    obj.put("positionId", positionId_xian);
+                    obj.put("cityId", cityId);
+                    obj.put("storeLocation", areStr);
                     obj.put("address", shopLocation);
                     obj.put("longitude", longitude);
                     obj.put("latitude", latitude);
-                    //  obj.put("serviceTypeList",serviceTypeListString); 下面平级添加；
+                    // 00 obj.put("serviceTypeList",serviceTypeListString); 下面平级添加；
                     obj.put("appExpert", isShoulian);
 
                 } catch (JSONException e) {
@@ -1198,13 +1435,13 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         try {
                             int status = new JSONObject(result).getInt("status");
                             String msg = new JSONObject(result).getString("msg");
-                            if (status>0) {
-                                Toast.makeText(RegisterActivity.this, msg , Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                            if (status > 0) {
+                                Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);
                                 RegisterActivity.this.finish();
-                            }else {
-                                Toast.makeText(RegisterActivity.this, msg , Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
@@ -1229,23 +1466,11 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             }
         });
 
-    }
-
-    private void showDialog(String error) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
-        TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
-        error_text.setText(error);
-        dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo);
-        dialog.setView(dialogView);
-        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
         dialog.show();
+        //设置按钮颜色
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+
     }
 
     @Override

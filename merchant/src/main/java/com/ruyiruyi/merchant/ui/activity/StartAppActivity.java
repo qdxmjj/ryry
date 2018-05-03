@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 import com.ruyiruyi.merchant.MainActivity;
@@ -47,179 +48,19 @@ public class StartAppActivity extends AppCompatActivity {
         //initIsLogin
         DbConfig dbConfig = new DbConfig();
         if (dbConfig.getIsLogin()) {
-            isLogin=1;
-        }else {
-            isLogin=0;
+            isLogin = 1;
+        } else {
+            isLogin = 0;
         }
 
         mTimeCount = new TimeCount(3000, 1000);
         mTimeCount.start();
 
-        initRegisterCategoryData();
-        initRegisterServiceTypeData();
         initProvinceData();
 
 
     }
 
-    private void initRegisterCategoryData() {
-// 0       date_category = new Date();
-        List<Category> categoryList = null;
-        try {
-            categoryList = new DbConfig().getDbManager().selector(Category.class).orderBy("time").findAll();
-
-        } catch (DbException e) {
-        }
-        JSONObject object = new JSONObject();
-
-        try {
-            if (categoryList == null) {
-                object.put("time", "2000-00-00 00:00:00");
-            } else {
-                String time = categoryList.get(categoryList.size() - 1).getTime();
-                object.put("time", time);
-
-            }
-        } catch (JSONException e) {
-        }
-
-        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreType");
-        params.addBodyParameter("reqJson", object.toString());
-//        Log.e(TAG, "initRegisterCategoryData: ------------1");
-        x.http().post(params, new Callback.CommonCallback<String>() {
-                    @Override
-                    public void onSuccess(String result) {
-//                        Log.e(TAG, "initRegisterCategoryData: ------------2 result = " + result);
-                        JSONObject jsonObject = null;
-                        try {
-                            jsonObject = new JSONObject(result);
-                            String status = jsonObject.getString("status");
-                            String msg = jsonObject.getString("msg");
-                            JSONArray data = jsonObject.getJSONArray("data");
-                            saveCategoryToDb(data);
-//                            Log.e(TAG, "initRegisterCategoryData: ------------3 data = " + data);
-                        } catch (JSONException e) {
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable ex, boolean isOnCallback) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(CancelledException cex) {
-
-                    }
-
-                    @Override
-                    public void onFinished() {
-
-                    }
-                }
-
-        );
-    }
-    private void saveCategoryToDb(JSONArray data) {
-        Category category;
-        DbManager db = (new DbConfig()).getDbManager();
-        for (int i = 0; i < data.length(); i++) {
-            category = new Category();
-            try {
-                JSONObject obj = (JSONObject) data.get(i);
-                long time = obj.getLong("time");
-                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-                category.setTime(timestampToStringAll);
-                category.setColor(obj.getString("color"));
-                category.setId(obj.getInt("id"));
-                category.setName(obj.getString("name"));
-//                Log.e(TAG, "saveCategoryToDb: category.getName() ==" + category.getName());
-                db.saveOrUpdate(category);
-            } catch (JSONException e) {
-
-            } catch (DbException e) {
-
-            }
-        }
-    }
-
-    private void initRegisterServiceTypeData() {
-//   0     date_serviceType = new Date();
-        List<ServiceType> serviceTypeList = null;
-        try {
-            serviceTypeList = new DbConfig().getDbManager().selector(ServiceType.class).orderBy("time").findAll();
-
-        } catch (DbException e) {
-        }
-        JSONObject object = new JSONObject();
-
-        try {
-            if (serviceTypeList == null) {
-                object.put("time", "2000-00-00 00:00:00");
-            } else {
-                String time = serviceTypeList.get(serviceTypeList.size() - 1).getTime();
-                object.put("time", time);
-
-            }
-        } catch (JSONException e) {
-        }
-
-        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreServiceType");
-        params.addBodyParameter("reqJson", object.toString());
-        x.http().post(params, new Callback.CommonCallback<String>() {
-                    @Override
-                    public void onSuccess(String result) {
-                        JSONObject jsonObject = null;
-                        try {
-                            jsonObject = new JSONObject(result);
-                            String status = jsonObject.getString("status");
-                            String msg = jsonObject.getString("msg");
-                            JSONArray data = jsonObject.getJSONArray("data");
-                            saveServiceTypeToDb(data);
-                        } catch (JSONException e) {
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable ex, boolean isOnCallback) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(CancelledException cex) {
-
-                    }
-
-                    @Override
-                    public void onFinished() {
-
-                    }
-                }
-
-        );
-    }
-    private void saveServiceTypeToDb(JSONArray data) {
-        ServiceType serviceType;
-        DbManager db = (new DbConfig()).getDbManager();
-        for (int i = 0; i < data.length(); i++) {
-            serviceType = new ServiceType();
-            try {
-                JSONObject obj = (JSONObject) data.get(i);
-                long time = obj.getLong("time");
-                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-//                Log.e(TAG, "saveServiceTypeToDb-------: timestampToStringAll ==" + timestampToStringAll);
-                serviceType.setTime(timestampToStringAll);
-                serviceType.setColor(obj.getString("color"));
-                serviceType.setId(obj.getInt("id"));
-                serviceType.setName(obj.getString("name"));
-                db.saveOrUpdate(serviceType);
-            } catch (JSONException e) {
-
-            } catch (DbException e) {
-
-            }
-        }
-    }
 
     private void initProvinceData() {
 //   0     date = new Date();
@@ -278,6 +119,7 @@ public class StartAppActivity extends AppCompatActivity {
             }
         });
     }
+
     private void saveProvinceToDb(JSONArray data) {
         Province province;
         DbManager db = (new DbConfig()).getDbManager();
@@ -323,7 +165,6 @@ public class StartAppActivity extends AppCompatActivity {
             }
         }
     }
-
 
 
     class TimeCount extends CountDownTimer {
