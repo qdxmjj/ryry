@@ -33,6 +33,7 @@ import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.bean.Service;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
+import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
@@ -53,7 +54,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class GoodsInfoActivity extends AppCompatActivity {
+public class GoodsInfoActivity extends BaseActivity {
     private final int CHOOSE_PICTURE = 0;
     private final int TAKE_PICTURE = 1;
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
@@ -25,7 +26,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class MyGoodsActivity extends AppCompatActivity {
+public class MyGoodsActivity extends FragmentActivity {
     private ActionBar mActionBar;
     private TabLayout mTab;
     private ViewPager mVPager;

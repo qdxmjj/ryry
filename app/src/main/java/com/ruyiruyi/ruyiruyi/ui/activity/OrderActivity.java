@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -22,7 +23,7 @@ import com.ruyiruyi.rylibrary.cell.NoCanSlideViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderActivity extends BaseActivity {
+public class OrderActivity extends FragmentActivity {
     private ActionBar actionBar;
     private NoCanSlideViewPager viewPager;
     private  TabLayout tabLayout;
@@ -32,7 +33,7 @@ public class OrderActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order,R.id.my_action);
+        setContentView(R.layout.activity_order);
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("我的订单");;
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){

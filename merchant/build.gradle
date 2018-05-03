@@ -15,9 +15,12 @@ android {
     defaultConfig {
         applicationId "com.ruyiruyi.merchant"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
+    }
+    task clean(type: Delete) {
+        delete rootProject.buildDir
     }
     sourceSets{
         main{
@@ -33,6 +36,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    packagingOptions{
+        exclude 'META-INF/rxjava.properties'
     }
 }
 

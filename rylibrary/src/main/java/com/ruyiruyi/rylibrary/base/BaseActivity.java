@@ -1,5 +1,6 @@
 package com.ruyiruyi.rylibrary.base;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +14,7 @@ import android.view.WindowManager;
 import com.ruyiruyi.rylibrary.R;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends Activity {
 
 
     private ActionBar a;

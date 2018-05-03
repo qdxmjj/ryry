@@ -4,8 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.ruyiruyi.merchant.R;
+import com.ruyiruyi.rylibrary.base.BaseActivity;
 
-public class StoreManagementActivity extends AppCompatActivity {
+public class StoreManagementActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
