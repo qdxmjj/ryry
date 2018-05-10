@@ -17,6 +17,10 @@ public class GoodsItemBean {
     private long time;
 
 
+    public GoodsItemBean(String name) {
+        this.name = name;
+    }
+
     public GoodsItemBean() {
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -25,7 +26,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class ShopGoodActivity extends BaseActivity {
+public class ShopGoodActivity extends FragmentActivity {
     private ActionBar actionBar;
     private  ViewPager viewPager;
     private  TabLayout tabLayout;
@@ -40,7 +41,7 @@ public class ShopGoodActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shop_good,R.id.my_action);
+        setContentView(R.layout.activity_shop_good);
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("商品列表");;
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){

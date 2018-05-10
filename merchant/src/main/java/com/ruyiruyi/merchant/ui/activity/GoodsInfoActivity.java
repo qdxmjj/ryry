@@ -111,16 +111,16 @@ public class GoodsInfoActivity extends BaseActivity {
                     break;
                 case 5:
                     //以下操作
-                    if (servicesBean2.size() != 0) {
+                    if (servicesBean2a.size() != 0) {
                         leftTypeList.add("汽车保养");
                     }
-                    if (servicesBean3.size() != 0) {
+                    if (servicesBean3a.size() != 0) {
                         leftTypeList.add("美容清洗");
                     }
-                    if (servicesBean4.size() != 0) {
-                        leftTypeList.add("改装");
+                    if (servicesBean4a.size() != 0) {
+                        leftTypeList.add("安装");
                     }
-                    if (servicesBean5.size() != 0) {
+                    if (servicesBean5a.size() != 0) {
                         leftTypeList.add("轮胎服务");
                     }
                     bindView();
@@ -324,17 +324,17 @@ public class GoodsInfoActivity extends BaseActivity {
             Toast.makeText(GoodsInfoActivity.this, "请输入商品单价", Toast.LENGTH_SHORT).show();
             return;
         }
-       String txt_price  = mGoodsPrice.getText().toString();
+        String txt_price = mGoodsPrice.getText().toString();
         int int_price = 0;
         for (int i = 0; i < txt_price.length(); i++) {//两个以上小数点情况
-            if (( txt_price.substring(i,i+1) ).equals(".")) {
+            if ((txt_price.substring(i, i + 1)).equals(".")) {
                 int_price++;
             }
         }
-        if (   ( txt_price.substring(0,1) ).equals(".") || ( txt_price.substring(txt_price.length()-1,txt_price.length()) ).equals(".")   ) {//首尾为小数点情况
-            int_price+=2;
+        if ((txt_price.substring(0, 1)).equals(".") || (txt_price.substring(txt_price.length() - 1, txt_price.length())).equals(".")) {//首尾为小数点情况
+            int_price += 2;
         }
-        if (int_price>1) {
+        if (int_price > 1) {
             Toast.makeText(GoodsInfoActivity.this, "请输入合理的商品单价", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -406,6 +406,7 @@ public class GoodsInfoActivity extends BaseActivity {
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "addStock");
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("stock_img", new File(img_Path));
+                Log.e(TAG, "onClick: 012 img_Path = add " + img_Path);
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
@@ -498,18 +499,23 @@ public class GoodsInfoActivity extends BaseActivity {
         View v_goodstype = LayoutInflater.from(this).inflate(R.layout.dialog_two_horizontal_wheel_view, null);
         leftWheel = (WheelView) v_goodstype.findViewById(R.id.whv_left);
         rightWheel = (WheelView) v_goodstype.findViewById(R.id.whv_right);
-        currentLeftPosition = 0;
-        currentRightPosition = 0;
-        currentForId = 0;
+        currentLeftPosition = 0;//每次弹Dialog 初始化
+        currentRightPosition = 0;//每次弹Dialog 初始化
+        currentForId = 0;//每次弹Dialog 初始化
         leftWheel.setItems(leftTypeList, currentLeftPosition);
         String s = leftTypeList.get(0);
-        rightWheel.setItems(getRightStringList(s), currentRightPosition);
+        List<String> strings = getRightStringList(s);
+        rightWheel.setItems(strings, currentRightPosition);
+        currentLeftString = leftTypeList.get(0);//每次弹Dialog 初始化
+        currentRightString = strings.get(currentRightPosition);//每次弹Dialog 初始化
         leftWheel.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
                 currentLeftPosition = leftWheel.getSelectedPosition();
                 currentLeftString = leftWheel.getSelectedItem();
-                rightWheel.setItems(getRightStringList(currentLeftString), currentRightPosition);
+                List<String> strings2 = getRightStringList(currentLeftString);
+                rightWheel.setItems(strings2, currentRightPosition);
+                currentRightString = strings2.get(currentRightPosition);//每次点击 初始化
             }
         });
         rightWheel.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
@@ -539,13 +545,13 @@ public class GoodsInfoActivity extends BaseActivity {
                                 leftTypeId = "3";
                                 rightTypeId = servicesBean3a.get(currentForId).getService_id() + "";
                                 break;
-                            case "改装":
+                            case "安装":
                                 leftTypeId = "4";
                                 rightTypeId = servicesBean4a.get(currentForId).getService_id() + "";
                                 break;
                             case "轮胎服务":
                                 leftTypeId = "5";
-                                rightTypeId = servicesBean5a.get(currentRightPosition).getService_id() + "";
+                                rightTypeId = servicesBean5a.get(currentForId).getService_id() + "";
                                 break;
                         }
                     }
@@ -566,7 +572,7 @@ public class GoodsInfoActivity extends BaseActivity {
                     strings.add(servicesBean3a.get(i).getServiceInfo());
                 }
                 break;
-            case "改装":
+            case "安装":
                 for (int i = 0; i < servicesBean4a.size(); i++) {
                     strings.add(servicesBean4a.get(i).getServiceInfo());
                 }

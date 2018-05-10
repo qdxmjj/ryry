@@ -7,14 +7,13 @@
     tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
 
     <View
-        android:background="@color/c1"
         android:layout_width="match_parent"
-        android:layout_height="6dp" />
+        android:layout_height="6dp"
+        android:background="@color/c1" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
-        />
+        android:layout_height="5dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -103,7 +102,8 @@
                     android:layout_gravity="center_vertical"
                     android:text="¥"
                     android:textColor="@color/c6"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_goodsprice"
@@ -112,7 +112,8 @@
                     android:layout_marginLeft="5dp"
                     android:text="66"
                     android:textColor="@color/c20"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
@@ -139,6 +140,7 @@
             android:text="" />
 
         <TextView
+            android:id="@+id/tv_delete_goods"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -149,6 +151,7 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/tv_reedit"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
@@ -159,7 +162,8 @@
             android:textColor="#ffffff"
             android:textSize="16sp" />
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"/>
+        android:layout_height="2dp" />
 </LinearLayout>

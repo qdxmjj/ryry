@@ -6,9 +6,9 @@
     tools:context="com.ruyiruyi.merchant.MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
 
         <FrameLayout
@@ -29,6 +29,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="40dp"
                 android:src="@mipmap/ic_launcher" />
+
             <TextView
                 android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
@@ -49,6 +50,7 @@
                 android:background="@drawable/ic_box"
                 android:orientation="horizontal"
                 android:weightSum="2">
+
                 <TextView
                     android:id="@+id/tv_mid_wddd"
                     android:layout_width="0dp"
@@ -57,8 +59,8 @@
                     android:drawableTop="@drawable/ic_dingdan"
                     android:gravity="center"
                     android:paddingTop="15dp"
-                    android:textColor="@color/c7"
                     android:text="我的订单"
+                    android:textColor="@color/c7"
                     android:textSize="16sp" />
 
                 <TextView
@@ -68,9 +70,9 @@
                     android:layout_weight="1"
                     android:drawableTop="@drawable/ic_shop"
                     android:gravity="center"
-                    android:textColor="@color/c7"
                     android:paddingTop="15dp"
                     android:text="管理店铺"
+                    android:textColor="@color/c7"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -79,8 +81,8 @@
                 android:id="@+id/v_mid_shu"
                 android:layout_width="0.5dp"
                 android:layout_height="70dp"
-                android:layout_marginTop="200dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="200dp"
                 android:background="@color/c2" />
         </FrameLayout>
 
@@ -148,9 +150,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:textColor="@color/c6"
                 android:layout_toRightOf="@+id/img_wdsp"
                 android:text="我的商品"
+                android:textColor="@color/c6"
                 android:textSize="15sp" />
 
             <ImageView
@@ -190,9 +192,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:textColor="@color/c6"
                 android:layout_toRightOf="@+id/img_tgjl"
                 android:text="推广奖励"
+                android:textColor="@color/c6"
                 android:textSize="15sp" />
 
             <ImageView
@@ -232,9 +234,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:textColor="@color/c6"
                 android:layout_toRightOf="@+id/img_dzyhs"
                 android:text="店主有话说"
+                android:textColor="@color/c6"
                 android:textSize="15sp" />
 
             <ImageView
@@ -252,6 +254,14 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@color/c2" />
+
+        <TextView
+            android:id="@+id/main_test"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="测试"
+            android:textSize="14sp" />
 
 
     </LinearLayout>

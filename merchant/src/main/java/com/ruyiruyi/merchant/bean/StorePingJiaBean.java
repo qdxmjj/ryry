@@ -7,12 +7,30 @@ public class StorePingJiaBean {
     private String pingjia_pica_url;
     private String pingjia_picb_url;
     private String pingjia_picc_url;
+    private String pingjia_picd_url;
+    private String pingjia_pice_url;
     private String user_name;
     private String star;     //0 1 2 3 4 5
     private String pj_time;
     private String pj_txt;
 
     public StorePingJiaBean() {
+    }
+
+    public void setPingjia_picd_url(String pingjia_picd_url) {
+        this.pingjia_picd_url = pingjia_picd_url;
+    }
+
+    public void setPingjia_pice_url(String pingjia_pice_url) {
+        this.pingjia_pice_url = pingjia_pice_url;
+    }
+
+    public String getPingjia_picd_url() {
+        return pingjia_picd_url;
+    }
+
+    public String getPingjia_pice_url() {
+        return pingjia_pice_url;
     }
 
     public void setPingjia_pica_url(String pingjia_pica_url) {

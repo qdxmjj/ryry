@@ -66,7 +66,7 @@ public class DianpuFragment extends Fragment {
             list.add(new Dianpu("汽车保养", "07-08", "+800.00", "已完成"));
             list.add(new Dianpu("美容清洗", "07-08", "+8000.00", "已完成"));
             list.add(new Dianpu("安装", "07-08", "+6000.00", "已完成"));
-            list.add(new Dianpu("改装", "07-08", "+6600.00", "已完成"));
+            list.add(new Dianpu("安装", "07-08", "+6600.00", "已完成"));
         }
         items.clear();
         items.addAll(list);

@@ -21,7 +21,7 @@ import org.xutils.x;
 
 import me.drakeet.multitype.ItemViewProvider;
 
-public class StorePingJiaItemProvider  extends ItemViewProvider<StorePingJiaBean, StorePingJiaItemProvider.ViewHolder> {
+public class StorePingJiaItemProvider extends ItemViewProvider<StorePingJiaBean, StorePingJiaItemProvider.ViewHolder> {
 
     private Context context;
     private RequestManager mGlideReqManager;
@@ -46,7 +46,9 @@ public class StorePingJiaItemProvider  extends ItemViewProvider<StorePingJiaBean
         //glide 设置圆形图片
         String topimgurl = storePingJiaBean.getUser_img_url();
         mGlideReqManager = Glide.with(context);
-        mGlideReqManager.load(topimgurl).transform(new GlideCircleTransform(  context  )).into(holder.img_user);
+        mGlideReqManager.load(topimgurl)
+                .transform(new GlideCircleTransform(context))
+                .into(holder.img_user);
         //设置评价图片 若后台获取null 则隐藏；
 
         ImageOptions options = new ImageOptions.Builder()
@@ -54,19 +56,29 @@ public class StorePingJiaItemProvider  extends ItemViewProvider<StorePingJiaBean
                 .setSquare(true)// setSquare和build为必须设置
                 .build();
         if (storePingJiaBean.getPingjia_pica_url() != null) {
-            x.image().bind(holder.img_pingjia_a, storePingJiaBean.getPingjia_pica_url(),options);
+            x.image().bind(holder.img_pingjia_a, storePingJiaBean.getPingjia_pica_url(), options);
         } else {
             holder.img_pingjia_a.setVisibility(View.GONE);
         }
         if (storePingJiaBean.getPingjia_picb_url() != null) {
-            x.image().bind(holder.img_pingjia_b, storePingJiaBean.getPingjia_picb_url(),options);
+            x.image().bind(holder.img_pingjia_b, storePingJiaBean.getPingjia_picb_url(), options);
         } else {
             holder.img_pingjia_b.setVisibility(View.GONE);
         }
         if (storePingJiaBean.getPingjia_picc_url() != null) {
-            x.image().bind(holder.img_pingjia_c, storePingJiaBean.getPingjia_picc_url(),options);
+            x.image().bind(holder.img_pingjia_c, storePingJiaBean.getPingjia_picc_url(), options);
         } else {
             holder.img_pingjia_c.setVisibility(View.GONE);
+        }
+        if (storePingJiaBean.getPingjia_picd_url() != null) {
+            x.image().bind(holder.img_pingjia_d, storePingJiaBean.getPingjia_picc_url(), options);
+        } else {
+            holder.img_pingjia_d.setVisibility(View.GONE);
+        }
+        if (storePingJiaBean.getPingjia_pice_url() != null) {
+            x.image().bind(holder.img_pingjia_e, storePingJiaBean.getPingjia_picc_url(), options);
+        } else {
+            holder.img_pingjia_e.setVisibility(View.GONE);
         }
     }
 
@@ -79,6 +91,8 @@ public class StorePingJiaItemProvider  extends ItemViewProvider<StorePingJiaBean
         private final ImageView img_pingjia_a;
         private final ImageView img_pingjia_b;
         private final ImageView img_pingjia_c;
+        private final ImageView img_pingjia_d;
+        private final ImageView img_pingjia_e;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -89,6 +103,8 @@ public class StorePingJiaItemProvider  extends ItemViewProvider<StorePingJiaBean
             img_pingjia_a = ((ImageView) itemView.findViewById(R.id.img_pingjia_a));
             img_pingjia_b = ((ImageView) itemView.findViewById(R.id.img_pingjia_b));
             img_pingjia_c = ((ImageView) itemView.findViewById(R.id.img_pingjia_c));
+            img_pingjia_d = ((ImageView) itemView.findViewById(R.id.img_pingjia_d));
+            img_pingjia_e = ((ImageView) itemView.findViewById(R.id.img_pingjia_e));
         }
     }
 }

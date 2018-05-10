@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ruyiruyi.merchant.ui.activity.BugTestActivity">
+
+    <TextView
+        android:id="@+id/order_xiangqing_act"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="bugtestclick"
+        android:text="OrderXiangqingActivity"
+        android:textSize="21sp" />
+
+    <TextView
+        android:id="@+id/service_record_act"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="bugtestclick"
+        android:text="ServiceRecordActivity"
+        android:textSize="21sp" />
+
+    <TextView
+        android:id="@+id/open_order_freechange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="bugtestclick"
+        android:text="OpenOrderFreeChangeActivity"
+        android:textSize="21sp" />
+
+    <TextView
+        android:id="@+id/open_order_xiubu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="bugtestclick"
+        android:text="OpenOrderXiuBuActivity"
+        android:textSize="21sp" />
+
+    <TextView
+        android:id="@+id/open_order_firstchange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="bugtestclick"
+        android:text="OpenOrderFirstChangeActivity"
+        android:textSize="21sp" />
+
+    <TextView
+        android:id="@+id/open_order_photosample_xiubu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="bugtestclick"
+        android:text="PhotoSampleActivity_xiubu"
+        android:textSize="21sp" />
+
+    <TextView
+        android:id="@+id/open_order_photosample_change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="bugtestclick"
+        android:text="PhotoSampleActivity_change"
+        android:textSize="21sp" />
+
+    <TextView
+        android:id="@+id/open_order_photosample_car"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="bugtestclick"
+        android:text="PhotoSampleActivity_car"
+        android:textSize="21sp" />
+
+    <TextView
+        android:id="@+id/change_bianma"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="bugtestclick"
+        android:text="ChangeBianmaActivity"
+        android:textSize="21sp" />
+</LinearLayout>

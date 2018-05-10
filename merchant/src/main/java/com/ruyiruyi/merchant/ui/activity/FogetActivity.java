@@ -18,6 +18,8 @@ import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
+import com.ruyiruyi.rylibrary.base.BaseActivity;
+import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.utils.TripleDESUtil;
 
 import org.json.JSONException;
@@ -31,7 +33,7 @@ import java.security.NoSuchAlgorithmException;
 
 import rx.functions.Action1;
 
-public class FogetActivity extends BaseActivityb {
+public class FogetActivity extends BaseActivity {
 
     private static final String TAG = FogetActivity.class.getSimpleName();
     private  TimeCount mtimeC;
@@ -41,11 +43,24 @@ public class FogetActivity extends BaseActivityb {
     private EditText et_passb;
     private TextView tv_code;
     private TextView tv_save;
+    private ActionBar mActionBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_foget);
+        mActionBar = (ActionBar) findViewById(R.id.forget_acbar);
+        mActionBar.setTitle("忘记密码");
+        mActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+            @Override
+            public void onItemClick(int var1) {
+                switch (var1) {
+                    case -1:
+                        onBackPressed();
+                        break;
+                }
+            }
+        });
 
         initView();
     }

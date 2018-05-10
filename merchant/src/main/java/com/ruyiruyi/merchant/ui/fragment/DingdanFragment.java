@@ -42,6 +42,29 @@ public class DingdanFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        initView();
+
+        initDataAndRfTest();
+
+        bindView();
+//        mRecyclerView.set
+
+
+    }
+
+    private void bindView() {
+        //设置item监听
+        mRecyclerView.addOnItemTouchListener(new OnMyItemTouchListener(mRecyclerView) {
+            @Override
+            public void onItemClick(RecyclerView.ViewHolder vh) {
+                //操作
+                Log.e(TAG, "Recycler-->onItemClick: "+"AdapterPosition:"+vh.getAdapterPosition());
+                Toast.makeText(getActivity(),"AdapterPosition:"+vh.getAdapterPosition(),Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initView() {
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.rlv_dingdan);
         LinearLayoutManager manager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
         mRecyclerView.setLayoutManager(manager);
@@ -53,19 +76,6 @@ public class DingdanFragment extends Fragment {
         mRecyclerView.setAdapter(multiTypeAdapter);
         //测试绑定
         assertHasTheSameAdapter(mRecyclerView,multiTypeAdapter);
-        initDataAndRfTest();
-        //设置item监听
-        mRecyclerView.addOnItemTouchListener(new OnMyItemTouchListener(mRecyclerView) {
-            @Override
-            public void onItemClick(RecyclerView.ViewHolder vh) {
-                //操作
-                Log.e(TAG, "Recycler-->onItemClick: "+"AdapterPosition:"+vh.getAdapterPosition());
-                Toast.makeText(getActivity(),"AdapterPosition:"+vh.getAdapterPosition(),Toast.LENGTH_SHORT).show();
-            }
-        });
-//        mRecyclerView.set
-
-
     }
 
 

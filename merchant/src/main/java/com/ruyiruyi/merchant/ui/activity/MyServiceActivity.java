@@ -172,7 +172,7 @@ public class MyServiceActivity extends FragmentActivity implements MyServiceFrag
         title_list = new ArrayList();
         title_list.add("汽车保养");
         title_list.add("美容清洗");
-        title_list.add("改装");
+        title_list.add("安装");
         title_list.add("轮胎服务");
 
     }
