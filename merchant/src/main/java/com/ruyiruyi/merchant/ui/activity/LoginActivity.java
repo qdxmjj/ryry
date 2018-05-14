@@ -76,24 +76,25 @@ public class LoginActivity extends BaseActivityb {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this,"请授权读写手机存储权限",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this,"请授权读写手机存储权限",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this,"请授权相机权限",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
             finish();
-        }  if (ContextCompat.checkSelfPermission(this,
+        }
+        if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this,"请授权定位权限",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         initView();
@@ -226,7 +227,7 @@ public class LoginActivity extends BaseActivityb {
             user.setStoreName(data.getString("storeName"));
             user.setStatus(data.getInt("status"));
             user.setStoreImgUrl(data.getString("storeImgUrl"));
-            Log.e(TAG, "saveUserToDb: storeImgUrl == >"+user.getStoreImgUrl());
+            Log.e(TAG, "saveUserToDb: storeImgUrl == >" + user.getStoreImgUrl());
             user.setStoreLoginName(data.getString("storeLoginName"));
             user.setToken(data.getString("token"));
             user.setUpdateTime(data.getString("updateTime"));
@@ -279,19 +280,23 @@ public class LoginActivity extends BaseActivityb {
     }
 
     private void showDialog(String error) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo);
+        dialog.setIcon(R.drawable.ic_logo_huise);
         dialog.setView(dialogView);
-        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
         dialog.show();
+        //设置按钮颜色
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+
     }
 }

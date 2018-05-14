@@ -3,6 +3,7 @@ package com.ruyiruyi.merchant.ui.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.XiangmusBean;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.ServiceType;
+import com.ruyiruyi.merchant.ui.activity.MyPicDialogActivity;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -78,13 +80,13 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     public int currentrTimePosition = 0;
     private List<String> lTime_list;
     private List<String> rTime_list;
-    private String shopTimes;
+    private String shopTimes = "00:00:00 至 00:00:00";
     private List<XiangmusBean> list_xms = new ArrayList<>();
     private List<String> serviceTypeList = new ArrayList<>();
     private String serviceTypeListString;
 
-    private String shopTimeL;
-    private String shopTimeR;
+    private String shopTimeL = "00:00:00";
+    private String shopTimeR = "00:00:00";
 
     private String storeTimeL_old;
     private String storeTimeR_old;
@@ -277,7 +279,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                 whv_lTime = (WheelView) v_shoptime.findViewById(R.id.whv_ltime);
                 whv_rTime = (WheelView) v_shoptime.findViewById(R.id.whv_rtime);
                 whv_lTime.setItems(getStrLTime(), currentlTimePosition);
-                whv_rTime.setItems(getRTimeList(0), 0);
+                whv_rTime.setItems(getRTimeList(0), currentrTimePosition);
                 whv_lTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(int selectedIndex, String item) {
@@ -349,21 +351,36 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         RxViewAction.clickNoDouble(img_mdpic_a).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                showPicDialog(mdPic_a_url);
+                /*showPicDialog(mdPic_a_url);*/
+                Intent intent = new Intent(getActivity(), MyPicDialogActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("imgUrl", mdPic_a_url);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
         //门店照片 b
         RxViewAction.clickNoDouble(img_mdpic_b).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                showPicDialog(mdPic_b_url);
+                /*showPicDialog(mdPic_b_url);*/
+                Intent intent = new Intent(getActivity(), MyPicDialogActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("imgUrl", mdPic_b_url);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
         //门店照片 c
         RxViewAction.clickNoDouble(img_mdpic_c).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                showPicDialog(mdPic_c_url);
+              /*  showPicDialog(mdPic_c_url);*/
+                Intent intent = new Intent(getActivity(), MyPicDialogActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("imgUrl", mdPic_c_url);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }
@@ -374,7 +391,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         TextView error_text = (TextView) dialogView.findViewById(R.id.save_text);
         error_text.setText("确定提交保存吗");
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo);
+        dialog.setIcon(R.drawable.ic_logo_huise);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
             @Override
@@ -527,17 +544,19 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         return rTime_list;
     }
 
+
+    //展示图片dialog 效果不佳 未使用
     private void showPicDialog(String pic_url) {
 
         AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
         View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_picture, null);
         ImageView img_dialog_pic = (ImageView) dialogView.findViewById(R.id.img_dialog_pic);
-//        //设置imageView 宽高
-//        WindowManager manager = getActivity().getWindowManager();
-//        Display display = manager.getDefaultDisplay();//为获取屏幕宽高
-//        LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) img_dialog_pic.getLayoutParams();
-//        linearParams.width = (int) (display.getWidth() * 0.9);
-//        linearParams.height = (int) (display.getHeight() * 0.9);
+/*        //设置imageView 宽高
+        WindowManager manager = getActivity().getWindowManager();
+        Display display = manager.getDefaultDisplay();//为获取屏幕宽高
+        LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) img_dialog_pic.getLayoutParams();
+        linearParams.width = (int) (display.getWidth() * 0.9);
+        linearParams.height = (int) (display.getHeight() * 0.9);*/
 
         ImageOptions myOptions = new ImageOptions.Builder()
                 .setCircular(false)
@@ -643,7 +662,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo);
+        dialog.setIcon(R.drawable.ic_logo_huise);
         dialog.setView(dialogView);
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override

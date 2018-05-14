@@ -108,6 +108,7 @@ public class MyServiceActivity extends FragmentActivity implements MyServiceFrag
                             String msg = object1.getString("msg");
                             int status = object1.getInt("status");
                             Toast.makeText(MyServiceActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            finish();
                         } catch (JSONException e) {
                         }
                     }
@@ -261,7 +262,7 @@ public class MyServiceActivity extends FragmentActivity implements MyServiceFrag
             boolean isadd = true;
             for (int i = 0; i < sizea; i++) {
                 if (selectServicesList.get(i).equals(id + "")) {//如果该id已存在 则移除
-                    isadd =false;
+                    isadd = false;
                  /*   Log.e(TAG, "onServiceItemClickToActivityListener000: ++++++++" );
                     selectServicesList.remove(i);
                     return;*/
@@ -269,10 +270,10 @@ public class MyServiceActivity extends FragmentActivity implements MyServiceFrag
                     selectServicesList.add(id + "");
                 }*/
             }
-            if (isadd){//添加
+            if (isadd) {//添加
                 selectServicesList.add(id + "");
-            }else {
-                selectServicesList.remove(id+"");
+            } else {
+                selectServicesList.remove(id + "");
             }
         }
     }

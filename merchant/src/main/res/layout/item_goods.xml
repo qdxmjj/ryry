@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:attr="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -21,13 +22,15 @@
         android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.ruyiruyi.merchant.utils.CircleImageView
             android:id="@+id/img_goods"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginLeft="10dp"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_head" />
+            android:src="@drawable/ic_head"
+            attr:roundHeight="3dp"
+            attr:roundWidth="3dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -122,13 +125,16 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:background="@color/c1" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_margin="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="6dp"
         android:orientation="horizontal"
         android:padding="3dp"
         android:weightSum="3">

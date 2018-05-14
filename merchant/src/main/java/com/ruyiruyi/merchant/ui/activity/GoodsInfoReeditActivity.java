@@ -78,7 +78,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
     private int currentRightPosition = 0;
     private int currentForId = 0;
     private int currentSale = 1;  //2 已下架   1在售
-    private String currentSaleString = "请选择";
+    private String currentSaleString = "出售中";
     private String currentSaleForIdString = "请选择";
     private String currentLeftString = "请选择";
     private String currentRightString = "请选择";
@@ -96,6 +96,16 @@ public class GoodsInfoReeditActivity extends BaseActivity {
     private String img_Path;
     private boolean isOldPic = true;
     private String goods_typeold_string = "";
+    private String goodsid;
+    private String amount;
+    private String soldno;
+    private String price;
+    private String imgurl;
+    private String storeId;
+    private String name;
+    private String serviceTypeId;
+    private String serviceId;
+    private String status = "1";//默认出售中
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -195,17 +205,6 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 .into(mGoodsImg);
     }
 
-    private String goodsid;
-    private String amount;
-    private String soldno;
-    private String price;
-    private String imgurl;
-    private String storeId;
-    private String name;
-    private String serviceTypeId;
-    private String serviceId;
-    private String status;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -229,6 +228,13 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         serviceTypeId = bundle.getString("serviceTypeId");
         serviceId = bundle.getString("serviceId");
         status = bundle.getString("status");
+        if ("2".equals(status)) {
+            currentSaleString = "已下架";
+            currentSale = 2;
+        } else {
+            currentSaleString = "出售中";
+            currentSale = 1;
+        }
         amount = bundle.getString("amount");
         soldno = bundle.getString("soldno");
         price = bundle.getString("price");
@@ -448,7 +454,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 break;
         }
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo);
+        dialog.setIcon(R.drawable.ic_logo_huise);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
             @Override
@@ -562,7 +568,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        currentSaleForIdString = currentSaleString;
+                        currentSaleForIdString = currentSaleString;//防止未确定dis
                         mGoodsStatus.setText(currentSaleForIdString);
                         if (currentSaleForIdString.equals("出售中")) {
                             currentSale = 1;
@@ -582,6 +588,10 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         currentRightPosition = 0;//每次弹Dialog 初始化
         currentForId = 0;//每次弹Dialog 初始化
         leftWheel.setItems(leftTypeList, currentLeftPosition);
+        if (leftTypeList == null || leftTypeList.size() == 0) {
+            Toast.makeText(GoodsInfoReeditActivity.this, "请先选择您的服务小类", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String s = leftTypeList.get(0);
         List<String> strings = getRightStringList(s);
         rightWheel.setItems(strings, currentRightPosition);

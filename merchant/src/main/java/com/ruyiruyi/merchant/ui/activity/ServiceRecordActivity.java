@@ -50,7 +50,7 @@ public class ServiceRecordActivity extends BaseActivity {
         setContentView(R.layout.activity_service_record);
 
         mActionBar = (ActionBar) findViewById(R.id.service_record_acbar);
-        mActionBar.setTitle("订单详情");
+        mActionBar.setTitle("服务记录");
         mActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {

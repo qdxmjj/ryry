@@ -80,6 +80,10 @@
         <activity android:name=".ui.activity.OpenOrderFirstChangeActivity" />
         <activity android:name=".ui.activity.PhotoSampleActivity" />
         <activity android:name=".ui.activity.ChangeBianmaActivity" />
+        <activity android:name=".ui.activity.ConfirmReceiveActivity" />
+        <activity
+            android:name=".ui.activity.MyPicDialogActivity"
+            android:theme="@style/dialogstyle"></activity>
     </application>
 
 </manifest>

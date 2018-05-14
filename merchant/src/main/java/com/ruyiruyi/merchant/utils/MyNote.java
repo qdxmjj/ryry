@@ -177,4 +177,23 @@ public class MyNote {
             }
         });
     }*/
+
+
+    /* OpenOrder 去掉替换功能  的TextView
+    *                     <TextView
+                        android:id="@+id/code_b_change"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/register_w_button"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:text="替换"
+                        android:textColor="@color/c6"
+                        android:textSize="18sp" />
+    * */
 }

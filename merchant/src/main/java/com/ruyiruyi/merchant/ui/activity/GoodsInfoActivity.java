@@ -77,8 +77,8 @@ public class GoodsInfoActivity extends BaseActivity {
     private int currentLeftPosition = 0;
     private int currentRightPosition = 0;
     private int currentForId = 0;
-    private int currentSale = 1;  //2 已下架   1在售
-    private String currentSaleString = "请选择";
+    private int currentSale = 2;  //2 已下架   1在售
+    private String currentSaleString = "已下架";
     private String currentSaleForIdString = "请选择";
     private String currentLeftString = "请选择";
     private String currentRightString = "请选择";
@@ -379,7 +379,7 @@ public class GoodsInfoActivity extends BaseActivity {
                 break;
         }
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo);
+        dialog.setIcon(R.drawable.ic_logo_huise);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
             @Override
@@ -483,7 +483,7 @@ public class GoodsInfoActivity extends BaseActivity {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        currentSaleForIdString = currentSaleString;
+                        currentSaleForIdString = currentSaleString;//防止未确定dis
                         mGoodsStatus.setText(currentSaleForIdString);
                         if (currentSaleForIdString.equals("出售中")) {
                             currentSale = 1;
@@ -503,6 +503,10 @@ public class GoodsInfoActivity extends BaseActivity {
         currentRightPosition = 0;//每次弹Dialog 初始化
         currentForId = 0;//每次弹Dialog 初始化
         leftWheel.setItems(leftTypeList, currentLeftPosition);
+        if (leftTypeList == null || leftTypeList.size() == 0) {
+            Toast.makeText(GoodsInfoActivity.this, "请先选择您的服务小类", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String s = leftTypeList.get(0);
         List<String> strings = getRightStringList(s);
         rightWheel.setItems(strings, currentRightPosition);

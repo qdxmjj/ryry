@@ -65,6 +65,10 @@ public class BugTestActivity extends BaseActivity {
                 Intent intent9 = new Intent(this, ChangeBianmaActivity.class);
                 startActivity(intent9);
                 break;
+            case R.id.confirm_receive:
+                Intent intent10 = new Intent(this, ConfirmReceiveActivity.class);
+                startActivity(intent10);
+                break;
         }
     }
 }

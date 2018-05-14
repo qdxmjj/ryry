@@ -56,7 +56,7 @@ public class MyGoodsFragment extends Fragment {
     private String leftid;
     private String rightid;
     private int total_all_page;
-    private int mRows = 10 ;  // 设置默认一页加载10条数据
+    private int mRows = 10;  // 设置默认一页加载10条数据
     private int current_page;
     private String sale_type;
     private SwipeRefreshLayout mSwipeLayout;
@@ -106,7 +106,7 @@ public class MyGoodsFragment extends Fragment {
         leftid = "";
         rightid = "";
         sale_type = bundle.getString(SALE_TYPE);
-        leftid = bundle.getString(LEFT_ID);//OMG
+        leftid = bundle.getString(LEFT_ID);
         rightid = bundle.getString(RIGHT_ID);
         Log.e(TAG, "onActivityCreated: 6668" + "  bundle.getString(LEFT_ID)= " + bundle.getString(LEFT_ID) + " bundle.getString(RIGHT_ID)= " + bundle.getString(RIGHT_ID));
         Log.e(TAG, "onActivityCreated: 6668" + " leftid= " + leftid + " rightid= " + rightid);
@@ -149,7 +149,7 @@ public class MyGoodsFragment extends Fragment {
                     isLoadMore = true;
                     initDataByLoadMoreType();
                 } else {
-                    if (!isLoadOver) {
+                    if (!isLoadOver && (total_all_page > 1)) {//用于判断是否加  加载完成底部
                         items.add(new ItemBottomBean("全部加载完毕!"));
                         isLoadOver = true;
                     }
@@ -200,8 +200,8 @@ public class MyGoodsFragment extends Fragment {
                     JSONObject jsonObject = new JSONObject(result);
                     JSONObject data = jsonObject.getJSONObject("data");
                     JSONArray rows = data.getJSONArray("rows");
-                    total_all_page = (data.getInt("total"))/mRows;//处理页数
-                    if ( data.getInt("total")%mRows > 0){
+                    total_all_page = (data.getInt("total")) / mRows;//处理页数
+                    if (data.getInt("total") % mRows > 0) {
                         total_all_page++;
                     }
                     for (int i = 0; i < rows.length(); i++) {

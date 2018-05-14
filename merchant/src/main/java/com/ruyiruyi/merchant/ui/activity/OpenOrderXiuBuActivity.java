@@ -11,7 +11,6 @@ import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 public class OpenOrderXiuBuActivity extends BaseActivity {
-    private TextView service_num;
     private TextView mid_title;
     private LinearLayout ll_mid_a;
     private LinearLayout ll_mid_b;
@@ -38,14 +37,12 @@ public class OpenOrderXiuBuActivity extends BaseActivity {
                 }
             }
         });
-        service_num = findViewById(R.id.service_num);
         mid_title = findViewById(R.id.mid_title);
         ll_mid_a = findViewById(R.id.ll_mid_a);
         ll_mid_b = findViewById(R.id.ll_mid_b);
         tv_bottom_a = findViewById(R.id.tv_bottom_a);
         tv_bottom_b = findViewById(R.id.tv_bottom_b);
         tv_bottom_c = findViewById(R.id.tv_bottom_c);
-        service_num.setText("修补数量:");
         mid_title.setText("补胎编号");
         ll_mid_a.setVisibility(View.GONE);
         ll_mid_b.setVisibility(View.VISIBLE);

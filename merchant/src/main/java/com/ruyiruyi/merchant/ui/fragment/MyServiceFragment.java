@@ -38,7 +38,6 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
     public static String SALE_TYPE = "SALE_TYPE";
     private String sale_type;
     private RecyclerView mRlv;
-    private TextView tv_save;
     private List<ServicesBean> servicesBean;
     private MultiTypeAdapter multiTypeAdapter;
     private List<Object> items = new ArrayList<>();
@@ -107,10 +106,11 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreServicesAndState");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        Log.e(TAG, "myRequestPostForDataBy: params.toString()==>" + params.toString());
+        Log.e(TAG, "myRequestPostForDataBy bugs: params.toString()==>" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: bugs result = " + result);
                 try {
                     JSONObject object = new JSONObject(result);
                     JSONArray data = object.getJSONArray("data");
@@ -175,7 +175,6 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
 
     private void initView() {
         mRlv = (RecyclerView) getView().findViewById(R.id.myservice_rlv);
-        tv_save = (TextView) getView().findViewById(R.id.tv_myservice_save);
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRlv.setLayoutManager(manager);
@@ -205,6 +204,7 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
 
     public interface StartFragmentPasstoActivity {
         void startFragmentPasstoActivityListener(String s, List<String> checkedList);//传至Activity 原始
+
         void onServiceItemClickToActivityListener(int id);//传至Activity 后选
     }
 }

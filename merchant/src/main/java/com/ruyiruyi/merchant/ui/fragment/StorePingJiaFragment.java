@@ -12,6 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.ItemBottomBean;
 import com.ruyiruyi.merchant.bean.ItemNullBean;
@@ -21,6 +25,7 @@ import com.ruyiruyi.merchant.ui.multiType.ItemBottomProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemNullProvider;
 import com.ruyiruyi.merchant.ui.multiType.StorePingJiaItemProvider;
 import com.ruyiruyi.merchant.ui.multiType.listener.OnLoadMoreListener;
+import com.ruyiruyi.merchant.utils.ImagPagerUtil;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 
@@ -39,15 +44,15 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class StorePingJiaFragment extends Fragment {
+public class StorePingJiaFragment extends Fragment implements StorePingJiaItemProvider.OnPingjiaPicClick {
     private RecyclerView mRlv;
     private SwipeRefreshLayout mSwipeLayout;
     private List<StorePingJiaBean> pingjiaBeanList;
     private MultiTypeAdapter multiTypeAdapter;
     private List<Object> items = new ArrayList<>();
     private String TAG = StorePingJiaFragment.class.getSimpleName();
-    private int mRows = 10;
-    private int currentPage ;
+    private int mRows = 10;// 设置默认一页加载10条数据
+    private int currentPage;
     private int total_page;
     private String storeId;
     private boolean isLoadMore = false;
@@ -67,8 +72,25 @@ public class StorePingJiaFragment extends Fragment {
         initView();
         initData();
         initSwipeLayout();
+        //配置点击查看大图
+        initImageLoader();
 
     }
+
+
+    private void initImageLoader() {//配置点击查看大图
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+                getActivity()).threadPriority(Thread.NORM_PRIORITY - 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                .writeDebugLogs() // Remove for release app
+                .build();
+        // Initialize ImageLoader with configuration.
+        ImageLoader.getInstance().init(config);
+
+    }
+
     //加载原始数据
     private void initData() {
         initDataByLoadMoreType();
@@ -117,6 +139,7 @@ public class StorePingJiaFragment extends Fragment {
                         bean.setPingjia_picd_url(object1.getString("img4Url"));
                         bean.setPingjia_pice_url(object1.getString("img5Url"));
                         bean.setUser_id(object1.getInt("userId"));
+                        bean.setPingjia_id(object1.getInt("id"));
                         bean.setUser_name(object1.getString("storeCommitUserName"));
                         bean.setPj_txt(object1.getString("content"));
                         long time = object1.getLong("time");
@@ -204,7 +227,7 @@ public class StorePingJiaFragment extends Fragment {
                     isLoadMore = true;
                     initDataByLoadMoreType();
                 } else {
-                    if (!isLoadOver) {
+                    if (!isLoadOver && (total_page > 1)) {//用于判断是否加  加载完成底部
                         items.add(new ItemBottomBean("全部加载完毕!"));
                         isLoadOver = true;
                     }
@@ -222,7 +245,9 @@ public class StorePingJiaFragment extends Fragment {
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRlv.setLayoutManager(manager);
         multiTypeAdapter = new MultiTypeAdapter(items);
-        multiTypeAdapter.register(StorePingJiaBean.class, new StorePingJiaItemProvider(getContext()));
+        StorePingJiaItemProvider provider = new StorePingJiaItemProvider(getContext());
+        provider.setListener(StorePingJiaFragment.this);
+        multiTypeAdapter.register(StorePingJiaBean.class, provider);
         multiTypeAdapter.register(ItemNullBean.class, new ItemNullProvider());
         multiTypeAdapter.register(ItemBottomBean.class, new ItemBottomProvider());
         mRlv.setAdapter(multiTypeAdapter);
@@ -230,5 +255,51 @@ public class StorePingJiaFragment extends Fragment {
 
         pingjiaBeanList = new ArrayList<>();
         storeId = new DbConfig().getId() + "";
+    }
+
+    @Override
+    public void onPingjiaPicClickListener(String url, int pjId) {
+        List<String> picList = new ArrayList<>();
+        picList.add(url);
+        String content = "";
+        for (int i = 0; i < pingjiaBeanList.size(); i++) {
+            if (pingjiaBeanList.get(i).getPingjia_id() == pjId) { //根据id找到该条评论
+                StorePingJiaBean beans = pingjiaBeanList.get(i);
+                ArrayList<String> arrayList = new ArrayList<>();//url不为空 即有图片再加入
+                if (beans.getPingjia_pica_url() == null || beans.getPingjia_pica_url().length() == 0) {
+                } else {
+                    arrayList.add(beans.getPingjia_pica_url());
+                }
+                if (beans.getPingjia_picb_url() == null || beans.getPingjia_picb_url().length() == 0) {
+                } else {
+                    arrayList.add(beans.getPingjia_picb_url());
+                }
+                if (beans.getPingjia_picc_url() == null || beans.getPingjia_picc_url().length() == 0) {
+                } else {
+                    arrayList.add(beans.getPingjia_picc_url());
+                }
+                if (beans.getPingjia_picd_url() == null || beans.getPingjia_picd_url().length() == 0) {
+                } else {
+                    arrayList.add(beans.getPingjia_picd_url());
+                }
+                if (beans.getPingjia_pice_url() == null || beans.getPingjia_pice_url().length() == 0) {
+                } else {
+                    arrayList.add(beans.getPingjia_pice_url());
+                }
+
+                content = beans.getPj_txt();
+
+                for (int j = 0; j < arrayList.size(); j++) {
+                    if (!arrayList.get(j).equals(url)) {
+                        picList.add(arrayList.get(j));
+                    }
+                }
+
+            }
+        }
+        ImagPagerUtil imagPagerUtil = new ImagPagerUtil(getActivity(), picList);
+        imagPagerUtil.setContentText(content);
+        imagPagerUtil.show();
+
     }
 }

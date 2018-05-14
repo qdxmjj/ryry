@@ -14,10 +14,12 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_below="@+id/goodsinfo_acbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/tv_tijiaosp">
+        android:layout_above="@+id/tv_tijiaosp"
+        android:layout_below="@+id/goodsinfo_acbar"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -30,8 +32,6 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="125dp"
                 android:background="#ffffff"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="vertical"
                 android:paddingBottom="100dp">
 
@@ -53,8 +53,7 @@
                         android:gravity="center_vertical|left"
                         android:text="商品名称"
                         android:textColor="@color/c7"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp" />
 
                     <EditText
                         android:id="@+id/et_goods_name"
@@ -91,8 +90,7 @@
                         android:gravity="center_vertical|left"
                         android:text="单价"
                         android:textColor="@color/c7"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp" />
 
                     <EditText
                         android:id="@+id/et_goods_price"
@@ -102,10 +100,10 @@
                         android:layout_marginLeft="2dp"
                         android:layout_weight="5"
                         android:background="@null"
-                        android:hint="请在此输入商品单价"
-                        android:maxLines="1"
                         android:digits="@string/input_num_point"
+                        android:hint="请在此输入商品单价"
                         android:maxLength="9"
+                        android:maxLines="1"
                         android:paddingLeft="5dp"
                         android:textColor="@color/c6"
                         android:textColorHint="@color/c6"
@@ -130,8 +128,7 @@
                         android:gravity="center_vertical|left"
                         android:text="商品分类"
                         android:textColor="@color/c7"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/tv_goods_type"
@@ -167,8 +164,7 @@
                         android:gravity="center_vertical|left"
                         android:text="库存"
                         android:textColor="@color/c7"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp" />
 
                     <EditText
                         android:id="@+id/et_goods_kucun"
@@ -179,9 +175,9 @@
                         android:layout_weight="5"
                         android:background="@null"
                         android:hint="请在此输入商品库存"
-                        android:maxLines="1"
                         android:inputType="number"
                         android:maxLength="9"
+                        android:maxLines="1"
                         android:paddingLeft="5dp"
                         android:textColor="@color/c6"
                         android:textColorHint="@color/c6"
@@ -206,8 +202,7 @@
                         android:gravity="center_vertical|left"
                         android:text="商品状态"
                         android:textColor="@color/c7"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/tv_goods_status"
@@ -217,10 +212,10 @@
                         android:layout_marginLeft="2dp"
                         android:layout_weight="5"
                         android:background="@null"
-                        android:text="请选择商品状态"
-                        android:maxLines="1"
                         android:gravity="center_vertical"
+                        android:maxLines="1"
                         android:paddingLeft="5dp"
+                        android:text="请选择商品状态"
                         android:textColor="@color/c6"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -248,7 +243,7 @@
         android:layout_above="@+id/tv_jixuadd"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/login_code_button"
         android:gravity="center"
         android:text="提交商品"

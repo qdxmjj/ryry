@@ -37,7 +37,6 @@ public class ItemNullProvider extends ItemViewProvider<ItemNullBean, ItemNullPro
     private String TAG = ItemNullProvider.class.getSimpleName();
 
 
-
     @NonNull
     @Override
     protected ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
@@ -47,7 +46,7 @@ public class ItemNullProvider extends ItemViewProvider<ItemNullBean, ItemNullPro
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final ItemNullBean itemNullBean) {
-//        holder.img_null.setImageResource();
+//        holder.img_null.setImageResource(R.drawable.ic_dakongbai);
 
     }
 
