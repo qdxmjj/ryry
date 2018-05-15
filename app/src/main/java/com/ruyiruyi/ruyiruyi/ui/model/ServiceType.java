@@ -1,6 +1,8 @@
 package com.ruyiruyi.ruyiruyi.ui.model;
 
-public class ServiceType {
+import java.io.Serializable;
+
+public class ServiceType implements Serializable{
     public String serviceName;
     public String serviceColor;
 

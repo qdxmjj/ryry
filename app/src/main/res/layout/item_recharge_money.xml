@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/money_layout"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/money_bg" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+       android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/recharge_money_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="充 500 元"
+            android:textColor="@color/c6"
+            android:textSize="17sp"/>
+        <TextView
+            android:id="@+id/give_money_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="送 100 元"
+            android:textColor="@color/c6"
+            android:layout_marginTop="5dp"/>
+    </LinearLayout>
+
+
+</FrameLayout>

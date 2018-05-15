@@ -96,6 +96,7 @@ public class TireCountActivity extends BaseActivity {
         params.addBodyParameter("reqJson",jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
+        Log.e(TAG, "initDataFromService:------- " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

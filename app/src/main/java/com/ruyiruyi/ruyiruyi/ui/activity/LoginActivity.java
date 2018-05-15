@@ -237,7 +237,7 @@ public class LoginActivity extends BaseActivity {
         try {
             user.setId(data.getInt("id"));
             user.setNick(data.getString("nick"));
-            user.setPassword(data.getString("password"));
+           // user.setPassword(data.getString("password"));
             user.setPhone(data.getString("phone"));
             user.setAge(data.getString("age"));
             long birthday = data.getLong("birthday");

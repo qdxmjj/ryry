@@ -80,6 +80,16 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("完善个人资料");
         actionBar.setShowBackView(false);
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+            @Override
+            public void onItemClick(int var1) {
+                switch ((var1)){
+                    case -1:
+                        onBackPressed();
+                        break;
+                }
+            }
+        });
         date = new StringBuffer();
 
         Intent intent = getIntent();
@@ -197,15 +207,15 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
             Toast.makeText(RegisterActivity.this, "用户名不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (age.isEmpty()){
+       /* if (age.isEmpty()){
             Toast.makeText(RegisterActivity.this, "年龄不能为空", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
 
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("phone",phone);
-            jsonObject.put("age",age);
+            jsonObject.put("age",0);
             jsonObject.put("birthday",birthday);
             jsonObject.put("email",email);
             jsonObject.put("gender",sex);

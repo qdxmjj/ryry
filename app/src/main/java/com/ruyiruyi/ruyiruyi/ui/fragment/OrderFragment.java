@@ -1,5 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.PaymentActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.PendingOrderActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Order;
 import com.ruyiruyi.ruyiruyi.ui.multiType.OrderViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.FullyLinearLayoutManager;
@@ -33,7 +36,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class OrderFragment extends Fragment {
+public class OrderFragment extends Fragment implements OrderViewBinder.OnOrderItemClick{
     private static final String TAG = OrderFragment.class.getSimpleName();
     public static String ORDER_TYPE;  //ALL DZF DFH DFW YWC
     private String orderType;
@@ -76,7 +79,7 @@ public class OrderFragment extends Fragment {
             }
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getGeneralOrderByState");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserGeneralOrderByState");
         params.addBodyParameter("reqJson",jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
@@ -152,6 +155,20 @@ public class OrderFragment extends Fragment {
     }
 
     private void register() {
-        adapter.register(Order.class,new OrderViewBinder(getContext()));
+        OrderViewBinder orderViewBinder = new OrderViewBinder(getContext());
+        orderViewBinder.setListener(this);
+        adapter.register(Order.class, orderViewBinder);
+    }
+
+    @Override
+    public void onOrderItemClickListener(String orderState,String orderType, String orderNo) {
+
+        if ((orderType.equals("1")&&orderState.equals("8")) || (orderType.equals("0")&&orderState.equals("5"))){ //待支付
+            Intent intent = new Intent(getContext(), PendingOrderActivity.class);
+            intent.putExtra(PaymentActivity.ORDERNO,orderNo);
+            intent.putExtra(PaymentActivity.ORDER_TYPE,Integer.parseInt(orderType));
+            intent.putExtra(PaymentActivity.ORDER_FROM,1);
+            startActivity(intent);
+        }
     }
 }

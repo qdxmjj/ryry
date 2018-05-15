@@ -22,7 +22,7 @@ public class DbConfig {
                 .setDbName("ruyiruyi.db")
                 .setAllowTransaction(true)
                 .setDbDir(Environment.getExternalStorageDirectory())
-                .setDbVersion(8);
+                .setDbVersion(10);
         return daoConfig;
     }
     public DbManager getDbManager(){

@@ -29,6 +29,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CarFigureActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CityChooseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.LoginActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireChangeActivity;
@@ -44,6 +45,7 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.ThreeEvent;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ThreeEventViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.XRequestParams;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
 
 import org.json.JSONArray;
@@ -153,18 +155,19 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId",id);
+           jsonObject.put("userId",id);
         } catch (JSONException e) {
         }
         lunbos.clear();
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAndroidHomeDate");
         params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        Log.e(TAG, "initdataFromService: -----------------" +params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
-
-
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: " + result);
+                Log.e(TAG, "onSuccess: --------------" + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
@@ -183,13 +186,25 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
                         }
 
                         //获取车辆数据
-                        JSONObject carObject = data.getJSONObject("androidHomeData_cars");
-                        carImage = carObject.getString("car_brand_url");
-                        carName = carObject.getString("car_verhicle");
-                        fontSize = carObject.getString("font");
-                        rearSize = carObject.getString("rear");
-                        tireSame = carObject.getBoolean("same");
-                        carId = carObject.getInt("car_id");
+                        try {
+                            JSONObject carObject = data.getJSONObject("androidHomeData_cars");
+                            if (carObject !=null){
+                                carImage = carObject.getString("car_brand_url");
+                                carName = carObject.getString("car_verhicle");
+                                fontSize = carObject.getString("font");
+                                rearSize = carObject.getString("rear");
+                                tireSame = carObject.getBoolean("same");
+                                carId = carObject.getInt("car_id");
+                                int uesrCarId = carObject.getInt("user_car_id");
+                                User user = new DbConfig().getUser();
+                                user.setCarId(uesrCarId);
+                                saveUserIntoDb(user);
+                            }
+                        }catch (JSONException e){
+
+                        }
+
+
 
                         saveLunboInToDb();
 
@@ -218,6 +233,16 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
                 Log.e(TAG, "onFinished:");
             }
         });
+    }
+
+    private void saveUserIntoDb(User user) {
+        DbConfig dbConfig = new DbConfig();
+        DbManager db = dbConfig.getDbManager();
+        try {
+            db.saveOrUpdate(user);
+        } catch (DbException e) {
+
+        }
     }
 
     private void saveLunboInToDb() {
@@ -382,7 +407,7 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
     @Override
     public void onEventClickListener(String tag) {
         if (tag.equals("cxwy")){
-
+            startActivity(new Intent(getContext(), CxwyActivity.class));
         }else if (tag.equals("qcby")){//3  //门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
             Intent intent = new Intent(getContext(), ShopChooseActivity.class);
             intent.putExtra(MerchantFragment.SHOP_TYPE,2);

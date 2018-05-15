@@ -15,9 +15,15 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.Location;
+import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.cell.ShopChooseCell;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
+import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
+import com.ruyiruyi.ruyiruyi.ui.multiType.Shop;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -26,6 +32,13 @@ import com.ruyiruyi.rylibrary.cell.flowlayout.FlowLayout;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagAdapter;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagFlowLayout;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +61,6 @@ public class TireChangeActivity extends BaseActivity {
     private LinearLayout freeChangeLayout;
     public int currentFontCount = 0;
     public int currentRearCount = 0;
-    public int hasFontCount = 0;
-    public int hasRearCount = 0;
 
     private AmountView fontAmountView;
     private AmountView rearAmountView;
@@ -62,6 +73,12 @@ public class TireChangeActivity extends BaseActivity {
     private ImageView reasonTwoImage;
     private ShopChooseCell shopChooseView;
     private LayoutInflater mInflater;
+    private int rearAvaliableAmount;
+    private int fontAvaliableAmount;
+    private int fontRearFlag;       //fontRearFlag：0：前后轮一致   非0:前后轮不一致
+    private int fontMaxCount = 0;
+    private int rearMaxCount = 0;
+    private Shop shop;
 
 
     @Override
@@ -93,9 +110,156 @@ public class TireChangeActivity extends BaseActivity {
 
 
         initData();
-
+        initDataFromService();
+        initShop();
         initView();
         initReasonView();
+      //  fontRearFlag = 0;
+      //  fontAvaliableAmount = 3;
+      //  rearAvaliableAmount = 0;
+
+    }
+
+    private void initDataFromService() {
+        User user = new DbConfig().getUser();
+        int carId = user.getCarId();
+        int userId = user.getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId",userId);
+            jsonObject.put("userCarId",carId);
+        } catch (JSONException e) {
+
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserUnusedShoeNum");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        Log.e(TAG, "initDataFromService: -----------------------" +jsonObject.toString() );
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                JSONObject jsonObject1 = null;
+                Log.e(TAG, "onSuccess:----------------------+- " + result );
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        fontRearFlag = data.getInt("fontRearFlag");
+                        fontAvaliableAmount = data.getInt("fontAvaliableAmount");
+                        rearAvaliableAmount =  data.getInt("rearAvaliableAmount");
+                    }
+                    initAmountView();
+
+
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void initShop() {
+        Location location = new DbConfig().getLocation();
+        String city = location.getCity();
+        Double jingdu = location.getJingdu();
+        Double weidu = location.getWeidu();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("page",1);
+            jsonObject.put("rows",1);
+            jsonObject.put("cityName",city);
+            jsonObject.put("storeName","");
+            jsonObject.put("storeType","");//门店类型  1:4S店   2:快修店  3:维修厂  4:美容店
+
+            jsonObject.put("rankType",1);//排序方式  0:默认排序  1：附近优先
+           //门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
+            jsonObject.put("serviceType",5); //针对性门店
+
+            jsonObject.put("longitude",jingdu + "");
+            jsonObject.put("latitude",weidu + "");
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "selectStoreByCondition");
+        Log.e(TAG, "initDataFromService:---------- " + jsonObject.toString() );
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    Log.e(TAG, "onSuccess: " + result);
+                    JSONObject jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        JSONArray storeQuaryResVos = data.getJSONArray("storeQuaryResVos");
+
+                        JSONObject storeObjecct = storeQuaryResVos.getJSONObject(0);
+                        String distance = storeObjecct.getString("distance");
+                        String storeAddress = storeObjecct.getString("storeAddress");
+                        String storeId = storeObjecct.getString("storeId");
+                        int storeIdInt = Integer.parseInt(storeId);
+                        String storeImg = storeObjecct.getString("storeImg");
+                        String storeName = storeObjecct.getString("storeName");
+                        String storeType = storeObjecct.getString("storeType");
+                        String storeTypeColor = storeObjecct.getString("storeTypeColor");
+                        JSONArray serviceArray = storeObjecct.getJSONArray("storeServcieList");
+                        List<ServiceType> serviceTypeList = new ArrayList<ServiceType>();
+                        for (int j = 0; j < serviceArray.length(); j++) {
+                            JSONObject serviceObject = serviceArray.getJSONObject(j);
+                            JSONObject service = serviceObject.getJSONObject("service");
+                            String color = service.getString("color");
+                            String name = service.getString("name");
+                            serviceTypeList.add(new ServiceType(name,color));
+                        }
+                        shop = new Shop(storeIdInt,storeType,storeTypeColor,storeName,storeImg,storeAddress,distance);
+                        shop.setServiceTypeList(serviceTypeList);
+                        shopChooseView.setValue(shop.getStoreName(),shop.getStoreImage(), shop.getStoreAddress(),shop.getStoreDistence(),shop.getServiceTypeList(),mInflater);
+
+                    }
+
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initReasonView() {
@@ -125,15 +289,13 @@ public class TireChangeActivity extends BaseActivity {
         reasonOneImage = (ImageView) findViewById(R.id.reason_one_image);
         reasonTwoImage = (ImageView) findViewById(R.id.reason_two_image);
         shopChooseView = (ShopChooseCell) findViewById(R.id.shop_choose_cell);
-        shopChooseView.setValue("青岛汽车总店","http://180.76.243.205:8111/images/flgure/970FB91D-D680-437D-606D-0AFAEC4E5F10.jpg",
-                "青岛市城阳区天安数码城","15km",typeList,mInflater);
 
         RxViewAction.clickNoDouble(shopChooseView)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), ShopChooseActivity.class);
-                        intent.putExtra(MerchantFragment.SHOP_TYPE,1);
+                        intent.putExtra(MerchantFragment.SHOP_TYPE,5);
                         startActivityForResult(intent,CHOOSE_SHOP);
                     }
                 });
@@ -141,63 +303,46 @@ public class TireChangeActivity extends BaseActivity {
 
         freeChangeLayout.setVisibility(currentChangeType == 0? View.GONE:View.VISIBLE);
 
-        if (currentChangeType == 0){//首次更换  当轮胎数量大于2时最大数量为2  小于2时为最小数量
+      /*  if (currentChangeType == 0){//首次更换  当轮胎数量大于2时最大数量为2  小于2时为最小数量
 
-            if (hasFontCount >2){
+            if (fontAvaliableAmount >2){
                 fontAmountView.setGoods_storage(2);
             }else {
-                fontAmountView.setGoods_storage(hasFontCount);
+                fontAmountView.setGoods_storage(fontAvaliableAmount);
             }
+
         }else { //免费再换前后轮最多各可选择两条轮胎
             fontAmountView.setGoods_storage(2);
         }
+*/
+        /*if (currentChangeType ==0 ){//首次更换
+            if (fontRearFlag == 0){//前后轮一致
+                initAmountView();
+            }else {
+                initAmountView();
+            }
 
+        }*/
+        initAmountView();
         fontAmountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
-                if (currentChangeType == 0){//首次
-                    if (amount == hasFontCount){
-                        Toast.makeText(TireChangeActivity.this,"轮胎数量已达到购买上限", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    currentFontCount =amount;
-                }else if(currentChangeType == 1){//mianfei
-                    if (amount == 2){
-                        Toast.makeText(TireChangeActivity.this,"轮胎数量已达到购买上限", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    currentFontCount =amount;
+                currentFontCount = amount;
+                initAmountView();
+                if (amount == fontMaxCount){
+                    Toast.makeText(TireChangeActivity.this, "轮胎数量达到购买上限", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
-        if (currentChangeType == 0){//首次更换  当轮胎数量大于2时最大数量为2  小于2时为最小数量
-            if (hasRearCount >2){
-                rearAmountView.setGoods_storage(2);
-            }else {
-                rearAmountView.setGoods_storage(hasRearCount);
-            }
-        }else { //免费再换前后轮最多各可选择两条轮胎
-            rearAmountView.setGoods_storage(2);
-        }
-
        // rearAmountView.setGoods_storage(2);
         rearAmountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
-                if (currentChangeType == 0){//首次
-                    if (amount == hasRearCount){
-                        Toast.makeText(TireChangeActivity.this,"轮胎数量已达到购买上限", Toast.LENGTH_SHORT).show();
-                    }
-                    currentRearCount =amount;
-                }else if(currentChangeType == 1){//mianfei
-                    if (amount == 2){
-                        Toast.makeText(TireChangeActivity.this,"轮胎数量已达到购买上限", Toast.LENGTH_SHORT).show();
-                    }
-                    currentRearCount =amount;
+                if (amount == rearMaxCount){
+                    Toast.makeText(TireChangeActivity.this, "轮胎数量达到购买上限", Toast.LENGTH_SHORT).show();
                 }
-
+                currentRearCount = amount;
+                initAmountView();
 
             }
         });
@@ -289,11 +434,57 @@ public class TireChangeActivity extends BaseActivity {
                 });
     }
 
+    private void initAmountView() {
+        if (currentChangeType ==0 ){//首次更换
+            if (fontRearFlag == 0){//前后轮一致
+                if (fontAvaliableAmount >= 4){ //当轮胎数大于4时 最大选择两个
+                    fontAmountView.setGoods_storage(2);
+                    rearAmountView.setGoods_storage(2);
+                    fontMaxCount = 2;
+                    rearMaxCount = 2;
+                }else { //当轮胎数小于4时  前后轮加起来不能超过轮胎数   没达到轮胎数时  设置最大选择两个
+                    fontMaxCount = 2;
+                    rearMaxCount = 2;
+                    fontAmountView.setGoods_storage(2);
+                    rearAmountView.setGoods_storage(2);
+                    if (currentFontCount + currentRearCount == fontAvaliableAmount){        //达到最大轮胎数时 设置为最大数
+                        fontAmountView.setGoods_storage(currentFontCount);
+                        rearAmountView.setGoods_storage(currentRearCount);
+                        fontMaxCount = currentFontCount;
+                        rearMaxCount = currentRearCount;
+                    }
+                }
+            }else {     //前后轮不一致
+                if (fontAvaliableAmount > 2){
+                    fontMaxCount = 2;
+                    fontAmountView.setGoods_storage(2);
+                }else {
+                    fontMaxCount = fontAvaliableAmount;
+                    fontAmountView.setGoods_storage(fontAvaliableAmount);
+                }
+
+                if (rearAvaliableAmount > 2){
+                    rearMaxCount = 2;
+                    rearAmountView.setGoods_storage(2);
+                }else {
+                    rearMaxCount = rearAvaliableAmount;
+                    rearAmountView.setGoods_storage(rearAvaliableAmount);
+                }
+
+            }
+
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == CHOOSE_SHOP){
-            int shopid = data.getIntExtra("SHOPID", 0);
-            Log.e(TAG, "onActivityResult: ---+----" + shopid);
+            Bundle bundle = data.getExtras();
+            shop = ((Shop) bundle.getSerializable("shop"));
+            shopChooseView.setValue(shop.getStoreName(),shop.getStoreImage(), shop.getStoreAddress(),shop.getStoreDistence(),shop.getServiceTypeList(),mInflater);
+
+            Log.e(TAG, "onActivityResult: " + shop.getStoreId());
+            Log.e(TAG, "onActivityResult: " + shop.getStoreName());
         }
     }
 }

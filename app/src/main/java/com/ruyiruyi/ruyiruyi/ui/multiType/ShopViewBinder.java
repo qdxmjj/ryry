@@ -68,7 +68,7 @@ public class ShopViewBinder extends ItemViewProvider<Shop, ShopViewBinder.ViewHo
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        listener.onShopItemClickListener(shop.getStoreId());
+                        listener.onShopItemClickListener(shop.getStoreId(),shop);
                     }
                 });
 
@@ -115,7 +115,7 @@ public class ShopViewBinder extends ItemViewProvider<Shop, ShopViewBinder.ViewHo
     }
 
     public interface OnShopItemClick{
-        void onShopItemClickListener(int storeId);
+        void onShopItemClickListener(int storeId,Shop shop);
     }
 
 }

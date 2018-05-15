@@ -11,7 +11,7 @@
         android:orientation="horizontal"
         android:padding="10dp">
         <ImageView
-            android:id="@+id/goods_images"
+            android:id="@+id/goods_images_ver"
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:src="@drawable/ic_launcher"/>
@@ -22,13 +22,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/goods_name_text"
+                android:id="@+id/goods_name_text_ver"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
+                android:layout_marginTop="10dp"
                 android:text="此处是商品名此处是商品名此处是商品名此处是商品名此处是商品名"/>
             <TextView
-                android:id="@+id/goods_price_text"
+                android:id="@+id/goods_price_text_ver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="￥1000"
@@ -50,7 +51,7 @@
             android:layout_marginLeft="20dp"/>
 
         <com.ruyiruyi.rylibrary.cell.AmountView
-            android:id="@+id/amount_view"
+            android:id="@+id/amount_view_ver"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_gravity="right"

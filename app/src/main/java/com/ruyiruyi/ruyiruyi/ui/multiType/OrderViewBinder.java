@@ -7,15 +7,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
 import me.drakeet.multitype.ItemViewProvider;
+import rx.functions.Action1;
 
 public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.ViewHolder> {
     public Context context;
+    public OnOrderItemClick listener;
+
+    public void setListener(OnOrderItemClick listener) {
+        this.listener = listener;
+    }
 
     public OrderViewBinder(Context context) {
         this.context = context;
@@ -29,7 +37,7 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull Order order) {
+    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Order order) {
         Glide.with(context).load(order.getOrderImage()).into(holder.orderImageView);
         holder.orderTitleText.setText(order.getOrderName());
         holder.orderPriceText.setText("￥"+order.getOrderPrice());
@@ -67,6 +75,14 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
                 holder.orderTypeText.setText("待支付");
             }
         }
+
+        RxViewAction.clickNoDouble(holder.orderLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        listener.onOrderItemClickListener(order.getOrderState(),order.getOrderType(),order.getOrderNo());
+                    }
+                });
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -76,6 +92,7 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
         private final TextView orderNoText;
         private final TextView orderPriceText;
         private final TextView orderTypeText;
+        private final LinearLayout orderLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -84,7 +101,12 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
             orderNoText = ((TextView) itemView.findViewById(R.id.order_no_text));
             orderPriceText = ((TextView) itemView.findViewById(R.id.order_price_text));
             orderTypeText = ((TextView) itemView.findViewById(R.id.order_type_button));
+            orderLayout = ((LinearLayout) itemView.findViewById(R.id.order_layout));
 
         }
+    }
+
+    public interface OnOrderItemClick{
+        void onOrderItemClickListener(String state,String orderType,String orderNo);
     }
 }

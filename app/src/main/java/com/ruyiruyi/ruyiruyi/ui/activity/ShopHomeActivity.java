@@ -127,8 +127,6 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
-
-
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: " + result);
@@ -283,6 +281,7 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), ShopGoodActivity.class);
                         intent.putExtra("STOREID",storeid);
+                        intent.putExtra("STORENAME",storeName);
                         startActivity(intent);
                     }
                 });
@@ -328,6 +327,9 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
 
     @Override
     public void onAllEvaluate() {
-        startActivity(new Intent(this,ShopEvaluateActivity.class));
+        Intent intent = new Intent(this, ShopEvaluateActivity.class);
+        intent.putExtra("STOREID",storeid);
+        intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE,0);
+        startActivity(intent);
     }
 }

@@ -20,6 +20,7 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.cell.CarInfoCell;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
 import com.ruyiruyi.ruyiruyi.ui.model.Car;
@@ -32,7 +33,9 @@ import com.ruyiruyi.rylibrary.utils.AndroidUtilities;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.DbManager;
 import org.xutils.common.Callback;
+import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -116,6 +119,11 @@ public class CarManagerActivity extends BaseActivity {
                             String number = data.getJSONObject(i).getString("plat_number");
                             String icon = data.getJSONObject(i).getString("car_brand");
                             carList.add(new Car(car_id,uesrCarId,name,number,icon,moren));
+                            if (moren ==1){
+                                User user = new DbConfig().getUser();
+                                user.setCarId(uesrCarId);
+                                saveUserIntoDb(user);
+                            }
                         }
                         Log.e(TAG, "onSuccess: " + carList.size());
                     }
@@ -273,7 +281,10 @@ public class CarManagerActivity extends BaseActivity {
     }
 
     private void setMorenCar(int userCarId) {
-        int userId = new DbConfig().getId();
+        User user = new DbConfig().getUser();
+        int userId = user.getId();
+        user.setCarId(userCarId);
+        saveUserIntoDb(user);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId",userId);
@@ -317,6 +328,16 @@ public class CarManagerActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void saveUserIntoDb(User user) {
+        DbConfig dbConfig = new DbConfig();
+        DbManager db = dbConfig.getDbManager();
+        try {
+            db.saveOrUpdate(user);
+        } catch (DbException e) {
+
+        }
     }
 
     /**

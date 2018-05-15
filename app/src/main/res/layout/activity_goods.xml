@@ -13,11 +13,16 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/goods_listview"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipre_refresh_goods_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="40dp" />
+            android:layout_marginBottom="40dp" >
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/goods_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_gravity="bottom"
@@ -27,6 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:layout_gravity="right">
                 <TextView
                     android:layout_width="wrap_content"
@@ -59,6 +65,7 @@
             </LinearLayout>
 
         </FrameLayout>
+
     </FrameLayout>
 
 </LinearLayout>

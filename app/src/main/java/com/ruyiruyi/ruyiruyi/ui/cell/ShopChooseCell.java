@@ -1,6 +1,8 @@
 package com.ruyiruyi.ruyiruyi.ui.cell;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
 import com.ruyiruyi.rylibrary.cell.flowlayout.FlowLayout;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagAdapter;
@@ -109,27 +112,27 @@ public class ShopChooseCell extends LinearLayout{
         locationLayout.addView(distenceView,LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT,LayoutHelper.WRAP_CONTENT,Gravity.CENTER_VERTICAL|Gravity.RIGHT));
     }
 
-    public void setValue(String shopNameStr, String shopImageStr, String shopAddress, String shopDistence, List<StoreType> typeList, final LayoutInflater mInflater){
+    public void setValue(String shopNameStr, String shopImageStr, String shopAddress, String shopDistence, List<ServiceType> typeList, final LayoutInflater mInflater){
         shopNameView.setText(shopNameStr);
         Glide.with(context).load(shopImageStr).into(shopImage);
         addressView.setText(shopAddress);
-        distenceView.setText(shopDistence);
+        if (shopDistence == null || shopDistence.equals("")){
+            distenceView.setText("");
+        }else {
+            distenceView.setText(shopDistence + "km");
+        }
 
-        tagFlowLayout.setAdapter(new TagAdapter<StoreType>(typeList) {
+
+        tagFlowLayout.setAdapter(new TagAdapter<ServiceType>(typeList) {
             @Override
-            public View getView(FlowLayout parent, int position, StoreType storeType) {
+            public View getView(FlowLayout parent, int position, ServiceType serviceType) {
                 TextView tv = (TextView) mInflater.inflate(R.layout.item_type,
                         tagFlowLayout, false);
-                tv.setText(storeType.getStoreName());
-                if (storeType.getType() == 1){
-                    tv.setBackgroundResource(R.drawable.tag_bg_hong);
-                } else if (storeType.getType() == 2) {
-                    tv.setBackgroundResource(R.drawable.tag_bg_huang);
-                }else if (storeType.getType() == 3){
-                    tv.setBackgroundResource(R.drawable.tag_bg_qing);
-                }else if (storeType.getType() == 4){
-                    tv.setBackgroundResource(R.drawable.tag_bg_lv);
-                }
+                int parseColor = Color.parseColor(serviceType.getServiceColor());
+                tv.setTextColor(parseColor);
+                tv.setText(serviceType.getServiceName());
+                GradientDrawable drawable = (GradientDrawable) tv.getBackground();
+                drawable.setStroke(2,parseColor);
                 return tv;
             }
         });

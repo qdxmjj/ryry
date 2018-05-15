@@ -205,15 +205,14 @@ public class EvaluateActivity extends BaseActivity implements EvaluateImageViewB
             //点击查看大图
             ArrayList<String> picList = new ArrayList<>();
             String oneUri = uri.toString();
-                picList.add(oneUri);
-            for (int i = 0; i < list.size(); i++) {
+            picList.add(oneUri); //点击哪张 把哪张放第一个
+            for (int i = 0; i < list.size(); i++) {     //除去点击那张  其他放进去
                 if (!oneUri.equals(list.get(i).getUri().toString())){
                     picList.add(list.get(i).getUri().toString());
                 }
             };
-            String content = evaluateEditText.getText().toString();
+            String content = evaluateEditText.getText().toString();     //放评论
             ImagPagerUtil imagPagerUtil = new ImagPagerUtil(EvaluateActivity.this, picList);
-
             imagPagerUtil.setContentText(content);
             imagPagerUtil.show();
         }
