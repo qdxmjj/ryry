@@ -106,7 +106,6 @@ public class RegisterMapActivity extends BaseActivity {
                 }
             }
         });
-
         //获取Intent传递的值
         Intent intent_g = getIntent();
         longitude_double = intent_g.getDoubleExtra("longitude_double", 1);

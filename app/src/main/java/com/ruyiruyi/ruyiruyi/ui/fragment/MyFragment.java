@@ -22,6 +22,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.UserInfoActivity;
 import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
@@ -55,7 +56,7 @@ public class MyFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_my,container,false);
+        return inflater.inflate(R.layout.fragment_my, container, false);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class MyFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         initView();
 
-        if (isLogin){
+        if (isLogin) {
             initDataFromDb();
         }
 
@@ -130,6 +131,14 @@ public class MyFragment extends Fragment {
         dfwLayout = (LinearLayout) getView().findViewById(R.id.dfw_layout);
         ywcLayout = (LinearLayout) getView().findViewById(R.id.ywc_layout);
 
+        RxViewAction.clickNoDouble(myImage).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
         RxViewAction.clickNoDouble(testLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -142,7 +151,7 @@ public class MyFragment extends Fragment {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getContext(), OrderActivity.class);
-                        intent.putExtra(OrderFragment.ORDER_TYPE,"ALL");
+                        intent.putExtra(OrderFragment.ORDER_TYPE, "ALL");
                         startActivity(intent);
                     }
                 });
@@ -151,7 +160,7 @@ public class MyFragment extends Fragment {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getContext(), OrderActivity.class);
-                        intent.putExtra(OrderFragment.ORDER_TYPE,"DZF");
+                        intent.putExtra(OrderFragment.ORDER_TYPE, "DZF");
                         startActivity(intent);
                     }
                 });
@@ -160,7 +169,7 @@ public class MyFragment extends Fragment {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getContext(), OrderActivity.class);
-                        intent.putExtra(OrderFragment.ORDER_TYPE,"DFH");
+                        intent.putExtra(OrderFragment.ORDER_TYPE, "DFH");
                         startActivity(intent);
                     }
                 });
@@ -169,7 +178,7 @@ public class MyFragment extends Fragment {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getContext(), OrderActivity.class);
-                        intent.putExtra(OrderFragment.ORDER_TYPE,"DFW");
+                        intent.putExtra(OrderFragment.ORDER_TYPE, "DFW");
                         startActivity(intent);
                     }
                 });
@@ -178,7 +187,7 @@ public class MyFragment extends Fragment {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getContext(), OrderActivity.class);
-                        intent.putExtra(OrderFragment.ORDER_TYPE,"YWC");
+                        intent.putExtra(OrderFragment.ORDER_TYPE, "YWC");
                         startActivity(intent);
                     }
                 });
@@ -186,7 +195,7 @@ public class MyFragment extends Fragment {
 
         DbConfig dbConfig = new DbConfig();
         isLogin = dbConfig.getIsLogin();
-        userInfoLayout.setVisibility(isLogin ? View.VISIBLE:View.GONE);
+        userInfoLayout.setVisibility(isLogin ? View.VISIBLE : View.GONE);
         noLoginLayout.setVisibility(isLogin ? View.GONE : View.VISIBLE);
         RxViewAction.clickNoDouble(noLoginLayout)
                 .subscribe(new Action1<Void>() {
@@ -199,7 +208,7 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (isLogin){
+                        if (isLogin) {
                             DbConfig dbConfig = new DbConfig();
                             User user = dbConfig.getUser();
                             user.setIsLogin("0");
@@ -223,7 +232,7 @@ public class MyFragment extends Fragment {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getContext(), CarManagerActivity.class);
-                        intent.putExtra(FROM_FRAGMENT,"MYFRAGMENT");
+                        intent.putExtra(FROM_FRAGMENT, "MYFRAGMENT");
                         startActivityForResult(intent, MainActivity.MYFRAGMENT_RESULT);
                     }
                 });

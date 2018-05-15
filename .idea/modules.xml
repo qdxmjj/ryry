@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/RuYiRuYi.iml" filepath="$PROJECT_DIR$/RuYiRuYi.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/merchant/merchant.iml" filepath="$PROJECT_DIR$/merchant/merchant.iml" />
       <module fileurl="file://$PROJECT_DIR$/rylibrary/rylibrary.iml" filepath="$PROJECT_DIR$/rylibrary/rylibrary.iml" />

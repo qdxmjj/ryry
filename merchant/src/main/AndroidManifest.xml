@@ -83,7 +83,9 @@
         <activity android:name=".ui.activity.ConfirmReceiveActivity" />
         <activity
             android:name=".ui.activity.MyPicDialogActivity"
-            android:theme="@style/dialogstyle"></activity>
+            android:theme="@style/dialogstyle" />
+        <activity android:name=".ui.activity.SheZhiActivity" />
+        <activity android:name=".ui.activity.ChangePwActivity"></activity>
     </application>
 
 </manifest>
