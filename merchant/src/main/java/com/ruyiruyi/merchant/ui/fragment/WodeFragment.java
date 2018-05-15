@@ -17,10 +17,13 @@ import com.bumptech.glide.RequestManager;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.User;
+import com.ruyiruyi.merchant.ui.activity.BugTestActivity;
 import com.ruyiruyi.merchant.ui.activity.LoginActivity;
 import com.ruyiruyi.merchant.ui.activity.MyGoodsActivity;
 import com.ruyiruyi.merchant.ui.activity.MyOrderActivity;
 import com.ruyiruyi.merchant.ui.activity.MyServiceActivity;
+import com.ruyiruyi.merchant.ui.activity.OrderXiangqingActivity;
+import com.ruyiruyi.merchant.ui.activity.ServiceRecordActivity;
 import com.ruyiruyi.merchant.ui.activity.StoreManageActivity;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -123,6 +126,17 @@ public class WodeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+
+        //测试用
+        TextView main_test = getView().findViewById(R.id.main_test);
+        RxViewAction.clickNoDouble(main_test).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getActivity(), BugTestActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initDataFromDbAndSetView() {
@@ -138,5 +152,4 @@ public class WodeFragment extends Fragment {
         tv_username.setText(storeName);
 
     }
-
 }

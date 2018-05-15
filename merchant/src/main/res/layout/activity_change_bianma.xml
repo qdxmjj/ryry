@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ruyiruyi.merchant.ui.activity.ChangeBianmaActivity">
+
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/bianma_acbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/save"
+        android:layout_below="@+id/bianma_acbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/fl_bianma_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/bianma_a"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:text="NO.456789456"
+                    android:textColor="@color/c6"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:id="@+id/bianma_a_change"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:gravity="center_vertical"
+                    android:onClick="changeclick"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:text="更改"
+                        android:textColor="@color/c6"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/bianma_a_change_pic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/rignt_huise_t" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_bianma_a_pic"
+                    android:layout_width="140dp"
+                    android:layout_height="90dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="35dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/bianma_a_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/xuxian_zhengfang_huise" />
+
+                    <ImageView
+                        android:id="@+id/bianma_a_pic_center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_add" />
+
+                    <ImageView
+                        android:id="@+id/bianma_a_pic_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:src="@drawable/ic_delete"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/c1" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_bianma_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/bianma_b"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:text="NO.456789456"
+                    android:textColor="@color/c6"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:id="@+id/bianma_b_change"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:gravity="center_vertical"
+                    android:onClick="changeclick"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:text="更改"
+                        android:textColor="@color/c6"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/bianma_b_change_pic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/rignt_huise_t" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_bianma_b_pic"
+                    android:layout_width="140dp"
+                    android:layout_height="90dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="35dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/bianma_b_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/xuxian_zhengfang_huise" />
+
+                    <ImageView
+                        android:id="@+id/bianma_b_pic_center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_add" />
+
+                    <ImageView
+                        android:id="@+id/bianma_b_pic_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:src="@drawable/ic_delete"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/c1" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_bianma_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/bianma_c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:text="NO.456789456"
+                    android:textColor="@color/c6"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:id="@+id/bianma_c_change"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:gravity="center_vertical"
+                    android:onClick="changeclick"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:text="更改"
+                        android:textColor="@color/c6"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/bianma_c_change_pic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/rignt_huise_t" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_bianma_c_pic"
+                    android:layout_width="140dp"
+                    android:layout_height="90dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="35dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/bianma_c_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/xuxian_zhengfang_huise" />
+
+                    <ImageView
+                        android:id="@+id/bianma_c_pic_center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_add" />
+
+                    <ImageView
+                        android:id="@+id/bianma_c_pic_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:src="@drawable/ic_delete"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/c1" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_bianma_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/bianma_d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:text="NO.456789456"
+                    android:textColor="@color/c6"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:id="@+id/bianma_d_change"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:gravity="center_vertical"
+                    android:onClick="changeclick"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:text="更改"
+                        android:textColor="@color/c6"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/bianma_d_change_pic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/rignt_huise_t" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_bianma_d_pic"
+                    android:layout_width="140dp"
+                    android:layout_height="90dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="35dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/bianma_d_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/xuxian_zhengfang_huise" />
+
+                    <ImageView
+                        android:id="@+id/bianma_d_pic_center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_add" />
+
+                    <ImageView
+                        android:id="@+id/bianma_d_pic_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:src="@drawable/ic_delete"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/c1" />
+            </FrameLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/login_code_button"
+        android:gravity="center"
+        android:text="保存"
+        android:textColor="#ffffff"
+        android:textSize="16sp" />
+</RelativeLayout>

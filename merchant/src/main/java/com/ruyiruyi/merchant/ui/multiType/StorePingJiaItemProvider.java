@@ -7,26 +7,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.bean.GoodsBean;
 import com.ruyiruyi.merchant.bean.StorePingJiaBean;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 
 import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
-import me.drakeet.multitype.ItemViewProvider;
+import java.util.ArrayList;
+import java.util.List;
 
-public class StorePingJiaItemProvider  extends ItemViewProvider<StorePingJiaBean, StorePingJiaItemProvider.ViewHolder> {
+import me.drakeet.multitype.ItemViewProvider;
+import rx.functions.Action1;
+
+public class StorePingJiaItemProvider extends ItemViewProvider<StorePingJiaBean, StorePingJiaItemProvider.ViewHolder> {
 
     private Context context;
     private RequestManager mGlideReqManager;
+
+    private OnPingjiaPicClick listener;
+
+    public void setListener(OnPingjiaPicClick listener) {
+        this.listener = listener;
+    }
 
     public StorePingJiaItemProvider(Context context) {
         this.context = context;
@@ -40,7 +49,7 @@ public class StorePingJiaItemProvider  extends ItemViewProvider<StorePingJiaBean
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull StorePingJiaBean storePingJiaBean) {
+    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final StorePingJiaBean storePingJiaBean) {
         holder.tv_user_name.setText(storePingJiaBean.getUser_name());
         holder.tv_pingjia_time.setText(storePingJiaBean.getPj_time());
         holder.tv_pingjia_txt.setText(storePingJiaBean.getPj_txt());
@@ -48,7 +57,9 @@ public class StorePingJiaItemProvider  extends ItemViewProvider<StorePingJiaBean
         //glide 设置圆形图片
         String topimgurl = storePingJiaBean.getUser_img_url();
         mGlideReqManager = Glide.with(context);
-        mGlideReqManager.load(topimgurl).transform(new GlideCircleTransform(  context  )).into(holder.img_user);
+        mGlideReqManager.load(topimgurl)
+                .transform(new GlideCircleTransform(context))
+                .into(holder.img_user);
         //设置评价图片 若后台获取null 则隐藏；
 
         ImageOptions options = new ImageOptions.Builder()
@@ -56,20 +67,73 @@ public class StorePingJiaItemProvider  extends ItemViewProvider<StorePingJiaBean
                 .setSquare(true)// setSquare和build为必须设置
                 .build();
         if (storePingJiaBean.getPingjia_pica_url() != null) {
-            x.image().bind(holder.img_pingjia_a, storePingJiaBean.getPingjia_pica_url(),options);
+            x.image().bind(holder.img_pingjia_a, storePingJiaBean.getPingjia_pica_url(), options);
         } else {
             holder.img_pingjia_a.setVisibility(View.GONE);
         }
         if (storePingJiaBean.getPingjia_picb_url() != null) {
-            x.image().bind(holder.img_pingjia_b, storePingJiaBean.getPingjia_picb_url(),options);
+            x.image().bind(holder.img_pingjia_b, storePingJiaBean.getPingjia_picb_url(), options);
         } else {
             holder.img_pingjia_b.setVisibility(View.GONE);
         }
         if (storePingJiaBean.getPingjia_picc_url() != null) {
-            x.image().bind(holder.img_pingjia_c, storePingJiaBean.getPingjia_picc_url(),options);
+            x.image().bind(holder.img_pingjia_c, storePingJiaBean.getPingjia_picc_url(), options);
         } else {
             holder.img_pingjia_c.setVisibility(View.GONE);
         }
+        if (storePingJiaBean.getPingjia_picd_url() != null) {
+            x.image().bind(holder.img_pingjia_d, storePingJiaBean.getPingjia_picd_url(), options);
+        } else {
+            holder.img_pingjia_d.setVisibility(View.GONE);
+        }
+        if (storePingJiaBean.getPingjia_pice_url() != null) {
+            x.image().bind(holder.img_pingjia_e, storePingJiaBean.getPingjia_pice_url(), options);
+        } else {
+            holder.img_pingjia_e.setVisibility(View.GONE);
+        }
+
+
+        //绑定图片查看监听
+        RxViewAction.clickNoDouble(holder.img_pingjia_a).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                String pingjia_pica_url = storePingJiaBean.getPingjia_pica_url();
+                int pj_id = storePingJiaBean.getPingjia_id();
+                listener.onPingjiaPicClickListener(pingjia_pica_url, pj_id);
+            }
+        });
+        RxViewAction.clickNoDouble(holder.img_pingjia_b).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                String pingjia_picb_url = storePingJiaBean.getPingjia_picb_url();
+                int pj_id = storePingJiaBean.getPingjia_id();
+                listener.onPingjiaPicClickListener(pingjia_picb_url, pj_id);
+            }
+        });
+        RxViewAction.clickNoDouble(holder.img_pingjia_c).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                String pingjia_picc_url = storePingJiaBean.getPingjia_picc_url();
+                int pj_id = storePingJiaBean.getPingjia_id();
+                listener.onPingjiaPicClickListener(pingjia_picc_url, pj_id);
+            }
+        });
+        RxViewAction.clickNoDouble(holder.img_pingjia_d).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                String pingjia_picd_url = storePingJiaBean.getPingjia_picd_url();
+                int pj_id = storePingJiaBean.getPingjia_id();
+                listener.onPingjiaPicClickListener(pingjia_picd_url, pj_id);
+            }
+        });
+        RxViewAction.clickNoDouble(holder.img_pingjia_e).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                String pingjia_pice_url = storePingJiaBean.getPingjia_pice_url();
+                int pj_id = storePingJiaBean.getPingjia_id();
+                listener.onPingjiaPicClickListener(pingjia_pice_url, pj_id);
+            }
+        });
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -81,6 +145,8 @@ public class StorePingJiaItemProvider  extends ItemViewProvider<StorePingJiaBean
         private final ImageView img_pingjia_a;
         private final ImageView img_pingjia_b;
         private final ImageView img_pingjia_c;
+        private final ImageView img_pingjia_d;
+        private final ImageView img_pingjia_e;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -91,6 +157,12 @@ public class StorePingJiaItemProvider  extends ItemViewProvider<StorePingJiaBean
             img_pingjia_a = ((ImageView) itemView.findViewById(R.id.img_pingjia_a));
             img_pingjia_b = ((ImageView) itemView.findViewById(R.id.img_pingjia_b));
             img_pingjia_c = ((ImageView) itemView.findViewById(R.id.img_pingjia_c));
+            img_pingjia_d = ((ImageView) itemView.findViewById(R.id.img_pingjia_d));
+            img_pingjia_e = ((ImageView) itemView.findViewById(R.id.img_pingjia_e));
         }
+    }
+
+    public interface OnPingjiaPicClick {
+        void onPingjiaPicClickListener(String url, int pjId);
     }
 }

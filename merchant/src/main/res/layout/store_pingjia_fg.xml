@@ -6,9 +6,14 @@
     android:orientation="vertical"
     tools:context="com.ruyiruyi.merchant.ui.activity.StartAppActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/store_pingjia_rlv"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/pingjia_swipelayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/store_pingjia_rlv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

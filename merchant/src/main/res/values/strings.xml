@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Merchant</string>
+    <string name="input_num_point">123456789.0</string>
 </resources>

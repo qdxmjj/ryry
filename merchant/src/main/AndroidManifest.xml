@@ -43,6 +43,9 @@
         <activity android:name=".ui.activity.BaseActivityb" />
         <activity android:name=".ui.activity.StoreManageActivity" />
         <activity android:name=".ui.activity.MyOrderActivity" />
+        <activity
+            android:name=".ui.activity.GoodsInfoReeditActivity"
+            android:launchMode="singleTask" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -66,9 +69,21 @@
         <activity android:name=".ui.activity.MyGoodsActivity" />
         <activity
             android:name=".ui.activity.GoodsInfoActivity"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity android:name=".ui.activity.StoreManagementActivity" />
-        <activity android:name=".ui.activity.MyServiceActivity"></activity>
+        <activity android:name=".ui.activity.MyServiceActivity" />
+        <activity android:name=".ui.activity.ServiceRecordActivity" />
+        <activity android:name=".ui.activity.OrderXiangqingActivity" />
+        <activity android:name=".ui.activity.BugTestActivity" />
+        <activity android:name=".ui.activity.OpenOrderFreeChangeActivity" />
+        <activity android:name=".ui.activity.OpenOrderXiuBuActivity" />
+        <activity android:name=".ui.activity.OpenOrderFirstChangeActivity" />
+        <activity android:name=".ui.activity.PhotoSampleActivity" />
+        <activity android:name=".ui.activity.ChangeBianmaActivity" />
+        <activity android:name=".ui.activity.ConfirmReceiveActivity" />
+        <activity
+            android:name=".ui.activity.MyPicDialogActivity"
+            android:theme="@style/dialogstyle"></activity>
     </application>
 
 </manifest>

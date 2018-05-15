@@ -15,12 +15,15 @@ android {
     defaultConfig {
         applicationId "com.ruyiruyi.merchant"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }
-    sourceSets{
-        main{
+    task clean(type: Delete) {
+        delete rootProject.buildDir
+    }
+    sourceSets {
+        main {
             jniLibs.srcDir 'libs'
             jni.srcDirs = []
         }
@@ -33,6 +36,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
     }
 }
 
@@ -48,6 +54,7 @@ dependencies {
     compile system_dependencies.recyclerview_v7
     compile system_dependencies.design
     compile system_dependencies.xutils
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile project(':rylibrary')
     compile files('libs/BaiduLBS_Android.jar')
 }

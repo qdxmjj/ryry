@@ -2,6 +2,7 @@ package com.ruyiruyi.merchant.ui.activity;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.ruyiruyi.merchant.ui.fragment.MyServiceFragment;
 import com.ruyiruyi.merchant.ui.multiType.ServiceItemProvider;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
+import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.json.JSONArray;
@@ -36,7 +38,7 @@ import java.util.Set;
 
 import rx.functions.Action1;
 
-public class MyServiceActivity extends AppCompatActivity implements MyServiceFragment.StartFragmentPasstoActivity {
+public class MyServiceActivity extends FragmentActivity implements MyServiceFragment.StartFragmentPasstoActivity {
     private static final String TAG = MyServiceActivity.class.getSimpleName();
     private ActionBar mAcBar;
     private TabLayout mTab;
@@ -106,6 +108,7 @@ public class MyServiceActivity extends AppCompatActivity implements MyServiceFra
                             String msg = object1.getString("msg");
                             int status = object1.getInt("status");
                             Toast.makeText(MyServiceActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            finish();
                         } catch (JSONException e) {
                         }
                     }
@@ -170,7 +173,7 @@ public class MyServiceActivity extends AppCompatActivity implements MyServiceFra
         title_list = new ArrayList();
         title_list.add("汽车保养");
         title_list.add("美容清洗");
-        title_list.add("改装");
+        title_list.add("安装");
         title_list.add("轮胎服务");
 
     }
@@ -259,7 +262,7 @@ public class MyServiceActivity extends AppCompatActivity implements MyServiceFra
             boolean isadd = true;
             for (int i = 0; i < sizea; i++) {
                 if (selectServicesList.get(i).equals(id + "")) {//如果该id已存在 则移除
-                    isadd =false;
+                    isadd = false;
                  /*   Log.e(TAG, "onServiceItemClickToActivityListener000: ++++++++" );
                     selectServicesList.remove(i);
                     return;*/
@@ -267,10 +270,10 @@ public class MyServiceActivity extends AppCompatActivity implements MyServiceFra
                     selectServicesList.add(id + "");
                 }*/
             }
-            if (isadd){//添加
+            if (isadd) {//添加
                 selectServicesList.add(id + "");
-            }else {
-                selectServicesList.remove(id+"");
+            } else {
+                selectServicesList.remove(id + "");
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.CountDownTimer;
@@ -21,6 +22,7 @@ import com.ruyiruyi.merchant.db.model.Province;
 import com.ruyiruyi.merchant.db.model.ServiceType;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
+import com.ruyiruyi.rylibrary.base.BaseActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +36,7 @@ import org.xutils.x;
 import java.util.Date;
 import java.util.List;
 
-public class StartAppActivity extends AppCompatActivity {
+public class StartAppActivity extends BaseActivity {
     private final String TAG = StartAppActivity.class.getSimpleName();
     TimeCount mTimeCount;
     private int isLogin = 0;  //0 未登录  1 已登录

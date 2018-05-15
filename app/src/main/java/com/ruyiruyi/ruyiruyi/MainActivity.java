@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +60,7 @@ import org.xutils.x;
 
 import rx.functions.Action1;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends FragmentActivity {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();

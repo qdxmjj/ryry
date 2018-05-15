@@ -3,6 +3,7 @@ package com.ruyiruyi.merchant.ui.activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.ruyiruyi.merchant.ui.fragment.MyGoodsFragment;
 import com.ruyiruyi.merchant.ui.fragment.StorePingJiaFragment;
 import com.ruyiruyi.merchant.ui.fragment.StoreXiangQingFragment;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
+import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class StoreManageActivity extends AppCompatActivity {
+public class StoreManageActivity extends FragmentActivity {
     private ActionBar mActionBar;
     private TabLayout mTab;
     private ViewPager mVPager;

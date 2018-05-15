@@ -1,31 +1,18 @@
 package com.ruyiruyi.merchant.ui.multiType;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.bean.GoodsBean;
 import com.ruyiruyi.merchant.bean.ServicesBean;
-import com.ruyiruyi.merchant.db.DbConfig;
-import com.ruyiruyi.merchant.ui.activity.MyServiceActivity;
-import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;

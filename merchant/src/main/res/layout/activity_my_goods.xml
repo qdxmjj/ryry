@@ -46,43 +46,49 @@
                 android:textColor="@color/c6"
                 android:textSize="16sp" />
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/theme_primary"
-                android:orientation="horizontal">
+                android:background="@color/theme_primary">
 
-                <TextView
-                    android:id="@+id/tv_type"
+                <LinearLayout
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center"
-                    android:text="分类"
-                    android:textColor="#ffffff"
-                    android:textSize="16sp" />
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_all_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
-                    android:gravity="center"
-                    android:text="全部分类"
-                    android:textColor="#ffffff"
-                    android:textSize="18sp" />
+                    <TextView
+                        android:id="@+id/tv_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center"
+                        android:text="分类"
+                        android:textColor="#ffffff"
+                        android:textSize="16sp" />
 
-                <ImageView
-                    android:id="@+id/img_bottom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
-                    android:gravity="center"
-                    android:src="@drawable/ic_downwhite" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_all_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center"
+                        android:text="全部分类"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/img_bottom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:src="@drawable/ic_downwhite" />
+                </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

@@ -121,8 +121,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     public String currentSheng = "北京市";
     public String currentShi = "北京市";
     public String currentXian = "东城区";
-    public String currentlTime = "8:00";
-    public String currentrTime = "18:00";
     public int currentShengPosition = 0;
     public int currentShiPosition = 0;
     public int currentXianPosition = 0;
@@ -133,7 +131,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private int areaId_shi = 8888;
     private List<String> lTime_list;
     private List<String> rTime_list;
-    private String shopTimes;
+    private String shopTimes = "00:00:00 至 00:00:00";
     private int currentImage = 0;//3-yyzz,0-mdpica,1-mdpicb,2-mdpicc,4-shou;
     private boolean hasPic_yyzz = false;
     private boolean hasPic_mdPic_a = false;
@@ -155,7 +153,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private LocationClient mLocationClient;
     private String cityAddress;
     private List<String> serviceTypeList = new ArrayList<String>();
-    private List<ServiceType> all_ServiceType;
     //提交参数---<
     private String persionName;
     private String persionPhone;
@@ -165,8 +162,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private String shopName;
     private String shopCategoryId;
     private String shopPhone;
-    private String shopTimeL;
-    private String shopTimeR;
+    private String shopTimeL = "00:00:00";
+    private String shopTimeR = "00:00:00";
     private String positionId_xian;
     private String cityId;
     private String shopLocation;
@@ -786,7 +783,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     @Override
                     public void onItemSelected(int selectedIndex, String item) {
                         currentlTimePosition = whv_lTime.getSelectedPosition();
-                        currentlTime = whv_lTime.getSelectedItem();
                         rTime_list = getRTimeList(selectedIndex);
                         whv_rTime.setItems(rTime_list, 0);
                         shopTimeL = item;
@@ -799,7 +795,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     @Override
                     public void onItemSelected(int selectedIndex, String item) {
                         currentrTimePosition = whv_rTime.getSelectedPosition();
-                        currentrTime = whv_rTime.getSelectedItem();
                         shopTimeR = item;
                         shopTimes = shopTimeL + "  至  " + shopTimeR;
                     }
@@ -1351,7 +1346,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo);
+        dialog.setIcon(R.drawable.ic_logo_huise);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
             @Override
@@ -1370,7 +1365,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         TextView error_text = (TextView) dialogView.findViewById(R.id.save_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo);
+        dialog.setIcon(R.drawable.ic_logo_huise);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
             @Override
