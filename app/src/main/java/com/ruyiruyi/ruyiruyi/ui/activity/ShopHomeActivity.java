@@ -1,6 +1,8 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -50,7 +56,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder.OnEvaluateImageClick ,ShopStrViewBinder.OnAllEvaluateClick {
+public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder.OnEvaluateImageClick, ShopStrViewBinder.OnAllEvaluateClick {
     private static final String TAG = ShopHomeActivity.class.getSimpleName();
     private ActionBar actionBar;
     private List<Object> items = new ArrayList<>();
@@ -77,17 +83,35 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
     private String storeType;
     private String storeName;
     private String storePhone;
+    private String store_latitude;
+    private String store_longitude;
+    private String user_latitude;
+    private String user_longitude;
+    private LocationClient mLocationClient;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    initDataFromService();
+                    // initdata();
+                    //配置点击查看大图
+                    initImageLoader();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shop_home,R.id.my_action);
+        setContentView(R.layout.activity_shop_home, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("门店首页");;
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -98,35 +122,60 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
         imageList = new ArrayList<>();
         //获取位置
         Location location = new DbConfig().getLocation();
-        if (location!=null){
+        if (location != null) {
             currentCity = location.getCity();
             jingdu = location.getJingdu();
             weidu = location.getWeidu();
         }
         Intent intent = getIntent();
-        storeid = intent.getIntExtra("STOREID",0);
+        storeid = intent.getIntExtra("STOREID", 0);
         userEvaluateList = new ArrayList<>();
         initView();
-        initDataFromService();
-       // initdata();
-        //配置点击查看大图
-        initImageLoader();
+        initUserLocation();
+        //移至handler中
 
+    }
+
+    private void initUserLocation() {
+        //获取用户实时定位经纬度  user_latitude&user_longitude
+        mLocationClient = new LocationClient(this);
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true);                                //打开gps
+        option.setCoorType("bd09ll");                           //设置坐标类型为bd09ll 百度需要的坐标，也可以返回其他type类型
+        option.setPriority(LocationClientOption.NetWorkFirst);  //设置网络优先
+//        option.setScanSpan(50000);                               //定时定位，每隔5秒钟定位一次。这个就看大家的需求了
+
+        mLocationClient.setLocOption(option);
+        mLocationClient.start();//这句代码百度api上给的没有，没有这个代码下面的回调方法不会执行的
+
+        mLocationClient.registerLocationListener(new BDLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation bdLocation) {
+                //  这里可以获取经纬度，这是回调方法
+                user_latitude = bdLocation.getLatitude() + "";
+                user_longitude = bdLocation.getLongitude() + "";
+                Message message = new Message();
+                message.what = 1;
+                mHandler.sendMessage(message);
+            }
+        });
     }
 
     private void initDataFromService() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("storeId",storeid);
-            jsonObject.put("longitude",jingdu);
-            jsonObject.put("latitude",weidu);
+            jsonObject.put("storeId", storeid);
+            jsonObject.put("longitude", jingdu);
+            jsonObject.put("latitude", weidu);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getStoreInfoByStoreId");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
+
+
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: " + result);
@@ -135,12 +184,14 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         Log.e(TAG, "onSuccess: 1");
                         JSONObject data = jsonObject1.getJSONObject("data");
                         String factoryImgUrl = data.getString("factoryImgUrl");
                         String indoorImgUrl = data.getString("indoorImgUrl");
                         String locationImgUrl = data.getString("locationImgUrl");
+                        store_latitude = data.getString("latitude");
+                        store_longitude = data.getString("longitude");
                         imageList.add(factoryImgUrl);
                         imageList.add(indoorImgUrl);
                         imageList.add(locationImgUrl);
@@ -162,19 +213,19 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
                             JSONObject service = object.getJSONObject("service");
                             String name = service.getString("name");
                             String color = service.getString("color");
-                            serviceTypeList.add(new ServiceType(name,color));
+                            serviceTypeList.add(new ServiceType(name, color));
                         }
                         Log.e(TAG, "onSuccess: 5");
                         //获取评论
                         JSONObject commit = null;
                         try {
-                             commit = data.getJSONObject("store_first_commit");
-                        }catch (JSONException e){
+                            commit = data.getJSONObject("store_first_commit");
+                        } catch (JSONException e) {
 
                         }
-                        Log.e(TAG, "onSuccess: " + commit );
+                        Log.e(TAG, "onSuccess: " + commit);
                         userEvaluateList.clear();
-                        if (commit!=null){
+                        if (commit != null) {
                             commitId = commit.getInt("id");
                             storeCommitUserName = commit.getString("storeCommitUserName");
                             storeCommitUserHeadImg = commit.getString("storeCommitUserHeadImg");
@@ -182,15 +233,15 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
                             storeCommitTime = new UtilsRY().getTimestampToString(time);
                             storeConnet = commit.getString("content");
                             List<String> imageList = new ArrayList<String>();
-                            imageList.add( commit.getString("img1Url"));
-                            imageList.add( commit.getString("img2Url"));
-                            imageList.add( commit.getString("img3Url"));
-                            imageList.add( commit.getString("img4Url"));
-                            imageList.add( commit.getString("img5Url"));
-                            userEvaluateList.add(new UserEvaluate(commitId,storeCommitUserHeadImg,storeCommitUserName,storeCommitTime,storeConnet,imageList));
+                            imageList.add(commit.getString("img1Url"));
+                            imageList.add(commit.getString("img2Url"));
+                            imageList.add(commit.getString("img3Url"));
+                            imageList.add(commit.getString("img4Url"));
+                            imageList.add(commit.getString("img5Url"));
+                            userEvaluateList.add(new UserEvaluate(commitId, storeCommitUserHeadImg, storeCommitUserName, storeCommitTime, storeConnet, imageList));
 
                         }
-                         initdata();
+                        initdata();
 
                     }
 
@@ -231,6 +282,7 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
     }
 
     private void initdata() {
+
         /*typeList = new ArrayList<>();
         typeList.add(new ServiceType("汽车保养","#ff3f7e"));
         typeList.add(new ServiceType("美容清洗","#00a600"));
@@ -249,18 +301,17 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
             userEvaluateList.add(new UserEvaluate(i,"http://180.76.243.205:8111/images/Advertisement/cxwy1000.png","一只大鸟"+i,"2017-02-1" + i,
                     "有一只大鸟从天上掉了下来",imageList));
         }*/
-
         items.clear();
-        items.add(new ShopInfo(storeName,storeType,storeTypeColor,storeAddress,distance,storePhone,storeConnet,imageList,serviceTypeList));
+        items.add(new ShopInfo(storeName, store_latitude, store_longitude, user_latitude, user_longitude, storeType, storeTypeColor, storeAddress, distance, storePhone, storeConnet, imageList, serviceTypeList));
         items.add(new ShopStr("门店评价"));
-        if (userEvaluateList.size()>0){
+        if (userEvaluateList.size() > 0) {
             for (int i = 0; i < userEvaluateList.size(); i++) {
                 items.add(userEvaluateList.get(i));
             }
-        }else {
+        } else {
             items.add(new Empty());
         }
-        assertAllRegistered(adapter,items);
+        assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
 
@@ -280,7 +331,7 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), ShopGoodActivity.class);
-                        intent.putExtra("STOREID",storeid);
+                        intent.putExtra("STOREID", storeid);
                         intent.putExtra("STORENAME",storeName);
                         startActivity(intent);
                     }
@@ -289,15 +340,15 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
     }
 
     private void register() {
-        adapter.register(ShopInfo.class,new ShopInfoViewBinder(this));
+        adapter.register(ShopInfo.class, new ShopInfoViewBinder(this));
         ShopStrViewBinder shopStrViewBinder = new ShopStrViewBinder();
         shopStrViewBinder.setListener(this);
         adapter.register(ShopStr.class, shopStrViewBinder);
         UserEvaluateViewBinder userEvaluateViewBinder = new UserEvaluateViewBinder(this);
         userEvaluateViewBinder.setListener(this);
         adapter.register(UserEvaluate.class, userEvaluateViewBinder);
-        adapter.register(Empty.class,new EmptyViewBinder());
-       // ShopGoodsViewBinder shopGoodsViewBinder = new ShopGoodsViewBinder(this,getSupportFragmentManager());
+        adapter.register(Empty.class, new EmptyViewBinder());
+        // ShopGoodsViewBinder shopGoodsViewBinder = new ShopGoodsViewBinder(this,getSupportFragmentManager());
         //adapter.register(ShopGoods.class, shopGoodsViewBinder);
 
     }

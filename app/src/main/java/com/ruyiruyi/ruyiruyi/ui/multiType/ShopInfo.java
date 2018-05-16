@@ -6,6 +6,45 @@ import java.util.List;
 
 public class ShopInfo {
     public String storeName;
+    private String store_latitude;
+    private String store_longitude;
+    private String user_latitude;
+    private String user_longitude;
+
+    public void setUser_latitude(String user_latitude) {
+        this.user_latitude = user_latitude;
+    }
+
+    public void setUser_longitude(String user_longitude) {
+        this.user_longitude = user_longitude;
+    }
+
+    public String getUser_latitude() {
+
+        return user_latitude;
+    }
+
+    public String getUser_longitude() {
+        return user_longitude;
+    }
+
+    public void setStore_latitude(String store_latitude) {
+        this.store_latitude = store_latitude;
+    }
+
+    public void setStore_longitude(String store_longitude) {
+        this.store_longitude = store_longitude;
+    }
+
+    public String getStore_latitude() {
+
+        return store_latitude;
+    }
+
+    public String getStore_longitude() {
+        return store_longitude;
+    }
+
     public String storeTypeName;
     public String storeTypeColor;
     public String storeAddress;
@@ -16,14 +55,17 @@ public class ShopInfo {
     public List<ServiceType> serviceTypeList;
 
 
-
     public ShopInfo(List<String> imageList, List<ServiceType> serviceTypeList) {
         this.imageList = imageList;
         this.serviceTypeList = serviceTypeList;
     }
 
-    public ShopInfo(String storeName, String storeTypeName, String storeTypeColor, String storeAddress, String storeDistence, String storePhone, String storeDescribe, List<String> imageList, List<ServiceType> serviceTypeList) {
+    public ShopInfo(String storeName, String store_latitude, String store_longitude, String user_latitude, String user_longitude, String storeTypeName, String storeTypeColor, String storeAddress, String storeDistence, String storePhone, String storeDescribe, List<String> imageList, List<ServiceType> serviceTypeList) {
         this.storeName = storeName;
+        this.store_latitude = store_latitude;
+        this.store_longitude = store_longitude;
+        this.user_latitude = user_latitude;
+        this.user_longitude = user_longitude;
         this.storeTypeName = storeTypeName;
         this.storeTypeColor = storeTypeColor;
         this.storeAddress = storeAddress;

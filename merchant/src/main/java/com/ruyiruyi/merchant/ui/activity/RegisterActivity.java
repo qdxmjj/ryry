@@ -1117,7 +1117,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         mLocationClient = new LocationClient(this);
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true);                                //打开gps
-        option.setCoorType("bd09ll");                           //设置坐标类型为bd09ll 百度需要的坐标，也可以返回其他type类型，大家可以查看下
+        option.setCoorType("bd09ll");                           //设置坐标类型为bd09ll 百度需要的坐标，也可以返回其他type类型
         option.setPriority(LocationClientOption.NetWorkFirst);  //设置网络优先
 //        option.setScanSpan(50000);                               //定时定位，每隔5秒钟定位一次。这个就看大家的需求了
 
@@ -1213,17 +1213,17 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             public void call(Void aVoid) {
                 Log.e(TAG, "call: et_userName.getText()" + et_userName.getText());
                 if (et_userName.getText() == null || et_userName.getText().length() == 0) {
-                    Toast.makeText(RegisterActivity.this, "请输入您的名字", Toast.LENGTH_SHORT).show();
+                    showDialog("请输入您的名字");
                     return;
                 } else {
                     persionName = et_userName.getText().toString();
                 }
                 if (isRightCode == 0) {
-                    Toast.makeText(RegisterActivity.this, "请验证手机号", Toast.LENGTH_SHORT).show();
+                    showDialog("请验证手机号");
                     return;
                 }
                 if (et_Passworda.getText() == null || et_Passworda.getText().length() == 0) {
-                    Toast.makeText(RegisterActivity.this, "请输入登录密码", Toast.LENGTH_SHORT).show();
+                    showDialog("请输入登录密码");
                     return;
                 } else {
                     byte[] md5 = new byte[0];
@@ -1235,7 +1235,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     passWord_a = TripleDESUtil.bytes2HexString(md5);
                 }
                 if (et_Passwordb.getText() == null || et_Passwordb.getText().length() == 0) {
-                    Toast.makeText(RegisterActivity.this, "请输入确认密码", Toast.LENGTH_SHORT).show();
+                    showDialog("请输入确认密码");
                     return;
                 } else {
                     byte[] md5 = new byte[0];
@@ -1247,31 +1247,31 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     passWord_b = TripleDESUtil.bytes2HexString(md5);
                 }
                 if (!passWord_a.equals(passWord_b)) {
-                    Toast.makeText(RegisterActivity.this, "两次输入密码不一致", Toast.LENGTH_SHORT).show();
+                    showDialog("两次输入密码不一致");
                     return;
                 }
                 if (et_Shopname.getText() == null || et_Shopname.getText().length() == 0) {
-                    Toast.makeText(RegisterActivity.this, "请输入门店名称", Toast.LENGTH_SHORT).show();
+                    showDialog("请输入门店名称");
                     return;
                 } else {
                     shopName = et_Shopname.getText().toString();
                 }
                 if (shopCategoryId == null) {
-                    Toast.makeText(RegisterActivity.this, "请选择您的门店类别", Toast.LENGTH_SHORT).show();
+                    showDialog("请选择您的门店类别");
                     return;
                 }
                 if (et_ShopPhone.getText() == null || et_ShopPhone.getText().length() == 0) {
-                    Toast.makeText(RegisterActivity.this, "请输入您店里的电话", Toast.LENGTH_SHORT).show();
+                    showDialog("请输入您店里的电话");
                     return;
                 } else {
                     shopPhone = et_ShopPhone.getText().toString();
                 }
                 if (shopTimeL == null || shopTimeR == null) {
-                    Toast.makeText(RegisterActivity.this, "请选择您的营业时间", Toast.LENGTH_SHORT).show();
+                    showDialog("请选择您的营业时间");
                     return;
                 }
                 if (areaId == 9999) {
-                    Toast.makeText(RegisterActivity.this, "请选择您的店铺所在城市", Toast.LENGTH_SHORT).show();
+                    showDialog("请选择您的店铺所在城市");
                     return;
                 } else {
                     positionId_xian = areaId + "";
@@ -1279,25 +1279,24 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
                 }
                 if (et_ShopLocation.getText() == null || et_ShopLocation.getText().length() == 0) {
-                    Toast.makeText(RegisterActivity.this, "请补充您的门店位置", Toast.LENGTH_SHORT).show();
+                    showDialog("请补充您的门店位置");
                     return;
                 } else {
                     shopLocation = et_ShopLocation.getText().toString();
                 }
                 if (latitude == null || longitude == null) {
-                    Toast.makeText(RegisterActivity.this, "请点击定位", Toast.LENGTH_SHORT).show();
+                    showDialog("请点击定位");
                     return;
                 }
                 if (yyzzPicBitmap == null) {
-                    Toast.makeText(RegisterActivity.this, "请上传营业执照", Toast.LENGTH_SHORT).show();
+                    showDialog("请上传营业执照");
                     return;
                 } else {
                     yyzzPath = ImageUtils.savePhoto(yyzzPicBitmap, Environment
                             .getExternalStorageDirectory().getAbsolutePath(), "yyzzPic");
-                    Log.e(TAG, "call: yyzzPath == " + yyzzPath);
                 }
                 if (mdPicaBitmap == null || mdPicbBitmap == null || mdPiccBitmap == null) {
-                    Toast.makeText(RegisterActivity.this, "请上传门店照片", Toast.LENGTH_SHORT).show();
+                    showDialog("请上传门店照片");
                     return;
                 } else {
                     mdpicaPath = ImageUtils.savePhoto(mdPicaBitmap, Environment
@@ -1308,14 +1307,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                             .getExternalStorageDirectory().getAbsolutePath(), "mdPicc");
                 }
                 if (shouPicBitmap == null) {
-                    Toast.makeText(RegisterActivity.this, "请上传手持身份证照片", Toast.LENGTH_SHORT).show();
+                    showDialog("请上传手持身份证照片");
                     return;
                 } else {
                     shouPath = ImageUtils.savePhoto(shouPicBitmap, Environment
                             .getExternalStorageDirectory().getAbsolutePath(), "shouPic");
                 }
                 if (serviceTypeList == null || serviceTypeList.size() == 0) {
-                    Toast.makeText(RegisterActivity.this, "请选择合作项目", Toast.LENGTH_SHORT).show();
+                    showDialog("请选择合作项目");
                     return;
                 } else {
                     serviceTypeListString = "";

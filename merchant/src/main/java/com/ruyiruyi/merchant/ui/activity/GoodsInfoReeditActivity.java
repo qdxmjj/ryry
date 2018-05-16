@@ -721,7 +721,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
         file = new File(Environment
-                .getExternalStorageDirectory(), "goodsinfoimg.jpg");
+                .getExternalStorageDirectory(), "goodsinforedeitimg.jpg");
 
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= 24) {
