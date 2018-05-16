@@ -4,8 +4,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.ruyiruyi.merchant.R;
+import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 public class OrderXiangqingActivity extends BaseActivity {
 
@@ -26,6 +31,30 @@ public class OrderXiangqingActivity extends BaseActivity {
                         onBackPressed();
                         break;
                 }
+            }
+        });
+
+
+        RequestParams params = new RequestParams(UtilsURL.LOGIN_PASS_REQUEST_URL + "test");
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
             }
         });
     }
