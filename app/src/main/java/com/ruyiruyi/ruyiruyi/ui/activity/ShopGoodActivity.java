@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -28,7 +29,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class ShopGoodActivity extends BaseActivity implements GoodsListFragment.OnGoodsListSend{
+public class ShopGoodActivity extends FragmentActivity implements GoodsListFragment.OnGoodsListSend{
     private static final String TAG = ShopGoodActivity.class.getSimpleName();
     private ActionBar actionBar;
     private  ViewPager viewPager;
@@ -54,7 +55,7 @@ public class ShopGoodActivity extends BaseActivity implements GoodsListFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shop_good,R.id.my_action);
+        setContentView(R.layout.activity_shop_good);
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("商品列表");;
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
@@ -90,87 +91,81 @@ public class ShopGoodActivity extends BaseActivity implements GoodsListFragment.
         initCoutView();
 
 
-                    allPriceText.setText(allPrice+"");
-                    getFragments();
-                    getTitles();
-                    getTabViews();
-                    pagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), this);
-                    viewPager.setAdapter(pagerAdapter);
-                    viewPager.setOffscreenPageLimit(3);
-                    tabLayout.setupWithViewPager(viewPager);
-                    tabLayout.setTabMode(TabLayout.MODE_FIXED);
-                    if (getTabViews()!=null){
-                        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-                            TabLayout.Tab tab = tabLayout.getTabAt(i);
-                            tab.setCustomView(pagerAdapter.getTabView(i));
-                        }
-                    }
-
-                    RxViewAction.clickNoDouble(goodBuyButton)
-                            .subscribe(new Action1<Void>() {
-                                @Override
-                                public void call(Void aVoid) {
-                                    goodsCommitList.clear();
-                                    for (int i = 0; i < goodsChooseList.size(); i++) {
-                                        if (goodsChooseList.get(i).getCurrentCount() != 0) {
-                                            goodsCommitList.add(goodsChooseList.get(i));
-                                        }
-                                    }
-                                    if (goodsCommitList.size() == 0){
-                                        Toast.makeText(ShopGoodActivity.this, "请选择商品", Toast.LENGTH_SHORT).show();
-                                    }else {
-                                        Intent intent = new Intent(getApplicationContext(), OrderGoodsAffirmActivity.class);
-                                        Bundle bundle = new Bundle();
-                                        bundle.putSerializable("GOODSLIST", (Serializable) goodsCommitList);
-                                        bundle.putDouble("ALLPRICE",allPrice);
-                                        bundle.putInt("STOREID",storeid);
-                                        bundle.putString("STORENAME",storename);
-                                        intent.putExtras(bundle);
-                                        startActivity(intent);
-                                    }
-
-                                }
-                            });
-
-
-                }
-
-            private void initCoutView() {
-                qcbyCountText.setVisibility(qcbyCount==0?View.GONE:View.VISIBLE);
-                mrqxCountText.setVisibility(mrqxCount==0?View.GONE:View.VISIBLE);
-                gzCountText.setVisibility(azCount==0?View.GONE:View.VISIBLE);
-                ltfwCountText.setVisibility(ltfwCount==0?View.GONE:View.VISIBLE);
-                qcbyCountText.setText("" + qcbyCount);
-                mrqxCountText.setText("" + mrqxCount);
-                gzCountText.setText("" + azCount);
-                ltfwCountText.setText("" + ltfwCount);
+        allPriceText.setText(allPrice+"");
+        getFragments();
+        getTitles();
+        getTabViews();
+        pagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), this);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(3);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        if (getTabViews()!=null){
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                TabLayout.Tab tab = tabLayout.getTabAt(i);
+                tab.setCustomView(pagerAdapter.getTabView(i));
             }
-
-            /**
-             * 商品选择的回调
-             * @param list
-             */
-            @Override
-            public void onGoodsListSend(int classId,List<GoodsHorizontal> list) {
-                if (goodsChooseList.size() == 0) {
-                    goodsChooseList.addAll(list);
-                }else {
-                    for (int i = 0; i < goodsChooseList.size(); i++) { //将改变的那一小服务的商品数量全部归零
-                        if (goodsChooseList.get(i).getGoodsClassId() == classId) {
-                            goodsChooseList.get(i).setCurrentCount(0);
+        }
+        RxViewAction.clickNoDouble(goodBuyButton)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        goodsCommitList.clear();
+                        for (int i = 0; i < goodsChooseList.size(); i++) {
+                            if (goodsChooseList.get(i).getCurrentCount() != 0) {
+                                goodsCommitList.add(goodsChooseList.get(i));
+                            }
+                        }
+                        if (goodsCommitList.size() == 0){
+                            Toast.makeText(ShopGoodActivity.this, "请选择商品", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Intent intent = new Intent(getApplicationContext(), OrderGoodsAffirmActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("GOODSLIST", (Serializable) goodsCommitList);
+                            bundle.putDouble("ALLPRICE",allPrice);
+                            bundle.putInt("STOREID",storeid);
+                            bundle.putString("STORENAME",storename);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
                         }
                     }
-                    boolean hasGoods = false;
-                    for (int i = 0; i < list.size(); i++) {     //将不存在的商品添加到goodsChooseList中  已存在的归零后重新赋值
-                        hasGoods = false;
-                        for (int j = 0; j < goodsChooseList.size(); j++) {
-                            if (goodsChooseList.get(j).getGoodsId() == list.get(i).getGoodsId()) {
-                                hasGoods = true;
-                                goodsChooseList.get(j).setCurrentCount(list.get(i).getCurrentCount());
-                            }
+                });
+    }
 
-                        }
-                        if (!hasGoods){
+    private void initCoutView() {
+        qcbyCountText.setVisibility(qcbyCount==0?View.GONE:View.VISIBLE);
+        mrqxCountText.setVisibility(mrqxCount==0?View.GONE:View.VISIBLE);
+        gzCountText.setVisibility(azCount==0?View.GONE:View.VISIBLE);
+        ltfwCountText.setVisibility(ltfwCount==0?View.GONE:View.VISIBLE);
+        qcbyCountText.setText("" + qcbyCount);
+        mrqxCountText.setText("" + mrqxCount);
+        gzCountText.setText("" + azCount);
+        ltfwCountText.setText("" + ltfwCount);
+    }
+    /**
+     * 商品选择的回调
+     * @param list
+     */
+    @Override
+    public void onGoodsListSend(int classId,List<GoodsHorizontal> list) {
+        if (goodsChooseList.size() == 0) {
+            goodsChooseList.addAll(list);
+        }else {
+            for (int i = 0; i < goodsChooseList.size(); i++) { //将改变的那一小服务的商品数量全部归零
+                if (goodsChooseList.get(i).getGoodsClassId() == classId) {
+                    goodsChooseList.get(i).setCurrentCount(0);
+                }
+            }
+            boolean hasGoods = false;
+            for (int i = 0; i < list.size(); i++) {     //将不存在的商品添加到goodsChooseList中  已存在的归零后重新赋值
+                hasGoods = false;
+                for (int j = 0; j < goodsChooseList.size(); j++) {
+                    if (goodsChooseList.get(j).getGoodsId() == list.get(i).getGoodsId()) {
+                        hasGoods = true;
+                        goodsChooseList.get(j).setCurrentCount(list.get(i).getCurrentCount());
+                    }
+                }
+                if (!hasGoods){
                     goodsChooseList.add(list.get(i));
                 }
             }

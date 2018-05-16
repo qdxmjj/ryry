@@ -20,6 +20,7 @@ import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.cell.ShopChooseCell;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
+import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Shop;
@@ -79,6 +80,7 @@ public class TireChangeActivity extends BaseActivity {
     private int fontMaxCount = 0;
     private int rearMaxCount = 0;
     private Shop shop;
+    private TextView postButton;
 
 
     @Override
@@ -289,6 +291,15 @@ public class TireChangeActivity extends BaseActivity {
         reasonOneImage = (ImageView) findViewById(R.id.reason_one_image);
         reasonTwoImage = (ImageView) findViewById(R.id.reason_two_image);
         shopChooseView = (ShopChooseCell) findViewById(R.id.shop_choose_cell);
+        postButton = (TextView) findViewById(R.id.first_change_button);
+
+        RxViewAction.clickNoDouble(postButton)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        postChangeOrder();
+                    }
+                });
 
         RxViewAction.clickNoDouble(shopChooseView)
                 .subscribe(new Action1<Void>() {
@@ -432,6 +443,68 @@ public class TireChangeActivity extends BaseActivity {
                         initReasonView();
                     }
                 });
+    }
+
+    private void postChangeOrder() {
+        if (currentChangeType == 0){//首次更换
+            User user = new DbConfig().getUser();
+            int userId = user.getId();
+            int userCarId = user.getCarId();
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("storeId",shop.getStoreId());
+                jsonObject.put("userCarId",userCarId);
+                jsonObject.put("userId",userId);
+                jsonObject.put("fontAmount",currentFontCount);
+                jsonObject.put("rearAmount",currentRearCount);
+                jsonObject.put("fontRearFlag",fontRearFlag);
+                jsonObject.put("orderType",2);
+            } catch (JSONException e) {
+            }
+            RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addFirstChangeShoeOrder");
+            Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString() );
+            params.addBodyParameter("reqJson",jsonObject.toString());
+            String token = new DbConfig().getToken();
+            params.addParameter("token",token);
+            x.http().post(params, new Callback.CommonCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    Log.e(TAG, "onSuccess: " + result);
+                    JSONObject jsonObject1 = null;
+                    try {
+                        jsonObject1 = new JSONObject(result);
+                        String status = jsonObject1.getString("status");
+                        String msg = jsonObject1.getString("msg");
+                        if (status.equals("1")){ //添加成功
+                            Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                            intent.putExtra(OrderFragment.ORDER_TYPE,"ALL");
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(TireChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+
+                    }
+
+                }
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+
+                }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+
+                }
+
+                @Override
+                public void onFinished() {
+
+                }
+            });
+        }else {
+        }
     }
 
     private void initAmountView() {

@@ -4,31 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ruyiruyi.ruyiruyi.ui.activity.PendingOrderActivity">
-
+    tools:context="com.ruyiruyi.ruyiruyi.ui.activity.OrderInfoActivity">
     <com.ruyiruyi.rylibrary.cell.ActionBar
         android:id="@+id/my_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_banner"/>
-
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff">
+        android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/pending_order_listview"
+            android:id="@+id/order_info_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff"
             android:layout_marginBottom="55dp"/>
 
         <TextView
-            android:id="@+id/go_pay_button"
+            android:id="@+id/order_pay_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="前往支付"
@@ -42,9 +33,5 @@
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/bg_button"/>
-
-
-
     </FrameLayout>
-
 </LinearLayout>

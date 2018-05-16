@@ -212,7 +212,8 @@
         <activity android:name=".ui.activity.OrderGoodsAffirmActivity" />
         <activity android:name=".ui.activity.CreditLimitActivity" />
         <activity android:name=".ui.activity.MyLimitActivity" />
-        <activity android:name=".ui.activity.CxwyActivity"></activity>
+        <activity android:name=".ui.activity.CxwyActivity" />
+        <activity android:name=".ui.activity.OrderInfoActivity"></activity>
     </application>
 
 </manifest>
