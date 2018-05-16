@@ -880,7 +880,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         int id = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("user_id",id);
+            jsonObject.put("userId",id);
             jsonObject.put("car_id",carTiteInfoId);
             jsonObject.put("car_name",carTypeChoose.getText());
             jsonObject.put("xinnengyuan",isEnergy);

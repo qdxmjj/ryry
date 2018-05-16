@@ -5,12 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireWait;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireWaitViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
@@ -35,12 +37,14 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class TireWaitChangeActivity extends BaseActivity {
+    private static final String TAG = TireWaitChangeActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;
     private List<Object> items = new ArrayList<>();
     private MultiTypeAdapter adapter;
     private TextView tireChangeButton;
     public List<TireWait> tireWaitList;
+    private String fromFragment = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,10 @@ public class TireWaitChangeActivity extends BaseActivity {
                 }
             }
         });
+        Intent intent = getIntent();
+        if (intent!=null){
+            fromFragment = intent.getStringExtra(MyFragment.FROM_FRAGMENT);
+        }
 
         tireWaitList = new ArrayList<>();
         initView();
@@ -81,6 +89,7 @@ public class TireWaitChangeActivity extends BaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result.toString());
                 JSONObject jsonObject1 = null;
                 try {
                     jsonObject1 = new JSONObject(result);
@@ -91,7 +100,6 @@ public class TireWaitChangeActivity extends BaseActivity {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject object = data.getJSONObject(i);
-                            String fontShoeName = object.getString("fontShoeName");
                             String name = object.getString("name");
                             String platNumber = object.getString("platNumber");
                             String orderNo = object.getString("orderNo");
@@ -100,17 +108,21 @@ public class TireWaitChangeActivity extends BaseActivity {
                             int fontRearFlag = object.getInt("fontRearFlag");
                             int fontAmount = object.getInt("fontAmount");
                             int rearAmount = object.getInt("rearAmount");
+                            String fontShoeName = "";
                             String tirePlace = "";
                             if (fontRearFlag==0){//前轮跟后轮
                                 tirePlace = "前轮/后轮";
+                                fontShoeName = object.getString("fontShoeName");
                                 TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus);
                                 tireWaitList.add(tireWait);
                             }else if (fontRearFlag == 1){//前轮
                                 tirePlace = "前轮";
+                                fontShoeName = object.getString("fontShoeName");
                                 TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus);
                                 tireWaitList.add(tireWait);
                             }else{ //后轮
                                 tirePlace = "后轮";
+                                fontShoeName = object.getString("rearShoeName");
                                 TireWait tireWait = new TireWait(orderImg, fontShoeName, name, rearAmount, platNumber, tirePlace, orderNo, rejectStatus);
                                 tireWaitList.add(tireWait);
                             }
@@ -183,6 +195,8 @@ public class TireWaitChangeActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra(MyFragment.FROM_FRAGMENT,fromFragment);
+        startActivity(intent);
     }
 }

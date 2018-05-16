@@ -1,5 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,10 +14,14 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.OrderInfoActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.PaymentActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.PendingOrderActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Order;
 import com.ruyiruyi.ruyiruyi.ui.multiType.OrderViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.FullyLinearLayoutManager;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +38,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class OrderFragment extends Fragment {
+public class OrderFragment extends Fragment implements OrderViewBinder.OnOrderItemClick{
     private static final String TAG = OrderFragment.class.getSimpleName();
     public static String ORDER_TYPE;  //ALL DZF DFH DFW YWC
     private String orderType;
@@ -76,7 +81,7 @@ public class OrderFragment extends Fragment {
             }
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getGeneralOrderByState");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserGeneralOrderByState");
         params.addBodyParameter("reqJson",jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
@@ -98,9 +103,10 @@ public class OrderFragment extends Fragment {
                             String orderNo = object.getString("orderNo");
                             String orderPrice = object.getString("orderPrice");
                             String orderState = object.getString("orderState");
-                            String orderTime = object.getString("orderTime");
+                          //  String orderTime = object.getString("orderTime");
+                            String orderTimeStr = new UtilsRY().getTimestampToString(object.getLong("orderTime"));
                             String orderType = object.getString("orderType");
-                            orderList.add(new Order(orderImage,orderName,orderNo,orderPrice,orderState,orderTime,orderType));
+                            orderList.add(new Order(orderImage,orderName,orderNo,orderPrice,orderState,orderTimeStr,orderType));
                         }
                         initData();
                     }else {
@@ -152,6 +158,28 @@ public class OrderFragment extends Fragment {
     }
 
     private void register() {
-        adapter.register(Order.class,new OrderViewBinder(getContext()));
+        OrderViewBinder orderViewBinder = new OrderViewBinder(getContext());
+        orderViewBinder.setListener(this);
+        adapter.register(Order.class, orderViewBinder);
+    }
+
+    @Override
+    public void onOrderItemClickListener(String orderState,String orderType, String orderNo) {
+        // OrderType 0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
+        //轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货
+        //订单状态(orderType:1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
+        if ((orderType.equals("1")&&orderState.equals("8")) || (orderType.equals("0")&&orderState.equals("5"))){ //待支付
+            Intent intent = new Intent(getContext(), PendingOrderActivity.class);
+            intent.putExtra(PaymentActivity.ORDERNO,orderNo);
+            intent.putExtra(PaymentActivity.ORDER_TYPE,Integer.parseInt(orderType));
+            intent.putExtra(PaymentActivity.ORDER_FROM,1);
+            startActivity(intent);
+        }else if (orderState.equals("5")){    //代发货
+            Intent intent = new Intent(getContext(), OrderInfoActivity.class);
+            intent.putExtra(PaymentActivity.ORDERNO,orderNo);
+            intent.putExtra(PaymentActivity.ORDER_TYPE,Integer.parseInt(orderType));
+            intent.putExtra(PaymentActivity.ORDER_STATE,Integer.parseInt(orderState));
+            startActivity(intent);
+        }
     }
 }

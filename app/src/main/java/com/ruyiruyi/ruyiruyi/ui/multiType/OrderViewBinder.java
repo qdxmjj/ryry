@@ -7,15 +7,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
 import me.drakeet.multitype.ItemViewProvider;
+import rx.functions.Action1;
 
 public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.ViewHolder> {
     public Context context;
+    public OnOrderItemClick listener;
+
+    public void setListener(OnOrderItemClick listener) {
+        this.listener = listener;
+    }
 
     public OrderViewBinder(Context context) {
         this.context = context;
@@ -29,11 +37,13 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull Order order) {
+    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Order order) {
         Glide.with(context).load(order.getOrderImage()).into(holder.orderImageView);
         holder.orderTitleText.setText(order.getOrderName());
         holder.orderPriceText.setText("￥"+order.getOrderPrice());
         holder.orderNoText.setText("订单编号： " + order.getOrderNo());
+        holder.orderTimeText.setText("下单时间： " + order.getOrderTime());
+        // OrderType 0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
         if (order.getOrderType().equals("0")){//轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货
             if (order.getOrderState().equals("1")) {
                 holder.orderTypeText.setText("已安装");
@@ -48,7 +58,7 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
             }else if (order.getOrderState().equals("6")){
                 holder.orderTypeText.setText("已退货");
             }
-        }else {//订单状态(orderType:1): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
+        }else {//订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
             if (order.getOrderState().equals("1")) {
                 holder.orderTypeText.setText("交易完成");
             }else if (order.getOrderState().equals("2")){
@@ -67,6 +77,14 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
                 holder.orderTypeText.setText("待支付");
             }
         }
+
+        RxViewAction.clickNoDouble(holder.orderLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        listener.onOrderItemClickListener(order.getOrderState(),order.getOrderType(),order.getOrderNo());
+                    }
+                });
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -74,17 +92,25 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
         private final ImageView orderImageView;
         private final TextView orderTitleText;
         private final TextView orderNoText;
+        private final TextView orderTimeText;
         private final TextView orderPriceText;
         private final TextView orderTypeText;
+        private final LinearLayout orderLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
             orderImageView = ((ImageView) itemView.findViewById(R.id.order_image));
             orderTitleText = ((TextView) itemView.findViewById(R.id.order_title_text));
             orderNoText = ((TextView) itemView.findViewById(R.id.order_no_text));
+            orderTimeText = ((TextView) itemView.findViewById(R.id.order_time_text));
             orderPriceText = ((TextView) itemView.findViewById(R.id.order_price_text));
             orderTypeText = ((TextView) itemView.findViewById(R.id.order_type_button));
+            orderLayout = ((LinearLayout) itemView.findViewById(R.id.order_layout));
 
         }
+    }
+
+    public interface OnOrderItemClick{
+        void onOrderItemClickListener(String state,String orderType,String orderNo);
     }
 }

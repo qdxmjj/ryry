@@ -19,7 +19,11 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.CreditLimitActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.MyLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.ShopEvaluateActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.UserInfoActivity;
@@ -29,6 +33,8 @@ import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
+
+import java.util.List;
 
 import rx.functions.Action1;
 
@@ -52,6 +58,12 @@ public class MyFragment extends Fragment {
     private LinearLayout dfwLayout;
     private LinearLayout ywcLayout;
     public static String FROM_FRAGMENT = "FROM_FRAGMENT";
+    private LinearLayout evaluateLayout;
+    private LinearLayout creditLimitLayout;
+    private TextView creditLimitText;
+    private LinearLayout myLimitLayout;
+    private TextView myLimitTesxt;
+    private LinearLayout cxwyLayout;
 
     @Nullable
     @Override
@@ -130,7 +142,38 @@ public class MyFragment extends Fragment {
         dfhLayout = (LinearLayout) getView().findViewById(R.id.dfh_layout);
         dfwLayout = (LinearLayout) getView().findViewById(R.id.dfw_layout);
         ywcLayout = (LinearLayout) getView().findViewById(R.id.ywc_layout);
+        evaluateLayout = (LinearLayout) getView().findViewById(R.id.evaluate_layout);
+        creditLimitLayout = (LinearLayout) getView().findViewById(R.id.credit_limit_layout);
+        creditLimitText = ((TextView) getView().findViewById(R.id.credit_limit_my_text));
+        myLimitLayout = ((LinearLayout) getView().findViewById(R.id.my_limit_layout));
+        myLimitTesxt = ((TextView) getView().findViewById(R.id.my_limit_text));
+        cxwyLayout = (LinearLayout) getView().findViewById(R.id.cxwy_layout);
 
+        //畅行无忧
+        RxViewAction.clickNoDouble(cxwyLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getContext(), CxwyActivity.class));
+                    }
+                });
+        //我的额度
+        RxViewAction.clickNoDouble(myLimitLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getContext(), MyLimitActivity.class));
+                    }
+                });
+        //信用额度
+        RxViewAction.clickNoDouble(creditLimitLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getContext(), CreditLimitActivity.class));
+                    }
+                });
+        //测试类
         RxViewAction.clickNoDouble(myImage).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -146,6 +189,7 @@ public class MyFragment extends Fragment {
                         startActivity(new Intent(getContext(), TestActivity.class));
                     }
                 });
+        //所有订单
         RxViewAction.clickNoDouble(orderAllText)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -155,6 +199,7 @@ public class MyFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
+        //待支付订单
         RxViewAction.clickNoDouble(dzfLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -164,6 +209,7 @@ public class MyFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
+        //待支付
         RxViewAction.clickNoDouble(dfhLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -173,6 +219,7 @@ public class MyFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
+        //带服务
         RxViewAction.clickNoDouble(dfwLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -182,6 +229,7 @@ public class MyFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
+        //已完成
         RxViewAction.clickNoDouble(ywcLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -204,6 +252,7 @@ public class MyFragment extends Fragment {
                         UIOpenHelper.openLogin(getContext());
                     }
                 });
+        //设置
         RxViewAction.clickNoDouble(shezhiLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -241,7 +290,20 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getContext(), TireWaitChangeActivity.class));
+                        Intent intent = new Intent(getContext(), TireWaitChangeActivity.class);
+                        intent.putExtra(FROM_FRAGMENT,"MYFRAGMENT");
+                        startActivity(intent);
+                    }
+                });
+        RxViewAction.clickNoDouble(evaluateLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        int userId = new DbConfig().getId();
+                        Intent intent = new Intent(getContext(), ShopEvaluateActivity.class);
+                        intent.putExtra("USERID",userId);
+                        intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE,1);
+                        startActivity(intent);
                     }
                 });
 

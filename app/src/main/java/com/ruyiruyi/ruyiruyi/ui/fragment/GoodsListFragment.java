@@ -18,6 +18,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.GoodsActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsHorizontal;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsItem;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsItemViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsVertical;
 import com.ruyiruyi.ruyiruyi.utils.FullyLinearLayoutManager;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 
@@ -28,6 +29,7 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +51,13 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
     private MultiTypeAdapter adapter;
     public List<GoodsItem> goodsItemList;
     private int storeId;
+    private List<GoodsVertical> goodslist;
+    private double allprice;
+    public OnGoodsListSend listener;
+
+    public void setListener(OnGoodsListSend listener) {
+        this.listener = listener;
+    }
 
     @Nullable
     @Override
@@ -65,7 +74,7 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
         Log.e(TAG, "onActivityCreated: -" + shopServiceType);
         goodsItemList = new ArrayList<>();
 
-
+        goodslist = new ArrayList<>();
 
        // createData();
 
@@ -104,7 +113,7 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
                         }else if (shopServiceType.equals("QCBY")){
                             object = data.getJSONArray("汽车保养");
                         } else if (shopServiceType.equals("GZ")){
-                            object = data.getJSONArray("改装");
+                            object = data.getJSONArray("安装");
                         }else if (shopServiceType.equals("LTFW")){
                             object = data.getJSONArray("轮胎服务");
                         }
@@ -141,41 +150,7 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
         });
     }
 
-    private void createData() {
-        goodsItemList.clear();
-        if (shopServiceType.equals("QCBY")){
-            GoodsItem goodsItem = new GoodsItem("汽车保养", true);
-            List<GoodsHorizontal> goodsHorizontalList = new ArrayList<>();
-            for (int i = 0; i < 6; i++) {
-                GoodsHorizontal goodsHorizontal = new GoodsHorizontal();
-                goodsHorizontal.setGoodsId(i);
-                goodsHorizontal.setGoodsCount(2);
-                goodsHorizontal.setGoodsImage("http://180.76.243.205:8111/images/flgure/543BFCB7-57C3-03F4-398A-ADDA0CEE50D6.jpg");
-                goodsHorizontal.setGoodsName("汽车保养"+i);
-                goodsHorizontal.setGoodsStock(10);
-                goodsHorizontalList.add(goodsHorizontal);
-            }
-            goodsItem.setGoodsList(goodsHorizontalList);
-            goodsItemList.add(goodsItem);
 
-            for (int i = 0; i < 10; i++) {
-                goodsItemList.add( new GoodsItem("汽车保养" + i,false));
-            }
-        }else if (shopServiceType.equals("MRQX")){
-            for (int i = 0; i < 20; i++) {
-                goodsItemList.add( new GoodsItem("美容清洗" + i,false));
-            }
-        }else if (shopServiceType.equals("GZ")){
-            for (int i = 0; i < 2; i++) {
-                goodsItemList.add( new GoodsItem("安装" + i,false));
-            }
-        }else if (shopServiceType.equals("LTFW")){
-            goodsItemList.add( new GoodsItem("轮胎服务" ,true));
-            for (int i = 0; i < 6; i++) {
-                goodsItemList.add( new GoodsItem("轮胎服务" + i,false));
-            }
-        }
-    }
 
     private void initData() {
         items.clear();
@@ -205,14 +180,64 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
     }
 
     @Override
-    public void onGoodsItemClickListenner(int goodsClassId) {
+    public void onGoodsItemClickListenner(int goodsClassId,List<GoodsHorizontal> goodsHorizontalList) {
+
         Intent intent = new Intent(getContext(),GoodsActivity.class);
-        intent.putExtra(GOODS_CLASS_ID,goodsClassId);
+        Bundle bundle = new Bundle();
+        bundle.putInt(GOODS_CLASS_ID,goodsClassId);
+        bundle.putSerializable("GOODSLIST", (Serializable) goodsHorizontalList);
+        intent.putExtras(bundle);
         startActivityForResult(intent,GOODS_FRAGMENT_RESULT);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode  == GOODS_FRAGMENT_RESULT){
+            Bundle bundle = data.getExtras();
+            int classId = bundle.getInt(GOODS_CLASS_ID);
+            goodslist.clear();
+            goodslist = ((List<GoodsVertical>) bundle.getSerializable("GOODSLIST"));
+            allprice = bundle.getDouble("ALLPRICE");
+            Log.e(TAG, "onActivityResult: ---++++-----" + goodslist.size());
+            List<GoodsHorizontal> goodsHorizontalList = new ArrayList<>();
+            for (int i = 0; i < goodslist.size(); i++) {
+                GoodsHorizontal goodsHorizontal = new GoodsHorizontal();
+                goodsHorizontal.setGoodsName(goodslist.get(i).getGoodsName());
+                goodsHorizontal.setGoodsImage(goodslist.get(i).getGoodsImage());
+                Log.e(TAG, "onActivityResult: *******" + goodslist.get(i).getGoodsId());
+                goodsHorizontal.setGoodsId(goodslist.get(i).getGoodsId());
+                goodsHorizontal.setGoodsCount(goodslist.get(i).getGoodsAmount());
+                goodsHorizontal.setGoodsPrice(goodslist.get(i).getGoodsPrice());
+                goodsHorizontal.setCurrentCount(goodslist.get(i).getCurrentGoodsAmount());
+                goodsHorizontal.setGoodsClassId(goodslist.get(i).getGoodsClassId());
+                goodsHorizontal.setServiceTypeId(goodslist.get(i).getServiceTypeId());
+                goodsHorizontalList.add(goodsHorizontal);
+            }
+            if (goodslist.size() > 0){
+                for (int i = 0; i < goodsItemList.size(); i++) {
+                    if (goodsItemList.get(i).getGoodsClassId() == classId) {
+                        goodsItemList.get(i).setGoodsList(goodsHorizontalList);
+                        goodsItemList.get(i).setChooseGood(true);
+                        goodsItemList.get(i).setPrice(allprice+"");
+                    }
+                }
+            }else {
+                for (int i = 0; i < goodsItemList.size(); i++) {
+                    if (goodsItemList.get(i).getGoodsClassId() == classId) {
+                        goodsItemList.get(i).setGoodsList(goodsHorizontalList);
+                        goodsItemList.get(i).setChooseGood(false);
+                    }
+                }
+            }
+            listener.onGoodsListSend(classId,goodsHorizontalList);
+            initData();
 
+
+        }
+
+    }
+
+    public interface OnGoodsListSend{
+        void onGoodsListSend(int classId,List<GoodsHorizontal> list);
     }
 }

@@ -3,9 +3,10 @@ package com.ruyiruyi.ruyiruyi.ui.multiType;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Shop {
+public class Shop implements Serializable{
     public int storeId;
     public String storeTypeName;
     public String storeTypreColoe;

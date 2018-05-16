@@ -107,9 +107,8 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_home, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("门店首页");
-        ;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+        actionBar.setTitle("门店首页");;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
             @Override
             public void onItemClick(int var1) {
                 switch ((var1)) {
@@ -333,6 +332,7 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), ShopGoodActivity.class);
                         intent.putExtra("STOREID", storeid);
+                        intent.putExtra("STORENAME",storeName);
                         startActivity(intent);
                     }
                 });
@@ -378,6 +378,9 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
 
     @Override
     public void onAllEvaluate() {
-        startActivity(new Intent(this, ShopEvaluateActivity.class));
+        Intent intent = new Intent(this, ShopEvaluateActivity.class);
+        intent.putExtra("STOREID",storeid);
+        intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE,0);
+        startActivity(intent);
     }
 }

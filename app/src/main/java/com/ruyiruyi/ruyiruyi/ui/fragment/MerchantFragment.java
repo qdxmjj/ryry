@@ -314,7 +314,7 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
             shaixuan.add("全部");
             shaixuan.add("汽车保养");
             shaixuan.add("美容清洗");
-            shaixuan.add("改装");
+            shaixuan.add("安装");
             shaixuan.add("轮胎服务");
         }else if (shopType ==1 ){
             fragmentTitle.setText("轮胎服务");
@@ -403,7 +403,7 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
                     currentServiceType = "2";
                 }else if (shaixuan.get(position).equals("美容清洗")) {
                     currentServiceType = "3";
-                }else if (shaixuan.get(position).equals("改装")) {
+                }else if (shaixuan.get(position).equals("安装")) {
                     currentServiceType = "4";
                 }else if (shaixuan.get(position).equals("轮胎服务")) {
                     currentServiceType = "5";
@@ -517,9 +517,9 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
      * item的点击回调
      */
     @Override
-    public void onShopItemClickListener(int storeId) {
-        if (shopType == 1){//轮胎服务  点击传值给Activity  做forResult返回
-            listener.onShopItemClickListener();
+    public void onShopItemClickListener(int storeId,Shop shop) {
+        if (shopType == 5){//轮胎服务  点击传值给Activity  做forResult返回
+            listener.onShopItemClickListener(shop);
         }else {
             Intent intent = new Intent(getContext(), ShopHomeActivity.class);
             intent.putExtra("STOREID",storeId);
@@ -530,6 +530,6 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
 
     public interface OnMerchantViewClick{
         void onBackViewClickListener();
-        void onShopItemClickListener();
+        void onShopItemClickListener(Shop shop);
     }
 }

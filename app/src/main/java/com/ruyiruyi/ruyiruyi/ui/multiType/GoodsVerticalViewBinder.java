@@ -3,6 +3,7 @@ package com.ruyiruyi.ruyiruyi.ui.multiType;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,14 @@ import me.drakeet.multitype.ItemViewProvider;
 
 public class GoodsVerticalViewBinder extends ItemViewProvider<GoodsVertical, GoodsVerticalViewBinder.ViewHolder> {
 
+    private static final String TAG = GoodsVerticalViewBinder.class.getSimpleName();
     public Context context;
     public int currentCount = 0;
+    public OnGoodsVerItemClick listener;
+
+    public void setListener(OnGoodsVerItemClick listener) {
+        this.listener = listener;
+    }
 
     public GoodsVerticalViewBinder(Context context) {
         this.context = context;
@@ -45,12 +52,15 @@ public class GoodsVerticalViewBinder extends ItemViewProvider<GoodsVertical, Goo
             @Override
             public void onAmountChange(View view, int amount) {
                 if (amount == goodsVertical.getGoodsAmount()){
-                    Toast.makeText(context,"轮胎数量已达到购买上限", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"已达到最大库存", Toast.LENGTH_SHORT).show();
                 }
                 currentCount =amount;
-
+                goodsVertical.setCurrentGoodsAmount(amount);
+                Log.e(TAG, "onAmountChange: xxx");
+                listener.onGoodsItemClickListener(goodsVertical);
             }
         });
+        holder.amountView.setAmount(goodsVertical.getCurrentGoodsAmount());
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -62,10 +72,14 @@ public class GoodsVerticalViewBinder extends ItemViewProvider<GoodsVertical, Goo
 
         ViewHolder(View itemView) {
             super(itemView);
-            goodsImageView = ((ImageView) itemView.findViewById(R.id.goods_image));
-            goodsNameText = ((TextView) itemView.findViewById(R.id.goods_name_text));
-            goodsPriceText = ((TextView) itemView.findViewById(R.id.goods_price_text));
-            amountView = ((AmountView) itemView.findViewById(R.id.amount_view));
+            goodsImageView = ((ImageView) itemView.findViewById(R.id.goods_images_ver));
+            goodsNameText = ((TextView) itemView.findViewById(R.id.goods_name_text_ver));
+            goodsPriceText = ((TextView) itemView.findViewById(R.id.goods_price_text_ver));
+            amountView = ((AmountView) itemView.findViewById(R.id.amount_view_ver));
         }
+    }
+
+    public interface  OnGoodsVerItemClick{
+        void onGoodsItemClickListener(GoodsVertical goodsVertical);
     }
 }

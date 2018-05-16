@@ -54,8 +54,8 @@ public class TireRepairActivity extends BaseActivity {
         mInflater = LayoutInflater.from(this);
         shopChooseView = (ShopChooseCell) findViewById(R.id.shop_choose_cell);
 
-        shopChooseView.setValue("青岛汽车总店","http://180.76.243.205:8111/images/flgure/970FB91D-D680-437D-606D-0AFAEC4E5F10.jpg",
-                "青岛市城阳区天安数码城","15km",typeList,mInflater);
+       /* shopChooseView.setValue("青岛汽车总店","http://180.76.243.205:8111/images/flgure/970FB91D-D680-437D-606D-0AFAEC4E5F10.jpg",
+                "青岛市城阳区天安数码城","15km",typeList,mInflater);*/
 
     }
 }

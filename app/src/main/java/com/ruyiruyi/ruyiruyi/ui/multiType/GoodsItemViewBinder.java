@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class GoodsItemViewBinder extends ItemViewProvider<GoodsItem, GoodsItemViewBinder.ViewHolder> {
+    private static final String TAG = GoodsItemViewBinder.class.getSimpleName();
     public Context context;
     private List<Object> items = new ArrayList<>();
     private MultiTypeAdapter adapter;
@@ -57,9 +59,10 @@ public class GoodsItemViewBinder extends ItemViewProvider<GoodsItem, GoodsItemVi
         assertHasTheSameAdapter(holder.listView, adapter);
         if (goodsItem.getChooseGood()) {
             holder.goodIsChoose.setImageResource( R.drawable.ic_xuanzhong );
-            holder.priceText.setText("￥" +goodsItem.getPrice());
+            holder.priceText.setText("￥" + goodsItem.getPrice());
             holder.priceText.setVisibility(View.VISIBLE);
             holder.listView.setVisibility(View.VISIBLE);
+            Log.e(TAG, "onBindViewHolder:----- " + goodsItem.getGoodsList().size());
             initData(goodsItem.getGoodsList());
         }else {
             holder.goodIsChoose.setImageResource(R.drawable.ic_weixuan );
@@ -70,11 +73,15 @@ public class GoodsItemViewBinder extends ItemViewProvider<GoodsItem, GoodsItemVi
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        listener.onGoodsItemClickListenner(goodsItem.getGoodsClassId());
+                        if (goodsItem.getChooseGood()){
+                            listener.onGoodsItemClickListenner(goodsItem.getGoodsClassId(),goodsItem.getGoodsList());
+                        }else {
+                            List<GoodsHorizontal> horizontalList = new ArrayList<GoodsHorizontal>();
+                            listener.onGoodsItemClickListenner(goodsItem.getGoodsClassId(),horizontalList);
+                        }
+
                     }
                 });
-
-
     }
 
     private void initData(List<GoodsHorizontal> goodsHorizontalList) {
@@ -109,6 +116,6 @@ public class GoodsItemViewBinder extends ItemViewProvider<GoodsItem, GoodsItemVi
     }
 
     public interface OnGoodsItemClick{
-        void onGoodsItemClickListenner(int goodsClassId);
+        void onGoodsItemClickListenner(int goodsClassId,List<GoodsHorizontal> goodsHorizontalList);
     }
 }

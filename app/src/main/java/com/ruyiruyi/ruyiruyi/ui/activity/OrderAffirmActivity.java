@@ -22,6 +22,9 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+
 import rx.functions.Action1;
 
 public class OrderAffirmActivity extends BaseActivity {
@@ -123,12 +126,13 @@ public class OrderAffirmActivity extends BaseActivity {
         double cxwyPriceDouble = Double.parseDouble(cxwyprice);
 
 
-        tirePriceAll = tirePriceDouble * tirecount;
-        cxwyPriceAll = cxwyPriceDouble * cxwycount;
+        tirePriceAll = Double.parseDouble(new DecimalFormat("0.00").format(tirePriceDouble * tirecount));
+        cxwyPriceAll = Double.parseDouble(new DecimalFormat("0.00").format(cxwyPriceDouble * cxwycount));
         tireAllPriceText.setText("￥"+tirePriceAll);
         cxwyAllPriceText.setText("￥"+cxwyPriceAll);
 
-        allPrice = tirePriceAll + cxwyPriceAll;
+       // allPrice = tirePriceAll + cxwyPriceAll;
+        allPrice=  Double.parseDouble(new DecimalFormat("0.00").format(tirePriceAll + cxwyPriceAll));
         allPriceText.setText("￥"+allPrice);
 
 
@@ -183,6 +187,7 @@ public class OrderAffirmActivity extends BaseActivity {
                         Intent intent = new Intent(getApplicationContext(),PaymentActivity.class);
                         intent.putExtra(PaymentActivity.ALL_PRICE,allPrice);
                         intent.putExtra(PaymentActivity.ORDERNO,orderNo);
+                        intent.putExtra(PaymentActivity.ORDER_TYPE,0);
                         startActivity(intent);
                     }else {
                         Toast.makeText(OrderAffirmActivity.this, msg, Toast.LENGTH_SHORT).show();

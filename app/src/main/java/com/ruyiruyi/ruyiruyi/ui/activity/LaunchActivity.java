@@ -234,6 +234,7 @@ public class LaunchActivity extends BaseActivity {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarBrandData");
         params.addBodyParameter("reqJson",jsonObject.toString());
+        Log.e(TAG, "initCarBrand:---*--- " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

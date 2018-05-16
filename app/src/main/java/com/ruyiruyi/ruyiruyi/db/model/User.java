@@ -10,54 +10,57 @@ public class User {
     @Column(name = "id",isId = true,autoGen = false)
     private int id;
 
+    @Column(name = "carid")
+    private int carId;        //用户名
+
     @Column(name = "nick")
-    private String nick;
+    private String nick;        //用户名
 
     @Column(name = "password")
-    private String password;
+    private String password;    //密码  可不要
 
     @Column(name = "phone")
-    private String phone;
+    private String phone;       //手机号
 
     @Column(name = "age")
-    private String age;
+    private String age;         //年龄   不要了
 
     @Column(name = "birthday")
-    private String birthday;
+    private String birthday;    //出生日期
 
 
     @Column(name = "email")
-    private String email;
+    private String email;       //邮箱
 
     @Column(name = "gender")
-    private int gender;
+    private int gender;     //性别  1男2女
 
     @Column(name = "headimgurl")
-    private String headimgurl;
+    private String headimgurl; //头像
 
     @Column(name = "ml")
     private BigDecimal ml;
 
     @Column(name = "paypwd")
-    private String payPwd;
+    private String payPwd;  //支付密码
 
     @Column(name = "remark")
-    private String remark;
+    private String remark;  //备注
 
     @Column(name = "creeatetime")
-    private String creeateTime;
+    private String creeateTime; //创建时间
 
     @Column(name = "updatetime")
-    private String updateTime;
+    private String updateTime;  //更新时间
 
     @Column(name = "token")
-    private String token;
+    private String token;       //token
 
     @Column(name = "qqinfoId")
-    private String qqInfoId;
+    private String qqInfoId; //qq登陆
 
     @Column(name = "wxinfoId")
-    private String wxInfoId;
+    private String wxInfoId;//微信登陆
 
     @Column(name = "status")
     private String status;  //用户状态 1 已锁定 2 未锁定 默认 2
@@ -69,6 +72,14 @@ public class User {
     private int firstAddCar;
 
     public User() {
+    }
+
+    public int getCarId() {
+        return carId;
+    }
+
+    public void setCarId(int carId) {
+        this.carId = carId;
     }
 
     public int getId() {

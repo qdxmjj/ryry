@@ -32,7 +32,7 @@ public class GoodsHorizontalViewBinder extends ItemViewProvider<GoodsHorizontal,
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull GoodsHorizontal goodsHorizontal) {
         Glide.with(context).load(goodsHorizontal.getGoodsImage()).into(holder.goodsImageView);
         holder.goodsNameText.setText(goodsHorizontal.getGoodsName());
-        holder.goodsCountText.setText(goodsHorizontal.getGoodsCount()+"");
+        holder.goodsCountText.setText(goodsHorizontal.getCurrentCount()+"");
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
