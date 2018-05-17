@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,354 +9,367 @@
     <com.ruyiruyi.rylibrary.cell.ActionBar
         android:id="@+id/my_action"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scroll_"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="100dp"
-        android:orientation="vertical">
+        android:layout_above="@+id/register_button"
+        android:layout_below="@+id/my_action">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="100dp"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical"
+            android:paddingLeft="20dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="手机号"
-                android:layout_centerVertical="true"
-                android:textSize="17sp"
-                android:textColor="@color/c6"/>
+                android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/phone_text"
-                android:layout_width="200dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:text="手机号"
+                    android:textColor="@color/c6"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/phone_text"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="20dp"
+                    android:gravity="right"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/c5"
+                    android:textSize="15sp" />
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/c3" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:gravity="right"
-                android:textColor="@color/c5"
-                android:textSize="15sp"
-                android:layout_marginRight="20dp"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"/>
-        </FrameLayout>
+                android:layout_marginTop="15dp">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/c3"
-            />
+                <TextView
+                    android:id="@+id/password_text_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:text="设置密码"
+                    android:textColor="@color/c6"
+                    android:textSize="17sp" />
 
+                <EditText
+                    android:id="@+id/password_edit1"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/show_password_one"
+                    android:background="@drawable/edit_bg_select_noline"
+                    android:gravity="right|center_vertical"
+                    android:inputType="textPassword"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/c5"
+                    android:textCursorDrawable="@drawable/edit_cursor_color"
+                    android:textSize="15sp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
-            <TextView
-                android:id="@+id/password_text_one"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/show_password_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_show" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/c3" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="设置密码"
-                android:layout_centerVertical="true"
-                android:textSize="17sp"
-                android:textColor="@color/c6"/>
-            <EditText
-                android:id="@+id/password_edit1"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:textColor="@color/c5"
-                android:textSize="15sp"
-                android:inputType="textPassword"
-                android:gravity="right|center_vertical"
-                android:background="@drawable/edit_bg_select_noline"
-                android:textCursorDrawable="@drawable/edit_cursor_color"
-                android:layout_marginRight="10dp"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:layout_toLeftOf ="@+id/show_password_one"/>
-            <ImageView
-                android:id="@+id/show_password_one"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_show"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:layout_centerVertical="true"
-                />
-        </RelativeLayout>
+                android:layout_marginTop="15dp">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/c3"
-            />
+                <TextView
+                    android:id="@+id/password_text_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:text="确认密码"
+                    android:textColor="@color/c6"
+                    android:textSize="17sp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
-            <TextView
-                android:id="@+id/password_text_two"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="确认密码"
-                android:layout_centerVertical="true"
-                android:textSize="17sp"
-                android:textColor="@color/c6"/>
-            <EditText
-                android:id="@+id/password_edit2"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:textColor="@color/c5"
-                android:textSize="15sp"
-                android:inputType="textPassword"
-                android:gravity="right|center_vertical"
-                android:background="@drawable/edit_bg_select_noline"
-                android:textCursorDrawable="@drawable/edit_cursor_color"
-                android:layout_marginRight="10dp"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:layout_toLeftOf ="@+id/show_password_two"/>
-            <ImageView
-                android:id="@+id/show_password_two"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_show"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:layout_centerVertical="true"
-                />
-        </RelativeLayout>
+                <EditText
+                    android:id="@+id/password_edit2"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/show_password_two"
+                    android:background="@drawable/edit_bg_select_noline"
+                    android:gravity="right|center_vertical"
+                    android:inputType="textPassword"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/c5"
+                    android:textCursorDrawable="@drawable/edit_cursor_color"
+                    android:textSize="15sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/c3"
-            />
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="昵称"
-                android:layout_centerVertical="true"
-                android:textSize="17sp"
-                android:textColor="@color/c6"/>
+                <ImageView
+                    android:id="@+id/show_password_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_show" />
+            </RelativeLayout>
 
-            <EditText
-                android:id="@+id/username_edit"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:gravity="right"
-                android:textColor="@color/c5"
-                android:textSize="15sp"
-                android:background="@drawable/edit_bg_select_noline"
-                android:textCursorDrawable="@drawable/edit_cursor_color"
-                android:inputType="text"
-                android:layout_marginRight="20dp"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"/>
-        </FrameLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/c3" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/c3"
-            />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="年龄"
-                android:layout_centerVertical="true"
-                android:textSize="17sp"
-                android:textColor="@color/c6"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:text="昵称"
+                    android:textColor="@color/c6"
+                    android:textSize="17sp" />
 
-            <EditText
-                android:id="@+id/choose_age"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:textColor="@color/c5"
-                android:layout_gravity="right"
-                android:inputType="number"
-                android:textSize="15sp"
-                android:background="@drawable/edit_bg_select_noline"
-                android:textCursorDrawable="@drawable/edit_cursor_color"
-                android:layout_marginRight="20dp"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"/>
-        </FrameLayout>
+                <EditText
+                    android:id="@+id/username_edit"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/edit_bg_select_noline"
+                    android:gravity="right"
+                    android:inputType="text"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/c5"
+                    android:textCursorDrawable="@drawable/edit_cursor_color"
+                    android:textSize="15sp" />
+            </FrameLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:visibility="gone"
-            android:layout_marginTop="10dp"
-            android:background="@color/c3"
-            />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/c3" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-            <TextView
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="邮箱"
-                android:layout_centerVertical="true"
-                android:textSize="17sp"
-                android:textColor="@color/c6"/>
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
 
-            <EditText
-                android:id="@+id/email_edit"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:textColor="@color/c5"
-                android:layout_gravity="right"
-                android:inputType="textEmailAddress"
-                android:textSize="15sp"
-                android:background="@drawable/edit_bg_select_noline"
-                android:textCursorDrawable="@drawable/edit_cursor_color"
-                android:layout_marginRight="20dp"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"/>
-        </FrameLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:text="年龄"
+                    android:textColor="@color/c6"
+                    android:textSize="17sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/c3"
-            />
+                <EditText
+                    android:id="@+id/choose_age"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/edit_bg_select_noline"
+                    android:gravity="right"
+                    android:inputType="number"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/c5"
+                    android:textCursorDrawable="@drawable/edit_cursor_color"
+                    android:textSize="15sp" />
+            </FrameLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="出生年月"
-                android:layout_centerVertical="true"
-                android:textSize="17sp"
-                android:textColor="@color/c6"/>
-            <TextView
-                android:id="@+id/choose_date"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="10dp"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:text="2017-03-01"
-                android:textSize="15sp"
-                android:gravity="right|center_vertical"
-                android:textColor="@color/c5"
-                android:layout_toLeftOf ="@+id/birthday_go"/>
-            <ImageView
-                android:id="@+id/birthday_go"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_go"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:layout_centerVertical="true"
-                />
-        </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/c3"
+                android:visibility="gone" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/c3"
-            />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp">
-            <TextView
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="性别"
-                android:layout_centerVertical="true"
-                android:textSize="17sp"
-                android:textColor="@color/c6"/>
-            <TextView
-                android:id="@+id/choose_sex"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="10dp"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:text="男"
-                android:textSize="15sp"
-                android:textColor="@color/c5"
-                android:gravity="right|center_vertical"
-                android:layout_toLeftOf ="@+id/sex_go"/>
-            <ImageView
-                android:id="@+id/sex_go"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_go"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:layout_centerVertical="true"
-                />
-        </RelativeLayout>
+                android:layout_marginTop="10dp">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/c3"
-            />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:text="邮箱"
+                    android:textColor="@color/c6"
+                    android:textSize="17sp" />
+
+                <EditText
+                    android:id="@+id/email_edit"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/edit_bg_select_noline"
+                    android:gravity="right"
+                    android:inputType="textEmailAddress"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/c5"
+                    android:textCursorDrawable="@drawable/edit_cursor_color"
+                    android:textSize="15sp" />
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/c3" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:text="出生年月"
+                    android:textColor="@color/c6"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/choose_date"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/birthday_go"
+                    android:gravity="right|center_vertical"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="2017-03-01"
+                    android:textColor="@color/c5"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:id="@+id/birthday_go"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_go" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/c3" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:text="性别"
+                    android:textColor="@color/c6"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/choose_sex"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/sex_go"
+                    android:gravity="right|center_vertical"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="男"
+                    android:textColor="@color/c5"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:id="@+id/sex_go"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_go" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/c3" />
 
 
-    </LinearLayout>
-
+        </LinearLayout>
+    </ScrollView>
 
     <TextView
+        android:layout_alignParentBottom="true"
         android:id="@+id/register_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/bg_button"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:text="保存"
         android:textColor="#ffffff"
-        android:textSize="16sp"
-        android:layout_gravity="bottom"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:gravity="center"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/bg_button"/>
+        android:textSize="16sp" />
 
-</FrameLayout>
+</RelativeLayout>

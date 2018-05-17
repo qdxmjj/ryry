@@ -218,8 +218,10 @@ public class WodeFragment extends Fragment {
         //在onCreateView的下面重写onActivityResult这个方法，跳转到系统的相册是仅仅有requeestCode系统相册是没有给我们加一个ResultCode这个参数！！！
         switch (requestCode) {
             case CHOOSE_PICTURE:
-                Uri uri = data.getData();
-                setImageToViewFromPhone(uri);
+                if (data!=null) {
+                    Uri uri = data.getData();
+                    setImageToViewFromPhone(uri);
+                }
                 break;
             case TAKE_PICTURE:
                 setImageToViewFromPhone(tempUri);
