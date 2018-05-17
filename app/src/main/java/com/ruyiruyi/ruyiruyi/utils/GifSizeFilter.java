@@ -12,6 +12,7 @@ import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
 import java.util.HashSet;
 import java.util.Set;
 
+@SuppressWarnings("ResourceType")
 public class GifSizeFilter extends Filter {
     public int mMinWidth;
     public int mMinHeight;
