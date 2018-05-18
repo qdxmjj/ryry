@@ -3,6 +3,7 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -174,6 +175,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
     private WheelView whv_lTime, whv_rTime;
     private String endYear;
     private int currentRtime = 0;
+    private ProgressDialog codeDialog;
 
 
     @Override
@@ -193,6 +195,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
             }
         });
 
+        codeDialog = new ProgressDialog(this);
 
         Intent intent = getIntent();
         canClick = intent.getIntExtra("CANCLICK", 0);
@@ -264,6 +267,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarByUserIdAndCarId");
         params.addBodyParameter("reqJson",jsonObject.toString());
+        params.setConnectTimeout(10000);
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -547,7 +551,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                         }
                         if (roadConditionText.getText().length() == 0){
                             Toast.makeText(CarInfoActivity.this, "请选择行驶路况", Toast.LENGTH_SHORT).show();
-
+                            return;
                         }
 
                         uploadPic();
@@ -876,7 +880,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
 
        String fuyePath = ImageUtils.savePhoto(fuyeBitmap, Environment
                 .getExternalStorageDirectory().getAbsolutePath(), "fuye");
-
+        showDialogProgress(codeDialog,"车辆添加中...");
         int id = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -946,6 +950,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
 
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserCar");
         params.addBodyParameter("reqJson",jsonObject.toString());
+        params.setConnectTimeout(10000);
         params.addBodyParameter("jiashizhengzhuye" ,new File(zhuyePath) );
         params.addBodyParameter("jiashizhengfuye" ,new File(fuyePath) );
         if (hasLichengbiao){
@@ -982,7 +987,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(CarInfoActivity.this, "添加车辆失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -992,7 +997,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(codeDialog);
             }
         });
 

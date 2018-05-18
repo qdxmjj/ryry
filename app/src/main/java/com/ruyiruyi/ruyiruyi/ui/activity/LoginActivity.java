@@ -1,6 +1,7 @@
 
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
@@ -40,6 +41,7 @@ import org.json.JSONObject;
 import org.xutils.DbManager;
 import org.xutils.common.Callback;
 import org.xutils.ex.DbException;
+import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -71,13 +73,14 @@ public class LoginActivity extends BaseActivity {
     private final Object timerSync = new Object();
     private TimeCount mTime;
     private TextView forgetPassword;
+    private ProgressDialog codeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         String ANDROID_ID = Settings.System.getString(this.getContentResolver(), Settings.System.ANDROID_ID);
-
+        codeDialog = new ProgressDialog(this);
         initView();
 
 
@@ -177,6 +180,12 @@ public class LoginActivity extends BaseActivity {
      * @param code
      */
     private void logdinByCode(final String phoneNumber, String code) {
+
+        showDialogProgress(codeDialog,"验证码登陆中...");
+        /*codeDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        codeDialog.setCanceledOnTouchOutside(false);
+        codeDialog.setMessage("验证码登陆中...");
+        codeDialog.show();*/
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("phone",phoneNumber);
@@ -184,6 +193,7 @@ public class LoginActivity extends BaseActivity {
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "verificationCode");
+        params.setConnectTimeout(10000);
         params.addBodyParameter("reqJson",jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -213,17 +223,24 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+              //  codeDialog.dismiss();
+             //   hideDialogProgress(codeDialog);
+                Log.e(TAG, "onError: " );
+                Toast.makeText(LoginActivity.this, "登陆失败，请检查网络链接", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
-
+             //   codeDialog.dismiss();
+               //hideDialogProgress(codeDialog);
+                Log.e(TAG, "onCancelled: ");
             }
 
             @Override
             public void onFinished() {
-
+               // codeDialog.dismiss();
+                hideDialogProgress(codeDialog);
+                Log.e(TAG, "onFinished: ");
             }
         });
     }
@@ -285,7 +302,7 @@ public class LoginActivity extends BaseActivity {
      * 获取短信验证码
      */
     private void getCode(String phoneNumber) {
-
+        mTime.start();
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("phone",phoneNumber);
@@ -293,6 +310,8 @@ public class LoginActivity extends BaseActivity {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "sendMsg");
         params.addBodyParameter("reqJson",jsonObject.toString());
+        params.setConnectTimeout(10000);
+        params.setMethod(HttpMethod.POST);
         params.addParameter("token","f1b47d968e3a4197afb8297476b02556");
         x.http().post(params, new Callback.CommonCallback<String>() {
             private String msg;
@@ -307,11 +326,13 @@ public class LoginActivity extends BaseActivity {
                     msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
                         Toast.makeText(LoginActivity.this, "发送成功", Toast.LENGTH_SHORT).show();
-                        mTime.start();
+                       // mTime.start();
                         //startCountDown();
                     }else {
+                        mTime.onFinish();
                         Toast.makeText(LoginActivity.this, msg , Toast.LENGTH_SHORT).show();
                         getCodeButton.setText("重新发送");
+
                     }
                 } catch (JSONException e) {
                 }
@@ -320,17 +341,22 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                mTime.onFinish();
+                mTime.cancel();
+                Toast.makeText(LoginActivity.this, "登陆失败，请检查网络链接", Toast.LENGTH_SHORT).show();
+               // getCodeButton.setText("重新发送");
 
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
+                Log.e(TAG, "onCancelled: ");
 
             }
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(codeDialog);
             }
         });
     }
@@ -340,6 +366,7 @@ public class LoginActivity extends BaseActivity {
      * 密码登陆方法
      */
     private void loginByPassword(String phoneNumber,String password) {
+        showDialogProgress(codeDialog,"密码登陆中...");
         Log.e(TAG, "login: " + phoneNumber);
         Log.e(TAG, "login: " + password);
         final JSONObject jsonObject = new JSONObject();
@@ -351,6 +378,7 @@ public class LoginActivity extends BaseActivity {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "pwdLogin");
         params.addBodyParameter("reqJson",jsonObject.toString());
+        params.setConnectTimeout(10000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -380,7 +408,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(LoginActivity.this, "网络异常，请检查网络链接", Toast.LENGTH_SHORT).show();
             }
 
             @Override

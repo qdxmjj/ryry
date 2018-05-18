@@ -1,5 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -72,6 +73,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
     private TextView registerButton;
     private EditText userNameEdit;
     private EditText emailEdit;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
                 }
             }
         });
+        progressDialog = new ProgressDialog(this);
         date = new StringBuffer();
 
         Intent intent = getIntent();
@@ -194,7 +197,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
         final String email = emailEdit.getText().toString();
         final String birthday = chooseData.getText().toString();
         String sexStr = chooseSex.getText().toString();
-        final int sex = (sexStr.equals("男")? 1:0);
+        final int sex = (sexStr.equals("男")? 1:2);
         if (passwordStr1.length() < 6){
             Toast.makeText(RegisterActivity.this, "密码不能少于6位", Toast.LENGTH_SHORT).show();
             return;
@@ -211,7 +214,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
             Toast.makeText(RegisterActivity.this, "年龄不能为空", Toast.LENGTH_SHORT).show();
             return;
         }*/
-
+        showDialogProgress(progressDialog,"用户信息提交中...");
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("phone",phone);
@@ -225,6 +228,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "registerUser");
         params.addBodyParameter("reqJson",jsonObject.toString());
+        params.setConnectTimeout(10000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -268,7 +272,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(RegisterActivity.this, "用户信息提交失败，请检查网络连接", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -278,7 +282,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(progressDialog);
             }
         });
 

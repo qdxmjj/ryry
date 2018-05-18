@@ -1,6 +1,7 @@
 package com.ruyiruyi.rylibrary.base;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -77,5 +78,15 @@ public abstract class BaseActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(oBaseActiviy_Broad);//注销广播
+    }
+
+    public void showDialogProgress(ProgressDialog dialog,String message){
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setMessage(message);
+        dialog.show();
+    }
+    public void hideDialogProgress(ProgressDialog dialog){
+        dialog.dismiss();
     }
 }
