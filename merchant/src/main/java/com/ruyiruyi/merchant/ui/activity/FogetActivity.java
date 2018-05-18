@@ -1,5 +1,6 @@
 package com.ruyiruyi.merchant.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
@@ -44,6 +45,7 @@ public class FogetActivity extends BaseActivity {
     private TextView tv_code;
     private TextView tv_save;
     private ActionBar mActionBar;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class FogetActivity extends BaseActivity {
                 }
             }
         });
+        dialog = new ProgressDialog(this);
 
         initView();
     }
@@ -142,6 +145,7 @@ public class FogetActivity extends BaseActivity {
      * 获取短信验证码
      */
     private void getCode(String phoneNumber) {
+        showDialogProgress(dialog, "验证码发送中...");
 
         final JSONObject jsonObject = new JSONObject();
         try {
@@ -150,6 +154,7 @@ public class FogetActivity extends BaseActivity {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "sendMsgChangePwd");
         params.addBodyParameter("reqJson", jsonObject.toString());
+        params.setConnectTimeout(6000);//6秒后走onError
         x.http().post(params, new Callback.CommonCallback<String>() {
             private String status;
 
@@ -174,7 +179,7 @@ public class FogetActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(getApplicationContext(), "验证码发送失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -184,7 +189,7 @@ public class FogetActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(dialog);
             }
         });
     }
@@ -257,6 +262,7 @@ public class FogetActivity extends BaseActivity {
      * @param password
      */
     private void savePassword(String phone, String code, String password) {
+        showDialogProgress(dialog, "密码重置中...");
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("phone", phone);
@@ -266,6 +272,7 @@ public class FogetActivity extends BaseActivity {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "changeStorePwd");
         params.addBodyParameter("reqJson", jsonObject.toString());
+        params.setConnectTimeout(6000);//6s 后 走OnError
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -274,11 +281,11 @@ public class FogetActivity extends BaseActivity {
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")) {
-                        Toast.makeText(FogetActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         FogetActivity.this.finish();
                     } else {
-                        Toast.makeText(FogetActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
 
@@ -287,7 +294,7 @@ public class FogetActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(FogetActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "密码重置失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -297,7 +304,7 @@ public class FogetActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(dialog);
             }
         });
     }

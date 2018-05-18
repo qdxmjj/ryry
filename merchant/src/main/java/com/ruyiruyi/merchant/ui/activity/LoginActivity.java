@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -47,26 +48,11 @@ public class LoginActivity extends BaseActivityb {
     private TextView tv_foget;
     private TextView tv_login;
     private TextView tv_register;
+    private ProgressDialog dialog;
 
     private int status = 1;
     private String msg = null;
-/*
-   2   private DbManager.DaoConfig daoConfig = new  DbManager.DaoConfig()
-            // 设置数据库名字
-            .setDbName("abc.db")
-            // 设置数据库版本
-            .setDbVersion(1)
-            // 设置数据库的路径
-             .setDbDir(Environment.getExternalStorageDirectory())
-            // 设置数据库允许事务
-            .setAllowTransaction(true)
-            // 升级监听
-            .setDbUpgradeListener(new DbManager.DbUpgradeListener() {
-                @Override
-                public void onUpgrade(DbManager db, int oldVersion, int newVersion) {
-                    // 进行表或是数据的变更
-                }
-            });*/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +63,10 @@ public class LoginActivity extends BaseActivityb {
         //判断权限
         judgePower();
 
-        initView();
-/*    2    DbManager db = x.getDb(daoConfig);
-        try {
-            db.save(new Car(1,"asa"));
-        } catch (DbException e) {
+        dialog = new ProgressDialog(this);
 
-        }*/
+        initView();
+
     }
 
     private void judgePower() {
@@ -125,7 +108,6 @@ public class LoginActivity extends BaseActivityb {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-//     3                   startActivity(new Intent(getApplicationContext(),RegisterMapActivity.class));
                         String phone = et_zhanghao.getText().toString();
                         String pass = et_pass.getText().toString();
                         byte[] md5 = new byte[0];
@@ -147,8 +129,7 @@ public class LoginActivity extends BaseActivityb {
                             }
                             //login ！！
                             loginByPassWord(phone, password);
-                            //测试用登录成功
-//                            loginTest();
+
                         } catch (NoSuchAlgorithmException e) {
 
                         } catch (UnsupportedEncodingException e) {
@@ -169,6 +150,7 @@ public class LoginActivity extends BaseActivityb {
 
     //登录
     private void loginByPassWord(final String phone, final String pass) {
+        showDialogProgress(dialog, "登录中...");
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("phone", phone);
@@ -179,6 +161,7 @@ public class LoginActivity extends BaseActivityb {
         Log.e(TAG, "loginByPassWord:111 ph" + phone + "mm" + pass);
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storePwdLogin");
         params.addBodyParameter("reqJson", jsonObject.toString());
+        params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -210,17 +193,16 @@ public class LoginActivity extends BaseActivityb {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Log.w(TAG, "onError: 登录请求 onError ??");
+                Toast.makeText(getApplicationContext(), "登录失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
-                Log.w(TAG, "onCancelled: 登录请求 onCancelled ??");
             }
 
             @Override
             public void onFinished() {
-                Log.w(TAG, "onFinished: 登录请求 onFinished ??");
+                hideDialogProgress(dialog);
             }
         });
     }

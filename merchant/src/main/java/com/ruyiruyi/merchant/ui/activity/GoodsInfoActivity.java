@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -94,6 +95,7 @@ public class GoodsInfoActivity extends BaseActivity {
     private String leftTypeId;
     private String rightTypeId;
     private String img_Path;
+    private ProgressDialog progressDialog;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -146,6 +148,7 @@ public class GoodsInfoActivity extends BaseActivity {
                 }
             }
         });
+        progressDialog = new ProgressDialog(this);
 
         serviceList = new ArrayList<>();
         initView();
@@ -392,6 +395,7 @@ public class GoodsInfoActivity extends BaseActivity {
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "是的", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                showDialogProgress(progressDialog, "商品提交中...");
                 JSONObject object = new JSONObject();
                 try {
                     object.put("storeId", new DbConfig().getId());
@@ -406,6 +410,7 @@ public class GoodsInfoActivity extends BaseActivity {
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "addStock");
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("stock_img", new File(img_Path));
+                params.setConnectTimeout(6000);
                 Log.e(TAG, "onClick: 012 img_Path = add " + img_Path);
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
@@ -434,7 +439,7 @@ public class GoodsInfoActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
+                        Toast.makeText(getApplicationContext(), "商品提交失败,请检查网络...", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -444,7 +449,7 @@ public class GoodsInfoActivity extends BaseActivity {
 
                     @Override
                     public void onFinished() {
-
+                        hideDialogProgress(progressDialog);
                     }
                 });
             }

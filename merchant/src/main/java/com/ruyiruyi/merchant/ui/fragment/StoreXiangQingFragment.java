@@ -2,6 +2,7 @@ package com.ruyiruyi.merchant.ui.fragment;
 
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -34,6 +35,8 @@ import com.ruyiruyi.merchant.ui.activity.MyPicDialogActivity;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
+import com.ruyiruyi.rylibrary.base.BaseActivity;
+import com.ruyiruyi.rylibrary.base.BaseFragment;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
 import com.ruyiruyi.rylibrary.utils.glide.GlideRoundTransform;
 
@@ -54,7 +57,7 @@ import java.util.List;
 import rx.functions.Action1;
 
 
-public class StoreXiangQingFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
+public class StoreXiangQingFragment extends BaseFragment implements CompoundButton.OnCheckedChangeListener {
 
     private String TAG = StoreXiangQingFragment.class.getSimpleName();
 
@@ -103,6 +106,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     private String mdPic_c_url;
     private boolean isClicked = false;
     private int isOpen = 1; //默认开店营业 2 不营业 1 营业
+    private ProgressDialog progressDialog;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -128,6 +132,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        progressDialog = new ProgressDialog(getActivity());
 
         initView();
         initRegisterServiceTypeData();
@@ -411,6 +416,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "是的", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                showDialogProgress(progressDialog, "店铺信息保存中...");
                 String storeId = new DbConfig().getId() + "";
                 JSONObject object = new JSONObject();
                 try {
@@ -425,6 +431,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreInfoByStoreId");
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("serviceTypeList", serviceTypeListString);
+                params.setConnectTimeout(6000);
                 Log.e(TAG, "onClick:110 serviceTypeListString = " + serviceTypeListString);
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
@@ -445,7 +452,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
+                        Toast.makeText(getActivity(), "更新店铺失败,请检查网络", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -455,7 +462,7 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
 
                     @Override
                     public void onFinished() {
-
+                        hideDialogProgress(progressDialog);
                     }
                 });
             }

@@ -1,5 +1,6 @@
 package com.ruyiruyi.merchant.ui.activity;
 
+import android.app.ProgressDialog;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +23,7 @@ import com.ruyiruyi.merchant.ui.multiType.ServiceItemProvider;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
+import com.ruyiruyi.rylibrary.base.BaseFragmentActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.json.JSONArray;
@@ -38,7 +40,7 @@ import java.util.Set;
 
 import rx.functions.Action1;
 
-public class MyServiceActivity extends FragmentActivity implements MyServiceFragment.StartFragmentPasstoActivity {
+public class MyServiceActivity extends BaseFragmentActivity implements MyServiceFragment.StartFragmentPasstoActivity {
     private static final String TAG = MyServiceActivity.class.getSimpleName();
     private ActionBar mAcBar;
     private TabLayout mTab;
@@ -50,6 +52,7 @@ public class MyServiceActivity extends FragmentActivity implements MyServiceFrag
 
     private List<String> selectServicesList = new ArrayList<>();
     private String selectServicesListString = "";
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -68,6 +71,7 @@ public class MyServiceActivity extends FragmentActivity implements MyServiceFrag
                 }
             }
         });
+        progressDialog = new ProgressDialog(this);
 
 
         initView();
@@ -79,6 +83,7 @@ public class MyServiceActivity extends FragmentActivity implements MyServiceFrag
         RxViewAction.clickNoDouble(tv_saveService).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
+                showDialogProgress(progressDialog, "保存提交中...");
                 Log.e(TAG, "call: 000servicesBeanList_all = >" + "all" + "<--" + selectServicesList.size());
                 JSONObject object = new JSONObject();
                 String storeId = new DbConfig().getId() + "";
@@ -100,6 +105,7 @@ public class MyServiceActivity extends FragmentActivity implements MyServiceFrag
                 }
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "addStoreServices");
                 params.addBodyParameter("reqJson", object.toString());
+                params.setConnectTimeout(6000);
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
@@ -115,7 +121,7 @@ public class MyServiceActivity extends FragmentActivity implements MyServiceFrag
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
+                        Toast.makeText(getApplicationContext(), "信息保存失败,请检查网络", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -125,7 +131,7 @@ public class MyServiceActivity extends FragmentActivity implements MyServiceFrag
 
                     @Override
                     public void onFinished() {
-
+                        hideDialogProgress(progressDialog);
                     }
                 });
 

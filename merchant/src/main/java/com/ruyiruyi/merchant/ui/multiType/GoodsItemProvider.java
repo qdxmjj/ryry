@@ -1,5 +1,6 @@
 package com.ruyiruyi.merchant.ui.multiType;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,6 +43,7 @@ import rx.functions.Action1;
 public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItemProvider.ViewHolder> {
     private Context context;
     private String TAG = GoodsItemProvider.class.getSimpleName();
+    private ProgressDialog progressDialog;
 
     public GoodsItemProvider(Context context) {
         this.context = context;
@@ -61,6 +63,7 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final GoodsItemBean goodsItemBean) {
+        progressDialog = new ProgressDialog(context);
         holder.tv_title.setText(goodsItemBean.getName());
         holder.tv_kucun.setText(goodsItemBean.getAmount() + "");
         holder.tv_yishou.setText(goodsItemBean.getSoldNo() + "");
@@ -121,6 +124,7 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "是的", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                showDialogProgress(progressDialog, "商品删除中...");
                 JSONObject object = new JSONObject();
                 try {
                     object.put("id", goodsid);
@@ -129,6 +133,7 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
                 }
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStock");
                 params.addBodyParameter("reqJson", object.toString());
+                params.setConnectTimeout(6000);
                 Log.e(TAG, "onClick: 00000 params.toString()  =  " + params.toString());
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
@@ -150,7 +155,7 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
+                        Toast.makeText(context, "商品删除失败,请检查网络", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -160,7 +165,7 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
 
                     @Override
                     public void onFinished() {
-
+                        hideDialogProgress(progressDialog);
                     }
                 });
             }
@@ -195,7 +200,14 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
         }
     }
 
-/*    public interface PassIdToFGListener {
-        void passtoFG(String id);
-    }*/
+    public void showDialogProgress(ProgressDialog dialog, String message) {
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setMessage(message);
+        dialog.show();
+    }
+
+    public void hideDialogProgress(ProgressDialog dialog) {
+        dialog.dismiss();
+    }
 }

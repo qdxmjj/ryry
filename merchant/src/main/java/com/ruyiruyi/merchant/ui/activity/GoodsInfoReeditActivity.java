@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -106,6 +107,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
     private String serviceTypeId;
     private String serviceId;
     private String status = "1";//默认出售中
+    private ProgressDialog progressDialog;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -222,6 +224,8 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 }
             }
         });
+        progressDialog = new ProgressDialog(this);
+
         Bundle bundle = getIntent().getExtras();
         goodsid = bundle.getString("goodsid");
         name = bundle.getString("name");
@@ -467,6 +471,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "是的", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                showDialogProgress(progressDialog, "修改提交中...");
                 JSONObject object = new JSONObject();
                 try {
                     object.put("storeId", storeId);
@@ -484,6 +489,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 }
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStock");
                 params.addBodyParameter("reqJson", object.toString());
+                params.setConnectTimeout(6000);
                 if (!isOldPic) {
                     params.addBodyParameter("stock_img", new File(img_Path));
                     Log.e(TAG, "onClick: 012 img_Path " + img_Path);
@@ -519,7 +525,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
+                        Toast.makeText(getApplicationContext(), "提交失败,请检查网络", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -529,7 +535,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
 
                     @Override
                     public void onFinished() {
-
+                        hideDialogProgress(progressDialog);
                     }
                 });
             }

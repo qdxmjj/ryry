@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -178,6 +179,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private int isShoulian;//0 no 1 yes ;
     private int isRightCode = 0;// 0 wrong 1 right;
     //提交参数>---
+    private ProgressDialog progressDialog;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -213,6 +215,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 }
             }
         });
+        progressDialog = new ProgressDialog(this);
 
         //下载数据
         initRegisterCategoryData();
@@ -1090,6 +1093,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
 
     private void getCode(String phoneNumber) {
+        showDialogProgress(progressDialog, "验证码发送中...");
 
         final JSONObject jsonObject = new JSONObject();
         try {
@@ -1098,6 +1102,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "sendMsg");
         params.addBodyParameter("reqJson", jsonObject.toString());
+        params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             private String status;
 
@@ -1122,7 +1127,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(getApplicationContext(), "验证码发送失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -1132,7 +1137,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(progressDialog);
             }
         });
     }
@@ -1402,6 +1407,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "是的", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                showDialogProgress(progressDialog, "注册信息提交中...");
                  /*    //提交参数---<
                 private String persionName;
                 private String persionPhone;
@@ -1448,6 +1454,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 pa.addBodyParameter("indoor_img", new File(mdpicbPath));
                 pa.addBodyParameter("factory_img", new File(mdpiccPath));
                 pa.addBodyParameter("id_img", new File(shouPath));
+                pa.setConnectTimeout(6000);
                 x.http().post(pa, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
@@ -1469,7 +1476,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-                        Toast.makeText(RegisterActivity.this, "网络错误提交失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "注册信息提交失败,请检查网络", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -1479,7 +1486,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
                     @Override
                     public void onFinished() {
-
+                        hideDialogProgress(progressDialog);
                     }
                 });
             }
