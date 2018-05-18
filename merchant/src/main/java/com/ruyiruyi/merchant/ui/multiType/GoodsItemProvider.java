@@ -68,8 +68,8 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
 
         String updateTime = String.valueOf(System.currentTimeMillis());
         Glide.with(context).load(goodsItemBean.getImgUrl())//不缓存
-                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
-                .skipMemoryCache(true)//跳过内存缓存
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+//                .skipMemoryCache(true)//跳过内存缓存
                 .into(holder.img_goods);
 
 

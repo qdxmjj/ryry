@@ -1,11 +1,14 @@
 package com.ruyiruyi.merchant;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,15 +59,18 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(content, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
+        //判断权限
+        judgePower();
+
         viewPager = new NoCanSlideViewPager(this);
-        content.addView(viewPager,LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.MATCH_PARENT, Gravity.TOP,0,0,0, HomeTabsCell.CELL_HEIGHT));
+        content.addView(viewPager, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP, 0, 0, 0, HomeTabsCell.CELL_HEIGHT));
 
         tabsCell = new HomeTabsCell(this);
-        content.addView(tabsCell,LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT,Gravity.BOTTOM));
+        content.addView(tabsCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM));
         tabsCell.setViewPager(viewPager);
 
         initTitle();
-        pagerAdapter = new HomePagerAdapeter(getSupportFragmentManager(),initPagerTitle(),initFragment());
+        pagerAdapter = new HomePagerAdapeter(getSupportFragmentManager(), initPagerTitle(), initFragment());
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -118,9 +124,9 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initTitle() {
-        tabsCell.addView(R.drawable.ic_tubiao1,R.drawable.ic_tubiao1_xuanzhong, "订单 ");
-        tabsCell.addView(R.drawable.ic_shop_weixuan,R.drawable.ic_shop_xuanzhong, "店铺 ");
-        tabsCell.addView(R.drawable.ic_wode_weixuan,R.drawable.ic_wode_xuanzhong, "我的 ");
+        tabsCell.addView(R.drawable.ic_tubiao1, R.drawable.ic_tubiao1_xuanzhong, "订单 ");
+        tabsCell.addView(R.drawable.ic_shop_weixuan, R.drawable.ic_shop_xuanzhong, "店铺 ");
+        tabsCell.addView(R.drawable.ic_wode_weixuan, R.drawable.ic_wode_xuanzhong, "我的 ");
     }
 
 
@@ -139,7 +145,6 @@ public class MainActivity extends FragmentActivity {
             return mPageTitle.get(position);
         }
     }
-
 
 
     @Override
@@ -163,6 +168,33 @@ public class MainActivity extends FragmentActivity {
 
 
             this.finish();
+        }
+    }
+
+    private void judgePower() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 }

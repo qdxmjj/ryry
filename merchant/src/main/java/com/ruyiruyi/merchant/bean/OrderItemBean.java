@@ -3,13 +3,33 @@ package com.ruyiruyi.merchant.bean;
 
 public class OrderItemBean {
 
-    private String storeId ;
-    private String goodsId ;
-    private String imgUrl ;
-    private String title ;
-    private String bianhao ;
-    private String price ;
-    private String status ;
+    private String storeId;
+    private String goodsId;
+
+    private String imgUrl;
+    private String title;
+    private String bianhao;
+    private String price;
+    private String status;
+    private long orderTime;
+    private String orderType;
+
+    public void setOrderTime(long orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public long getOrderTime() {
+
+        return orderTime;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
 
     public OrderItemBean() {
     }

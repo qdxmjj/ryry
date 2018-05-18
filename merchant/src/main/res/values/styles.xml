@@ -1,16 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="AppBaseTheme">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/theme_primary</item>
         <item name="colorPrimaryDark">@color/theme_primary</item>
         <item name="colorAccent">@color/theme_primary</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:datePickerDialogTheme" tools:targetApi="lollipop">

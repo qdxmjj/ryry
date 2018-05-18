@@ -73,6 +73,20 @@ public class LoginActivity extends BaseActivityb {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
+
+        //判断权限
+        judgePower();
+
+        initView();
+/*    2    DbManager db = x.getDb(daoConfig);
+        try {
+            db.save(new Car(1,"asa"));
+        } catch (DbException e) {
+
+        }*/
+    }
+
+    private void judgePower() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -97,13 +111,6 @@ public class LoginActivity extends BaseActivityb {
             Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
             finish();
         }
-        initView();
-/*    2    DbManager db = x.getDb(daoConfig);
-        try {
-            db.save(new Car(1,"asa"));
-        } catch (DbException e) {
-
-        }*/
     }
 
     private void initView() {

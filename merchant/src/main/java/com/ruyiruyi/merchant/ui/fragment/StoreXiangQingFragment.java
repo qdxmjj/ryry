@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.XiangmusBean;
 import com.ruyiruyi.merchant.db.DbConfig;
@@ -155,12 +156,18 @@ public class StoreXiangQingFragment extends Fragment implements CompoundButton.O
         x.image().bind(img_mdpic_c, mdPic_c_url, myOptions);*/
         Glide.with(getActivity()).load(mdPic_a_url)
                 .transform(new GlideRoundTransform(getActivity(), 5))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+                .skipMemoryCache(true)//跳过内存缓存
                 .into(img_mdpic_a);
         Glide.with(getActivity()).load(mdPic_b_url)
                 .transform(new GlideRoundTransform(getActivity(), 5))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+                .skipMemoryCache(true)//跳过内存缓存
                 .into(img_mdpic_b);
         Glide.with(getActivity()).load(mdPic_c_url)
                 .transform(new GlideRoundTransform(getActivity(), 5))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+                .skipMemoryCache(true)//跳过内存缓存
                 .into(img_mdpic_c);
         if (isOpen == 2) {
             mSwitch.setChecked(false);

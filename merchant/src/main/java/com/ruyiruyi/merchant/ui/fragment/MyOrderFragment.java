@@ -17,12 +17,15 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.GoodsItemBean;
+import com.ruyiruyi.merchant.bean.ItemBottomBean;
 import com.ruyiruyi.merchant.bean.ItemNullBean;
 import com.ruyiruyi.merchant.bean.OrderItemBean;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.multiType.GoodsItemProvider;
+import com.ruyiruyi.merchant.ui.multiType.ItemBottomProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemNullProvider;
 import com.ruyiruyi.merchant.ui.multiType.OrderItemProvider;
+import com.ruyiruyi.merchant.ui.multiType.listener.OnLoadMoreListener;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 
 import org.json.JSONArray;
@@ -49,6 +52,13 @@ public class MyOrderFragment extends Fragment {
     private String TAG = MyOrderFragment.class.getSimpleName();
     private String order_type;
     private List<OrderItemBean> orderBeanList;
+    private String storeId;
+    private String state;//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
+    private int total_all_page;
+    private int mRows = 10;  // 设置默认一页加载10条数据
+    private int current_page;
+    private boolean isLoadMore = false;
+    private boolean isLoadOver = false;
 
 
     @Nullable
@@ -63,86 +73,119 @@ public class MyOrderFragment extends Fragment {
 
         Bundle bundle = getArguments();
         order_type = bundle.getString(ORDER_TYPE);
-        Log.e(TAG, "onActivityCreated: order_type = " + order_type);
+        storeId = new DbConfig().getId() + "";
+        state = "";
 
         initView();
         initData();
         initSwipeLayout();
     }
 
+    //加载原始数据
     private void initData() {
+        initDataByLoadMoreType();
+    }
+
+    //公用下载
+    private void initDataByLoadMoreType() {
+        isLoadOver = false;
+
+        if (!isLoadMore) {//只有加载更多(不清空原数据)
+            orderBeanList.clear();
+            current_page = 1;
+        }
+
+        //下载数据
         switch (order_type) {
             case "QUANBU":
-                for (int i = 0; i < 8; i++) {
-                    OrderItemBean bean = new OrderItemBean();
-                    bean.setTitle("商品" + i);
-                    bean.setGoodsId(i + "");
-                    bean.setImgUrl("http://192.168.0.167/images/store/stockImg/72/1525685364190568addgoodsimg.png");
-                    bean.setBianhao("1234567890" + i);
-                    bean.setPrice("888");
-                    bean.setStatus("0");
-                    orderBeanList.add(bean);
-
-                    OrderItemBean bean2 = new OrderItemBean();
-                    bean2.setTitle("商品" + i);
-                    bean2.setGoodsId(i + "");
-                    bean2.setImgUrl("http://192.168.0.167/images/store/stockImg/72/1525685364190568addgoodsimg.png");
-                    bean2.setBianhao("1234567890" + i);
-                    bean2.setPrice("888");
-                    bean2.setStatus("1");
-                    orderBeanList.add(bean2);
-                }
+                state = "0";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
+                requestFromServer(storeId, state);
                 break;
             case "DAIFAHUO":
-                for (int i = 0; i < 10; i++) {
-                    OrderItemBean bean = new OrderItemBean();
-                    bean.setTitle("商品" + i);
-                    bean.setGoodsId(i + "");
-                    bean.setImgUrl("http://192.168.0.167/images/store/stockImg/72/1525685364190568addgoodsimg.png");
-                    bean.setBianhao("1234567890" + i);
-                    bean.setPrice("888");
-                    bean.setStatus("0");
-                    orderBeanList.add(bean);
-                }
+                state = "1";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
+                requestFromServer(storeId, state);
                 break;
             case "DAISHOUHUO":
-                for (int i = 0; i < 10; i++) {
-                    OrderItemBean bean = new OrderItemBean();
-                    bean.setTitle("商品" + i);
-                    bean.setGoodsId(i + "");
-                    bean.setImgUrl("http://192.168.0.167/images/store/stockImg/72/1525685364190568addgoodsimg.png");
-                    bean.setBianhao("1234567890" + i);
-                    bean.setPrice("888");
-                    bean.setStatus("0");
-                    orderBeanList.add(bean);
-                }
+                state = "2";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
+                requestFromServer(storeId, state);
                 break;
             case "DAIFUWU":
-                for (int i = 0; i < 10; i++) {
-                    OrderItemBean bean = new OrderItemBean();
-                    bean.setTitle("商品" + i);
-                    bean.setGoodsId(i + "");
-                    bean.setImgUrl("http://192.168.0.167/images/store/stockImg/72/1525685364190568addgoodsimg.png");
-                    bean.setBianhao("1234567890" + i);
-                    bean.setPrice("888");
-                    bean.setStatus("0");
-                    orderBeanList.add(bean);
-                }
+                state = "3";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
+                requestFromServer(storeId, state);
                 break;
             case "YIWANCHENG":
-                for (int i = 0; i < 10; i++) {
-                    OrderItemBean bean = new OrderItemBean();
-                    bean.setTitle("商品" + i);
-                    bean.setGoodsId(i + "");
-                    bean.setImgUrl("http://192.168.0.167/images/store/stockImg/72/1525685364190568addgoodsimg.png");
-                    bean.setBianhao("1234567890" + i);
-                    bean.setPrice("888");
-                    bean.setStatus("1");
-                    orderBeanList.add(bean);
-                }
+                state = "4";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
+                requestFromServer(storeId, state);
                 break;
         }
 
+    }
+
+    private void requestFromServer(final String storeId, String state) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("storeId", storeId);
+            object.put("state", state);
+            object.put("page", current_page);
+            object.put("rows", mRows);
+
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreGeneralOrderByState");
+        params.addBodyParameter("reqJson", object.toString());
+        params.addBodyParameter("token", new DbConfig().getToken());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess0808: result =  " + result);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject data = jsonObject.getJSONObject("data");
+                    total_all_page = (data.getInt("total")) / mRows;//处理页数
+                    if (data.getInt("total") % mRows > 0) {
+                        total_all_page++;
+                    }
+                    JSONArray rows = data.getJSONArray("rows");
+                    for (int i = 0; i < rows.length(); i++) {
+                        JSONObject orders = (JSONObject) rows.get(i);
+                        OrderItemBean bean = new OrderItemBean();
+                        bean.setStoreId(storeId);
+                        bean.setImgUrl(orders.getString("orderImage"));
+                        bean.setTitle(orders.getString("orderName"));
+                        bean.setBianhao(orders.getString("orderNo"));
+                        bean.setPrice(orders.getString("orderPrice"));
+                        bean.setStatus(orders.getString("orderState"));
+                        bean.setOrderTime(orders.getLong("orderTime"));
+                        bean.setOrderType(orders.getString("orderType"));
+                        orderBeanList.add(bean);
+                    }
+
+                    //更新数据
+                    updataData();
+
+
+                } catch (JSONException e) {
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void updataData() {
         if (orderBeanList == null || orderBeanList.size() == 0) {
             items.clear();
             items.add(new ItemNullBean("暂无数据"));
@@ -169,13 +212,14 @@ public class MyOrderFragment extends Fragment {
         OrderItemProvider provider = new OrderItemProvider(getActivity());
         multiTypeAdapter.register(OrderItemBean.class, provider);
         multiTypeAdapter.register(ItemNullBean.class, new ItemNullProvider());
+        multiTypeAdapter.register(ItemBottomBean.class, new ItemBottomProvider());
         mRlv.setAdapter(multiTypeAdapter);
         assertHasTheSameAdapter(mRlv, multiTypeAdapter);
 
         orderBeanList = new ArrayList<>();
     }
 
-    //下拉刷新
+    //初始化下拉上拉
     private void initSwipeLayout() {
         mSwipeLayout.setColorSchemeResources(
                 R.color.theme_primary,
@@ -187,19 +231,38 @@ public class MyOrderFragment extends Fragment {
             @Override
             public void onRefresh() {
                 //加载最新数据并更新adapter数据
+                isLoadMore = false;
                 myDownRefreshByServer();
 
                 mSwipeLayout.setRefreshing(false);
             }
         });
         //加载更多
-//        mRlv.setOnScrollListener(new OnLoadMoreListener(){
-//
-//        });
+        mRlv.setOnScrollListener(new OnLoadMoreListener() {
+
+            @Override
+            public void onLoadMore() {
+                if (total_all_page > current_page) {
+                    current_page++;
+                    items.add(new ItemBottomBean("加载更多..."));
+
+                    isLoadMore = true;
+                    initDataByLoadMoreType();
+                } else {
+                    if (!isLoadOver && (total_all_page > 1)) {//用于判断是否加  加载完成底部
+                        items.add(new ItemBottomBean("全部加载完毕!"));
+                        isLoadOver = true;
+                    }
+                }
+                assertAllRegistered(multiTypeAdapter, items);
+                multiTypeAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
+    //下拉刷新
     private void myDownRefreshByServer() {
-
+        initDataByLoadMoreType();
     }
 
 }

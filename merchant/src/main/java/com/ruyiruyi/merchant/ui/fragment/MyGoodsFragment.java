@@ -119,6 +119,7 @@ public class MyGoodsFragment extends Fragment {
 
     }
 
+    //初始化下拉上拉
     private void initSwipeLayout() {
         mSwipeLayout.setColorSchemeResources(//下拉刷新圆圈颜色
                 R.color.theme_primary,

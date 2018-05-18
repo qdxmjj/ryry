@@ -8,10 +8,24 @@ repositories {
 
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'xiaomajiajiamerchant'
+            keyPassword 'qdxmjj'
+            storeFile file('E:/kaifa/xmjjworkspace/ryry/merchant/keystore.jks')
+            storePassword 'qdxmjj'
+            println("====== signingConfigs.config ======")
+        }
+        debug {
+            storeFile file('E:/kaifa/xmjjworkspace/ryry/merchant/keystore.jks')//签名文件路径
+            storePassword "qdxmjj"
+            keyAlias "xiaomajiajiamerchant"
+            keyPassword "qdxmjj"  //签名密码
+            println("====== signingConfigs.debug ======")
+        }
+    }
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
-
-
     defaultConfig {
         applicationId "com.ruyiruyi.merchant"
         minSdkVersion 15
@@ -35,6 +49,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
     packagingOptions {
@@ -44,8 +62,8 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
     compile files('libs/BaiduLBS_Android.jar')
+    testCompile 'junit:junit:4.12'
     def system_dependencies = rootProject.ext.system_dependencies
     compile system_dependencies.support_v4
     compile system_dependencies.appcompat_v7

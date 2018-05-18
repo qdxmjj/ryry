@@ -456,7 +456,7 @@ public class UserInfoActivity extends BaseActivity implements DatePicker.OnDateC
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "是的", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                JSONObject object = new JSONObject();
+                final JSONObject object = new JSONObject();
                 try {
                     object.put("userId", new DbConfig().getId());
                     object.put("id", new DbConfig().getId());
@@ -480,8 +480,11 @@ public class UserInfoActivity extends BaseActivity implements DatePicker.OnDateC
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
+                        Log.e(TAG, "onSuccess: abcdef result = " + result);
                         try {
                             JSONObject objects = new JSONObject(result);
+                            JSONObject data = objects.getJSONObject("data");
+                            headimgurl = data.getString("headimgurl");
                             String msg = objects.getString("msg");
                             int status = objects.getInt("status");
                             if (status == 1) {
@@ -489,6 +492,7 @@ public class UserInfoActivity extends BaseActivity implements DatePicker.OnDateC
                                 User user = new DbConfig().getUser();
                                 user.setNick(nick);
                                 user.setGender(gender);
+                                user.setHeadimgurl(headimgurl);
                                 user.setEmail(email);
                                 user.setBirthday(birthday);
                                 saveUserToDb(user);//保存更新到数据库

@@ -96,22 +96,22 @@ public class FogetActivity extends BaseActivity {
                     public void call(Void aVoid) {
                         String phone = et_phone.getText().toString();
                         if (!UtilsRY.isMobile(phone)) {
-                            Toast.makeText(FogetActivity.this, "手机号格式错误", Toast.LENGTH_SHORT).show();
+                            showDialog("手机号格式错误");
                             return;
                         }
                         String code = et_code.getText().toString();
                         if (code.isEmpty()) {
-                            Toast.makeText(FogetActivity.this, "验证码不能为空", Toast.LENGTH_SHORT).show();
+                            showDialog("验证码不能为空");
                             return;
                         }
                         String passwordStr1 = et_passa.getText().toString();
                         String passwordStr2 = et_passb.getText().toString();
                         if (passwordStr1.length() < 6) {
-                            Toast.makeText(FogetActivity.this, "密码不能少于6位", Toast.LENGTH_SHORT).show();
+                            showDialog("密码不能少于6位");
                             return;
                         }
                         if (passwordStr1.isEmpty() || passwordStr2.isEmpty()) {
-                            Toast.makeText(FogetActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
+                            showDialog("密码不能为空");
                             return;
                         }
                         String password1 = null;
@@ -129,7 +129,7 @@ public class FogetActivity extends BaseActivity {
                         }
 
                         if (!password1.equals(password2)) {
-                            Toast.makeText(FogetActivity.this, "密码输入不一致", Toast.LENGTH_SHORT).show();
+                            showDialog("密码输入不一致");
                             return;
                         }
                         savePassword(phone, code, password1);

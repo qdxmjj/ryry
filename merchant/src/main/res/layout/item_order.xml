@@ -17,6 +17,7 @@
         android:layout_height="5dp" />
 
     <FrameLayout
+        android:id="@+id/order_item_fl"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginRight="5dp"

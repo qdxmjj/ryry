@@ -1,12 +1,15 @@
 package com.ruyiruyi.ruyiruyi;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,6 +49,7 @@ import com.ruyiruyi.rylibrary.utils.LayoutHelper;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
 import android.os.Handler;
 import android.widget.Toast;
 
@@ -93,24 +97,28 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         content = new FrameLayout(this);
-        setContentView(content,LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.MATCH_PARENT));
+        setContentView(content, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+
+        //判断权限
+        judgePower();
+
         Intent intent = getIntent();
 
-        if (intent!=null){
+        if (intent != null) {
             fromFragment = intent.getStringExtra(MyFragment.FROM_FRAGMENT);
-        }else {
+        } else {
             fromFragment = "";
         }
         Log.e(TAG, "onCreate: -----------" + fromFragment);
         viewPager = new NoCanSlideViewPager(this);
-        content.addView(viewPager,LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.MATCH_PARENT,Gravity.TOP,0,0,0, AndroidUtilities.dp(HomeTabsCell.CELL_HEIGHT)));
+        content.addView(viewPager, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP, 0, 0, 0, AndroidUtilities.dp(HomeTabsCell.CELL_HEIGHT)));
 
         tabsCell = new HomeTabsCell(this);
-        content.addView(tabsCell,LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,AndroidUtilities.dp(HomeTabsCell.CELL_HEIGHT),Gravity.BOTTOM));
+        content.addView(tabsCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, AndroidUtilities.dp(HomeTabsCell.CELL_HEIGHT), Gravity.BOTTOM));
         tabsCell.setViewPager(viewPager);
 
         initTitle();
-        pagerAdapter = new HomePagerAdapeter(getSupportFragmentManager(),initPagerTitle(),initFragment());
+        pagerAdapter = new HomePagerAdapeter(getSupportFragmentManager(), initPagerTitle(), initFragment());
         viewPager.setAdapter(pagerAdapter);
 
 
@@ -130,28 +138,27 @@ public class MainActivity extends FragmentActivity {
 
             }
         });
-        if (fromFragment == null){
+        if (fromFragment == null) {
             viewPager.setCurrentItem(0);
             tabsCell.setSelected(0);
-        }else if (fromFragment.equals("MYFRAGMENT")){
+        } else if (fromFragment.equals("MYFRAGMENT")) {
             viewPager.setCurrentItem(3);
             tabsCell.setSelected(3);
         }
 
 
         //获取车辆品牌数据
-       // initCarDataIntoDb();
+        // initCarDataIntoDb();
         //获取车辆图标数据
-       // initCarBrand();
+        // initCarBrand();
         //获取车辆型号数据
-       // initCarVerhicle();
+        // initCarVerhicle();
         //获取车辆轮胎和排量数据
-       // initCarrTireInfo();
+        // initCarrTireInfo();
         //获取轮胎型号
-       // initTireType();
+        // initTireType();
         //获取省市县
-       // initProvice();
-
+        // initProvice();
 
 
     }
@@ -168,17 +175,17 @@ public class MainActivity extends FragmentActivity {
         }
         JSONObject jsonObject = new JSONObject();
         try {
-            if (provinceList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (provinceList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = provinceList.get(provinceList.size() - 1).getTime();
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
 
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAllPositon");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -187,7 +194,7 @@ public class MainActivity extends FragmentActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<Province> provinceArrayList = new ArrayList<Province>();
                         for (int i = 0; i < data.length(); i++) {
@@ -201,11 +208,11 @@ public class MainActivity extends FragmentActivity {
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
 
 
-                            provinceArrayList.add(new Province(id,fid,definition,name,timestampToStringAll));
+                            provinceArrayList.add(new Province(id, fid, definition, name, timestampToStringAll));
                         }
 
                         saveProvinceIntoDb(provinceArrayList);
-                    }else {
+                    } else {
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -256,18 +263,18 @@ public class MainActivity extends FragmentActivity {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            if (tireTypeList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (tireTypeList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = tireTypeList.get(tireTypeList.size() - 1).getTime();
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
 
         }
 
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getTireType");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
 
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -277,7 +284,7 @@ public class MainActivity extends FragmentActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<TireType> tireTypeArrayList = new ArrayList<TireType>();
                         for (int i = 0; i < data.length(); i++) {
@@ -290,11 +297,11 @@ public class MainActivity extends FragmentActivity {
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
 
 
-                            tireTypeArrayList.add(new TireType(id,tireFlatWidth,tireFlatnessRatio,tireDiameter,timestampToStringAll));
+                            tireTypeArrayList.add(new TireType(id, tireFlatWidth, tireFlatnessRatio, tireDiameter, timestampToStringAll));
                         }
 
                         saveTireTypeIntoDb(tireTypeArrayList);
-                    }else {
+                    } else {
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -347,17 +354,17 @@ public class MainActivity extends FragmentActivity {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            if (carTireInfoList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (carTireInfoList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = carTireInfoList.get(carTireInfoList.size() - 1).getTime();
                 Log.e(TAG, "initCarDataIntoDb: " + time);
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarTireInfoData");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -366,7 +373,7 @@ public class MainActivity extends FragmentActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<CarTireInfo> carTireInfoArrayList = new ArrayList<CarTireInfo>();
                         for (int i = 0; i < data.length(); i++) {
@@ -386,10 +393,10 @@ public class MainActivity extends FragmentActivity {
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
 
 
-                            carTireInfoArrayList.add(new CarTireInfo(id,brand,carBrandId,verhicle,verhicleId,pailiang,year,name,font,rear,timestampToStringAll));
+                            carTireInfoArrayList.add(new CarTireInfo(id, brand, carBrandId, verhicle, verhicleId, pailiang, year, name, font, rear, timestampToStringAll));
                         }
                         savaCarTireIntoDb(carTireInfoArrayList);
-                    }else {
+                    } else {
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -441,17 +448,17 @@ public class MainActivity extends FragmentActivity {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            if (carVerhicleList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (carVerhicleList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = carVerhicleList.get(carVerhicleList.size() - 1).getTime();
                 Log.e(TAG, "initCarDataIntoDb: " + time);
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarVerhicleData");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -460,7 +467,7 @@ public class MainActivity extends FragmentActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<CarVerhicle> carVerhicleArrayList = new ArrayList<CarVerhicle>();
                         for (int i = 0; i < data.length(); i++) {
@@ -474,10 +481,10 @@ public class MainActivity extends FragmentActivity {
 
                             long time = data.getJSONObject(i).getLong("time");
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-                            carVerhicleArrayList.add(new CarVerhicle(id,verhicle,carBrandId,factoryId,carVersion,verify,timestampToStringAll));
+                            carVerhicleArrayList.add(new CarVerhicle(id, verhicle, carBrandId, factoryId, carVersion, verify, timestampToStringAll));
                         }
                         savaCarVerhicleIntoDb(carVerhicleArrayList);
-                    }else {
+                    } else {
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -528,16 +535,16 @@ public class MainActivity extends FragmentActivity {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            if (carBrandList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (carBrandList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = carBrandList.get(carBrandList.size() - 1).getTime();
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarBrandData");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -545,7 +552,7 @@ public class MainActivity extends FragmentActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<CarBrand> carBrandArrayList = new ArrayList<CarBrand>();
                         for (int i = 0; i < data.length(); i++) {
@@ -561,10 +568,10 @@ public class MainActivity extends FragmentActivity {
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
 
 
-                            carBrandArrayList.add(new CarBrand(id,name,imgUrl,icon,timestampToStringAll));
+                            carBrandArrayList.add(new CarBrand(id, name, imgUrl, icon, timestampToStringAll));
                         }
                         saveCarBrandIntoDb(carBrandArrayList);
-                    }else {
+                    } else {
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -606,9 +613,9 @@ public class MainActivity extends FragmentActivity {
         DbManager db = dbConfig.getDbManager();
         List<CarFactory> carList = null;
         try {
-             carList = db.selector(CarFactory.class)
-                     .orderBy("time")
-                     .findAll();
+            carList = db.selector(CarFactory.class)
+                    .orderBy("time")
+                    .findAll();
 
         } catch (DbException e) {
 
@@ -616,16 +623,16 @@ public class MainActivity extends FragmentActivity {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            if (carList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (carList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = carList.get(carList.size() - 1).getTime();
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarFactoryData");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -633,7 +640,7 @@ public class MainActivity extends FragmentActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<CarFactory> factoryList = new ArrayList<CarFactory>();
                         for (int i = 0; i < data.length(); i++) {
@@ -642,10 +649,10 @@ public class MainActivity extends FragmentActivity {
                             int carBrandId = data.getJSONObject(i).getInt("carBrandId");
                             long time = data.getJSONObject(i).getLong("time");
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-                            factoryList.add(new CarFactory(id,carBrandId,factory,timestampToStringAll));
+                            factoryList.add(new CarFactory(id, carBrandId, factory, timestampToStringAll));
                         }
                         savaCarFactoryIntoDb(factoryList);
-                    }else {
+                    } else {
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -673,6 +680,7 @@ public class MainActivity extends FragmentActivity {
 
     /**
      * 保存车辆工厂信息到数据库
+     *
      * @param factoryList
      */
     private void savaCarFactoryIntoDb(List<CarFactory> factoryList) {
@@ -685,7 +693,7 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    private List<Fragment> initFragment(){
+    private List<Fragment> initFragment() {
         Log.e(TAG, "initFragment: -2-" + ischoos);
         List<Fragment> fragments = new ArrayList<>();
         HomeFragment homeFragment = new HomeFragment();
@@ -694,7 +702,7 @@ public class MainActivity extends FragmentActivity {
         fragments.add(homeFragment);
         MerchantFragment merchantFragment = new MerchantFragment();
         Bundle bundleMerchant = new Bundle();
-        bundleMerchant.putInt(MerchantFragment.SHOP_TYPE,0);
+        bundleMerchant.putInt(MerchantFragment.SHOP_TYPE, 0);
         merchantFragment.setArguments(bundleMerchant);
         fragments.add(merchantFragment);
         fragments.add(new YcxFragment());
@@ -713,14 +721,14 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void initTitle() {
-        tabsCell.addView(R.drawable.ic_home,R.drawable.ic_home_pressed, "首页 ");
-        tabsCell.addView(R.drawable.ic_merchant,R.drawable.ic_merchant_pressed, "附近门店 ");
-        tabsCell.addView(R.drawable.ic_dongjitai,R.drawable.ic_dongjitai_pressed, "冬季胎 ");
-        tabsCell.addView(R.drawable.ic_my,R.drawable.ic_my_pressed, "我的 ");
+        tabsCell.addView(R.drawable.ic_home, R.drawable.ic_home_pressed, "首页 ");
+        tabsCell.addView(R.drawable.ic_merchant, R.drawable.ic_merchant_pressed, "附近门店 ");
+        tabsCell.addView(R.drawable.ic_dongjitai, R.drawable.ic_dongjitai_pressed, "冬季胎 ");
+        tabsCell.addView(R.drawable.ic_my, R.drawable.ic_my_pressed, "我的 ");
 
     }
 
-    class HomePagerAdapeter extends FragmentViewPagerAdapter{
+    class HomePagerAdapeter extends FragmentViewPagerAdapter {
 
         private final List<String> mPageTitle = new ArrayList<>();
 
@@ -754,7 +762,7 @@ public class MainActivity extends FragmentActivity {
             // 利用handler延迟发送更改状态信息
             mHandler.sendEmptyMessageDelayed(0, 2000);
         } else {
-            Log.e(TAG, "exit: -----" );
+            Log.e(TAG, "exit: -----");
            /* Intent intent = new Intent("qd.xmjj.baseActivity");
             intent.putExtra("closeAll", 1);
             sendBroadcast(intent);//发送广播*/
@@ -763,9 +771,36 @@ public class MainActivity extends FragmentActivity {
             intent.putExtra("closeAll", 1);
             sendBroadcast(intent);//发送广播*/
 
-           // this.finish();
+            // this.finish();
             //System.exit(0);
         }
     }
 
+
+    private void judgePower() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
 }
