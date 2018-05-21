@@ -778,6 +778,8 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         View v_shoptime = LayoutInflater.from(this).inflate(R.layout.dialog_choose_time, null);
         whv_lTime = (WheelView) v_shoptime.findViewById(R.id.whv_ltime);
         whv_rTime = (WheelView) v_shoptime.findViewById(R.id.whv_rtime);
+        whv_lTime.setIsLoop(false);
+        whv_rTime.setIsLoop(false);
         whv_lTime.setItems(getStrLTime(), 0);
         whv_rTime.setItems(getRTimeList(), currentRtime);
         whv_lTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
@@ -788,10 +790,6 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         });
 
         whv_rTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
-
-
-
-
             @Override
             public void onItemSelected(int selectedIndex, String item) {
                 currentRtime = whv_rTime.getSelectedPosition();
@@ -824,6 +822,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         for (int i = 0; i < xszEndYear - currentYear; i++) {
             rTime_list.add(currentYear + i+"");
         }
+        endYear = currentYear+"";
         return rTime_list;
     }
 
@@ -844,10 +843,10 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
      */
     private void initLichengbiao() {
         if (hasLichengbiao){
-            lichengbiaoImage.setImageResource(R.drawable.ic_check);
+            lichengbiaoImage.setImageResource(R.drawable.ic_check_no);
             lichengbiaoDataLayout.setVisibility(View.VISIBLE);
         }else {
-            lichengbiaoImage.setImageResource(R.drawable.ic_check_no);
+            lichengbiaoImage.setImageResource(R.drawable.ic_check);
             lichengbiaoDataLayout.setVisibility(View.GONE);
         }
     }
@@ -1321,6 +1320,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 }
                 View outerView = LayoutInflater.from(this).inflate(R.layout.dialog_content_view, null);
                 final WheelView city = (WheelView) outerView.findViewById(R.id.wheel_view_city);
+                city.setIsLoop(false);
                 city.setItems(getCity(),currentCity);//init selected position is 0 初始选中位置为0
                 city.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
@@ -1329,6 +1329,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                     }
                 });
                 final WheelView provice = (WheelView) outerView.findViewById(R.id.wheel_view_provice);
+                provice.setIsLoop(false);
                 provice.setItems(getProvice(),currentProvicen);//init selected position is 0 初始选中位置为0
                 provice.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
@@ -1396,6 +1397,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 Log.e(TAG, "onClick: 1");
                 View proView = LayoutInflater.from(this).inflate(R.layout.dialog_province_view, null);
                 shengWv = (WheelView) proView.findViewById(R.id.wheel_view_sheng);
+                shengWv.setIsLoop(false);
                 shengWv.setItems(shengList,currentShengPosition);//init selected position is 0 初始选中位置为0
                 shengWv.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
@@ -1412,6 +1414,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 });
 
                 shiWv = (WheelView) proView.findViewById(R.id.wheel_view_shi);
+                shiWv.setIsLoop(false);
                 shiWv.setItems(shiList,currentShiPosition);//init selected position is 0 初始选中位置为0
                 shiWv.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
@@ -1425,6 +1428,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 });
 
                 xianWv = (WheelView) proView.findViewById(R.id.wheel_view_xian);
+                xianWv.setIsLoop(false);
                 xianWv.setItems(xianList,currentXianPosition);//init selected position is 0 初始选中位置为0
                 xianWv.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override

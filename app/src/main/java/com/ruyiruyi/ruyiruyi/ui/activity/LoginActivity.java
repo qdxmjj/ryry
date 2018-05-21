@@ -397,7 +397,7 @@ public class LoginActivity extends BaseActivity {
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                     }else {
-
+                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -418,7 +418,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(codeDialog);
             }
         });
 

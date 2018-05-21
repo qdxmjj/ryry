@@ -86,6 +86,7 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getShoeBySize");
         params.addBodyParameter("reqJson",jsonObject.toString());
+        Log.e(TAG, "getDataFromService:---- " + jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
