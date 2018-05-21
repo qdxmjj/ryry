@@ -28,6 +28,7 @@ public class MyPicDialogActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         imgUrl = "";
         imgUrl = bundle.getString("imgUrl");
+        Log.e(TAG, "onCreate:  imgUrl = " + imgUrl );
         RelativeLayout layout = getLayoutView();
         setContentView(layout);
 
@@ -50,7 +51,7 @@ public class MyPicDialogActivity extends BaseActivity {
         iv = new ImageView(this);
         WindowManager.LayoutParams ivlp = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         iv.setLayoutParams(ivlp);
-        Glide.with(this).load(imgUrl)//不缓存
+        Glide.with(this).load(imgUrl)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
                 .skipMemoryCache(true)//跳过内存缓存
                 .into(iv);

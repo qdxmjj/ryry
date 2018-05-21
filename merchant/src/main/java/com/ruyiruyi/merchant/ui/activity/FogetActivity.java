@@ -1,5 +1,6 @@
 package com.ruyiruyi.merchant.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
@@ -44,6 +45,7 @@ public class FogetActivity extends BaseActivity {
     private TextView tv_code;
     private TextView tv_save;
     private ActionBar mActionBar;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class FogetActivity extends BaseActivity {
                 }
             }
         });
+        dialog = new ProgressDialog(this);
 
         initView();
     }
@@ -96,22 +99,22 @@ public class FogetActivity extends BaseActivity {
                     public void call(Void aVoid) {
                         String phone = et_phone.getText().toString();
                         if (!UtilsRY.isMobile(phone)) {
-                            Toast.makeText(FogetActivity.this, "手机号格式错误", Toast.LENGTH_SHORT).show();
+                            showDialog("手机号格式错误");
                             return;
                         }
                         String code = et_code.getText().toString();
                         if (code.isEmpty()) {
-                            Toast.makeText(FogetActivity.this, "验证码不能为空", Toast.LENGTH_SHORT).show();
+                            showDialog("验证码不能为空");
                             return;
                         }
                         String passwordStr1 = et_passa.getText().toString();
                         String passwordStr2 = et_passb.getText().toString();
                         if (passwordStr1.length() < 6) {
-                            Toast.makeText(FogetActivity.this, "密码不能少于6位", Toast.LENGTH_SHORT).show();
+                            showDialog("密码不能少于6位");
                             return;
                         }
                         if (passwordStr1.isEmpty() || passwordStr2.isEmpty()) {
-                            Toast.makeText(FogetActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
+                            showDialog("密码不能为空");
                             return;
                         }
                         String password1 = null;
@@ -129,7 +132,7 @@ public class FogetActivity extends BaseActivity {
                         }
 
                         if (!password1.equals(password2)) {
-                            Toast.makeText(FogetActivity.this, "密码输入不一致", Toast.LENGTH_SHORT).show();
+                            showDialog("密码输入不一致");
                             return;
                         }
                         savePassword(phone, code, password1);
@@ -142,6 +145,7 @@ public class FogetActivity extends BaseActivity {
      * 获取短信验证码
      */
     private void getCode(String phoneNumber) {
+        showDialogProgress(dialog, "验证码发送中...");
 
         final JSONObject jsonObject = new JSONObject();
         try {
@@ -150,6 +154,7 @@ public class FogetActivity extends BaseActivity {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "sendMsgChangePwd");
         params.addBodyParameter("reqJson", jsonObject.toString());
+        params.setConnectTimeout(6000);//6秒后走onError
         x.http().post(params, new Callback.CommonCallback<String>() {
             private String status;
 
@@ -174,7 +179,7 @@ public class FogetActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(getApplicationContext(), "验证码发送失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -184,7 +189,7 @@ public class FogetActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(dialog);
             }
         });
     }
@@ -257,6 +262,7 @@ public class FogetActivity extends BaseActivity {
      * @param password
      */
     private void savePassword(String phone, String code, String password) {
+        showDialogProgress(dialog, "密码重置中...");
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("phone", phone);
@@ -266,6 +272,7 @@ public class FogetActivity extends BaseActivity {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "changeStorePwd");
         params.addBodyParameter("reqJson", jsonObject.toString());
+        params.setConnectTimeout(6000);//6s 后 走OnError
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -274,11 +281,11 @@ public class FogetActivity extends BaseActivity {
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")) {
-                        Toast.makeText(FogetActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         FogetActivity.this.finish();
                     } else {
-                        Toast.makeText(FogetActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
 
@@ -287,7 +294,7 @@ public class FogetActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(FogetActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "密码重置失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -297,7 +304,7 @@ public class FogetActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(dialog);
             }
         });
     }

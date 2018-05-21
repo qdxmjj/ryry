@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -178,6 +179,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private int isShoulian;//0 no 1 yes ;
     private int isRightCode = 0;// 0 wrong 1 right;
     //提交参数>---
+    private ProgressDialog progressDialog;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -213,6 +215,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 }
             }
         });
+        progressDialog = new ProgressDialog(this);
 
         //下载数据
         initRegisterCategoryData();
@@ -585,21 +588,28 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("上传照片");
         String[] items = {"拍照"};
-        builder.setNegativeButton("取消", null);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 takePicture();
             }
         });
-        builder.create().show();
+        final AlertDialog dialog = builder.create();
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        //设置按钮颜色
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
     }
 
     private void showPicInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("上传照片");
         String[] items = {"选择本地照片", "拍照"};
-        builder.setNegativeButton("取消", null);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -615,7 +625,16 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 }
             }
         });
-        builder.create().show();
+        final AlertDialog dialog = builder.create();
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        //设置按钮颜色
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
     }
 
     private void takePicture() {
@@ -757,21 +776,23 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 whv_category.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(int selectedIndex, String item) {
-
                     }
                 });
                 whv_category.setIsLoop(false);
-                new AlertDialog.Builder(this)
-                        .setTitle("选择门店类别")
-                        .setView(v_category)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                tv_ShopCategory.setText(whv_category.getSelectedItem());
-                                shopCategoryId = (whv_category.getSelectedPosition() + 1) + "";
-                            }
-                        })
-                        .show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("选择门店类别")
+                        .setView(v_category);
+                final AlertDialog dialog = builder.create();
+                dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        tv_ShopCategory.setText(whv_category.getSelectedItem());
+                        shopCategoryId = (whv_category.getSelectedPosition() + 1) + "";
+                    }
+                });
+                dialog.show();
+                //设置按钮颜色
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
                 break;
             case R.id.tv_shoptime:
                 View v_shoptime = LayoutInflater.from(this).inflate(R.layout.dialog_shoptime_view, null);
@@ -801,15 +822,19 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 });
                 whv_lTime.setIsLoop(false);
                 whv_rTime.setIsLoop(false);
-                new AlertDialog.Builder(this)
-                        .setTitle("选择营业时间")
-                        .setView(v_shoptime)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                tv_ShopTime.setText(shopTimes);
-                            }
-                        }).show();
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+                builder2.setTitle("选择营业时间")
+                        .setView(v_shoptime);
+                final AlertDialog dialog2 = builder2.create();
+                dialog2.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        tv_ShopTime.setText(shopTimes);
+                    }
+                });
+                dialog2.show();
+                //设置按钮颜色
+                dialog2.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
                 break;
             case R.id.tv_shopcity:
                 View v_city = LayoutInflater.from(this).inflate(R.layout.dialog_city_view, null);
@@ -851,25 +876,26 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 whv_sheng.setIsLoop(false);
                 whv_shi.setIsLoop(false);
                 whv_xian.setIsLoop(false);
-                new AlertDialog.Builder(this)
-                        .setTitle("选择所在城市")
-                        .setView(v_city)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String sheng = whv_sheng.getSelectedItem();
-                                String shi = whv_shi.getSelectedItem();
-                                String xian = whv_xian.getSelectedItem();
-                                if (xian.equals("无")) {
-                                    areStr = sheng + shi;
-                                } else {
-                                    areStr = sheng + shi + xian;
-                                }
-                                Log.e(TAG, "onClick: areStr = " + areStr);
-                                tv_ShopCity.setText(areStr);
+                AlertDialog.Builder builder3 = new AlertDialog.Builder(this);
+                builder3.setTitle("选择所在城市")
+                        .setView(v_city);
+                final AlertDialog dialog3 = builder3.create();
+                dialog3.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String sheng = whv_sheng.getSelectedItem();
+                        String shi = whv_shi.getSelectedItem();
+                        String xian = whv_xian.getSelectedItem();
+                        if (xian.equals("无")) {
+                            areStr = sheng + shi;
+                        } else {
+                            areStr = sheng + shi + xian;
+                        }
+                        Log.e(TAG, "onClick: areStr = " + areStr);
+                        tv_ShopCity.setText(areStr);
 
-                                if (xian.equals("无") || xian.equals("")) {
-                                    if (shi.equals("无") || shi.equals("")) {  //没有县  没有市 获取省Id
+                        if (xian.equals("无") || xian.equals("")) {
+                            if (shi.equals("无") || shi.equals("")) {  //没有县  没有市 获取省Id
                                        /* DbManager db = new DbConfig().getDbManager();
                                         List<Province> provinceList = new ArrayList<>();
                                         try {
@@ -881,47 +907,49 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                                         if (provinceList != null) {
                                             areaId = provinceList.get(0).getId();
                                         }*/
-                                        areaId = 0;//没县 没市 全部默认0  省id 暂时忽略；
-                                        areaId_shi = 0;
-                                    } else {     //没有县 有市 获取市id
-                                        DbManager db = new DbConfig().getDbManager();
-                                        List<Province> provinceList = new ArrayList<>();
-                                        try {
-                                            provinceList = db.selector(Province.class)
-                                                    .where("name", "=", shi)
-                                                    .findAll();
-                                        } catch (DbException e) {
-                                        }
-                                        if (provinceList != null) {
-                                            areaId_shi = provinceList.get(0).getId();
-                                        }
-                                        areaId = 0;//没有县 默认0；
-
-                                    }
-                                } else {//获取县id
-                                    DbManager db = new DbConfig().getDbManager();
-                                    List<Province> provinceList = new ArrayList<>();
-                                    List<Province> provinceListCity = new ArrayList<>();
-                                    try {
-                                        provinceList = db.selector(Province.class)
-                                                .where("name", "=", xian)
-                                                .findAll();
-                                        provinceListCity = db.selector(Province.class)
-                                                .where("name", "=", shi)
-                                                .findAll();
-
-                                    } catch (DbException e) {
-                                    }
-                                    if (provinceList != null) {
-                                        areaId = provinceList.get(0).getId();
-                                    }
-                                    if (provinceListCity != null) {
-                                        areaId_shi = provinceListCity.get(0).getId();
-                                    }
+                                areaId = 0;//没县 没市 全部默认0  省id 暂时忽略；
+                                areaId_shi = 0;
+                            } else {     //没有县 有市 获取市id
+                                DbManager db = new DbConfig().getDbManager();
+                                List<Province> provinceList = new ArrayList<>();
+                                try {
+                                    provinceList = db.selector(Province.class)
+                                            .where("name", "=", shi)
+                                            .findAll();
+                                } catch (DbException e) {
                                 }
+                                if (provinceList != null) {
+                                    areaId_shi = provinceList.get(0).getId();
+                                }
+                                areaId = 0;//没有县 默认0；
+
                             }
-                        })
-                        .show();
+                        } else {//获取县id
+                            DbManager db = new DbConfig().getDbManager();
+                            List<Province> provinceList = new ArrayList<>();
+                            List<Province> provinceListCity = new ArrayList<>();
+                            try {
+                                provinceList = db.selector(Province.class)
+                                        .where("name", "=", xian)
+                                        .findAll();
+                                provinceListCity = db.selector(Province.class)
+                                        .where("name", "=", shi)
+                                        .findAll();
+
+                            } catch (DbException e) {
+                            }
+                            if (provinceList != null) {
+                                areaId = provinceList.get(0).getId();
+                            }
+                            if (provinceListCity != null) {
+                                areaId_shi = provinceListCity.get(0).getId();
+                            }
+                        }
+                    }
+                });
+                dialog3.show();
+                //设置按钮颜色
+                dialog3.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
                 break;
             case R.id.tv_shoppoint:
                 Intent intent = new Intent(RegisterActivity.this, RegisterMapActivity.class);
@@ -1065,6 +1093,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
 
     private void getCode(String phoneNumber) {
+        showDialogProgress(progressDialog, "验证码发送中...");
 
         final JSONObject jsonObject = new JSONObject();
         try {
@@ -1073,6 +1102,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "sendMsg");
         params.addBodyParameter("reqJson", jsonObject.toString());
+        params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             private String status;
 
@@ -1097,7 +1127,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(getApplicationContext(), "验证码发送失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -1107,7 +1137,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(progressDialog);
             }
         });
     }
@@ -1377,6 +1407,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "是的", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                showDialogProgress(progressDialog, "注册信息提交中...");
                  /*    //提交参数---<
                 private String persionName;
                 private String persionPhone;
@@ -1423,6 +1454,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 pa.addBodyParameter("indoor_img", new File(mdpicbPath));
                 pa.addBodyParameter("factory_img", new File(mdpiccPath));
                 pa.addBodyParameter("id_img", new File(shouPath));
+                pa.setConnectTimeout(6000);
                 x.http().post(pa, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
@@ -1444,7 +1476,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-                        Toast.makeText(RegisterActivity.this, "网络错误提交失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "注册信息提交失败,请检查网络", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -1454,7 +1486,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
                     @Override
                     public void onFinished() {
-
+                        hideDialogProgress(progressDialog);
                     }
                 });
             }
