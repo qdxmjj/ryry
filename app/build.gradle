@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def VERSION_CODE = 1
-def VERSION_NAME = "1.3"
+def VERSION_NAME = "1.4"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''
@@ -44,7 +44,7 @@ android {
     signingConfigs {
 
         myConfig {
-            storeFile file('E:/workspace/ryry/ruyiruyi.jks')
+            storeFile file('ruyiruyi.jks')
             storePassword 'qdxmjj'
             keyAlias 'xiaomajiajia'
             keyPassword 'qdxmjj'
@@ -130,6 +130,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/alipaySdk-20180403.jar')
     testCompile 'junit:junit:4.12'
     def system_dependencies = rootProject.ext.system_dependencies
     compile system_dependencies.support_v4
@@ -146,5 +147,7 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'ch.ielse:imagewatcher:1.0.3'
     compile 'com.google.code.gson:gson:2.6.2'
+    /*微信*/
+   // compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     compile project(':rylibrary')
 }

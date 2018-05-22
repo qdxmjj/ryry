@@ -479,6 +479,7 @@ public class TireChangeActivity extends BaseActivity {
                             Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
                             intent.putExtra(OrderFragment.ORDER_TYPE,"ALL");
                             startActivity(intent);
+                            finish();
                         }else {
                             Toast.makeText(TireChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
                         }

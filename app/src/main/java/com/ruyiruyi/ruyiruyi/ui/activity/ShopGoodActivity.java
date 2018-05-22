@@ -100,6 +100,7 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
+
         if (getTabViews()!=null){
             for (int i = 0; i < tabLayout.getTabCount(); i++) {
                 TabLayout.Tab tab = tabLayout.getTabAt(i);

@@ -68,6 +68,7 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
             }else if (order.getOrderState().equals("4")){
                 holder.orderTypeText.setText("作废");
             }else if (order.getOrderState().equals("5")){
+                holder.orderPriceText.setVisibility(View.INVISIBLE);
                 holder.orderTypeText.setText("待发货");
             }else if (order.getOrderState().equals("6")){
                 holder.orderTypeText.setText("待车主确认服务");

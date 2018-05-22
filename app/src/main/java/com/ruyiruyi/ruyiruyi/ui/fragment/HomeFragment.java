@@ -161,6 +161,7 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
         lunbos.clear();
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAndroidHomeDate");
         params.addBodyParameter("reqJson",jsonObject.toString());
+        Log.e(TAG, "initdataFromService: --" + jsonObject.toString());
         String token = new DbConfig().getToken();
         params.addParameter("token",token);
         Log.e(TAG, "initdataFromService: -----------------" +params.toString());

@@ -15,6 +15,8 @@ public class TireInfo {
         this.fontRearFlag = fontRearFlag;
     }
 
+
+
     public String getFontRearFlag() {
         return fontRearFlag;
     }
