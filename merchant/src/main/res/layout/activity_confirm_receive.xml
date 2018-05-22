@@ -176,6 +176,7 @@
                 android:padding="5dp">
 
                 <ImageView
+                    android:id="@+id/img_qiantai"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginLeft="5dp"
@@ -308,6 +309,7 @@
                 android:padding="5dp">
 
                 <ImageView
+                    android:id="@+id/img_houtai"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginLeft="5dp"
@@ -430,48 +432,177 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <FrameLayout
+            <LinearLayout
+                android:id="@+id/ll_yizhi"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="#ffffff"
-                android:paddingLeft="26dp"
-                android:paddingRight="26dp">
+                android:orientation="horizontal"
+                android:padding="5dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_vertical"
-                    android:text="条形码是否不一致"
-                    android:textColor="@color/c7"
-                    android:textSize="16sp" />
+                <ImageView
+                    android:id="@+id/img_yizhi"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_order_luntai" />
 
-                <Switch
-                    android:id="@+id/tiaoma_switch"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:checked="false" />
-            </FrameLayout>
+                    android:layout_marginLeft="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/type_yizhi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="轮胎服务"
+                        android:textColor="@color/c7"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="服务项目:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/xiangmu_yizhi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="首次更换"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="轮胎规格:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/luntai_yizhi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="165/4588556"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="更换位置:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/change_location_yizhi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="前胎/后胎"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="更换数量:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/luntai_num_yizhi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="2"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="5dp"
                 android:background="#ffffff"
                 android:orientation="vertical"
                 android:paddingLeft="26dp"
                 android:paddingRight="26dp">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_vertical"
-                    android:text="条形码:"
-                    android:textColor="@color/c6"
-                    android:textSize="16sp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="条形码:"
+                        android:textColor="@color/c7"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|right"
+                        android:paddingRight="3dp"
+                        android:text="条形码是否不一致"
+                        android:textColor="@color/c6"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -489,15 +620,38 @@
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp">
 
-                <TextView
-                    android:id="@+id/tiaoma_a_"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="50dp"
-                    android:gravity="center_vertical"
-                    android:text="456789456"
-                    android:textColor="@color/c6"
-                    android:textSize="16sp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/tiaoma_a_"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="456789456"
+                        android:textColor="@color/c6"
+                        android:textSize="16sp" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <Switch
+                            android:id="@+id/tiaoma_switch_a_"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:checked="false" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -514,15 +668,38 @@
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp">
 
-                <TextView
-                    android:id="@+id/tiaoma_b_"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="50dp"
-                    android:gravity="center_vertical"
-                    android:text="456789456"
-                    android:textColor="@color/c6"
-                    android:textSize="16sp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/tiaoma_b_"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="456789456"
+                        android:textColor="@color/c6"
+                        android:textSize="16sp" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <Switch
+                            android:id="@+id/tiaoma_switch_b_"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:checked="false" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -539,15 +716,38 @@
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp">
 
-                <TextView
-                    android:id="@+id/tiaoma_c_"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="50dp"
-                    android:gravity="center_vertical"
-                    android:text="456789456"
-                    android:textColor="@color/c6"
-                    android:textSize="16sp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/tiaoma_c_"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="456789456"
+                        android:textColor="@color/c6"
+                        android:textSize="16sp" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <Switch
+                            android:id="@+id/tiaoma_switch_c_"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:checked="false" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -564,15 +764,38 @@
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp">
 
-                <TextView
-                    android:id="@+id/tiaoma_d_"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="50dp"
-                    android:gravity="center_vertical"
-                    android:text="456789456"
-                    android:textColor="@color/c6"
-                    android:textSize="16sp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/tiaoma_d_"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="456789456"
+                        android:textColor="@color/c6"
+                        android:textSize="16sp" />
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <Switch
+                            android:id="@+id/tiaoma_switch_d_"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:checked="false" />
+                    </FrameLayout>
+
+                </LinearLayout>
+
 
                 <View
                     android:layout_width="match_parent"

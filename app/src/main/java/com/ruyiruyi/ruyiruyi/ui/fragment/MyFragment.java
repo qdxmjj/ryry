@@ -23,6 +23,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CreditLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.MyLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.PromotionActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopEvaluateActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
@@ -64,6 +65,7 @@ public class MyFragment extends Fragment {
     private LinearLayout myLimitLayout;
     private TextView myLimitTesxt;
     private LinearLayout cxwyLayout;
+    private LinearLayout ll_promotion;
 
     @Nullable
     @Override
@@ -148,8 +150,16 @@ public class MyFragment extends Fragment {
         myLimitLayout = ((LinearLayout) getView().findViewById(R.id.my_limit_layout));
         myLimitTesxt = ((TextView) getView().findViewById(R.id.my_limit_text));
         cxwyLayout = (LinearLayout) getView().findViewById(R.id.cxwy_layout);
+        ll_promotion = (LinearLayout) getView().findViewById(R.id.ll_promotion);
 
-        //畅行无忧
+        //推广码
+        RxViewAction.clickNoDouble(ll_promotion)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getContext(), PromotionActivity.class));
+                    }
+                });     //畅行无忧
         RxViewAction.clickNoDouble(cxwyLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -291,7 +301,7 @@ public class MyFragment extends Fragment {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getContext(), TireWaitChangeActivity.class);
-                        intent.putExtra(FROM_FRAGMENT,"MYFRAGMENT");
+                        intent.putExtra(FROM_FRAGMENT, "MYFRAGMENT");
                         startActivity(intent);
                     }
                 });
@@ -301,8 +311,8 @@ public class MyFragment extends Fragment {
                     public void call(Void aVoid) {
                         int userId = new DbConfig().getId();
                         Intent intent = new Intent(getContext(), ShopEvaluateActivity.class);
-                        intent.putExtra("USERID",userId);
-                        intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE,1);
+                        intent.putExtra("USERID", userId);
+                        intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE, 1);
                         startActivity(intent);
                     }
                 });

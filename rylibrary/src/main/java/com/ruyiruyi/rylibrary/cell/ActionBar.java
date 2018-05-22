@@ -40,6 +40,12 @@ public class ActionBar extends FrameLayout {
     private static Paint paint;
     private boolean needDivider;
     private boolean isSmallStyle;
+    private ImageView imageView;
+    public OnRightImageClick listener;
+
+    public void setListener(OnRightImageClick listener) {
+        this.listener = listener;
+    }
 
     public void setActionBarMenuOnItemClick(ActionBar.ActionBarMenuOnItemClick var1){
         this.actionBarMenuOnItemClick = var1;
@@ -85,15 +91,32 @@ public class ActionBar extends FrameLayout {
                     }
                 });
 
+
         titleView = new TextView(context);
         titleView.setTextSize(20);
         titleView.setText("AA");
         titleView.setTextColor(Color.WHITE);
         content.addView(titleView,LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT,LayoutHelper.WRAP_CONTENT,Gravity.CENTER));
+
+        imageView = new ImageView(context);
+        imageView.setVisibility(GONE);
+        content.addView(imageView,LayoutHelper.createFrame(60,60,Gravity.CENTER_VERTICAL|Gravity.RIGHT,0,0,20,0));
+        RxViewAction.clickNoDouble(imageView)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        ActionBar.this.actionBarMenuOnItemClick.onItemClick(-2);
+                       // listener.onRightItemClickListener();
+                    }
+                });
     }
 
     public void setBackground(int color){
         content.setBackgroundColor(color);
+    }
+    public void setRightImage(int imageId){
+        imageView.setVisibility(VISIBLE);
+        imageView.setImageResource(imageId);
     }
 
     public void setTitle(String title){
@@ -105,9 +128,7 @@ public class ActionBar extends FrameLayout {
         }else {
             backButtonImageView.setVisibility(GONE);
         }
-
     }
-
 
 
     public static class ActionBarMenuOnItemClick{
@@ -115,6 +136,12 @@ public class ActionBar extends FrameLayout {
 
         }
         public void onItemClick(int var1){}
+
+      // public void onRightClick(){}
+    }
+
+    public interface OnRightImageClick{
+        void onRightItemClickListener();
     }
 
 

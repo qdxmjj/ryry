@@ -74,6 +74,7 @@ public class MyOrderActivity extends FragmentActivity {
         });
         mTab.setupWithViewPager(mVPager);
 
+
     }
 
     private List<String> getTitles() {

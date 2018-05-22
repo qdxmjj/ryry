@@ -482,12 +482,13 @@ public class GoodsInfoActivity extends BaseActivity {
             }
         });
         oneWheel.setIsLoop(false);
-        new AlertDialog.Builder(this)
-                .setTitle("请选择商品状态")
-                .setView(v_goodstatus)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("请选择商品状态")
+                .setView(v_goodstatus);
+        AlertDialog dialog = builder.create();
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         currentSaleForIdString = currentSaleString;//防止未确定dis
                         mGoodsStatus.setText(currentSaleForIdString);
                         if (currentSaleForIdString.equals("出售中")) {
@@ -496,7 +497,10 @@ public class GoodsInfoActivity extends BaseActivity {
                             currentSale = 2;
                         }
                     }
-                }).show();
+                }
+        );
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
 
     }
 
@@ -536,12 +540,13 @@ public class GoodsInfoActivity extends BaseActivity {
         });
         leftWheel.setIsLoop(false);
         rightWheel.setIsLoop(false);
-        new AlertDialog.Builder(this)
-                .setTitle("选择商品分类")
-                .setView(v_goodstype)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("选择商品分类")
+                .setView(v_goodstype);
+        AlertDialog dialog = builder.create();
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         mGoodsType.setText(currentLeftString + "  " + currentRightString);
                         currentForId = currentRightPosition;
                         //获取ID
@@ -564,7 +569,10 @@ public class GoodsInfoActivity extends BaseActivity {
                                 break;
                         }
                     }
-                }).show();
+                }
+        );
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
 
     }
 
