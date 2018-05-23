@@ -1,6 +1,8 @@
 package com.ruyiruyi.ruyiruyi.ui.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,13 +25,23 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CreditLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.MyLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.SendToWXActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopEvaluateActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.UserInfoActivity;
+import com.ruyiruyi.ruyiruyi.utils.Constants;
+import com.ruyiruyi.ruyiruyi.utils.MMAlert;
 import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
+import com.ruyiruyi.ruyiruyi.utils.Util;
+import com.ruyiruyi.ruyiruyi.wxapi.WXEntryActivity;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
@@ -39,6 +51,7 @@ import java.util.List;
 import rx.functions.Action1;
 
 public class MyFragment extends Fragment {
+    private static final int THUMB_SIZE = 150;
 
     private TextView myButton;
     private TextView nologin;
@@ -64,6 +77,12 @@ public class MyFragment extends Fragment {
     private LinearLayout myLimitLayout;
     private TextView myLimitTesxt;
     private LinearLayout cxwyLayout;
+    private LinearLayout shareLayout;
+    private IWXAPI api;
+    private static final int MMAlertSelect1  =  0;
+    private static final int MMAlertSelect2  =  1;
+    private static final int MMAlertSelect3  =  2;
+    private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
 
     @Nullable
     @Override
@@ -75,6 +94,7 @@ public class MyFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+        api = WXAPIFactory.createWXAPI(getContext(), Constants.APP_ID);
 
         if (isLogin) {
             initDataFromDb();
@@ -148,6 +168,7 @@ public class MyFragment extends Fragment {
         myLimitLayout = ((LinearLayout) getView().findViewById(R.id.my_limit_layout));
         myLimitTesxt = ((TextView) getView().findViewById(R.id.my_limit_text));
         cxwyLayout = (LinearLayout) getView().findViewById(R.id.cxwy_layout);
+        shareLayout = (LinearLayout) getView().findViewById(R.id.share_layout);
 
         //畅行无忧
         RxViewAction.clickNoDouble(cxwyLayout)
@@ -252,6 +273,14 @@ public class MyFragment extends Fragment {
                         UIOpenHelper.openLogin(getContext());
                     }
                 });
+
+        RxViewAction.clickNoDouble(shareLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        shareWx();
+                    }
+                });
         //设置
         RxViewAction.clickNoDouble(shezhiLayout)
                 .subscribe(new Action1<Void>() {
@@ -318,6 +347,15 @@ public class MyFragment extends Fragment {
             myButton.setClickable(false);
             nologin.setVisibility(View.VISIBLE);
         }*/
+    }
+
+    private void shareWx() {
+        startActivity(new Intent(getContext(), WXEntryActivity.class));
+
+    }
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
     @Override

@@ -28,8 +28,6 @@
 
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
-
-
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -49,6 +47,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <!-- 百度地图 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -192,9 +191,9 @@
         <activity android:name=".ui.activity.PaySuccessActivity" />
         <activity android:name=".ui.activity.TireWaitChangeActivity" />
         <activity android:name=".ui.activity.FirstChangeActivity" />
-        <activity android:name=".ui.activity.TireChangeActivity"
-            android:launchMode="singleTask"
-            />
+        <activity
+            android:name=".ui.activity.TireChangeActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".ui.activity.ServiceOrderAffirmActivity" />
         <activity android:name=".ui.activity.TireLiuchengActivity" />
 
@@ -220,24 +219,28 @@
         <activity android:name=".ui.activity.CreditLimitActivity" />
         <activity android:name=".ui.activity.MyLimitActivity" />
         <activity android:name=".ui.activity.CxwyActivity" />
-        <activity android:name=".ui.activity.OrderInfoActivity"></activity>
+        <activity android:name=".ui.activity.OrderInfoActivity" />
         <activity android:name=".ui.activity.RouteMapActivity" />
-        <activity android:name=".ui.activity.UserInfoActivity"></activity>
-        <!--支付宝-->
+        <activity android:name=".ui.activity.UserInfoActivity" />
+        <!-- 支付宝 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name" />
+        <activity android:name=".ui.activity.SendToWXActivity" />
+        <activity android:name=".ui.activity.ShowFromWXActivity"></activity>
     </application>
 
 </manifest>

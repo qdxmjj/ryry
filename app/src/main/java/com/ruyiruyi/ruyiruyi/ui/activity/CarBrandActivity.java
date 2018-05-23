@@ -63,8 +63,6 @@ public class CarBrandActivity extends BaseActivity {
 
     public void onlisten(){
 
-
-
         mAdapter.setOnItemContentClickListener(new IndexableAdapter.OnItemContentClickListener<CarModel>() {
             @Override
             public void onItemClick(View v, int originalPosition, int currentPosition, CarModel entity) {

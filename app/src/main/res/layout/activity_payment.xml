@@ -53,6 +53,7 @@
                 android:background="@color/c2"/>
 
             <FrameLayout
+                android:id="@+id/yu_e_layout"
                 android:layout_width="match_parent"
                 android:layout_height="55dp">
                 <ImageView
@@ -89,6 +90,7 @@
                         android:layout_height="wrap_content"
                         android:text="余额：10,000"/>
                     <ImageView
+                        android:id="@+id/yu_e_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -109,6 +111,7 @@
                 android:layout_marginTop="20dp"/>
 
             <FrameLayout
+                android:id="@+id/weixin_layout"
                 android:layout_width="match_parent"
                 android:layout_height="55dp">
                 <ImageView
@@ -143,6 +146,7 @@
                     android:layout_marginRight="30dp">
 
                     <ImageView
+                        android:id="@+id/weixin_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -150,6 +154,7 @@
                 </LinearLayout>
             </FrameLayout>
             <FrameLayout
+                android:id="@+id/zhifubao_layout"
                 android:layout_width="match_parent"
                 android:layout_height="55dp">
                 <ImageView
@@ -184,6 +189,7 @@
                     android:layout_marginRight="30dp">
 
                     <ImageView
+                        android:id="@+id/zhifubao_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"

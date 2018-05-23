@@ -9,6 +9,9 @@ import android.os.Vibrator;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
+import com.ruyiruyi.ruyiruyi.utils.Constants;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.xutils.x;
 
@@ -19,6 +22,7 @@ public class MyApplication extends Application {
     private List<Activity> oList;
     public LocationService locationService;
     public Vibrator mVibrator;
+    private IWXAPI api;
 
 
     @Override
@@ -37,6 +41,11 @@ public class MyApplication extends Application {
         //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
+
+        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
+        api.registerApp(Constants.APP_ID);
+
+
 
     }
 

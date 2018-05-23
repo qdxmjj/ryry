@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" 
+    style="@style/NavPage">
+    
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:gravity="center_vertical"
+	    android:orientation="vertical" >
+        
+		<TextView
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="从微信接收"/>
+	    
+	    <Button
+	        android:id="@+id/get_text"
+	        style="@style/MMLineActionButton"
+	        android:layout_margin="10dp"
+	        android:text="回应文本到微信" />
+	
+	    <Button
+	        android:id="@+id/get_img"
+	        style="@style/MMLineActionButton"
+	        android:layout_margin="10dp"
+	        android:text="回应图片到微信" />
+	        
+	    <Button
+	        android:id="@+id/get_music"
+	        style="@style/MMLineActionButton"
+	        android:layout_margin="10dp"
+	        android:text="回应音乐到微信" />
+	        
+	    <Button
+	        android:id="@+id/get_video"
+	        style="@style/MMLineActionButton"
+	        android:layout_margin="10dp"
+	        android:text="回应视频到微信" />
+
+	    <Button
+	        android:id="@+id/get_webpage"
+	        style="@style/MMLineActionButton"
+	        android:layout_margin="10dp"
+	        android:text="回应URL到微信" />
+	
+	    <Button
+	        android:id="@+id/get_appdata"
+	        style="@style/MMLineActionButton"
+	        android:layout_margin="10dp"
+	        android:text="回应app消息到微信" />
+	
+	</LinearLayout>
+</ScrollView>

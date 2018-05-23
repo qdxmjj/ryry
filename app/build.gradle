@@ -39,9 +39,13 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionCode VERSION_CODE
         versionName VERSION_NAME
+        multiDexEnabled true
     }
 
     signingConfigs {
+        debug {
+            storeFile file("../debug.keystore")
+        }
 
         myConfig {
             storeFile file('ruyiruyi.jks')
@@ -148,6 +152,6 @@ dependencies {
     compile 'ch.ielse:imagewatcher:1.0.3'
     compile 'com.google.code.gson:gson:2.6.2'
     /*微信*/
-   // compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     compile project(':rylibrary')
 }

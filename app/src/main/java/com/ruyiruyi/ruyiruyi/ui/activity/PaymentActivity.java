@@ -3,6 +3,8 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +14,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,12 +24,20 @@ import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.model.PayResult;
+import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.OrderInfoUtil2_0;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.Util;
 import com.ruyiruyi.ruyiruyi.utils.XMJJUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,6 +65,7 @@ public class PaymentActivity extends BaseActivity {
     private double allprice;
     private TextView allPriceText;
     private String orderno;
+    public int currentType = 0;  //0是余额支付  1是微信支付 2是支付宝支付
     public static String ALL_PRICE = "ALLPRICE";
     public static String ORDERNO = "ORDERNO";
     public static String ORDER_TYPE = "ORDER_TYPE";//  0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
@@ -92,6 +105,24 @@ public class PaymentActivity extends BaseActivity {
     public static final String PID = "2088821219284232";
     private ProgressDialog progressDialog;
 
+    //微信
+    private static final String APP_ID ="wxfff9348898072d7c";
+    private static final int THUMB_SIZE = 150;
+    private IWXAPI api;
+    private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
+
+
+    private FrameLayout yuELayout;
+    private FrameLayout weixinLayout;
+    private FrameLayout zhifubaoLayout;
+    private ImageView yuEImage;
+    private ImageView weixinImage;
+    private ImageView zhifubaoImage;
+
+    private void regToWx(){
+        api = WXAPIFactory.createWXAPI(this,APP_ID,true);
+        api.registerApp(APP_ID);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +140,7 @@ public class PaymentActivity extends BaseActivity {
                 }
             }
         });
+        regToWx();
         progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
         allprice = intent.getDoubleExtra(ALL_PRICE,0.00);
@@ -126,16 +158,123 @@ public class PaymentActivity extends BaseActivity {
         payButton = (TextView) findViewById(R.id.payment_button);
         allPriceText = (TextView) findViewById(R.id.price_text);
         allPriceText.setText(allprice+"");
+        yuELayout = (FrameLayout) findViewById(R.id.yu_e_layout);
+        weixinLayout = (FrameLayout) findViewById(R.id.weixin_layout);
+        zhifubaoLayout = (FrameLayout) findViewById(R.id.zhifubao_layout);
+        yuEImage = (ImageView) findViewById(R.id.yu_e_image);
+        weixinImage = (ImageView) findViewById(R.id.weixin_image);
+        zhifubaoImage = (ImageView) findViewById(R.id.zhifubao_image);
+        initZhifuLayout();
+
+        RxViewAction.clickNoDouble(yuELayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        currentType = 0;
+                        initZhifuLayout();
+                    }
+                });
+        RxViewAction.clickNoDouble(weixinLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        currentType = 1;
+                        initZhifuLayout();
+                    }
+                });
+        RxViewAction.clickNoDouble(zhifubaoLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        currentType = 2;
+                        initZhifuLayout();
+                    }
+                });
 
 
         RxViewAction.clickNoDouble(payButton)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        //获取签名后的orderInfo
-                        getSign();
+                        if (currentType == 0){  //余额支付
+                            api = WXAPIFactory.createWXAPI(getApplicationContext(), Constants.APP_ID, false);
+                            Toast.makeText(getApplicationContext(), "launch result = " + api.openWXApp(), Toast.LENGTH_LONG).show();
+
+                        }else if (currentType == 1){//微信支付
+                          /*  //初始化一个WXTextObject对象
+                            WXTextObject textObject = new WXTextObject();
+                            textObject.text = "111";
+                            //用WXTextObject对象初始化一个WXMediaMessage对象
+                            WXMediaMessage msg = new WXMediaMessage();
+                            msg.mediaObject = textObject;
+                            msg.description = "111";
+                            //构建一个Req
+                            SendMessageToWX.Req req = new SendMessageToWX.Req();
+                            req.transaction = String.valueOf(System.currentTimeMillis()); //transaction 字段用于唯一标识一个请求
+                            req.message = msg;
+                            api.sendReq(req);*/
+
+
+                       /*     WXWebpageObject webpager = new WXWebpageObject();
+                            webpager.webpageUrl = "www.baidu.com";
+
+                            WXMediaMessage msg = new WXMediaMessage(webpager);
+                            msg.title = "百度一下";
+                            msg.description = "百度一下，你就知道";
+                            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+                            Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+                            bmp.recycle();
+                            msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+
+                            SendMessageToWX.Req req = new SendMessageToWX.Req();
+                            req.transaction = buildTransaction("webpage");
+                            req.message = msg;
+                            req.scene = mTargetScene;
+                            api.sendReq(req);
+                            finish();*/
+                            WXWebpageObject webpage = new WXWebpageObject();
+                            webpage.webpageUrl = "http://www.qq.com";
+                            WXMediaMessage msg = new WXMediaMessage(webpage);
+                            msg.title = "WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
+                            msg.description = "WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
+                            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.send_music_thumb);
+                            Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+                            bmp.recycle();
+                            msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+
+                            SendMessageToWX.Req req = new SendMessageToWX.Req();
+                            req.transaction = buildTransaction("webpage");
+                            req.message = msg;
+                            req.scene = mTargetScene;
+                            api.sendReq(req);
+
+                        }else if (currentType == 2){ //支付宝支付
+                            //获取签名后的orderInfo
+                            getSign();
+                        }
+
                     }
                 });
+    }
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
+
+
+    private void initZhifuLayout() {
+        if (currentType == 0){  //余额
+            yuEImage.setImageResource(R.drawable.ic_yes);
+            weixinImage.setImageResource(R.drawable.ic_no);
+            zhifubaoImage.setImageResource(R.drawable.ic_no);
+        }else if (currentType == 1){//微信
+            yuEImage.setImageResource(R.drawable.ic_no);
+            weixinImage.setImageResource(R.drawable.ic_yes);
+            zhifubaoImage.setImageResource(R.drawable.ic_no);
+        }else if(currentType == 2){//支付宝
+            yuEImage.setImageResource(R.drawable.ic_no);
+            weixinImage.setImageResource(R.drawable.ic_no);
+            zhifubaoImage.setImageResource(R.drawable.ic_yes);
+        }
     }
 
     private void getSign() {
