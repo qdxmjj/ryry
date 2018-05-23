@@ -20,14 +20,15 @@ public class PaySuccessActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pay_success,R.id.my_action);
+//        setContentView(R.layout.activity_pay_success,R.id.my_action);//方案一
+        setContentView(R.layout.activity_pay_success_two, R.id.my_action);//方案二
 
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("支付成功");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("支付成功");
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -45,7 +46,7 @@ public class PaySuccessActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                      //  startActivity(new Intent(getApplicationContext(),PaySuccessActivity.class));
+                        startActivity(new Intent(getApplicationContext(), TireChangeActivity.class));
                     }
                 });
     }

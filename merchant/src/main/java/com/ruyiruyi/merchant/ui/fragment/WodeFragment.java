@@ -36,6 +36,7 @@ import com.ruyiruyi.merchant.ui.activity.MyGoodsActivity;
 import com.ruyiruyi.merchant.ui.activity.MyOrderActivity;
 import com.ruyiruyi.merchant.ui.activity.MyServiceActivity;
 import com.ruyiruyi.merchant.ui.activity.OrderXiangqingActivity;
+import com.ruyiruyi.merchant.ui.activity.PromotionActivity;
 import com.ruyiruyi.merchant.ui.activity.ServiceRecordActivity;
 import com.ruyiruyi.merchant.ui.activity.SheZhiActivity;
 import com.ruyiruyi.merchant.ui.activity.StoreManageActivity;
@@ -101,6 +102,14 @@ public class WodeFragment extends Fragment {
         img_user_top = (ImageView) getView().findViewById(R.id.img_user_top);
 
 
+        RxViewAction.clickNoDouble(rl_tgjl).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), PromotionActivity.class);
+                startActivity(intent);
+            }
+        });
         RxViewAction.clickNoDouble(rl_wdsp).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
