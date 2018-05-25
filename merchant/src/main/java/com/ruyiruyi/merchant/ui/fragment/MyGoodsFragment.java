@@ -193,10 +193,11 @@ public class MyGoodsFragment extends Fragment {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStockByCondition");
         params.addBodyParameter("reqJson", object.toString());
+        Log.e(TAG, "initDataByLoadMoreType: oovm" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:999 up  1 ");
+                Log.e(TAG, "onSuccess:oovm " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     JSONObject data = jsonObject.getJSONObject("data");
@@ -224,7 +225,6 @@ public class MyGoodsFragment extends Fragment {
 
                         itemBeanList.add(itemBean);
                     }
-                    Log.e(TAG, "onSuccess:333 1 itemBeanList.size() = " + itemBeanList.size());
                     //更新适配器数据 handler 中进行
                     Message message = new Message();
                     message.what = 1;

@@ -2,41 +2,82 @@ package com.ruyiruyi.merchant.ui.multiType.modle;
 
 
 public class Dingdan {
-    public Dingdan(String dingdan_type, String car_num, String msg_state) {
-        this.dingdan_type = dingdan_type;
-        this.car_num = car_num;
-        this.msg_state = msg_state;
+
+    private String orderImage;
+    private String orderName;
+    private String platNumber;
+    private String orderType;
+    private String orderNo;
+    private String orderState;
+    private long orderTime;
+    private String isRead;
+
+    public void setOrderImage(String orderImage) {
+        this.orderImage = orderImage;
     }
 
-    private String dingdan_type;
-
-    private String car_num;
-
-    private String msg_state;
-
-
-    public String getDingdan_type() {
-        return dingdan_type;
+    public void setOrderName(String orderName) {
+        this.orderName = orderName;
     }
 
-    public String getCar_num() {
-        return car_num;
+    public void setPlatNumber(String platNumber) {
+        this.platNumber = platNumber;
     }
 
-    public String getMsg_state() {
-        return msg_state;
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 
-
-    public void setDingdan_type(String dingdan_type) {
-        this.dingdan_type = dingdan_type;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
-    public void setCar_num(String car_num) {
-        this.car_num = car_num;
+    public void setOrderState(String orderState) {
+        this.orderState = orderState;
     }
 
-    public void setMsg_state(String msg_state) {
-        this.msg_state = msg_state;
+    public void setOrderTime(long orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public void setIsRead(String isRead) {
+        this.isRead = isRead;
+    }
+
+    public Dingdan() {
+
+
+    }
+
+    public String getOrderImage() {
+        return orderImage;
+    }
+
+    public String getOrderName() {
+        return orderName;
+    }
+
+    public String getPlatNumber() {
+        return platNumber;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public String getOrderState() {
+        return orderState;
+    }
+
+    public long getOrderTime() {
+        return orderTime;
+    }
+
+    public String getIsRead() {
+        return isRead;
     }
 }

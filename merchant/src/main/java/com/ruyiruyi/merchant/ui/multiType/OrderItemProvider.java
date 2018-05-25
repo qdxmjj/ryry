@@ -91,6 +91,7 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                 Intent intent = new Intent();
                 switch (orderItemBean.getOrderType()) {
                     case "1"://orderType:  1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
+//                        intent.setClass(context, OrderXiangqingActivity.class);
                         break;
                     case "2"://orderType:  1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
                         intent.setClass(context, OrderXiangqingActivity.class);

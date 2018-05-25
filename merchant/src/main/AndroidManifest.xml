@@ -35,7 +35,7 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="XtlGuahX7H7TsAQ6m7Mk1zb73h2tXmTT" />
 
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity" android:launchMode="singleTask"/>
         <activity
             android:name=".ui.activity.LoginActivity"
             android:launchMode="singleTask" />
@@ -85,8 +85,9 @@
             android:name=".ui.activity.MyPicDialogActivity"
             android:theme="@style/dialogstyle" />
         <activity android:name=".ui.activity.SheZhiActivity" />
-        <activity android:name=".ui.activity.ChangePwActivity"></activity>
-        <activity android:name=".ui.activity.PromotionActivity"></activity>
+        <activity android:name=".ui.activity.ChangePwActivity" />
+        <activity android:name=".ui.activity.PromotionActivity" />
+        <activity android:name=".ui.activity.StoreOrderInfoActivity"></activity>
     </application>
 
 </manifest>

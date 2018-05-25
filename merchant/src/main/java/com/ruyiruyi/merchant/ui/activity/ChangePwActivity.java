@@ -1,10 +1,12 @@
 package com.ruyiruyi.merchant.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -12,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ruyiruyi.merchant.R;
+import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.db.model.User;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
@@ -20,7 +24,9 @@ import com.ruyiruyi.rylibrary.utils.TripleDESUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.DbManager;
 import org.xutils.common.Callback;
+import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -41,6 +47,8 @@ public class ChangePwActivity extends BaseActivity {
     private String passWord_yuan_;
     private String passWord_xin_a_;
     private String passWord_xin_b_;
+    private ProgressDialog progressDialog;
+    private String TAG = ChangeBianmaActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +66,7 @@ public class ChangePwActivity extends BaseActivity {
                 }
             }
         });
+        progressDialog = new ProgressDialog(ChangePwActivity.this);
 
         initView();
         bindView();
@@ -93,6 +102,10 @@ public class ChangePwActivity extends BaseActivity {
                     }
                     passWord_xin_a_ = TripleDESUtil.bytes2HexString(md5);
                 }
+                if (et_xinmima_a_.getText().toString().length() < 6) {
+                    showDialog("密码不能少于6位");
+                    return;
+                }
                 if (et_xinmima_b_.getText() == null || et_xinmima_b_.getText().length() == 0) {
                     showDialog("请输入确认密码");
                     return;
@@ -104,6 +117,10 @@ public class ChangePwActivity extends BaseActivity {
                     } catch (UnsupportedEncodingException e) {
                     }
                     passWord_xin_b_ = TripleDESUtil.bytes2HexString(md5);
+                }
+                if (et_xinmima_b_.getText().toString().length() < 6) {
+                    showDialog("密码不能少于6位");
+                    return;
                 }
                 if (!passWord_xin_a_.equals(passWord_xin_b_)) {
                     showDialog("两次输入密码不一致");
@@ -143,6 +160,64 @@ public class ChangePwActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                showDialogProgress(progressDialog, "修改提交中...");
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("oldPassword", passWord_yuan_);
+                    object.put("newPassword", passWord_xin_a_);
+                    User user = new DbConfig().getUser();
+                    object.put("phone", user.getPhone());
+
+                } catch (JSONException e) {
+                }
+                RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "changeStorePwdByOldPwd");
+                params.addBodyParameter("reqJson", object.toString());
+                params.addBodyParameter("token", new DbConfig().getToken());
+                params.setConnectTimeout(6000);
+                Log.e(TAG, "onClick: params.toString() " + params.toString());
+                x.http().post(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Log.e(TAG, "onSuccess:  result = " + result);
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            String msg = jsonObject.getString("msg");
+                            int status = jsonObject.getInt("status");
+                            Toast.makeText(ChangePwActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            if (status == 1) {
+                                //退出登录更改本地用户信息并跳转登录界面
+                                User user = new DbConfig().getUser();
+                                user.setIsLogin("0");
+                                DbManager dbManager = new DbConfig().getDbManager();
+                                try {
+                                    dbManager.saveOrUpdate(user);
+                                } catch (DbException e) {
+                                }
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                startActivity(intent);
+                            }
+
+                        } catch (JSONException e) {
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+                        Toast.makeText(ChangePwActivity.this, "密码修改失败,请检查网络", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+                        hideDialogProgress(progressDialog);
+                    }
+                });
             }
         });
 

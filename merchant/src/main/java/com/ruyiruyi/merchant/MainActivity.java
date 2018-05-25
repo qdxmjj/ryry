@@ -2,7 +2,6 @@ package com.ruyiruyi.merchant;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -10,27 +9,19 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.ruyiruyi.merchant.ui.fragment.DianpuFragment;
-import com.ruyiruyi.merchant.ui.fragment.DingdanFragment;
-import com.ruyiruyi.merchant.ui.fragment.WodeFragment;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
+import com.ruyiruyi.merchant.ui.fragment.StoreFragment;
+import com.ruyiruyi.merchant.ui.fragment.OrderFragment;
+import com.ruyiruyi.merchant.ui.fragment.MyFragment;
 import com.ruyiruyi.rylibrary.cell.HomeTabsCell;
 import com.ruyiruyi.rylibrary.cell.NoCanSlideViewPager;
 import com.ruyiruyi.rylibrary.ui.adapter.FragmentViewPagerAdapter;
 import com.ruyiruyi.rylibrary.utils.LayoutHelper;
-
-import org.xutils.DbManager;
-import org.xutils.ex.DbException;
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +42,7 @@ public class MainActivity extends FragmentActivity {
             isExit = false;
         }
     };
+    private String page;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +50,10 @@ public class MainActivity extends FragmentActivity {
         content = new FrameLayout(this);
 
         setContentView(content, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+
+        //获取传递page标记
+        Bundle bundle = getIntent().getExtras();
+        page = bundle.getString("page");
 
         //判断权限
         judgePower();
@@ -87,8 +83,20 @@ public class MainActivity extends FragmentActivity {
 
             }
         });
-        viewPager.setCurrentItem(2);
-        tabsCell.setSelected(2);
+        switch (page) {
+            case "order":
+                viewPager.setCurrentItem(0);
+                tabsCell.setSelected(0);
+                break;
+            case "store":
+                viewPager.setCurrentItem(1);
+                tabsCell.setSelected(1);
+                break;
+            case "my":
+                viewPager.setCurrentItem(2);
+                tabsCell.setSelected(2);
+                break;
+        }
 
 
         initView();
@@ -107,10 +115,10 @@ public class MainActivity extends FragmentActivity {
 
     private List<Fragment> initFragment() {
         List<Fragment> fragments = new ArrayList<>();
-        DingdanFragment dingdanFragment = new DingdanFragment();
-        fragments.add(dingdanFragment);
-        fragments.add(new DianpuFragment());
-        fragments.add(new WodeFragment());
+        OrderFragment orderFragment = new OrderFragment();
+        fragments.add(orderFragment);
+        fragments.add(new StoreFragment());
+        fragments.add(new MyFragment());
 
         return fragments;
     }

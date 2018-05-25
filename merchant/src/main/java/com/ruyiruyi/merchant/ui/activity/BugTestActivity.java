@@ -67,6 +67,9 @@ public class BugTestActivity extends BaseActivity {
                 break;
             case R.id.confirm_receive:
                 Intent intent10 = new Intent(this, ConfirmReceiveActivity.class);
+                Bundle bundle10 = new Bundle();
+                bundle10.putString("orderNo", "201805171751371670");
+                intent10.putExtras(bundle10);
                 startActivity(intent10);
                 break;
         }
