@@ -19,6 +19,11 @@ import rx.functions.Action1;
 
 public class PromotionViewBinder extends ItemViewProvider<Promotion, PromotionViewBinder.ViewHolder> {
     private Context context;
+    public OnShareViewClick listener;
+
+    public void setListener(OnShareViewClick listener) {
+        this.listener = listener;
+    }
 
     public PromotionViewBinder(Context context) {
         this.context = context;
@@ -40,7 +45,8 @@ public class PromotionViewBinder extends ItemViewProvider<Promotion, PromotionVi
         RxViewAction.clickNoDouble(holder.promotion_share).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Toast.makeText(context, "分享", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "分享", Toast.LENGTH_SHORT).show();
+                listener.onShareViewClikcListenner();
             }
         });
 
@@ -60,6 +66,10 @@ public class PromotionViewBinder extends ItemViewProvider<Promotion, PromotionVi
             promotion_way = ((TextView) itemView.findViewById(R.id.promotion_way));
             promotion_share = ((TextView) itemView.findViewById(R.id.promotion_share));
         }
+    }
+
+    public interface OnShareViewClick{
+        void onShareViewClikcListenner();
     }
 
 }

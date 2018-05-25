@@ -170,7 +170,6 @@ public class MyFragment extends Fragment {
         myLimitTesxt = ((TextView) getView().findViewById(R.id.my_limit_text));
         cxwyLayout = (LinearLayout) getView().findViewById(R.id.cxwy_layout);
         ll_promotion = (LinearLayout) getView().findViewById(R.id.ll_promotion);
-        shareLayout = (LinearLayout) getView().findViewById(R.id.share_layout);
 
         //推广码
         RxViewAction.clickNoDouble(ll_promotion)

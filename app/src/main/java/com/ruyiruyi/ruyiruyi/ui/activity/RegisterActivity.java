@@ -74,6 +74,9 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
     private EditText userNameEdit;
     private EditText emailEdit;
     private ProgressDialog progressDialog;
+    private String headUrl;
+    private String openId;
+    private String nickName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,9 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
 
         Intent intent = getIntent();
         phone = intent.getStringExtra("PHONE");
+        headUrl = intent.getStringExtra(LoginActivity.HEADURL);
+        openId = intent.getStringExtra(LoginActivity.OPENID);
+        nickName = intent.getStringExtra(LoginActivity.NICKNAME);
 
 
         initView();
@@ -118,6 +124,9 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
         emailEdit = (EditText) findViewById(R.id.email_edit);
 
         phoneText.setText(phone);
+        if (nickName != null || !nickName.equals("")){
+            userNameEdit.setText(nickName);
+        }
 
 
         showPasswordOne();
@@ -224,6 +233,8 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
             jsonObject.put("gender",sex);
             jsonObject.put("nick",userName);
             jsonObject.put("password",password1);
+            jsonObject.put("wxInfoId",openId);
+            jsonObject.put("headimgurl",headUrl);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "registerUser");

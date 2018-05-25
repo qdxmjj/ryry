@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.ui.cell.TabItemView;
 import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsListFragment;
@@ -29,6 +30,8 @@ public class OrderActivity extends FragmentActivity {
     private  TabLayout tabLayout;
     private SimpleFragmentPagerAdapter pagerAdapter;
     private String orderType;
+    public static String ORDER_FROM = "ORDER_FROM";  //0是来自main  1是其他
+    private int orderFrom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class OrderActivity extends FragmentActivity {
         });
         Intent intent = getIntent();
         orderType = intent.getStringExtra(OrderFragment.ORDER_TYPE);
+        orderFrom = intent.getIntExtra(OrderActivity.ORDER_FROM,0);
 
         initView();
     }
@@ -159,12 +163,21 @@ public class OrderActivity extends FragmentActivity {
         List list = new ArrayList();
         list.add("全部");
         list.add("待支付");
-        list.add("代发货");
+        list.add("待发货");
         list.add("待服务");
         list.add("已完成");
         return list;
     }
     protected List<TabItemView> getTabViews() {
         return null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (orderFrom == 1){
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }else {
+            super.onBackPressed();
+        }
     }
 }

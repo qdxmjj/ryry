@@ -23,6 +23,7 @@ import com.alipay.sdk.app.PayTask;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
 import com.ruyiruyi.ruyiruyi.ui.model.PayResult;
 import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.OrderInfoUtil2_0;
@@ -89,7 +90,10 @@ public class PaymentActivity extends BaseActivity {
                 // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                 Toast.makeText(PaymentActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
                 //支付成功 跳转到待更换轮胎界面
-                startActivity(new Intent(getApplicationContext(),TireWaitChangeActivity.class));
+                Intent intent1 = new Intent(getApplicationContext(), PaySuccessActivity.class);
+                intent1.putExtra("ORDERTYPE",orderType);
+                startActivity(intent1);
+
             } else {
                 // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                 Toast.makeText(PaymentActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
@@ -118,6 +122,7 @@ public class PaymentActivity extends BaseActivity {
     private ImageView yuEImage;
     private ImageView weixinImage;
     private ImageView zhifubaoImage;
+    public double lineCredit =1000.00;
 
     private void regToWx(){
         api = WXAPIFactory.createWXAPI(this,APP_ID,true);
@@ -197,8 +202,16 @@ public class PaymentActivity extends BaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         if (currentType == 0){  //余额支付
-                            api = WXAPIFactory.createWXAPI(getApplicationContext(), Constants.APP_ID, false);
-                            Toast.makeText(getApplicationContext(), "launch result = " + api.openWXApp(), Toast.LENGTH_LONG).show();
+                            if (allprice > lineCredit) {
+                                Toast.makeText(PaymentActivity.this, "信用额度不足，请使用其他支付方式", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (orderType == 0){        //轮胎订单
+                                postTireOrder();
+                            }else if (orderType == 1){  //商品订单
+                                postGoodsOrder();
+                            }
+
 
                         }else if (currentType == 1){//微信支付
                           /*  //初始化一个WXTextObject对象
@@ -256,6 +269,160 @@ public class PaymentActivity extends BaseActivity {
                     }
                 });
     }
+
+    /**
+     * 提交商品订单
+     */
+    private void postGoodsOrder() {
+        int userId = new DbConfig().getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("orderNo",orderno);
+            jsonObject.put("userId",userId);
+
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addConfirmStockOrder");
+        String token = new DbConfig().getToken();
+        String jsonByToken = "";
+        try {
+            jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(),token);
+
+
+        } catch (UnsupportedEncodingException e) {
+
+        } catch (IllegalBlockSizeException e) {
+
+        } catch (InvalidKeyException e) {
+
+        } catch (BadPaddingException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        } catch (NoSuchPaddingException e) {
+
+        }
+        String s2 = jsonByToken.replaceAll("\\n", "");
+        params.addBodyParameter("reqJson",s2);
+        params.addParameter("token",token);
+        Log.e(TAG, "postOrderSuccess: paramas---" + params.toString());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: --*--" + result );
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Intent intent1 = new Intent(getApplicationContext(), PaySuccessActivity.class);
+                        intent1.putExtra("ORDERTYPE",orderType);
+                        startActivity(intent1);
+                        finish();
+                    }else {
+                        Toast.makeText(PaymentActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 提交轮胎订单
+     */
+    private void postTireOrder() {
+        int userId = new DbConfig().getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("orderNo",orderno);
+            jsonObject.put("userId",userId);
+
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addConfirmUserShoeCxwyOrder");
+        String token = new DbConfig().getToken();
+        String jsonByToken = "";
+        try {
+            jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(),token);
+
+
+        } catch (UnsupportedEncodingException e) {
+
+        } catch (IllegalBlockSizeException e) {
+
+        } catch (InvalidKeyException e) {
+
+        } catch (BadPaddingException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        } catch (NoSuchPaddingException e) {
+
+        }
+        String s2 = jsonByToken.replaceAll("\\n", "");
+        params.addBodyParameter("reqJson",s2);
+        params.addParameter("token",token);
+        Log.e(TAG, "postOrderSuccess: paramas---" + params.toString());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: --*--" + result );
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+
+                        Intent intent1 = new Intent(getApplicationContext(), PaySuccessActivity.class);
+                        intent1.putExtra("ORDERTYPE",orderType);
+                        startActivity(intent1);
+                        finish();
+                    }else {
+                        Toast.makeText(PaymentActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     private String buildTransaction(final String type) {
         return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
@@ -371,75 +538,6 @@ public class PaymentActivity extends BaseActivity {
         payThread.start();
     }
 
-    private void postOrderSuccess() {
-        int userId = new DbConfig().getId();
-        JSONObject jsonObject = new JSONObject();
-        try {
-           jsonObject.put("orderNo",orderno);
-           jsonObject.put("userId",userId);
-
-        } catch (JSONException e) {
-        }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addConfirmUserShoeCxwyOrder");
-        String token = new DbConfig().getToken();
-        String jsonByToken = "";
-        try {
-                jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(),token);
-
-
-        } catch (UnsupportedEncodingException e) {
-
-        } catch (IllegalBlockSizeException e) {
-
-        } catch (InvalidKeyException e) {
-
-        } catch (BadPaddingException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        } catch (NoSuchPaddingException e) {
-
-        }
-        String s2 = jsonByToken.replaceAll("\\n", "");
-        params.addBodyParameter("reqJson",s2);
-        params.addParameter("token",token);
-        Log.e(TAG, "postOrderSuccess: paramas---" + params.toString());
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: --*--" + result );
-                JSONObject jsonObject1 = null;
-                try {
-                    jsonObject1 = new JSONObject(result);
-                    String status = jsonObject1.getString("status");
-                    String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
-                        startActivity(new Intent(getApplicationContext(),TireWaitChangeActivity.class));
-                    }else {
-                        Toast.makeText(PaymentActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
 
     @Override
     public void onBackPressed() {

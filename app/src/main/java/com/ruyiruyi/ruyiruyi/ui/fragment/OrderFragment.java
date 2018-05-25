@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -46,6 +47,7 @@ public class OrderFragment extends Fragment implements OrderViewBinder.OnOrderIt
     private List<Object> items = new ArrayList<>();
     private MultiTypeAdapter adapter;
     public List<Order> orderList ;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
@@ -88,6 +90,8 @@ public class OrderFragment extends Fragment implements OrderViewBinder.OnOrderIt
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                orderList.clear();
+                swipeRefreshLayout.setRefreshing(false);
                 Log.e(TAG, "onSuccess: " + result );
                 JSONObject jsonObject1 = null;
                 try {
@@ -146,6 +150,7 @@ public class OrderFragment extends Fragment implements OrderViewBinder.OnOrderIt
     }
 
     private void initView() {
+        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.order_refresh_layout);
         listView = (RecyclerView) getView().findViewById(R.id.order_listview);
         LinearLayoutManager linearLayoutManager = new FullyLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         listView.setLayoutManager(linearLayoutManager);
@@ -154,6 +159,15 @@ public class OrderFragment extends Fragment implements OrderViewBinder.OnOrderIt
 
         listView.setAdapter(adapter);
         assertHasTheSameAdapter(listView, adapter);
+        swipeRefreshLayout.setProgressViewEndTarget(true, 200);
+        //下拉刷新
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initDataFromService();
+
+            }
+        });
 
     }
 
@@ -174,7 +188,19 @@ public class OrderFragment extends Fragment implements OrderViewBinder.OnOrderIt
             intent.putExtra(PaymentActivity.ORDER_TYPE,Integer.parseInt(orderType));
             intent.putExtra(PaymentActivity.ORDER_FROM,1);
             startActivity(intent);
-        }else if (orderState.equals("5")){    //代发货
+        }else if (orderState.equals("5")){    //代发货 orderType 2
+            Intent intent = new Intent(getContext(), OrderInfoActivity.class);
+            intent.putExtra(PaymentActivity.ORDERNO,orderNo);
+            intent.putExtra(PaymentActivity.ORDER_TYPE,Integer.parseInt(orderType));
+            intent.putExtra(PaymentActivity.ORDER_STATE,Integer.parseInt(orderState));
+            startActivity(intent);
+        }else if (orderType.equals("2")&& orderState.equals("2")){  //轮胎订单 待收货
+            Intent intent = new Intent(getContext(), OrderInfoActivity.class);
+            intent.putExtra(PaymentActivity.ORDERNO,orderNo);
+            intent.putExtra(PaymentActivity.ORDER_TYPE,Integer.parseInt(orderType));
+            intent.putExtra(PaymentActivity.ORDER_STATE,Integer.parseInt(orderState));
+            startActivity(intent);
+        }else if (orderType.equals("1")&&orderState.equals("3") || orderType.equals("2")&&orderState.equals("3")){ //商品订单  待商家确认服务 //首次更换订单  待商家确认服务
             Intent intent = new Intent(getContext(), OrderInfoActivity.class);
             intent.putExtra(PaymentActivity.ORDERNO,orderNo);
             intent.putExtra(PaymentActivity.ORDER_TYPE,Integer.parseInt(orderType));

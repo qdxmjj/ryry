@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def VERSION_CODE = 1
-def VERSION_NAME = "1.4"
+def VERSION_NAME = "1.5.7"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''
@@ -43,10 +43,6 @@ android {
     }
 
     signingConfigs {
-        debug {
-            storeFile file("../debug.keystore")
-        }
-
         myConfig {
             storeFile file('ruyiruyi.jks')
             storePassword 'qdxmjj'
@@ -147,11 +143,13 @@ dependencies {
     compile('com.zhihu.android:matisse:0.4.3', {
         exclude group: 'com.android.support'
     })
+    compile 'com.alibaba:fastjson:1.1.56.android'
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'ch.ielse:imagewatcher:1.0.3'
     compile 'com.google.code.gson:gson:2.6.2'
     /*微信*/
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    compile 'com.zhy:okhttputils:2.6.2'
     compile project(':rylibrary')
 }

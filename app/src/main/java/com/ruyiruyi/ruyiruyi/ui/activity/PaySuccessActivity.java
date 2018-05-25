@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -15,7 +16,10 @@ import rx.functions.Action1;
 
 public class PaySuccessActivity extends BaseActivity {
     private ActionBar actionBar;
-    private TextView tireChangeButton;
+    private Intent intent;
+    private int ordertype;
+    private TextView goSeeView;
+    private TextView goMainView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,20 +39,49 @@ public class PaySuccessActivity extends BaseActivity {
                 }
             }
         });
+        intent = getIntent();
+        ordertype = intent.getIntExtra("ORDERTYPE",0);  //0轮胎订单  1商品订单;
+
+
 
         initView();
     }
 
     private void initView() {
-        tireChangeButton = (TextView) findViewById(R.id.tire_change_button);
+        goSeeView = (TextView) findViewById(R.id.go_see_view);
+        goMainView = (TextView) findViewById(R.id.go_main_view);
 
-        RxViewAction.clickNoDouble(tireChangeButton)
+        if (ordertype == 0){
+            goSeeView.setText("去换胎");
+        }else if (ordertype == 1){
+            goSeeView.setText("去服务");
+        }
+
+        RxViewAction.clickNoDouble(goSeeView)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getApplicationContext(), TireChangeActivity.class));
+                        if (ordertype == 1){    //商品订单
+                            Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                            intent.putExtra(OrderFragment.ORDER_TYPE, "DFW");
+                            intent.putExtra(OrderActivity.ORDER_FROM,1);
+                            startActivity(intent);
+                            finish();
+                        }else if (ordertype == 0){  //轮胎订单
+                            startActivity(new Intent(getApplicationContext(),TireWaitChangeActivity.class));
+                        }
                     }
                 });
+
+        RxViewAction.clickNoDouble(goMainView)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                    }
+                });
+
+
     }
 
     @Override

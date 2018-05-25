@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Newest;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.db.model.UserTest;
+import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.TimeCount;
 import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
@@ -34,6 +36,9 @@ import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.ui.dialog.ErrorDialog;
 import com.ruyiruyi.rylibrary.utils.AndroidUtilities;
 import com.ruyiruyi.rylibrary.utils.TripleDESUtil;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,6 +79,15 @@ public class LoginActivity extends BaseActivity {
     private TimeCount mTime;
     private TextView forgetPassword;
     private ProgressDialog codeDialog;
+    private LinearLayout weixinLoginLayout;
+    private IWXAPI api;
+
+    public static String HEADURL = "HEADURL";
+    public static String NICKNAME = "NICKNAME";
+    public static String OPENID = "OPENID";
+    private String headUrl;
+    private String nickName;
+    private String openId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +95,9 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         String ANDROID_ID = Settings.System.getString(this.getContentResolver(), Settings.System.ANDROID_ID);
         codeDialog = new ProgressDialog(this);
+
+        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
+        api.registerApp(Constants.APP_ID);
         initView();
 
 
@@ -97,8 +114,18 @@ public class LoginActivity extends BaseActivity {
         loginButton = (TextView) findViewById(R.id.login_button);
         getCodeButton = (TextView) findViewById(R.id.get_code_button);
         forgetPassword = (TextView) findViewById(R.id.forget_password);
+        weixinLoginLayout = (LinearLayout) findViewById(R.id.weixin_login_layout);
 
         mTime = new TimeCount(60000,1000);
+
+        //微信登陆
+        RxViewAction.clickNoDouble(weixinLoginLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        weixinLogin();
+                    }
+                });
 
 
 
@@ -176,6 +203,16 @@ public class LoginActivity extends BaseActivity {
     }
 
     /**
+     * 微信登陆
+     */
+    private void weixinLogin() {
+        SendAuth.Req req = new SendAuth.Req();
+        req.scope = "snsapi_userinfo";
+        req.state = "wechat_sdk_微信登录";
+        api.sendReq(req);
+    }
+
+    /**
      * 验证码登陆
      * @param code
      */
@@ -207,6 +244,9 @@ public class LoginActivity extends BaseActivity {
                     if (status.equals("1")){//用户信息不存在  跳转到注册界面
                         Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                         intent.putExtra("PHONE",phoneEdit.getText().toString());
+                        intent.putExtra(LoginActivity.HEADURL,"");
+                        intent.putExtra(LoginActivity.NICKNAME,"");
+                        intent.putExtra(LoginActivity.OPENID,"");
                         startActivity(intent);
                     }else if (status.equals("111111")){ //用户信息存在返回用户信息
                         JSONObject data = jsonObject1.getJSONObject("data");
@@ -546,5 +586,73 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         startActivity(new Intent(this,MainActivity.class));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Toast.makeText(LoginActivity.this, requestCode, Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, resultCode, Toast.LENGTH_SHORT).show();
+        if(resultCode == 0){
+            headUrl = data.getStringExtra(HEADURL);
+            nickName = data.getStringExtra(NICKNAME);
+            openId = data.getStringExtra(OPENID);
+            Toast.makeText(LoginActivity.this, "微信登陆成功", Toast.LENGTH_SHORT).show();
+            wxLoigin();
+        }
+    }
+
+    private void wxLoigin() {
+        showDialogProgress(codeDialog,"微信登陆中...");
+        final JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("wxInfoId",openId);
+
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "checkWXInfoId  ");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.setConnectTimeout(10000);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result );
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String status = jsonObject.getString("status");
+                    String msg = jsonObject.getString("msg");
+                    Log.e(TAG, "onSuccess: " + status);
+                    if(status.equals("1")){
+                        Toast.makeText(LoginActivity.this, "chenggong", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), WxPhoneActivity.class);
+                        intent.putExtra(HEADURL,headUrl);
+                        intent.putExtra(NICKNAME,nickName);
+                        intent.putExtra(OPENID,openId);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(LoginActivity.this, "网络异常，请检查网络链接", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                hideDialogProgress(codeDialog);
+            }
+        });
+
     }
 }

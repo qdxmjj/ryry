@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/c1"
+    tools:context="com.ruyiruyi.ruyiruyi.ui.activity.WxPhoneActivity">
+
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/my_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="50dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_phone"/>
+
+        <EditText
+            android:id="@+id/wx_phone_number_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:hint="请输入您的手机号"
+            android:textColorHint="@color/c4"
+            android:textSize="15sp"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:background="@drawable/edit_bg_select"
+            android:textCursorDrawable="@drawable/edit_cursor_color"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_password"/>
+        <FrameLayout
+            android:id="@+id/code_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/wx_code_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:hint="请输入验证码"
+                android:textColorHint="@color/c4"
+                android:textSize="15sp"
+                android:inputType="number"
+                android:background="@drawable/edit_bg_select"
+                android:textCursorDrawable="@drawable/edit_cursor_color"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                />
+            <TextView
+                android:id="@+id/wx_get_code_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="获取验证码"
+                android:textColor="#ffffff"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:layout_gravity="right"
+                android:background="@drawable/login_button"/>
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/c5"
+        android:text="*已注册过如驿如意App的手机号将绑定该微信，可通过微信直接登陆原账号，未注册过的手机号将注册新的如驿如意App"/>
+
+    <TextView
+        android:id="@+id/wx_phone_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="30dp"
+        android:text="确认"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        android:background="@drawable/login_button"
+        android:paddingTop="7dp"
+        android:gravity="center"
+        android:paddingBottom="7dp"/>
+
+</LinearLayout>

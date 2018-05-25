@@ -222,9 +222,9 @@
         <activity android:name=".ui.activity.OrderInfoActivity" />
         <activity android:name=".ui.activity.RouteMapActivity" />
         <activity android:name=".ui.activity.UserInfoActivity" />
-        <activity android:name=".ui.activity.PromotionActivity"></activity>
-        <activity android:name=".ui.activity.UserInfoActivity"></activity>
-        <!--支付宝-->
+        <activity android:name=".ui.activity.PromotionActivity" />
+        <activity android:name=".ui.activity.UserInfoActivity" />
+        <!-- 支付宝 -->
         <activity android:name=".ui.activity.UserInfoActivity" />
         <!-- 支付宝 -->
         <activity
@@ -242,9 +242,11 @@
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:launchMode="singleTask" />
         <activity android:name=".ui.activity.SendToWXActivity" />
-        <activity android:name=".ui.activity.ShowFromWXActivity"></activity>
+        <activity android:name=".ui.activity.ShowFromWXActivity" />
+        <activity android:name=".ui.activity.WxPhoneActivity"></activity>
     </application>
 
 </manifest>
