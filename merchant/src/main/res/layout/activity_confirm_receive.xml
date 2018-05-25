@@ -15,7 +15,7 @@
         android:id="@+id/scl_"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/save_"
+        android:layout_above="@+id/ll_bottom_"
         android:layout_below="@+id/acbar_"
         android:background="@color/c1">
 
@@ -26,7 +26,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -62,7 +62,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -99,7 +99,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -136,7 +136,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -190,11 +190,12 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/type_qiantai"
+                        android:id="@+id/luntai_qiantai"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="轮胎服务"
+                        android:maxLines="2"
+                        android:text="ROADCRUZA/运动操控/255/45R17/102W/W"
                         android:textColor="@color/c7"
                         android:textSize="18sp" />
 
@@ -222,29 +223,6 @@
                             android:textSize="15sp" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:text="轮胎规格:"
-                            android:textColor="@color/c6"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/luntai_qiantai"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="3dp"
-                            android:text="165/4588556"
-                            android:textColor="@color/c6"
-                            android:textSize="15sp" />
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -323,11 +301,12 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/type_houtai"
+                        android:id="@+id/luntai_houtai"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="轮胎服务"
+                        android:maxLines="2"
+                        android:text="ROADCRUZA/运动操控/255/45R17/102W/W"
                         android:textColor="@color/c7"
                         android:textSize="18sp" />
 
@@ -351,30 +330,6 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
                             android:text="首次更换"
-                            android:textColor="@color/c6"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:text="轮胎规格:"
-                            android:textColor="@color/c6"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/luntai_houtai"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="3dp"
-                            android:text="165/4588556"
                             android:textColor="@color/c6"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -456,11 +411,12 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/type_yizhi"
+                        android:id="@+id/luntai_yizhi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="轮胎服务"
+                        android:maxLines="2"
+                        android:text="ROADCRUZA/运动操控/255/45R17/102W/W"
                         android:textColor="@color/c7"
                         android:textSize="18sp" />
 
@@ -484,30 +440,6 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
                             android:text="首次更换"
-                            android:textColor="@color/c6"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:text="轮胎规格:"
-                            android:textColor="@color/c6"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/luntai_yizhi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="3dp"
-                            android:text="165/4588556"
                             android:textColor="@color/c6"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -566,6 +498,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_tiaoma_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -586,7 +519,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="条形码:"
+                        android:text="条形码"
                         android:textColor="@color/c7"
                         android:textSize="16sp" />
 
@@ -597,8 +530,8 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical|right"
                         android:paddingRight="3dp"
-                        android:text="条形码是否不一致"
-                        android:textColor="@color/c6"
+                        android:text="是否不一致"
+                        android:textColor="@color/c7"
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -624,15 +557,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:weightSum="5">
 
                     <TextView
                         android:id="@+id/tiaoma_a_"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_marginLeft="50dp"
-                        android:layout_weight="1"
+                        android:layout_weight="4"
+                        android:ellipsize="end"
                         android:gravity="center_vertical"
+                        android:maxLines="1"
                         android:text="456789456"
                         android:textColor="@color/c6"
                         android:textSize="16sp" />
@@ -672,15 +607,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:weightSum="5">
 
                     <TextView
                         android:id="@+id/tiaoma_b_"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_marginLeft="50dp"
-                        android:layout_weight="1"
+                        android:layout_weight="4"
+                        android:ellipsize="end"
                         android:gravity="center_vertical"
+                        android:maxLines="1"
                         android:text="456789456"
                         android:textColor="@color/c6"
                         android:textSize="16sp" />
@@ -720,15 +657,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:weightSum="5">
 
                     <TextView
                         android:id="@+id/tiaoma_c_"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_marginLeft="50dp"
-                        android:layout_weight="1"
+                        android:layout_weight="4"
+                        android:ellipsize="end"
                         android:gravity="center_vertical"
+                        android:maxLines="1"
                         android:text="456789456"
                         android:textColor="@color/c6"
                         android:textSize="16sp" />
@@ -768,15 +707,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:weightSum="5">
 
                     <TextView
                         android:id="@+id/tiaoma_d_"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_marginLeft="50dp"
-                        android:layout_weight="1"
+                        android:layout_weight="4"
+                        android:ellipsize="end"
                         android:gravity="center_vertical"
+                        android:maxLines="1"
                         android:text="456789456"
                         android:textColor="@color/c6"
                         android:textSize="16sp" />
@@ -806,19 +747,39 @@
         </LinearLayout>
     </ScrollView>
 
-    <TextView
-        android:id="@+id/save_"
+    <LinearLayout
+        android:id="@+id/ll_bottom_"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="2dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/login_code_button"
-        android:gravity="center"
-        android:text="提交"
-        android:textColor="#ffffff"
-        android:textSize="18sp" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/save_"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/login_code_button"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/state_"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/login_code_button_huise"
+            android:gravity="center"
+            android:text="状态"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
 
 
+    </LinearLayout>
 </RelativeLayout>

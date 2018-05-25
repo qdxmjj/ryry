@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.fragment;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,30 +24,35 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.User;
 import com.ruyiruyi.merchant.ui.activity.BugTestActivity;
-import com.ruyiruyi.merchant.ui.activity.LoginActivity;
 import com.ruyiruyi.merchant.ui.activity.MyGoodsActivity;
 import com.ruyiruyi.merchant.ui.activity.MyOrderActivity;
 import com.ruyiruyi.merchant.ui.activity.MyServiceActivity;
-import com.ruyiruyi.merchant.ui.activity.OrderXiangqingActivity;
 import com.ruyiruyi.merchant.ui.activity.PromotionActivity;
-import com.ruyiruyi.merchant.ui.activity.ServiceRecordActivity;
 import com.ruyiruyi.merchant.ui.activity.SheZhiActivity;
 import com.ruyiruyi.merchant.ui.activity.StoreManageActivity;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
+import com.ruyiruyi.rylibrary.base.BaseFragment;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.DbManager;
+import org.xutils.common.Callback;
 import org.xutils.ex.DbException;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -55,9 +61,9 @@ import java.io.IOException;
 import rx.functions.Action1;
 
 
-public class WodeFragment extends Fragment {
+public class MyFragment extends BaseFragment {
 
-    private static final String TAG = WodeFragment.class.getSimpleName();
+    private static final String TAG = MyFragment.class.getSimpleName();
     private TextView tv_username;
     private TextView tv_mid_wddd;
     private TextView tv_mid_gldp;
@@ -74,6 +80,8 @@ public class WodeFragment extends Fragment {
     private final int TAKE_PICTURE = 1;
     private Uri tempUri;
     private Bitmap imgBitmap;
+    private String img_Path;
+    private ProgressDialog progressDialog;
 
 
     @Nullable
@@ -85,23 +93,17 @@ public class WodeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        progressDialog = new ProgressDialog(getContext());
+
         initView();
 
         initDataFromDbAndSetView();
+
+        bindView();
     }
 
-    private void initView() {
-        tv_username = (TextView) getView().findViewById(R.id.tv_username);
-        tv_mid_wddd = (TextView) getView().findViewById(R.id.tv_mid_wddd);
-        tv_mid_gldp = (TextView) getView().findViewById(R.id.tv_mid_gldp);
-        rl_wdfw = (RelativeLayout) getView().findViewById(R.id.rl_wdfw);
-        rl_wdsp = (RelativeLayout) getView().findViewById(R.id.rl_wdsp);
-        rl_tgjl = (RelativeLayout) getView().findViewById(R.id.rl_tgjl);
-        rl_dzyhs = (RelativeLayout) getView().findViewById(R.id.rl_dzyhs);
-        rl_shezhi = (RelativeLayout) getView().findViewById(R.id.rl_shezhi);
-        img_user_top = (ImageView) getView().findViewById(R.id.img_user_top);
-
-
+    private void bindView() {
         RxViewAction.clickNoDouble(rl_tgjl).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -168,10 +170,23 @@ public class WodeFragment extends Fragment {
         });
     }
 
+    private void initView() {
+        tv_username = (TextView) getView().findViewById(R.id.tv_username);
+        tv_mid_wddd = (TextView) getView().findViewById(R.id.tv_mid_wddd);
+        tv_mid_gldp = (TextView) getView().findViewById(R.id.tv_mid_gldp);
+        rl_wdfw = (RelativeLayout) getView().findViewById(R.id.rl_wdfw);
+        rl_wdsp = (RelativeLayout) getView().findViewById(R.id.rl_wdsp);
+        rl_tgjl = (RelativeLayout) getView().findViewById(R.id.rl_tgjl);
+        rl_dzyhs = (RelativeLayout) getView().findViewById(R.id.rl_dzyhs);
+        rl_shezhi = (RelativeLayout) getView().findViewById(R.id.rl_shezhi);
+        img_user_top = (ImageView) getView().findViewById(R.id.img_user_top);
+
+    }
+
 
     private void showPicInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("上传照片");
+        builder.setTitle("修改头像");
         String[] items = {"选择本地照片", "拍照"};
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -222,7 +237,7 @@ public class WodeFragment extends Fragment {
             tempUri = FileProvider.getUriForFile(getActivity(), "com.ruyiruyi.merchant.fileProvider", file);
         } else {
             tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "image.jpg"));
+                    .getExternalStorageDirectory(), "newstoreheadimg.jpg"));
         }
         Log.e(TAG, "takePicture: " + tempUri);
         // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
@@ -257,14 +272,88 @@ public class WodeFragment extends Fragment {
             } catch (IOException e) {
             }
             imgBitmap = rotaingImageView(degree, photo);
-//   2          mGoodsImg.setImageBitmap(imgBitmap);
-            //Glide 加载BitMap需要先将bitmap对象转换为字节,在加载;
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            imgBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] bytes = baos.toByteArray();
-            Glide.with(this).load(bytes)
-                    .transform(new GlideCircleTransform(getActivity()))
-                    .into(img_user_top);
+
+    /**/                      //请求修改头像
+            showDialogProgress(progressDialog, "头像修改中...");
+
+            img_Path = ImageUtils.savePhoto(imgBitmap, Environment
+                    .getExternalStorageDirectory().getAbsolutePath(), "storeheadimg");
+            JSONObject object = new JSONObject();
+            try {
+                object.put("storeId", new DbConfig().getId() + "");
+                User user = new DbConfig().getUser();
+                object.put("headImgUrl", user.getStoreImgUrl());
+
+            } catch (JSONException e) {
+            }
+            RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreHeadImgByStoreId");
+            params.addBodyParameter("reqJson", object.toString());
+            params.addBodyParameter("token", new DbConfig().getToken());
+            params.addBodyParameter("store_head_img", new File(img_Path));
+            params.setConnectTimeout(6000);
+            x.http().post(params, new Callback.CommonCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        String msg = jsonObject.getString("msg");
+                        String url = jsonObject.getString("data");
+                        int status = jsonObject.getInt("status");
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+
+                        if (status == 1) {
+/*                            //头像修改成功操作 (Glide 加载BitMap需要先将bitmap对象转换为字节,在加载;)
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            imgBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                            byte[] bytes = baos.toByteArray();
+                            Glide.with(getContext()).load(bytes)
+                                    .transform(new GlideCircleTransform(getActivity()))
+                                    .into(img_user_top);*/
+                            //修改本地用户信息后跳转
+                            User user = new DbConfig().getUser();
+                            user.setStoreImgUrl(url);
+
+                            Log.e(TAG, "onSuccess: get0=" + url);
+                            Log.e(TAG, "onSuccess: get=" + user.getStoreImgUrl());
+
+                            DbConfig dbConfig = new DbConfig();
+                            DbManager db = dbConfig.getDbManager();
+                            try {
+                                db.saveOrUpdate(user);
+
+                            } catch (DbException e) {
+                            }
+
+                            String storeImgUrl = new DbConfig().getUser().getStoreImgUrl();
+                            Log.e(TAG, "onSuccess: get2=" + storeImgUrl);
+
+                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("page", "my");
+                            intent.putExtras(bundle);
+                            getActivity().finish();
+                            startActivity(intent);
+                        }
+
+                    } catch (JSONException e) {
+                    }
+                }
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                    Toast.makeText(getContext(), "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+
+                }
+
+                @Override
+                public void onFinished() {
+                    hideDialogProgress(progressDialog);
+                }
+            });
         }
     }
 
@@ -292,6 +381,7 @@ public class WodeFragment extends Fragment {
         User user = dbConfig.getUser();
         String topimgurl = user.getStoreImgUrl();
         String storeName = user.getStoreName();
+        Log.e(TAG, "initDataFromDbAndSetView:789789 topimgurl = " + topimgurl + "storeName = " + storeName);
         //glide 转换圆形图片
         glideReq = Glide.with(this);
         glideReq.load(topimgurl)

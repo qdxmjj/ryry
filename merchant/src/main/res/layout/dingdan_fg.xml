@@ -5,171 +5,162 @@
     android:layout_height="match_parent"
     tools:context="com.ruyiruyi.merchant.MainActivity">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+
+    <LinearLayout
+        android:id="@+id/ll_all"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="280dp">
 
-            <FrameLayout
+            <ImageView
+                android:id="@+id/img_top"
                 android:layout_width="match_parent"
-                android:layout_height="280dp">
+                android:layout_height="220dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_ground" />
 
-                <ImageView
-                    android:id="@+id/img_top"
-                    android:layout_width="match_parent"
-                    android:layout_height="220dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_ground" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="15dp"
-                    android:text="订单"
-                    android:textColor="#ffffff"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_zdd_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="80dp"
+                android:text="0"
+                android:textColor="#ffffff"
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tv_zdd_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="100dp"
-                    android:text="1234"
-                    android:textColor="#ffffff"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_zdd_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="120dp"
+                android:text="总订单 (单)"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/tv_zdd_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="140dp"
-                    android:text="总订单 (单)"
-                    android:textColor="#ffffff"
-                    android:textSize="15sp" />
+            <LinearLayout
+                android:id="@+id/ll_mid"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="190dp"
+                android:background="@drawable/ic_box"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
                 <LinearLayout
-                    android:id="@+id/ll_mid"
-                    android:layout_width="match_parent"
-                    android:layout_height="90dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="190dp"
-                    android:background="@drawable/ic_box"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_wwcdd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="未完成订单"
+                        android:textColor="@color/c7"
+                        android:textSize="14sp" />
 
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tv_wwcdd"
+                            android:id="@+id/tv_wwcdd_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:text="未完成订单"
-                            android:textColor="@color/c7"
-                            android:textSize="14sp" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/tv_wwcdd_num"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="48902"
-                                android:textColor="@color/c8"
-                                android:textSize="20sp" />
-
-                            <TextView
-                                android:id="@+id/tv_wwcdd_dan"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="2dp"
-                                android:text="(单)"
-                                android:textColor="@color/c8"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                            android:text="0"
+                            android:textColor="@color/c8"
+                            android:textSize="20sp" />
 
                         <TextView
-                            android:id="@+id/tv_ywcdd"
+                            android:id="@+id/tv_wwcdd_dan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:text="已完成订单"
-                            android:textColor="@color/c7"
+                            android:layout_marginLeft="2dp"
+                            android:text="(单)"
+                            android:textColor="@color/c8"
                             android:textSize="14sp" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/tv_ywcdd_num"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="66648902"
-                                android:textColor="@color/c8"
-                                android:textSize="20sp" />
-
-                            <TextView
-                                android:id="@+id/tv_ywcdd_dan"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="2dp"
-                                android:text="(单)"
-                                android:textColor="@color/c8"
-                                android:textSize="14sp" />
-                        </LinearLayout>
                     </LinearLayout>
-
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/v_mid_shu"
-                    android:layout_width="0.5dp"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="200dp"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@color/c2" />
-            </FrameLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_ywcdd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="已完成订单"
+                        android:textColor="@color/c7"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_ywcdd_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/c8"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/tv_ywcdd_dan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:text="(单)"
+                            android:textColor="@color/c8"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/v_mid_shu"
+                android:layout_width="0.5dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="200dp"
+                android:background="@color/c2" />
+        </FrameLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/my_swp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rlv_dingdan"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
-        </LinearLayout>
+                android:layout_height="match_parent" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
 
-
-    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

@@ -141,12 +141,6 @@ public class LoginActivity extends BaseActivityb {
 
     }
 
-    //测试用 登录成功
-    private void loginTest() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        LoginActivity.this.finish();
-    }
 
     //登录
     private void loginByPassWord(final String phone, final String pass) {
@@ -179,6 +173,9 @@ public class LoginActivity extends BaseActivityb {
                         //login
                         Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("page", "my");
+                        intent.putExtras(bundle);
                         startActivity(intent);
                         LoginActivity.this.finish();
                     } else {
@@ -216,10 +213,10 @@ public class LoginActivity extends BaseActivityb {
             user.setStoreName(data.getString("storeName"));
             user.setStatus(data.getInt("status"));
             user.setStoreImgUrl(data.getString("storeImgUrl"));
-            Log.e(TAG, "saveUserToDb: storeImgUrl == >" + user.getStoreImgUrl());
             user.setStoreLoginName(data.getString("storeLoginName"));
             user.setToken(data.getString("token"));
             user.setUpdateTime(data.getString("updateTime"));
+            user.setPhone(data.getString("phone"));
             user.setIsLogin("1");
             DbConfig dbConfig = new DbConfig();
             DbManager db = dbConfig.getDbManager();

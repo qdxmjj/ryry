@@ -196,6 +196,9 @@ public class StartAppActivity extends BaseActivity {
                 StartAppActivity.this.finish();
             } else {
                 Intent intent = new Intent(StartAppActivity.this, MainActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("page", "my");
+                intent.putExtras(bundle);
                 startActivity(intent);
                 StartAppActivity.this.finish();
             }
