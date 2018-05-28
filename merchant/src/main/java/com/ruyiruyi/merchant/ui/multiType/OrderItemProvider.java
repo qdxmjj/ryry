@@ -1,36 +1,23 @@
 package com.ruyiruyi.merchant.ui.multiType;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.bean.GoodsItemBean;
 import com.ruyiruyi.merchant.bean.OrderItemBean;
-import com.ruyiruyi.merchant.ui.activity.GoodsInfoReeditActivity;
-import com.ruyiruyi.merchant.ui.activity.OrderXiangqingActivity;
-import com.ruyiruyi.merchant.utils.UtilsURL;
+import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.ui.activity.PublicOrderInfoActivity;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import me.drakeet.multitype.ItemViewProvider;
 import rx.functions.Action1;
@@ -89,23 +76,12 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
             @Override
             public void call(Void aVoid) {
                 Intent intent = new Intent();
-                switch (orderItemBean.getOrderType()) {
-                    case "1"://orderType:  1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
-//                        intent.setClass(context, OrderXiangqingActivity.class);
-                        break;
-                    case "2"://orderType:  1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
-                        intent.setClass(context, OrderXiangqingActivity.class);
-                        break;
-                    case "3"://orderType:  1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
-                        break;
-                    case "4"://orderType:  1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
-                        break;
-                }
+                intent.setClass(context, PublicOrderInfoActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("orderNo", orderItemBean.getBianhao());
                 bundle.putString("orderType", orderItemBean.getOrderType());
-                bundle.putString("storeId", orderItemBean.getStoreId());
-                bundle.putString("statusStr", statusStr);
+                bundle.putString("orderState", orderItemBean.getStatus());
+                bundle.putString("storeId", new DbConfig().getId() + "");
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }

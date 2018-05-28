@@ -13,7 +13,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:onClick="bugtestclick"
-        android:text="OrderXiangqingActivity"
+        android:text="OrderXiangqingActivity已删"
         android:textSize="21sp" />
 
     <TextView
@@ -103,6 +103,6 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:onClick="bugtestclick"
-        android:text="ConfirmReceiveActivity"
+        android:text="ConfirmReceiveActivity已删"
         android:textSize="21sp" />
 </LinearLayout>

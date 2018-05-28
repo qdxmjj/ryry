@@ -18,8 +18,8 @@ import android.widget.Toast;
 import com.ruyiruyi.merchant.ui.fragment.StoreFragment;
 import com.ruyiruyi.merchant.ui.fragment.OrderFragment;
 import com.ruyiruyi.merchant.ui.fragment.MyFragment;
-import com.ruyiruyi.rylibrary.cell.HomeTabsCell;
-import com.ruyiruyi.rylibrary.cell.NoCanSlideViewPager;
+import com.ruyiruyi.merchant.utils.NoPreloadHomeTabsCell;
+import com.ruyiruyi.merchant.utils.NoPreloadViewPager;
 import com.ruyiruyi.rylibrary.ui.adapter.FragmentViewPagerAdapter;
 import com.ruyiruyi.rylibrary.utils.LayoutHelper;
 
@@ -29,8 +29,8 @@ import java.util.List;
 public class MainActivity extends FragmentActivity {
 
     private FrameLayout content;
-    private NoCanSlideViewPager viewPager;
-    private HomeTabsCell tabsCell;
+    private NoPreloadViewPager viewPager;
+    private NoPreloadHomeTabsCell tabsCell;
     private List<String> titles;
     private HomePagerAdapeter pagerAdapter;
     private static boolean isExit = false;
@@ -58,17 +58,17 @@ public class MainActivity extends FragmentActivity {
         //判断权限
         judgePower();
 
-        viewPager = new NoCanSlideViewPager(this);
-        content.addView(viewPager, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP, 0, 0, 0, HomeTabsCell.CELL_HEIGHT));
+        viewPager = new NoPreloadViewPager(this);
+        content.addView(viewPager, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP, 0, 0, 0, NoPreloadHomeTabsCell.CELL_HEIGHT));
 
-        tabsCell = new HomeTabsCell(this);
+        tabsCell = new NoPreloadHomeTabsCell(this);
         content.addView(tabsCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM));
         tabsCell.setViewPager(viewPager);
 
         initTitle();
         pagerAdapter = new HomePagerAdapeter(getSupportFragmentManager(), initPagerTitle(), initFragment());
         viewPager.setAdapter(pagerAdapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.setOnPageChangeListener(new NoPreloadViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -76,6 +76,7 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onPageSelected(int position) {
+
             }
 
             @Override
@@ -83,6 +84,7 @@ public class MainActivity extends FragmentActivity {
 
             }
         });
+
         switch (page) {
             case "order":
                 viewPager.setCurrentItem(0);
@@ -158,14 +160,14 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            exit();
+            judgeExit();
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
 
-    private void exit() {
+    private void judgeExit() {
         if (!isExit) {
             isExit = true;
             Toast.makeText(getApplicationContext(), "再按一次后退键退出程序",

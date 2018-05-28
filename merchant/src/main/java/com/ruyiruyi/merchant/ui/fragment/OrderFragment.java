@@ -54,6 +54,7 @@ public class OrderFragment extends BaseFragment {
     private int current_page;
     private boolean isLoadMore = false;
     private boolean isLoadOver = false;
+    private boolean isLoadMoreSingle = false;//上拉单次标志位
 
     private String totalNum;
     private String finishedNum;
@@ -118,6 +119,11 @@ public class OrderFragment extends BaseFragment {
 
             @Override
             public void onLoadMore() {
+                if (isLoadMoreSingle) {
+                    return;
+                }
+                isLoadMoreSingle = true;//上拉单次标志位
+
                 if (total_all_page > current_page) {
                     current_page++;
                     items.add(new ItemBottomBean("加载更多..."));
@@ -202,6 +208,8 @@ public class OrderFragment extends BaseFragment {
 
                     //绑定固定数据
                     setData();
+
+                    isLoadMoreSingle = false;//重置加载更多单次标志位
 
 
                 } catch (JSONException e) {

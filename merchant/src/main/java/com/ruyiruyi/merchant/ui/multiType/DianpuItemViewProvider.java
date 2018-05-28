@@ -13,7 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.ui.activity.StoreOrderInfoActivity;
+import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.ui.activity.PublicOrderInfoActivity;
 import com.ruyiruyi.merchant.ui.multiType.modle.Dianpu;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -92,9 +93,14 @@ public class DianpuItemViewProvider extends ItemViewProvider<Dianpu, DianpuItemV
         RxViewAction.clickNoDouble(holder.rl_item).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Intent intent = new Intent(context, StoreOrderInfoActivity.class);
-                intent.putExtra("passBean", dianpu);
-                intent.putExtra("stateStr", stateStr);
+                Intent intent = new Intent();
+                intent.setClass(context, PublicOrderInfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("orderNo", dianpu.getOrderNo());
+                bundle.putString("orderType", dianpu.getOrderType());
+                bundle.putString("orderState", dianpu.getOrderState());
+                bundle.putString("storeId", new DbConfig().getId() + "");
+                intent.putExtras(bundle);
                 context.startActivity(intent);
             }
         });

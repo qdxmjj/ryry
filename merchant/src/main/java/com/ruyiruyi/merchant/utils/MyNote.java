@@ -1,7 +1,10 @@
 package com.ruyiruyi.merchant.utils;
 
-public class MyNote {
 
+public class MyNote {
+    /*
+    *  暂未使用的类
+    * */
 
     /*
     门店注册页面门店类别、城市列表、合作项目  下载与存储
