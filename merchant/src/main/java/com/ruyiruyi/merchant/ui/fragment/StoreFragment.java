@@ -2,6 +2,7 @@ package com.ruyiruyi.merchant.ui.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.facebook.common.file.FileUtils;
 import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.ItemBottomBean;
@@ -43,6 +45,7 @@ import com.ruyiruyi.merchant.ui.multiType.listener.OnLoadMoreListener;
 import com.ruyiruyi.merchant.ui.multiType.listener.OnMyItemTouchListener;
 import com.ruyiruyi.merchant.ui.multiType.modle.Dianpu;
 import com.ruyiruyi.merchant.ui.multiType.modle.Dingdan;
+import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseFragment;
@@ -89,6 +92,7 @@ public class StoreFragment extends BaseFragment {
     private int current_page;
     private boolean isLoadMore = false;
     private boolean isLoadOver = false;
+    private boolean isLoadMoreSingle = false;//上拉单次标志位
     private SwipeRefreshLayout mSwipeLayout;
     private String monthIncome;
     private String totalIncome;
@@ -125,7 +129,6 @@ public class StoreFragment extends BaseFragment {
         startDialog = new ProgressDialog(getContext());
         showDialogProgress(startDialog, "订单信息加载中...");
 
-
         isLoadOver = false;
 
         if (!isLoadMore) {//只有加载更多(不清空原数据)
@@ -133,7 +136,7 @@ public class StoreFragment extends BaseFragment {
             current_page = 1;
         }
 
-
+        //下载数据
         JSONObject object = new JSONObject();
         try {
             object.put("page", current_page);
@@ -196,6 +199,8 @@ public class StoreFragment extends BaseFragment {
                     //设置固定数据
                     setData();
 
+                    isLoadMoreSingle = false;//重置加载更多单次标志位
+
 
                 } catch (JSONException e) {
                 }
@@ -246,9 +251,13 @@ public class StoreFragment extends BaseFragment {
         });
         //加载更多
         mRecyclerView.setOnScrollListener(new OnLoadMoreListener() {
-
             @Override
             public void onLoadMore() {
+                if (isLoadMoreSingle) {
+                    return;
+                }
+                isLoadMoreSingle = true;//上拉单次标志位
+
                 if (total_all_page > current_page) {
                     current_page++;
                     items.add(new ItemBottomBean("加载更多..."));
@@ -381,10 +390,10 @@ public class StoreFragment extends BaseFragment {
             tempUri = FileProvider.getUriForFile(getActivity(), "com.ruyiruyi.merchant.fileProvider", file);
         } else {
             tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "image.jpg"));
+                    .getExternalStorageDirectory(), "newstoreheadimg.jpg"));
         }
         Log.e(TAG, "takePicture: " + tempUri);
-        // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
+        // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换(最后删除)
         openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
         startActivityForResult(openCameraIntent, TAKE_PICTURE);
     }
@@ -400,7 +409,10 @@ public class StoreFragment extends BaseFragment {
                 }
                 break;
             case TAKE_PICTURE:
-                setImageToViewFromPhone(tempUri);
+                if (tempUri != null) {
+                    setImageToViewFromPhone(tempUri);
+
+                }
                 break;
 
         }
@@ -415,37 +427,49 @@ public class StoreFragment extends BaseFragment {
                 photo = ImageUtils.getBitmapFormUri(getContext(), uri);
             } catch (IOException e) {
             }
-            imgBitmap = rotaingImageView(degree, photo);
 
- /**/           //请求修改头像
-            showDialogProgress(progressDialog, "头像修改中...");
-
-            img_Path = ImageUtils.savePhoto(imgBitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "storeheadimg");
-            JSONObject object = new JSONObject();
-            try {
-                object.put("storeId", new DbConfig().getId() + "");
-                User user = new DbConfig().getUser();
-                object.put("headImgUrl", user.getStoreImgUrl());
-
-            } catch (JSONException e) {
+            if (photo != null) {
+                imgBitmap = rotaingImageView(degree, photo);
+                requestForChangePic();//请求修改头像
+                UtilsRY.deleteUri(getContext(), uri);//删除照片
             }
-            RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreHeadImgByStoreId");
-            params.addBodyParameter("reqJson", object.toString());
-            params.addBodyParameter("token", new DbConfig().getToken());
-            params.addBodyParameter("store_head_img", new File(img_Path));
-            params.setConnectTimeout(6000);
-            x.http().post(params, new Callback.CommonCallback<String>() {
-                @Override
-                public void onSuccess(String result) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(result);
-                        String msg = jsonObject.getString("msg");
-                        String url = jsonObject.getString("data");
-                        int status = jsonObject.getInt("status");
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+    }
 
-                        if (status == 1) {
+
+    /*
+    * //请求修改头像
+    * */
+    private void requestForChangePic() {
+         /**/           //请求修改头像
+        showDialogProgress(progressDialog, "头像修改中...");
+
+        img_Path = ImageUtils.savePhoto(imgBitmap, Environment
+                .getExternalStorageDirectory().getAbsolutePath(), "forpoststoreheadimg");//为提交请求所生成图片 每次提交被替换
+        JSONObject object = new JSONObject();
+        try {
+            object.put("storeId", new DbConfig().getId() + "");
+            User user = new DbConfig().getUser();
+            object.put("headImgUrl", user.getStoreImgUrl());
+
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreHeadImgByStoreId");
+        params.addBodyParameter("reqJson", object.toString());
+        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("store_head_img", new File(img_Path));
+        params.setConnectTimeout(6000);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String msg = jsonObject.getString("msg");
+                    String url = jsonObject.getString("data");
+                    int status = jsonObject.getInt("status");
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+
+                    if (status == 1) {
 /*                            //头像修改成功操作 (Glide 加载BitMap需要先将bitmap对象转换为字节,在加载;)
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             imgBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -453,44 +477,43 @@ public class StoreFragment extends BaseFragment {
                             Glide.with(getContext()).load(bytes)
                                     .transform(new GlideCircleTransform(getActivity()))
                                     .into(storeImage);*/
-                            //修改本地用户信息后跳转
-                            User user = new DbConfig().getUser();
-                            user.setStoreImgUrl(url);
-                            DbConfig dbConfig = new DbConfig();
-                            DbManager db = dbConfig.getDbManager();
-                            try {
-                                db.saveOrUpdate(user);
+                        //修改本地用户信息后跳转
+                        User user = new DbConfig().getUser();
+                        user.setStoreImgUrl(url);
+                        DbConfig dbConfig = new DbConfig();
+                        DbManager db = dbConfig.getDbManager();
+                        try {
+                            db.saveOrUpdate(user);
 
-                            } catch (DbException e) {
-                            }
-                            Intent intent = new Intent(getContext(), MainActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("page", "store");
-                            intent.putExtras(bundle);
-                            getActivity().finish();
-                            startActivity(intent);
+                        } catch (DbException e) {
                         }
-
-                    } catch (JSONException e) {
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("page", "store");
+                        intent.putExtras(bundle);
+                        getActivity().finish();
+                        startActivity(intent);
                     }
-                }
 
-                @Override
-                public void onError(Throwable ex, boolean isOnCallback) {
-                    Toast.makeText(getContext(), "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
                 }
+            }
 
-                @Override
-                public void onCancelled(CancelledException cex) {
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(getContext(), "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
+            }
 
-                }
+            @Override
+            public void onCancelled(CancelledException cex) {
 
-                @Override
-                public void onFinished() {
-                    hideDialogProgress(progressDialog);
-                }
-            });
-        }
+            }
+
+            @Override
+            public void onFinished() {
+                hideDialogProgress(progressDialog);
+            }
+        });
     }
 
     public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {

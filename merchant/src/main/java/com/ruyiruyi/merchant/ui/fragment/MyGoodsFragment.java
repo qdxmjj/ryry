@@ -2,6 +2,7 @@ package com.ruyiruyi.merchant.ui.fragment;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +30,7 @@ import com.ruyiruyi.merchant.ui.multiType.ItemBottomProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemNullProvider;
 import com.ruyiruyi.merchant.ui.multiType.listener.OnLoadMoreListener;
 import com.ruyiruyi.merchant.utils.UtilsURL;
+import com.ruyiruyi.rylibrary.base.BaseFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +51,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class MyGoodsFragment extends Fragment {
+public class MyGoodsFragment extends BaseFragment {
     public static String SALE_TYPE = "SALE_TYPE";
     public static String LEFT_ID = "LEFT_ID";
     public static String RIGHT_ID = "RIGHT_ID";
@@ -67,6 +69,8 @@ public class MyGoodsFragment extends Fragment {
     private List<GoodsItemBean> itemBeanList;
     private boolean isLoadMore = false;
     private boolean isLoadOver = false;
+    private boolean isLoadMoreSingle = false;//上拉单次标志位
+    private ProgressDialog startDialog;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -143,6 +147,11 @@ public class MyGoodsFragment extends Fragment {
 
             @Override
             public void onLoadMore() {
+                if (isLoadMoreSingle) {
+                    return;
+                }
+                isLoadMoreSingle = true;//上拉单次标志位
+
                 if (total_all_page > current_page) {
                     current_page++;
                     items.add(new ItemBottomBean("加载更多..."));
@@ -163,6 +172,10 @@ public class MyGoodsFragment extends Fragment {
 
     //公用下载
     private void initDataByLoadMoreType() {
+        //数据加载完成前显示加载动画
+        startDialog = new ProgressDialog(getContext());
+        showDialogProgress(startDialog, "商品信息加载中...");
+
         isLoadOver = false;
 
         if (!isLoadMore) {//只有加载更多(不清空原数据)
@@ -182,18 +195,15 @@ public class MyGoodsFragment extends Fragment {
             switch (sale_type) {//上架下架状态 1 yes    2 no
                 case "ONSALE":
                     object.put("stockStatus", "1");
-                    Log.e(TAG, "passToEnterFragment:222 ONSALE sale_type=" + sale_type);
                     break;
                 case "NOSALE":
                     object.put("stockStatus", "2");
-                    Log.e(TAG, "passToEnterFragment:222 NOSALE sale_type=" + sale_type);
                     break;
             }
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStockByCondition");
         params.addBodyParameter("reqJson", object.toString());
-        Log.e(TAG, "initDataByLoadMoreType: oovm" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -221,7 +231,6 @@ public class MyGoodsFragment extends Fragment {
                         itemBean.setStockTypeId(one.getInt("stockTypeId"));
                         itemBean.setStoreId(one.getInt("storeId"));
                         itemBean.setTime(one.getLong("time"));
-                        Log.e(TAG, "onSuccess:333 1 itemBean.getName() = " + itemBean.getName());
 
                         itemBeanList.add(itemBean);
                     }
@@ -236,7 +245,7 @@ public class MyGoodsFragment extends Fragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(getContext(), "商品信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -246,7 +255,8 @@ public class MyGoodsFragment extends Fragment {
 
             @Override
             public void onFinished() {
-
+                //加载完成 隐藏加载动画
+                hideDialogProgress(startDialog);
             }
         });
     }
@@ -277,9 +287,4 @@ public class MyGoodsFragment extends Fragment {
         assertHasTheSameAdapter(mRlv, multiTypeAdapter);
     }
 
-    /*    //接口回调方法
-    @Override
-    public void passtoFG(String id) {
-
-    }*/
 }

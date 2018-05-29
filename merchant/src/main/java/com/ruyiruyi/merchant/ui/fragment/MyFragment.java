@@ -2,6 +2,7 @@ package com.ruyiruyi.merchant.ui.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -40,6 +41,7 @@ import com.ruyiruyi.merchant.ui.activity.MyServiceActivity;
 import com.ruyiruyi.merchant.ui.activity.PromotionActivity;
 import com.ruyiruyi.merchant.ui.activity.SheZhiActivity;
 import com.ruyiruyi.merchant.ui.activity.StoreManageActivity;
+import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseFragment;
@@ -57,6 +59,8 @@ import org.xutils.x;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import rx.functions.Action1;
 
@@ -229,7 +233,7 @@ public class MyFragment extends BaseFragment {
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
         file = new File(Environment
-                .getExternalStorageDirectory(), "wodetopimg.jpg");
+                .getExternalStorageDirectory(), "newwodetopimg.jpg");
 
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= 24) {
@@ -237,10 +241,10 @@ public class MyFragment extends BaseFragment {
             tempUri = FileProvider.getUriForFile(getActivity(), "com.ruyiruyi.merchant.fileProvider", file);
         } else {
             tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "newstoreheadimg.jpg"));
+                    .getExternalStorageDirectory(), "newwodetopimg.jpg"));
         }
         Log.e(TAG, "takePicture: " + tempUri);
-        // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
+        // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换(最后删除)
         openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
         startActivityForResult(openCameraIntent, TAKE_PICTURE);
     }
@@ -271,37 +275,49 @@ public class MyFragment extends BaseFragment {
                 photo = ImageUtils.getBitmapFormUri(getContext(), uri);
             } catch (IOException e) {
             }
-            imgBitmap = rotaingImageView(degree, photo);
 
-    /**/                      //请求修改头像
-            showDialogProgress(progressDialog, "头像修改中...");
-
-            img_Path = ImageUtils.savePhoto(imgBitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "storeheadimg");
-            JSONObject object = new JSONObject();
-            try {
-                object.put("storeId", new DbConfig().getId() + "");
-                User user = new DbConfig().getUser();
-                object.put("headImgUrl", user.getStoreImgUrl());
-
-            } catch (JSONException e) {
+            if (photo != null) {
+                imgBitmap = rotaingImageView(degree, photo);
+                requestForChangePic();//请求修改头像
+                UtilsRY.deleteUri(getContext(), uri);//删除照片
             }
-            RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreHeadImgByStoreId");
-            params.addBodyParameter("reqJson", object.toString());
-            params.addBodyParameter("token", new DbConfig().getToken());
-            params.addBodyParameter("store_head_img", new File(img_Path));
-            params.setConnectTimeout(6000);
-            x.http().post(params, new Callback.CommonCallback<String>() {
-                @Override
-                public void onSuccess(String result) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(result);
-                        String msg = jsonObject.getString("msg");
-                        String url = jsonObject.getString("data");
-                        int status = jsonObject.getInt("status");
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+    }
 
-                        if (status == 1) {
+
+    /*
+    * //请求修改头像
+    * */
+    private void requestForChangePic() {
+            /**/                      //请求修改头像
+        showDialogProgress(progressDialog, "头像修改中...");
+
+        img_Path = ImageUtils.savePhoto(imgBitmap, Environment
+                .getExternalStorageDirectory().getAbsolutePath(), "forpoststoreheadimg");//为提交请求所生成图片 每次提交被替换
+        JSONObject object = new JSONObject();
+        try {
+            object.put("storeId", new DbConfig().getId() + "");
+            User user = new DbConfig().getUser();
+            object.put("headImgUrl", user.getStoreImgUrl());
+
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreHeadImgByStoreId");
+        params.addBodyParameter("reqJson", object.toString());
+        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("store_head_img", new File(img_Path));
+        params.setConnectTimeout(6000);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String msg = jsonObject.getString("msg");
+                    String url = jsonObject.getString("data");
+                    int status = jsonObject.getInt("status");
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+
+                    if (status == 1) {
 /*                            //头像修改成功操作 (Glide 加载BitMap需要先将bitmap对象转换为字节,在加载;)
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             imgBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -309,52 +325,51 @@ public class MyFragment extends BaseFragment {
                             Glide.with(getContext()).load(bytes)
                                     .transform(new GlideCircleTransform(getActivity()))
                                     .into(img_user_top);*/
-                            //修改本地用户信息后跳转
-                            User user = new DbConfig().getUser();
-                            user.setStoreImgUrl(url);
+                        //修改本地用户信息后跳转
+                        User user = new DbConfig().getUser();
+                        user.setStoreImgUrl(url);
 
-                            Log.e(TAG, "onSuccess: get0=" + url);
-                            Log.e(TAG, "onSuccess: get=" + user.getStoreImgUrl());
+                        Log.e(TAG, "onSuccess: get0=" + url);
+                        Log.e(TAG, "onSuccess: get=" + user.getStoreImgUrl());
 
-                            DbConfig dbConfig = new DbConfig();
-                            DbManager db = dbConfig.getDbManager();
-                            try {
-                                db.saveOrUpdate(user);
+                        DbConfig dbConfig = new DbConfig();
+                        DbManager db = dbConfig.getDbManager();
+                        try {
+                            db.saveOrUpdate(user);
 
-                            } catch (DbException e) {
-                            }
-
-                            String storeImgUrl = new DbConfig().getUser().getStoreImgUrl();
-                            Log.e(TAG, "onSuccess: get2=" + storeImgUrl);
-
-                            Intent intent = new Intent(getContext(), MainActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("page", "my");
-                            intent.putExtras(bundle);
-                            getActivity().finish();
-                            startActivity(intent);
+                        } catch (DbException e) {
                         }
 
-                    } catch (JSONException e) {
+                        String storeImgUrl = new DbConfig().getUser().getStoreImgUrl();
+                        Log.e(TAG, "onSuccess: get2=" + storeImgUrl);
+
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("page", "my");
+                        intent.putExtras(bundle);
+                        getActivity().finish();
+                        startActivity(intent);
                     }
-                }
 
-                @Override
-                public void onError(Throwable ex, boolean isOnCallback) {
-                    Toast.makeText(getContext(), "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
                 }
+            }
 
-                @Override
-                public void onCancelled(CancelledException cex) {
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(getContext(), "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
+            }
 
-                }
+            @Override
+            public void onCancelled(CancelledException cex) {
 
-                @Override
-                public void onFinished() {
-                    hideDialogProgress(progressDialog);
-                }
-            });
-        }
+            }
+
+            @Override
+            public void onFinished() {
+                hideDialogProgress(progressDialog);
+            }
+        });
     }
 
     public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
@@ -392,4 +407,5 @@ public class MyFragment extends BaseFragment {
         tv_username.setText(storeName);
 
     }
+
 }

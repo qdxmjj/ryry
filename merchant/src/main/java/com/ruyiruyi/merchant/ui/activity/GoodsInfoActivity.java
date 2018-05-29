@@ -313,7 +313,7 @@ public class GoodsInfoActivity extends BaseActivity {
     private void commitData(int type) {
         if (imgBitmap != null) {
             img_Path = ImageUtils.savePhoto(imgBitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "addgoodsimg");
+                    .getExternalStorageDirectory().getAbsolutePath(), "forpostaddgoodsimg");//为提交请求所生成图片 每次提交被替换
         } else {
             Toast.makeText(GoodsInfoActivity.this, "请上传商品照片", Toast.LENGTH_SHORT).show();
             return;

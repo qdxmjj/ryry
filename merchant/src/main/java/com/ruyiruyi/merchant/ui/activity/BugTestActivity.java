@@ -20,10 +20,6 @@ public class BugTestActivity extends BaseActivity {
     //测试 用
     public void bugtestclick(View view) {
         switch (view.getId()) {
-            case R.id.order_xiangqing_act:
-                Intent intent1 = new Intent(this, OrderXiangqingActivity.class);
-                startActivity(intent1);
-                break;
             case R.id.service_record_act:
                 Intent intent2 = new Intent(this, ServiceRecordActivity.class);
                 startActivity(intent2);
@@ -64,13 +60,6 @@ public class BugTestActivity extends BaseActivity {
             case R.id.change_bianma:
                 Intent intent9 = new Intent(this, ChangeBianmaActivity.class);
                 startActivity(intent9);
-                break;
-            case R.id.confirm_receive:
-                Intent intent10 = new Intent(this, ConfirmReceiveActivity.class);
-                Bundle bundle10 = new Bundle();
-                bundle10.putString("orderNo", "201805171751371670");
-                intent10.putExtras(bundle10);
-                startActivity(intent10);
                 break;
         }
     }

@@ -404,7 +404,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         if (imgBitmap != null) {
             isOldPic = false;
             img_Path = ImageUtils.savePhoto(imgBitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "xiugaigoodsimg");
+                    .getExternalStorageDirectory().getAbsolutePath(), "forpostxiugaigoodsimg");//为提交请求所生成图片 每次提交被替换
         } else {
             isOldPic = true;
         }

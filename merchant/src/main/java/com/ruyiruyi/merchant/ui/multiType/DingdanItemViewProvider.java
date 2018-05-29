@@ -15,9 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.db.DbConfig;
-import com.ruyiruyi.merchant.ui.activity.ConfirmReceiveActivity;
-import com.ruyiruyi.merchant.ui.activity.OpenOrderFirstChangeActivity;
-import com.ruyiruyi.merchant.ui.activity.OrderXiangqingActivity;
+import com.ruyiruyi.merchant.ui.activity.PublicOrderInfoActivity;
 import com.ruyiruyi.merchant.ui.multiType.modle.Dingdan;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
@@ -65,35 +63,18 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
         RxViewAction.clickNoDouble(holder.rl_item).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                switch (dingdan.getOrderType()) {//orderType:  1:普通商品购买订单（此处无） 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
-                    case "2"://2:首次更换订单
 
-                        /*orderState:订单状态(): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付*/
+                /*orderState:订单状态(): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付*/
 
-                        if (dingdan.getOrderState().equals("3")){//3 待商家确认服务
-                            Intent intent = new Intent(context, OpenOrderFirstChangeActivity.class);
-                            context.startActivity(intent);
-                        }else {
-                            Intent intent = new Intent(context, ConfirmReceiveActivity.class);//首次更换订单 各状态orderState均复用此页面(除待商家确认服务)
-                            Bundle bundle = new Bundle();
-                            bundle.putString("orderNo", dingdan.getOrderNo());
-                            bundle.putString("orderType", dingdan.getOrderType());
-                            bundle.putString("orderState", dingdan.getOrderState());
-                            bundle.putString("storeId", new DbConfig().getId() + "");
-                            intent.putExtras(bundle);
-                            context.startActivity(intent);
-                        }
+                Intent intent = new Intent(context, PublicOrderInfoActivity.class);//各订单orderType各状态orderState均复用此页面(
+                Bundle bundle = new Bundle();
+                bundle.putString("orderNo", dingdan.getOrderNo());
+                bundle.putString("orderType", dingdan.getOrderType());
+                bundle.putString("orderState", dingdan.getOrderState());
+                bundle.putString("storeId", new DbConfig().getId() + "");
+                intent.putExtras(bundle);
+                context.startActivity(intent);
 
-                        break;
-                    case "3"://3:免费再换订单
-                        /*orderState:订单状态(): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付*/
-
-                        break;
-                    case "4"://4:轮胎修补订单
-                        /*orderState:订单状态(): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付*/
-
-                        break;
-                }
             }
         });
 

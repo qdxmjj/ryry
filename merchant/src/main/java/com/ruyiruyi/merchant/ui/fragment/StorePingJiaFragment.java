@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.fragment;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -28,6 +30,7 @@ import com.ruyiruyi.merchant.ui.multiType.listener.OnLoadMoreListener;
 import com.ruyiruyi.merchant.utils.ImagPagerUtil;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
+import com.ruyiruyi.rylibrary.base.BaseFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +47,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class StorePingJiaFragment extends Fragment implements StorePingJiaItemProvider.OnPingjiaPicClick {
+public class StorePingJiaFragment extends BaseFragment implements StorePingJiaItemProvider.OnPingjiaPicClick {
     private RecyclerView mRlv;
     private SwipeRefreshLayout mSwipeLayout;
     private List<StorePingJiaBean> pingjiaBeanList;
@@ -57,6 +60,8 @@ public class StorePingJiaFragment extends Fragment implements StorePingJiaItemPr
     private String storeId;
     private boolean isLoadMore = false;
     private boolean isLoadOver = false;
+    private boolean isLoadMoreSingle = false;//上拉单次标志位
+    private ProgressDialog startDialog;
 
 
     @Nullable
@@ -98,6 +103,11 @@ public class StorePingJiaFragment extends Fragment implements StorePingJiaItemPr
 
     //公用下载
     private void initDataByLoadMoreType() {
+        //数据加载完成前显示加载动画
+        startDialog = new ProgressDialog(getContext());
+        showDialogProgress(startDialog, "评价信息加载中...");
+
+
         isLoadOver = false;
 
         if (!isLoadMore) {//只有加载更多(不清空原数据)
@@ -116,6 +126,7 @@ public class StorePingJiaFragment extends Fragment implements StorePingJiaItemPr
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getCommitByCondition");
         params.addBodyParameter("reqJson", object.toString());
+        params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -158,7 +169,7 @@ public class StorePingJiaFragment extends Fragment implements StorePingJiaItemPr
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(getContext(), "评价信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -168,7 +179,8 @@ public class StorePingJiaFragment extends Fragment implements StorePingJiaItemPr
 
             @Override
             public void onFinished() {
-
+                //加载完成 隐藏加载动画
+                hideDialogProgress(startDialog);
             }
         });
 
@@ -196,7 +208,7 @@ public class StorePingJiaFragment extends Fragment implements StorePingJiaItemPr
         initDataByLoadMoreType();
     }
 
-
+    //初始化下拉上拉
     private void initSwipeLayout() {
         mSwipeLayout.setColorSchemeResources(//下拉刷新圆圈颜色
                 R.color.theme_primary,
@@ -220,6 +232,11 @@ public class StorePingJiaFragment extends Fragment implements StorePingJiaItemPr
 
             @Override
             public void onLoadMore() {
+                if (isLoadMoreSingle) {
+                    return;
+                }
+                isLoadMoreSingle = true;//上拉单次标志位
+
                 if (total_page > currentPage) {
                     currentPage++;
                     items.add(new ItemBottomBean("加载更多..."));
