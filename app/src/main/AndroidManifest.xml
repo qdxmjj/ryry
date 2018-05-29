@@ -246,7 +246,8 @@
             android:launchMode="singleTask" />
         <activity android:name=".ui.activity.SendToWXActivity" />
         <activity android:name=".ui.activity.ShowFromWXActivity" />
-        <activity android:name=".ui.activity.WxPhoneActivity"></activity>
+        <activity android:name=".ui.activity.WxPhoneActivity" />
+        <activity android:name=".ui.activity.QRCodeActivity" />
     </application>
 
 </manifest>

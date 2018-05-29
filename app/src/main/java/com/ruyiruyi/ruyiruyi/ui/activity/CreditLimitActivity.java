@@ -1,15 +1,31 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CreditLimit;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CreditLimitViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBig;
+import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBigViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMore;
+import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMoreViewBinder;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +38,7 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 public class CreditLimitActivity extends BaseActivity {
     private ActionBar actionBar;
     private RecyclerView listView;
+    private SwipeRefreshLayout mSwipeLayout;
     private List<Object> items = new ArrayList<>();
     private MultiTypeAdapter adapter;
     public List<CreditLimit> creditLimitList;
@@ -29,13 +46,14 @@ public class CreditLimitActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_credit_limit,R.id.my_action);
+        setContentView(R.layout.activity_credit_limit, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("信用额度");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("信用额度");
+        ;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -46,24 +64,126 @@ public class CreditLimitActivity extends BaseActivity {
 
 
         initView();
-
-        for (int i = 0; i < 10; i++) {
-            creditLimitList.add(new CreditLimit("http://180.76.243.205:8111/images/car_brand/baoma.png","奥迪" + i,"鲁B 2356" + i,"500" + i,"300" + i));
-        }
         initData();
+        initSwipeLayout();
     }
 
     private void initData() {
-        items.clear();
-        for (int i = 0; i < creditLimitList.size(); i++) {
-            items.add(creditLimitList.get(i));
+        requestFromServer();
+    }
+
+    private void requestFromServer() {
+        creditLimitList.clear();
+
+        JSONObject object = new JSONObject();
+        try {
+            object.put("userId", new DbConfig().getId());
+
+        } catch (JSONException e) {
         }
-        assertAllRegistered(adapter,items);
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCarInfo/queryCarCreditInfo");
+        params.addBodyParameter("reqJson", object.toString());
+        params.addBodyParameter("token", new DbConfig().getToken());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    int status = jsonObject.getInt("status");
+                    String msg = jsonObject.getString("msg");
+                    if (status == 1) {
+                        JSONArray data = jsonObject.getJSONArray("data");
+                        for (int i = 0; i < data.length(); i++) {
+                            CreditLimit creditLimit = new CreditLimit();
+                            JSONObject objBean = (JSONObject) data.get(i);
+                            creditLimit.setCarImage(objBean.getString("logoUrl"));
+                            creditLimit.setCarName(objBean.getString("carName"));
+                            creditLimit.setCarNumber(objBean.getString("platNumber"));
+                            creditLimit.setCreditLimit(objBean.getString("credit"));
+                            creditLimit.setCreditLimitRemain(objBean.getString("remain"));
+                            creditLimitList.add(creditLimit);
+                        }
+                    } else if (status == -999) {
+                        Toast.makeText(CreditLimitActivity.this, "登录失效,请重新登录", Toast.LENGTH_SHORT).show();
+                        //登录失效,跳转登录界面
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    } else {
+                        Toast.makeText(CreditLimitActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+
+                    //更新数据
+                    updataData();
+
+                } catch (JSONException e) {
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+
+    /*
+    * 更新数据
+    * */
+    private void updataData() {
+        items.clear();
+        if (creditLimitList == null || creditLimitList.size() == 0) {
+            items.add(new EmptyBig());
+        } else {
+            for (int i = 0; i < creditLimitList.size(); i++) {
+                items.add(creditLimitList.get(i));
+            }
+        }
+        assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
 
+    //初始化下拉上拉
+    private void initSwipeLayout() {
+        mSwipeLayout.setColorSchemeResources(//下拉刷新圆圈颜色
+                R.color.theme_primary,
+                R.color.c5,
+                R.color.c6,
+                R.color.c7
+        );
+        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //加载最新数据并更新adapter数据
+
+                myDownRefreshByServer();
+
+                mSwipeLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    /*
+    * 下拉刷新
+    * */
+    private void myDownRefreshByServer() {
+        requestFromServer();
+    }
+
+
     private void initView() {
         listView = (RecyclerView) findViewById(R.id.credit_limit_listview);
+        mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.credit_limit_swip);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         listView.setLayoutManager(linearLayoutManager);
         adapter = new MultiTypeAdapter(items);
@@ -74,6 +194,8 @@ public class CreditLimitActivity extends BaseActivity {
     }
 
     private void register() {
-        adapter.register(CreditLimit.class,new CreditLimitViewBinder(this));
+        adapter.register(CreditLimit.class, new CreditLimitViewBinder(this));
+        adapter.register(EmptyBig.class, new EmptyBigViewBinder());
+        adapter.register(LoadMore.class, new LoadMoreViewBinder());
     }
 }

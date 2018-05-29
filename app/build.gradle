@@ -152,4 +152,5 @@ dependencies {
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     compile 'com.zhy:okhttputils:2.6.2'
     compile project(':rylibrary')
+    compile files('libs/core-3.2.1.jar')
 }

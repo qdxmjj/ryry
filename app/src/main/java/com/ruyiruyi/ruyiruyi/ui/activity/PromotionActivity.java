@@ -1,11 +1,13 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +25,9 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.PromotionNoperson;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PromotionNopersonViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PromotionViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.Constants;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.Util;
+import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -32,6 +36,13 @@ import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +67,14 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
     private View inflate;
     private LinearLayout weixinShreLayout;
     private LinearLayout pengyouquanLayout;
+    private String award;
+    private String content;
+    private String img;
+    private String rule;
+    private String title;
+    private String url;
+    private String invitationCode;
+    private String TAG = PromotionActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +91,7 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
                         onBackPressed();
                         break;
                     case -2:
-                        Toast.makeText(PromotionActivity.this, "二维码", Toast.LENGTH_SHORT).show();
+                        onQrCodePressed();
                         break;
                 }
             }
@@ -85,38 +104,95 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
         initData();
     }
 
+    private void onQrCodePressed() {
+        Intent intent = new Intent(getApplicationContext(), QRCodeActivity.class);
+        intent.putExtra("url", url);
+        intent.putExtra("content", content);
+        startActivity(intent);
+    }
+
     private void initData() {
         //下载数据
-        //缺接口暂用假数据
-        getFakeData();
+        JSONObject object = new JSONObject();
+        try {
+            object.put("userId", new DbConfig().getId());
+
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "preferentialInfo/queryShareInfo");
+        params.addBodyParameter("reqJson", object.toString());
+        params.addBodyParameter("token", new DbConfig().getToken());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject data = jsonObject.getJSONObject("data");
+                    award = data.getString("award");
+                    content = data.getString("content");
+                    img = data.getString("img");
+                    rule = data.getString("rule");
+                    title = data.getString("title");
+                    url = data.getString("url");
+                    invitationCode = data.getString("invitationCode");
+                    JSONArray shareRelationList = data.getJSONArray("shareRelationList");
+                    for (int i = 0; i < shareRelationList.length(); i++) {
+                        JSONObject bean = (JSONObject) shareRelationList.get(i);
+                        PromotionHasperson hasperson = new PromotionHasperson();
+                        hasperson.setUserState("已邀请");
+                        long createdTime = bean.getLong("createdTime");
+                        String s = new UtilsRY().getTimestampToString(createdTime);
+                        hasperson.setUserTime(s);
+                        String phone = bean.getString("phone");
+                        String subPhone = phone.substring(0, 3) + "****" + phone.substring(7, 11);
+                        hasperson.setUserPhone(subPhone);
+                        if (i == 1) {
+                            hasperson.setFirst(true);
+                        } else {
+                            hasperson.setFirst(false);
+                        }
+                        personList.add(hasperson);
+                    }
+
+                    //下载完成更新数据
+                    updataData();
 
 
+                } catch (JSONException e) {
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+
+    }
+
+    private void updataData() {
         //下载完成
         items.clear();
-        items.add(new Promotion("SADDD", "下载的推广简介", "下载的邀请方式简介"));
+        items.add(new Promotion(invitationCode + "DSSAD", award, rule));
         if (personList == null || personList.size() == 0) {
             items.add(new PromotionNoperson());
         } else {
+            Log.e(TAG, "updataData: updataData");
             items.addAll(personList);
         }
         assertAllRegistered(multiTypeAdapter, items);
         multiTypeAdapter.notifyDataSetChanged();
-
-    }
-
-    private void getFakeData() {
-        for (int i = 0; i < 6; i++) {
-            PromotionHasperson bean = new PromotionHasperson();
-            bean.setUserPhone("123****8905");
-            bean.setUserState("已邀请");
-            bean.setUserTime("2018-05-21");
-            if (i == 0) {
-                bean.setFirst(true);
-            } else {
-                bean.setFirst(false);
-            }
-            personList.add(bean);
-        }
     }
 
     private void initView() {
@@ -135,7 +211,7 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
         personList = new ArrayList<>();
 
         dialog = new Dialog(this, R.style.ActionSheetDialogStyle);
-        inflate = LayoutInflater.from(this).inflate(R.layout.dialog_share,null);
+        inflate = LayoutInflater.from(this).inflate(R.layout.dialog_share, null);
         weixinShreLayout = ((LinearLayout) inflate.findViewById(R.id.weixin_share_layout));
         pengyouquanLayout = ((LinearLayout) inflate.findViewById(R.id.pengyouquan_share_layout));
         dialog.setContentView(inflate);
@@ -168,7 +244,7 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
     private void shareToWexin() {
         int id = new DbConfig().getId();
         WXWebpageObject webpage = new WXWebpageObject();
-        webpage.webpageUrl = "http://192.168.0.190:8060/preferentialInfo/share?userId=" + id ;
+        webpage.webpageUrl = "http://192.168.0.190:8060/preferentialInfo/share?userId=" + id;
         WXMediaMessage msg = new WXMediaMessage(webpage);
         msg.title = "百度一下";
         msg.description = "百度一下你就知道";
@@ -188,12 +264,10 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
         dialog.show();
 
     }
+
     private String buildTransaction(final String type) {
         return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
-
-
-
 
 
 }

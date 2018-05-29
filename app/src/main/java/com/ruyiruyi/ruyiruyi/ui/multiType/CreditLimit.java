@@ -7,6 +7,9 @@ public class CreditLimit {
     public String creditLimit;
     public String creditLimitRemain;
 
+    public CreditLimit() {
+    }
+
     public CreditLimit(String carImage, String carName, String carNumber, String creditLimit, String creditLimitRemain) {
         this.carImage = carImage;
         this.carName = carName;

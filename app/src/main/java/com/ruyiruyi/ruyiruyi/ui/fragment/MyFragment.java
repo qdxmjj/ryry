@@ -79,9 +79,9 @@ public class MyFragment extends Fragment {
     private LinearLayout cxwyLayout;
     private LinearLayout shareLayout;
     private IWXAPI api;
-    private static final int MMAlertSelect1  =  0;
-    private static final int MMAlertSelect2  =  1;
-    private static final int MMAlertSelect3  =  2;
+    private static final int MMAlertSelect1 = 0;
+    private static final int MMAlertSelect2 = 1;
+    private static final int MMAlertSelect3 = 2;
     private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
     private LinearLayout ll_promotion;
 
@@ -178,7 +178,8 @@ public class MyFragment extends Fragment {
                     public void call(Void aVoid) {
                         startActivity(new Intent(getContext(), PromotionActivity.class));
                     }
-                });     //畅行无忧
+                });
+        //畅行无忧
         RxViewAction.clickNoDouble(cxwyLayout)
                 .subscribe(new Action1<Void>() {
                     @Override

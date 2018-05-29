@@ -75,4 +75,5 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile project(':rylibrary')
     compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/core-3.2.1.jar')
 }
