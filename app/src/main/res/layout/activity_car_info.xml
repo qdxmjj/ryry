@@ -8,10 +8,11 @@
         android:id="@+id/my_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <!--温馨提示：一下信息均为必填，以方便我们审核您的车辆状况，为您提供更专业的服务-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="温馨提示：一下信息均为必填，以方便我们审核您的车辆状况，为您提供更专业的服务"
+        android:text="温馨提示：如驿如意平台致力于您的爱车提供终身个性化轮胎服务，需要了解您爱车的详细信息，请您仔细填写！"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="5dp"

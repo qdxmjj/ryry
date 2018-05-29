@@ -31,6 +31,7 @@ import com.ruyiruyi.ruyiruyi.db.model.TireType;
 import com.ruyiruyi.ruyiruyi.ui.activity.ActionBarActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsClassFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.HomeFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
@@ -705,7 +706,7 @@ public class MainActivity extends FragmentActivity {
         bundleMerchant.putInt(MerchantFragment.SHOP_TYPE, 0);
         merchantFragment.setArguments(bundleMerchant);
         fragments.add(merchantFragment);
-        fragments.add(new YcxFragment());
+        fragments.add(new GoodsClassFragment());
         fragments.add(new MyFragment());
 
         return fragments;
@@ -715,7 +716,7 @@ public class MainActivity extends FragmentActivity {
         titles = new ArrayList<>();
         titles.add("首页");
         titles.add("附近门店");
-        titles.add("冬季胎");
+        titles.add("分类");
         titles.add("我的");
         return titles;
     }
@@ -723,7 +724,7 @@ public class MainActivity extends FragmentActivity {
     private void initTitle() {
         tabsCell.addView(R.drawable.ic_home, R.drawable.ic_home_pressed, "首页 ");
         tabsCell.addView(R.drawable.ic_merchant, R.drawable.ic_merchant_pressed, "附近门店 ");
-        tabsCell.addView(R.drawable.ic_dongjitai, R.drawable.ic_dongjitai_pressed, "冬季胎 ");
+        tabsCell.addView(R.drawable.ic_shangpin, R.drawable.ic_shangpin_2, "分类");
         tabsCell.addView(R.drawable.ic_my, R.drawable.ic_my_pressed, "我的 ");
 
     }

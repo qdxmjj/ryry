@@ -4,7 +4,7 @@ public class Cxwy {
     public int cxwyId;
     public String cxwyStartTime;
     public String cxwyEndTime;
-    public int cxwyType; //1是购买  2是赠送
+    public int cxwyType; //1是赠送  2是购买
 
     public Cxwy(int cxwyId, String cxwyStartTime, String cxwyEndTime, int cxwyType) {
         this.cxwyId = cxwyId;

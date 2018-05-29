@@ -61,7 +61,13 @@ public class UserEvaluateViewBinder extends ItemViewProvider<UserEvaluate, UserE
 
         holder.listView.setAdapter(adapter);
         assertHasTheSameAdapter(holder.listView, adapter);
-        initData(userEvaluate.getEvaluateImageList(),userEvaluate.getEvaluateId());
+        if (userEvaluate.getEvaluateImageList().size()>0){
+            holder.listView.setVisibility(View.VISIBLE);
+            initData(userEvaluate.getEvaluateImageList(),userEvaluate.getEvaluateId());
+        }else {
+            holder.listView.setVisibility(View.GONE);
+        }
+
 
     }
     private void initData(List<String> evaluateImageList,int evaluateId) {

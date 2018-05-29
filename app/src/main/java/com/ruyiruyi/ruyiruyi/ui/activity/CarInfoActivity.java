@@ -1564,4 +1564,6 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         day = calendar.get(Calendar.DAY_OF_MONTH);
 
     }
+
+
 }

@@ -7,20 +7,26 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -29,15 +35,22 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.cell.MessagePicturesLayout;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EvaluateImage;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EvaluateImageViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.GifSizeFilter;
 import com.ruyiruyi.ruyiruyi.utils.ImagPagerUtil;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.Utils;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.cell.CustomEditText;
+import com.ruyiruyi.rylibrary.cell.NewRatingBar;
+import com.ruyiruyi.rylibrary.image.ImageUtils;
+import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
@@ -45,6 +58,14 @@ import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,11 +74,13 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import me.drakeet.multitype.MultiTypeAdapter;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class EvaluateActivity extends BaseActivity implements EvaluateImageViewBinder.OnEvaluateImageClickListener ,MessagePicturesLayout.Callback{
+    private static final String TAG = EvaluateActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;
     private List<Object> items = new ArrayList<>();
@@ -69,6 +92,18 @@ public class EvaluateActivity extends BaseActivity implements EvaluateImageViewB
     private ImageWatcher vImageWatcher;
     public boolean isTranslucentStatus = false;
     private final List<ImageView> mVisiblePictureList = new ArrayList<>();
+    private String headimgurl;
+    private RequestManager glideRequest;
+    private ImageView userImage;
+    private TextView evaluateButton;
+    private Bitmap evaluateOne;
+    private Bitmap evaluateTwo;
+    private Bitmap evaluateThree;
+    private Bitmap evaluateFour;
+    private Bitmap evaluateFive;
+    private NewRatingBar ratingBar;
+    private String orderNo;
+    private String storeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +130,9 @@ public class EvaluateActivity extends BaseActivity implements EvaluateImageViewB
                 }
             }
         });
+        Intent intent = getIntent();
+        orderNo = intent.getStringExtra(PaymentActivity.ORDERNO);
+        storeId = intent.getStringExtra(PaymentActivity.STOREID);
 
         //配置点击查看大图
         initImageLoader();
@@ -104,6 +142,9 @@ public class EvaluateActivity extends BaseActivity implements EvaluateImageViewB
 
     private void initView() {
         listView = (RecyclerView) findViewById(R.id.evaluate_phote_recycle);
+        evaluateButton = (TextView) findViewById(R.id.save_evaluate);
+        ratingBar = (NewRatingBar) findViewById(R.id.rating_bar);
+        userImage = (ImageView) findViewById(R.id.user_image);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         listView.setLayoutManager(gridLayoutManager);
         adapter = new MultiTypeAdapter(items);
@@ -118,7 +159,155 @@ public class EvaluateActivity extends BaseActivity implements EvaluateImageViewB
 
         evaluateEditText = (CustomEditText) findViewById(R.id.evaluate_edittext);
         evaluateEditText.clearFocus();
+        User user = new DbConfig().getUser();
+        headimgurl = user.getHeadimgurl();
+        glideRequest = Glide.with(this);
+        glideRequest.load(headimgurl).transform(new GlideCircleTransform(this)).into(userImage);
+        RxViewAction.clickNoDouble(evaluateButton)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                       // float starStep = ratingBar.starStep;
+                        //Log.e(TAG, "call: -----" + starStep);
+                         postEvaluate();
+                    }
+                });
     }
+
+    /**
+     * 提交评价
+     */
+    private void postEvaluate() {
+        Log.e(TAG, "postEvaluate: -*-" + list.size());
+        for (int i = 0; i < list.size(); i++) {
+            try {
+                Uri uri = list.get(i).getUri();
+                int degree = ImageUtils.readPictureDegree(uri.toString());
+                Bitmap photo = ImageUtils.getBitmapFormUri(getApplicationContext(), uri);
+                if (i == 0){
+                    Log.e(TAG, "postEvaluate: 0");
+                    evaluateOne = rotaingImageView(degree, photo);
+                }else if (i == 1){
+                    Log.e(TAG, "postEvaluate: 1");
+                    evaluateTwo = rotaingImageView(degree, photo);
+                }else if (i == 2){
+                    Log.e(TAG, "postEvaluate: 2");
+                    evaluateThree = rotaingImageView(degree, photo);
+                }else if (i == 3){
+                    Log.e(TAG, "postEvaluate: 3");
+                    evaluateFour = rotaingImageView(degree, photo);
+                }else if (i == 4){
+                    Log.e(TAG, "postEvaluate: 4");
+                    evaluateFive = rotaingImageView(degree, photo);
+                }
+            } catch (IOException e) {
+
+            }
+        }
+
+
+
+        final int userId = new DbConfig().getId();
+        float starStep = ratingBar.starStep;
+        String content = evaluateEditText.getText().toString();
+        Log.e(TAG, "postEvaluate: " + starStep);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId",userId);
+            jsonObject.put("orderNo",orderNo);
+            jsonObject.put("storeId",storeId);
+            jsonObject.put("content",content);
+            jsonObject.put("starNo",starStep);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCommitComment");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.setConnectTimeout(10000);
+        if (evaluateOne!=null){
+            String evaluateOne = ImageUtils.savePhoto(this.evaluateOne, Environment
+                    .getExternalStorageDirectory().getAbsolutePath(), "evaluateOne");
+            params.addBodyParameter("img1" ,new File(evaluateOne) );
+        }
+        if (evaluateTwo!=null){
+            String evaluateTwo = ImageUtils.savePhoto(this.evaluateTwo, Environment
+                    .getExternalStorageDirectory().getAbsolutePath(), "evaluateTwo");
+            params.addBodyParameter("img2" ,new File(evaluateTwo) );
+        }
+        if (evaluateThree!=null){
+            String evaluateThree = ImageUtils.savePhoto(this.evaluateThree, Environment
+                    .getExternalStorageDirectory().getAbsolutePath(), "evaluateThree");
+            params.addBodyParameter("img3" ,new File(evaluateThree) );
+        }
+        if (evaluateFour!=null){
+            String evaluateFour = ImageUtils.savePhoto(this.evaluateFour, Environment
+                    .getExternalStorageDirectory().getAbsolutePath(), "evaluateFour");
+            params.addBodyParameter("img4" ,new File(evaluateFour) );
+        }
+        if (evaluateFive!=null){
+            String evaluateFive = ImageUtils.savePhoto(this.evaluateFive, Environment
+                    .getExternalStorageDirectory().getAbsolutePath(), "evaluateFive");
+            params.addBodyParameter("img5" ,new File(evaluateFive) );
+        }
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Intent intent = new Intent(getApplicationContext(), ShopEvaluateActivity.class);
+                        intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE,1);
+                        intent.putExtra("USERID",userId);
+                        startActivity(intent);
+                        finish();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+    public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
+        Bitmap returnBm = null;
+        // 根据旋转角度，生成旋转矩阵
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        try {
+            // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
+            returnBm = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        } catch (OutOfMemoryError e) {
+        }
+        if (returnBm == null) {
+            returnBm = bitmap;
+        }
+        if (bitmap != returnBm) {
+            bitmap.recycle();
+        }
+        return returnBm;
+    }
+
 
     private void updateData() {
         items.clear();

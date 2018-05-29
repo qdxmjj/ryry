@@ -314,26 +314,7 @@ public class TireChangeActivity extends BaseActivity {
 
         freeChangeLayout.setVisibility(currentChangeType == 0? View.GONE:View.VISIBLE);
 
-      /*  if (currentChangeType == 0){//首次更换  当轮胎数量大于2时最大数量为2  小于2时为最小数量
 
-            if (fontAvaliableAmount >2){
-                fontAmountView.setGoods_storage(2);
-            }else {
-                fontAmountView.setGoods_storage(fontAvaliableAmount);
-            }
-
-        }else { //免费再换前后轮最多各可选择两条轮胎
-            fontAmountView.setGoods_storage(2);
-        }
-*/
-        /*if (currentChangeType ==0 ){//首次更换
-            if (fontRearFlag == 0){//前后轮一致
-                initAmountView();
-            }else {
-                initAmountView();
-            }
-
-        }*/
         initAmountView();
         fontAmountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
@@ -547,6 +528,9 @@ public class TireChangeActivity extends BaseActivity {
 
             }
 
+        }else { //免费再换
+            fontAmountView.setGoods_storage(2);
+            rearAmountView.setGoods_storage(2);
         }
     }
 

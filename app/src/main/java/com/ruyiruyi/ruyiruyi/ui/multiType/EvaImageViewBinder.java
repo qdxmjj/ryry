@@ -3,6 +3,7 @@ package com.ruyiruyi.ruyiruyi.ui.multiType;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.activity.EvaluateActivity;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import me.drakeet.multitype.ItemViewProvider;
 import rx.functions.Action1;
 
 public class EvaImageViewBinder extends ItemViewProvider<EvaImage, EvaImageViewBinder.ViewHolder> {
+    private static final String TAG = EvaluateActivity.class.getSimpleName();
     public Context context;
     public OnEvaluateImageClick listener;
 
@@ -38,7 +41,11 @@ public class EvaImageViewBinder extends ItemViewProvider<EvaImage, EvaImageViewB
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final EvaImage evaImage) {
+        Log.e(TAG, "onBindViewHolder: "+evaImage.getImageUrl());
+
         Glide.with(context).load(evaImage.getImageUrl()).into(holder.evaluateImageView);
+
+
         RxViewAction.clickNoDouble(holder.evaluateImageView)
                 .subscribe(new Action1<Void>() {
                     @Override

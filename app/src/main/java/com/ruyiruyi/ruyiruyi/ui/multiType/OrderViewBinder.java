@@ -40,11 +40,19 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Order order) {
         Glide.with(context).load(order.getOrderImage()).into(holder.orderImageView);
         holder.orderTitleText.setText(order.getOrderName());
-        holder.orderPriceText.setText("￥"+order.getOrderPrice());
+
         holder.orderNoText.setText("订单编号： " + order.getOrderNo());
         holder.orderTimeText.setText("下单时间： " + order.getOrderTime());
+
+        if (order.getOrderType().equals("2")){
+            holder.orderPriceText.setVisibility(View.INVISIBLE);
+        }else {
+            holder.orderPriceText.setVisibility(View.VISIBLE);
+            holder.orderPriceText.setText("￥"+order.getOrderPrice());
+        }
         // OrderType 0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
         if (order.getOrderType().equals("0")){//轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货
+
             if (order.getOrderState().equals("1")) {
                 holder.orderTypeText.setText("已安装");
             }else if (order.getOrderState().equals("2")){
@@ -59,6 +67,7 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
                 holder.orderTypeText.setText("已退货");
             }
         }else {//订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
+
             if (order.getOrderState().equals("1")) {
                 holder.orderTypeText.setText("交易完成");
             }else if (order.getOrderState().equals("2")){
@@ -83,7 +92,7 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        listener.onOrderItemClickListener(order.getOrderState(),order.getOrderType(),order.getOrderNo());
+                        listener.onOrderItemClickListener(order.getOrderState(),order.getOrderType(),order.getOrderNo(),order.storeId);
                     }
                 });
     }
@@ -112,6 +121,6 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
     }
 
     public interface OnOrderItemClick{
-        void onOrderItemClickListener(String state,String orderType,String orderNo);
+        void onOrderItemClickListener(String state,String orderType,String orderNo,String storeId);
     }
 }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.EvaluateActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PaymentActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PendingOrderActivity;
@@ -108,9 +109,10 @@ public class OrderFragment extends Fragment implements OrderViewBinder.OnOrderIt
                             String orderPrice = object.getString("orderPrice");
                             String orderState = object.getString("orderState");
                           //  String orderTime = object.getString("orderTime");
-                            String orderTimeStr = new UtilsRY().getTimestampToString(object.getLong("orderTime"));
+                            String orderTimeStr = new UtilsRY().getTimestampToStringAll(object.getLong("orderTime"));
                             String orderType = object.getString("orderType");
-                            orderList.add(new Order(orderImage,orderName,orderNo,orderPrice,orderState,orderTimeStr,orderType));
+                            String storeId = object.getString("storeId");
+                            orderList.add(new Order(orderImage,orderName,orderNo,orderPrice,orderState,orderTimeStr,orderType,storeId));
                         }
                         initData();
                     }else {
@@ -178,7 +180,7 @@ public class OrderFragment extends Fragment implements OrderViewBinder.OnOrderIt
     }
 
     @Override
-    public void onOrderItemClickListener(String orderState,String orderType, String orderNo) {
+    public void onOrderItemClickListener(String orderState,String orderType, String orderNo,String storeId) {
         // OrderType 0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
         //轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货
         //订单状态(orderType:1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
@@ -194,17 +196,23 @@ public class OrderFragment extends Fragment implements OrderViewBinder.OnOrderIt
             intent.putExtra(PaymentActivity.ORDER_TYPE,Integer.parseInt(orderType));
             intent.putExtra(PaymentActivity.ORDER_STATE,Integer.parseInt(orderState));
             startActivity(intent);
-        }else if (orderType.equals("2")&& orderState.equals("2")){  //轮胎订单 待收货
+        }else if (orderType.equals("2")&& orderState.equals("2")|| orderType.equals("2")&&orderState.equals("3")
+                || orderType.equals("2") && orderState.equals("6")){  //首次更换订单 待收货 || 待商家确认服务 || 待车主确认服务
             Intent intent = new Intent(getContext(), OrderInfoActivity.class);
             intent.putExtra(PaymentActivity.ORDERNO,orderNo);
             intent.putExtra(PaymentActivity.ORDER_TYPE,Integer.parseInt(orderType));
             intent.putExtra(PaymentActivity.ORDER_STATE,Integer.parseInt(orderState));
             startActivity(intent);
-        }else if (orderType.equals("1")&&orderState.equals("3") || orderType.equals("2")&&orderState.equals("3")){ //商品订单  待商家确认服务 //首次更换订单  待商家确认服务
+        }else if (orderType.equals("1")&&orderState.equals("3") || orderType.equals("1")&&orderState.equals("6") ){ //商品订单  待商家确认服务  || 待车主确认服务
             Intent intent = new Intent(getContext(), OrderInfoActivity.class);
             intent.putExtra(PaymentActivity.ORDERNO,orderNo);
             intent.putExtra(PaymentActivity.ORDER_TYPE,Integer.parseInt(orderType));
             intent.putExtra(PaymentActivity.ORDER_STATE,Integer.parseInt(orderState));
+            startActivity(intent);
+        }else if (orderState.equals("7")){  //待评价
+            Intent intent = new Intent(getContext(), EvaluateActivity.class);
+            intent.putExtra(PaymentActivity.ORDERNO,orderNo);
+            intent.putExtra(PaymentActivity.STOREID,storeId);
             startActivity(intent);
         }
     }

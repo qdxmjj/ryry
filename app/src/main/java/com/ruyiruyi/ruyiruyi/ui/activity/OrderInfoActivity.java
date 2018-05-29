@@ -7,9 +7,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Code;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CodeViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CxwyOrder;
@@ -21,6 +23,7 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.InfoOneViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireInfo;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireInfoViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
@@ -35,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.drakeet.multitype.MultiTypeAdapter;
+import rx.functions.Action1;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
@@ -92,6 +96,8 @@ public class OrderInfoActivity extends BaseActivity implements InfoOneViewBinder
             actionBar.setTitle("待收货");
         }else if (orderState == 3){
             actionBar.setTitle("待商家确认服务");
+        }else if (orderState == 6){
+            actionBar.setTitle("待车主确认服务");
         }
 
         initView();
@@ -129,13 +135,13 @@ public class OrderInfoActivity extends BaseActivity implements InfoOneViewBinder
                         if (orderType == 2){//首次更换订单
                             if (orderState == 5) {  //代发货
                                 getFirstTireOrderInfo(data);
-                            }else if (orderState == 3 || orderState == 2){ //待商家确认服务 || 待收货
+                            }else if (orderState == 3 || orderState == 2 || orderState == 6){ //待商家确认服务 || 待收货  ||待车主确认服务
                                 codeList.clear();
                                 getFirstTireOrderInfo(data);
                                 getFirstTireOrderCode(data);
                             }
                         } else if (orderType == 1){ //商品订单
-                            if (orderState == 3) {//待商家确认服务
+                            if (orderState == 3 || orderState == 6) {//待商家确认服务 || 待车主确认服务
                                 getGoodsOrderInfo(data);
                             }
                         }
@@ -252,7 +258,7 @@ public class OrderInfoActivity extends BaseActivity implements InfoOneViewBinder
                 for (int i = 0; i < tireInfoList.size(); i++) {
                     items.add(tireInfoList.get(i));
                 }
-            }else if (orderState == 3 || orderState ==2){ //待商家确认服务 || 待收货
+            }else if (orderState == 3 || orderState ==2 || orderState == 6){ //待商家确认服务 || 待收货 || 带车主确认服务
                 items.add(new InfoOne("联系人",userName,false));
                 items.add(new InfoOne("联系电话",userPhone,false));
                 items.add(new InfoOne("车牌号",carNumber,false));
@@ -267,7 +273,7 @@ public class OrderInfoActivity extends BaseActivity implements InfoOneViewBinder
                 }
             }
         }else if (orderType == 1){  //商品订单
-            if (orderState == 3){   //待商家确认服务
+            if (orderState == 3 || orderState == 6){   //待商家确认服务 || 带车主确认服务
                 items.add(new InfoOne("联系人",userName,false));
                 items.add(new InfoOne("联系电话",userPhone,false));
                 items.add(new InfoOne("车牌号",carNumber,false));
@@ -293,26 +299,104 @@ public class OrderInfoActivity extends BaseActivity implements InfoOneViewBinder
 
         orderButton = (TextView) findViewById(R.id.order_pay_button);
         initButton();
+
+        RxViewAction.clickNoDouble(orderButton)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        if (orderState == 6){   //待车主确认服务
+                            userAffirmService();
+                        }
+                    }
+                });
+    }
+
+    /**
+     *车主确认服务
+     */
+    private void userAffirmService() {
+        int userId = new DbConfig().getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("orderNo",orderNo);
+            jsonObject.put("orderType",orderType);
+            jsonObject.put("userId",userId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userConfirmOrderServiced");
+        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString() );
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: ------" +  result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                        intent.putExtra(OrderFragment.ORDER_TYPE, "YWC");
+                        intent.putExtra(OrderActivity.ORDER_FROM,1);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initButton() {
-
-
         if (orderType == 2){    //首次更换
             if (orderState == 5){
                 orderButton.setText("等待发货");
+                orderButton.setClickable(false);
                 orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
             }else if (orderState == 2){
                 orderButton.setText("待收货");
+                orderButton.setClickable(false);
                 orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
             }else if (orderState == 3){ //待商家确认服务
                 orderButton.setText("待商家确认服务");
+                orderButton.setClickable(false);
                 orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+            }else if (orderState == 6){ //待车主确认服务
+                orderButton.setText("确认服务");
+                orderButton.setClickable(true);
+                orderButton.setBackgroundResource(R.drawable.bg_button);
             }
         }else if (orderType == 1){  //商品订单
             if (orderState == 3){ //待商家确认服务
                 orderButton.setText("待商家确认服务");
+                orderButton.setClickable(false);
                 orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+            }else if (orderState == 6){ //待车主确认服务
+                orderButton.setText("确认服务");
+                orderButton.setClickable(true);
+                orderButton.setBackgroundResource(R.drawable.bg_button);
             }
         }
     }

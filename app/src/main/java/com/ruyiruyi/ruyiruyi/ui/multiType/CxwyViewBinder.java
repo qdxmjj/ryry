@@ -23,10 +23,10 @@ public class CxwyViewBinder extends ItemViewProvider<Cxwy, CxwyViewBinder.ViewHo
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull Cxwy cxwy) {
-        if (cxwy.getCxwyType() == 1) {  //1是购买  2是赠送
+        if (cxwy.getCxwyType() == 2) {  //1是赠送  2是购买
             holder.cxwyLayout.setBackgroundResource(R.drawable.cxwy_normal);
             holder.cxwyTimeText.setText("限制使用时间： 无限制" );
-        }else if (cxwy.getCxwyType() == 2){
+        }else if (cxwy.getCxwyType() == 1){
             holder.cxwyLayout.setBackgroundResource(R.drawable.cxwy_give);
             holder.cxwyTimeText.setText("限制使用时间： " + cxwy.getCxwyStartTime() + "-" + cxwy.getCxwyEndTime());
         }
