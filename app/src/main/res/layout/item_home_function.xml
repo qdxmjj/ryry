@@ -87,11 +87,11 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_share"/>
+                android:src="@drawable/ic_icon4"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="共享冬季胎"
+                android:text="商品分类"
                 android:textSize="14sp"
                 android:textColor="@color/c6"
                 android:layout_marginTop="5dp"

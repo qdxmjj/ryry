@@ -54,20 +54,6 @@
                     android:layout_marginLeft="30dp"
                     />
                 <com.ruyiruyi.rylibrary.ui.cell.WheelView
-                    android:id="@+id/diameter_wheel_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:textColorCenter="@color/theme_primary"
-                    app:lineSpaceingDimens="15dp"
-                    app:itemVisibleNum="3"
-                    app:lineColor="@color/theme_primary"
-                    app:textSizeCenter="20dp"
-                    app:textSizeOuter="16dp"
-                    app:isLoop="false"
-                    app:textColorOuter="@android:color/darker_gray"
-                    android:layout_marginLeft="30dp"
-                    />
-                <com.ruyiruyi.rylibrary.ui.cell.WheelView
                     android:id="@+id/radiowheel_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -81,6 +67,22 @@
                     app:textColorOuter="@android:color/darker_gray"
                     android:layout_marginLeft="30dp"
                     />
+
+                <com.ruyiruyi.rylibrary.ui.cell.WheelView
+                    android:id="@+id/diameter_wheel_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:textColorCenter="@color/theme_primary"
+                    app:lineSpaceingDimens="15dp"
+                    app:itemVisibleNum="3"
+                    app:lineColor="@color/theme_primary"
+                    app:textSizeCenter="20dp"
+                    app:textSizeOuter="16dp"
+                    app:isLoop="false"
+                    app:textColorOuter="@android:color/darker_gray"
+                    android:layout_marginLeft="30dp"
+                    />
+
             </LinearLayout>
 
         </LinearLayout>

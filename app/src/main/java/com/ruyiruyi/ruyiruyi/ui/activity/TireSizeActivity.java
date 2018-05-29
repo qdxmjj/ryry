@@ -70,14 +70,15 @@ public class TireSizeActivity extends BaseActivity {
             int one = tire.indexOf("/");
             int two = tire.indexOf("R");
             String width = tire.substring(0, one);
-            String diameter = tire.substring(one+1, two);
-            String radio = tire.substring(two+1, tire.length());
+            String radio = tire.substring(one+1, two);
+            String diameter = tire.substring(two+1, tire.length());
             currenWidth = width;
-            currendDiameter = diameter;
             currenRadio = radio;
+            currendDiameter = diameter;
+
             Log.e(TAG, "onCreate: " + currenWidth);
-            Log.e(TAG, "onCreate: " + currendDiameter);
             Log.e(TAG, "onCreate: " + currenRadio);
+            Log.e(TAG, "onCreate: " + currendDiameter);
 
         }
 
@@ -108,7 +109,7 @@ public class TireSizeActivity extends BaseActivity {
                         String radio = radioWv.getSelectedItem();
                         Intent intent = new Intent();
                         intent.putExtra("weizhi",weizhi);
-                        intent.putExtra("tire",width + "/" + diameter+ "R" + radio);
+                        intent.putExtra("tire",width + "/" + radio+ "R" + diameter);
                         setResult(CarInfoActivity.TIRE_SIZE, intent);
                         finish();
 
@@ -116,8 +117,9 @@ public class TireSizeActivity extends BaseActivity {
                 });
 
         getWidth();
-        getDiameter();
-        getRatio();
+        getRatio(); //扁平比
+        getDiameter();//直径
+
 
         initWv();
 
@@ -134,11 +136,11 @@ public class TireSizeActivity extends BaseActivity {
                 currenWidthPositoin = widthWV.getSelectedPosition();
                 String width = widthWV.getSelectedItem();
                 currenWidth = width;
-                getDiameter();
                 getRatio();
-
-                diameterWV.setItems(diameterList,1);
+                getDiameter();
                 radioWv.setItems(ratiodList,1);
+                diameterWV.setItems(diameterList,1);
+
 
             }
 
@@ -146,29 +148,31 @@ public class TireSizeActivity extends BaseActivity {
         Log.e(TAG, "onItemSelected:-+++" + widthWV.getSelectedItem());
 
 
-        diameterWV.setItems(diameterList,currendDiameterPosition);//init selected position is 1 初始选中位置为1
-        diameterWV.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(int selectedIndex, String item) {
-                currendDiameterPosition = diameterWV.getSelectedPosition();
-                String diameter = diameterWV.getSelectedItem();
-                currendDiameter = diameter;
-                getRatio();
-                radioWv.setItems(ratiodList,currenRadioPosition);
-            }
-
-        });
-
-
-
         radioWv.setItems(ratiodList,currenRadioPosition);//init selected position is 1 初始选中位置为1
         radioWv.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
                 currenRadioPosition = radioWv.getSelectedPosition();
+                String radio = radioWv.getSelectedItem();
+                currenRadio = radio;
+                getDiameter();
+                diameterWV.setItems(diameterList,currendDiameterPosition);
             }
 
         });
+
+
+        diameterWV.setItems(diameterList,currendDiameterPosition);//init selected position is 1 初始选中位置为1
+        diameterWV.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int selectedIndex, String item) {
+                currendDiameterPosition = diameterWV.getSelectedPosition();
+            }
+
+        });
+
+
+
     }
 
 
@@ -218,6 +222,7 @@ public class TireSizeActivity extends BaseActivity {
         try {
             tireType  = db.selector(TireType.class)
                     .where("tireflatwidth" ,"=",currenWidth)
+                    .where("tireFlatnessRatio" ,"=",currenRadio)
                     .findAll();
         } catch (DbException e) {
 
@@ -258,7 +263,6 @@ public class TireSizeActivity extends BaseActivity {
         try {
             tireType  = db.selector(TireType.class)
                     .where("tireflatwidth" ,"=",currenWidth)
-                    .where("tirediameter" ,"=",currendDiameter)
                     .findAll();
         } catch (DbException e) {
 
@@ -268,7 +272,6 @@ public class TireSizeActivity extends BaseActivity {
 
         for (int i = 0; i < tireType.size(); i++) {
             radioAllList.add(tireType.get(i).getTireFlatnessRatio().toString());
-            Log.e(TAG, "getRatio: " + tireType.get(i).getTireDiameter().toString());
         }
        ratiodList = new ArrayList<>();
         //去除重复的轮胎型号

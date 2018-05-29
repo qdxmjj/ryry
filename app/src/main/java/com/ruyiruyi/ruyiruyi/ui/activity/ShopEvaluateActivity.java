@@ -71,7 +71,7 @@ public class ShopEvaluateActivity extends BaseActivity implements EvaImageViewBi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_evaluate,R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("门店评价");;
+
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
             @Override
             public void onItemClick(int var1) {
@@ -86,25 +86,14 @@ public class ShopEvaluateActivity extends BaseActivity implements EvaImageViewBi
         evaluateType = intent.getIntExtra(EVALUATE_TYPE,0);//0是门店评价  1是我的评价
         if (evaluateType==0){
             storeid = intent.getIntExtra("STOREID",0);
+            actionBar.setTitle("门店评价");;
         }else {
             userId = intent.getIntExtra("USERID",0);
+            actionBar.setTitle("我的评价");;
         }
 
         userEvaluateList = new ArrayList<>();
         isCleanData = true;
-
-        List<String> imageList = new ArrayList<>();
-
-        imageList.add("http://192.168.0.167/images/user/carImage/70/zhuye.png");
-        imageList.add("http://180.76.243.205:8111/images/Advertisement/cxwy.png");
-        imageList.add("http://192.168.0.167/images/user/carImage/70/fuye.png");
-        imageList.add("http://180.76.243.205:8111/images/Advertisement/cxwy1000.png");
-
-/*
-        for (int i = 0; i < 5; i++) {
-            userEvaluateList.add(new UserEvaluate(i,"http://180.76.243.205:8111/images/Advertisement/cxwy1000.png","一只大鸟"+i,"2017-02-1" + i,
-                    "有一只大鸟从天上掉了下来",imageList));
-        }*/
 
         initView();
         initDataFromService();
@@ -169,11 +158,21 @@ public class ShopEvaluateActivity extends BaseActivity implements EvaImageViewBi
                             String img4Url = object.getString("img4Url");
                             String img5Url = object.getString("img5Url");
                             List<String> imageList = new ArrayList<String>();
-                            imageList.add(img1Url);
-                            imageList.add(img2Url);
-                            imageList.add(img3Url);
-                            imageList.add(img4Url);
-                            imageList.add(img5Url);
+                            if (!img1Url.equals("")){
+                                imageList.add(img1Url);
+                            }
+                            if (!img2Url.equals("")){
+                                imageList.add(img2Url);
+                            }
+                            if (!img3Url.equals("")){
+                                imageList.add(img3Url);
+                            }
+                            if (!img4Url.equals("")){
+                                imageList.add(img4Url);
+                            }
+                            if (!img5Url.equals("")){
+                                imageList.add(img5Url);
+                            }
                             UserEvaluate userEvaluate = new UserEvaluate(id, userImage, usetName, evaluateTimeStr, evaluateContent, imageList);
                             userEvaluateList.add(userEvaluate);
                         }

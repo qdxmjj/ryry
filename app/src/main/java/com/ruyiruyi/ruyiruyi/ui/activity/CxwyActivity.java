@@ -4,13 +4,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Cxwy;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CxwyViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.FullyLinearLayoutManager;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +33,7 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class CxwyActivity extends BaseActivity {
+    private static final String TAG = CxwyActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;
     private List<Object> items = new ArrayList<>();
@@ -54,7 +67,75 @@ public class CxwyActivity extends BaseActivity {
 
         }
         initView();
-        initData();
+        initDataFromService();
+       //initData();
+    }
+
+    private void initDataFromService() {
+        User user = new DbConfig().getUser();
+        int userId = user.getId();
+        int carId = user.getCarId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId",userId);
+            jsonObject.put("userCarId",carId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCarInfo/queryCarCxwyInfo");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        Log.e(TAG, "initDataFromService: " + params.toString());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONArray data = jsonObject1.getJSONArray("data");
+                        cxwyList.clear();
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject object = data.getJSONObject(i);
+                            long cxwyBuytime = object.getLong("cxwyBuytime");
+                            String cxwyBuyTimeStr = new UtilsRY().getTimestampToStringAll(cxwyBuytime);
+                            long cxwyEndtime = object.getLong("cxwyEndtime");
+                            String cxwyEndTimeStr = new UtilsRY().getTimestampToStringAll(cxwyEndtime);
+                            long cxwyStarttime = object.getLong("cxwyStarttime");
+                            String cxwyStartTimeStr = new UtilsRY().getTimestampToStringAll(cxwyStarttime);
+                            int cxwyState = object.getInt("cxwyState");
+                            int cxwyTypeId = object.getInt("cxwyTypeId");// 1:有期限 2:没有期限
+                            int getWay = object.getInt("getWay");//获取方式 1 系统赠送 2 正常购买
+                            int id = object.getInt("id");
+                            Cxwy cxwy = new Cxwy(id, cxwyStartTimeStr, cxwyEndTimeStr, getWay);
+                            cxwyList.add(cxwy);
+                        }
+                        initData();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initData() {

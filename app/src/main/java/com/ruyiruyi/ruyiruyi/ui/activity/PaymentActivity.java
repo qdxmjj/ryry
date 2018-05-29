@@ -37,6 +37,7 @@ import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
@@ -69,6 +70,7 @@ public class PaymentActivity extends BaseActivity {
     public int currentType = 0;  //0是余额支付  1是微信支付 2是支付宝支付
     public static String ALL_PRICE = "ALLPRICE";
     public static String ORDERNO = "ORDERNO";
+    public static String STOREID = "STOREID";
     public static String ORDER_TYPE = "ORDER_TYPE";//  0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
     public static String ORDER_STATE = "ORDER_STATE";//轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货
                                                  // 订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
@@ -214,6 +216,7 @@ public class PaymentActivity extends BaseActivity {
 
 
                         }else if (currentType == 1){//微信支付
+                            weixinPay();
                           /*  //初始化一个WXTextObject对象
                             WXTextObject textObject = new WXTextObject();
                             textObject.text = "111";
@@ -245,7 +248,7 @@ public class PaymentActivity extends BaseActivity {
                             req.scene = mTargetScene;
                             api.sendReq(req);
                             finish();*/
-                            WXWebpageObject webpage = new WXWebpageObject();
+                          /*  WXWebpageObject webpage = new WXWebpageObject();
                             webpage.webpageUrl = "http://www.qq.com";
                             WXMediaMessage msg = new WXMediaMessage(webpage);
                             msg.title = "WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
@@ -259,7 +262,7 @@ public class PaymentActivity extends BaseActivity {
                             req.transaction = buildTransaction("webpage");
                             req.message = msg;
                             req.scene = mTargetScene;
-                            api.sendReq(req);
+                            api.sendReq(req);*/
 
                         }else if (currentType == 2){ //支付宝支付
                             //获取签名后的orderInfo
@@ -268,6 +271,49 @@ public class PaymentActivity extends BaseActivity {
 
                     }
                 });
+    }
+
+    private void weixinPay() {
+        JSONObject jsonObject = new JSONObject();
+        RequestParams params = new RequestParams("http://wxpay.wxutil.com/pub_v2/app/app_pay.php");
+
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: --------"+ result);
+                try {
+                    JSONObject data  = new JSONObject(result);
+                    PayReq req = new PayReq();
+                    req.appId = data.getString("appid");;
+                    req.partnerId = data.getString("partnerid");
+                    req.prepayId = data.getString("prepayid");
+                    req.nonceStr = data.getString("noncestr");
+                    req.timeStamp = data.getString("timestamp");
+                    req.packageValue = data.getString("package");
+                    req.sign = data.getString("sign");
+                    api.sendReq(req);
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
     }
 
     /**

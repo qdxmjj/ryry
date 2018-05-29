@@ -19,7 +19,7 @@ public class NewRatingBar extends LinearLayout {
     private NewRatingBar.OnRatingChangeListener onRatingChangeListener;
     private float starImageSize;
     private float starPadding;
-    private float starStep;
+    public float starStep;
     private Drawable starEmptyDrawable;
     private Drawable starFillDrawable;
     private Drawable starHalfDrawable;

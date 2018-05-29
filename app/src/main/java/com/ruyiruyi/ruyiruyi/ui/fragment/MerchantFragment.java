@@ -316,7 +316,7 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
             shaixuan.add("美容清洗");
             shaixuan.add("安装");
             shaixuan.add("轮胎服务");
-        }else if (shopType ==1 ){
+        }else if (shopType == 5 ){
             fragmentTitle.setText("轮胎服务");
             shaixuan.add("轮胎服务");
         }else if (shopType ==2 ){

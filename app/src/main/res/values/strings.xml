@@ -30,4 +30,6 @@
         <item>发送网页url</item>
     </string-array>
 
+    <string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
+
 </resources>
