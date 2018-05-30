@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,15 +26,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.utils.FormatDateUtil;
@@ -58,7 +56,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class UserInfoActivity extends BaseActivity implements DatePicker.OnDateChangedListener {
+public class UserInfoActivity extends RYBaseActivity implements DatePicker.OnDateChangedListener {
 
     private ActionBar mActionBar;
     private LinearLayout ll_change;
@@ -501,8 +499,9 @@ public class UserInfoActivity extends BaseActivity implements DatePicker.OnDateC
                                 Intent intent = new Intent(UserInfoActivity.this, MainActivity.class);
                                 intent.putExtra(MyFragment.FROM_FRAGMENT, "MYFRAGMENT");
                                 startActivity(intent);
+                            } else if (status == -999) {
+                                showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                             } else {
-                                Log.e(TAG, "onSuccess: msg2 = " + msg);
                                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                             }
 

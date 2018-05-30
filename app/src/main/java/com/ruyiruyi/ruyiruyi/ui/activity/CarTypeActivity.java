@@ -1,7 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,29 +9,25 @@ import android.util.Log;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarTireInfo;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarTitle;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarTitleViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarTypeViewBinder;
-import com.ruyiruyi.ruyiruyi.ui.multiType.CarVersionViewBinder;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import me.drakeet.multitype.MultiTypeAdapter;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class CarTypeActivity extends BaseActivity implements CarTypeViewBinder.OnCarTypeClick ,CarTitleViewBinder.OnCarTitlrClick{
+public class CarTypeActivity extends RYBaseActivity implements CarTypeViewBinder.OnCarTypeClick ,CarTitleViewBinder.OnCarTitlrClick{
     private static final String TAG = CarTypeActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;

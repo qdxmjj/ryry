@@ -1,18 +1,16 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.cell.flowlayout.FlowLayout;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagAdapter;
@@ -22,7 +20,7 @@ import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstChangeActivity extends BaseActivity {
+public class FirstChangeActivity extends RYBaseActivity {
     private ActionBar actionBar;
     private TagFlowLayout typeFlowLayout;
     private String[] mVals = new String[]

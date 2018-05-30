@@ -11,10 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.GoodsActivity;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsHorizontal;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsItem;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsItemViewBinder;
@@ -38,7 +40,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.OnGoodsItemClick {
+public class GoodsListFragment extends RYBaseFragment implements GoodsItemViewBinder.OnGoodsItemClick {
     private static final String TAG = GoodsListFragment.class.getSimpleName();
     public static final int GOODS_FRAGMENT_RESULT = 2;
     public static String GOODS_CLASS_ID = "GOODS_CLASS_ID";
@@ -62,7 +64,7 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_gooods_list,container,false);
+        return inflater.inflate(R.layout.fragment_gooods_list, container, false);
     }
 
     @Override
@@ -76,26 +78,26 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
 
         goodslist = new ArrayList<>();
 
-       // createData();
+        // createData();
 
 
         initView();
         initDataFromService();
 
-       // initData();
+        // initData();
 
     }
 
     private void initDataFromService() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("storeId",storeId);
+            jsonObject.put("storeId", storeId);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getStoreAddedServices");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -105,16 +107,16 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     List<GoodsHorizontal> goodsHorizontalList = new ArrayList<GoodsHorizontal>();
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         JSONArray object = null; //MRQX  QCBY  GZ  LTFW
                         if (shopServiceType.equals("MRQX")) {
                             object = data.getJSONArray("美容清洗");
-                        }else if (shopServiceType.equals("QCBY")){
+                        } else if (shopServiceType.equals("QCBY")) {
                             object = data.getJSONArray("汽车保养");
-                        } else if (shopServiceType.equals("GZ")){
+                        } else if (shopServiceType.equals("GZ")) {
                             object = data.getJSONArray("安装");
-                        }else if (shopServiceType.equals("LTFW")){
+                        } else if (shopServiceType.equals("LTFW")) {
                             object = data.getJSONArray("轮胎服务");
                         }
                         for (int i = 0; i < object.length(); i++) {
@@ -124,7 +126,7 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
                             String serviceName = objectJSONObject.getString("serviceName");
                             String serviceTypeId = objectJSONObject.getString("serviceTypeId");
                             String serviceTypeName = objectJSONObject.getString("serviceTypeName");
-                            goodsItemList.add(new GoodsItem(serviceIdInt,serviceName,false));
+                            goodsItemList.add(new GoodsItem(serviceIdInt, serviceName, false));
                         }
                         initData();
                     }
@@ -151,13 +153,12 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
     }
 
 
-
     private void initData() {
         items.clear();
-        for (int i = 0; i <goodsItemList.size() ; i++) {
+        for (int i = 0; i < goodsItemList.size(); i++) {
             items.add(goodsItemList.get(i));
         }
-        assertAllRegistered(adapter,items);
+        assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
 
@@ -180,19 +181,19 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
     }
 
     @Override
-    public void onGoodsItemClickListenner(int goodsClassId,List<GoodsHorizontal> goodsHorizontalList) {
+    public void onGoodsItemClickListenner(int goodsClassId, List<GoodsHorizontal> goodsHorizontalList) {
 
-        Intent intent = new Intent(getContext(),GoodsActivity.class);
+        Intent intent = new Intent(getContext(), GoodsActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt(GOODS_CLASS_ID,goodsClassId);
+        bundle.putInt(GOODS_CLASS_ID, goodsClassId);
         bundle.putSerializable("GOODSLIST", (Serializable) goodsHorizontalList);
         intent.putExtras(bundle);
-        startActivityForResult(intent,GOODS_FRAGMENT_RESULT);
+        startActivityForResult(intent, GOODS_FRAGMENT_RESULT);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode  == GOODS_FRAGMENT_RESULT){
+        if (resultCode == GOODS_FRAGMENT_RESULT) {
             Bundle bundle = data.getExtras();
             int classId = bundle.getInt(GOODS_CLASS_ID);
             goodslist.clear();
@@ -213,15 +214,15 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
                 goodsHorizontal.setServiceTypeId(goodslist.get(i).getServiceTypeId());
                 goodsHorizontalList.add(goodsHorizontal);
             }
-            if (goodslist.size() > 0){
+            if (goodslist.size() > 0) {
                 for (int i = 0; i < goodsItemList.size(); i++) {
                     if (goodsItemList.get(i).getGoodsClassId() == classId) {
                         goodsItemList.get(i).setGoodsList(goodsHorizontalList);
                         goodsItemList.get(i).setChooseGood(true);
-                        goodsItemList.get(i).setPrice(allprice+"");
+                        goodsItemList.get(i).setPrice(allprice + "");
                     }
                 }
-            }else {
+            } else {
                 for (int i = 0; i < goodsItemList.size(); i++) {
                     if (goodsItemList.get(i).getGoodsClassId() == classId) {
                         goodsItemList.get(i).setGoodsList(goodsHorizontalList);
@@ -229,7 +230,7 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
                     }
                 }
             }
-            listener.onGoodsListSend(classId,goodsHorizontalList);
+            listener.onGoodsListSend(classId, goodsHorizontalList);
             initData();
 
 
@@ -237,7 +238,7 @@ public class GoodsListFragment extends Fragment implements GoodsItemViewBinder.O
 
     }
 
-    public interface OnGoodsListSend{
-        void onGoodsListSend(int classId,List<GoodsHorizontal> list);
+    public interface OnGoodsListSend {
+        void onGoodsListSend(int classId, List<GoodsHorizontal> list);
     }
 }

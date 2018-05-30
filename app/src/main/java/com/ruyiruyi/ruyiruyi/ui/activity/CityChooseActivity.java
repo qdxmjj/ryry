@@ -2,7 +2,6 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,18 +19,15 @@ import android.widget.Toast;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.Poi;
-import com.baidu.mapapi.SDKInitializer;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.MyApplication;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
-import com.ruyiruyi.ruyiruyi.ui.fragment.HomeFragment;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
-import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.ui.adapter.CYBChangeCityGridViewAdapter;
 import com.ruyiruyi.rylibrary.ui.adapter.ContactAdapter;
 import com.ruyiruyi.rylibrary.ui.bean.UserEntity;
@@ -41,7 +37,6 @@ import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import me.yokeyword.indexablerv.IndexableAdapter;
@@ -49,7 +44,7 @@ import me.yokeyword.indexablerv.IndexableHeaderAdapter;
 import me.yokeyword.indexablerv.IndexableLayout;
 import rx.functions.Action1;
 
-public class CityChooseActivity extends BaseActivity {
+public class CityChooseActivity extends RYBaseActivity {
     private static final String TAG = CityChooseActivity.class.getSimpleName();
     private ContactAdapter mAdapter;
     private BannerHeaderAdapter mBannerHeaderAdapter;

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.ui.activity.GoodsShopActivity;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.BigClass;
 import com.ruyiruyi.ruyiruyi.ui.multiType.BigClassViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EvaluateImage;
@@ -28,7 +29,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class GoodsClassFragment extends Fragment implements BigClassViewBinder.OnBigClassItemClick ,GoodsClassViewBinder.OnClassItemClick {
+public class GoodsClassFragment extends RYBaseFragment implements BigClassViewBinder.OnBigClassItemClick ,GoodsClassViewBinder.OnClassItemClick {
     private RecyclerView bigClassliserView;
     private RecyclerView classListView;
     private List<Object> bigClassItems = new ArrayList<>();

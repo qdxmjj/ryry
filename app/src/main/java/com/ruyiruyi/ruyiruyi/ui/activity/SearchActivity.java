@@ -1,18 +1,18 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.rylibrary.android.searchview.ICallBack;
 import com.ruyiruyi.rylibrary.android.searchview.ItemCallBack;
 import com.ruyiruyi.rylibrary.android.searchview.SearchView;
 import com.ruyiruyi.rylibrary.android.searchview.bCallBack;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends RYBaseActivity {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
     private SearchView searchView;

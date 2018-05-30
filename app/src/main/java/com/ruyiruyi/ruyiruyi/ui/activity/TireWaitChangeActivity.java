@@ -1,7 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,12 +11,12 @@ import android.widget.Toast;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireWait;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireWaitViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.json.JSONArray;
@@ -36,7 +35,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class TireWaitChangeActivity extends BaseActivity {
+public class TireWaitChangeActivity extends RYBaseActivity {
     private static final String TAG = TireWaitChangeActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;
@@ -49,13 +48,13 @@ public class TireWaitChangeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tire_wait_change,R.id.my_action);
+        setContentView(R.layout.activity_tire_wait_change, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("待更换轮胎");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("待更换轮胎");
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         break;
@@ -63,14 +62,14 @@ public class TireWaitChangeActivity extends BaseActivity {
             }
         });
         Intent intent = getIntent();
-        if (intent!=null){
+        if (intent != null) {
             fromFragment = intent.getStringExtra(MyFragment.FROM_FRAGMENT);
         }
 
         tireWaitList = new ArrayList<>();
         initView();
 
-       // initData();
+        // initData();
         initDataFromService();
     }
 
@@ -78,14 +77,14 @@ public class TireWaitChangeActivity extends BaseActivity {
         int userId = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId",userId);
+            jsonObject.put("userId", userId);
         } catch (JSONException e) {
 
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUnusedShoeOrder");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -95,7 +94,7 @@ public class TireWaitChangeActivity extends BaseActivity {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         tireWaitList.clear();
                         JSONArray data = jsonObject1.getJSONArray("data");
                         for (int i = 0; i < data.length(); i++) {
@@ -110,17 +109,17 @@ public class TireWaitChangeActivity extends BaseActivity {
                             int rearAmount = object.getInt("rearAmount");
                             String fontShoeName = "";
                             String tirePlace = "";
-                            if (fontRearFlag==0){//前轮跟后轮
+                            if (fontRearFlag == 0) {//前轮跟后轮
                                 tirePlace = "前轮/后轮";
                                 fontShoeName = object.getString("fontShoeName");
                                 TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus);
                                 tireWaitList.add(tireWait);
-                            }else if (fontRearFlag == 1){//前轮
+                            } else if (fontRearFlag == 1) {//前轮
                                 tirePlace = "前轮";
                                 fontShoeName = object.getString("fontShoeName");
                                 TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus);
                                 tireWaitList.add(tireWait);
-                            }else{ //后轮
+                            } else { //后轮
                                 tirePlace = "后轮";
                                 fontShoeName = object.getString("rearShoeName");
                                 TireWait tireWait = new TireWait(orderImg, fontShoeName, name, rearAmount, platNumber, tirePlace, orderNo, rejectStatus);
@@ -130,8 +129,10 @@ public class TireWaitChangeActivity extends BaseActivity {
 
                         }
 
-                    }else {
-                        Toast.makeText(TireWaitChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -162,7 +163,7 @@ public class TireWaitChangeActivity extends BaseActivity {
         for (int i = 0; i < tireWaitList.size(); i++) {
             items.add(tireWaitList.get(i));
         }
-        assertAllRegistered(adapter,items);
+        assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
 
@@ -175,7 +176,7 @@ public class TireWaitChangeActivity extends BaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), TireChangeActivity.class);
-                        intent.putExtra(TireChangeActivity.CHANGE_TIRE,0);
+                        intent.putExtra(TireChangeActivity.CHANGE_TIRE, 0);
                         startActivity(intent);
                     }
                 });
@@ -190,13 +191,13 @@ public class TireWaitChangeActivity extends BaseActivity {
     }
 
     private void register() {
-        adapter.register(TireWait.class,new TireWaitViewBinder(this));
+        adapter.register(TireWait.class, new TireWaitViewBinder(this));
     }
 
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.putExtra(MyFragment.FROM_FRAGMENT,fromFragment);
+        intent.putExtra(MyFragment.FROM_FRAGMENT, fromFragment);
         startActivity(intent);
     }
 }

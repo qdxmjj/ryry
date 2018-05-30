@@ -43,7 +43,7 @@
             android:launchMode="singleTask" />
         <activity android:name=".ui.activity.FogetActivity" />
         <activity android:name=".ui.activity.RegisterActivity" />
-        <activity android:name=".ui.activity.BaseActivityb" />
+        <activity android:name=".ui.activity.base.BaseActivityb" />
         <activity android:name=".ui.activity.StoreManageActivity" />
         <activity android:name=".ui.activity.MyOrderActivity" />
         <activity

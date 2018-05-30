@@ -1,8 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
-import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +8,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CreditLimit;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CreditLimitViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBig;
@@ -17,7 +16,6 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBigViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMore;
 import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMoreViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.json.JSONArray;
@@ -35,7 +33,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class CreditLimitActivity extends BaseActivity {
+public class CreditLimitActivity extends RYBaseActivity {
     private ActionBar actionBar;
     private RecyclerView listView;
     private SwipeRefreshLayout mSwipeLayout;
@@ -49,7 +47,6 @@ public class CreditLimitActivity extends BaseActivity {
         setContentView(R.layout.activity_credit_limit, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("信用额度");
-        ;
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
@@ -104,13 +101,12 @@ public class CreditLimitActivity extends BaseActivity {
                             creditLimitList.add(creditLimit);
                         }
                     } else if (status == -999) {
-                        Toast.makeText(CreditLimitActivity.this, "登录失效,请重新登录", Toast.LENGTH_SHORT).show();
-                        //登录失效,跳转登录界面
-                        finish();
-                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+
                     } else {
-                        Toast.makeText(CreditLimitActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
+
 
                     //更新数据
                     updataData();
@@ -136,6 +132,7 @@ public class CreditLimitActivity extends BaseActivity {
         });
 
     }
+
 
     /*
     * 更新数据

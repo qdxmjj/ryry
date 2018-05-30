@@ -1,21 +1,19 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarFactory;
 import com.ruyiruyi.ruyiruyi.db.model.CarVerhicle;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarFactoryM;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarFactoryViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarVersion;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarVersionViewBinder;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.xutils.DbManager;
@@ -29,7 +27,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class CarDemioActivity extends BaseActivity implements CarVersionViewBinder.OnCarVersionClick{
+public class CarDemioActivity extends RYBaseActivity implements CarVersionViewBinder.OnCarVersionClick{
 
     private static final String TAG = CarDemioActivity.class.getSimpleName();
     private ActionBar actionBar;

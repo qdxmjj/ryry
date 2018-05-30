@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.User;
+import com.ruyiruyi.merchant.ui.activity.base.BaseActivityb;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;

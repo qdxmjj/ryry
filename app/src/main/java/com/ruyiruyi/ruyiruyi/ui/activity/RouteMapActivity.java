@@ -1,18 +1,15 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.OpenLocalMapUtil;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
-public class RouteMapActivity extends BaseActivity {
+public class RouteMapActivity extends RYBaseActivity {
 
     private ActionBar mActionBar;
     private String startLat;

@@ -3,23 +3,16 @@ package com.ruyiruyi.ruyiruyi;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarBrand;
@@ -28,26 +21,19 @@ import com.ruyiruyi.ruyiruyi.db.model.CarTireInfo;
 import com.ruyiruyi.ruyiruyi.db.model.CarVerhicle;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.TireType;
-import com.ruyiruyi.ruyiruyi.ui.activity.ActionBarActivity;
-import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseFragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsClassFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.HomeFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
-import com.ruyiruyi.ruyiruyi.ui.fragment.YcxFragment;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
-import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
-import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.cell.HomeTabsCell;
 import com.ruyiruyi.rylibrary.cell.NoCanSlideViewPager;
 import com.ruyiruyi.rylibrary.ui.adapter.FragmentViewPagerAdapter;
 import com.ruyiruyi.rylibrary.utils.AndroidUtilities;
 import com.ruyiruyi.rylibrary.utils.LayoutHelper;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,9 +49,7 @@ import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import rx.functions.Action1;
-
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends RYBaseFragmentActivity {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -745,12 +729,12 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-  /*  @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    /*  @Override
+      public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        return super.onKeyDown(keyCode, event);
-    }
-*/
+          return super.onKeyDown(keyCode, event);
+      }
+  */
     @Override
     public void onBackPressed() {
 

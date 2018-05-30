@@ -1,19 +1,14 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.Manifest;
-import android.app.FragmentBreadCrumbs;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,9 +22,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -37,15 +29,14 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.MessagePicturesLayout;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EvaluateImage;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EvaluateImageViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.GifSizeFilter;
 import com.ruyiruyi.ruyiruyi.utils.ImagPagerUtil;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
-import com.ruyiruyi.ruyiruyi.utils.Utils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.cell.CustomEditText;
 import com.ruyiruyi.rylibrary.cell.NewRatingBar;
@@ -73,13 +64,12 @@ import ch.ielse.view.imagewatcher.ImageWatcher;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import me.drakeet.multitype.MultiTypeAdapter;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class EvaluateActivity extends BaseActivity implements EvaluateImageViewBinder.OnEvaluateImageClickListener ,MessagePicturesLayout.Callback{
+public class EvaluateActivity extends RYBaseActivity implements EvaluateImageViewBinder.OnEvaluateImageClickListener ,MessagePicturesLayout.Callback{
     private static final String TAG = EvaluateActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;

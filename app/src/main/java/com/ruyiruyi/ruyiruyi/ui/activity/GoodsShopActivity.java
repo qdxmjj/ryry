@@ -1,15 +1,14 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsShop;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsShopViewBinder;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class  GoodsShopActivity extends BaseActivity {
+public class  GoodsShopActivity extends RYBaseActivity {
     private ActionBar actionBar;
     public static String CLASS_NAME = "CLASS_NAME";
     public static String CLASS_ID = "CLASS_ID";

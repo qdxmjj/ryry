@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseFragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.TabItemView;
 import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsListFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsHorizontal;
@@ -29,11 +30,11 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class ShopGoodActivity extends FragmentActivity implements GoodsListFragment.OnGoodsListSend{
+public class ShopGoodActivity extends RYBaseFragmentActivity implements GoodsListFragment.OnGoodsListSend {
     private static final String TAG = ShopGoodActivity.class.getSimpleName();
     private ActionBar actionBar;
-    private  ViewPager viewPager;
-    private  TabLayout tabLayout;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
     private SimpleFragmentPagerAdapter pagerAdapter;
     private int storeid;
     private TextView qcbyCountText;
@@ -57,11 +58,12 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_good);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("商品列表");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("商品列表");
+        ;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -69,7 +71,7 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
             }
         });
         Intent intent = getIntent();
-        storeid = intent.getIntExtra("STOREID",0);
+        storeid = intent.getIntExtra("STOREID", 0);
         storename = intent.getStringExtra("STORENAME");
         goodsChooseList = new ArrayList<>();
         goodsCommitList = new ArrayList<>();
@@ -86,12 +88,12 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
         mrqxCountText = (TextView) findViewById(R.id.mrqx_count_text);
         gzCountText = (TextView) findViewById(R.id.gz_count_text);
         ltfwCountText = (TextView) findViewById(R.id.ltfw_count_text);
-        allPriceText = (TextView)findViewById(R.id.all_price_text);
+        allPriceText = (TextView) findViewById(R.id.all_price_text);
         goodBuyButton = (TextView) findViewById(R.id.goods_buy_button);
         initCoutView();
 
 
-        allPriceText.setText(allPrice+"");
+        allPriceText.setText(allPrice + "");
         getFragments();
         getTitles();
         getTabViews();
@@ -101,7 +103,7 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
-        if (getTabViews()!=null){
+        if (getTabViews() != null) {
             for (int i = 0; i < tabLayout.getTabCount(); i++) {
                 TabLayout.Tab tab = tabLayout.getTabAt(i);
                 tab.setCustomView(pagerAdapter.getTabView(i));
@@ -117,15 +119,15 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
                                 goodsCommitList.add(goodsChooseList.get(i));
                             }
                         }
-                        if (goodsCommitList.size() == 0){
+                        if (goodsCommitList.size() == 0) {
                             Toast.makeText(ShopGoodActivity.this, "请选择商品", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
                             Intent intent = new Intent(getApplicationContext(), OrderGoodsAffirmActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("GOODSLIST", (Serializable) goodsCommitList);
-                            bundle.putDouble("ALLPRICE",allPrice);
-                            bundle.putInt("STOREID",storeid);
-                            bundle.putString("STORENAME",storename);
+                            bundle.putDouble("ALLPRICE", allPrice);
+                            bundle.putInt("STOREID", storeid);
+                            bundle.putString("STORENAME", storename);
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }
@@ -134,24 +136,26 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
     }
 
     private void initCoutView() {
-        qcbyCountText.setVisibility(qcbyCount==0?View.GONE:View.VISIBLE);
-        mrqxCountText.setVisibility(mrqxCount==0?View.GONE:View.VISIBLE);
-        gzCountText.setVisibility(azCount==0?View.GONE:View.VISIBLE);
-        ltfwCountText.setVisibility(ltfwCount==0?View.GONE:View.VISIBLE);
+        qcbyCountText.setVisibility(qcbyCount == 0 ? View.GONE : View.VISIBLE);
+        mrqxCountText.setVisibility(mrqxCount == 0 ? View.GONE : View.VISIBLE);
+        gzCountText.setVisibility(azCount == 0 ? View.GONE : View.VISIBLE);
+        ltfwCountText.setVisibility(ltfwCount == 0 ? View.GONE : View.VISIBLE);
         qcbyCountText.setText("" + qcbyCount);
         mrqxCountText.setText("" + mrqxCount);
         gzCountText.setText("" + azCount);
         ltfwCountText.setText("" + ltfwCount);
     }
+
     /**
      * 商品选择的回调
+     *
      * @param list
      */
     @Override
-    public void onGoodsListSend(int classId,List<GoodsHorizontal> list) {
+    public void onGoodsListSend(int classId, List<GoodsHorizontal> list) {
         if (goodsChooseList.size() == 0) {
             goodsChooseList.addAll(list);
-        }else {
+        } else {
             for (int i = 0; i < goodsChooseList.size(); i++) { //将改变的那一小服务的商品数量全部归零
                 if (goodsChooseList.get(i).getGoodsClassId() == classId) {
                     goodsChooseList.get(i).setCurrentCount(0);
@@ -166,7 +170,7 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
                         goodsChooseList.get(j).setCurrentCount(list.get(i).getCurrentCount());
                     }
                 }
-                if (!hasGoods){
+                if (!hasGoods) {
                     goodsChooseList.add(list.get(i));
                 }
             }
@@ -183,13 +187,13 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
 
             int serviceTypeId = goodsChooseList.get(i).getServiceTypeId();
 
-            if (serviceTypeId == 2){
+            if (serviceTypeId == 2) {
                 qcbyCount += currentCount;
-            }else if (serviceTypeId == 3){
+            } else if (serviceTypeId == 3) {
                 mrqxCount += currentCount;
-            }else if (serviceTypeId == 4){
+            } else if (serviceTypeId == 4) {
                 azCount += currentCount;
-            }else if (serviceTypeId == 5){
+            } else if (serviceTypeId == 5) {
                 ltfwCount += currentCount;
             }
         }
@@ -198,7 +202,7 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
         Log.e(TAG, "onGoodsListSend:azCount---- " + azCount);
         Log.e(TAG, "onGoodsListSend:ltfwCount---- " + ltfwCount);
         initCoutView();
-        allPriceText.setText(allPrice+"");
+        allPriceText.setText(allPrice + "");
 
     }
 
@@ -222,7 +226,7 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if (getTitles()!=null&&!getTitles().isEmpty()){
+            if (getTitles() != null && !getTitles().isEmpty()) {
                 return getTitles().get(position);
             }
             return null;
@@ -239,37 +243,38 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
         List fragments = new ArrayList();
         GoodsListFragment qcbyFragment = new GoodsListFragment();
         Bundle qcbyBundle = new Bundle();
-        qcbyBundle.putString(GoodsListFragment.SHOP_SERVICE_TYPE,"QCBY");
-        qcbyBundle.putInt(GoodsListFragment.STORE_ID,storeid);
+        qcbyBundle.putString(GoodsListFragment.SHOP_SERVICE_TYPE, "QCBY");
+        qcbyBundle.putInt(GoodsListFragment.STORE_ID, storeid);
         qcbyFragment.setArguments(qcbyBundle);
         qcbyFragment.setListener(this);
         fragments.add(qcbyFragment);
 
         GoodsListFragment mrqxFragment = new GoodsListFragment();
         Bundle mrqxBundle = new Bundle();
-        mrqxBundle.putString(GoodsListFragment.SHOP_SERVICE_TYPE,"MRQX");
-        mrqxBundle.putInt(GoodsListFragment.STORE_ID,storeid);
+        mrqxBundle.putString(GoodsListFragment.SHOP_SERVICE_TYPE, "MRQX");
+        mrqxBundle.putInt(GoodsListFragment.STORE_ID, storeid);
         mrqxFragment.setArguments(mrqxBundle);
         mrqxFragment.setListener(this);
         fragments.add(mrqxFragment);
 
         GoodsListFragment azFragment = new GoodsListFragment();
         Bundle azBundle = new Bundle();
-        azBundle.putString(GoodsListFragment.SHOP_SERVICE_TYPE,"GZ");
-        azBundle.putInt(GoodsListFragment.STORE_ID,storeid);
+        azBundle.putString(GoodsListFragment.SHOP_SERVICE_TYPE, "GZ");
+        azBundle.putInt(GoodsListFragment.STORE_ID, storeid);
         azFragment.setArguments(azBundle);
         azFragment.setListener(this);
         fragments.add(azFragment);
 
         GoodsListFragment ltfwFragment = new GoodsListFragment();
         Bundle ltfwBundle = new Bundle();
-        ltfwBundle.putString(GoodsListFragment.SHOP_SERVICE_TYPE,"LTFW");
-        ltfwBundle.putInt(GoodsListFragment.STORE_ID,storeid);
+        ltfwBundle.putString(GoodsListFragment.SHOP_SERVICE_TYPE, "LTFW");
+        ltfwBundle.putInt(GoodsListFragment.STORE_ID, storeid);
         ltfwFragment.setArguments(ltfwBundle);
         ltfwFragment.setListener(this);
         fragments.add(ltfwFragment);
         return fragments;
     }
+
     protected List<String> getTitles() {
         List list = new ArrayList();
         list.add("汽车保养");
@@ -278,6 +283,7 @@ public class ShopGoodActivity extends FragmentActivity implements GoodsListFragm
         list.add("轮胎服务");
         return list;
     }
+
     protected List<TabItemView> getTabViews() {
         return null;
     }

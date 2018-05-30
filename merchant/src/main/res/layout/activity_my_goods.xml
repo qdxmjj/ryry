@@ -25,13 +25,13 @@
             android:id="@+id/mygoods_vpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="62dp"
+            android:layout_marginBottom="52dp"
             android:layout_marginTop="5dp" />
 
         <LinearLayout
             android:id="@+id/ll_bottom"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_gravity="bottom"
             android:orientation="horizontal"
             android:weightSum="2">

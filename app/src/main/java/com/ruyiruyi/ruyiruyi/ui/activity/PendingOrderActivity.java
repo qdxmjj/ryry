@@ -1,7 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,9 +11,9 @@ import android.widget.Toast;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CxwyOrder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CxwyOrderViewBinder;
-import com.ruyiruyi.ruyiruyi.ui.multiType.CxwyViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsInfo;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsInfoViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.InfoOne;
@@ -23,7 +22,6 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.TireInfo;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireInfoViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.json.JSONArray;
@@ -42,7 +40,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class PendingOrderActivity extends BaseActivity implements InfoOneViewBinder.OnInfoItemClick{
+public class PendingOrderActivity extends RYBaseActivity implements InfoOneViewBinder.OnInfoItemClick {
     private static final String TAG = PendingOrderActivity.class.getSimpleName();
     private ActionBar actionBar;
     private String orderno;
@@ -66,13 +64,14 @@ public class PendingOrderActivity extends BaseActivity implements InfoOneViewBin
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pending_order,R.id.my_action);
+        setContentView(R.layout.activity_pending_order, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("待支付");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("待支付");
+        ;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -83,8 +82,8 @@ public class PendingOrderActivity extends BaseActivity implements InfoOneViewBin
         goodsInfoList = new ArrayList<>();
         Intent intent = getIntent();
         orderno = intent.getStringExtra(PaymentActivity.ORDERNO);
-        orderType = intent.getIntExtra(PaymentActivity.ORDER_TYPE,0);
-        orderFrom = intent.getIntExtra(PaymentActivity.ORDER_FROM,0);
+        orderType = intent.getIntExtra(PaymentActivity.ORDER_TYPE, 0);
+        orderFrom = intent.getIntExtra(PaymentActivity.ORDER_FROM, 0);
 
         initView();
         initOrderFromService();
@@ -93,29 +92,29 @@ public class PendingOrderActivity extends BaseActivity implements InfoOneViewBin
     private void initOrderFromService() {
         int userId = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
-        Log.e(TAG, "initOrderFromService:--- " + orderType );
+        Log.e(TAG, "initOrderFromService:--- " + orderType);
         try {
-            jsonObject.put("orderNo",orderno);
-            jsonObject.put("orderType",orderType);
-            jsonObject.put("userId",userId);
+            jsonObject.put("orderNo", orderno);
+            jsonObject.put("orderType", orderType);
+            jsonObject.put("userId", userId);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserOrderInfoByNoAndType");
-        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString() );
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess:---- " + result);
                 JSONObject jsonObject1 = null;
                 try {
-                    if (orderType == 0){ //轮胎订单
+                    if (orderType == 0) { //轮胎订单
                         jsonObject1 = new JSONObject(result);
                         String status = jsonObject1.getString("status");
                         String msg = jsonObject1.getString("msg");
-                        if (status.equals("1")){
+                        if (status.equals("1")) {
                             JSONObject data = jsonObject1.getJSONObject("data");
                             orderImg = data.getString("orderImg");
                             orderTotalPrice = data.getString("orderTotalPrice");
@@ -133,29 +132,33 @@ public class PendingOrderActivity extends BaseActivity implements InfoOneViewBin
                                 String tireCount = "";
                                 String tirePrice = "";
                                 String totalPrice = "";
-                                if (fontRearFlag.equals("2")){ //后轮
+                                if (fontRearFlag.equals("2")) { //后轮
                                     tireName = object.getString("rearShoeName");
                                     tireCount = object.getString("rearAmount");
                                     tirePrice = object.getString("rearPrice");
                                     totalPrice = object.getString("rearTotalPrice");
-                                }else { //前轮 或  前后轮
+                                } else { //前轮 或  前后轮
                                     tireName = object.getString("fontShoeName");
                                     tireCount = object.getString("fontAmount");
                                     tirePrice = object.getString("fontPrice");
                                     totalPrice = object.getString("fontTotalPrice");
                                 }
-                                tireInfo = new TireInfo(orderImg,tireName,Integer.parseInt(tireCount),tirePrice,fontRearFlag);
-                                if (Integer.parseInt(cxwyAmount) > 0){
-                                    cxwyOrder = new CxwyOrder(Integer.parseInt(cxwyAmount),cxwyPrice);
+                                tireInfo = new TireInfo(orderImg, tireName, Integer.parseInt(tireCount), tirePrice, fontRearFlag);
+                                if (Integer.parseInt(cxwyAmount) > 0) {
+                                    cxwyOrder = new CxwyOrder(Integer.parseInt(cxwyAmount), cxwyPrice);
                                 }
                             }
                             initData();
+                        } else if (status.equals("-999")) {
+                            showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                        } else {
+                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                         }
-                    }else if (orderType == 1){ //商品服务订单
+                    } else if (orderType == 1) { //商品服务订单
                         jsonObject1 = new JSONObject(result);
                         String status = jsonObject1.getString("status");
                         String msg = jsonObject1.getString("msg");
-                        if (status.equals("1")){
+                        if (status.equals("1")) {
                             JSONObject data = jsonObject1.getJSONObject("data");
                             orderImg = data.getString("orderImg");
                             orderTotalPrice = data.getString("orderTotalPrice");
@@ -180,7 +183,7 @@ public class PendingOrderActivity extends BaseActivity implements InfoOneViewBin
                                 goodsInfoList.add(goodsInfo);
                             }
                             initData();
-                        }else {
+                        } else {
                         }
                     }
                 } catch (JSONException e) {
@@ -208,25 +211,25 @@ public class PendingOrderActivity extends BaseActivity implements InfoOneViewBin
 
     private void initData() {
         items.clear();
-        if (orderType == 0){ //轮胎
-            items.add(new InfoOne("联系人",userName,false));
-            items.add(new InfoOne("联系电话",userPhone,false));
-            items.add(new InfoOne("车牌号",carNumber,false));
-            items.add(new InfoOne("订单总价","￥"+orderTotalPrice,true));
+        if (orderType == 0) { //轮胎
+            items.add(new InfoOne("联系人", userName, false));
+            items.add(new InfoOne("联系电话", userPhone, false));
+            items.add(new InfoOne("车牌号", carNumber, false));
+            items.add(new InfoOne("订单总价", "￥" + orderTotalPrice, true));
             items.add(tireInfo);
-            if (cxwyOrder!=null){
+            if (cxwyOrder != null) {
                 items.add(cxwyOrder);
             }
-        }else if (orderType == 1){ //商品
-            items.add(new InfoOne("联系人",userName,false));
-            items.add(new InfoOne("联系电话",userPhone,false));
-            items.add(new InfoOne("订单总价","￥"+orderTotalPrice,false));
-            items.add(new InfoOne("店铺名称",storeName,true,true));
+        } else if (orderType == 1) { //商品
+            items.add(new InfoOne("联系人", userName, false));
+            items.add(new InfoOne("联系电话", userPhone, false));
+            items.add(new InfoOne("订单总价", "￥" + orderTotalPrice, false));
+            items.add(new InfoOne("店铺名称", storeName, true, true));
             for (int i = 0; i < goodsInfoList.size(); i++) {
                 items.add(goodsInfoList.get(i));
             }
         }
-        assertAllRegistered(adapter,items);
+        assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
 
@@ -245,29 +248,29 @@ public class PendingOrderActivity extends BaseActivity implements InfoOneViewBin
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Intent intent = new Intent(getApplicationContext(),PaymentActivity.class);
-                        intent.putExtra(PaymentActivity.ALL_PRICE,Double.parseDouble(orderTotalPrice));
-                        intent.putExtra(PaymentActivity.ORDERNO,orderno);
-                        intent.putExtra(PaymentActivity.ORDER_TYPE,orderType);
+                        Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
+                        intent.putExtra(PaymentActivity.ALL_PRICE, Double.parseDouble(orderTotalPrice));
+                        intent.putExtra(PaymentActivity.ORDERNO, orderno);
+                        intent.putExtra(PaymentActivity.ORDER_TYPE, orderType);
                         startActivity(intent);
                     }
                 });
     }
 
     private void register() {
-        adapter.register(GoodsInfo.class,new GoodsInfoViewBinder(this));
+        adapter.register(GoodsInfo.class, new GoodsInfoViewBinder(this));
         InfoOneViewBinder infoOneViewBinder = new InfoOneViewBinder();
         infoOneViewBinder.setListener(this);
         adapter.register(InfoOne.class, infoOneViewBinder);
-            adapter.register(CxwyOrder.class,new CxwyOrderViewBinder());
-        adapter.register(TireInfo.class,new TireInfoViewBinder(this));
+        adapter.register(CxwyOrder.class, new CxwyOrderViewBinder());
+        adapter.register(TireInfo.class, new TireInfoViewBinder(this));
     }
 
     @Override
     public void onBackPressed() {
-        if (orderFrom == 0){
+        if (orderFrom == 0) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        }else {
+        } else {
             super.onBackPressed();
         }
 
@@ -275,10 +278,10 @@ public class PendingOrderActivity extends BaseActivity implements InfoOneViewBin
 
     @Override
     public void onInfoItemClickListener(String name) {
-        if (name.equals("店铺名称")){
-            Log.e(TAG, "onInfoItemClickListener: storeid :" + storeId );
+        if (name.equals("店铺名称")) {
+            Log.e(TAG, "onInfoItemClickListener: storeid :" + storeId);
             Intent intent = new Intent(this, ShopHomeActivity.class);
-            intent.putExtra("STOREID",Integer.parseInt(storeId));
+            intent.putExtra("STOREID", Integer.parseInt(storeId));
             startActivity(intent);
         }
     }

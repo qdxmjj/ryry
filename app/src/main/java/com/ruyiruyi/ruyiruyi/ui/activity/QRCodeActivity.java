@@ -5,14 +5,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -22,13 +20,9 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
-import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 
-import org.xutils.x;
-
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -37,13 +31,13 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
-public class QRCodeActivity extends BaseActivity {
+public class QRCodeActivity extends RYBaseActivity {
 
     private ActionBar actionBar;
     private String url;
     private String content;
+    private String headimgurl;
 
     private ImageView user_img;
     private ImageView sex_img;
@@ -87,7 +81,11 @@ public class QRCodeActivity extends BaseActivity {
 
         //获取传递数据
         url = getIntent().getStringExtra("url");
+        Log.e(TAG, "onCreate: url = " + url + "-");
         content = getIntent().getStringExtra("content");
+        if (url == null || url.length() == 0) {//url（logo）判空
+            url = "http://www.qdxmjj.com";
+        }
 
         initView();
 
@@ -95,8 +93,12 @@ public class QRCodeActivity extends BaseActivity {
       /* 设置数据 */
         bottom_txt.setText(content);
         user = new DbConfig().getUser();
+        headimgurl = user.getHeadimgurl();
+        if (headimgurl == null || headimgurl.length() == 0) {//headimgurl（userImg）判空
+            headimgurl = "http://180.76.243.205:8383/images/userHeadimgurl/default/383614945.jpg";
+        }
         //1 通过url下载logo
-        logo = returnBitMap(user.getHeadimgurl());
+        logo = returnBitMap(headimgurl);
 
     }
 
@@ -121,7 +123,7 @@ public class QRCodeActivity extends BaseActivity {
         }
 
         //2 其它数据
-        Glide.with(this).load(user.getHeadimgurl()).into(user_img);
+        Glide.with(this).load(headimgurl).into(user_img);
         if (user.getGender() == 1) {//1男 2 女
             sex_img.setImageResource(R.drawable.ic_qr_man);
         } else {

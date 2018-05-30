@@ -31,6 +31,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.ShopEvaluateActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.UserInfoActivity;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
 import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.MMAlert;
 import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
@@ -51,7 +52,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class MyFragment extends Fragment {
+public class MyFragment extends RYBaseFragment {
 
     private TextView myButton;
     private TextView nologin;
@@ -176,6 +177,10 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         startActivity(new Intent(getContext(), PromotionActivity.class));
                     }
                 });
@@ -184,6 +189,10 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         startActivity(new Intent(getContext(), CxwyActivity.class));
                     }
                 });
@@ -192,6 +201,10 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         startActivity(new Intent(getContext(), MyLimitActivity.class));
                     }
                 });
@@ -200,6 +213,10 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         startActivity(new Intent(getContext(), CreditLimitActivity.class));
                     }
                 });
@@ -224,6 +241,10 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         Intent intent = new Intent(getContext(), OrderActivity.class);
                         intent.putExtra(OrderFragment.ORDER_TYPE, "ALL");
                         startActivity(intent);
@@ -234,6 +255,10 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         Intent intent = new Intent(getContext(), OrderActivity.class);
                         intent.putExtra(OrderFragment.ORDER_TYPE, "DZF");
                         startActivity(intent);
@@ -244,6 +269,10 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         Intent intent = new Intent(getContext(), OrderActivity.class);
                         intent.putExtra(OrderFragment.ORDER_TYPE, "DFH");
                         startActivity(intent);
@@ -254,6 +283,10 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         Intent intent = new Intent(getContext(), OrderActivity.class);
                         intent.putExtra(OrderFragment.ORDER_TYPE, "DFW");
                         startActivity(intent);
@@ -264,6 +297,10 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         Intent intent = new Intent(getContext(), OrderActivity.class);
                         intent.putExtra(OrderFragment.ORDER_TYPE, "YWC");
                         startActivity(intent);
@@ -310,6 +347,10 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         Intent intent = new Intent(getContext(), CarManagerActivity.class);
                         intent.putExtra(FROM_FRAGMENT, "MYFRAGMENT");
                         startActivityForResult(intent, MainActivity.MYFRAGMENT_RESULT);
@@ -320,15 +361,24 @@ public class MyFragment extends Fragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         Intent intent = new Intent(getContext(), TireWaitChangeActivity.class);
                         intent.putExtra(FROM_FRAGMENT, "MYFRAGMENT");
                         startActivity(intent);
                     }
                 });
+        //店铺评价点击
         RxViewAction.clickNoDouble(evaluateLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
                         int userId = new DbConfig().getId();
                         Intent intent = new Intent(getContext(), ShopEvaluateActivity.class);
                         intent.putExtra("USERID", userId);

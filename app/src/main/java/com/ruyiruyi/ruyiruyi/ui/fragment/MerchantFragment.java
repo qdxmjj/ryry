@@ -31,6 +31,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.SearchActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopGoodActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopHomeActivity;
 import com.ruyiruyi.ruyiruyi.ui.adapter.MenuListAdapter;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
@@ -62,7 +63,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopItemClick {
+public class MerchantFragment extends RYBaseFragment implements ShopViewBinder.OnShopItemClick {
 
     private static final int MERCHANT_CITY_CHOOSE = 5;
     private static final String TAG = MerchantFragment.class.getSimpleName();

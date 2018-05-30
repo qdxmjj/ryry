@@ -7,10 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseFragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Shop;
 
-public class ShopChooseActivity extends FragmentActivity implements MerchantFragment.OnMerchantViewClick{
+public class ShopChooseActivity extends RYBaseFragmentActivity implements MerchantFragment.OnMerchantViewClick{
 
     private static final String TAG = ShopChooseActivity.class.getSimpleName();
     private int shopType;

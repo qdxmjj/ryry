@@ -3,12 +3,12 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -21,12 +21,11 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EvaImageViewBinder;
-import com.ruyiruyi.ruyiruyi.ui.multiType.ShopGoods;
-import com.ruyiruyi.ruyiruyi.ui.multiType.ShopGoodsViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ShopInfo;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ShopInfoViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ShopStr;
@@ -37,7 +36,6 @@ import com.ruyiruyi.ruyiruyi.utils.ImagPagerUtil;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.json.JSONArray;
@@ -56,7 +54,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder.OnEvaluateImageClick, ShopStrViewBinder.OnAllEvaluateClick {
+public class ShopHomeActivity extends RYBaseActivity implements EvaImageViewBinder.OnEvaluateImageClick, ShopStrViewBinder.OnAllEvaluateClick {
     private static final String TAG = ShopHomeActivity.class.getSimpleName();
     private ActionBar actionBar;
     private List<Object> items = new ArrayList<>();
@@ -107,8 +105,9 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_home, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("门店首页");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("门店首页");
+        ;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
                 switch ((var1)) {
@@ -243,6 +242,10 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
                         }
                         initdata();
 
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -332,7 +335,7 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), ShopGoodActivity.class);
                         intent.putExtra("STOREID", storeid);
-                        intent.putExtra("STORENAME",storeName);
+                        intent.putExtra("STORENAME", storeName);
                         startActivity(intent);
                     }
                 });
@@ -379,8 +382,8 @@ public class ShopHomeActivity extends BaseActivity implements EvaImageViewBinder
     @Override
     public void onAllEvaluate() {
         Intent intent = new Intent(this, ShopEvaluateActivity.class);
-        intent.putExtra("STOREID",storeid);
-        intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE,0);
+        intent.putExtra("STOREID", storeid);
+        intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE, 0);
         startActivity(intent);
     }
 }
