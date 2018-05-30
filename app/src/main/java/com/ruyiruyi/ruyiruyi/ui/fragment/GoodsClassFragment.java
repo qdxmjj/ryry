@@ -7,28 +7,45 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.GoodsShopActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.Line;
+import com.ruyiruyi.ruyiruyi.ui.activity.SearchActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.BigClass;
 import com.ruyiruyi.ruyiruyi.ui.multiType.BigClassViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EvaluateImage;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EvaluateImageViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsClass;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsClassViewBinder;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.drakeet.multitype.MultiTypeAdapter;
+import rx.functions.Action1;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class GoodsClassFragment extends Fragment implements BigClassViewBinder.OnBigClassItemClick ,GoodsClassViewBinder.OnClassItemClick {
+    private static final String TAG = GoodsClassFragment.class.getSimpleName();
     private RecyclerView bigClassliserView;
     private RecyclerView classListView;
     private List<Object> bigClassItems = new ArrayList<>();
@@ -39,6 +56,10 @@ public class GoodsClassFragment extends Fragment implements BigClassViewBinder.O
     private MultiTypeAdapter classAdapter;
     public List<GoodsClass> goodsClassList;
     public int serviceType = 2; //2汽车保养  3美容清洗  4安装改装  5轮胎服务
+    private LinearLayout goodsSearchLayout;
+    private int classId;
+    private String className;
+    private String classImage;
 
 
     @Nullable
@@ -59,31 +80,72 @@ public class GoodsClassFragment extends Fragment implements BigClassViewBinder.O
         bigClassLists.add(new BigClass("安装改装",false));
         bigClassLists.add(new BigClass("轮胎服务",false));
         initView();
+
         initData();
         initClassData();
 
     }
 
     private void initClassData() {
-        goodsClassList.clear();
-        if (serviceType == 2){//2汽车保养  3美容清洗  4安装改装  5轮胎服务
-            for (int i = 0; i < 20; i++) {
-                goodsClassList.add(new GoodsClass(i,"防冻液" + i,""));
-            }
-        }else if (serviceType == 3){
-            for (int i = 0; i < 20; i++) {
-                goodsClassList.add(new GoodsClass(i,"美容" + i,""));
-            }
-        }else if (serviceType == 4){
-            for (int i = 0; i < 20; i++) {
-                goodsClassList.add(new GoodsClass(i,"安装" + i,""));
-            }
-        }else if (serviceType == 5){
-            for (int i = 0; i < 20; i++) {
-                goodsClassList.add(new GoodsClass(i,"轮胎" + i,""));
-            }
+        User user = new DbConfig().getUser();
+        int userId = user.getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId",userId);
+            jsonObject.put("serviceTypeId",serviceType);
+        } catch (JSONException e) {
+
         }
-        initClass();
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "serviceInfo/showServicesList");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        Log.e(TAG, "initClassData: " + params.toString());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+
+
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONArray data = jsonObject1.getJSONArray("data");
+                        goodsClassList.clear();
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject object = data.getJSONObject(i);
+                            classImage = object.getString("img");
+                            className = object.getString("name");
+                            classId = object.getInt("id");
+                            goodsClassList.add(new GoodsClass(classId,className,classImage));
+                        }
+                        initClass();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
     }
 
     private void initClass() {
@@ -107,6 +169,8 @@ public class GoodsClassFragment extends Fragment implements BigClassViewBinder.O
     private void initView() {
         bigClassliserView = ((RecyclerView) getView().findViewById(R.id.goods_big_class_listview));
         classListView = ((RecyclerView) getView().findViewById(R.id.goods_class_listview));
+        goodsSearchLayout = (LinearLayout) getView().findViewById(R.id.goods_search_layout);
+
 
         //服务大类的listview
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -123,10 +187,21 @@ public class GoodsClassFragment extends Fragment implements BigClassViewBinder.O
         classListView.setAdapter(classAdapter);
         assertHasTheSameAdapter(classListView, classAdapter);
 
+        //搜索商品
+        RxViewAction.clickNoDouble(goodsSearchLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(getContext(), SearchActivity.class);
+                        intent.putExtra(SearchActivity.TYPE,1);
+                        startActivity(intent);
+                    }
+                });
+
     }
 
     private void classRegister() {
-        GoodsClassViewBinder goodsClassViewBinder = new GoodsClassViewBinder();
+        GoodsClassViewBinder goodsClassViewBinder = new GoodsClassViewBinder(getContext());
         goodsClassViewBinder.setListener(this);
         classAdapter.register(GoodsClass.class, goodsClassViewBinder);
     }
@@ -169,6 +244,7 @@ public class GoodsClassFragment extends Fragment implements BigClassViewBinder.O
         Intent intent = new Intent(getContext(), GoodsShopActivity.class);
         intent.putExtra(GoodsShopActivity.CLASS_ID,classId);
         intent.putExtra(GoodsShopActivity.CLASS_NAME,className);
+        intent.putExtra(GoodsShopActivity.FROMTYPE,0);
         startActivity(intent);
     }
 }

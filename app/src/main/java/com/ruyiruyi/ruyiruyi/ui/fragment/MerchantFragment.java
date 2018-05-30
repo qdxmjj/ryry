@@ -468,6 +468,7 @@ public class MerchantFragment extends Fragment implements ShopViewBinder.OnShopI
                 @Override
                 public void call(Void aVoid) {
                     Intent intent = new Intent(getContext(), SearchActivity.class);
+                    intent.putExtra(SearchActivity.TYPE,0);
                     startActivityForResult(intent,SEARCH_CODE);
                 }
             });

@@ -37,6 +37,7 @@ public class TireWaitViewBinder extends ItemViewProvider<TireWait, TireWaitViewB
         holder.carNumberText.setText("服务对象：  "+tireWait.getCarName());
         holder.tirePlaceText.setText("位置：  "+tireWait.getTirePlace());
         holder.orderNoText.setText("订单编号：  "+tireWait.getOrderNo());
+        holder.avaliabText.setText("可用数量：  " + tireWait.getAvaliableShoeNo());
         holder.caozuoButton.setVisibility(tireWait.rejectStatus?View.VISIBLE:View.GONE);
 
     }
@@ -51,6 +52,7 @@ public class TireWaitViewBinder extends ItemViewProvider<TireWait, TireWaitViewB
         private final TextView tirePlaceText;
         private final TextView orderNoText;
         private final TextView caozuoButton;
+        private final TextView avaliabText;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -62,6 +64,7 @@ public class TireWaitViewBinder extends ItemViewProvider<TireWait, TireWaitViewB
             tirePlaceText = ((TextView) itemView.findViewById(R.id.tire_place_text));
             orderNoText = ((TextView) itemView.findViewById(R.id.order_no_text));
             caozuoButton = ((TextView) itemView.findViewById(R.id.caozuo_button));
+            avaliabText = ((TextView) itemView.findViewById(R.id.tire_avaliab_count_text));
 
         }
     }

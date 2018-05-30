@@ -144,6 +144,10 @@ public class OrderInfoActivity extends BaseActivity implements InfoOneViewBinder
                             if (orderState == 3 || orderState == 6) {//待商家确认服务 || 待车主确认服务
                                 getGoodsOrderInfo(data);
                             }
+                        }else if (orderType == 3){ //免费再换
+                            if (orderState == 5) {  //代发货
+                                getFirstTireOrderInfo(data);
+                            }
                         }
                         initData();
                     }
@@ -281,6 +285,17 @@ public class OrderInfoActivity extends BaseActivity implements InfoOneViewBinder
                 items.add(new InfoOne("店铺名称",storeName,true,true));
                 for (int i = 0; i < goodsInfoList.size(); i++) {
                     items.add(goodsInfoList.get(i));
+                }
+            }
+        }else if (orderType == 3){ //免费再换
+            if (orderState == 5){
+                items.add(new InfoOne("联系人",userName,false));
+                items.add(new InfoOne("联系电话",userPhone,false));
+                items.add(new InfoOne("车牌号",carNumber,false));
+                items.add(new InfoOne("服务项目","免费再换",false));
+                items.add(new InfoOne("店铺名称",storeName,true,true));
+                for (int i = 0; i < tireInfoList.size(); i++) {
+                    items.add(tireInfoList.get(i));
                 }
             }
         }

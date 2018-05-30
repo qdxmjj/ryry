@@ -36,9 +36,9 @@ public class UtilsRY {
 
     public Timestamp getStringToTimestamp(String time){
         Timestamp ts = Timestamp.valueOf(time);
-
         return ts;
-
     }
+
+
 
 }

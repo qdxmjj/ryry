@@ -10,8 +10,9 @@ public class TireWait {
     public String tirePlace;
     public String orderNo;
     public Boolean rejectStatus;
+    public int avaliableShoeNo;
 
-    public TireWait(String tireImage, String tireTitle, String username, int tireCount, String carName, String tirePlace, String orderNo, Boolean rejectStatus) {
+    public TireWait(String tireImage, String tireTitle, String username, int tireCount, String carName, String tirePlace, String orderNo, Boolean rejectStatus,int avaliableShoeNo) {
         this.tireImage = tireImage;
         this.tireTitle = tireTitle;
         this.username = username;
@@ -20,6 +21,15 @@ public class TireWait {
         this.tirePlace = tirePlace;
         this.orderNo = orderNo;
         this.rejectStatus = rejectStatus;
+        this.avaliableShoeNo = avaliableShoeNo;
+    }
+
+    public int getAvaliableShoeNo() {
+        return avaliableShoeNo;
+    }
+
+    public void setAvaliableShoeNo(int avaliableShoeNo) {
+        this.avaliableShoeNo = avaliableShoeNo;
     }
 
     public int getTireCount() {

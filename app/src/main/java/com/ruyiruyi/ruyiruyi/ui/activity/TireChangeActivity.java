@@ -82,6 +82,11 @@ public class TireChangeActivity extends BaseActivity {
     private Shop shop;
     private TextView postButton;
 
+    private int isReach5Years;   //`0不满 1是满五年
+    private int rearFreeAmount;
+    private int fontFreeAmount;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +117,12 @@ public class TireChangeActivity extends BaseActivity {
 
 
         initData();
-        initDataFromService();
+        if (currentChangeType == 0){
+            initDataFromService();  //获取首次更换数据
+        }else if (currentChangeType == 1){
+            initFreeTireFromService();
+        }
+
         initShop();
         initView();
         initReasonView();
@@ -120,6 +130,65 @@ public class TireChangeActivity extends BaseActivity {
       //  fontAvaliableAmount = 3;
       //  rearAvaliableAmount = 0;
 
+    }
+
+    private void initFreeTireFromService() {
+        User user = new DbConfig().getUser();
+        int carId = user.getCarId();
+        int userId = user.getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId",userId);
+            jsonObject.put("userCarId",carId);
+        } catch (JSONException e) {
+
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserChangedShoeNumAnd5Year");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+
+            @Override
+            public void onSuccess(String result) {
+                JSONObject jsonObject1 = null;
+                Log.e(TAG, "onSuccess:----------------------+- " + result );
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        fontFreeAmount = data.getInt("fontAmount");;
+                        rearFreeAmount = data.getInt("rearAmount");
+                        fontRearFlag = data.getInt("fontRearFlag");
+                        isReach5Years = data.getInt("isReach5Years");
+
+                        initAmountView();
+                    }else {
+                        Toast.makeText(TireChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initDataFromService() {
@@ -297,7 +366,13 @@ public class TireChangeActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        postChangeOrder();
+
+                        if (currentChangeType == 0){
+                            postChangeOrder();
+                        }else if (currentChangeType == 1){
+                            freeChangeOrder();
+                        }
+
                     }
                 });
 
@@ -330,12 +405,11 @@ public class TireChangeActivity extends BaseActivity {
         rearAmountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
+                currentRearCount = amount;
+                initAmountView();
                 if (amount == rearMaxCount){
                     Toast.makeText(TireChangeActivity.this, "轮胎数量达到购买上限", Toast.LENGTH_SHORT).show();
                 }
-                currentRearCount = amount;
-                initAmountView();
-
             }
         });
 
@@ -412,8 +486,13 @@ public class TireChangeActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        oneReasonCheck = !oneReasonCheck;
-                        initReasonView();
+                        if (isReach5Years == 1){
+                            oneReasonCheck = !oneReasonCheck;
+                            initReasonView();
+                        }else {
+                            Toast.makeText(TireChangeActivity.this, "您的轮胎不满5年", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
         RxViewAction.clickNoDouble(reasonTwoLayout)
@@ -426,6 +505,79 @@ public class TireChangeActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * 免费再换
+     */
+    private void freeChangeOrder() {
+        User user = new DbConfig().getUser();
+        int userId = user.getId();
+        int userCarId = user.getCarId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("storeId",shop.getStoreId());
+            jsonObject.put("userCarId",userCarId);
+            jsonObject.put("userId",userId);
+            jsonObject.put("fontAmount",currentFontCount);
+            jsonObject.put("rearAmount",currentRearCount);
+            jsonObject.put("fontRearFlag",fontRearFlag);
+            jsonObject.put("orderType",3);
+            if (oneReasonCheck && twoReasonCheck){
+                jsonObject.put("reason",3);
+            }else if (oneReasonCheck && !twoReasonCheck){
+                jsonObject.put("reason",1);
+            }else if (!oneReasonCheck && twoReasonCheck){
+                jsonObject.put("reason",2);
+            }
+
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserFreeChangeOrder");
+        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString() );
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){ //添加成功
+                        Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                        intent.putExtra(OrderFragment.ORDER_TYPE,"ALL");
+                        startActivity(intent);
+                        finish();
+                    }else {
+                        Toast.makeText(TireChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 首次更换
+     */
     private void postChangeOrder() {
         if (currentChangeType == 0){//首次更换
             User user = new DbConfig().getUser();
@@ -529,8 +681,30 @@ public class TireChangeActivity extends BaseActivity {
             }
 
         }else { //免费再换
-            fontAmountView.setGoods_storage(2);
-            rearAmountView.setGoods_storage(2);
+            if (fontRearFlag == 0){ //前后轮一致
+                fontMaxCount = 2;
+                rearMaxCount = 2;
+                if (fontFreeAmount == 4){   //一共四条轮胎
+                    fontAmountView.setGoods_storage(2);
+                    rearAmountView.setGoods_storage(2);
+                }else {     //不足四条轮胎
+
+                    fontAmountView.setGoods_storage(2);
+                    rearAmountView.setGoods_storage(2);
+                    if (currentFontCount + currentRearCount == fontFreeAmount){        //达到最大轮胎数时 设置为最大数
+                        fontAmountView.setGoods_storage(currentFontCount);
+                        rearAmountView.setGoods_storage(currentRearCount);
+                        fontMaxCount = currentFontCount;
+                        rearMaxCount = currentRearCount;
+                    }
+                }
+            }else {     //前后轮不一致
+                fontMaxCount = fontFreeAmount;
+                rearMaxCount = rearFreeAmount;
+                fontAmountView.setGoods_storage(fontFreeAmount);
+                rearAmountView.setGoods_storage(rearFreeAmount);
+            }
+
         }
     }
 
