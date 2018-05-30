@@ -517,8 +517,14 @@ public class TireChangeActivity extends BaseActivity {
             jsonObject.put("storeId",shop.getStoreId());
             jsonObject.put("userCarId",userCarId);
             jsonObject.put("userId",userId);
-            jsonObject.put("fontAmount",currentFontCount);
-            jsonObject.put("rearAmount",currentRearCount);
+            if (fontRearFlag == 0){
+                jsonObject.put("fontAmount",currentFontCount + currentRearCount);
+                jsonObject.put("rearAmount",0);
+            }else {
+                jsonObject.put("fontAmount",currentFontCount);
+                jsonObject.put("rearAmount",currentRearCount);
+            }
+
             jsonObject.put("fontRearFlag",fontRearFlag);
             jsonObject.put("orderType",3);
             if (oneReasonCheck && twoReasonCheck){
