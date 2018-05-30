@@ -2,7 +2,6 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.User;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.ShopChooseCell;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
@@ -26,11 +26,8 @@ import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Shop;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.cell.AmountView;
-import com.ruyiruyi.rylibrary.cell.flowlayout.FlowLayout;
-import com.ruyiruyi.rylibrary.cell.flowlayout.TagAdapter;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagFlowLayout;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
 
@@ -46,10 +43,10 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class TireChangeActivity extends BaseActivity {
+public class TireChangeActivity extends RYBaseActivity {
     public final static String CHANGE_TIRE = "CHANGE_TIRE";
     public static final int CHOOSE_SHOP = 2;
-    private static final String TAG = TireChangeActivity.class.getSimpleName() ;
+    private static final String TAG = TireChangeActivity.class.getSimpleName();
     public int currentChangeType = 0;  //0是首次更换  1是免费更换
 
     private ActionBar actionBar;
@@ -91,13 +88,13 @@ public class TireChangeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tire_change,R.id.my_action);
+        setContentView(R.layout.activity_tire_change, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
 
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -106,7 +103,7 @@ public class TireChangeActivity extends BaseActivity {
         });
 
         Intent intent = getIntent();
-        currentChangeType = intent.getIntExtra(CHANGE_TIRE,0);
+        currentChangeType = intent.getIntExtra(CHANGE_TIRE, 0);
 
         if (currentChangeType == 0){
             actionBar.setTitle("首次更换");;
@@ -220,7 +217,11 @@ public class TireChangeActivity extends BaseActivity {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         fontRearFlag = data.getInt("fontRearFlag");
                         fontAvaliableAmount = data.getInt("fontAvaliableAmount");
-                        rearAvaliableAmount =  data.getInt("rearAvaliableAmount");
+                        rearAvaliableAmount = data.getInt("rearAvaliableAmount");
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                     initAmountView();
 
@@ -309,6 +310,10 @@ public class TireChangeActivity extends BaseActivity {
                         shop.setServiceTypeList(serviceTypeList);
                         shopChooseView.setValue(shop.getStoreName(),shop.getStoreImage(), shop.getStoreAddress(),shop.getStoreDistence(),shop.getServiceTypeList(),mInflater);
 
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -619,8 +624,10 @@ public class TireChangeActivity extends BaseActivity {
                             intent.putExtra(OrderFragment.ORDER_TYPE,"ALL");
                             startActivity(intent);
                             finish();
-                        }else {
-                            Toast.makeText(TireChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        } else if (status.equals("-999")) {
+                            showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                        } else {
+                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
 

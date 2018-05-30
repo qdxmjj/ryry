@@ -1,34 +1,26 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.SyncStateContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -44,43 +36,34 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarTireInfo;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
-import com.ruyiruyi.ruyiruyi.db.model.TireType;
 import com.ruyiruyi.ruyiruyi.db.model.User;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChoose;
-import com.ruyiruyi.ruyiruyi.ui.multiType.Shop;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
-import com.ruyiruyi.rylibrary.ui.dialog.CustomDialog;
 import com.ruyiruyi.rylibrary.utils.A2bigA;
-import com.zhy.http.okhttp.https.HttpsUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.DbManager;
 import org.xutils.common.Callback;
-import org.xutils.common.util.KeyValue;
 import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
-import org.xutils.http.body.MultipartBody;
 import org.xutils.x;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
 import rx.functions.Action1;
 
-public class CarInfoActivity extends BaseActivity implements View.OnClickListener, DatePicker.OnDateChangedListener{
+public class CarInfoActivity extends RYBaseActivity implements View.OnClickListener, DatePicker.OnDateChangedListener{
 
     public static final int TIRE_SIZE = 5; //前后轮选择
     private ActionBar actionBar;
@@ -328,7 +311,12 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                         roadConditionText.setText(roadTxt);
                         saveCatButton.setText("暂不可修改");
 
+                    }else if (status.equals("-999")){
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
+
                 } catch (JSONException e) {
 
                 }

@@ -2,21 +2,20 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsListFragment;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
-import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBig;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBigViewBinder;
-import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsHorizontal;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsVertical;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsVerticalViewBinder;
@@ -24,7 +23,6 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMore;
 import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMoreViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.json.JSONArray;
@@ -44,7 +42,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBinder.OnGoodsVerItemClick {
+public class GoodsActivity extends RYBaseActivity implements GoodsVerticalViewBinder.OnGoodsVerItemClick {
     private static final String TAG = GoodsActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;
@@ -52,13 +50,13 @@ public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBind
     private MultiTypeAdapter adapter;
     private int goodsClassId;
     private TextView buyButton;
-    public List<GoodsVertical> goodsVerticalList ;
+    public List<GoodsVertical> goodsVerticalList;
     private SwipeRefreshLayout swipeRefreshLayout;
     public int currentPage = 1;
     public int currentPageCount = 10;
     private int total;
     private int allPager = 0;
-    public boolean isCleanData =  false;
+    public boolean isCleanData = false;
     public List<GoodsVertical> goodsList;
     public List<GoodsVertical> currenGoodsList;
     private TextView priceText;
@@ -68,13 +66,14 @@ public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBind
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goods,R.id.my_action);
+        setContentView(R.layout.activity_goods, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("商品列表");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("商品列表");
+        ;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -93,24 +92,24 @@ public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBind
         currenGoodsList.clear();
         initView();
         initDataFromService();
-       // initData();
+        // initData();
     }
 
     private void initDataFromService() {
         final JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("page",1);
-            jsonObject.put("rows",10);
-            jsonObject.put("storeId","");
-            jsonObject.put("serviceTypeId","");
-            jsonObject.put("servicesId",goodsClassId);
-            jsonObject.put("stockStatus",1);
+            jsonObject.put("page", 1);
+            jsonObject.put("rows", 10);
+            jsonObject.put("storeId", "");
+            jsonObject.put("serviceTypeId", "");
+            jsonObject.put("servicesId", goodsClassId);
+            jsonObject.put("stockStatus", 1);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getStockByCondition");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -120,13 +119,13 @@ public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBind
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data1 = jsonObject1.getJSONObject("data");
                         total = data1.getInt("total");
                         //页数计算
                         if (total % currentPageCount > 0) {
-                            allPager = (total / currentPageCount) +1;
-                        }else {
+                            allPager = (total / currentPageCount) + 1;
+                        } else {
                             allPager = total / currentPageCount;
                         }
                         //获取商品页
@@ -140,16 +139,16 @@ public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBind
                             int amount = object.getInt("amount");
                             int serviceTypeId = object.getInt("serviceTypeId");
                             long price = object.getLong("price");
-                            GoodsVertical goodsVertical = new GoodsVertical(id, imgUrl, name, price +"", amount,0,goodsClassId,serviceTypeId);
+                            GoodsVertical goodsVertical = new GoodsVertical(id, imgUrl, name, price + "", amount, 0, goodsClassId, serviceTypeId);
                             goodsVerticalList.add(goodsVertical);
                         }
 
-                        for (int i = 0; i <  goodsVerticalList.size(); i++) {
-                            Log.e(TAG, "onSuccess: " + goodsVerticalList.get(i).getGoodsId()  + "---" + goodsVerticalList.get(i).getCurrentGoodsAmount());
+                        for (int i = 0; i < goodsVerticalList.size(); i++) {
+                            Log.e(TAG, "onSuccess: " + goodsVerticalList.get(i).getGoodsId() + "---" + goodsVerticalList.get(i).getCurrentGoodsAmount());
                         }
 
-                        for (int i = 0; i <  chooseGoodsList.size(); i++) {
-                            Log.e(TAG, "onSuccess: " + chooseGoodsList.get(i).getGoodsId()  + "++++" + chooseGoodsList.get(i).getCurrentCount());
+                        for (int i = 0; i < chooseGoodsList.size(); i++) {
+                            Log.e(TAG, "onSuccess: " + chooseGoodsList.get(i).getGoodsId() + "++++" + chooseGoodsList.get(i).getCurrentCount());
                         }
 
                         for (int i = 0; i < goodsVerticalList.size(); i++) {
@@ -161,6 +160,10 @@ public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBind
                             }
                         }
                         initData();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
 
@@ -189,26 +192,26 @@ public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBind
         if (isCleanData) {
             items.clear();
         }
-        if (goodsVerticalList.size() == 0 && currentPage == 1){
+        if (goodsVerticalList.size() == 0 && currentPage == 1) {
             items.add(new EmptyBig());
-        }else {
-            if (items.size() > 0 ){ //去除加载更多item
-                items.remove(items.size()-1);
+        } else {
+            if (items.size() > 0) { //去除加载更多item
+                items.remove(items.size() - 1);
             }
             for (int i = 0; i < goodsVerticalList.size(); i++) {
                 items.add(goodsVerticalList.get(i));
             }
-            if (allPager>1 ){
-                if (allPager ==  currentPage){
+            if (allPager > 1) {
+                if (allPager == currentPage) {
                     items.add(new LoadMore("全部加载完毕！"));
-                }else {
+                } else {
                     items.add(new LoadMore("加载更多...."));
                 }
             }
         }
         isCleanData = false;
 
-        assertAllRegistered(adapter,items);
+        assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
 
@@ -231,17 +234,17 @@ public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBind
                     @Override
                     public void call(Void aVoid) {
                         for (int i = 0; i < goodsList.size(); i++) {
-                            if (goodsList.get(i).getCurrentGoodsAmount()!=0) {
+                            if (goodsList.get(i).getCurrentGoodsAmount() != 0) {
                                 currenGoodsList.add(goodsList.get(i));
                             }
                         }
                         Intent intent = new Intent();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("GOODSLIST", (Serializable) currenGoodsList);
-                        bundle.putInt(GoodsListFragment.GOODS_CLASS_ID,goodsClassId);
-                        bundle.putDouble("ALLPRICE",allPrice);
+                        bundle.putInt(GoodsListFragment.GOODS_CLASS_ID, goodsClassId);
+                        bundle.putDouble("ALLPRICE", allPrice);
                         intent.putExtras(bundle);
-                        setResult(GoodsListFragment.GOODS_FRAGMENT_RESULT,intent);
+                        setResult(GoodsListFragment.GOODS_FRAGMENT_RESULT, intent);
                         finish();
                     }
                 });
@@ -260,7 +263,7 @@ public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBind
         listView.setOnScrollListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                if (allPager > currentPage){
+                if (allPager > currentPage) {
                     currentPage += 1;
                     isCleanData = false;
                     initDataFromService();
@@ -273,22 +276,23 @@ public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBind
         GoodsVerticalViewBinder goodsVerticalViewBinder = new GoodsVerticalViewBinder(this);
         goodsVerticalViewBinder.setListener(this);
         adapter.register(GoodsVertical.class, goodsVerticalViewBinder);
-        adapter.register(EmptyBig.class,new EmptyBigViewBinder());
-        adapter.register(LoadMore.class,new LoadMoreViewBinder());
+        adapter.register(EmptyBig.class, new EmptyBigViewBinder());
+        adapter.register(LoadMore.class, new LoadMoreViewBinder());
     }
 
     /**
      * 商品数量点击回调
+     *
      * @param goodsVertical
      */
     @Override
     public void onGoodsItemClickListener(GoodsVertical goodsVertical) {
         allPrice = 0.00;
         boolean hasGoods = false;
-        if (goodsList.size() == 0){
+        if (goodsList.size() == 0) {
             hasGoods = true;
             goodsList.add(goodsVertical);
-        }else {
+        } else {
             for (int i = 0; i < goodsList.size(); i++) {
                 if (goodsList.get(i).getGoodsId() == goodsVertical.getGoodsId()) {
                     hasGoods = true;
@@ -296,14 +300,14 @@ public class GoodsActivity extends BaseActivity implements GoodsVerticalViewBind
                 }
             }
         }
-        if (!hasGoods){
+        if (!hasGoods) {
             goodsList.add(goodsVertical);
         }
         for (int i = 0; i < goodsList.size(); i++) {
             double goodsPrice = Double.parseDouble(goodsList.get(i).getGoodsPrice());
             int currentGoodsAmount = goodsList.get(i).getCurrentGoodsAmount();
             allPrice = allPrice + (goodsPrice * currentGoodsAmount);
-            Log.e(TAG, "onGoodsItemClickListener: " + goodsList.get(i).getGoodsName() + "----"  + currentGoodsAmount);
+            Log.e(TAG, "onGoodsItemClickListener: " + goodsList.get(i).getGoodsName() + "----" + currentGoodsAmount);
         }
         priceText.setText(allPrice + "");
 

@@ -1,19 +1,18 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.ShopChooseCell;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TireRepairActivity extends BaseActivity {
+public class TireRepairActivity extends RYBaseActivity {
     private ActionBar actionBar;
     private ShopChooseCell shopChooseView;
     public List<StoreType> typeList;

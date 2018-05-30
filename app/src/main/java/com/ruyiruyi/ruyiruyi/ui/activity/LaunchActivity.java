@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
-import com.baidu.location.Poi;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.MyApplication;
@@ -28,11 +26,10 @@ import com.ruyiruyi.ruyiruyi.db.model.CarVerhicle;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.TireType;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,12 +43,12 @@ import org.xutils.x;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LaunchActivity extends BaseActivity {
+public class LaunchActivity extends RYBaseActivity {
 
     private static final String TAG = LaunchActivity.class.getSimpleName();
     private ImageView launchImage;
-    public String currentCity="";
-    private double jingdu  = 0.00;
+    public String currentCity = "";
+    private double jingdu = 0.00;
     private double weidu = 0.00;
     private LocationService locationService;
 
@@ -102,7 +99,7 @@ public class LaunchActivity extends BaseActivity {
         setContentView(R.layout.activity_launch);
         //权限获取
         requestPower();
-        handler.sendEmptyMessageDelayed(0,3000);
+        handler.sendEmptyMessageDelayed(0, 3000);
         //  handler.sendEmptyMessageDelayed(0,3000);
 
        /* initView();
@@ -122,13 +119,10 @@ public class LaunchActivity extends BaseActivity {
     }
 
 
-
-
     private void initView() {
         launchImage = (ImageView) findViewById(R.id.launch_image);
         Glide.with(this).load("http://180.76.243.205:8111/images/launch/launch.jpg").into(launchImage);
     }
-
 
 
     private void initCarDataIntoDb() {
@@ -146,16 +140,16 @@ public class LaunchActivity extends BaseActivity {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            if (carList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (carList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = carList.get(carList.size() - 1).getTime();
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarFactoryData");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -164,7 +158,7 @@ public class LaunchActivity extends BaseActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<CarFactory> factoryList = new ArrayList<CarFactory>();
                         for (int i = 0; i < data.length(); i++) {
@@ -173,11 +167,13 @@ public class LaunchActivity extends BaseActivity {
                             int carBrandId = data.getJSONObject(i).getInt("carBrandId");
                             long time = data.getJSONObject(i).getLong("time");
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-                            factoryList.add(new CarFactory(id,carBrandId,factory,timestampToStringAll));
+                            factoryList.add(new CarFactory(id, carBrandId, factory, timestampToStringAll));
                         }
                         savaCarFactoryIntoDb(factoryList);
-                    }else {
-                        Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -201,8 +197,10 @@ public class LaunchActivity extends BaseActivity {
             }
         });
     }
+
     /**
      * 保存车辆工厂信息到数据库
+     *
      * @param factoryList
      */
     private void savaCarFactoryIntoDb(List<CarFactory> factoryList) {
@@ -230,16 +228,16 @@ public class LaunchActivity extends BaseActivity {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            if (carBrandList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (carBrandList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = carBrandList.get(carBrandList.size() - 1).getTime();
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarBrandData");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         Log.e(TAG, "initCarBrand:---*--- " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -249,7 +247,7 @@ public class LaunchActivity extends BaseActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<CarBrand> carBrandArrayList = new ArrayList<CarBrand>();
                         for (int i = 0; i < data.length(); i++) {
@@ -265,10 +263,10 @@ public class LaunchActivity extends BaseActivity {
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
 
 
-                            carBrandArrayList.add(new CarBrand(id,name,imgUrl,icon,timestampToStringAll));
+                            carBrandArrayList.add(new CarBrand(id, name, imgUrl, icon, timestampToStringAll));
                         }
                         saveCarBrandIntoDb(carBrandArrayList);
-                    }else {
+                    } else {
                         Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -319,17 +317,17 @@ public class LaunchActivity extends BaseActivity {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            if (carVerhicleList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (carVerhicleList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = carVerhicleList.get(carVerhicleList.size() - 1).getTime();
                 Log.e(TAG, "initCarDataIntoDb: " + time);
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarVerhicleData");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -338,7 +336,7 @@ public class LaunchActivity extends BaseActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<CarVerhicle> carVerhicleArrayList = new ArrayList<CarVerhicle>();
                         for (int i = 0; i < data.length(); i++) {
@@ -352,10 +350,10 @@ public class LaunchActivity extends BaseActivity {
 
                             long time = data.getJSONObject(i).getLong("time");
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-                            carVerhicleArrayList.add(new CarVerhicle(id,verhicle,carBrandId,factoryId,carVersion,verify,timestampToStringAll));
+                            carVerhicleArrayList.add(new CarVerhicle(id, verhicle, carBrandId, factoryId, carVersion, verify, timestampToStringAll));
                         }
                         savaCarVerhicleIntoDb(carVerhicleArrayList);
-                    }else {
+                    } else {
                         Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -406,17 +404,17 @@ public class LaunchActivity extends BaseActivity {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            if (carTireInfoList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (carTireInfoList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = carTireInfoList.get(carTireInfoList.size() - 1).getTime();
                 Log.e(TAG, "initCarDataIntoDb: " + time);
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarTireInfoData");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -425,7 +423,7 @@ public class LaunchActivity extends BaseActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<CarTireInfo> carTireInfoArrayList = new ArrayList<CarTireInfo>();
                         for (int i = 0; i < data.length(); i++) {
@@ -445,10 +443,10 @@ public class LaunchActivity extends BaseActivity {
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
 
 
-                            carTireInfoArrayList.add(new CarTireInfo(id,brand,carBrandId,verhicle,verhicleId,pailiang,year,name,font,rear,timestampToStringAll));
+                            carTireInfoArrayList.add(new CarTireInfo(id, brand, carBrandId, verhicle, verhicleId, pailiang, year, name, font, rear, timestampToStringAll));
                         }
                         savaCarTireIntoDb(carTireInfoArrayList);
-                    }else {
+                    } else {
                         Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -473,6 +471,7 @@ public class LaunchActivity extends BaseActivity {
             }
         });
     }
+
     private void savaCarTireIntoDb(List<CarTireInfo> carTireInfoArrayList) {
         DbConfig dbConfig = new DbConfig();
         DbManager db = dbConfig.getDbManager();
@@ -496,18 +495,18 @@ public class LaunchActivity extends BaseActivity {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            if (tireTypeList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (tireTypeList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = tireTypeList.get(tireTypeList.size() - 1).getTime();
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
 
         }
 
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getTireType");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
 
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -517,7 +516,7 @@ public class LaunchActivity extends BaseActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<TireType> tireTypeArrayList = new ArrayList<TireType>();
                         for (int i = 0; i < data.length(); i++) {
@@ -530,11 +529,11 @@ public class LaunchActivity extends BaseActivity {
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
 
 
-                            tireTypeArrayList.add(new TireType(id,tireFlatWidth,tireFlatnessRatio,tireDiameter,timestampToStringAll));
+                            tireTypeArrayList.add(new TireType(id, tireFlatWidth, tireFlatnessRatio, tireDiameter, timestampToStringAll));
                         }
 
                         saveTireTypeIntoDb(tireTypeArrayList);
-                    }else {
+                    } else {
                         Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -560,6 +559,7 @@ public class LaunchActivity extends BaseActivity {
         });
 
     }
+
     private void saveTireTypeIntoDb(List<TireType> tireTypeArrayList) {
         DbConfig dbConfig = new DbConfig();
         DbManager db = dbConfig.getDbManager();
@@ -582,17 +582,17 @@ public class LaunchActivity extends BaseActivity {
         }
         JSONObject jsonObject = new JSONObject();
         try {
-            if (provinceList == null){
-                jsonObject.put("time","2000-00-00 00:00:00");
-            }else {
+            if (provinceList == null) {
+                jsonObject.put("time", "2000-00-00 00:00:00");
+            } else {
                 String time = provinceList.get(provinceList.size() - 1).getTime();
-                jsonObject.put("time",time);
+                jsonObject.put("time", time);
             }
         } catch (JSONException e) {
 
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAllPositon");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -601,7 +601,7 @@ public class LaunchActivity extends BaseActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         List<Province> provinceArrayList = new ArrayList<Province>();
                         for (int i = 0; i < data.length(); i++) {
@@ -615,11 +615,11 @@ public class LaunchActivity extends BaseActivity {
                             String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
 
 
-                            provinceArrayList.add(new Province(id,fid,definition,name,timestampToStringAll));
+                            provinceArrayList.add(new Province(id, fid, definition, name, timestampToStringAll));
                         }
 
                         saveProvinceIntoDb(provinceArrayList);
-                    }else {
+                    } else {
                         Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -644,10 +644,9 @@ public class LaunchActivity extends BaseActivity {
             }
         });
     }
+
     /*****
-     *
      * 定位结果回调，重写onReceiveLocation方法，可以直接拷贝如下代码到自己工程中修改
-     *
      */
     private BDAbstractLocationListener mListener = new BDAbstractLocationListener() {
 

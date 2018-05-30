@@ -1,22 +1,21 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.model.Road;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChoose;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChooseViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadTypeViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.json.JSONArray;
@@ -36,7 +35,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class RoadConditionActivity extends BaseActivity implements RoadChooseViewBinder.OnRoadChooseClick {
+public class RoadConditionActivity extends RYBaseActivity implements RoadChooseViewBinder.OnRoadChooseClick {
 
     private static final String TAG = RoadConditionActivity.class.getSimpleName();
     private ActionBar actionBar;
@@ -56,13 +55,14 @@ public class RoadConditionActivity extends BaseActivity implements RoadChooseVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_road_condition,R.id.my_action);
+        setContentView(R.layout.activity_road_condition, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("路况选择");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("路况选择");
+        ;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -70,7 +70,7 @@ public class RoadConditionActivity extends BaseActivity implements RoadChooseVie
             }
         });
         currentRoad = 0;
-        ouerOrBuRoadList  = new ArrayList<RoadChoose>();
+        ouerOrBuRoadList = new ArrayList<RoadChoose>();
         jingchangRoadList = new ArrayList<RoadChoose>();
         bujingchangRoadList = new ArrayList<RoadChoose>();
         ouerRoadList = new ArrayList<RoadChoose>();
@@ -81,7 +81,7 @@ public class RoadConditionActivity extends BaseActivity implements RoadChooseVie
 
     private void initDataFromService() {
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAllRoad");
-        params.addBodyParameter("reqJson","");
+        params.addBodyParameter("reqJson", "");
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -90,18 +90,26 @@ public class RoadConditionActivity extends BaseActivity implements RoadChooseVie
                 JSONObject jsonObject1 = null;
                 try {
                     jsonObject1 = new JSONObject(result);
-                    JSONArray data = jsonObject1.getJSONArray("data");
-                    for (int i = 0; i < data.length(); i++) {
-                        JSONObject object = data.getJSONObject(i);
-                        String content = object.getString("description");
-                        String img = object.getString("img");
-                        int id = object.getInt("id");
-                        String name = object.getString("name");
-                        roadList.add(new RoadChoose(id,false,img,name,content));
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")) {
+                        JSONArray data = jsonObject1.getJSONArray("data");
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject object = data.getJSONObject(i);
+                            String content = object.getString("description");
+                            String img = object.getString("img");
+                            int id = object.getInt("id");
+                            String name = object.getString("name");
+                            roadList.add(new RoadChoose(id, false, img, name, content));
+                        }
+
+                        initData();
+
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
-
-                    initData();
-
                 } catch (JSONException e) {
 
                 }
@@ -127,18 +135,18 @@ public class RoadConditionActivity extends BaseActivity implements RoadChooseVie
 
     private void initData() {
         items.clear();
-        if (currentRoad == 0){
+        if (currentRoad == 0) {
             items.add(new RoadType(0));
             for (int i = 0; i < roadList.size(); i++) {
                 items.add(roadList.get(i));
             }
-        }else {
+        } else {
             items.add(new RoadType(1));
             for (int i = 0; i < ouerOrBuRoadList.size(); i++) {
                 items.add(ouerOrBuRoadList.get(i));
             }
         }
-        assertAllRegistered(adapter,items);
+        assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
 
     }
@@ -160,45 +168,45 @@ public class RoadConditionActivity extends BaseActivity implements RoadChooseVie
                     @Override
                     public void call(Void aVoid) {
 
-                        if (currentRoad == 0){
+                        if (currentRoad == 0) {
                             roadButton.setText("保存");
 
                             for (int i = 0; i < roadList.size(); i++) {
-                                if (!roadList.get(i).isChoose){
+                                if (!roadList.get(i).isChoose) {
                                     ouerOrBuRoadList.add(roadList.get(i));
-                                }else {
+                                } else {
                                     jingchangRoadList.add(roadList.get(i));
                                 }
                             }
-                            if (jingchangRoadList.size() == 5){ //经常行驶全部选择
+                            if (jingchangRoadList.size() == 5) { //经常行驶全部选择
                                 Intent intent = new Intent();
-                                intent.putExtra("JINGCHANG",(Serializable)jingchangRoadList);
-                                intent.putExtra("OUER",(Serializable)ouerRoadList);
-                                intent.putExtra("BUJINGCHANG",(Serializable)bujingchangRoadList);
-                                Log.e(TAG, "call:jingchangRoadList " +  jingchangRoadList.size());
+                                intent.putExtra("JINGCHANG", (Serializable) jingchangRoadList);
+                                intent.putExtra("OUER", (Serializable) ouerRoadList);
+                                intent.putExtra("BUJINGCHANG", (Serializable) bujingchangRoadList);
+                                Log.e(TAG, "call:jingchangRoadList " + jingchangRoadList.size());
                                 setResult(CarInfoActivity.ROAD_CONDITITION, intent);
                                 finish();
-                            }else {
+                            } else {
                                 currentRoad = 1;
                                 initData();
                             }
 
 
-                        }else {
+                        } else {
                             for (int i = 0; i < ouerOrBuRoadList.size(); i++) {
-                                if (!ouerOrBuRoadList.get(i).isChoose){
+                                if (!ouerOrBuRoadList.get(i).isChoose) {
                                     bujingchangRoadList.add(ouerOrBuRoadList.get(i));
-                                }else {
+                                } else {
                                     ouerRoadList.add(ouerOrBuRoadList.get(i));
                                 }
                             }
                             Intent intent = new Intent();
-                            intent.putExtra("JINGCHANG",(Serializable)jingchangRoadList);
-                            intent.putExtra("OUER",(Serializable)ouerRoadList);
-                            intent.putExtra("BUJINGCHANG",(Serializable)bujingchangRoadList);
-                            Log.e(TAG, "call:jingchangRoadList " +  jingchangRoadList.size());
-                            Log.e(TAG, "call:ouerRoadList " +  ouerRoadList.size());
-                            Log.e(TAG, "call:bujingchangRoadList " +  bujingchangRoadList.size());
+                            intent.putExtra("JINGCHANG", (Serializable) jingchangRoadList);
+                            intent.putExtra("OUER", (Serializable) ouerRoadList);
+                            intent.putExtra("BUJINGCHANG", (Serializable) bujingchangRoadList);
+                            Log.e(TAG, "call:jingchangRoadList " + jingchangRoadList.size());
+                            Log.e(TAG, "call:ouerRoadList " + ouerRoadList.size());
+                            Log.e(TAG, "call:bujingchangRoadList " + bujingchangRoadList.size());
                             setResult(CarInfoActivity.ROAD_CONDITITION, intent);
                             finish();
                         }
@@ -207,7 +215,7 @@ public class RoadConditionActivity extends BaseActivity implements RoadChooseVie
     }
 
     private void register() {
-        adapter.register(RoadType.class,new RoadTypeViewBinder());
+        adapter.register(RoadType.class, new RoadTypeViewBinder());
         RoadChooseViewBinder roadChooseViewBinder = new RoadChooseViewBinder(this);
         roadChooseViewBinder.setListener(this);
         adapter.register(RoadChoose.class, roadChooseViewBinder);

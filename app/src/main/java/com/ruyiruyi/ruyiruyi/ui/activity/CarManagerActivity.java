@@ -1,15 +1,12 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,12 +18,12 @@ import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.CarInfoCell;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
 import com.ruyiruyi.ruyiruyi.ui.model.Car;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.utils.AndroidUtilities;
 
@@ -44,7 +41,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class CarManagerActivity extends BaseActivity {
+public class CarManagerActivity extends RYBaseActivity {
     private static final String TAG = CarManagerActivity.class.getSimpleName();
     private ActionBar actionBar;
     private TextView addCarView;
@@ -58,14 +55,13 @@ public class CarManagerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manager_car,R.id.my_action);
-
+        setContentView(R.layout.activity_manager_car, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("管理车辆");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("管理车辆");
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -73,7 +69,7 @@ public class CarManagerActivity extends BaseActivity {
             }
         });
         Intent intent = getIntent();
-        if (intent!=null){
+        if (intent != null) {
             fromFragment = intent.getStringExtra(MyFragment.FROM_FRAGMENT);
         }
 
@@ -81,7 +77,7 @@ public class CarManagerActivity extends BaseActivity {
         initView();
 
         initDataFromService();
-       // initData();
+        // initData();
 
 
     }
@@ -92,14 +88,14 @@ public class CarManagerActivity extends BaseActivity {
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "initDataFromService: " + id);
         try {
-            jsonObject.put("userId",id);
+            jsonObject.put("userId", id);
         } catch (JSONException e) {
 
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarListByUserId");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -108,24 +104,29 @@ public class CarManagerActivity extends BaseActivity {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         carList.clear();
-                        for (int i = 0; i < data.length(); i++) { ;
+                        for (int i = 0; i < data.length(); i++) {
+                            ;
                             int car_id = data.getJSONObject(i).getInt("car_id");
                             int uesrCarId = data.getJSONObject(i).getInt("user_car_id");
                             int moren = data.getJSONObject(i).getInt("is_default");
                             String name = data.getJSONObject(i).getString("car_name");
                             String number = data.getJSONObject(i).getString("plat_number");
                             String icon = data.getJSONObject(i).getString("car_brand");
-                            carList.add(new Car(car_id,uesrCarId,name,number,icon,moren));
-                            if (moren ==1){
+                            carList.add(new Car(car_id, uesrCarId, name, number, icon, moren));
+                            if (moren == 1) {
                                 User user = new DbConfig().getUser();
                                 user.setCarId(uesrCarId);
                                 saveUserIntoDb(user);
                             }
                         }
                         Log.e(TAG, "onSuccess: " + carList.size());
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                     adapter.notifyDataSetChanged();
@@ -178,9 +179,9 @@ public class CarManagerActivity extends BaseActivity {
                 int uesrCarId = car.getUserCarId();
                 Log.e(TAG, "onItemClick:------- " + uesrCarId);
                 Intent intent = new Intent(getApplicationContext(), CarInfoActivity.class);
-                intent.putExtra("USERCARID" ,uesrCarId);
-                intent.putExtra("FROM",1);
-                intent.putExtra("CANCLICK",1);
+                intent.putExtra("USERCARID", uesrCarId);
+                intent.putExtra("FROM", 1);
+                intent.putExtra("CANCLICK", 1);
                 startActivity(intent);
             }
         });
@@ -207,7 +208,7 @@ public class CarManagerActivity extends BaseActivity {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 Car car = carList.get(position);
                 int userCarId = car.getUserCarId();
-                switch (index){
+                switch (index) {
                     case 0:             //设为默认
                         Log.e(TAG, "onMenuItemClick: " + userCarId);
                         setMorenCar(userCarId);
@@ -226,9 +227,9 @@ public class CarManagerActivity extends BaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), CarInfoActivity.class);
-                        intent.putExtra("CANCLICK",0);
-                        intent.putExtra("FROM",3);
-                        startActivityForResult(intent,CARMANAMGER_RESULT);
+                        intent.putExtra("CANCLICK", 0);
+                        intent.putExtra("FROM", 3);
+                        startActivityForResult(intent, CARMANAMGER_RESULT);
                     }
                 });
     }
@@ -237,14 +238,14 @@ public class CarManagerActivity extends BaseActivity {
         int userId = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId",userId);
-            jsonObject.put("userCarId",userCarId);
+            jsonObject.put("userId", userId);
+            jsonObject.put("userCarId", userCarId);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "deleteCar");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -253,8 +254,8 @@ public class CarManagerActivity extends BaseActivity {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    Toast.makeText(CarManagerActivity.this,msg , Toast.LENGTH_SHORT).show();
-                    if (status.equals("1")){
+                    Toast.makeText(CarManagerActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    if (status.equals("1")) {
                         initDataFromService();//修改完成后更新数据
                     }
                 } catch (JSONException e) {
@@ -287,14 +288,14 @@ public class CarManagerActivity extends BaseActivity {
         saveUserIntoDb(user);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId",userId);
-            jsonObject.put("userCarId",userCarId);
+            jsonObject.put("userId", userId);
+            jsonObject.put("userCarId", userCarId);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "changeDefaultCar");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -303,8 +304,8 @@ public class CarManagerActivity extends BaseActivity {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    Toast.makeText(CarManagerActivity.this,msg , Toast.LENGTH_SHORT).show();
-                    if (status.equals("1")){
+                    Toast.makeText(CarManagerActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    if (status.equals("1")) {
                         initDataFromService();//修改完成后更新数据
                     }
                 } catch (JSONException e) {
@@ -342,7 +343,7 @@ public class CarManagerActivity extends BaseActivity {
 
     /**
      * * listView的Adapter适配器
-    */
+     */
     class ListAdapter extends BaseAdapter {
 
         @Override
@@ -362,7 +363,7 @@ public class CarManagerActivity extends BaseActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null){
+            if (convertView == null) {
                 convertView = new CarInfoCell(CarManagerActivity.this);
             }
             //加载item布局
@@ -372,7 +373,7 @@ public class CarManagerActivity extends BaseActivity {
             Car car = carList.get(position);
 
             //赋值
-            cell.setValue(car.getCarIcon(),car.getCarName(),car.getCarNumber(),car.moren);
+            cell.setValue(car.getCarIcon(), car.getCarName(), car.getCarNumber(), car.moren);
             return convertView;
         }
     }
@@ -380,7 +381,7 @@ public class CarManagerActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.putExtra(MyFragment.FROM_FRAGMENT,fromFragment);
+        intent.putExtra(MyFragment.FROM_FRAGMENT, fromFragment);
         startActivity(intent);
     }
     /*

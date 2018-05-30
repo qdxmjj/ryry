@@ -4,16 +4,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,16 +18,14 @@ import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
-import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.utils.TripleDESUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 import org.xutils.DbManager;
 import org.xutils.common.Callback;
 import org.xutils.ex.DbException;
@@ -39,15 +34,13 @@ import org.xutils.x;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import rx.functions.Action1;
 
-public class RegisterActivity extends BaseActivity implements DatePicker.OnDateChangedListener{
+public class RegisterActivity extends RYBaseActivity implements DatePicker.OnDateChangedListener {
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
     private ActionBar actionBar;
@@ -58,7 +51,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
     private StringBuffer date;
     private int hour;
     private TextView chooseAge;
-    private String[] sexArry = new String[]{ "女", "男"};
+    private String[] sexArry = new String[]{"女", "男"};
 
     private static int isBoy = 0;
     private TextView chooseSex;
@@ -81,14 +74,14 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register,R.id.my_action);
+        setContentView(R.layout.activity_register, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("完善个人资料");
         actionBar.setShowBackView(false);
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -124,7 +117,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
         emailEdit = (EditText) findViewById(R.id.email_edit);
 
         phoneText.setText(phone);
-        if (nickName != null || !nickName.equals("")){
+        if (nickName != null || !nickName.equals("")) {
             userNameEdit.setText(nickName);
         }
 
@@ -135,9 +128,9 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (isShowPassOne){
+                        if (isShowPassOne) {
                             isShowPassOne = false;
-                        }else {
+                        } else {
                             isShowPassOne = true;
                         }
                         showPasswordOne();
@@ -147,9 +140,9 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (isShowPassTwo){
+                        if (isShowPassTwo) {
                             isShowPassTwo = false;
-                        }else {
+                        } else {
                             isShowPassTwo = true;
                         }
                         showPasswordTwo();
@@ -175,7 +168,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
                         showSexChooseDialog();
                     }
                 });
-        
+
         RxViewAction.clickNoDouble(registerButton)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -206,16 +199,16 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
         final String email = emailEdit.getText().toString();
         final String birthday = chooseData.getText().toString();
         String sexStr = chooseSex.getText().toString();
-        final int sex = (sexStr.equals("男")? 1:2);
-        if (passwordStr1.length() < 6){
+        final int sex = (sexStr.equals("男") ? 1 : 2);
+        if (passwordStr1.length() < 6) {
             Toast.makeText(RegisterActivity.this, "密码不能少于6位", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!password1.equals(password2)){
+        if (!password1.equals(password2)) {
             Toast.makeText(RegisterActivity.this, "密码不一致", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (userName.isEmpty()){
+        if (userName.isEmpty()) {
             Toast.makeText(RegisterActivity.this, "用户名不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -223,22 +216,22 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
             Toast.makeText(RegisterActivity.this, "年龄不能为空", Toast.LENGTH_SHORT).show();
             return;
         }*/
-        showDialogProgress(progressDialog,"用户信息提交中...");
+        showDialogProgress(progressDialog, "用户信息提交中...");
         final JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("phone",phone);
-            jsonObject.put("age",0);
-            jsonObject.put("birthday",birthday);
-            jsonObject.put("email",email);
-            jsonObject.put("gender",sex);
-            jsonObject.put("nick",userName);
-            jsonObject.put("password",password1);
-            jsonObject.put("wxInfoId",openId);
-            jsonObject.put("headimgurl",headUrl);
+            jsonObject.put("phone", phone);
+            jsonObject.put("age", 0);
+            jsonObject.put("birthday", birthday);
+            jsonObject.put("email", email);
+            jsonObject.put("gender", sex);
+            jsonObject.put("nick", userName);
+            jsonObject.put("password", password1);
+            jsonObject.put("wxInfoId", openId);
+            jsonObject.put("headimgurl", headUrl);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "registerUser");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         params.setConnectTimeout(10000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -249,9 +242,9 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    if (status.equals("1")){//注册成功
+                    if (status.equals("1")) {//注册成功
                         JSONObject data = jsonObject1.getJSONObject("data");
-                        Log.e(TAG, "onSuccess: ---" + data );
+                        Log.e(TAG, "onSuccess: ---" + data);
                         int id = data.getInt("id");
                         String token = data.getString("token");
                         String headimgurl = data.getString("headimgurl");
@@ -274,6 +267,10 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
                         savaUserToDb(user);//保存到数据库
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         //UIOpenHelper.openHomeActivity(getApplicationContext());
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
 
@@ -315,12 +312,12 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
     }
 
     private void showPasswordTwo() {
-        passwordEdit2.setInputType(isShowPassTwo ? InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD: InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        passwordEdit2.setInputType(isShowPassTwo ? InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD : InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         showPassTwo.setImageResource(isShowPassTwo ? R.drawable.ic_noshow : R.drawable.ic_show);
     }
 
     private void showPasswordOne() {
-        passwordEdit1.setInputType(isShowPassOne ? InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD: InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        passwordEdit1.setInputType(isShowPassOne ? InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD : InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         showPassOne.setImageResource(isShowPassOne ? R.drawable.ic_noshow : R.drawable.ic_show);
     }
 
@@ -335,7 +332,7 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
                 if (date.length() > 0) { //清除上次记录的日期
                     date.delete(0, date.length());
                 }
-                chooseData.setText(date.append(String.valueOf(year)).append("-").append(String.valueOf(month +1)).append("-").append(day));
+                chooseData.setText(date.append(String.valueOf(year)).append("-").append(String.valueOf(month + 1)).append("-").append(day));
                 dialog.dismiss();
             }
         });
@@ -380,9 +377,9 @@ public class RegisterActivity extends BaseActivity implements DatePicker.OnDateC
     private void showSexChooseDialog() {
         String sexStr = chooseSex.getText().toString();
         int sex;
-        if (sexStr.equals("男")){
+        if (sexStr.equals("男")) {
             sex = 1;
-        }else {
+        } else {
             sex = 0;
         }
         AlertDialog.Builder builder3 = new AlertDialog.Builder(this);// 自定义对话框

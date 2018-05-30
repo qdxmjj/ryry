@@ -1,6 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,10 +10,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RechargeMoney;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RechargeMoneyViewBinder;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class MyLimitActivity extends BaseActivity implements RechargeMoneyViewBinder.OnMoneyClick{
+public class MyLimitActivity extends RYBaseActivity implements RechargeMoneyViewBinder.OnMoneyClick {
     private ActionBar actionBar;
     private RecyclerView listView;
     private List<Object> items = new ArrayList<>();
@@ -42,13 +43,13 @@ public class MyLimitActivity extends BaseActivity implements RechargeMoneyViewBi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_limit,R.id.my_action);
+        setContentView(R.layout.activity_my_limit, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("我的额度");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("我的额度");
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -57,9 +58,9 @@ public class MyLimitActivity extends BaseActivity implements RechargeMoneyViewBi
         });
         rechargeMoneyList = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            rechargeMoneyList.add(new RechargeMoney(i,i+"00",i+"0",false,0));
+            rechargeMoneyList.add(new RechargeMoney(i, i + "00", i + "0", false, 0));
         }
-        rechargeMoneyList.add(new RechargeMoney(5,"其他","",true,1));
+        rechargeMoneyList.add(new RechargeMoney(5, "其他", "", true, 1));
         showOtherMoneyView = true;
         initView();
         initData();
@@ -71,7 +72,7 @@ public class MyLimitActivity extends BaseActivity implements RechargeMoneyViewBi
         for (int i = 0; i < rechargeMoneyList.size(); i++) {
             items.add(rechargeMoneyList.get(i));
         }
-        assertAllRegistered(adapter,items);
+        assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
 
@@ -112,11 +113,11 @@ public class MyLimitActivity extends BaseActivity implements RechargeMoneyViewBi
 
     private void initPayLayout() {
         weixinImage.setImageResource(payType == 0 ? R.drawable.ic_check : R.drawable.ic_check_no);
-        zhifubaoImageView.setImageResource(payType == 0? R.drawable.ic_check_no : R.drawable.ic_check);
+        zhifubaoImageView.setImageResource(payType == 0 ? R.drawable.ic_check_no : R.drawable.ic_check);
     }
 
     private void initOtherMoneyView() {
-        otherMoneyEdit.setVisibility(showOtherMoneyView ? View.VISIBLE:View.GONE);
+        otherMoneyEdit.setVisibility(showOtherMoneyView ? View.VISIBLE : View.GONE);
     }
 
     private void register() {
@@ -127,10 +128,10 @@ public class MyLimitActivity extends BaseActivity implements RechargeMoneyViewBi
 
     @Override
     public void onMonyeClickListener(int moneyId) {
-        for (int i = 0; i < rechargeMoneyList.size() ; i++) {
+        for (int i = 0; i < rechargeMoneyList.size(); i++) {
             if (rechargeMoneyList.get(i).getMoneyId() == moneyId) {
                 rechargeMoneyList.get(i).setIscheck(true);
-            }else {
+            } else {
                 rechargeMoneyList.get(i).setIscheck(false);
             }
         }

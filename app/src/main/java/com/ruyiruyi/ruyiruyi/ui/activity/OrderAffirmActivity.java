@@ -1,7 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -11,9 +10,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.json.JSONException;
@@ -22,12 +21,11 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import rx.functions.Action1;
 
-public class OrderAffirmActivity extends BaseActivity {
+public class OrderAffirmActivity extends RYBaseActivity {
     private static final String TAG = OrderAffirmActivity.class.getSimpleName();
     private ActionBar actionBar;
     private TextView tireBuyButton;
@@ -60,13 +58,14 @@ public class OrderAffirmActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_affirm,R.id.my_action);
+        setContentView(R.layout.activity_order_affirm, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("订单确认");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("订单确认");
+        ;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -76,16 +75,16 @@ public class OrderAffirmActivity extends BaseActivity {
 
         Intent intent = getIntent();
         fontrearflag = intent.getStringExtra("FONTREARFLAG");
-        tirecount = intent.getIntExtra("TIRECOUNT",0);
+        tirecount = intent.getIntExtra("TIRECOUNT", 0);
         tireprice = intent.getStringExtra("TIREPRICE");
         tirepname = intent.getStringExtra("TIREPNAME");
-        cxwycount = intent.getIntExtra("CXWYCOUNT",0);
+        cxwycount = intent.getIntExtra("CXWYCOUNT", 0);
         cxwyprice = intent.getStringExtra("CXWYPRICE");
         username = intent.getStringExtra("USERNAME");
         userphone = intent.getStringExtra("USERPHONE");
         carnumber = intent.getStringExtra("CARNUMBER");
         tireimage = intent.getStringExtra("TIREIMAGE");
-        shoeid = intent.getIntExtra("SHOEID",0);
+        shoeid = intent.getIntExtra("SHOEID", 0);
         Log.e(TAG, "onCreate:1- " + fontrearflag);
         Log.e(TAG, "onCreate: 2-" + tirecount);
         Log.e(TAG, "onCreate: 3-" + tireprice);
@@ -119,7 +118,7 @@ public class OrderAffirmActivity extends BaseActivity {
         cxwy_count_text.setText("×" + cxwycount);
         tireCountText.setText("×" + tirecount);
         tireNameText.setText(tirepname);
-        tirePriceText.setText("￥" +tireprice);
+        tirePriceText.setText("￥" + tireprice);
 
 
         double tirePriceDouble = Double.parseDouble(tireprice);
@@ -128,16 +127,15 @@ public class OrderAffirmActivity extends BaseActivity {
 
         tirePriceAll = Double.parseDouble(new DecimalFormat("0.00").format(tirePriceDouble * tirecount));
         cxwyPriceAll = Double.parseDouble(new DecimalFormat("0.00").format(cxwyPriceDouble * cxwycount));
-        tireAllPriceText.setText("￥"+tirePriceAll);
-        cxwyAllPriceText.setText("￥"+cxwyPriceAll);
+        tireAllPriceText.setText("￥" + tirePriceAll);
+        cxwyAllPriceText.setText("￥" + cxwyPriceAll);
 
-       // allPrice = tirePriceAll + cxwyPriceAll;
-        allPrice=  Double.parseDouble(new DecimalFormat("0.00").format(tirePriceAll + cxwyPriceAll));
-        allPriceText.setText("￥"+allPrice);
+        // allPrice = tirePriceAll + cxwyPriceAll;
+        allPrice = Double.parseDouble(new DecimalFormat("0.00").format(tirePriceAll + cxwyPriceAll));
+        allPriceText.setText("￥" + allPrice);
 
 
-
-      //  Glide.with(this).load("http://180.76.243.205:8111/images/flgure/9F5CD167-866A-C9B3-4406-7E0E36A4D003.jpg").into(tireImage);
+        //  Glide.with(this).load("http://180.76.243.205:8111/images/flgure/9F5CD167-866A-C9B3-4406-7E0E36A4D003.jpg").into(tireImage);
 
         RxViewAction.clickNoDouble(tireBuyButton)
                 .subscribe(new Action1<Void>() {
@@ -153,44 +151,46 @@ public class OrderAffirmActivity extends BaseActivity {
         int userId = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("shoeId",shoeid);
-            jsonObject.put("userId",userId);
-            jsonObject.put("fontRearFlag",fontrearflag);
-            jsonObject.put("amount",tirecount);
-            jsonObject.put("shoeName",tirepname);
-            jsonObject.put("shoeTotalPrice",tirePriceAll+"");
-            jsonObject.put("shoePrice",tireprice);
-            jsonObject.put("cxwyAmount",cxwycount);
-            jsonObject.put("cxwyPrice",cxwyprice);
-            jsonObject.put("cxwyTotalPrice",cxwyPriceAll+"");
-            jsonObject.put("totalPrice",allPrice);
+            jsonObject.put("shoeId", shoeid);
+            jsonObject.put("userId", userId);
+            jsonObject.put("fontRearFlag", fontrearflag);
+            jsonObject.put("amount", tirecount);
+            jsonObject.put("shoeName", tirepname);
+            jsonObject.put("shoeTotalPrice", tirePriceAll + "");
+            jsonObject.put("shoePrice", tireprice);
+            jsonObject.put("cxwyAmount", cxwycount);
+            jsonObject.put("cxwyPrice", cxwyprice);
+            jsonObject.put("cxwyTotalPrice", cxwyPriceAll + "");
+            jsonObject.put("totalPrice", allPrice);
             Log.e(TAG, "postOrder: ------------------------------" + tireimage);
-            jsonObject.put("orderImg",tireimage);
+            jsonObject.put("orderImg", tireimage);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserShoeOrder");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:------ " + result );
+                Log.e(TAG, "onSuccess:------ " + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         String orderNo = data.getString("orderNo");
 
-                        Intent intent = new Intent(getApplicationContext(),PaymentActivity.class);
-                        intent.putExtra(PaymentActivity.ALL_PRICE,allPrice);
-                        intent.putExtra(PaymentActivity.ORDERNO,orderNo);
-                        intent.putExtra(PaymentActivity.ORDER_TYPE,0);
+                        Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
+                        intent.putExtra(PaymentActivity.ALL_PRICE, allPrice);
+                        intent.putExtra(PaymentActivity.ORDERNO, orderNo);
+                        intent.putExtra(PaymentActivity.ORDER_TYPE, 0);
                         startActivity(intent);
-                    }else {
-                        Toast.makeText(OrderAffirmActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
 

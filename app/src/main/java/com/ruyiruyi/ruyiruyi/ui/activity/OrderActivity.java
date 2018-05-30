@@ -14,6 +14,7 @@ import android.view.View;
 
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseFragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.TabItemView;
 import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsListFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
@@ -24,10 +25,10 @@ import com.ruyiruyi.rylibrary.cell.NoCanSlideViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderActivity extends FragmentActivity {
+public class OrderActivity extends RYBaseFragmentActivity {
     private ActionBar actionBar;
     private NoCanSlideViewPager viewPager;
-    private  TabLayout tabLayout;
+    private TabLayout tabLayout;
     private SimpleFragmentPagerAdapter pagerAdapter;
     private String orderType;
     public static String ORDER_FROM = "ORDER_FROM";  //0是来自main  1是其他
@@ -38,11 +39,11 @@ public class OrderActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("我的订单");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("我的订单");
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -51,7 +52,7 @@ public class OrderActivity extends FragmentActivity {
         });
         Intent intent = getIntent();
         orderType = intent.getStringExtra(OrderFragment.ORDER_TYPE);
-        orderFrom = intent.getIntExtra(OrderActivity.ORDER_FROM,0);
+        orderFrom = intent.getIntExtra(OrderActivity.ORDER_FROM, 0);
 
         initView();
     }
@@ -69,25 +70,25 @@ public class OrderActivity extends FragmentActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        if (getTabViews()!=null){
+        if (getTabViews() != null) {
             for (int i = 0; i < tabLayout.getTabCount(); i++) {
                 TabLayout.Tab tab = tabLayout.getTabAt(i);
                 tab.setCustomView(pagerAdapter.getTabView(i));
             }
         }
-        if (orderType.equals("ALL")){
+        if (orderType.equals("ALL")) {
             viewPager.setCurrentItem(0);
             tabLayout.getTabAt(0).select();
-        }else if (orderType.equals("DZF")){
+        } else if (orderType.equals("DZF")) {
             viewPager.setCurrentItem(1);
             tabLayout.getTabAt(1).select();
-        }else if (orderType.equals("DFH")){
+        } else if (orderType.equals("DFH")) {
             viewPager.setCurrentItem(2);
             tabLayout.getTabAt(2).select();
-        }else if (orderType.equals("DFW")){
+        } else if (orderType.equals("DFW")) {
             viewPager.setCurrentItem(3);
             tabLayout.getTabAt(3).select();
-        }else if (orderType.equals("YWC")){
+        } else if (orderType.equals("YWC")) {
             viewPager.setCurrentItem(4);
             tabLayout.getTabAt(4).select();
         }
@@ -113,7 +114,7 @@ public class OrderActivity extends FragmentActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if (getTitles()!=null&&!getTitles().isEmpty()){
+            if (getTitles() != null && !getTitles().isEmpty()) {
                 return getTitles().get(position);
             }
             return null;
@@ -130,35 +131,36 @@ public class OrderActivity extends FragmentActivity {
         List fragments = new ArrayList();
         OrderFragment allFragment = new OrderFragment();
         Bundle allBundle = new Bundle();
-        allBundle.putString(OrderFragment.ORDER_TYPE,"ALL");
+        allBundle.putString(OrderFragment.ORDER_TYPE, "ALL");
         allFragment.setArguments(allBundle);
         fragments.add(allFragment);
 
         OrderFragment dzfFragment = new OrderFragment();
         Bundle dzfBundle = new Bundle();
-        dzfBundle.putString(OrderFragment.ORDER_TYPE,"DZF");
+        dzfBundle.putString(OrderFragment.ORDER_TYPE, "DZF");
         dzfFragment.setArguments(dzfBundle);
         fragments.add(dzfFragment);
 
         OrderFragment dfhFragment = new OrderFragment();
         Bundle dfhBundle = new Bundle();
-        dfhBundle.putString(OrderFragment.ORDER_TYPE,"DFH");
+        dfhBundle.putString(OrderFragment.ORDER_TYPE, "DFH");
         dfhFragment.setArguments(dfhBundle);
         fragments.add(dfhFragment);
 
         OrderFragment dfwFragment = new OrderFragment();
         Bundle dfwBundle = new Bundle();
-        dfwBundle.putString(OrderFragment.ORDER_TYPE,"DFW");
+        dfwBundle.putString(OrderFragment.ORDER_TYPE, "DFW");
         dfwFragment.setArguments(dfwBundle);
         fragments.add(dfwFragment);
 
         OrderFragment ywcFragment = new OrderFragment();
         Bundle ywcBundle = new Bundle();
-        ywcBundle.putString(OrderFragment.ORDER_TYPE,"YWC");
+        ywcBundle.putString(OrderFragment.ORDER_TYPE, "YWC");
         ywcFragment.setArguments(ywcBundle);
         fragments.add(ywcFragment);
         return fragments;
     }
+
     protected List<String> getTitles() {
         List list = new ArrayList();
         list.add("全部");
@@ -168,15 +170,16 @@ public class OrderActivity extends FragmentActivity {
         list.add("已完成");
         return list;
     }
+
     protected List<TabItemView> getTabViews() {
         return null;
     }
 
     @Override
     public void onBackPressed() {
-        if (orderFrom == 1){
+        if (orderFrom == 1) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        }else {
+        } else {
             super.onBackPressed();
         }
     }

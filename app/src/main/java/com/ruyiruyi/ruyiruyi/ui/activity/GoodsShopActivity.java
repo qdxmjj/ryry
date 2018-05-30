@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsShop;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsShopViewBinder;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -28,7 +29,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class  GoodsShopActivity extends BaseActivity {
+public class  GoodsShopActivity extends RYBaseActivity {
     private ActionBar actionBar;
     public static String CLASS_NAME = "CLASS_NAME";
     public static String CLASS_ID = "CLASS_ID";

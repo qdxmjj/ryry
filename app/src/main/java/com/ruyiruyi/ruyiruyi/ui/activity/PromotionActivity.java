@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Promotion;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PromotionHasperson;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PromotionHaspersonViewBinder;
@@ -29,7 +30,6 @@ import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.Util;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
@@ -53,7 +53,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class PromotionActivity extends BaseActivity implements PromotionViewBinder.OnShareViewClick {
+public class PromotionActivity extends RYBaseActivity implements PromotionViewBinder.OnShareViewClick {
 
     private ActionBar actionBar;
     private RecyclerView mRlv;
@@ -127,35 +127,43 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
             public void onSuccess(String result) {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
-                    JSONObject data = jsonObject.getJSONObject("data");
-                    award = data.getString("award");
-                    content = data.getString("content");
-                    img = data.getString("img");
-                    rule = data.getString("rule");
-                    title = data.getString("title");
-                    url = data.getString("url");
-                    invitationCode = data.getString("invitationCode");
-                    JSONArray shareRelationList = data.getJSONArray("shareRelationList");
-                    for (int i = 0; i < shareRelationList.length(); i++) {
-                        JSONObject bean = (JSONObject) shareRelationList.get(i);
-                        PromotionHasperson hasperson = new PromotionHasperson();
-                        hasperson.setUserState("已邀请");
-                        long createdTime = bean.getLong("createdTime");
-                        String s = new UtilsRY().getTimestampToString(createdTime);
-                        hasperson.setUserTime(s);
-                        String phone = bean.getString("phone");
-                        String subPhone = phone.substring(0, 3) + "****" + phone.substring(7, 11);
-                        hasperson.setUserPhone(subPhone);
-                        if (i == 1) {
-                            hasperson.setFirst(true);
-                        } else {
-                            hasperson.setFirst(false);
+                    String status = jsonObject.getString("status");
+                    String msg = jsonObject.getString("msg");
+                    if (status.equals("1")) {
+                        JSONObject data = jsonObject.getJSONObject("data");
+                        award = data.getString("award");
+                        content = data.getString("content");
+                        img = data.getString("img");
+                        rule = data.getString("rule");
+                        title = data.getString("title");
+                        url = data.getString("url");
+                        invitationCode = data.getString("invitationCode");
+                        JSONArray shareRelationList = data.getJSONArray("shareRelationList");
+                        for (int i = 0; i < shareRelationList.length(); i++) {
+                            JSONObject bean = (JSONObject) shareRelationList.get(i);
+                            PromotionHasperson hasperson = new PromotionHasperson();
+                            hasperson.setUserState("已邀请");
+                            long createdTime = bean.getLong("createdTime");
+                            String s = new UtilsRY().getTimestampToString(createdTime);
+                            hasperson.setUserTime(s);
+                            String phone = bean.getString("phone");
+                            String subPhone = phone.substring(0, 3) + "****" + phone.substring(7, 11);
+                            hasperson.setUserPhone(subPhone);
+                            if (i == 1) {
+                                hasperson.setFirst(true);
+                            } else {
+                                hasperson.setFirst(false);
+                            }
+                            personList.add(hasperson);
                         }
-                        personList.add(hasperson);
-                    }
 
-                    //下载完成更新数据
-                    updataData();
+                        //下载完成更新数据
+                        updataData();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                    }
 
 
                 } catch (JSONException e) {
@@ -184,7 +192,7 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
     private void updataData() {
         //下载完成
         items.clear();
-        items.add(new Promotion(invitationCode + "DSSAD", award, rule));
+        items.add(new Promotion(invitationCode, award, rule));
         if (personList == null || personList.size() == 0) {
             items.add(new PromotionNoperson());
         } else {

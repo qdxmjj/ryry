@@ -6,9 +6,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnFigureItemInterface;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireFigure;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireFigureViewBinder;
@@ -17,7 +19,6 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.TitleStr;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TitleStrViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.json.JSONArray;
@@ -36,27 +37,27 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class CarFigureActivity extends BaseActivity implements OnFigureItemInterface {
+public class CarFigureActivity extends RYBaseActivity implements OnFigureItemInterface {
     private static final String TAG = CarFigureActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;
     private TextView nextButton;
     private List<Object> items = new ArrayList<>();
     private MultiTypeAdapter adapter;
-    private List<TireFigure> tireFigureList ;
+    private List<TireFigure> tireFigureList;
     private String tiresize;
     private String fontrearflag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_car_figure,R.id.my_action);
+        setContentView(R.layout.activity_car_figure, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("选择花纹");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("选择花纹");
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -80,25 +81,25 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
         int uesrId = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("shoeSize",tiresize);
-            jsonObject.put("userId",uesrId);
+            jsonObject.put("shoeSize", tiresize);
+            jsonObject.put("userId", uesrId);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getShoeBySize");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         Log.e(TAG, "getDataFromService:---- " + jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:------ " + result );
+                Log.e(TAG, "onSuccess:------ " + result);
                 JSONObject jsonObject1 = null;
                 try {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         for (int i = 0; i < data.length(); i++) {
                             String description = data.getJSONObject(i).getString("description");
@@ -113,12 +114,16 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
                                 String shoeId = shoeSpeedLoadResultList.getJSONObject(j).getString("shoeId");
                                 int shoeIdInt = Integer.parseInt(shoeId);
                                 String speedLoadStr = shoeSpeedLoadResultList.getJSONObject(j).getString("speedLoadStr");
-                                tireRankList.add(new TireRank(shoeIdInt,speedLoadStr,shoeFlgureName,false,price));
+                                tireRankList.add(new TireRank(shoeIdInt, speedLoadStr, shoeFlgureName, false, price));
                             }
-                            tireFigureList.add(new TireFigure(false,0,shoeFlgureName,imgLeftUrl,imgMiddleUrl,imgRightUrl,description,tireRankList));
+                            tireFigureList.add(new TireFigure(false, 0, shoeFlgureName, imgLeftUrl, imgMiddleUrl, imgRightUrl, description, tireRankList));
                         }
                         Log.e(TAG, "onSuccess: " + tireFigureList.size());
                         initData();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(CarFigureActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -149,9 +154,9 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
         tireFigureList.clear();
         List<TireRank> tireRankList = new ArrayList<>();
         for (int i = 0; i < 1; i++) {
-            tireRankList.add(new TireRank(i,"载重1000/200K/￥200","经济运动型",false,"￥200"));
+            tireRankList.add(new TireRank(i, "载重1000/200K/￥200", "经济运动型", false, "￥200"));
         }
-        TireFigure tireFigure = new TireFigure(false, 0,"经济运动型", "http://180.76.243.205:8111/images/flgure/9F5CD167-866A-C9B3-4406-7E0E36A4D003.jpg",
+        TireFigure tireFigure = new TireFigure(false, 0, "经济运动型", "http://180.76.243.205:8111/images/flgure/9F5CD167-866A-C9B3-4406-7E0E36A4D003.jpg",
                 "http://180.76.243.205:8111/images/flgure/9F5CD167-866A-C9B3-4406-7E0E36A4D003.jpg",
                 "http://180.76.243.205:8111/images/flgure/112E28A5-68FD-B758-16CA-E1C7F67939C6.jpg",
                 "路酷泽品牌轮胎是山东新大陆橡胶科技有限公司针对高端乘用车推出的拳头产品！如驿如意平台结合中国车主用车习惯独家推出“一次换轮胎 终身免费开”的全新升级服务！",
@@ -161,9 +166,9 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
             String gifureStr = "经济运动型" + i;
             List<TireRank> tireRankList1 = new ArrayList<>();
             for (int j = 0; j < 3; j++) {
-                tireRankList1.add(new TireRank(j,"载重1000/200K/￥200/" + j,gifureStr,false,"￥200"));
+                tireRankList1.add(new TireRank(j, "载重1000/200K/￥200/" + j, gifureStr, false, "￥200"));
             }
-            TireFigure tireFigure1 = new TireFigure(false, 0,gifureStr, "http://180.76.243.205:8111/images/flgure/9F5CD167-866A-C9B3-4406-7E0E36A4D003.jpg",
+            TireFigure tireFigure1 = new TireFigure(false, 0, gifureStr, "http://180.76.243.205:8111/images/flgure/9F5CD167-866A-C9B3-4406-7E0E36A4D003.jpg",
                     "http://180.76.243.205:8111/images/flgure/9F5CD167-866A-C9B3-4406-7E0E36A4D003.jpg",
                     "http://180.76.243.205:8111/images/flgure/112E28A5-68FD-B758-16CA-E1C7F67939C6.jpg",
                     "路酷泽品牌轮胎是山东新大陆橡胶科技有限公司针对高端乘用车推出的拳头产品！如驿如意平台结合中国车主用车习惯独家推出“一次换轮胎 终身免费开”的全新升级服务！",
@@ -181,7 +186,7 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
         for (int i = 0; i < tireFigureList.size(); i++) {
             items.add(tireFigureList.get(i));
         }
-        assertAllRegistered(adapter,items);
+        assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
 
@@ -209,9 +214,9 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
                                         String price = tireRankList.get(j).getPrice();
                                         Log.e(TAG, "call: ---------*--------" + shoeId);
                                         Intent intent = new Intent(getApplicationContext(), TireCountActivity.class);
-                                        intent.putExtra("SHOEID",shoeId);
-                                        intent.putExtra("PRICE",price);
-                                        intent.putExtra("FONTREARFLAG",fontrearflag);
+                                        intent.putExtra("SHOEID", shoeId);
+                                        intent.putExtra("PRICE", price);
+                                        intent.putExtra("FONTREARFLAG", fontrearflag);
                                         startActivity(intent);
                                     }
                                 }
@@ -222,10 +227,10 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
     }
 
     private void register() {
-        adapter.register(TitleStr.class,new TitleStrViewBinder());
+        adapter.register(TitleStr.class, new TitleStrViewBinder());
         TireFigureViewBinder tireFigureViewBinder = new TireFigureViewBinder(this);
         tireFigureViewBinder.setListener(this);
-       // tireFigureViewBinder.setRanklistener(this);
+        // tireFigureViewBinder.setRanklistener(this);
         adapter.register(TireFigure.class, tireFigureViewBinder);
     }
 
@@ -235,7 +240,7 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
             if (tireFigureList.get(i).getTitleStr().equals(name)) {
 
                 tireFigureList.get(i).setCheck(!tireFigureList.get(i).isCheck);
-            }else {
+            } else {
                 tireFigureList.get(i).setCheck(false);
             }
         }
@@ -243,18 +248,18 @@ public class CarFigureActivity extends BaseActivity implements OnFigureItemInter
     }
 
     @Override
-    public void onRankClickListener(String rankName,String figureName) {
+    public void onRankClickListener(String rankName, String figureName) {
         for (int i = 0; i < tireFigureList.size(); i++) {
             if (tireFigureList.get(i).getTitleStr().equals(figureName)) {
 
                 for (int h = 0; h < tireFigureList.get(i).getTireRankList().size(); h++) {
-                    if (tireFigureList.get(i).getTireRankList().get(h).getRankName().equals(rankName)){
+                    if (tireFigureList.get(i).getTireRankList().get(h).getRankName().equals(rankName)) {
                         tireFigureList.get(i).getTireRankList().get(h).setCheck(true);
-                    }else {
+                    } else {
                         tireFigureList.get(i).getTireRankList().get(h).setCheck(false);
                     }
                 }
-            }else {
+            } else {
                 for (int h = 0; h < tireFigureList.get(i).getTireRankList().size(); h++) {
                     tireFigureList.get(i).getTireRankList().get(h).setCheck(false);
                 }

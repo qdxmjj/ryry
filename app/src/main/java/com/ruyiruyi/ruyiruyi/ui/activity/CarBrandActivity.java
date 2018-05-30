@@ -2,27 +2,22 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarBrand;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.CarModel;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
-import com.ruyiruyi.rylibrary.ui.adapter.ContactAdapter;
-import com.ruyiruyi.rylibrary.ui.bean.UserEntity;
 
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
@@ -33,7 +28,7 @@ import java.util.List;
 import me.yokeyword.indexablerv.IndexableAdapter;
 import me.yokeyword.indexablerv.IndexableLayout;
 
-public class CarBrandActivity extends BaseActivity {
+public class CarBrandActivity extends RYBaseActivity {
     private static final String TAG = CarInfoActivity.class.getSimpleName();
     private ActionBar actionBar;
     private IndexableLayout indexableLayout;

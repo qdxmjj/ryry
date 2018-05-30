@@ -8,8 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
 
-public class YcxFragment extends Fragment {
+public class YcxFragment extends RYBaseFragment {
 
     @Nullable
     @Override

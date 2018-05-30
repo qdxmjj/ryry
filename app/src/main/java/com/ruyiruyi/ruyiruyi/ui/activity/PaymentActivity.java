@@ -3,12 +3,9 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,23 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
-import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.PayResult;
-import com.ruyiruyi.ruyiruyi.utils.Constants;
-import com.ruyiruyi.ruyiruyi.utils.OrderInfoUtil2_0;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
-import com.ruyiruyi.ruyiruyi.utils.Util;
 import com.ruyiruyi.ruyiruyi.utils.XMJJUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXTextObject;
-import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -48,7 +37,6 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -59,7 +47,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import rx.functions.Action1;
 
-public class PaymentActivity extends BaseActivity {
+public class PaymentActivity extends RYBaseActivity {
 
     private static final String TAG = PaymentActivity.class.getSimpleName();
     private ActionBar actionBar;
@@ -73,10 +61,10 @@ public class PaymentActivity extends BaseActivity {
     public static String STOREID = "STOREID";
     public static String ORDER_TYPE = "ORDER_TYPE";//  0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
     public static String ORDER_STATE = "ORDER_STATE";//轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货
-                                                 // 订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
+    // 订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
     public static String ORDER_FROM = "ORDER_FROM";  //0是来自收银台  1是来自订单
     private int orderType;
-    public  String orderInfo = "";   // 订单信息
+    public String orderInfo = "";   // 订单信息
     private static final int SDK_PAY_FLAG = 1;
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -93,26 +81,32 @@ public class PaymentActivity extends BaseActivity {
                 Toast.makeText(PaymentActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
                 //支付成功 跳转到待更换轮胎界面
                 Intent intent1 = new Intent(getApplicationContext(), PaySuccessActivity.class);
-                intent1.putExtra("ORDERTYPE",orderType);
+                intent1.putExtra("ORDERTYPE", orderType);
                 startActivity(intent1);
 
             } else {
                 // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                 Toast.makeText(PaymentActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
             }
-           // Toast.makeText(PaymentActivity.this, payResult.getResult(), Toast.LENGTH_LONG).show();
-        };
+            // Toast.makeText(PaymentActivity.this, payResult.getResult(), Toast.LENGTH_LONG).show();
+        }
+
+        ;
     };
 
-    /** 支付宝支付业务：入参app_id */
+    /**
+     * 支付宝支付业务：入参app_id
+     */
     public static final String APPID = "2018051760091839";
 
-    /** 支付宝账户登录授权业务：入参pid值 */
+    /**
+     * 支付宝账户登录授权业务：入参pid值
+     */
     public static final String PID = "2088821219284232";
     private ProgressDialog progressDialog;
 
     //微信
-    private static final String APP_ID ="wxfff9348898072d7c";
+    private static final String APP_ID = "wxfff9348898072d7c";
     private static final int THUMB_SIZE = 150;
     private IWXAPI api;
     private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
@@ -124,23 +118,24 @@ public class PaymentActivity extends BaseActivity {
     private ImageView yuEImage;
     private ImageView weixinImage;
     private ImageView zhifubaoImage;
-    public double lineCredit =1000.00;
+    public double lineCredit = 1000.00;
 
-    private void regToWx(){
-        api = WXAPIFactory.createWXAPI(this,APP_ID,true);
+    private void regToWx() {
+        api = WXAPIFactory.createWXAPI(this, APP_ID, true);
         api.registerApp(APP_ID);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment,R.id.my_action);
+        setContentView(R.layout.activity_payment, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("收银台");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("收银台");
+        ;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -150,9 +145,9 @@ public class PaymentActivity extends BaseActivity {
         regToWx();
         progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
-        allprice = intent.getDoubleExtra(ALL_PRICE,0.00);
+        allprice = intent.getDoubleExtra(ALL_PRICE, 0.00);
         orderno = intent.getStringExtra(ORDERNO);
-        orderType = intent.getIntExtra(ORDER_TYPE,0);
+        orderType = intent.getIntExtra(ORDER_TYPE, 0);
         initView();
         getDataFromService();
     }
@@ -164,7 +159,7 @@ public class PaymentActivity extends BaseActivity {
     private void initView() {
         payButton = (TextView) findViewById(R.id.payment_button);
         allPriceText = (TextView) findViewById(R.id.price_text);
-        allPriceText.setText(allprice+"");
+        allPriceText.setText(allprice + "");
         yuELayout = (FrameLayout) findViewById(R.id.yu_e_layout);
         weixinLayout = (FrameLayout) findViewById(R.id.weixin_layout);
         zhifubaoLayout = (FrameLayout) findViewById(R.id.zhifubao_layout);
@@ -203,19 +198,19 @@ public class PaymentActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (currentType == 0){  //余额支付
+                        if (currentType == 0) {  //余额支付
                             if (allprice > lineCredit) {
                                 Toast.makeText(PaymentActivity.this, "信用额度不足，请使用其他支付方式", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            if (orderType == 0){        //轮胎订单
+                            if (orderType == 0) {        //轮胎订单
                                 postTireOrder();
-                            }else if (orderType == 1){  //商品订单
+                            } else if (orderType == 1) {  //商品订单
                                 postGoodsOrder();
                             }
 
 
-                        }else if (currentType == 1){//微信支付
+                        } else if (currentType == 1) {//微信支付
                             weixinPay();
                           /*  //初始化一个WXTextObject对象
                             WXTextObject textObject = new WXTextObject();
@@ -264,7 +259,7 @@ public class PaymentActivity extends BaseActivity {
                             req.scene = mTargetScene;
                             api.sendReq(req);*/
 
-                        }else if (currentType == 2){ //支付宝支付
+                        } else if (currentType == 2) { //支付宝支付
                             //获取签名后的orderInfo
                             getSign();
                         }
@@ -280,11 +275,12 @@ public class PaymentActivity extends BaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: --------"+ result);
+                Log.e(TAG, "onSuccess: --------" + result);
                 try {
-                    JSONObject data  = new JSONObject(result);
+                    JSONObject data = new JSONObject(result);
                     PayReq req = new PayReq();
-                    req.appId = data.getString("appid");;
+                    req.appId = data.getString("appid");
+                    ;
                     req.partnerId = data.getString("partnerid");
                     req.prepayId = data.getString("prepayid");
                     req.nonceStr = data.getString("noncestr");
@@ -323,8 +319,8 @@ public class PaymentActivity extends BaseActivity {
         int userId = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("orderNo",orderno);
-            jsonObject.put("userId",userId);
+            jsonObject.put("orderNo", orderno);
+            jsonObject.put("userId", userId);
 
         } catch (JSONException e) {
         }
@@ -332,7 +328,7 @@ public class PaymentActivity extends BaseActivity {
         String token = new DbConfig().getToken();
         String jsonByToken = "";
         try {
-            jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(),token);
+            jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(), token);
 
 
         } catch (UnsupportedEncodingException e) {
@@ -349,25 +345,27 @@ public class PaymentActivity extends BaseActivity {
 
         }
         String s2 = jsonByToken.replaceAll("\\n", "");
-        params.addBodyParameter("reqJson",s2);
-        params.addParameter("token",token);
+        params.addBodyParameter("reqJson", s2);
+        params.addParameter("token", token);
         Log.e(TAG, "postOrderSuccess: paramas---" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: --*--" + result );
+                Log.e(TAG, "onSuccess: --*--" + result);
                 JSONObject jsonObject1 = null;
                 try {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         Intent intent1 = new Intent(getApplicationContext(), PaySuccessActivity.class);
-                        intent1.putExtra("ORDERTYPE",orderType);
+                        intent1.putExtra("ORDERTYPE", orderType);
                         startActivity(intent1);
                         finish();
-                    }else {
-                        Toast.makeText(PaymentActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
 
@@ -399,8 +397,8 @@ public class PaymentActivity extends BaseActivity {
         int userId = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("orderNo",orderno);
-            jsonObject.put("userId",userId);
+            jsonObject.put("orderNo", orderno);
+            jsonObject.put("userId", userId);
 
         } catch (JSONException e) {
         }
@@ -408,7 +406,7 @@ public class PaymentActivity extends BaseActivity {
         String token = new DbConfig().getToken();
         String jsonByToken = "";
         try {
-            jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(),token);
+            jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(), token);
 
 
         } catch (UnsupportedEncodingException e) {
@@ -425,26 +423,28 @@ public class PaymentActivity extends BaseActivity {
 
         }
         String s2 = jsonByToken.replaceAll("\\n", "");
-        params.addBodyParameter("reqJson",s2);
-        params.addParameter("token",token);
+        params.addBodyParameter("reqJson", s2);
+        params.addParameter("token", token);
         Log.e(TAG, "postOrderSuccess: paramas---" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: --*--" + result );
+                Log.e(TAG, "onSuccess: --*--" + result);
                 JSONObject jsonObject1 = null;
                 try {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
 
                         Intent intent1 = new Intent(getApplicationContext(), PaySuccessActivity.class);
-                        intent1.putExtra("ORDERTYPE",orderType);
+                        intent1.putExtra("ORDERTYPE", orderType);
                         startActivity(intent1);
                         finish();
-                    }else {
-                        Toast.makeText(PaymentActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
 
@@ -475,15 +475,15 @@ public class PaymentActivity extends BaseActivity {
 
 
     private void initZhifuLayout() {
-        if (currentType == 0){  //余额
+        if (currentType == 0) {  //余额
             yuEImage.setImageResource(R.drawable.ic_yes);
             weixinImage.setImageResource(R.drawable.ic_no);
             zhifubaoImage.setImageResource(R.drawable.ic_no);
-        }else if (currentType == 1){//微信
+        } else if (currentType == 1) {//微信
             yuEImage.setImageResource(R.drawable.ic_no);
             weixinImage.setImageResource(R.drawable.ic_yes);
             zhifubaoImage.setImageResource(R.drawable.ic_no);
-        }else if(currentType == 2){//支付宝
+        } else if (currentType == 2) {//支付宝
             yuEImage.setImageResource(R.drawable.ic_no);
             weixinImage.setImageResource(R.drawable.ic_no);
             zhifubaoImage.setImageResource(R.drawable.ic_yes);
@@ -495,15 +495,15 @@ public class PaymentActivity extends BaseActivity {
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "getSign: orderno-" + orderno);
         try {
-            jsonObject.put("orderNo",orderno);
-            jsonObject.put("orderType",orderType);
-            if (orderType == 0){    //轮胎订单
-                jsonObject.put("orderName","轮胎购买");
-            }else {     //商品订单
-                jsonObject.put("orderName","商品购买");
+            jsonObject.put("orderNo", orderno);
+            jsonObject.put("orderType", orderType);
+            if (orderType == 0) {    //轮胎订单
+                jsonObject.put("orderName", "轮胎购买");
+            } else {     //商品订单
+                jsonObject.put("orderName", "商品购买");
             }
-            jsonObject.put("orderPrice",0.01);
-            jsonObject.put("userId",userId);
+            jsonObject.put("orderPrice", 0.01);
+            jsonObject.put("userId", userId);
         } catch (JSONException e) {
         }
         Log.e(TAG, "getSign: " + orderno);
@@ -511,7 +511,7 @@ public class PaymentActivity extends BaseActivity {
         String token = new DbConfig().getToken();
         String jsonByToken = "";
         try {
-            jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(),token);
+            jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(), token);
 
 
         } catch (UnsupportedEncodingException e) {
@@ -528,8 +528,8 @@ public class PaymentActivity extends BaseActivity {
 
         }
         String s2 = jsonByToken.replaceAll("\\n", "");
-        params.addBodyParameter("reqJson",s2);
-        params.addParameter("token",token);
+        params.addBodyParameter("reqJson", s2);
+        params.addParameter("token", token);
         Log.e(TAG, "postOrderSuccess: paramas---" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -568,8 +568,8 @@ public class PaymentActivity extends BaseActivity {
         Runnable payRunnable = new Runnable() {
             @Override
             public void run() {
-               // String orderInfoStr = orderInfo.substring(1, orderInfo.length()-1);
-               // Log.e(TAG, "run:---- " + orderInfo);
+                // String orderInfoStr = orderInfo.substring(1, orderInfo.length()-1);
+                // Log.e(TAG, "run:---- " + orderInfo);
                 //Log.e(TAG, "run:---- " + orderInfo);
                 PayTask alipay = new PayTask(PaymentActivity.this);
                 Map<String, String> result = alipay.payV2(orderInfo, true);
@@ -590,7 +590,8 @@ public class PaymentActivity extends BaseActivity {
         showDialog("您确认要离开支付订单界面，离开订单会变为代付款订单，可在待付款订单中查看");
 
     }
-    private void showDialog(String msg){
+
+    private void showDialog(String msg) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
@@ -603,9 +604,9 @@ public class PaymentActivity extends BaseActivity {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 Intent intent = new Intent(getApplicationContext(), PendingOrderActivity.class);
-                intent.putExtra(ORDERNO,orderno);
-                intent.putExtra(ORDER_TYPE,orderType);
-                intent.putExtra(ORDER_FROM,0);
+                intent.putExtra(ORDERNO, orderno);
+                intent.putExtra(ORDER_TYPE, orderType);
+                intent.putExtra(ORDER_FROM, 0);
                 startActivity(intent);
             }
         });

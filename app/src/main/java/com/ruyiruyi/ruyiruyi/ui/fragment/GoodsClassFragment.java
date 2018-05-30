@@ -17,6 +17,7 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.GoodsShopActivity;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.activity.Line;
 import com.ruyiruyi.ruyiruyi.ui.activity.SearchActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.BigClass;
@@ -44,7 +45,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class GoodsClassFragment extends Fragment implements BigClassViewBinder.OnBigClassItemClick ,GoodsClassViewBinder.OnClassItemClick {
+public class GoodsClassFragment extends RYBaseFragment implements BigClassViewBinder.OnBigClassItemClick ,GoodsClassViewBinder.OnClassItemClick {
     private static final String TAG = GoodsClassFragment.class.getSimpleName();
     private RecyclerView bigClassliserView;
     private RecyclerView classListView;

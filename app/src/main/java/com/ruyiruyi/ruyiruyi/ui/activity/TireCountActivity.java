@@ -2,7 +2,6 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,9 +12,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.cell.AmountView;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
@@ -31,7 +30,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class TireCountActivity extends BaseActivity {
+public class TireCountActivity extends RYBaseActivity {
     private static final String TAG = TireCountActivity.class.getSimpleName();
     private ActionBar actionBar;
     private CustomBanner mBanner;
@@ -59,13 +58,14 @@ public class TireCountActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tire_count,R.id.my_action);
+        setContentView(R.layout.activity_tire_count, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("轮胎购买");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("轮胎购买");
+        ;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -74,7 +74,7 @@ public class TireCountActivity extends BaseActivity {
         });
 
         Intent intent = getIntent();
-        shoeId = intent.getIntExtra("SHOEID",0);
+        shoeId = intent.getIntExtra("SHOEID", 0);
         price = intent.getStringExtra("PRICE");
         fontrearflag = intent.getStringExtra("FONTREARFLAG");
         Log.e(TAG, "onCreate: --------*---------" + shoeId);
@@ -88,25 +88,25 @@ public class TireCountActivity extends BaseActivity {
         int userId = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("shoeId",shoeId);
-            jsonObject.put("userId",userId);
+            jsonObject.put("shoeId", shoeId);
+            jsonObject.put("userId", userId);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getShoeDetailByShoeId");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         Log.e(TAG, "initDataFromService:------- " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:------ " + result );
+                Log.e(TAG, "onSuccess:------ " + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         tireName = data.getString("detailStr");
                         cxwyPrice = data.getString("finalCxwyPrice");
@@ -137,13 +137,17 @@ public class TireCountActivity extends BaseActivity {
                             public void updateUI(Context context, View view, int position, String entity) {
                                 Glide.with(context).load(entity).into((ImageView) view);
                             }
-                        },imageList)
+                        }, imageList)
                                 //设置自动翻页
                                 .startTurning(5000);
                         tireNameText.setText(tireName);
 
                         cxwyPriceText.setText("￥" + cxwyPrice);
 
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
 
@@ -177,11 +181,11 @@ public class TireCountActivity extends BaseActivity {
         tireLocationText = (TextView) findViewById(R.id.tire_location_text);
         cxwyPriceText = (TextView) findViewById(R.id.cxwy_price_text);
 
-        if (fontrearflag.equals("0")){
+        if (fontrearflag.equals("0")) {
             tireLocationText.setText("轮胎数量");
-        }else if (fontrearflag.equals("1")){
+        } else if (fontrearflag.equals("1")) {
             tireLocationText.setText("前轮数量");
-        }else {
+        } else {
             tireLocationText.setText("后轮数量");
         }
 
@@ -191,10 +195,10 @@ public class TireCountActivity extends BaseActivity {
         tireAmountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
-                if (amount == maxCount){
-                    Toast.makeText(TireCountActivity.this,"轮胎数量已达到购买上限", Toast.LENGTH_SHORT).show();
+                if (amount == maxCount) {
+                    Toast.makeText(TireCountActivity.this, "轮胎数量已达到购买上限", Toast.LENGTH_SHORT).show();
                 }
-                tireCurrentCount =amount;
+                tireCurrentCount = amount;
 
             }
         });
@@ -203,10 +207,10 @@ public class TireCountActivity extends BaseActivity {
         cxwyAmountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
-                if (amount == maxCount){
-                    Toast.makeText(TireCountActivity.this,"畅行无忧已达到购买上限", Toast.LENGTH_SHORT).show();
+                if (amount == maxCount) {
+                    Toast.makeText(TireCountActivity.this, "畅行无忧已达到购买上限", Toast.LENGTH_SHORT).show();
                 }
-                cxwyCurrentCount =amount;
+                cxwyCurrentCount = amount;
 
             }
         });
@@ -215,32 +219,28 @@ public class TireCountActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (tireCurrentCount == 0){
+                        if (tireCurrentCount == 0) {
                             Toast.makeText(TireCountActivity.this, "你选择轮胎购买数量", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         Intent intent = new Intent(getApplicationContext(), QcActivity.class);
-                        intent.putExtra("FONTREARFLAG",fontrearflag);   //前后轮标识
-                        intent.putExtra("TIRECOUNT",tireCurrentCount);//轮胎数量
-                        intent.putExtra("TIREPRICE",price);     //轮胎单价
-                        intent.putExtra("TIREPNAME",tireName);  //轮胎名称
-                        intent.putExtra("CXWYCOUNT",cxwyCurrentCount);  //畅行无忧数量
-                        intent.putExtra("CXWYPRICE",cxwyPrice);  //畅行无忧名称
-                        intent.putExtra("USERNAME",userName);  //用户名
-                        intent.putExtra("USERPHONE",userPhone);  //手机号
-                        intent.putExtra("CARNUMBER",carNumber);  //车牌号
-                        intent.putExtra("TIREIMAGE",tireImage);  //轮胎图片
-                        intent.putExtra("SHOEID",shoeId);  //轮胎id
-                        Log.e(TAG, "call: " + carNumber );
+                        intent.putExtra("FONTREARFLAG", fontrearflag);   //前后轮标识
+                        intent.putExtra("TIRECOUNT", tireCurrentCount);//轮胎数量
+                        intent.putExtra("TIREPRICE", price);     //轮胎单价
+                        intent.putExtra("TIREPNAME", tireName);  //轮胎名称
+                        intent.putExtra("CXWYCOUNT", cxwyCurrentCount);  //畅行无忧数量
+                        intent.putExtra("CXWYPRICE", cxwyPrice);  //畅行无忧名称
+                        intent.putExtra("USERNAME", userName);  //用户名
+                        intent.putExtra("USERPHONE", userPhone);  //手机号
+                        intent.putExtra("CARNUMBER", carNumber);  //车牌号
+                        intent.putExtra("TIREIMAGE", tireImage);  //轮胎图片
+                        intent.putExtra("SHOEID", shoeId);  //轮胎id
+                        Log.e(TAG, "call: " + carNumber);
 
 
                         startActivity(intent);
                     }
                 });
-
-
-
-
 
 
     }

@@ -1,7 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -9,22 +8,20 @@ import android.widget.TextView;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.TireType;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
 
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
-import org.xutils.x;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import rx.functions.Action1;
 
-public class TireSizeActivity extends BaseActivity {
+public class TireSizeActivity extends RYBaseActivity {
     private static final String TAG = TireSizeActivity.class.getSimpleName();
     private ActionBar actionBar;
     private WheelView widthWV;

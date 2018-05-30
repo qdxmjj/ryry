@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -35,6 +36,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.ShopChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TirePlaceActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireRepairActivity;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Function;
 import com.ruyiruyi.ruyiruyi.ui.multiType.FunctionViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Hometop;
@@ -67,8 +69,8 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTopItemClickListener,FunctionViewBinder.OnFunctionItemClick
-        ,ThreeEventViewBinder.OnEventItemClickListener {
+public class HomeFragment extends RYBaseFragment implements HometopViewBinder.OnHomeTopItemClickListener, FunctionViewBinder.OnFunctionItemClick
+        , ThreeEventViewBinder.OnEventItemClickListener {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
     private CustomBanner<String> mBanner;
@@ -97,9 +99,8 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_home,container,false);
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
-
 
 
     @Override
@@ -133,7 +134,7 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
 
         //获取位置
         Location location = new DbConfig().getLocation();
-        if (location!=null){
+        if (location != null) {
             currentCity = location.getCity();
             jingdu = location.getJingdu();
             weidu = location.getWeidu();
@@ -146,25 +147,22 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
     }
 
 
-
-
-
     private void initdataFromService() {
         DbConfig dbConfig = new DbConfig();
         int id = dbConfig.getId();
 
         JSONObject jsonObject = new JSONObject();
         try {
-           jsonObject.put("userId",id);
+            jsonObject.put("userId", id);
         } catch (JSONException e) {
         }
         lunbos.clear();
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAndroidHomeDate");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         Log.e(TAG, "initdataFromService: --" + jsonObject.toString());
         String token = new DbConfig().getToken();
-        params.addParameter("token",token);
-        Log.e(TAG, "initdataFromService: -----------------" +params.toString());
+        params.addParameter("token", token);
+        Log.e(TAG, "initdataFromService: -----------------" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -173,7 +171,7 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         //获取轮播数据
                         JSONArray lunboList = data.getJSONArray("lunbo_infos");
@@ -189,7 +187,7 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
                         //获取车辆数据
                         try {
                             JSONObject carObject = data.getJSONObject("androidHomeData_cars");
-                            if (carObject !=null){
+                            if (carObject != null) {
                                 carImage = carObject.getString("car_brand_url");
                                 carName = carObject.getString("car_verhicle");
                                 fontSize = carObject.getString("font");
@@ -201,17 +199,15 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
                                 user.setCarId(uesrCarId);
                                 saveUserIntoDb(user);
                             }
-                        }catch (JSONException e){
+                        } catch (JSONException e) {
 
                         }
-
 
 
                         saveLunboInToDb();
 
                         initdata();
                     }
-
 
 
                 } catch (JSONException e) {
@@ -221,7 +217,7 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Log.e(TAG, "onError: " );
+                Log.e(TAG, "onError: ");
             }
 
             @Override
@@ -270,7 +266,7 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
         ThreeEventViewBinder threeEventViewBinder = new ThreeEventViewBinder();
         threeEventViewBinder.setListener(this);
         adapter.register(ThreeEvent.class, threeEventViewBinder);
-        adapter.register(OneEvent.class,new OneEventViewBinder());
+        adapter.register(OneEvent.class, new OneEventViewBinder());
     }
 
     private void initdata() {
@@ -286,25 +282,24 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
         for (int i = 0; i < lunboList.size(); i++) {
             images.add(lunboList.get(i).getContentImageUrl());
         }
-        if (!(user == null)){
+        if (!(user == null)) {
             int firstAddCar1 = user.getFirstAddCar();
-            if (firstAddCar1 == 0){
-                items.add(new Hometop(images,"添加我的宝驹","邀请好友绑定车辆可免费洗车",1,currentCity));
-            }else {
-                Hometop carInfo = new Hometop(images, carName, "一次性购买四条轮胎送洗车券", 2,currentCity);
+            if (firstAddCar1 == 0) {
+                items.add(new Hometop(images, "添加我的宝驹", "邀请好友绑定车辆可免费洗车", 1, currentCity));
+            } else {
+                Hometop carInfo = new Hometop(images, carName, "一次性购买四条轮胎送洗车券", 2, currentCity);
                 carInfo.setCarImage(carImage);
                 items.add(carInfo);
             }
-        }else {//未登陆
-            items.add(new Hometop(images,"新人注册享好礼","注册享受价格1000元大礼包",0,currentCity));
+        } else {//未登陆
+            items.add(new Hometop(images, "新人注册享好礼", "注册享受价格1000元大礼包", 0, currentCity));
         }
-
 
 
         items.add(new Function());
         items.add(new ThreeEvent());
         items.add(new OneEvent());
-        assertAllRegistered(adapter,items);
+        assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
 
@@ -340,12 +335,12 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
     @Override
     public void onCityLayoutClickListener() {
         Intent intent = new Intent(getContext(), CityChooseActivity.class);
-        startActivityForResult(intent,CITY_CHOOSE);
+        startActivityForResult(intent, CITY_CHOOSE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == CITY_CHOOSE){
+        if (resultCode == CITY_CHOOSE) {
             String city = data.getStringExtra("CITY");
             currentCity = city;
             initdata();
@@ -355,46 +350,59 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
 
     /**
      * 车辆item的点击事件
+     *
      * @param state
      */
     @Override
     public void onCarItemClickListener(int state) {
-        if (state == 0){        //未登陆
+        if (state == 0) {        //未登陆
             startActivity(new Intent(getContext(), LoginActivity.class));
-        }else if (state == 1){  //未添加车辆
+        } else if (state == 1) {  //未添加车辆
             Intent intent = new Intent(getContext(), CarInfoActivity.class);
-            intent.putExtra("CANCLICK",0);
-            intent.putExtra("FROM",3);
+            intent.putExtra("CANCLICK", 0);
+            intent.putExtra("FROM", 3);
             startActivity(intent);
-        }else {         //已添加车辆
+        } else {         //已添加车辆
             Intent intent = new Intent(getContext(), CarManagerActivity.class);
-            intent.putExtra("FRAGMENT","HOMEFRAGMENT");
+            intent.putExtra("FRAGMENT", "HOMEFRAGMENT");
             startActivityForResult(intent, MainActivity.HOMEFRAGMENT_RESULT);
         }
     }
 
     @Override
     public void onFunctionClickListener(int type) {
-        if (type == 0){//轮胎购买
-            if (tireSame){  //前后轮一样
+        if (type == 0) {//轮胎购买
+            //判断是否登录（未登录提示登录）
+            if (!judgeIsLogin()) {
+                return;
+            }
+            if (tireSame) {  //前后轮一样
                 Intent intent = new Intent(getContext(), CarFigureActivity.class);
-                intent.putExtra("TIRESIZE",fontSize);
-                intent.putExtra("FONTREARFLAG","0");
+                intent.putExtra("TIRESIZE", fontSize);
+                intent.putExtra("FONTREARFLAG", "0");
                 startActivity(intent);
-            }else {         //前后轮不一样
+            } else {         //前后轮不一样
                 Intent intent = new Intent(getContext(), TirePlaceActivity.class);
-                intent.putExtra("FONTSIZE",fontSize);
-                intent.putExtra("REARSIZE",rearSize);
+                intent.putExtra("FONTSIZE", fontSize);
+                intent.putExtra("REARSIZE", rearSize);
                 startActivity(intent);
             }
 
-        }else if (type==1){//免费更换
+        } else if (type == 1) {//免费更换
+            //判断是否登录（未登录提示登录）
+            if (!judgeIsLogin()) {
+                return;
+            }
             Intent intent = new Intent(getContext(), TireChangeActivity.class);
-            intent.putExtra(TireChangeActivity.CHANGE_TIRE,1);
+            intent.putExtra(TireChangeActivity.CHANGE_TIRE, 1);
             startActivity(intent);
-        }else if (type == 2){//轮胎修补
+        } else if (type == 2) {//轮胎修补
+            //判断是否登录（未登录提示登录）
+            if (!judgeIsLogin()) {
+                return;
+            }
             startActivity(new Intent(getContext(), TireRepairActivity.class));
-        }else if (type ==3){
+        } else if (type == 3) {
 
         }
     }
@@ -407,15 +415,27 @@ public class HomeFragment extends Fragment implements HometopViewBinder.OnHomeTo
 
     @Override
     public void onEventClickListener(String tag) {
-        if (tag.equals("cxwy")){
+        if (tag.equals("cxwy")) {//（畅行无忧）
+            //判断是否登录（未登录提示登录）
+            if (!judgeIsLogin()) {
+                return;
+            }
             startActivity(new Intent(getContext(), CxwyActivity.class));
-        }else if (tag.equals("qcby")){//3  //门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
+        } else if (tag.equals("qcby")) {//（汽车保养）//3  //门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
+            //判断是否登录（未登录提示登录）
+            if (!judgeIsLogin()) {
+                return;
+            }
             Intent intent = new Intent(getContext(), ShopChooseActivity.class);
-            intent.putExtra(MerchantFragment.SHOP_TYPE,2);
+            intent.putExtra(MerchantFragment.SHOP_TYPE, 2);
             startActivity(intent);
-        }else if (tag.equals("mrqx")){//2
+        } else if (tag.equals("mrqx")) {//（美容清洗）//2
+            //判断是否登录（未登录提示登录）
+            if (!judgeIsLogin()) {
+                return;
+            }
             Intent intent = new Intent(getContext(), ShopChooseActivity.class);
-            intent.putExtra(MerchantFragment.SHOP_TYPE,3);
+            intent.putExtra(MerchantFragment.SHOP_TYPE, 3);
             startActivity(intent);
         }
     }
