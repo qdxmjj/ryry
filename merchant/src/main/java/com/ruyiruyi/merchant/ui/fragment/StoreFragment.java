@@ -253,6 +253,7 @@ public class StoreFragment extends BaseFragment {
         mRecyclerView.setOnScrollListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
+                //根据上拉单次标志位判断是否执行加载更多（防止多次加载）
                 if (isLoadMoreSingle) {
                     return;
                 }
@@ -283,19 +284,16 @@ public class StoreFragment extends BaseFragment {
 
 
     private void updataData() {
+        items.clear();
         if (list == null || list.size() == 0) {
-            items.clear();
             items.add(new ItemNullBean("暂无数据"));
-            assertAllRegistered(multiTypeAdapter, items);
-            multiTypeAdapter.notifyDataSetChanged();
         } else {
-            items.clear();
             for (int i = 0; i < list.size(); i++) {
                 items.add(list.get(i));
             }
-            assertAllRegistered(multiTypeAdapter, items);
-            multiTypeAdapter.notifyDataSetChanged();
         }
+        assertAllRegistered(multiTypeAdapter, items);
+        multiTypeAdapter.notifyDataSetChanged();
     }
 
     private void bindView() {

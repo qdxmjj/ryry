@@ -252,6 +252,8 @@
             android:exported="true"
             android:launchMode="singleTop" />
         <activity android:name=".ui.activity.GoodsShopActivity"></activity>
+        <activity android:name=".ui.activity.WxPhoneActivity" />
+        <activity android:name=".ui.activity.QRCodeActivity" />
     </application>
 
 </manifest>

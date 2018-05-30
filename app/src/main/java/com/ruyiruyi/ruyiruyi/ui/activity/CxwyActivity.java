@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.drakeet.multitype.MultiTypeAdapter;
+import rx.functions.Action1;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
