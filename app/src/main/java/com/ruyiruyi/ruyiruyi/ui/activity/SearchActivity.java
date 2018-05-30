@@ -16,11 +16,15 @@ public class SearchActivity extends RYBaseActivity {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
     private SearchView searchView;
+    public static String TYPE = "TYPE";
+    private int type = 0;  //0是搜索稳点  1是搜索商品
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        Intent intent = getIntent();
+        type = intent.getIntExtra(TYPE,0);
 
         // 3. 绑定组件
         searchView = (SearchView) findViewById(R.id.search_view);
@@ -31,10 +35,18 @@ public class SearchActivity extends RYBaseActivity {
             @Override
             public void SearchAciton(String string) {
                 Log.e(TAG, "SearchAciton: " + string);
-                Intent intent = new Intent();
-                intent.putExtra("SEARCH_STR",string);
-                setResult(MerchantFragment.SEARCH_CODE,intent);
-                finish();
+                if (type == 0){
+                    Intent intent = new Intent();
+                    intent.putExtra("SEARCH_STR",string);
+                    setResult(MerchantFragment.SEARCH_CODE,intent);
+                    finish();
+                }else if (type == 1){
+                    Intent intent = new Intent(getApplicationContext(),GoodsShopActivity.class);
+                    intent.putExtra("SEARCH_STR",string);
+                    intent.putExtra(GoodsShopActivity.FROMTYPE,1);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -50,10 +62,18 @@ public class SearchActivity extends RYBaseActivity {
             @Override
             public void ItemClick(String string) {
                 Log.e(TAG, "SearchAciton: " + string);
-                Intent intent = new Intent();
-                intent.putExtra("SEARCH_STR",string);
-                setResult(MerchantFragment.SEARCH_CODE,intent);
-                finish();
+
+                if (type == 0){
+                    Intent intent = new Intent();
+                    intent.putExtra("SEARCH_STR",string);
+                    setResult(MerchantFragment.SEARCH_CODE,intent);
+                    finish();
+                }else if (type == 1){
+                    Intent intent = new Intent(getApplicationContext(),GoodsShopActivity.class);
+                    intent.putExtra("SEARCH_STR",string);
+                    intent.putExtra(GoodsShopActivity.FROMTYPE,1);
+                    startActivity(intent);
+                }
             }
         });
     }

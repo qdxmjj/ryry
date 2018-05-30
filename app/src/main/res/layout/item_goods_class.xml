@@ -21,12 +21,15 @@
                 android:id="@+id/class_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_launcher"/>
             <TextView
                 android:id="@+id/class_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:singleLine="true"
+                android:enabled="true"
                 android:layout_gravity="center_horizontal"
                 android:text="防冻液"/>
         </LinearLayout>

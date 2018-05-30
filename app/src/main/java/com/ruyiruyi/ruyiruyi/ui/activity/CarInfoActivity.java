@@ -806,7 +806,7 @@ public class CarInfoActivity extends RYBaseActivity implements View.OnClickListe
         List<String> lTime_list = new ArrayList<>();
         Calendar date = Calendar.getInstance();
         String year = String.valueOf(date.get(Calendar.YEAR));
-        int currentYear = Integer.parseInt(year);
+        int currentYear = Integer.parseInt(year) + 1;
         for (int i = 0; i < xszEndYear - currentYear; i++) {
             rTime_list.add(currentYear + i+"");
         }

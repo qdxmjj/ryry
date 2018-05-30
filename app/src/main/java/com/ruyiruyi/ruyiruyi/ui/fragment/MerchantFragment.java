@@ -469,6 +469,7 @@ public class MerchantFragment extends RYBaseFragment implements ShopViewBinder.O
                 @Override
                 public void call(Void aVoid) {
                     Intent intent = new Intent(getContext(), SearchActivity.class);
+                    intent.putExtra(SearchActivity.TYPE,0);
                     startActivityForResult(intent,SEARCH_CODE);
                 }
             });

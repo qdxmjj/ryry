@@ -9,19 +9,20 @@
         android:layout_height="45dp"
         android:background="@color/theme_primary">
         <LinearLayout
+            android:id="@+id/goods_search_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
             android:background="@drawable/bg_search">
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="20dp"
                 android:src="@drawable/ic_search"/>
 
@@ -30,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:text="请输入商品名称"
                 android:textColor="#ffffff"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:layout_marginLeft="15dp"/>
         </LinearLayout>
     </FrameLayout>

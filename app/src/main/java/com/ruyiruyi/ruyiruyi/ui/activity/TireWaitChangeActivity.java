@@ -107,22 +107,23 @@ public class TireWaitChangeActivity extends RYBaseActivity {
                             int fontRearFlag = object.getInt("fontRearFlag");
                             int fontAmount = object.getInt("fontAmount");
                             int rearAmount = object.getInt("rearAmount");
+                            int shoeAvailableNo = object.getInt("shoeAvailableNo");
                             String fontShoeName = "";
                             String tirePlace = "";
                             if (fontRearFlag == 0) {//前轮跟后轮
                                 tirePlace = "前轮/后轮";
                                 fontShoeName = object.getString("fontShoeName");
-                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus);
+                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus,shoeAvailableNo);
                                 tireWaitList.add(tireWait);
                             } else if (fontRearFlag == 1) {//前轮
                                 tirePlace = "前轮";
                                 fontShoeName = object.getString("fontShoeName");
-                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus);
+                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus,shoeAvailableNo);
                                 tireWaitList.add(tireWait);
                             } else { //后轮
                                 tirePlace = "后轮";
                                 fontShoeName = object.getString("rearShoeName");
-                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, rearAmount, platNumber, tirePlace, orderNo, rejectStatus);
+                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, rearAmount, platNumber, tirePlace, orderNo, rejectStatus,shoeAvailableNo);
                                 tireWaitList.add(tireWait);
                             }
                             initData();
