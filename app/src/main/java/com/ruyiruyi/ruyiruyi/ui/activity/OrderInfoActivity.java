@@ -119,8 +119,6 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
         String token = new DbConfig().getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
-
-
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: ------" + result);
@@ -146,7 +144,7 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
                             }
                         }else if (orderType == 3){ //免费再换
                             if (orderState == 5) {  //代发货
-                                getFirstTireOrderInfo(data);
+                                getFreeTireOrderInfo(data);
                             }
                         }
                         initData();
@@ -176,6 +174,40 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
 
             }
         });
+    }
+
+    /**
+     * 免费再换
+     * @param data
+     * @throws JSONException
+     */
+    private void getFreeTireOrderInfo(JSONObject data) throws JSONException {
+        orderImg = data.getString("orderImg");
+        orderTotalPrice = data.getString("orderTotalPrice");
+        carNumber = data.getString("platNumber");
+        storeId = data.getString("storeId");
+        storeName = data.getString("storeName");
+        userName = data.getString("userName");
+        userPhone = data.getString("userPhone");
+        JSONArray array = data.getJSONArray("freeChangeOrderVoList");
+        tireInfoList.clear();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject object = array.getJSONObject(i);
+            String shoeName = object.getString("shoeName");
+            String shoeImg = object.getString("shoeImg");
+            String fontRearFlag = object.getString("fontRearFlag");
+            int fontAmount = object.getInt("fontAmount");
+            int rearAmount = object.getInt("rearAmount");
+            TireInfo tireInfo = null;
+            if (fontRearFlag.equals("2")){ //后轮
+                tireInfo = new TireInfo(orderImg,shoeName,rearAmount,"0.00",fontRearFlag);
+            }else if (fontRearFlag.equals("1")){ //前轮
+                tireInfo = new TireInfo(orderImg,shoeName,fontAmount,"0.00",fontRearFlag);
+            }else {//前后轮一致
+                tireInfo = new TireInfo(orderImg,shoeName,fontAmount + rearAmount,"0.00",fontRearFlag);
+            }
+            tireInfoList.add(tireInfo);
+        }
     }
 
     /**
@@ -419,6 +451,12 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
                 orderButton.setText("确认服务");
                 orderButton.setClickable(true);
                 orderButton.setBackgroundResource(R.drawable.bg_button);
+            }
+        }else if (orderType == 3){
+            if (orderState == 5){
+                orderButton.setText("等待发货");
+                orderButton.setClickable(false);
+                orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
             }
         }
     }
