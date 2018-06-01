@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsShop;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsShopViewBinder;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;

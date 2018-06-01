@@ -27,6 +27,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.MyLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PromotionActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.SendToWXActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.SettingActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopEvaluateActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
@@ -324,22 +325,11 @@ public class MyFragment extends RYBaseFragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (isLogin) {
-                            DbConfig dbConfig = new DbConfig();
-                            User user = dbConfig.getUser();
-                            user.setIsLogin("0");
-                            DbManager db = dbConfig.getDbManager();
-
-                            try {
-                                db.saveOrUpdate(user);
-                            } catch (DbException e) {
-
-                            }
-                            initView();
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
                         }
-
-                        UIOpenHelper.openLogin(getContext());
-
+                        startActivity(new Intent(getContext(), SettingActivity.class));
                     }
                 });
         //我的宝驹的点击

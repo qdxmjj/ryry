@@ -15,6 +15,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.ui.activity.OrderConfirmFirstChangeActivity;
+import com.ruyiruyi.merchant.ui.activity.OrderConfirmFreeChangeActivity;
+import com.ruyiruyi.merchant.ui.activity.OrderConfirmTireRepairActivity;
 import com.ruyiruyi.merchant.ui.activity.PublicOrderInfoActivity;
 import com.ruyiruyi.merchant.ui.multiType.modle.Dingdan;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -63,17 +66,30 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
         RxViewAction.clickNoDouble(holder.rl_item).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-
+                /*orderType:  1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单*/
                 /*orderState:订单状态(): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付*/
 
-                Intent intent = new Intent(context, PublicOrderInfoActivity.class);//各订单orderType各状态orderState均复用此页面(
-                Bundle bundle = new Bundle();
-                bundle.putString("orderNo", dingdan.getOrderNo());
-                bundle.putString("orderType", dingdan.getOrderType());
-                bundle.putString("orderState", dingdan.getOrderState());
-                bundle.putString("storeId", new DbConfig().getId() + "");
-                intent.putExtras(bundle);
-                context.startActivity(intent);
+                if (dingdan.getOrderType().equals("2") && dingdan.getOrderState().equals("3")) {//(2:首次更换订单  3 待商家确认服务)
+                    Intent intent = new Intent(context, OrderConfirmFirstChangeActivity.class);
+                    context.startActivity(intent);
+                } else if (dingdan.getOrderType().equals("3") && dingdan.getOrderState().equals("3")) {//(3:免费再换订单  3 待商家确认服务)
+                    Intent intent = new Intent(context, OrderConfirmFreeChangeActivity.class);
+                    intent.putExtra("orderNo", dingdan.getOrderNo());
+                    intent.putExtra("orderType", dingdan.getOrderType());
+                    context.startActivity(intent);
+                } else if (dingdan.getOrderType().equals("4") && dingdan.getOrderState().equals("3")) {//(4:轮胎修补订单  3 待商家确认服务)
+                    Intent intent = new Intent(context, OrderConfirmTireRepairActivity.class);
+                    context.startActivity(intent);
+                } else {
+                    Intent intent = new Intent(context, PublicOrderInfoActivity.class);//其余各订单orderType各状态orderState均复用此页面(
+                    Bundle bundle = new Bundle();
+                    bundle.putString("orderNo", dingdan.getOrderNo());
+                    bundle.putString("orderType", dingdan.getOrderType());
+                    bundle.putString("orderState", dingdan.getOrderState());
+                    bundle.putString("storeId", new DbConfig().getId() + "");
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                }
 
             }
         });

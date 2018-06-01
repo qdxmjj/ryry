@@ -1,11 +1,10 @@
-package com.ruyiruyi.merchant.ui.activity;
+package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.db.DbConfig;
-import com.ruyiruyi.merchant.db.model.User;
-import com.ruyiruyi.merchant.utils.UtilsURL;
+import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.User;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -30,13 +30,12 @@ import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
 import rx.functions.Action1;
 
-public class ChangePwActivity extends BaseActivity {
+public class ChangePwActivity extends RYBaseActivity {
 
     private ActionBar mActionBar;
     private EditText et_yuanmima;
@@ -145,8 +144,8 @@ public class ChangePwActivity extends BaseActivity {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_save_commit, null);
         TextView error_text = (TextView) dialogView.findViewById(R.id.save_text);
         error_text.setText(error);
-        dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setTitle("如意如驿");
+        dialog.setIcon(R.drawable.ic_logo_login);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
             @Override
@@ -170,7 +169,7 @@ public class ChangePwActivity extends BaseActivity {
 
                 } catch (JSONException e) {
                 }
-                RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "changeStorePwdByOldPwd");
+                RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "changeStorePwdByOldPwd");
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("token", new DbConfig().getToken());
                 params.setConnectTimeout(6000);
@@ -233,8 +232,8 @@ public class ChangePwActivity extends BaseActivity {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
-        dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setTitle("如意如驿");
+        dialog.setIcon(R.drawable.ic_logo_login);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
             @Override

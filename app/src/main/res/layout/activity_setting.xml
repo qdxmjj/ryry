@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ruyiruyi.ruyiruyi.ui.activity.SettingActivity">
+
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/acbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="52dp"
+            android:layout_marginLeft="22dp"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/fl_change_pw"
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_gaimima" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="修改密码"
+                        android:textColor="@color/c7"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="22dp"
+                    android:src="@drawable/ic_right_car" />
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/c1" />
+
+            <FrameLayout
+                android:id="@+id/fl_change_phone"
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_gaishoujihao" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="修改手机号"
+                        android:textColor="@color/c7"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="22dp"
+                    android:src="@drawable/ic_right_car" />
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/c1" />
+
+            <FrameLayout
+                android:id="@+id/fl_talk"
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_question" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="联系客服"
+                        android:textColor="@color/c7"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="22dp"
+                    android:src="@drawable/ic_right_car" />
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/c1" />
+
+            <FrameLayout
+                android:id="@+id/fl_understand_us"
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_about" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:text="关于我们"
+                        android:textColor="@color/c7"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="22dp"
+                    android:src="@drawable/ic_right_car" />
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/c1" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_exit"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/bg_button"
+            android:gravity="center"
+            android:text="退出登录"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+    </FrameLayout>
+
+</LinearLayout>
