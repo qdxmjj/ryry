@@ -1318,14 +1318,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     showDialog("请点击定位");
                     return;
                 }
-                if (yyzzPicBitmap == null) {
+                if (yyzzPicBitmap == null || !hasPic_yyzz) {
                     showDialog("请上传营业执照");
                     return;
                 } else {
                     yyzzPath = ImageUtils.savePhoto(yyzzPicBitmap, Environment
                             .getExternalStorageDirectory().getAbsolutePath(), "yyzzPic");
                 }
-                if (mdPicaBitmap == null || mdPicbBitmap == null || mdPiccBitmap == null) {
+                if (mdPicaBitmap == null || mdPicbBitmap == null || mdPiccBitmap == null || !hasPic_mdPic_a || !hasPic_mdPic_b || !hasPic_mdPic_c) {
                     showDialog("请上传门店照片");
                     return;
                 } else {
@@ -1336,7 +1336,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     mdpiccPath = ImageUtils.savePhoto(mdPiccBitmap, Environment
                             .getExternalStorageDirectory().getAbsolutePath(), "mdPicc");
                 }
-                if (shouPicBitmap == null) {
+                if (shouPicBitmap == null || !hasPic_shou_a) {
                     showDialog("请上传手持身份证照片");
                     return;
                 } else {

@@ -151,7 +151,7 @@ public class OrderFragment extends BaseFragment {
     private void requestFromServer() {
         //数据加载完成前显示加载动画
         startDialog = new ProgressDialog(getContext());
-        showDialogProgress(startDialog, "订单信息加载中...");
+        showDialogProgress(startDialog, "信息加载中...");
 
 
         isLoadOver = false;
@@ -220,7 +220,7 @@ public class OrderFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(getContext(), "订单信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
