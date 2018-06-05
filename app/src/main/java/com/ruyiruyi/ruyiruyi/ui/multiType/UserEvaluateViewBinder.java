@@ -48,7 +48,6 @@ public class UserEvaluateViewBinder extends ItemViewProvider<UserEvaluate, UserE
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull UserEvaluate userEvaluate) {
-
         Glide.with(context).load(userEvaluate.getUserImage()).transform(new GlideCircleTransform(context)).into(holder.userImageView);
         holder.usernameText.setText(userEvaluate.getUsetName());
         holder.evaluateTimeText.setText(userEvaluate.getEvaluateTime());

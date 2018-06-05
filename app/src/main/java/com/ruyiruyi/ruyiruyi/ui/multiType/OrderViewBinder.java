@@ -66,33 +66,45 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
             }else if (order.getOrderState().equals("6")){
                 holder.orderTypeText.setText("已退货");
             }
-        }else {//订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
+        }
+        else {//订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
 
-            if (order.getOrderState().equals("1")) {
-                holder.orderTypeText.setText("交易完成");
-            }else if (order.getOrderState().equals("2")){
-                holder.orderTypeText.setText("待收货");
-            }else if (order.getOrderState().equals("3")){
-                holder.orderTypeText.setText("待商家确认服务");
-            }else if (order.getOrderState().equals("4")){
-                holder.orderTypeText.setText("作废");
-            }else if (order.getOrderState().equals("5")){
-                holder.orderPriceText.setVisibility(View.INVISIBLE);
-                holder.orderTypeText.setText("待发货");
-            }else if (order.getOrderState().equals("6")){
-                holder.orderTypeText.setText("待车主确认服务");
-            }else if (order.getOrderState().equals("7")){
-                holder.orderTypeText.setText("待评价");
-            }else if (order.getOrderState().equals("8")){
-                holder.orderTypeText.setText("待支付");
+            if (order.getOrderStage().equals("1")){  //orderStage:订单二段状态 1 默认(不需要支付差价)  2 待车主支付差价 3 已支付差价 4 待车主支付运费 5 已支付运费
+                if (order.getOrderState().equals("1")) {
+                    holder.orderTypeText.setText("交易完成");
+                }else if (order.getOrderState().equals("2")){
+                    holder.orderTypeText.setText("待收货");
+                }else if (order.getOrderState().equals("3")){
+                    holder.orderTypeText.setText("待商家确认服务");
+                }else if (order.getOrderState().equals("4")){
+                    holder.orderTypeText.setText("作废");
+                }else if (order.getOrderState().equals("5")){
+                    holder.orderPriceText.setVisibility(View.INVISIBLE);
+                    holder.orderTypeText.setText("待发货");
+                }else if (order.getOrderState().equals("6")){
+                    holder.orderTypeText.setText("待车主确认服务");
+                }else if (order.getOrderState().equals("7")){
+                    holder.orderTypeText.setText("待评价");
+                }else if (order.getOrderState().equals("8")){
+                    holder.orderTypeText.setText("待支付");
+                }
+            }else if (order.getOrderStage().equals("2")){
+                holder.orderTypeText.setText("待车主支付差价");
+            }else if (order.getOrderStage().equals("3")){
+                holder.orderTypeText.setText("已支付差价");
+            }else if (order.getOrderStage().equals("4")){
+                holder.orderTypeText.setText("待车主支付运费");
+            }else if (order.getOrderStage().equals("5")){
+                holder.orderTypeText.setText("已支付运费");
             }
+
         }
 
         RxViewAction.clickNoDouble(holder.orderLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        listener.onOrderItemClickListener(order.getOrderState(),order.getOrderType(),order.getOrderNo(),order.storeId);
+                        listener.onOrderItemClickListener(order.getOrderState(),order.getOrderType(),order.getOrderNo(),order.storeId,order.getOrderStage());
                     }
                 });
     }
@@ -121,6 +133,6 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
     }
 
     public interface OnOrderItemClick{
-        void onOrderItemClickListener(String state,String orderType,String orderNo,String storeId);
+        void onOrderItemClickListener(String state,String orderType,String orderNo,String storeId,String orderStage);
     }
 }

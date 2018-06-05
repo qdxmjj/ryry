@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -23,7 +23,7 @@ import org.xutils.ex.DbException;
 
 import rx.functions.Action1;
 
-public class SettingActivity extends RYBaseActivity {
+public class SettingActivity extends RyBaseActivity {
     private ActionBar actionBar;
     private FrameLayout fl_change_pw;
     private FrameLayout fl_change_phone;

@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
@@ -35,7 +35,7 @@ import java.security.NoSuchAlgorithmException;
 
 import rx.functions.Action1;
 
-public class ChangePwActivity extends RYBaseActivity {
+public class ChangePwActivity extends RyBaseActivity {
 
     private ActionBar mActionBar;
     private EditText et_yuanmima;

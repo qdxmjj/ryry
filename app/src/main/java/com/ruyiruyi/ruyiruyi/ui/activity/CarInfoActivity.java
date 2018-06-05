@@ -1257,6 +1257,9 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         }else if (currentImage == 1){
             file = new File(Environment
                     .getExternalStorageDirectory(), "zhashizhengfuye.jpg");
+        }else if (currentImage == 2){
+            file = new File(Environment
+                    .getExternalStorageDirectory(), "lichengbiao.jpg");
         }
 
         //判断是否是AndroidN以及更高的版本
