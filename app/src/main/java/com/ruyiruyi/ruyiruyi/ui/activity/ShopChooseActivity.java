@@ -1,17 +1,15 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseFragmentActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseFragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Shop;
 
-public class ShopChooseActivity extends RYBaseFragmentActivity implements MerchantFragment.OnMerchantViewClick{
+public class ShopChooseActivity extends RyBaseFragmentActivity implements MerchantFragment.OnMerchantViewClick{
 
     private static final String TAG = ShopChooseActivity.class.getSimpleName();
     private int shopType;

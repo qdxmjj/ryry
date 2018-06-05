@@ -17,7 +17,7 @@ import com.ruyiruyi.rylibrary.base.BaseFragmentActivity;
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 
-public class RYBaseFragmentActivity extends BaseFragmentActivity {
+public class RyBaseFragmentActivity extends BaseFragmentActivity {
 
 
     @Override

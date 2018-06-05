@@ -21,7 +21,7 @@ import com.ruyiruyi.ruyiruyi.db.model.CarTireInfo;
 import com.ruyiruyi.ruyiruyi.db.model.CarVerhicle;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.TireType;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseFragmentActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseFragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsClassFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.HomeFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
@@ -49,7 +49,7 @@ import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-public class MainActivity extends RYBaseFragmentActivity {
+public class MainActivity extends RyBaseFragmentActivity {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
