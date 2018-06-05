@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Promotion;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PromotionHasperson;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PromotionHaspersonViewBinder;
@@ -53,7 +53,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class PromotionActivity extends RYBaseActivity implements PromotionViewBinder.OnShareViewClick {
+public class PromotionActivity extends RyBaseActivity implements PromotionViewBinder.OnShareViewClick {
 
     private ActionBar actionBar;
     private RecyclerView mRlv;
@@ -254,8 +254,8 @@ public class PromotionActivity extends RYBaseActivity implements PromotionViewBi
         WXWebpageObject webpage = new WXWebpageObject();
         webpage.webpageUrl = "http://192.168.0.190:8060/preferentialInfo/share?userId=" + id;
         WXMediaMessage msg = new WXMediaMessage(webpage);
-        msg.title = "百度一下";
-        msg.description = "百度一下你就知道";
+        msg.title = "如驿如意";
+        msg.description = "分享下载app，注册并添加车辆即赠送两张精致洗车券，购买轮胎，更有精美大礼赠送！";
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
         Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
         bmp.recycle();

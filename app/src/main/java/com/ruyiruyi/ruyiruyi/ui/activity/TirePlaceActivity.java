@@ -6,13 +6,13 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import rx.functions.Action1;
 
-public class TirePlaceActivity extends RYBaseActivity {
+public class TirePlaceActivity extends RyBaseActivity {
     private ActionBar actionBar;
     private String fontsize;
     private String rearsize;

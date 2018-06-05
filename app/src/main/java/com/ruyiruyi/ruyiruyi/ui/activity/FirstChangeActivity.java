@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.cell.flowlayout.FlowLayout;
@@ -20,7 +20,7 @@ import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstChangeActivity extends RYBaseActivity {
+public class FirstChangeActivity extends RyBaseActivity {
     private ActionBar actionBar;
     private TagFlowLayout typeFlowLayout;
     private String[] mVals = new String[]

@@ -14,7 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBig;
@@ -45,7 +45,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class ShopEvaluateActivity extends RYBaseActivity implements EvaImageViewBinder.OnEvaluateImageClick {
+public class ShopEvaluateActivity extends RyBaseActivity implements EvaImageViewBinder.OnEvaluateImageClick {
     private static final String TAG = ShopEvaluateActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;

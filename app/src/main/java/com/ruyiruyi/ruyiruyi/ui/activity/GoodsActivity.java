@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsListFragment;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBig;
@@ -42,7 +42,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class GoodsActivity extends RYBaseActivity implements GoodsVerticalViewBinder.OnGoodsVerItemClick {
+public class GoodsActivity extends RyBaseActivity implements GoodsVerticalViewBinder.OnGoodsVerItemClick {
     private static final String TAG = GoodsActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;

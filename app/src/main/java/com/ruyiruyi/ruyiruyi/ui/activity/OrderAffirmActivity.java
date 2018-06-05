@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -25,7 +25,7 @@ import java.text.DecimalFormat;
 
 import rx.functions.Action1;
 
-public class OrderAffirmActivity extends RYBaseActivity {
+public class OrderAffirmActivity extends RyBaseActivity {
     private static final String TAG = OrderAffirmActivity.class.getSimpleName();
     private ActionBar actionBar;
     private TextView tireBuyButton;

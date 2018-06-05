@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Newest;
 import com.ruyiruyi.ruyiruyi.db.model.UserTest;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.service.CodeTimerService;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.utils.LayoutHelper;
@@ -27,7 +27,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class TestActivity extends RYBaseActivity {
+public class TestActivity extends RyBaseActivity {
 
     private static final String TAG = TestActivity.class.getSimpleName();
     private LinearLayout content;

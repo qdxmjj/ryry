@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RechargeMoney;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RechargeMoneyViewBinder;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -26,7 +26,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class MyLimitActivity extends RYBaseActivity implements RechargeMoneyViewBinder.OnMoneyClick {
+public class MyLimitActivity extends RyBaseActivity implements RechargeMoneyViewBinder.OnMoneyClick {
     private ActionBar actionBar;
     private RecyclerView listView;
     private List<Object> items = new ArrayList<>();

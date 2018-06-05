@@ -7,6 +7,7 @@
     tools:context="com.ruyiruyi.ruyiruyi.ui.activity.GoodsShopActivity">
 
     <LinearLayout
+        android:id="@+id/goods_shop_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

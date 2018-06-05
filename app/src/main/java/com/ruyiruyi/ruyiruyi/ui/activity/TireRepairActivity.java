@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.ShopChooseCell;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -12,7 +12,7 @@ import com.ruyiruyi.rylibrary.cell.ActionBar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TireRepairActivity extends RYBaseActivity {
+public class TireRepairActivity extends RyBaseActivity {
     private ActionBar actionBar;
     private ShopChooseCell shopChooseView;
     public List<StoreType> typeList;

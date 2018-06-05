@@ -1,11 +1,8 @@
 package com.ruyiruyi.ruyiruyi.ui.fragment;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,23 +15,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.ruyiruyi.ruyiruyi.MyApplication;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.ui.activity.CityChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.SearchActivity;
-import com.ruyiruyi.ruyiruyi.ui.activity.ShopGoodActivity;
-import com.ruyiruyi.ruyiruyi.ui.activity.ShopHomeActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.ShopGoodsNewActivity;
 import com.ruyiruyi.ruyiruyi.ui.adapter.MenuListAdapter;
-import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
-import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMore;
@@ -53,6 +44,7 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -63,7 +55,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class MerchantFragment extends RYBaseFragment implements ShopViewBinder.OnShopItemClick {
+public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.OnShopItemClick {
 
     private static final int MERCHANT_CITY_CHOOSE = 5;
     private static final String TAG = MerchantFragment.class.getSimpleName();
@@ -240,7 +232,6 @@ public class MerchantFragment extends RYBaseFragment implements ShopViewBinder.O
                             shopList.add(shop);
                           //  typeList.clear();
                         }
-
                         initData();
                     }else {
                         shopList.clear();
@@ -274,19 +265,19 @@ public class MerchantFragment extends RYBaseFragment implements ShopViewBinder.O
             items.clear();
         }
 
-        if (shopList.size() == 0 && currentPage ==1){
+        if (shopList.size() == 0 && currentPage ==1){//当数据源为空
             items.add(new Empty());
         }else {
-            if (items.size() > 0 ){
+            if (items.size() > 0 ){           //当item不是空 >0  移除最后的加载更多的item
                 items.remove(items.size()-1);
             }
-            for (int i = 0; i < shopList.size(); i++) {
+            for (int i = 0; i < shopList.size(); i++) {     //加载数据源
                 items.add(shopList.get(i));
             }
 
             Log.e(TAG, "initData:---" + currentPage);
             Log.e(TAG, "initData: ---" + allPager);
-            if (allPager>1 ){
+            if (allPager>1 ){        //下拉加载
                 if (allPager ==  currentPage){
                     items.add(new LoadMore("全部加载完毕！"));
                 }else {
@@ -519,12 +510,21 @@ public class MerchantFragment extends RYBaseFragment implements ShopViewBinder.O
      * item的点击回调
      */
     @Override
-    public void onShopItemClickListener(int storeId,Shop shop) {
+    public void onShopItemClickListener(int storeId, String storeMame, String storeImage, List<ServiceType> storeService, Shop shop) {
         if (shopType == 5){//轮胎服务  点击传值给Activity  做forResult返回
             listener.onShopItemClickListener(shop);
         }else {
-            Intent intent = new Intent(getContext(), ShopHomeActivity.class);
+           /* Intent intent = new Intent(getContext(), ShopHomeActivity.class);
             intent.putExtra("STOREID",storeId);
+            startActivity(intent);*/
+            Intent intent = new Intent(getContext(), ShopGoodsNewActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt(ShopGoodsNewActivity.FROM_TYPE,0);
+            bundle.putInt(ShopGoodsNewActivity.STORE_ID,storeId);
+            bundle.putString(ShopGoodsNewActivity.STORE_IMAGE,storeImage);
+            bundle.putString(ShopGoodsNewActivity.STORE_NAME,storeMame);
+            bundle.putSerializable(ShopGoodsNewActivity.STORE_SERVICE, (Serializable) storeService);
+            intent.putExtras(bundle);
             startActivity(intent);
         }
     }

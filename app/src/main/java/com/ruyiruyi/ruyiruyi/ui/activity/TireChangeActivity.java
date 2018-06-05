@@ -17,7 +17,7 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.ShopChooseCell;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
@@ -43,7 +43,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class TireChangeActivity extends RYBaseActivity {
+public class TireChangeActivity extends RyBaseActivity {
     public final static String CHANGE_TIRE = "CHANGE_TIRE";
     public static final int CHOOSE_SHOP = 2;
     private static final String TAG = TireChangeActivity.class.getSimpleName();
@@ -71,8 +71,8 @@ public class TireChangeActivity extends RYBaseActivity {
     private ImageView reasonTwoImage;
     private ShopChooseCell shopChooseView;
     private LayoutInflater mInflater;
-    private int rearAvaliableAmount;
-    private int fontAvaliableAmount;
+    private int rearAvaliableAmount = 0;
+    private int fontAvaliableAmount = 0;
     private int fontRearFlag;       //fontRearFlag：0：前后轮一致   非0:前后轮不一致
     private int fontMaxCount = 0;
     private int rearMaxCount = 0;
@@ -161,6 +161,9 @@ public class TireChangeActivity extends RYBaseActivity {
                         fontRearFlag = data.getInt("fontRearFlag");
                         isReach5Years = data.getInt("isReach5Years");
 
+                        if (fontFreeAmount == 0 && rearFreeAmount == 0){
+                            Toast.makeText(TireChangeActivity.this, "暂无可更换轮胎", Toast.LENGTH_SHORT).show();
+                        }
                         initAmountView();
                     }else {
                         Toast.makeText(TireChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
@@ -514,6 +517,9 @@ public class TireChangeActivity extends RYBaseActivity {
      * 免费再换
      */
     private void freeChangeOrder() {
+        if (currentRearCount ==0 && currentFontCount == 0){
+            Toast.makeText(TireChangeActivity.this, "请选择轮胎数量", Toast.LENGTH_SHORT).show();
+        }
         User user = new DbConfig().getUser();
         int userId = user.getId();
         int userCarId = user.getCarId();

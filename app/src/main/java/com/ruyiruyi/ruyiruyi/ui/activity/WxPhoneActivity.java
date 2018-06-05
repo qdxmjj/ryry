@@ -17,7 +17,7 @@ import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -34,7 +34,7 @@ import org.xutils.x;
 
 import rx.functions.Action1;
 
-public class WxPhoneActivity extends RYBaseActivity {
+public class WxPhoneActivity extends RyBaseActivity {
     private static final String TAG = WxPhoneActivity.class.getSimpleName();
     private ActionBar actionBar;
     private EditText wxPhoneEdit;

@@ -29,7 +29,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.MessagePicturesLayout;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EvaluateImage;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EvaluateImageViewBinder;
@@ -69,7 +69,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class EvaluateActivity extends RYBaseActivity implements EvaluateImageViewBinder.OnEvaluateImageClickListener ,MessagePicturesLayout.Callback{
+public class EvaluateActivity extends RyBaseActivity implements EvaluateImageViewBinder.OnEvaluateImageClickListener ,MessagePicturesLayout.Callback{
     private static final String TAG = EvaluateActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;

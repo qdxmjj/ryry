@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireWait;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireWaitViewBinder;
@@ -35,7 +35,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class TireWaitChangeActivity extends RYBaseActivity {
+public class TireWaitChangeActivity extends RyBaseActivity {
     private static final String TAG = TireWaitChangeActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;

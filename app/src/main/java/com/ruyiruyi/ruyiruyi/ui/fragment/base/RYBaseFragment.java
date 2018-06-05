@@ -16,7 +16,7 @@ import com.ruyiruyi.rylibrary.base.BaseFragment;
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 
-public class RYBaseFragment extends BaseFragment {
+public class RyBaseFragment extends BaseFragment {
 
 
     /*

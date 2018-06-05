@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.alipay.sdk.app.PayTask;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.PayResult;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.XMJJUtils;
@@ -47,7 +47,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import rx.functions.Action1;
 
-public class PaymentActivity extends RYBaseActivity {
+public class PaymentActivity extends RyBaseActivity {
 
     private static final String TAG = PaymentActivity.class.getSimpleName();
     private ActionBar actionBar;

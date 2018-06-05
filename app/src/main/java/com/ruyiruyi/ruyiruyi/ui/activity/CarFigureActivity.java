@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnFigureItemInterface;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireFigure;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireFigureViewBinder;
@@ -37,7 +37,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class CarFigureActivity extends RYBaseActivity implements OnFigureItemInterface {
+public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInterface {
     private static final String TAG = CarFigureActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;

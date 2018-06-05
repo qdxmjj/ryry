@@ -3,7 +3,6 @@ package com.ruyiruyi.ruyiruyi.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,17 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.GoodsActivity;
-import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsHorizontal;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsItem;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsItemViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsVertical;
-import com.ruyiruyi.ruyiruyi.utils.FullyLinearLayoutManager;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 
 import org.json.JSONArray;
@@ -40,7 +37,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class GoodsListFragment extends RYBaseFragment implements GoodsItemViewBinder.OnGoodsItemClick {
+public class GoodsListFragment extends RyBaseFragment implements GoodsItemViewBinder.OnGoodsItemClick {
     private static final String TAG = GoodsListFragment.class.getSimpleName();
     public static final int GOODS_FRAGMENT_RESULT = 2;
     public static String GOODS_CLASS_ID = "GOODS_CLASS_ID";

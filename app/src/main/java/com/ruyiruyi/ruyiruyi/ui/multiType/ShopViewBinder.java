@@ -22,6 +22,8 @@ import com.ruyiruyi.rylibrary.cell.flowlayout.FlowLayout;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagAdapter;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagFlowLayout;
 
+import java.util.List;
+
 import me.drakeet.multitype.ItemViewProvider;
 import rx.functions.Action1;
 
@@ -68,7 +70,7 @@ public class ShopViewBinder extends ItemViewProvider<Shop, ShopViewBinder.ViewHo
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        listener.onShopItemClickListener(shop.getStoreId(),shop);
+                        listener.onShopItemClickListener(shop.getStoreId(),shop.getStoreName(),shop.getStoreImage(),shop.getServiceTypeList(),shop);
                     }
                 });
 
@@ -115,7 +117,7 @@ public class ShopViewBinder extends ItemViewProvider<Shop, ShopViewBinder.ViewHo
     }
 
     public interface OnShopItemClick{
-        void onShopItemClickListener(int storeId,Shop shop);
+        void onShopItemClickListener(int storeId, String storeMame, String storeImage, List<ServiceType> storeService, Shop shop);
     }
 
 }

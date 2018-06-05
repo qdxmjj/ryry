@@ -25,7 +25,7 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.ui.adapter.CYBChangeCityGridViewAdapter;
@@ -44,7 +44,7 @@ import me.yokeyword.indexablerv.IndexableHeaderAdapter;
 import me.yokeyword.indexablerv.IndexableLayout;
 import rx.functions.Action1;
 
-public class CityChooseActivity extends RYBaseActivity {
+public class CityChooseActivity extends RyBaseActivity {
     private static final String TAG = CityChooseActivity.class.getSimpleName();
     private ContactAdapter mAdapter;
     private BannerHeaderAdapter mBannerHeaderAdapter;

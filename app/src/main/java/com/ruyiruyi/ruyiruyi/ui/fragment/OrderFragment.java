@@ -3,7 +3,6 @@ package com.ruyiruyi.ruyiruyi.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +18,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.EvaluateActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PaymentActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PendingOrderActivity;
-import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Order;
 import com.ruyiruyi.ruyiruyi.ui.multiType.OrderViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.FullyLinearLayoutManager;
@@ -41,7 +40,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class OrderFragment extends RYBaseFragment implements OrderViewBinder.OnOrderItemClick {
+public class OrderFragment extends RyBaseFragment implements OrderViewBinder.OnOrderItemClick {
     private static final String TAG = OrderFragment.class.getSimpleName();
     public static String ORDER_TYPE;  //ALL DZF DFH DFW YWC
     private String orderType;
@@ -197,14 +196,23 @@ public class OrderFragment extends RYBaseFragment implements OrderViewBinder.OnO
             intent.putExtra(PaymentActivity.ORDER_TYPE, Integer.parseInt(orderType));
             intent.putExtra(PaymentActivity.ORDER_FROM, 1);
             startActivity(intent);
-        } else if (orderState.equals("5")) {    //代发货 orderType 2
+        } else if ( orderState.equals("5")) {    //首次更换 免费再换 代发货 orderType 2  ||
             Intent intent = new Intent(getContext(), OrderInfoActivity.class);
             intent.putExtra(PaymentActivity.ORDERNO, orderNo);
             intent.putExtra(PaymentActivity.ORDER_TYPE, Integer.parseInt(orderType));
             intent.putExtra(PaymentActivity.ORDER_STATE, Integer.parseInt(orderState));
             startActivity(intent);
         } else if (orderType.equals("2") && orderState.equals("2") || orderType.equals("2") && orderState.equals("3")
-                || orderType.equals("2") && orderState.equals("6")) {  //首次更换订单 待收货 || 待商家确认服务 || 待车主确认服务
+                || orderType.equals("2") && orderState.equals("6")   ) {
+            //首次更换订单 待收货 || 待商家确认服务 || 待车主确认服务 || 免费再换 待收货
+            Intent intent = new Intent(getContext(), OrderInfoActivity.class);
+            intent.putExtra(PaymentActivity.ORDERNO, orderNo);
+            intent.putExtra(PaymentActivity.ORDER_TYPE, Integer.parseInt(orderType));
+            intent.putExtra(PaymentActivity.ORDER_STATE, Integer.parseInt(orderState));
+            startActivity(intent);
+        } else if (orderType.equals("3") && orderState.equals("2") || orderType.equals("3") && orderState.equals("3")
+                || orderType.equals("3") && orderState.equals("6")   ) {
+            //免费在还订单 待收货 || 待商家确认服务 || 待车主确认服务 || 免费再换 待收货
             Intent intent = new Intent(getContext(), OrderInfoActivity.class);
             intent.putExtra(PaymentActivity.ORDERNO, orderNo);
             intent.putExtra(PaymentActivity.ORDER_TYPE, Integer.parseInt(orderType));
@@ -217,6 +225,11 @@ public class OrderFragment extends RYBaseFragment implements OrderViewBinder.OnO
             intent.putExtra(PaymentActivity.ORDER_STATE, Integer.parseInt(orderState));
             startActivity(intent);
         } else if (orderState.equals("7")) {  //待评价
+            Intent intent = new Intent(getContext(), EvaluateActivity.class);
+            intent.putExtra(PaymentActivity.ORDERNO, orderNo);
+            intent.putExtra(PaymentActivity.STOREID, storeId);
+            startActivity(intent);
+        }else if (orderState.equals("1")) {  //已完成
             Intent intent = new Intent(getContext(), EvaluateActivity.class);
             intent.putExtra(PaymentActivity.ORDERNO, orderNo);
             intent.putExtra(PaymentActivity.STOREID, storeId);

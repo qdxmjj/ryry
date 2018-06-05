@@ -16,24 +16,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/shop_home_listview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="70dp"/>
+            android:layout_height="match_parent" />
 
-        <TextView
-            android:id="@+id/go_bug_good_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="购买商品"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:layout_gravity="bottom"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_button"/>
+
     </FrameLayout>
 
 </LinearLayout>

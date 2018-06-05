@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.InfoOne;
 import com.ruyiruyi.ruyiruyi.ui.multiType.InfoOneViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PublicBigPic;
@@ -32,7 +32,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class BuyCxwyActivity extends RYBaseActivity implements PublicCheckNumViewBinder.OnPubCheckNumItemClick {
+public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumViewBinder.OnPubCheckNumItemClick {
 
     private ActionBar actionBar;
     private ImageView img_agree;

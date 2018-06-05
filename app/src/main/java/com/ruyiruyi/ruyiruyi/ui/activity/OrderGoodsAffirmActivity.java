@@ -12,11 +12,12 @@ import com.google.gson.Gson;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.OrderGoods;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsHorizontal;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsInfo;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsInfoViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsNew;
 import com.ruyiruyi.ruyiruyi.ui.multiType.InfoOne;
 import com.ruyiruyi.ruyiruyi.ui.multiType.InfoOneViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
@@ -38,7 +39,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class OrderGoodsAffirmActivity extends RYBaseActivity {
+public class OrderGoodsAffirmActivity extends RyBaseActivity {
     private static final String TAG = OrderGoodsAffirmActivity.class.getSimpleName();
     private ActionBar actionBar;
     private List<Object> items = new ArrayList<>();
@@ -46,7 +47,7 @@ public class OrderGoodsAffirmActivity extends RYBaseActivity {
     private RecyclerView listView;
     private String username;
     private String phone;
-    private List<GoodsHorizontal> goodslist;
+    private List<GoodsNew> goodslist;
     private List<GoodsInfo> goodsInfoList;
     private double allprice = 0.00;
     private TextView allPriceText;
@@ -74,7 +75,7 @@ public class OrderGoodsAffirmActivity extends RYBaseActivity {
         });
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        goodslist = ((List<GoodsHorizontal>) bundle.getSerializable("GOODSLIST"));
+        goodslist = ((List<GoodsNew>) bundle.getSerializable("GOODSLIST"));
         allprice = bundle.getDouble("ALLPRICE");
         storeid = bundle.getInt("STOREID");
         storename = bundle.getString("STORENAME");
@@ -85,9 +86,9 @@ public class OrderGoodsAffirmActivity extends RYBaseActivity {
                 goodsInfo.setGoodsName(goodslist.get(i).getGoodsName());
                 goodsInfo.setGoodsImage(goodslist.get(i).getGoodsImage());
                 goodsInfo.setGoodsId(goodslist.get(i).getGoodsId());
-                goodsInfo.setGoodsCount(goodslist.get(i).getGoodsCount());
+                goodsInfo.setGoodsCount(goodslist.get(i).getGoodsAmount());
                 goodsInfo.setGoodsPrice(goodslist.get(i).getGoodsPrice());
-                goodsInfo.setCurrentCount(goodslist.get(i).getCurrentCount());
+                goodsInfo.setCurrentCount(goodslist.get(i).getCurrentGoodsAmount());
                 goodsInfo.setGoodsClassId(goodslist.get(i).getGoodsClassId());
                 goodsInfo.setServiceTypeId(goodslist.get(i).getServiceTypeId());
                 goodsInfoList.add(goodsInfo);
@@ -162,7 +163,8 @@ public class OrderGoodsAffirmActivity extends RYBaseActivity {
     private void initData() {
         items.clear();
         items.add(new InfoOne("联系人", username, false));
-        items.add(new InfoOne("联系电话", phone, true));
+        items.add(new InfoOne("联系电话", phone, false));
+        items.add(new InfoOne("店铺名", storename, true));
         for (int i = 0; i < goodsInfoList.size(); i++) {
             items.add(goodsInfoList.get(i));
         }

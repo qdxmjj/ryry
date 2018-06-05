@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Code;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CodeViewBinder;
@@ -42,7 +42,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBinder.OnInfoItemClick {
+public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBinder.OnInfoItemClick {
     private static final String TAG = OrderInfoActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;
@@ -91,7 +91,6 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
         orderState = intent.getIntExtra(PaymentActivity.ORDER_STATE, 0);
         if (orderState == 5) {
             actionBar.setTitle("待发货");
-            ;
         } else if (orderState == 2) {
             actionBar.setTitle("待收货");
         } else if (orderState == 3) {
@@ -145,6 +144,10 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
                         }else if (orderType == 3){ //免费再换
                             if (orderState == 5) {  //代发货
                                 getFreeTireOrderInfo(data);
+                            } else if (orderState == 3 || orderState == 2 || orderState == 6) { //待商家确认服务 || 待收货  ||待车主确认服务
+                                codeList.clear();
+                                getFreeTireOrderInfo(data);
+                                getFreeTireOrderCode(data);
                             }
                         }
                         initData();
@@ -174,6 +177,14 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
 
             }
         });
+    }
+
+    private void getFreeTireOrderCode(JSONObject data) throws JSONException {
+        JSONArray userCarShoeBarCodeList = data.getJSONArray("userCarShoeBarCodeList");
+        for (int i = 0; i < userCarShoeBarCodeList.length(); i++) {
+            String barCode = userCarShoeBarCodeList.getJSONObject(i).getString("barCode");
+            codeList.add(barCode);
+        }
     }
 
     /**
@@ -292,7 +303,7 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
     private void initData() {
         items.clear();
         if (orderType == 2) {    //首次更换
-            if (orderState == 5) {
+            if (orderState == 5) {   //5 待支付
                 items.add(new InfoOne("联系人", userName, false));
                 items.add(new InfoOne("联系电话", userPhone, false));
                 items.add(new InfoOne("车牌号", carNumber, false));
@@ -335,6 +346,19 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
                 items.add(new InfoOne("店铺名称",storeName,true,true));
                 for (int i = 0; i < tireInfoList.size(); i++) {
                     items.add(tireInfoList.get(i));
+                }
+            }else if (orderState == 3 || orderState == 2 || orderState == 6) { //待商家确认服务 || 待收货 || 带车主确认服务
+                items.add(new InfoOne("联系人", userName, false));
+                items.add(new InfoOne("联系电话", userPhone, false));
+                items.add(new InfoOne("车牌号", carNumber, false));
+                items.add(new InfoOne("服务项目", "免费再换", false));
+                items.add(new InfoOne("店铺名称", storeName, true, true));
+                for (int i = 0; i < tireInfoList.size(); i++) {
+                    items.add(tireInfoList.get(i));
+                }
+                items.add(new InfoOne("轮胎条码", "", false));
+                for (int i = 0; i < codeList.size(); i++) {
+                    items.add(new Code(codeList.get(i)));
                 }
             }
         }
@@ -424,7 +448,7 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
     }
 
     private void initButton() {
-        if (orderType == 2) {    //首次更换
+    //    if (orderType == 2) {    //首次更换
             if (orderState == 5) {
                 orderButton.setText("等待发货");
                 orderButton.setClickable(false);
@@ -442,7 +466,7 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
                 orderButton.setClickable(true);
                 orderButton.setBackgroundResource(R.drawable.bg_button);
             }
-        } else if (orderType == 1) {  //商品订单
+      /*  } else if (orderType == 1) {  //商品订单
             if (orderState == 3) { //待商家确认服务
                 orderButton.setText("待商家确认服务");
                 orderButton.setClickable(false);
@@ -452,13 +476,25 @@ public class OrderInfoActivity extends RYBaseActivity implements InfoOneViewBind
                 orderButton.setClickable(true);
                 orderButton.setBackgroundResource(R.drawable.bg_button);
             }
-        }else if (orderType == 3){
+        }else if (orderType == 3){ //免费在还
             if (orderState == 5){
                 orderButton.setText("等待发货");
                 orderButton.setClickable(false);
                 orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+            }else if (orderState == 2) {
+                orderButton.setText("待收货");
+                orderButton.setClickable(false);
+                orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+            } else if (orderState == 3) { //待商家确认服务
+                orderButton.setText("待商家确认服务");
+                orderButton.setClickable(false);
+                orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+            } else if (orderState == 6) { //待车主确认服务
+                orderButton.setText("确认服务");
+                orderButton.setClickable(true);
+                orderButton.setBackgroundResource(R.drawable.bg_button);
             }
-        }
+        }*/
     }
 
     private void register() {
