@@ -20,6 +20,8 @@ import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsShop;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsShopViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMore;

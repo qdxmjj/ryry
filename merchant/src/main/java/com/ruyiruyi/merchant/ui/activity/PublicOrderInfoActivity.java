@@ -498,8 +498,21 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
 
 
     /*
-   * //提交监听//普通商品订单
-   * */
+    * 重写回退键监听
+    * */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("page", "order");
+        intent.putExtras(bundle);
+        finish();
+        startActivity(intent);
+    }
+
+    /*
+       * //提交监听//普通商品订单
+       * */
     private void bindButtonOrdinarygoods() {
         RxViewAction.clickNoDouble(stateButton).subscribe(new Action1<Void>() {
             @Override

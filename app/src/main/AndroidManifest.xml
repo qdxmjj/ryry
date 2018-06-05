@@ -191,6 +191,7 @@
         <activity android:name=".ui.activity.PaySuccessActivity" />
         <activity android:name=".ui.activity.TireWaitChangeActivity" />
         <activity android:name=".ui.activity.FirstChangeActivity" />
+        <activity android:name=".ui.activity.ChangePwActivity" />
         <activity
             android:name=".ui.activity.TireChangeActivity"
             android:launchMode="singleTask" />
@@ -254,6 +255,7 @@
         <activity android:name=".ui.activity.GoodsShopActivity" />
         <activity android:name=".ui.activity.WxPhoneActivity" />
         <activity android:name=".ui.activity.QRCodeActivity" />
+        <activity android:name=".ui.activity.SettingActivity"></activity>
         <activity android:name=".ui.activity.BuyCxwyActivity" />
         <activity android:name=".ui.activity.base.RyBaseActivity" />
         <activity android:name=".ui.activity.ShopGoodsNewActivity" />

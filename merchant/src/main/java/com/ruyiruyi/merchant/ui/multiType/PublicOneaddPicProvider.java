@@ -66,14 +66,14 @@ public class PublicOneaddPicProvider extends ItemViewProvider<PublicOneaddPic, P
         RxViewAction.clickNoDouble(holder.right_pic).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                //再判断用户是否给与电话权限
-                if (judgeIsPower()) {
+//                //再判断用户是否给与电话权限
+//                if (judgeIsPower()) {
                     //用户已给权限拨打电话
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     Uri data = Uri.parse("tel:" + bean.getContent());
                     intent.setData(data);
                     context.startActivity(intent);
-                }
+//                }
             }
         });
     }

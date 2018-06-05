@@ -84,8 +84,9 @@ public class GoodsClassFragment extends RyBaseFragment implements LeftViewBinder
     }
 
     private void initClassData() {
-        User user = new DbConfig().getUser();
-        int userId = user.getId();
+       /* User user = new DbConfig().getUser();
+        int userId = user.getId();*/
+        int userId = new DbConfig().getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId",userId);

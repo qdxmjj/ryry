@@ -86,7 +86,10 @@
         <activity android:name=".ui.activity.SheZhiActivity" />
         <activity android:name=".ui.activity.ChangePwActivity" />
         <activity android:name=".ui.activity.PromotionActivity" />
-        <activity android:name=".ui.activity.PublicOrderInfoActivity"></activity>
+        <activity android:name=".ui.activity.PublicOrderInfoActivity" />
+        <activity android:name=".ui.activity.OrderConfirmFreeChangeActivity" />
+        <activity android:name=".ui.activity.OrderConfirmFirstChangeActivity" />
+        <activity android:name=".ui.activity.OrderConfirmTireRepairActivity"></activity>
     </application>
 
 </manifest>
