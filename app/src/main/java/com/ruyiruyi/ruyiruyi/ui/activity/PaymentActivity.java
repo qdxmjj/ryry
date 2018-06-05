@@ -61,6 +61,7 @@ public class PaymentActivity extends RyBaseActivity {
     public static String STOREID = "STOREID";
     public static String ORDER_TYPE = "ORDER_TYPE";//  0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
     public static String ORDER_STATE = "ORDER_STATE";//轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货
+    public static String ORDER_STAGE = "ORDER_STAGE";//orderStage:订单二段状态 1 默认(不需要支付差价)  2 待车主支付差价 3 已支付差价 4 待车主支付运费 5 已支付运费
     // 订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
     public static String ORDER_FROM = "ORDER_FROM";  //0是来自收银台  1是来自订单
     private int orderType;

@@ -17,8 +17,10 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.CouponActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CreditLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.Line;
 import com.ruyiruyi.ruyiruyi.ui.activity.MyLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PromotionActivity;
@@ -28,6 +30,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.UserInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
+import com.ruyiruyi.ruyiruyi.ui.multiType.Coupon;
 import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
 import com.ruyiruyi.ruyiruyi.wxapi.WXEntryActivity;
@@ -72,6 +75,7 @@ public class MyFragment extends RyBaseFragment {
     private static final int MMAlertSelect3 = 2;
     private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
     private LinearLayout ll_promotion;
+    private LinearLayout couponLayout;
 
     @Nullable
     @Override
@@ -158,6 +162,25 @@ public class MyFragment extends RyBaseFragment {
         myLimitTesxt = ((TextView) getView().findViewById(R.id.my_limit_text));
         cxwyLayout = (LinearLayout) getView().findViewById(R.id.cxwy_layout);
         ll_promotion = (LinearLayout) getView().findViewById(R.id.ll_promotion);
+        couponLayout = (LinearLayout) getView().findViewById(R.id.coupon_layout);
+
+        //优惠券
+        RxViewAction.clickNoDouble(couponLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
+                        User user = new DbConfig().getUser();
+                        int carId = user.getCarId();
+                        Intent intent = new Intent(getContext(), CouponActivity.class);
+                        intent.putExtra(CouponActivity.FROM_TYPE,0);
+                        intent.putExtra(CouponActivity.CAR_ID,carId);
+                        startActivity(intent);
+                    }
+                });
 
         //推广码
         RxViewAction.clickNoDouble(ll_promotion)
