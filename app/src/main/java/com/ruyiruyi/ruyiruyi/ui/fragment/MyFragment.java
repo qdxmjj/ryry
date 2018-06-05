@@ -24,7 +24,6 @@ import com.ruyiruyi.ruyiruyi.ui.activity.Line;
 import com.ruyiruyi.ruyiruyi.ui.activity.MyLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PromotionActivity;
-import com.ruyiruyi.ruyiruyi.ui.activity.SendToWXActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.SettingActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopEvaluateActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
@@ -40,9 +39,6 @@ import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-
-import org.xutils.DbManager;
-import org.xutils.ex.DbException;
 
 import rx.functions.Action1;
 

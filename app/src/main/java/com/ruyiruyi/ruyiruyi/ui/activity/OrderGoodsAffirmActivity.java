@@ -14,7 +14,6 @@ import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.OrderGoods;
-import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsHorizontal;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsInfo;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsInfoViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsNew;

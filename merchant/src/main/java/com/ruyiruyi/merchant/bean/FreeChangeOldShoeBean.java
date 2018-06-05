@@ -7,7 +7,7 @@ public class FreeChangeOldShoeBean {
     private String fontRearFlag;
     private String id;
     private String barCode;
-    private String isReach5Years;
+    private String isReach5Years;//0 没有   1  达到
     private String orderNo;
     private long time;
     private String userCarId;

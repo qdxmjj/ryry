@@ -20,6 +20,7 @@ import com.ruyiruyi.merchant.ui.fragment.OrderFragment;
 import com.ruyiruyi.merchant.ui.fragment.MyFragment;
 import com.ruyiruyi.merchant.utils.NoPreloadHomeTabsCell;
 import com.ruyiruyi.merchant.utils.NoPreloadViewPager;
+import com.ruyiruyi.rylibrary.cell.HomeTabsCell;
 import com.ruyiruyi.rylibrary.ui.adapter.FragmentViewPagerAdapter;
 import com.ruyiruyi.rylibrary.utils.LayoutHelper;
 
@@ -29,8 +30,8 @@ import java.util.List;
 public class MainActivity extends FragmentActivity {
 
     private FrameLayout content;
-    private NoPreloadViewPager viewPager;
-    private NoPreloadHomeTabsCell tabsCell;
+    private ViewPager viewPager;
+    private HomeTabsCell tabsCell;
     private List<String> titles;
     private HomePagerAdapeter pagerAdapter;
     private static boolean isExit = false;
@@ -58,17 +59,17 @@ public class MainActivity extends FragmentActivity {
         //判断权限
         judgePower();
 
-        viewPager = new NoPreloadViewPager(this);
+        viewPager = new ViewPager(this);
         content.addView(viewPager, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP, 0, 0, 0, NoPreloadHomeTabsCell.CELL_HEIGHT));
 
-        tabsCell = new NoPreloadHomeTabsCell(this);
+        tabsCell = new HomeTabsCell(this);
         content.addView(tabsCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM));
         tabsCell.setViewPager(viewPager);
 
         initTitle();
         pagerAdapter = new HomePagerAdapeter(getSupportFragmentManager(), initPagerTitle(), initFragment());
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setOnPageChangeListener(new NoPreloadViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 

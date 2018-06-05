@@ -19,16 +19,37 @@
             android:layout_marginLeft="10dp"
             android:src="@drawable/ic_baoyang" />
 
-        <TextView
-            android:id="@+id/dingdan_tv_type"
+        <LinearLayout
+            android:id="@+id/ll_c"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/dingdan_rlv_img"
-            android:text="汽车保养"
-            android:textColor="@color/c7"
-            android:textSize="15sp" />
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/dingdan_tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="bottom|left"
+                android:text="免费更换订单"
+                android:textColor="@color/c7"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/dingdan_tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="2018-05-23 17:27:04"
+                android:textColor="@color/c6"
+                android:textSize="10sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/dingdan_tv_carnum"
@@ -36,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/dingdan_tv_type"
+            android:layout_toRightOf="@+id/ll_c"
             android:text="鲁 B 12345"
             android:textColor="@color/c6"
             android:textSize="15sp" />

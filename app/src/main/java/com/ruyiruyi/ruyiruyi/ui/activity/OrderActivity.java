@@ -4,28 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseFragmentActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseFragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.TabItemView;
-import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsListFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.cell.NoCanSlideViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderActivity extends RYBaseFragmentActivity {
+public class OrderActivity extends RyBaseFragmentActivity {
     private ActionBar actionBar;
     private NoCanSlideViewPager viewPager;
     private TabLayout tabLayout;

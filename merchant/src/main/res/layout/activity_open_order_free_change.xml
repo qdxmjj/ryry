@@ -434,7 +434,7 @@
 
                 </LinearLayout>
             </LinearLayout>
-
+            <!--轮胎编码-->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -468,7 +468,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -575,7 +575,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -1374,8 +1374,8 @@
                 android:id="@+id/ll_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#ffffff"
                 android:layout_alignParentBottom="true"
+                android:background="#ffffff"
                 android:orientation="vertical">
 
                 <TextView

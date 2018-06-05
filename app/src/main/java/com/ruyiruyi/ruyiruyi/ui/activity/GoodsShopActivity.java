@@ -2,7 +2,6 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +16,6 @@ import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
-import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
@@ -27,7 +25,6 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMore;
 import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMoreViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import org.json.JSONArray;
@@ -37,7 +34,6 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,6 +1,5 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +9,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RechargeMoney;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RechargeMoneyViewBinder;

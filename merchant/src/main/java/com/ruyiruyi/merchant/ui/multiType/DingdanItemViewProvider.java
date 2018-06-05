@@ -20,6 +20,7 @@ import com.ruyiruyi.merchant.ui.activity.OrderConfirmFreeChangeActivity;
 import com.ruyiruyi.merchant.ui.activity.OrderConfirmTireRepairActivity;
 import com.ruyiruyi.merchant.ui.activity.PublicOrderInfoActivity;
 import com.ruyiruyi.merchant.ui.multiType.modle.Dingdan;
+import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 
@@ -44,6 +45,8 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Dingdan dingdan) {
 
         holder.dingdan_tv_type.setText(dingdan.getOrderName());
+        String timestampToStringAll = new UtilsRY().getTimestampToStringAll(dingdan.getOrderTime());
+        holder.dingdan_tv_time.setText(timestampToStringAll);
         holder.dingdan_tv_carnum.setText(dingdan.getPlatNumber());
         // 0 空白   1 未读
         switch (dingdan.getIsRead()) {
@@ -71,6 +74,8 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
 
                 if (dingdan.getOrderType().equals("2") && dingdan.getOrderState().equals("3")) {//(2:首次更换订单  3 待商家确认服务)
                     Intent intent = new Intent(context, OrderConfirmFirstChangeActivity.class);
+                    intent.putExtra("orderNo", dingdan.getOrderNo());
+                    intent.putExtra("orderType", dingdan.getOrderType());
                     context.startActivity(intent);
                 } else if (dingdan.getOrderType().equals("3") && dingdan.getOrderState().equals("3")) {//(3:免费再换订单  3 待商家确认服务)
                     Intent intent = new Intent(context, OrderConfirmFreeChangeActivity.class);
@@ -102,6 +107,8 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
         @NonNull
         private TextView dingdan_tv_type;
         @NonNull
+        private TextView dingdan_tv_time;
+        @NonNull
         private TextView dingdan_tv_carnum;
         @NonNull
         private ImageView dingdan_img_state;
@@ -112,6 +119,7 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
             super(itemView);
             this.dingdan_img = (ImageView) itemView.findViewById(R.id.dingdan_rlv_img);
             this.dingdan_tv_type = (TextView) itemView.findViewById(R.id.dingdan_tv_type);
+            this.dingdan_tv_time = (TextView) itemView.findViewById(R.id.dingdan_tv_time);
             this.dingdan_tv_carnum = (TextView) itemView.findViewById(R.id.dingdan_tv_carnum);
             this.dingdan_img_state = (ImageView) itemView.findViewById(R.id.dingdan_img_state);
             this.rl_item = (RelativeLayout) itemView.findViewById(R.id.rl_item);
