@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -92,6 +93,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     private String isNoConsistent_c_;//false
     private String isNoConsistent_d_;//false
     private ProgressDialog progressDialog;
+    private String TAG = PublicOrderInfoActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -707,8 +709,10 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
         Bundle bundle = new Bundle();
         bundle.putString("page", "order");
         intent.putExtras(bundle);
-        finish();
+        Log.e(TAG, "onBackPressed: ~~~~beforestart~~~~");
         startActivity(intent);
+        Log.e(TAG, "onBackPressed: ~~~~afterstart~~~~");
+        finish();
     }
 
     /*

@@ -55,6 +55,7 @@ public class OrderFragment extends BaseFragment {
     private boolean isLoadMore = false;
     private boolean isLoadOver = false;
     private boolean isLoadMoreSingle = false;//上拉单次标志位
+    private boolean isFirstLoad = true;
 
     private String totalNum;
     private String finishedNum;
@@ -151,7 +152,9 @@ public class OrderFragment extends BaseFragment {
     private void requestFromServer() {
         //数据加载完成前显示加载动画
         startDialog = new ProgressDialog(getContext());
-        showDialogProgress(startDialog, "信息加载中...");
+        if (isFirstLoad) {
+            showDialogProgress(startDialog, "信息加载中...");
+        }
 
 
         isLoadOver = false;
@@ -231,7 +234,10 @@ public class OrderFragment extends BaseFragment {
             @Override
             public void onFinished() {
                 //加载完成 隐藏加载动画
-                hideDialogProgress(startDialog);
+                if (isFirstLoad) {
+                    hideDialogProgress(startDialog);
+                    isFirstLoad = false;
+                }
             }
         });
     }

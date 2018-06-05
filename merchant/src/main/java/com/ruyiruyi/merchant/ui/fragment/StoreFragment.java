@@ -84,6 +84,7 @@ public class StoreFragment extends BaseFragment {
     private String TAG = StoreFragment.class.getSimpleName();
     private final int CHOOSE_PICTURE = 0;
     private final int TAKE_PICTURE = 1;
+    private boolean isFirstLoad = true;
     private Uri tempUri;
     private Bitmap imgBitmap;
     private String img_Path;
@@ -127,7 +128,9 @@ public class StoreFragment extends BaseFragment {
     private void requestFromServer() {
         //数据加载完成前显示加载动画
         startDialog = new ProgressDialog(getContext());
-        showDialogProgress(startDialog, "信息加载中...");
+        if (isFirstLoad) {
+            showDialogProgress(startDialog, "信息加载中...");
+        }
 
         isLoadOver = false;
 
@@ -220,7 +223,10 @@ public class StoreFragment extends BaseFragment {
             @Override
             public void onFinished() {
                 //加载完成 隐藏加载动画
-                hideDialogProgress(startDialog);
+                if (isFirstLoad) {
+                    hideDialogProgress(startDialog);
+                    isFirstLoad = false;
+                }
             }
         });
     }
