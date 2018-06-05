@@ -28,7 +28,7 @@ import org.xutils.ex.DbException;
 /**
  * Created by Lenovo on 2018/3/8.
  */
-public class RYBaseActivity extends BaseActivity {
+public class RyBaseActivity extends BaseActivity {
     private MyApplication application;
     private BaseActivity oContext;
 

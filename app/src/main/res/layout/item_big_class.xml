@@ -7,7 +7,7 @@
     <FrameLayout
         android:id="@+id/big_class_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         >
         <View
@@ -19,13 +19,28 @@
             android:background="@color/theme_primary"/>
         <TextView
             android:id="@+id/big_class_text"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="美容清洗"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:textColor="@color/c6"
             android:layout_gravity="center"
+            android:gravity="center"
             android:layout_marginLeft="4dp"
             android:textSize="12sp"/>
+        <TextView
+            android:id="@+id/class_count_text"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:background="@drawable/ic_mark"
+            android:gravity="center"
+            android:layout_gravity="right"
+            android:textSize="8sp"
+            android:textColor="#ffffff"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="1dp"
+            android:text="11"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"

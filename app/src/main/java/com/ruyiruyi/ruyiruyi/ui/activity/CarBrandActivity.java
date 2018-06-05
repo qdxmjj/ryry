@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarBrand;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.CarModel;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
@@ -28,7 +28,7 @@ import java.util.List;
 import me.yokeyword.indexablerv.IndexableAdapter;
 import me.yokeyword.indexablerv.IndexableLayout;
 
-public class CarBrandActivity extends RYBaseActivity {
+public class CarBrandActivity extends RyBaseActivity {
     private static final String TAG = CarInfoActivity.class.getSimpleName();
     private ActionBar actionBar;
     private IndexableLayout indexableLayout;

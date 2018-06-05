@@ -5,11 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.OpenLocalMapUtil;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
-public class RouteMapActivity extends RYBaseActivity {
+public class RouteMapActivity extends RyBaseActivity {
 
     private ActionBar mActionBar;
     private String startLat;

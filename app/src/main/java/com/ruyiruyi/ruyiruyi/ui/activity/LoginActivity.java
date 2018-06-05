@@ -22,7 +22,7 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Newest;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
@@ -51,7 +51,7 @@ import java.util.TimerTask;
 
 import rx.functions.Action1;
 
-public class LoginActivity extends RYBaseActivity {
+public class LoginActivity extends RyBaseActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private TextView loginType;

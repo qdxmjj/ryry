@@ -20,7 +20,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class QRCodeActivity extends RYBaseActivity {
+public class QRCodeActivity extends RyBaseActivity {
 
     private ActionBar actionBar;
     private String url;

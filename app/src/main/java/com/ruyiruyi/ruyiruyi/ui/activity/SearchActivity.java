@@ -5,14 +5,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.rylibrary.android.searchview.ICallBack;
 import com.ruyiruyi.rylibrary.android.searchview.ItemCallBack;
 import com.ruyiruyi.rylibrary.android.searchview.SearchView;
 import com.ruyiruyi.rylibrary.android.searchview.bCallBack;
 
-public class SearchActivity extends RYBaseActivity {
+public class SearchActivity extends RyBaseActivity {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
     private SearchView searchView;

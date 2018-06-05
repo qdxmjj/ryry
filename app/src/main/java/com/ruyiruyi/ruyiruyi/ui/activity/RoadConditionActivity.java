@@ -9,7 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChoose;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChooseViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadType;
@@ -35,7 +35,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class RoadConditionActivity extends RYBaseActivity implements RoadChooseViewBinder.OnRoadChooseClick {
+public class RoadConditionActivity extends RyBaseActivity implements RoadChooseViewBinder.OnRoadChooseClick {
 
     private static final String TAG = RoadConditionActivity.class.getSimpleName();
     private ActionBar actionBar;

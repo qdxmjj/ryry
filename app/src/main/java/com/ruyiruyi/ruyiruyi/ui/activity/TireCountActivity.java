@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -30,7 +30,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class TireCountActivity extends RYBaseActivity {
+public class TireCountActivity extends RyBaseActivity {
     private static final String TAG = TireCountActivity.class.getSimpleName();
     private ActionBar actionBar;
     private CustomBanner mBanner;

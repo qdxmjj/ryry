@@ -3,10 +3,10 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.os.Bundle;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
-public class ActionBarActivity extends RYBaseActivity {
+public class ActionBarActivity extends RyBaseActivity {
     private ActionBar actionBar;
 
     @Override

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,14 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.baidu.location.Poi;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.MainActivity;
-import com.ruyiruyi.ruyiruyi.MyApplication;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
@@ -36,7 +30,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.ShopChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TirePlaceActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireRepairActivity;
-import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Function;
 import com.ruyiruyi.ruyiruyi.ui.multiType.FunctionViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Hometop;
@@ -47,7 +41,6 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.ThreeEvent;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ThreeEventViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
-import com.ruyiruyi.ruyiruyi.utils.XRequestParams;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
 
 import org.json.JSONArray;
@@ -62,14 +55,12 @@ import org.xutils.x;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.security.auth.login.LoginException;
-
 import me.drakeet.multitype.MultiTypeAdapter;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class HomeFragment extends RYBaseFragment implements HometopViewBinder.OnHomeTopItemClickListener, FunctionViewBinder.OnFunctionItemClick
+public class HomeFragment extends RyBaseFragment implements HometopViewBinder.OnHomeTopItemClickListener, FunctionViewBinder.OnFunctionItemClick
         , ThreeEventViewBinder.OnEventItemClickListener {
 
     private static final String TAG = HomeFragment.class.getSimpleName();

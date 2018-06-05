@@ -21,7 +21,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyViewBinder;
@@ -54,7 +54,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class ShopHomeActivity extends RYBaseActivity implements EvaImageViewBinder.OnEvaluateImageClick, ShopStrViewBinder.OnAllEvaluateClick {
+public class ShopHomeActivity extends RyBaseActivity implements EvaImageViewBinder.OnEvaluateImageClick, ShopStrViewBinder.OnAllEvaluateClick {
     private static final String TAG = ShopHomeActivity.class.getSimpleName();
     private ActionBar actionBar;
     private List<Object> items = new ArrayList<>();
@@ -328,7 +328,7 @@ public class ShopHomeActivity extends RYBaseActivity implements EvaImageViewBind
         listView.setAdapter(adapter);
         assertHasTheSameAdapter(listView, adapter);
 
-        goBuyGoodsButton = (TextView) findViewById(R.id.go_bug_good_button);
+        /*goBuyGoodsButton = (TextView) findViewById(R.id.go_bug_good_button);
         RxViewAction.clickNoDouble(goBuyGoodsButton)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -338,7 +338,7 @@ public class ShopHomeActivity extends RYBaseActivity implements EvaImageViewBind
                         intent.putExtra("STORENAME", storeName);
                         startActivity(intent);
                     }
-                });
+                });*/
 
     }
 

@@ -26,7 +26,7 @@ import com.ruyiruyi.ruyiruyi.db.model.CarVerhicle;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.TireType;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
@@ -43,7 +43,7 @@ import org.xutils.x;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LaunchActivity extends RYBaseActivity {
+public class LaunchActivity extends RyBaseActivity {
 
     private static final String TAG = LaunchActivity.class.getSimpleName();
     private ImageView launchImage;

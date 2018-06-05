@@ -37,7 +37,7 @@ import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarTireInfo;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChoose;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
@@ -63,7 +63,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class CarInfoActivity extends RYBaseActivity implements View.OnClickListener, DatePicker.OnDateChangedListener{
+public class CarInfoActivity extends RyBaseActivity implements View.OnClickListener, DatePicker.OnDateChangedListener{
 
     public static final int TIRE_SIZE = 5; //前后轮选择
     private ActionBar actionBar;

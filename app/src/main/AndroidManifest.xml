@@ -254,7 +254,10 @@
         <activity android:name=".ui.activity.GoodsShopActivity" />
         <activity android:name=".ui.activity.WxPhoneActivity" />
         <activity android:name=".ui.activity.QRCodeActivity" />
-        <activity android:name=".ui.activity.BuyCxwyActivity"></activity>
+        <activity android:name=".ui.activity.BuyCxwyActivity" />
+        <activity android:name=".ui.activity.base.RyBaseActivity" />
+        <activity android:name=".ui.activity.ShopGoodsNewActivity" />
+        <activity android:name=".ui.activity.CouponActivity"></activity>
     </application>
 
 </manifest>

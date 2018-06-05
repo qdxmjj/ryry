@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Cxwy;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CxwyViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.FullyLinearLayoutManager;
@@ -36,7 +36,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class CxwyActivity extends RYBaseActivity {
+public class CxwyActivity extends RyBaseActivity {
     private static final String TAG = CxwyActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;

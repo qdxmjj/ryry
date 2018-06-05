@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CreditLimit;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CreditLimitViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBig;
@@ -33,7 +33,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class CreditLimitActivity extends RYBaseActivity {
+public class CreditLimitActivity extends RyBaseActivity {
     private ActionBar actionBar;
     private RecyclerView listView;
     private SwipeRefreshLayout mSwipeLayout;

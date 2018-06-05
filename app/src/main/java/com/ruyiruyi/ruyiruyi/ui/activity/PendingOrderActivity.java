@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CxwyOrder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CxwyOrderViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsInfo;
@@ -40,7 +40,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class PendingOrderActivity extends RYBaseActivity implements InfoOneViewBinder.OnInfoItemClick {
+public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewBinder.OnInfoItemClick {
     private static final String TAG = PendingOrderActivity.class.getSimpleName();
     private ActionBar actionBar;
     private String orderno;

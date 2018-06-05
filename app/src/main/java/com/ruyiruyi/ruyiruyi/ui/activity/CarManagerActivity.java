@@ -18,7 +18,7 @@ import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RYBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.CarInfoCell;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
 import com.ruyiruyi.ruyiruyi.ui.model.Car;
@@ -41,7 +41,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class CarManagerActivity extends RYBaseActivity {
+public class CarManagerActivity extends RyBaseActivity {
     private static final String TAG = CarManagerActivity.class.getSimpleName();
     private ActionBar actionBar;
     private TextView addCarView;

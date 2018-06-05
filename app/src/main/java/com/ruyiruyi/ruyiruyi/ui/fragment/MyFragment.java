@@ -1,15 +1,11 @@
 package com.ruyiruyi.ruyiruyi.ui.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,33 +22,26 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.MyLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PromotionActivity;
-import com.ruyiruyi.ruyiruyi.ui.activity.SendToWXActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopEvaluateActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.UserInfoActivity;
-import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
 import com.ruyiruyi.ruyiruyi.utils.Constants;
-import com.ruyiruyi.ruyiruyi.utils.MMAlert;
 import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
-import com.ruyiruyi.ruyiruyi.utils.Util;
 import com.ruyiruyi.ruyiruyi.wxapi.WXEntryActivity;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 
-import java.util.List;
-
 import rx.functions.Action1;
 
-public class MyFragment extends RYBaseFragment {
+public class MyFragment extends RyBaseFragment {
 
     private TextView myButton;
     private TextView nologin;

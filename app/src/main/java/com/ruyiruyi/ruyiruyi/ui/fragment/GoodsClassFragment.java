@@ -3,7 +3,6 @@ package com.ruyiruyi.ruyiruyi.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,13 +16,10 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.GoodsShopActivity;
-import com.ruyiruyi.ruyiruyi.ui.fragment.base.RYBaseFragment;
-import com.ruyiruyi.ruyiruyi.ui.activity.Line;
+import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.activity.SearchActivity;
-import com.ruyiruyi.ruyiruyi.ui.multiType.BigClass;
-import com.ruyiruyi.ruyiruyi.ui.multiType.BigClassViewBinder;
-import com.ruyiruyi.ruyiruyi.ui.multiType.EvaluateImage;
-import com.ruyiruyi.ruyiruyi.ui.multiType.EvaluateImageViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.Left;
+import com.ruyiruyi.ruyiruyi.ui.multiType.LeftViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsClass;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsClassViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
@@ -45,13 +41,13 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class GoodsClassFragment extends RYBaseFragment implements BigClassViewBinder.OnBigClassItemClick ,GoodsClassViewBinder.OnClassItemClick {
+public class GoodsClassFragment extends RyBaseFragment implements LeftViewBinder.OnBigClassItemClick ,GoodsClassViewBinder.OnClassItemClick {
     private static final String TAG = GoodsClassFragment.class.getSimpleName();
     private RecyclerView bigClassliserView;
     private RecyclerView classListView;
     private List<Object> bigClassItems = new ArrayList<>();
     private MultiTypeAdapter bigClassAdapter;
-    public List<BigClass> bigClassLists;
+    public List<Left> leftLists;
 
     private List<Object> classItems = new ArrayList<>();
     private MultiTypeAdapter classAdapter;
@@ -73,13 +69,13 @@ public class GoodsClassFragment extends RYBaseFragment implements BigClassViewBi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        bigClassLists = new ArrayList<>();
+        leftLists = new ArrayList<>();
         goodsClassList = new ArrayList<>();
 
-        bigClassLists.add(new BigClass("汽车保养",true));
-        bigClassLists.add(new BigClass("美容清洗",false));
-        bigClassLists.add(new BigClass("安装改装",false));
-        bigClassLists.add(new BigClass("轮胎服务",false));
+        leftLists.add(new Left("汽车保养",true));
+        leftLists.add(new Left("美容清洗",false));
+        leftLists.add(new Left("安装改装",false));
+        leftLists.add(new Left("轮胎服务",false));
         initView();
 
         initData();
@@ -160,8 +156,8 @@ public class GoodsClassFragment extends RYBaseFragment implements BigClassViewBi
 
     private void initData() {
         bigClassItems.clear();
-        for (int i = 0; i < bigClassLists.size(); i++) {
-            bigClassItems.add(bigClassLists.get(i));
+        for (int i = 0; i < leftLists.size(); i++) {
+            bigClassItems.add(leftLists.get(i));
         }
         assertAllRegistered(bigClassAdapter,bigClassItems);
         bigClassAdapter.notifyDataSetChanged();
@@ -208,9 +204,9 @@ public class GoodsClassFragment extends RYBaseFragment implements BigClassViewBi
     }
 
     private void bigClassRegister() {
-        BigClassViewBinder bigClassViewBinder = new BigClassViewBinder();
-        bigClassViewBinder.setListener(this);
-        bigClassAdapter.register(BigClass.class, bigClassViewBinder);
+        LeftViewBinder leftViewBinder = new LeftViewBinder();
+        leftViewBinder.setListener(this);
+        bigClassAdapter.register(Left.class, leftViewBinder);
     }
 
     @Override
@@ -219,7 +215,7 @@ public class GoodsClassFragment extends RYBaseFragment implements BigClassViewBi
     }
 
     @Override
-    public void onBigClassItemClikcListener(String className) {
+    public void onLeftItemClikcListener(String className,String classId) {
         if(className.equals("汽车保养")){
             serviceType = 2;
         }else if (className.equals("美容清洗")){
@@ -229,11 +225,11 @@ public class GoodsClassFragment extends RYBaseFragment implements BigClassViewBi
         }else if (className.equals("轮胎服务")){
             serviceType = 5;
         }
-        for (int i = 0; i < bigClassLists.size(); i++) {
-            if (bigClassLists.get(i).getBigClassName().equals(className)) {
-                bigClassLists.get(i).setCheck(true);
+        for (int i = 0; i < leftLists.size(); i++) {
+            if (leftLists.get(i).getBigClassName().equals(className)) {
+                leftLists.get(i).setCheck(true);
             }else {
-                bigClassLists.get(i).setCheck(false);
+                leftLists.get(i).setCheck(false);
             }
         }
         initData();
