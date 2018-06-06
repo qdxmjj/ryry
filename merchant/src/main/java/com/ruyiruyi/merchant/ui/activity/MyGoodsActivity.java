@@ -435,7 +435,6 @@ public class MyGoodsActivity extends FragmentActivity {
         MyGoodsFragment onsale_fragment = new MyGoodsFragment();
         Bundle bundle_onSale2 = new Bundle();
         bundle_onSale2.putString(MyGoodsFragment.SALE_TYPE, "ONSALE");
-        Log.e(TAG, "onActivity: 6668acONSALE" + " leftTypeId= " + leftTypeId + " rightTypeId= " + rightTypeId);
         bundle_onSale2.putString(MyGoodsFragment.LEFT_ID, leftTypeId);
         bundle_onSale2.putString(MyGoodsFragment.RIGHT_ID, rightTypeId);//OMG
         onsale_fragment.setArguments(bundle_onSale2);
@@ -444,7 +443,6 @@ public class MyGoodsActivity extends FragmentActivity {
         MyGoodsFragment nosale_fragment = new MyGoodsFragment();
         Bundle bundle_noSale2 = new Bundle();
         bundle_noSale2.putString(MyGoodsFragment.SALE_TYPE, "NOSALE");
-        Log.e(TAG, "onActivity: 6668acNOSALE" + " leftTypeId= " + leftTypeId + " rightTypeId= " + rightTypeId);
         bundle_noSale2.putString(MyGoodsFragment.LEFT_ID, leftTypeId);
         bundle_noSale2.putString(MyGoodsFragment.RIGHT_ID, rightTypeId);
         nosale_fragment.setArguments(bundle_noSale2);

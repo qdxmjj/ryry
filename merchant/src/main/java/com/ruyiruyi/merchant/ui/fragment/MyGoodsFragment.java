@@ -239,6 +239,8 @@ public class MyGoodsFragment extends BaseFragment {
                     message.what = 1;
                     mHandler.sendMessage(message);
 
+                    isLoadMoreSingle = false;//重置加载更多单次标志位
+
                 } catch (JSONException e) {
                 }
             }

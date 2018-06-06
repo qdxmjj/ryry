@@ -417,11 +417,11 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             if (firstChangeOrderVoList == null || firstChangeOrderVoList.length() == 0) {
                 //首次更换订单列表为空 不操作
             } else {
+                shoeFlagList.clear();
                 for (int i = 0; i < firstChangeOrderVoList.length(); i++) {
                     JSONObject obj = (JSONObject) firstChangeOrderVoList.get(i);
                     String flag = obj.getString("fontRearFlag");
                     String shoeFlag = "";
-                    shoeFlagList.clear();
                     PublicShoeFlag shoeFlagbean = new PublicShoeFlag();
                     if (flag.equals("1")) {
                         shoeFlag = "前胎";
@@ -477,11 +477,11 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             if (firstChangeOrderVoList == null || firstChangeOrderVoList.length() == 0) {
                 //首次更换订单列表为空 不操作
             } else {
+                shoeFlagList.clear();
                 for (int i = 0; i < firstChangeOrderVoList.length(); i++) {
                     JSONObject obj = (JSONObject) firstChangeOrderVoList.get(i);
                     String flag = obj.getString("fontRearFlag");
                     String shoeFlag = "";
-                    shoeFlagList.clear();
                     PublicShoeFlag shoeFlagbean = new PublicShoeFlag();
                     if (flag.equals("1")) {
                         shoeFlag = "前胎";
@@ -854,7 +854,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(PublicOrderInfoActivity.this, "网络异常,请检查网络!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -864,7 +864,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(progressDialog);
             }
         });
     }

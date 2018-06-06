@@ -216,6 +216,14 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private boolean hasPic_license = false;//已拍照拍不可点击标志位
     private boolean hasPic_car = false;//已拍照拍不可点击标志位
     private String TAG = OrderConfirmFreeChangeActivity.class.getSimpleName();
+    private boolean isBucha_a_ = false;//补差dialog是否选择标志位默认未选
+    private boolean isBucha_b_ = false;//补差dialog是否选择标志位
+    private boolean isBucha_c_ = false;//补差dialog是否选择标志位
+    private boolean isBucha_d_ = false;//补差dialog是否选择标志位
+    private String buchaBarCode_a_ = "";//补差提交的条形码
+    private String buchaBarCode_b_ = "";
+    private String buchaBarCode_c_ = "";
+    private String buchaBarCode_d_ = "";
 
     private ProgressDialog progressDialog;
     /*提交参数*/
@@ -608,6 +616,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
 
 
         /*底部订单处理按钮监听*/
+        //确认服务
         RxViewAction.clickNoDouble(tv_bottom_a).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -616,14 +625,17 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 }
             }
         });
+        //补差服务
         RxViewAction.clickNoDouble(tv_bottom_b).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 if (judgeBeforeSave("2")) {
-                    showOrderDialog("2");
+                    showBuchaDialog();
                 }
+
             }
         });
+        //拒绝服务
         RxViewAction.clickNoDouble(tv_bottom_c).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -634,9 +646,205 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         });
     }
 
+    private void showBuchaDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_bucha, null);
+        LinearLayout ll_bucha_a_ = (LinearLayout) dialogView.findViewById(R.id.ll_bucha_a_);
+        final ImageView img_bucha_a_ = (ImageView) dialogView.findViewById(R.id.img_bucha_a_);
+        TextView tv_bucha_a_ = (TextView) dialogView.findViewById(R.id.tv_bucha_a_);
+        LinearLayout ll_bucha_b_ = (LinearLayout) dialogView.findViewById(R.id.ll_bucha_b_);
+        final ImageView img_bucha_b_ = (ImageView) dialogView.findViewById(R.id.img_bucha_b_);
+        TextView tv_bucha_b_ = (TextView) dialogView.findViewById(R.id.tv_bucha_b_);
+        LinearLayout ll_bucha_c_ = (LinearLayout) dialogView.findViewById(R.id.ll_bucha_c_);
+        final ImageView img_bucha_c_ = (ImageView) dialogView.findViewById(R.id.img_bucha_c_);
+        TextView tv_bucha_c_ = (TextView) dialogView.findViewById(R.id.tv_bucha_c_);
+        LinearLayout ll_bucha_d_ = (LinearLayout) dialogView.findViewById(R.id.ll_bucha_d_);
+        final ImageView img_bucha_d_ = (ImageView) dialogView.findViewById(R.id.img_bucha_d_);
+        TextView tv_bucha_d_ = (TextView) dialogView.findViewById(R.id.tv_bucha_d_);
+        dialog.setTitle("选择需要补差的轮胎");
+        dialog.setIcon(R.drawable.ic_logo_huise);
+        ll_bucha_a_.setVisibility(View.GONE);//初始化全部隐藏
+        ll_bucha_b_.setVisibility(View.GONE);
+        ll_bucha_c_.setVisibility(View.GONE);
+        ll_bucha_d_.setVisibility(View.GONE);
+        if (noFiveYearsShoeAmount >= 1) {//根据需要补差轮胎的个数显示
+            ll_bucha_a_.setVisibility(View.VISIBLE);
+            buchaBarCode_a_ = oldShoeNoFiveList.get(0).getBarCode();//提交所需的条形码
+            tv_bucha_a_.setText(buchaBarCode_a_);
+            //记录dismiss前点击选择的补差条形码
+            if (isBucha_a_) {
+                img_bucha_a_.setImageResource(R.drawable.ic_check);
+            } else {
+                img_bucha_a_.setImageResource(R.drawable.ic_notcheck);
+            }
+            //监听
+            RxViewAction.clickNoDouble(img_bucha_a_).subscribe(new Action1<Void>() {
+                @Override
+                public void call(Void aVoid) {
+                    if (!isBucha_a_) {
+                        img_bucha_a_.setImageResource(R.drawable.ic_check);
+                        isBucha_a_ = true;
+                    } else {
+                        img_bucha_a_.setImageResource(R.drawable.ic_notcheck);
+                        isBucha_a_ = false;
+                    }
+                }
+            });
+        }
+        if (noFiveYearsShoeAmount >= 2) {
+            ll_bucha_b_.setVisibility(View.VISIBLE);
+            buchaBarCode_b_ = oldShoeNoFiveList.get(1).getBarCode();
+            tv_bucha_b_.setText(buchaBarCode_b_);
+            //记录dismiss前点击选择的补差条形码
+            if (isBucha_b_) {
+                img_bucha_b_.setImageResource(R.drawable.ic_check);
+            } else {
+                img_bucha_b_.setImageResource(R.drawable.ic_notcheck);
+            }
+            //监听
+            RxViewAction.clickNoDouble(img_bucha_b_).subscribe(new Action1<Void>() {
+                @Override
+                public void call(Void aVoid) {
+                    if (!isBucha_b_) {
+                        img_bucha_b_.setImageResource(R.drawable.ic_check);
+                        isBucha_b_ = true;
+                    } else {
+                        img_bucha_b_.setImageResource(R.drawable.ic_notcheck);
+                        isBucha_b_ = false;
+                    }
+                }
+            });
+        }
+        if (noFiveYearsShoeAmount >= 3) {
+            ll_bucha_c_.setVisibility(View.VISIBLE);
+            buchaBarCode_c_ = oldShoeNoFiveList.get(2).getBarCode();
+            tv_bucha_c_.setText(buchaBarCode_c_);
+            //记录dismiss前点击选择的补差条形码
+            if (isBucha_c_) {
+                img_bucha_c_.setImageResource(R.drawable.ic_check);
+            } else {
+                img_bucha_c_.setImageResource(R.drawable.ic_notcheck);
+            }
+            //监听
+            RxViewAction.clickNoDouble(img_bucha_c_).subscribe(new Action1<Void>() {
+                @Override
+                public void call(Void aVoid) {
+                    if (!isBucha_c_) {
+                        img_bucha_c_.setImageResource(R.drawable.ic_check);
+                        isBucha_c_ = true;
+                    } else {
+                        img_bucha_c_.setImageResource(R.drawable.ic_notcheck);
+                        isBucha_c_ = false;
+                    }
+                }
+            });
+        }
+        if (noFiveYearsShoeAmount >= 4) {
+            ll_bucha_d_.setVisibility(View.VISIBLE);
+            buchaBarCode_d_ = oldShoeNoFiveList.get(3).getBarCode();
+            tv_bucha_d_.setText(buchaBarCode_d_);
+            //记录dismiss前点击选择的补差条形码
+            if (isBucha_d_) {
+                img_bucha_d_.setImageResource(R.drawable.ic_check);
+            } else {
+                img_bucha_d_.setImageResource(R.drawable.ic_notcheck);
+            }
+            //监听
+            RxViewAction.clickNoDouble(img_bucha_d_).subscribe(new Action1<Void>() {
+                @Override
+                public void call(Void aVoid) {
+                    if (!isBucha_d_) {
+                        img_bucha_d_.setImageResource(R.drawable.ic_check);
+                        isBucha_d_ = true;
+                    } else {
+                        img_bucha_d_.setImageResource(R.drawable.ic_notcheck);
+                        isBucha_d_ = false;
+                    }
+                }
+            });
+        }
+        dialog.setView(dialogView);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //先判断是否选择补差轮胎
+                if (!isBucha_a_ && !isBucha_b_ && !isBucha_c_ && isBucha_d_) {
+                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "请选择需要补差的轮胎!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                //再提交
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("orderNo", orderNo);
+                    object.put("serviceType", "2");
+                    object.put("orderType", orderType);
+
+                } catch (JSONException e) {
+                }
+                RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectChangeShoeOrderType");
+                params.addBodyParameter("reqJson", object.toString());
+                params.addBodyParameter("token", new DbConfig().getToken());
+                List<OldNewBarCode> c_list = new ArrayList<OldNewBarCode>();
+                if (isBucha_a_) {
+                    c_list.add(new OldNewBarCode(buchaBarCode_a_, ""));
+                }
+                if (isBucha_b_) {
+                    c_list.add(new OldNewBarCode(buchaBarCode_b_, ""));
+                }
+                if (isBucha_c_) {
+                    c_list.add(new OldNewBarCode(buchaBarCode_c_, ""));
+                }
+                if (isBucha_d_) {
+                    c_list.add(new OldNewBarCode(buchaBarCode_d_, ""));
+                }
+                params.addBodyParameter("changeBarCodeVoList", c_list.toString());
+                x.http().post(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            String msg = jsonObject.getString("msg");
+                            int status = jsonObject.getInt("status");
+                            Toast.makeText(OrderConfirmFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            if (status == 1) {
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("page", "order");
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                });
+
+            }
+        });
+        dialog.show();
+        //设置按钮颜色
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+    }
+
     private boolean judgeBeforeSave(String type) {
         switch (type) {
-            case "1":
+            case "1"://确认服务
                 if (!hasPic_a_left && !hasPic_b_left && !hasPic_c_left && !hasPic_d_left) {
                     showErrorDialog("请补全轮胎正面照!");
                     return false;
@@ -654,9 +862,15 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     return false;
                 }
                 break;
-            case "2":
+            case "2"://补差服务
+                //判断补差  --》 dialog--》post
+                if (noFiveYearsShoeAmount == 0) {//达到磨损程度的轮胎数量为零则不能补差
+                    showErrorDialog("没有可补差的轮胎(达到磨损程度且未满五年的轮胎)!");
+                    return false;
+                }
                 break;
-            case "3":
+            case "3"://拒绝服务
+                //(无需判断)
                 break;
         }
         return true;
@@ -692,7 +906,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 error_text.setText("确定确认服务吗?");
                 break;
             case "2":
-//                error_text.setText("确定补差服务吗?");
+                error_text.setText("确定补差服务吗?");
                 break;
             case "3":
                 error_text.setText("确定拒绝服务吗?");
@@ -758,7 +972,6 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                             params.addBodyParameter("shoe4BarCodeImg", new File(path_shoeDBarcodeBitmap));
                         }
                         Log.e(TAG, "onClick:  params.toString() = " + params.toString());
-//                        params.setConnectTimeout(10000);
                         x.http().post(params, new Callback.CommonCallback<String>() {
                             @Override
                             public void onSuccess(String result) {
@@ -802,6 +1015,55 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         break;
                     case "3":
                         //拒绝
+                        JSONObject object3 = new JSONObject();
+                        try {
+                            object3.put("orderNo", orderNo);
+                            object3.put("serviceType", "3");
+                            object3.put("orderType", orderType);
+
+                        } catch (JSONException e) {
+                        }
+                        RequestParams params3 = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectChangeShoeOrderType");
+                        params3.addBodyParameter("reqJson", object3.toString());
+                        params3.addBodyParameter("changeBarCodeVoList", oldNewBarCodeList.toString());
+                        params3.addBodyParameter("token", new DbConfig().getToken());
+                        x.http().post(params3, new Callback.CommonCallback<String>() {
+                            @Override
+                            public void onSuccess(String result) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(result);
+                                    int status = jsonObject.getInt("status");
+                                    String msg = jsonObject.getString("msg");
+                                    Toast.makeText(OrderConfirmFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                    if (status == 1) {
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("page", "order");
+                                        intent.putExtras(bundle);
+                                        finish();
+                                        startActivity(intent);
+                                    }
+
+
+                                } catch (JSONException e) {
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable ex, boolean isOnCallback) {
+                                Toast.makeText(OrderConfirmFreeChangeActivity.this, "网络异常,请检查网络", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancelled(CancelledException cex) {
+
+                            }
+
+                            @Override
+                            public void onFinished() {
+                                hideDialogProgress(progressDialog);
+                            }
+                        });
                         break;
                 }
             }
@@ -1478,6 +1740,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                             bean.setStatus(objBean.getInt("status") + "");
                             newShoeList.add(bean);
                         }
+                        Log.e(TAG, "onSuccess:   bug在哪里 4");
                         Log.e(TAG, "onSuccess: " + "onSuccess");
 
                         //设置数据
@@ -1565,8 +1828,12 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
             }
         }
         //分别设置数据
-        fiveYearsShoeAmount = oldShoeReachFiveList.size();
-        noFiveYearsShoeAmount = oldShoeNoFiveList.size();
+        if (oldShoeReachFiveList != null) {
+            fiveYearsShoeAmount = oldShoeReachFiveList.size();/*轮胎满五年条数*/
+        }
+        if (oldShoeNoFiveList != null) {
+            noFiveYearsShoeAmount = oldShoeNoFiveList.size();/*轮胎不满五年条数*/
+        }
         if (oldShoeReachFiveList.size() == 0) {//满五年
             fl_full_change_title.setVisibility(View.GONE);
             ll_full_change_content.setVisibility(View.GONE);
@@ -1642,6 +1909,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
             fl_broken_barcode_d_.setVisibility(View.GONE);
             broken_code_a.setText(oldShoeNoFiveList.get(0).getBarCode());
             broken_code_a_change.setTag(fiveYearsShoeAmount + 1 + "");
+
         }
         if (oldShoeNoFiveList.size() == 2) {
             fl_broken_change_title.setVisibility(View.VISIBLE);

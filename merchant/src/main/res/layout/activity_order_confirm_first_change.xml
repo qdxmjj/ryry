@@ -296,7 +296,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
-                            android:text="免费再换"
+                            android:text="首次更换"
                             android:textColor="@color/c6"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -406,7 +406,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
-                            android:text="免费再换"
+                            android:text="首次更换"
                             android:textColor="@color/c6"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -516,7 +516,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
-                            android:text="免费再换"
+                            android:text="首次更换"
                             android:textColor="@color/c6"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -903,7 +903,7 @@
                     android:layout_marginTop="3dp"
                     android:background="@drawable/register_theam_button"
                     android:gravity="center"
-                    android:text="补差服务"
+                    android:text="拒绝服务"
                     android:textColor="@color/theme_primary"
                     android:textSize="16sp" />
 

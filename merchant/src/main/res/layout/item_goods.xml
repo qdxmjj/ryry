@@ -18,14 +18,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="115dp"
         android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
         <com.ruyiruyi.merchant.utils.CircleImageView
             android:id="@+id/img_goods"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
             android:layout_marginLeft="10dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_head"
@@ -35,7 +35,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="2dp"
             android:orientation="vertical">
 
@@ -43,15 +43,16 @@
                 android:id="@+id/tv_goodstitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:maxLines="2"
-                android:text="撒大声地撒多所多撒多撒多sad撒多撒多"
+                android:text="撒大声地撒多所多撒多撒多sad撒多撒多撒大声地撒多所多撒多撒多撒多撒大声地撒多所多撒多撒多sad撒多撒多"
                 android:textColor="@color/c7"
                 android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="6dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -125,16 +126,16 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:background="@color/c1" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:orientation="horizontal"
         android:padding="3dp"
         android:weightSum="3">
@@ -154,7 +155,7 @@
             android:gravity="center"
             android:text="删除商品"
             android:textColor="@color/theme_primary"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_reedit"
@@ -166,7 +167,7 @@
             android:gravity="center"
             android:text="重新编辑"
             android:textColor="#ffffff"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <View

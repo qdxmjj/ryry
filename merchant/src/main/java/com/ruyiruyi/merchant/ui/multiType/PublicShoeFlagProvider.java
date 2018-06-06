@@ -39,8 +39,17 @@ public class PublicShoeFlagProvider extends ItemViewProvider<PublicShoeFlag, Pub
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final PublicShoeFlag bean) {
         Glide.with(context).load(bean.getShoeImgUrl()).into(holder.shoe_img);
         holder.shoe_name.setText(bean.getShoeName());
-        holder.shoe_type.setText(bean.getOrderType());
-        holder.shoe_location.setText(bean.getShoeFlag());
+        switch (bean.getOrderType()) {
+            case "2":
+                holder.shoe_type.setText("首次更换");
+                break;
+            case "3":
+                holder.shoe_type.setText("免费再换");
+                break;
+            case "4":
+                holder.shoe_type.setText("轮胎修补");
+                break;
+        }
         holder.shoe_amount.setText(bean.getShoeAmount());
         if (bean.getHasTopline().equals("0")) {
             holder.top_line.setVisibility(View.GONE);

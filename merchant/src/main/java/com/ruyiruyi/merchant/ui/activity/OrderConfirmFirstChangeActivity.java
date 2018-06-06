@@ -287,14 +287,14 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         RxViewAction.clickNoDouble(tv_bottom_a).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                if (judgeBeforeSave("1")) {
+                if (judgeBeforeSave("1")) {//serviceType1:商家确认服务
                     showOrderDialog("1");
                 }
             }
         });
         RxViewAction.clickNoDouble(tv_bottom_b).subscribe(new Action1<Void>() {
             @Override
-            public void call(Void aVoid) {
+            public void call(Void aVoid) {//serviceType3:拒绝服务
                 if (judgeBeforeSave("2")) {
                     showOrderDialog("2");
                 }
@@ -302,7 +302,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         });
         RxViewAction.clickNoDouble(tv_bottom_c).subscribe(new Action1<Void>() {
             @Override
-            public void call(Void aVoid) {
+            public void call(Void aVoid) {//serviceType2:客户自提
                 if (judgeBeforeSave("3")) {
                     showOrderDialog("3");
                 }
@@ -321,7 +321,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                 error_text.setText("确定确认服务吗?");
                 break;
             case "2":
-//                error_text.setText("确定补差服务吗?");
+                error_text.setText("确定拒绝服务吗?");
                 break;
             case "3":
                 error_text.setText("确定客户自提吗?");
@@ -362,7 +362,6 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                         params.addBodyParameter("drivingLicenseImg", new File(path_licenseBitmap));
                         params.addBodyParameter("carImg", new File(path_carBitmap));
                         Log.e(TAG, "onClick:  params.toString() = " + params.toString());
-//                        params.setConnectTimeout(10000);
                         x.http().post(params, new Callback.CommonCallback<String>() {
                             @Override
                             public void onSuccess(String result) {
@@ -402,10 +401,114 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                         });
                         break;
                     case "2":
-                        //补差
+                        //拒绝服务
+                        JSONObject object2 = new JSONObject();
+                        try {
+                            object2.put("orderNo", orderNo);
+                            object2.put("serviceType", "3");
+                            object2.put("orderType", orderType);
+
+                        } catch (JSONException e) {
+                        }
+                        RequestParams params2 = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectFirstChangeShoeOrderType");
+                        params2.addBodyParameter("reqJson", object2.toString());
+                        params2.addBodyParameter("token", new DbConfig().getToken());
+                        Log.e(TAG, "onClick:  params.toString() = " + params2.toString());
+                        x.http().post(params2, new Callback.CommonCallback<String>() {
+                            @Override
+                            public void onSuccess(String result) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(result);
+                                    int status = jsonObject.getInt("status");
+                                    String msg = jsonObject.getString("msg");
+                                    Toast.makeText(OrderConfirmFirstChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                    if (status == 1) {
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("page", "order");
+                                        intent.putExtras(bundle);
+                                        finish();
+                                        startActivity(intent);
+                                    }
+
+
+                                } catch (JSONException e) {
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable ex, boolean isOnCallback) {
+                                Toast.makeText(OrderConfirmFirstChangeActivity.this, "网络异常,请检查网络", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancelled(CancelledException cex) {
+
+                            }
+
+                            @Override
+                            public void onFinished() {
+                                hideDialogProgress(progressDialog);
+                            }
+                        });
                         break;
                     case "3":
-                        //拒绝
+                        //客户自提
+                        //先处理提交数据
+                        initBeforePost();
+
+                        //再请求
+                        JSONObject object3 = new JSONObject();
+                        try {
+                            object3.put("orderNo", orderNo);
+                            object3.put("serviceType", "2");
+                            object3.put("orderType", orderType);
+
+                        } catch (JSONException e) {
+                        }
+                        RequestParams params3 = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectFirstChangeShoeOrderType");
+                        params3.addBodyParameter("reqJson", object3.toString());
+                        params3.addBodyParameter("token", new DbConfig().getToken());
+                        params3.addBodyParameter("drivingLicenseImg", new File(path_licenseBitmap));
+                        params3.addBodyParameter("carImg", new File(path_carBitmap));
+                        Log.e(TAG, "onClick:  params.toString() = " + params3.toString());
+                        x.http().post(params3, new Callback.CommonCallback<String>() {
+                            @Override
+                            public void onSuccess(String result) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(result);
+                                    int status = jsonObject.getInt("status");
+                                    String msg = jsonObject.getString("msg");
+                                    Toast.makeText(OrderConfirmFirstChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                    if (status == 1) {
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("page", "order");
+                                        intent.putExtras(bundle);
+                                        finish();
+                                        startActivity(intent);
+                                    }
+
+
+                                } catch (JSONException e) {
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable ex, boolean isOnCallback) {
+                                Toast.makeText(OrderConfirmFirstChangeActivity.this, "网络异常,请检查网络", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancelled(CancelledException cex) {
+
+                            }
+
+                            @Override
+                            public void onFinished() {
+                                hideDialogProgress(progressDialog);
+                            }
+                        });
                         break;
                 }
             }
@@ -426,7 +529,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
 
     private boolean judgeBeforeSave(String type) {
         switch (type) {
-            case "1":
+            case "1"://serviceType1:确认服务
                 if (!hasPic_license) {
                     showErrorDialog("请上传行驶证照片!");
                     return false;
@@ -436,9 +539,18 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                     return false;
                 }
                 break;
-            case "2":
+            case "2"://serviceType3:拒绝服务
+                //(无需判断)
                 break;
-            case "3":
+            case "3"://serviceType2:客户自提
+                if (!hasPic_license) {
+                    showErrorDialog("请上传行驶证照片!");
+                    return false;
+                }
+                if (!hasPic_car) {
+                    showErrorDialog("请上传车辆照片!");
+                    return false;
+                }
                 break;
         }
 
