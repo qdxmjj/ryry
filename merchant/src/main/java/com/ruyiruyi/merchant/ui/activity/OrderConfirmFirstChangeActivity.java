@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,6 +49,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.security.auth.login.LoginException;
 
 import rx.functions.Action1;
 
@@ -92,6 +95,15 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
     private ImageView pic_car;
     private ImageView pic_car_delete;
     private LinearLayout pic_car_center;
+    //条形码
+    private FrameLayout fl_code_a;
+    private TextView code_a;
+    private FrameLayout fl_code_b;
+    private TextView code_b;
+    private FrameLayout fl_code_c;
+    private TextView code_c;
+    private FrameLayout fl_code_d;
+    private TextView code_d;
 
 
     private String TAG = OrderConfirmFirstChangeActivity.class.getSimpleName();
@@ -106,6 +118,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
     private ProgressDialog progressDialog;
     private String path_licenseBitmap = "";
     private String path_carBitmap = "";
+    private List<FreeChangeNewShoeBean> newShoeList; //条形码轮胎list
 
 
     @Override
@@ -194,6 +207,22 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                             }
                         }
 
+                        JSONArray userCarShoeBarCodeList = data.getJSONArray("userCarShoeBarCodeList");
+                        for (int i = 0; i < userCarShoeBarCodeList.length(); i++) {//存取新轮胎数据
+                            FreeChangeNewShoeBean bean = new FreeChangeNewShoeBean();
+                            JSONObject objBean = (JSONObject) userCarShoeBarCodeList.get(i);
+                            bean.setShoeImgUrl(objBean.getString("shoeImgUrl"));
+                            bean.setBarcodeImgUrl(objBean.getString("barcodeImgUrl"));
+                            bean.setShoeName(objBean.getString("shoeName"));
+                            bean.setOrderType(orderType);
+                            bean.setFontRearFlag(objBean.getInt("fontRearFlag") + "");
+                            bean.setId(objBean.getInt("id") + "");
+                            bean.setBarCode(objBean.getString("barCode"));
+                            bean.setOrderNo(objBean.getString("orderNo"));
+//                            bean.setTime(objBean.getLong("time"));
+                            bean.setStatus(objBean.getInt("status") + "");
+                            newShoeList.add(bean);
+                        }
                         Log.e(TAG, "onSuccess: " + "onSuccess");
 
                         //设置数据
@@ -701,7 +730,35 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         order_num.setText(orderNo);
         //设置内层数据shoeFlag
         setShoeFlagData();
+        //设置条形码newShoeList
+        setShoeBarCodeData();
 
+    }
+
+    private void setShoeBarCodeData() {
+        //初始化 全部隐藏
+        fl_code_a.setVisibility(View.GONE);
+        fl_code_b.setVisibility(View.GONE);
+        fl_code_c.setVisibility(View.GONE);
+        fl_code_d.setVisibility(View.GONE);
+
+        //根据个数显示
+        if (newShoeList.size() >= 1) {
+            fl_code_a.setVisibility(View.VISIBLE);
+            code_a.setText(newShoeList.get(0).getBarCode());
+        }
+        if (newShoeList.size() >= 2) {
+            fl_code_b.setVisibility(View.VISIBLE);
+            code_b.setText(newShoeList.get(1).getBarCode());
+        }
+        if (newShoeList.size() >= 3) {
+            fl_code_c.setVisibility(View.VISIBLE);
+            code_c.setText(newShoeList.get(2).getBarCode());
+        }
+        if (newShoeList.size() >= 4) {
+            fl_code_d.setVisibility(View.VISIBLE);
+            code_d.setText(newShoeList.get(3).getBarCode());
+        }
     }
 
     private void setShoeFlagData() {
@@ -712,17 +769,11 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
             for (int i = 0; i < shoeFlagList.size(); i++) {
                 PublicShoeFlag bean = shoeFlagList.get(i);
                 if (shoeFlagList.get(i).getShoeFlag().equals("1")) {
-                    ll_shoe_font.setVisibility(View.VISIBLE);
-                    ll_shoe_rear.setVisibility(View.GONE);
-                    ll_shoe_consistent.setVisibility(View.GONE);
                     shoe_name_font.setText(bean.getShoeName());
                     shoe_amount_font.setText(bean.getShoeAmount());
                     Glide.with(getApplicationContext()).load(bean.getShoeImgUrl()).into(shoe_img_font);
                 }
                 if (shoeFlagList.get(i).getShoeFlag().equals("2")) {
-                    ll_shoe_font.setVisibility(View.GONE);
-                    ll_shoe_rear.setVisibility(View.VISIBLE);
-                    ll_shoe_consistent.setVisibility(View.GONE);
                     shoe_name_rear.setText(bean.getShoeName());
                     shoe_amount_rear.setText(bean.getShoeAmount());
                     Glide.with(getApplicationContext()).load(bean.getShoeImgUrl()).into(shoe_img_rear);
@@ -790,9 +841,19 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         pic_car = findViewById(R.id.pic_car);
         pic_car_delete = findViewById(R.id.pic_car_delete);
         pic_car_center = findViewById(R.id.pic_car_center);
+        //条形码
+        fl_code_a = findViewById(R.id.fl_code_a);
+        code_a = findViewById(R.id.code_a);
+        fl_code_b = findViewById(R.id.fl_code_b);
+        code_b = findViewById(R.id.code_b);
+        fl_code_c = findViewById(R.id.fl_code_c);
+        code_c = findViewById(R.id.code_c);
+        fl_code_d = findViewById(R.id.fl_code_d);
+        code_d = findViewById(R.id.code_d);
 
 
         shoeFlagList = new ArrayList<>();
+        newShoeList = new ArrayList<>();
         progressDialog = new ProgressDialog(OrderConfirmFirstChangeActivity.this);
     }
 }

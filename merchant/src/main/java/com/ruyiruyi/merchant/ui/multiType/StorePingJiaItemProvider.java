@@ -3,6 +3,7 @@ package com.ruyiruyi.merchant.ui.multiType;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,6 +105,7 @@ public class StorePingJiaItemProvider extends ItemViewProvider<StorePingJiaBean,
         }
         if (hasPic_a_ == 0 && hasPic_b_ == 0 && hasPic_c_ == 0 && hasPic_d_ == 0 && hasPic_e_ == 0) {
             holder.ll_pingjia_pics.setVisibility(View.GONE);
+            Log.e("GONE?", "onBindViewHolder:GONE? ");
         }
 
 

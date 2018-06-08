@@ -3,6 +3,7 @@ package com.ruyiruyi.merchant.ui.multiType;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,8 @@ public class PublicShoeFlagProvider extends ItemViewProvider<PublicShoeFlag, Pub
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final PublicShoeFlag bean) {
         Glide.with(context).load(bean.getShoeImgUrl()).into(holder.shoe_img);
         holder.shoe_name.setText(bean.getShoeName());
+        Log.e(TAG, "onBindViewHolder:bean =  " + bean);
+        Log.e(TAG, "onBindViewHolder:bean.getOrderType() =  " + bean.getOrderType());//null
         switch (bean.getOrderType()) {
             case "2":
                 holder.shoe_type.setText("首次更换");
@@ -48,6 +51,18 @@ public class PublicShoeFlagProvider extends ItemViewProvider<PublicShoeFlag, Pub
                 break;
             case "4":
                 holder.shoe_type.setText("轮胎修补");
+                break;
+        }
+       /* holder.shoe_location.setText(bean.getShoeFlag());//bean.getShoeFlag() = "前轮/后轮"/*/
+        switch (bean.getShoeFlag()) {
+            case "0":
+                holder.shoe_location.setText("前轮/后轮");
+                break;
+            case "1":
+                holder.shoe_location.setText("前轮");
+                break;
+            case "2":
+                holder.shoe_location.setText("后轮");
                 break;
         }
         holder.shoe_amount.setText(bean.getShoeAmount());

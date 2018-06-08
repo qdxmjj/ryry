@@ -101,6 +101,11 @@ public class StoreFragment extends BaseFragment {
     private TextView tv_zsy_num;
     private ProgressDialog progressDialog;
     private ProgressDialog startDialog;
+    private ForRefreshStore listener;
+
+    public void setListener(ForRefreshStore listener) {
+        this.listener = listener;
+    }
 
     @Nullable
     @Override
@@ -434,8 +439,7 @@ public class StoreFragment extends BaseFragment {
 
             if (photo != null) {
                 imgBitmap = rotaingImageView(degree, photo);
-                requestForChangePic();//请求修改头像
-                UtilsRY.deleteUri(getContext(), uri);//删除照片
+                requestForChangePic(uri);//请求修改头像
             }
         }
     }
@@ -444,7 +448,7 @@ public class StoreFragment extends BaseFragment {
     /*
     * //请求修改头像
     * */
-    private void requestForChangePic() {
+    private void requestForChangePic(final Uri uri) {
          /**/           //请求修改头像
         showDialogProgress(progressDialog, "头像修改中...");
 
@@ -491,12 +495,14 @@ public class StoreFragment extends BaseFragment {
 
                         } catch (DbException e) {
                         }
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("page", "store");
-                        intent.putExtras(bundle);
-                        getActivity().finish();
-                        startActivity(intent);
+//                        Intent intent = new Intent(getContext(), MainActivity.class);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString("page", "store");
+//                        intent.putExtras(bundle);
+//                        startActivity(intent);
+                        UtilsRY.deleteUri(getContext(), uri);//删除照片
+                        listener.forRefreshStoreListener();//通知MainActivity刷新数据
+//                        getActivity().finish();
                     }
 
                 } catch (JSONException e) {
@@ -537,6 +543,15 @@ public class StoreFragment extends BaseFragment {
             bitmap.recycle();
         }
         return returnBm;
+    }
+
+
+    /*
+    * 头像修改完毕 刷新MainActivity中所有数据 接口   fg-->activity
+    * */
+    public interface ForRefreshStore {
+        void forRefreshStoreListener();//头像修改完毕 通知MainActivity刷新所有数据
+
     }
 
 

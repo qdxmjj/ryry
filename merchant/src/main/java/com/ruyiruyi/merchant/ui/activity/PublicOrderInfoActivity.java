@@ -174,6 +174,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             @Override
             public void onSuccess(String result) {
                 try {
+                    Log.e(TAG, "onSuccess: result = " + result);
                     JSONObject jsonObject = new JSONObject(result);
                     int sta = jsonObject.getInt("status");
                     if (sta == 1) {
@@ -421,28 +422,24 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 for (int i = 0; i < firstChangeOrderVoList.length(); i++) {
                     JSONObject obj = (JSONObject) firstChangeOrderVoList.get(i);
                     String flag = obj.getString("fontRearFlag");
-                    String shoeFlag = "";
                     PublicShoeFlag shoeFlagbean = new PublicShoeFlag();
                     if (flag.equals("1")) {
-                        shoeFlag = "前胎";
                         fontShoeImg = obj.getString("shoeImg");
                         fontShoeName = obj.getString("shoeName");
                         fontAmount = obj.getString("fontAmount");
-                        shoeFlagbean = new PublicShoeFlag(fontShoeImg, fontShoeName, orderType, shoeFlag, fontAmount);
+                        shoeFlagbean = new PublicShoeFlag(fontShoeImg, fontShoeName, orderType, flag, fontAmount);
                     }
                     if (flag.equals("2")) {
-                        shoeFlag = "后胎";
                         rearShoeImg = obj.getString("shoeImg");
                         rearShoeName = obj.getString("shoeName");
                         rearAmount = obj.getString("rearAmount");
-                        shoeFlagbean = new PublicShoeFlag(rearShoeImg, rearShoeName, orderType, shoeFlag, rearAmount);
+                        shoeFlagbean = new PublicShoeFlag(rearShoeImg, rearShoeName, orderType, flag, rearAmount);
                     }
                     if (flag.equals("0")) {
-                        shoeFlag = "前胎/后胎";
                         consistentShoeImg = obj.getString("shoeImg");
                         consistentShoeName = obj.getString("shoeName");
                         consistentAmount = obj.getString("fontAmount");
-                        shoeFlagbean = new PublicShoeFlag(consistentShoeImg, consistentShoeName, orderType, shoeFlag, consistentAmount);
+                        shoeFlagbean = new PublicShoeFlag(consistentShoeImg, consistentShoeName, orderType, flag, consistentAmount);
                     }
 
                     if (i == 0) {//首尾中判断加线
@@ -481,28 +478,24 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 for (int i = 0; i < firstChangeOrderVoList.length(); i++) {
                     JSONObject obj = (JSONObject) firstChangeOrderVoList.get(i);
                     String flag = obj.getString("fontRearFlag");
-                    String shoeFlag = "";
                     PublicShoeFlag shoeFlagbean = new PublicShoeFlag();
                     if (flag.equals("1")) {
-                        shoeFlag = "前胎";
                         fontShoeImg = obj.getString("shoeImg");
                         fontShoeName = obj.getString("shoeName");
                         fontAmount = obj.getString("fontAmount");
-                        shoeFlagbean = new PublicShoeFlag(fontShoeImg, fontShoeName, orderType, shoeFlag, fontAmount);
+                        shoeFlagbean = new PublicShoeFlag(fontShoeImg, fontShoeName, orderType, flag, fontAmount);
                     }
                     if (flag.equals("2")) {
-                        shoeFlag = "后胎";
                         rearShoeImg = obj.getString("shoeImg");
                         rearShoeName = obj.getString("shoeName");
                         rearAmount = obj.getString("rearAmount");
-                        shoeFlagbean = new PublicShoeFlag(rearShoeImg, rearShoeName, orderType, shoeFlag, rearAmount);
+                        shoeFlagbean = new PublicShoeFlag(rearShoeImg, rearShoeName, orderType, flag, rearAmount);
                     }
                     if (flag.equals("0")) {
-                        shoeFlag = "前胎/后胎";
                         consistentShoeImg = obj.getString("shoeImg");
                         consistentShoeName = obj.getString("shoeName");
                         consistentAmount = obj.getString("fontAmount");
-                        shoeFlagbean = new PublicShoeFlag(consistentShoeImg, consistentShoeName, orderType, shoeFlag, consistentAmount);
+                        shoeFlagbean = new PublicShoeFlag(consistentShoeImg, consistentShoeName, orderType, flag, consistentAmount);
                     }
 
                     if (i == 0) {//首尾中判断加线
@@ -613,7 +606,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 stateButton.setText("待发货");
             }
             if (orderState.equals("6")) {
-                stateButton.setText("待用户确认服务");
+                stateButton.setText("待车主确认服务");
             }
             if (orderState.equals("7")) {
                 stateButton.setText("待评价");
@@ -646,9 +639,9 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 //提交监听
                 bindButtonFreeChange();
             }
-/*            if (orderState.equals("3")) {//待商家确认服务
-                stateButton.setVisibility(View.GONE);
-            }*///已移出
+            if (orderState.equals("3")) {//待商家确认服务(在DingdanItemViewProvider中  只有orderStage！=1 为补差时进入此页面)
+                stateButton.setText("待车主支付差价");
+            }
             if (orderState.equals("4")) {
                 stateButton.setText("已取消");
             }
@@ -659,7 +652,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 stateButton.setText("待发货");
             }
             if (orderState.equals("6")) {
-                stateButton.setText("待用户确认服务");
+                stateButton.setText("待车主确认服务");
             }
             if (orderState.equals("7")) {
                 stateButton.setText("待评价");
@@ -675,9 +668,9 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 //提交监听
                 bindButtonShoeRepair();
             }
-/*            if (orderState.equals("3")) {//待商家确认服务
-                stateButton.setVisibility(View.GONE);
-            }*///已移出
+            if (orderState.equals("3")) {//待商家确认服务(在DingdanItemViewProvider中  只有orderStage！=1 为补差时进入此页面)
+                stateButton.setText("待车主支付差价");
+            }
             if (orderState.equals("4")) {
                 stateButton.setText("已取消");
             }
@@ -688,7 +681,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 stateButton.setText("待发货");
             }
             if (orderState.equals("6")) {
-                stateButton.setText("待用户确认服务");
+                stateButton.setText("待车主确认服务");
             }
             if (orderState.equals("7")) {
                 stateButton.setText("待评价");

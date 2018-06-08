@@ -68,7 +68,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.MyGoodsActivity" />
+        <activity android:name=".ui.activity.MyGoodsActivity"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ui.activity.GoodsInfoActivity"
             android:launchMode="singleTop" />

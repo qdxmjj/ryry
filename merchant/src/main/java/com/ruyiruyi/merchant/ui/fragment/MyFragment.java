@@ -86,7 +86,11 @@ public class MyFragment extends BaseFragment {
     private Bitmap imgBitmap;
     private String img_Path;
     private ProgressDialog progressDialog;
+    private ForRefreshMy listener;
 
+    public void setListener(ForRefreshMy listener) {
+        this.listener = listener;
+    }
 
     @Nullable
     @Override
@@ -278,8 +282,7 @@ public class MyFragment extends BaseFragment {
 
             if (photo != null) {
                 imgBitmap = rotaingImageView(degree, photo);
-                requestForChangePic();//请求修改头像
-                UtilsRY.deleteUri(getContext(), uri);//删除照片
+                requestForChangePic(uri);//请求修改头像
             }
         }
     }
@@ -288,7 +291,7 @@ public class MyFragment extends BaseFragment {
     /*
     * //请求修改头像
     * */
-    private void requestForChangePic() {
+    private void requestForChangePic(final Uri uri) {
             /**/                      //请求修改头像
         showDialogProgress(progressDialog, "头像修改中...");
 
@@ -343,12 +346,15 @@ public class MyFragment extends BaseFragment {
                         String storeImgUrl = new DbConfig().getUser().getStoreImgUrl();
                         Log.e(TAG, "onSuccess: get2=" + storeImgUrl);
 
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("page", "my");
-                        intent.putExtras(bundle);
-                        getActivity().finish();
-                        startActivity(intent);
+//                        Intent intent = new Intent(getContext(), MainActivity.class);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString("page", "my");
+//                        intent.putExtras(bundle);
+//                        startActivity(intent);
+
+                        UtilsRY.deleteUri(getContext(), uri);//删除照片
+                        listener.forRefreshMyListener();//通知MainActivity刷新数据
+//                        getActivity().finish();
                     }
 
                 } catch (JSONException e) {
@@ -405,6 +411,15 @@ public class MyFragment extends BaseFragment {
                 .skipMemoryCache(true)//跳过内存缓存
                 .into(img_user_top);
         tv_username.setText(storeName);
+
+    }
+
+
+    /*
+     * 头像修改完毕 刷新MainActivity中所有数据 接口   fg-->activity
+     * */
+    public interface ForRefreshMy {
+        void forRefreshMyListener();//头像修改完毕 通知MainActivity刷新所有数据
 
     }
 

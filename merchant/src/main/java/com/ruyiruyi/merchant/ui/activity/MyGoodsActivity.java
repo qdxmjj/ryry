@@ -452,4 +452,14 @@ public class MyGoodsActivity extends FragmentActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //刷新数据
+        fragments.clear();
+        fragments = getFragments(leftTypeId, rightTypeId);
+        title_list.clear();
+        title_list = getTitles();
+        pagerAdapter.UpdataNewData(title_list, fragments);
+    }
 }

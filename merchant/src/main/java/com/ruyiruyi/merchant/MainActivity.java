@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
@@ -15,25 +14,24 @@ import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.ruyiruyi.merchant.ui.adapter.MyPagerAdapter;
 import com.ruyiruyi.merchant.ui.fragment.StoreFragment;
 import com.ruyiruyi.merchant.ui.fragment.OrderFragment;
 import com.ruyiruyi.merchant.ui.fragment.MyFragment;
 import com.ruyiruyi.merchant.utils.NoPreloadHomeTabsCell;
-import com.ruyiruyi.merchant.utils.NoPreloadViewPager;
 import com.ruyiruyi.rylibrary.cell.HomeTabsCell;
-import com.ruyiruyi.rylibrary.ui.adapter.FragmentViewPagerAdapter;
 import com.ruyiruyi.rylibrary.utils.LayoutHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements StoreFragment.ForRefreshStore, MyFragment.ForRefreshMy {
 
     private FrameLayout content;
     private ViewPager viewPager;
     private HomeTabsCell tabsCell;
     private List<String> titles;
-    private HomePagerAdapeter pagerAdapter;
+    private MyPagerAdapter pagerAdapter;
     private static boolean isExit = false;
     private static Handler mHandler = new Handler() {
 
@@ -60,6 +58,7 @@ public class MainActivity extends FragmentActivity {
         judgePower();
 
         viewPager = new ViewPager(this);
+        viewPager.setId("MAINACTIVITY".hashCode());
         content.addView(viewPager, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP, 0, 0, 0, NoPreloadHomeTabsCell.CELL_HEIGHT));
 
         tabsCell = new HomeTabsCell(this);
@@ -67,7 +66,8 @@ public class MainActivity extends FragmentActivity {
         tabsCell.setViewPager(viewPager);
 
         initTitle();
-        pagerAdapter = new HomePagerAdapeter(getSupportFragmentManager(), initPagerTitle(), initFragment());
+//        pagerAdapter = new HomePagerAdapeter(getSupportFragmentManager(), initPagerTitle(), initFragment());
+        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), initPagerTitle(), initFragment());
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -120,8 +120,12 @@ public class MainActivity extends FragmentActivity {
         List<Fragment> fragments = new ArrayList<>();
         OrderFragment orderFragment = new OrderFragment();
         fragments.add(orderFragment);
-        fragments.add(new StoreFragment());
-        fragments.add(new MyFragment());
+        StoreFragment storeFragment = new StoreFragment();
+        storeFragment.setListener(this);
+        fragments.add(storeFragment);
+        MyFragment myFragment = new MyFragment();
+        myFragment.setListener(this);
+        fragments.add(myFragment);
 
         return fragments;
     }
@@ -140,8 +144,7 @@ public class MainActivity extends FragmentActivity {
         tabsCell.addView(R.drawable.ic_wode_weixuan, R.drawable.ic_wode_xuanzhong, "我的 ");
     }
 
-
-    class HomePagerAdapeter extends FragmentViewPagerAdapter {
+ /*   class HomePagerAdapeter extends FragmentViewPagerAdapter {
 
         private final List<String> mPageTitle = new ArrayList<>();
 
@@ -155,7 +158,7 @@ public class MainActivity extends FragmentActivity {
         public CharSequence getPageTitle(int position) {
             return mPageTitle.get(position);
         }
-    }
+    }*/
 
 
     @Override
@@ -207,5 +210,33 @@ public class MainActivity extends FragmentActivity {
             Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
             finish();
         }
+    }
+
+
+    /*
+    * 接口回调 StoreFragment修改头像成功后通知刷新activity数据方法
+    * */
+    @Override
+    public void forRefreshStoreListener() {
+        //刷新适配器数据
+        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
+    }
+
+
+    /*
+    * 接口回调 MyFragment修改头像成功后通知刷新activity数据方法
+    * */
+    @Override
+    public void forRefreshMyListener() {
+        //刷新适配器数据
+        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+      /*  //刷新适配器数据  (未用 暂用接口回调)
+        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());*/
     }
 }

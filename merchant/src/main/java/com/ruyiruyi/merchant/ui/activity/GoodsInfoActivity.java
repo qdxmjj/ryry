@@ -422,6 +422,7 @@ public class GoodsInfoActivity extends BaseActivity {
                                 Toast.makeText(GoodsInfoActivity.this, "添加商品成功", Toast.LENGTH_SHORT).show();
                                 switch (type) {
                                     case 1:
+                                        /*startActivity(new Intent(getApplicationContext(), MyGoodsActivity.class));*///（暂未用 MyGoodsActivity已重写onResume）
                                         finish();
                                         break;
                                     case 2:
@@ -511,24 +512,25 @@ public class GoodsInfoActivity extends BaseActivity {
         currentLeftPosition = 0;//每次弹Dialog 初始化
         currentRightPosition = 0;//每次弹Dialog 初始化
         currentForId = 0;//每次弹Dialog 初始化
-        leftWheel.setItems(leftTypeList, currentLeftPosition);
         if (leftTypeList == null || leftTypeList.size() == 0) {
             Toast.makeText(GoodsInfoActivity.this, "请先选择您的服务小类", Toast.LENGTH_SHORT).show();
             return;
         }
+        leftWheel.setItems(leftTypeList, 0);
+        currentLeftString = leftTypeList.get(0);//每次弹Dialog 初始化
         String s = leftTypeList.get(0);
         List<String> strings = getRightStringList(s);
-        rightWheel.setItems(strings, currentRightPosition);
-        currentLeftString = leftTypeList.get(0);//每次弹Dialog 初始化
-        currentRightString = strings.get(currentRightPosition);//每次弹Dialog 初始化
+        rightWheel.setItems(strings, 0);
+        currentRightString = strings.get(0);//每次弹Dialog 初始化
         leftWheel.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
                 currentLeftPosition = leftWheel.getSelectedPosition();
                 currentLeftString = leftWheel.getSelectedItem();
                 List<String> strings2 = getRightStringList(currentLeftString);
-                rightWheel.setItems(strings2, currentRightPosition);
-                currentRightString = strings2.get(currentRightPosition);//每次点击 初始化
+                rightWheel.setItems(strings2, 0);
+                currentRightString = strings2.get(0);//每次点击 初始化
+                currentRightPosition = 0;//初始化 R position
             }
         });
         rightWheel.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {

@@ -133,6 +133,7 @@ public class StorePingJiaFragment extends BaseFragment implements StorePingJiaIt
             @Override
             public void onSuccess(String result) {
                 try {
+                    Log.e(TAG, "onSuccess: result = " + result);
                     JSONObject jsonObject = new JSONObject(result);
                     JSONObject data = jsonObject.getJSONObject("data");
                     String msg = jsonObject.getString("msg");

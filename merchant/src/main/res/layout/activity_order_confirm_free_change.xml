@@ -323,7 +323,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
-                            android:text="前胎"
+                            android:text="前轮"
                             android:textColor="@color/c6"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -433,7 +433,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
-                            android:text="后胎"
+                            android:text="后轮"
                             android:textColor="@color/c6"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -543,7 +543,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
-                            android:text="前胎/后胎"
+                            android:text="前轮/后轮"
                             android:textColor="@color/c6"
                             android:textSize="15sp" />
                     </LinearLayout>

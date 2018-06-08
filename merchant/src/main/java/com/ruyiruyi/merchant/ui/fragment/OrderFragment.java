@@ -180,7 +180,7 @@ public class OrderFragment extends BaseFragment {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: result = " + result);
+                Log.e(TAG, "onSuccess: result656 = " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     JSONObject data = jsonObject.getJSONObject("data");
@@ -200,6 +200,7 @@ public class OrderFragment extends BaseFragment {
                         dingdan.setOrderName(order.getString("orderName"));
                         dingdan.setPlatNumber(order.getString("platNumber"));
                         dingdan.setOrderType(order.getString("orderType"));
+                        dingdan.setOrderStage(order.getString("orderStage"));
                         dingdan.setOrderNo(order.getString("orderNo"));
                         dingdan.setOrderState(order.getString("orderState"));
                         dingdan.setOrderTime(order.getLong("orderTime"));
