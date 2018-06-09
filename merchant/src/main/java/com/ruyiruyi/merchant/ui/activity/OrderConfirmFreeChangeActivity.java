@@ -182,6 +182,11 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private ImageView pic_car_delete;
     private LinearLayout pic_car_center;
 
+    //拍照示例
+    private TextView tv_shoepic_sample;
+    private TextView tv_licencepic_sample;
+    private TextView tv_carpic_sample;
+
 
     private ActionBar actionBar;
     private String orderNo;
@@ -690,6 +695,28 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 if (judgeBeforeSave("3")) {
                     showOrderDialog("3");
                 }
+            }
+        });
+
+        //拍照示例
+        RxViewAction.clickNoDouble(tv_shoepic_sample).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getApplicationContext(), PhotoSampleActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "change");
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        RxViewAction.clickNoDouble(tv_carpic_sample).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getApplicationContext(), PhotoSampleActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "car");
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }
@@ -2354,6 +2381,11 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         pic_car = findViewById(R.id.pic_car);
         pic_car_delete = findViewById(R.id.pic_car_delete);
         pic_car_center = findViewById(R.id.pic_car_center);
+
+        //拍照示例
+        tv_shoepic_sample = findViewById(R.id.tv_shoepic_sample);
+        tv_licencepic_sample = findViewById(R.id.tv_licencepic_sample);
+        tv_carpic_sample = findViewById(R.id.tv_carpic_sample);
 
         shoeFlagList = new ArrayList<>();
         oldShoeList = new ArrayList<>();

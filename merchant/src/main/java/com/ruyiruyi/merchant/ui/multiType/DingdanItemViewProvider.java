@@ -92,6 +92,7 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
                     bundle.putString("orderType", dingdan.getOrderType());
                     bundle.putString("orderState", dingdan.getOrderState());
                     bundle.putString("storeId", new DbConfig().getId() + "");
+                    bundle.putString("whereIn", "MainOrderItem");
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }

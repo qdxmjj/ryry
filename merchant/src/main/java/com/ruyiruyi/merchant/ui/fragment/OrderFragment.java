@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,12 +20,14 @@ import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.ItemBottomBean;
 import com.ruyiruyi.merchant.bean.ItemNullBean;
 import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.ui.activity.MyOrderActivity;
 import com.ruyiruyi.merchant.ui.multiType.DingdanItemViewProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemBottomProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemNullProvider;
 import com.ruyiruyi.merchant.ui.multiType.listener.OnLoadMoreListener;
 import com.ruyiruyi.merchant.ui.multiType.modle.Dingdan;
 import com.ruyiruyi.merchant.utils.UtilsURL;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseFragment;
 
 import org.json.JSONArray;
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.drakeet.multitype.MultiTypeAdapter;
+import rx.functions.Action1;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
@@ -65,6 +69,8 @@ public class OrderFragment extends BaseFragment {
     private TextView tv_ywcdd_num;
     private SwipeRefreshLayout mSwipeLayout;
     private ProgressDialog startDialog;
+    private LinearLayout ll_wwcdd;
+    private LinearLayout ll_ywcdd;
 
     @Nullable
     @Override
@@ -257,7 +263,22 @@ public class OrderFragment extends BaseFragment {
     }
 
     private void bindView() {
-
+        RxViewAction.clickNoDouble(ll_wwcdd).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getContext(), MyOrderActivity.class);
+                intent.putExtra("page", "1");
+                startActivity(intent);
+            }
+        });
+        RxViewAction.clickNoDouble(ll_ywcdd).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getContext(), MyOrderActivity.class);
+                intent.putExtra("page", "4");
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView() {
@@ -265,6 +286,8 @@ public class OrderFragment extends BaseFragment {
         tv_wwcdd_num = getView().findViewById(R.id.tv_wwcdd_num);
         tv_ywcdd_num = getView().findViewById(R.id.tv_ywcdd_num);
         mSwipeLayout = getView().findViewById(R.id.my_swp);
+        ll_wwcdd = getView().findViewById(R.id.ll_wwcdd);
+        ll_ywcdd = getView().findViewById(R.id.ll_ywcdd);
 
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.rlv_dingdan);
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);

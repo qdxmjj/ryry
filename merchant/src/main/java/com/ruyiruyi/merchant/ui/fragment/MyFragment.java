@@ -148,6 +148,7 @@ public class MyFragment extends BaseFragment {
             @Override
             public void call(Void aVoid) {
                 Intent intent = new Intent();
+                intent.putExtra("page", "0");
                 intent.setClass(getActivity(), MyOrderActivity.class);
                 startActivity(intent);
             }

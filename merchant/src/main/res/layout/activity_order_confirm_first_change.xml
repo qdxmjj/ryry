@@ -714,18 +714,41 @@
             </LinearLayout>
 
             <!--行驶证照片-->
-            <TextView
+            <!--标题加拍照示例-->
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="1dp"
-                android:background="#ffffff"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="36dp"
-                android:paddingRight="26dp"
-                android:text="行驶证照片"
-                android:textColor="@color/c7"
-                android:textSize="16sp" />
+                android:layout_marginTop="5dp"
+                android:background="#ffffff">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="36dp"
+                    android:paddingRight="26dp"
+                    android:text="行驶证照片"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_licencepic_sample"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="36dp"
+                    android:background="@drawable/register_huise_button"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="6dp"
+                    android:text="拍照示例"
+                    android:textColor="@color/c6"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -801,17 +824,40 @@
             </LinearLayout>
 
             <!--车辆照片-->
-            <TextView
+            <!--标题加拍照示例-->
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:background="#ffffff"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="36dp"
-                android:paddingRight="26dp"
-                android:text="车辆照片"
-                android:textColor="@color/c7"
-                android:textSize="16sp" />
+                android:layout_marginTop="5dp"
+                android:background="#ffffff">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="36dp"
+                    android:paddingRight="26dp"
+                    android:text="车辆照片"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_carpic_sample"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="36dp"
+                    android:background="@drawable/register_huise_button"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="6dp"
+                    android:text="拍照示例"
+                    android:textColor="@color/c6"
+                    android:textSize="12sp" />
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

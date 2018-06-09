@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,7 @@ import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseFragmentActivity;
 import com.ruyiruyi.merchant.ui.adapter.MyPagerAdapter;
 import com.ruyiruyi.merchant.ui.fragment.StoreFragment;
 import com.ruyiruyi.merchant.ui.fragment.OrderFragment;
@@ -25,7 +27,7 @@ import com.ruyiruyi.rylibrary.utils.LayoutHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity implements StoreFragment.ForRefreshStore, MyFragment.ForRefreshMy {
+public class MainActivity extends MerchantBaseFragmentActivity implements StoreFragment.ForRefreshStore, MyFragment.ForRefreshMy {
 
     private FrameLayout content;
     private ViewPager viewPager;
@@ -179,9 +181,11 @@ public class MainActivity extends FragmentActivity implements StoreFragment.ForR
             // 利用handler延迟发送更改状态信息
             mHandler.sendEmptyMessageDelayed(0, 2000);
         } else {
+            Intent intent = new Intent("qd.xmjj.baseActivity");
+            intent.putExtra("closeAll", 1);
+            sendBroadcast(intent);//发送广播*/
 
-
-            this.finish();
+//            this.finish();
         }
     }
 

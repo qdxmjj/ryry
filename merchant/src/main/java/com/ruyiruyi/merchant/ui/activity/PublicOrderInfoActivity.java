@@ -60,6 +60,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     private String orderNo;
     private String orderType;//2首次更换订单
     private String orderState;
+    private String whereIn;
     private String storeId;
 
     private String userName;
@@ -104,6 +105,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
         orderNo = bundle.getString("orderNo");
         orderType = bundle.getString("orderType");
         orderState = bundle.getString("orderState");
+        whereIn = bundle.getString("whereIn");
         switch (orderType) {
             case "1":
                 orderTypeStr = "普通商品订单";
@@ -622,6 +624,18 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 //提交监听
                 bindButtonOrdinarygoods();
             }
+            if (orderState.equals("2")) {
+                stateButton.setText("待收货");
+            }
+            if (orderState.equals("4")) {
+                stateButton.setText("已取消");
+            }
+            if (orderState.equals("5")) {
+                stateButton.setText("待发货");
+            }
+            if (orderState.equals("6")) {
+                stateButton.setText("待车主确认服务");
+            }
             if (orderState.equals("8")) {
                 stateButton.setText("待支付");
             }
@@ -698,13 +712,25 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     * */
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putString("page", "order");
+
+        if (whereIn.equals("MainOrderItem")) {
+            intent.setClass(getApplicationContext(), MainActivity.class);
+            bundle.putString("page", "order");
+        }
+        if (whereIn.equals("MainStoreItem")) {
+            intent.setClass(getApplicationContext(), MainActivity.class);
+            bundle.putString("page", "store");
+        }
+        if (whereIn.equals("MyOrderItem")) {
+            intent.setClass(getApplicationContext(), MyOrderActivity.class);
+            bundle.putString("page", "0");
+        }
+
+
         intent.putExtras(bundle);
-        Log.e(TAG, "onBackPressed: ~~~~beforestart~~~~");
         startActivity(intent);
-        Log.e(TAG, "onBackPressed: ~~~~afterstart~~~~");
         finish();
     }
 
