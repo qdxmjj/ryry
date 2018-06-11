@@ -35,7 +35,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class TireWaitChangeActivity extends RyBaseActivity {
+public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitViewBinder.OnWaitTireClick {
     private static final String TAG = TireWaitChangeActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;
@@ -192,13 +192,24 @@ public class TireWaitChangeActivity extends RyBaseActivity {
     }
 
     private void register() {
-        adapter.register(TireWait.class, new TireWaitViewBinder(this));
+        TireWaitViewBinder tireWaitViewBinder = new TireWaitViewBinder(this);
+        tireWaitViewBinder.setListener(this);
+        adapter.register(TireWait.class, tireWaitViewBinder);
     }
 
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra(MyFragment.FROM_FRAGMENT, fromFragment);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onWaitTireClikcListener(String orderNo) {
+        Intent intent = new Intent(this, OrderInfoActivity.class);
+        intent.putExtra(PaymentActivity.ORDERNO, orderNo);
+        intent.putExtra(PaymentActivity.ORDER_TYPE, 0);
+        intent.putExtra(PaymentActivity.ORDER_STATE, 3);
         startActivity(intent);
     }
 }

@@ -67,7 +67,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
         setContentView(R.layout.activity_pending_order, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("待支付");
-        ;
+        actionBar.setRightView("取消订单");
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
@@ -75,9 +75,19 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                     case -1:
                         onBackPressed();
                         break;
+                    case -3:
+
+                        if (orderType == 0){
+                            cancleTireOrder();
+                        }else {
+                            cancleOrder();
+                        }
+
+                        break;
                 }
             }
         });
+
 
         goodsInfoList = new ArrayList<>();
         Intent intent = getIntent();
@@ -87,6 +97,112 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
 
         initView();
         initOrderFromService();
+    }
+
+    /**
+     * 取消轮胎订单
+     */
+    private void cancleTireOrder() {
+        int userId = new DbConfig().getId();
+        JSONObject jsonObject = new JSONObject();
+        Log.e(TAG, "initOrderFromService:--- " + orderType);
+        try {
+            jsonObject.put("orderNo", orderno);
+            jsonObject.put("userId", userId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "cancelShoeCxwyOrder");
+        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Toast.makeText(PendingOrderActivity.this, "取消订单成功", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 取消商品订单
+     */
+    private void cancleOrder() {
+        int userId = new DbConfig().getId();
+        JSONObject jsonObject = new JSONObject();
+        Log.e(TAG, "initOrderFromService:--- " + orderType);
+        try {
+            jsonObject.put("orderNo", orderno);
+            jsonObject.put("userId", userId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "cancelStockOrder");
+        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Toast.makeText(PendingOrderActivity.this, "取消订单成功", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initOrderFromService() {
@@ -130,18 +246,18 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                                 String fontRearFlag = object.getString("fontRearFlag");
                                 String tireName = "";
                                 String tireCount = "";
-                                String tirePrice = "";
-                                String totalPrice = "";
+                                Double tirePrice = 0.00;
+                                Double totalPrice = 0.00;
                                 if (fontRearFlag.equals("2")) { //后轮
                                     tireName = object.getString("rearShoeName");
                                     tireCount = object.getString("rearAmount");
-                                    tirePrice = object.getString("rearPrice");
-                                    totalPrice = object.getString("rearTotalPrice");
+                                    tirePrice = object.getDouble("rearPrice");
+                                    totalPrice = object.getDouble("rearTotalPrice");
                                 } else { //前轮 或  前后轮
                                     tireName = object.getString("fontShoeName");
                                     tireCount = object.getString("fontAmount");
-                                    tirePrice = object.getString("fontPrice");
-                                    totalPrice = object.getString("fontTotalPrice");
+                                    tirePrice = object.getDouble("fontPrice");
+                                    totalPrice = object.getDouble("fontTotalPrice");
                                 }
                                 tireInfo = new TireInfo(orderImg, tireName, Integer.parseInt(tireCount), tirePrice, fontRearFlag);
                                 if (Integer.parseInt(cxwyAmount) > 0) {

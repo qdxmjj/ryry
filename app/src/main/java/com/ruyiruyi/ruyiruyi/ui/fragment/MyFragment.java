@@ -178,6 +178,7 @@ public class MyFragment extends RyBaseFragment {
                         Intent intent = new Intent(getContext(), CouponActivity.class);
                         intent.putExtra(CouponActivity.FROM_TYPE,0);
                         intent.putExtra(CouponActivity.CAR_ID,carId);
+                        intent.putExtra(CouponActivity.CHOOSE_TYPE,0);
                         startActivity(intent);
                     }
                 });

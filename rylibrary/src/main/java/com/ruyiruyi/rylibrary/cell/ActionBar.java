@@ -42,6 +42,7 @@ public class ActionBar extends FrameLayout {
     private boolean isSmallStyle;
     private ImageView imageView;
     public OnRightImageClick listener;
+    private TextView rightView;
 
     public void setListener(OnRightImageClick listener) {
         this.listener = listener;
@@ -109,6 +110,18 @@ public class ActionBar extends FrameLayout {
                        // listener.onRightItemClickListener();
                     }
                 });
+
+        rightView = new TextView(context);
+        rightView.setVisibility(GONE);
+        rightView.setTextColor(Color.WHITE);
+        content.addView(rightView,LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT,LayoutHelper.WRAP_CONTENT,Gravity.CENTER_VERTICAL|Gravity.RIGHT,0,0,20,0));
+        RxViewAction.clickNoDouble(rightView)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        ActionBar.this.actionBarMenuOnItemClick.onItemClick(-3);
+                    }
+                });
     }
 
     public void setBackground(int color){
@@ -117,6 +130,10 @@ public class ActionBar extends FrameLayout {
     public void setRightImage(int imageId){
         imageView.setVisibility(VISIBLE);
         imageView.setImageResource(imageId);
+    }
+    public void setRightView(String rightStr){
+        rightView.setText(rightStr);
+        rightView.setVisibility(VISIBLE);
     }
 
     public void setTitle(String title){
