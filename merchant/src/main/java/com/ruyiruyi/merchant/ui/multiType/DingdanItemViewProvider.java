@@ -84,6 +84,8 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
                     context.startActivity(intent);
                 } else if (dingdan.getOrderType().equals("4") && dingdan.getOrderState().equals("3") && dingdan.getOrderStage().equals("1")) {//(4:轮胎修补订单  3 待商家确认服务  1 非补差)
                     Intent intent = new Intent(context, OrderConfirmTireRepairActivity.class);
+                    intent.putExtra("orderNo", dingdan.getOrderNo());
+                    intent.putExtra("orderType", dingdan.getOrderType());
                     context.startActivity(intent);
                 } else {
                     Intent intent = new Intent(context, PublicOrderInfoActivity.class);//其余各订单orderType各状态orderState均复用此页面(

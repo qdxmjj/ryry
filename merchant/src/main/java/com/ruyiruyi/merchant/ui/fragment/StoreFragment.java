@@ -84,7 +84,6 @@ public class StoreFragment extends BaseFragment {
     private String TAG = StoreFragment.class.getSimpleName();
     private final int CHOOSE_PICTURE = 0;
     private final int TAKE_PICTURE = 1;
-    private boolean isFirstLoad = true;
     private Uri tempUri;
     private Bitmap imgBitmap;
     private String img_Path;
@@ -102,6 +101,13 @@ public class StoreFragment extends BaseFragment {
     private ProgressDialog progressDialog;
     private ProgressDialog startDialog;
     private ForRefreshStore listener;
+    private String path_takepic;
+    private boolean isCamera = false;
+    private Context mContext;
+
+    public StoreFragment(Context mContext) {
+        this.mContext = mContext;
+    }
 
     public void setListener(ForRefreshStore listener) {
         this.listener = listener;
@@ -133,9 +139,7 @@ public class StoreFragment extends BaseFragment {
     private void requestFromServer() {
         //数据加载完成前显示加载动画
         startDialog = new ProgressDialog(getContext());
-        if (isFirstLoad) {
-            showDialogProgress(startDialog, "信息加载中...");
-        }
+        showDialogProgress(startDialog, "信息加载中...");
 
         isLoadOver = false;
 
@@ -228,10 +232,7 @@ public class StoreFragment extends BaseFragment {
             @Override
             public void onFinished() {
                 //加载完成 隐藏加载动画
-                if (isFirstLoad) {
-                    hideDialogProgress(startDialog);
-                    isFirstLoad = false;
-                }
+                hideDialogProgress(startDialog);
             }
         });
     }
@@ -347,7 +348,7 @@ public class StoreFragment extends BaseFragment {
 
 
     private void showPicInputDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle("修改头像");
         String[] items = {"选择本地照片", "拍照"};
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -381,7 +382,7 @@ public class StoreFragment extends BaseFragment {
         String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (Build.VERSION.SDK_INT >= 23) {
             // 需要申请动态权限
-            int check = ContextCompat.checkSelfPermission(getActivity(), permissions[0]);
+            int check = ContextCompat.checkSelfPermission(mContext, permissions[0]);
             // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
             if (check != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -392,11 +393,12 @@ public class StoreFragment extends BaseFragment {
         File file = null;
         file = new File(Environment
                 .getExternalStorageDirectory(), "newstoreheadimg.jpg");
+        path_takepic = file.getPath();
 
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= 24) {
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            tempUri = FileProvider.getUriForFile(getActivity(), "com.ruyiruyi.merchant.fileProvider", file);
+            tempUri = FileProvider.getUriForFile(mContext, "com.ruyiruyi.merchant.fileProvider", file);
         } else {
             tempUri = Uri.fromFile(new File(Environment
                     .getExternalStorageDirectory(), "newstoreheadimg.jpg"));
@@ -413,14 +415,15 @@ public class StoreFragment extends BaseFragment {
         switch (requestCode) {
             case CHOOSE_PICTURE:
                 if (data != null) {
+                    isCamera = false;
                     Uri uri = data.getData();
-                    setImageToViewFromPhone(uri);
+                    setImageToViewFromPhone(uri, uri.toString());
                 }
                 break;
             case TAKE_PICTURE:
                 if (tempUri != null) {
-                    setImageToViewFromPhone(tempUri);
-
+                    isCamera = true;
+                    setImageToViewFromPhone(tempUri, path_takepic);
                 }
                 break;
 
@@ -428,8 +431,8 @@ public class StoreFragment extends BaseFragment {
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(uri.toString());
+    private void setImageToViewFromPhone(Uri uri, String paths) {
+        int degree = ImageUtils.readPictureDegree(paths);
         if (uri != null) {
             Bitmap photo = null;
             try {
@@ -466,10 +469,10 @@ public class StoreFragment extends BaseFragment {
         params.addBodyParameter("reqJson", object.toString());
         params.addBodyParameter("token", new DbConfig().getToken());
         params.addBodyParameter("store_head_img", new File(img_Path));
-        params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: xmjj store"  );
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String msg = jsonObject.getString("msg");
@@ -499,9 +502,12 @@ public class StoreFragment extends BaseFragment {
 //                        Bundle bundle = new Bundle();
 //                        bundle.putString("page", "store");
 //                        intent.putExtras(bundle);
+//                        getActivity().finish();
 //                        startActivity(intent);
-                        UtilsRY.deleteUri(getContext(), uri);//删除照片
                         listener.forRefreshStoreListener();//通知MainActivity刷新数据
+                        if (isCamera) {
+                            UtilsRY.deleteUri(getContext(), uri);//删除照片
+                        }
 //                        getActivity().finish();
                     }
 
@@ -511,7 +517,8 @@ public class StoreFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(getContext(), "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onError: xmjj store"  );
+//                Toast.makeText(mContext, "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -544,7 +551,6 @@ public class StoreFragment extends BaseFragment {
         }
         return returnBm;
     }
-
 
     /*
     * 头像修改完毕 刷新MainActivity中所有数据 接口   fg-->activity

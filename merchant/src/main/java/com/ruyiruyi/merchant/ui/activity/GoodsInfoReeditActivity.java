@@ -145,6 +145,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
             }
         }
     };
+    private String path_takepic;
 
     //设置商品修改前数据
     private void initOldData() {
@@ -488,8 +489,8 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 } catch (JSONException e) {
                 }
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStock");
-                params.addBodyParameter("reqJson", object.toString());
-                params.setConnectTimeout(6000);
+                String replace = object.toString().replace("\\", "");
+                params.addBodyParameter("reqJson", replace);
                 if (!isOldPic) {
                     params.addBodyParameter("stock_img", new File(img_Path));
                     Log.e(TAG, "onClick: 012 img_Path " + img_Path);
@@ -506,7 +507,6 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                                 Toast.makeText(GoodsInfoReeditActivity.this, "商品修改成功", Toast.LENGTH_SHORT).show();
                                 switch (type) {
                                     case 1:
-                                       /* startActivity(new Intent(getApplicationContext(), MyGoodsActivity.class));*///（暂未用 MyGoodsActivity已重写onResume）
                                         finish();
                                         break;
                                     case 2:
@@ -597,6 +597,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         currentLeftPosition = 0;//每次弹Dialog 初始化
         currentRightPosition = 0;//每次弹Dialog 初始化
         currentForId = 0;//每次弹Dialog 初始化
+        leftWheel.setItems(leftTypeList, currentLeftPosition);
         if (leftTypeList == null || leftTypeList.size() == 0) {
             Toast.makeText(GoodsInfoReeditActivity.this, "请先选择您的服务小类", Toast.LENGTH_SHORT).show();
             return;
@@ -745,6 +746,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         File file = null;
         file = new File(Environment
                 .getExternalStorageDirectory(), "goodsinforedeitimg.jpg");
+        path_takepic = file.getPath();
 
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= 24) {
@@ -767,10 +769,12 @@ public class GoodsInfoReeditActivity extends BaseActivity {
             switch (requestCode) {
                 case CHOOSE_PICTURE:
                     Uri uri = data.getData();
-                    setImageToViewFromPhone(uri);
+                    setImageToViewFromPhone(uri, uri.toString());
+                    Log.e(TAG, "onActivityResult: " + uri.getPath());
                     break;
                 case TAKE_PICTURE:
-                    setImageToViewFromPhone(tempUri);
+                    setImageToViewFromPhone(tempUri, path_takepic);
+                    Log.e(TAG, "onActivityResult: " + tempUri.getPath());
                     break;
 
             }
@@ -778,8 +782,8 @@ public class GoodsInfoReeditActivity extends BaseActivity {
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(uri.toString());
+    private void setImageToViewFromPhone(Uri uri, String paths) {
+        int degree = ImageUtils.readPictureDegree(paths);
         if (uri != null) {
             Bitmap photo = null;
             try {

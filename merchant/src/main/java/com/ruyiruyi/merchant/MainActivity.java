@@ -60,7 +60,7 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         judgePower();
 
         viewPager = new ViewPager(this);
-        viewPager.setId("MAINACTIVITY".hashCode());
+        viewPager.setId("MAINACTIVITYS".hashCode());
         content.addView(viewPager, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP, 0, 0, 0, NoPreloadHomeTabsCell.CELL_HEIGHT));
 
         tabsCell = new HomeTabsCell(this);
@@ -122,10 +122,10 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         List<Fragment> fragments = new ArrayList<>();
         OrderFragment orderFragment = new OrderFragment();
         fragments.add(orderFragment);
-        StoreFragment storeFragment = new StoreFragment();
+        StoreFragment storeFragment = new StoreFragment(this);
         storeFragment.setListener(this);
         fragments.add(storeFragment);
-        MyFragment myFragment = new MyFragment();
+        MyFragment myFragment = new MyFragment(this);
         myFragment.setListener(this);
         fragments.add(myFragment);
 

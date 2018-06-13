@@ -261,6 +261,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private String code_d_ = "";
     private String code_null_ = "";
     private int newShoeNum = 0;
+    private String path_;
 
 
     @Override
@@ -1311,33 +1312,43 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         if (currentImage == 1) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "shoea.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 2) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "shoeacode.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 3) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "shoeb.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 4) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "shoebcode.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 5) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "shoec.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 6) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "shoeccode.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 7) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "shoed.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 8) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "shoedcode.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 9) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "license.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 10) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "car.jpg");
+            path_ = file.getPath();
         }
 
         //判断是否是AndroidN以及更高的版本
@@ -1368,7 +1379,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
 
     //未剪辑照片
     private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(uri.toString());
+        int degree = ImageUtils.readPictureDegree(path_);
         if (uri != null) {
             Bitmap photo = null;
             try {
@@ -2398,6 +2409,10 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         progressDialog = new ProgressDialog(OrderConfirmFreeChangeActivity.this);
     }
 
+
+    /*  onDestroy()
+    * 判断删除带有条形码的图片
+    * */
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -11,13 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="26dp"
         android:layout_marginRight="26dp"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="20dp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -29,7 +28,7 @@
             android:id="@+id/et_yuanmima"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="40dp"
             android:background="@drawable/edit_background_noline"
             android:hint="请输入原密码"
             android:inputType="textPassword"
@@ -40,15 +39,14 @@
             android:textCursorDrawable="@drawable/edit_cursor_color"
             android:textSize="15sp" />
 
-    </LinearLayout>
+    </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="26dp"
         android:layout_marginRight="26dp"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="12dp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -60,7 +58,7 @@
             android:id="@+id/et_xinmima_a_"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="40dp"
             android:background="@drawable/edit_background_noline"
             android:hint="请输入新密码"
             android:inputType="textPassword"
@@ -71,15 +69,14 @@
             android:textCursorDrawable="@drawable/edit_cursor_color"
             android:textSize="15sp" />
 
-    </LinearLayout>
+    </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="26dp"
         android:layout_marginRight="26dp"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="12dp">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -91,7 +88,7 @@
             android:id="@+id/et_xinmima_b_"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="40dp"
             android:background="@drawable/edit_background_noline"
             android:hint="请确认新密码"
             android:inputType="textPassword"
@@ -102,7 +99,7 @@
             android:textCursorDrawable="@drawable/edit_cursor_color"
             android:textSize="15sp" />
 
-    </LinearLayout>
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

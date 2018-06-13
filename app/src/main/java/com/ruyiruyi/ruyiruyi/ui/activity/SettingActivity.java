@@ -13,8 +13,6 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
-import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
@@ -83,7 +81,7 @@ public class SettingActivity extends RyBaseActivity {
                 if (!judgeIsLogin()) {
                     return;
                 }
-
+                startActivity(new Intent(getApplicationContext(),ContactServiceActivity.class));
 
             }
         });
@@ -91,7 +89,7 @@ public class SettingActivity extends RyBaseActivity {
         RxViewAction.clickNoDouble(fl_understand_us).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-
+                startActivity(new Intent(getApplicationContext(),UnderstandUsActivity.class));
             }
         });
         //退出登录

@@ -119,6 +119,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
     private String path_licenseBitmap = "";
     private String path_carBitmap = "";
     private List<FreeChangeNewShoeBean> newShoeList; //条形码轮胎list
+    private String path_;
 
 
     @Override
@@ -644,9 +645,11 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         if (currentImage == 1) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "license" + code + ".jpg");
+            path_ = file.getPath();
         } else if (currentImage == 2) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "car" + code + ".jpg");
+            path_ = file.getPath();
         }
 
         //判断是否是AndroidN以及更高的版本
@@ -677,7 +680,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
 
     //未剪辑照片
     private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(uri.toString());
+        int degree = ImageUtils.readPictureDegree(path_);
         if (uri != null) {
             Bitmap photo = null;
             try {

@@ -196,6 +196,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         }
     };
     private String areStr = "";
+    private String path_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -653,18 +654,23 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         if (currentImage == 0) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "mdpicaaa.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 1) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "mdpicbbb.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 2) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "mdpicccc.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 3) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "yyzz.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 4) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "shou.jpg");
+            path_ = file.getPath();
         }
 
         //判断是否是AndroidN以及更高的版本
@@ -695,10 +701,10 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             switch (requestCode) {
                 case CHOOSE_PICTURE:
                     Uri uri = data.getData();
-                    setImageToViewFromPhone(uri);
+                    setImageToViewFromPhone(uri, false);
                     break;
                 case TAKE_PICTURE:
-                    setImageToViewFromPhone(tempUri);
+                    setImageToViewFromPhone(tempUri, true);
                     break;
 
             }
@@ -706,8 +712,11 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(uri.toString());
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_);
+        }
         if (uri != null) {
             Bitmap photo = null;
             try {
@@ -715,31 +724,51 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             } catch (IOException e) {
             }
             if (currentImage == 0) {
-                mdPicaBitmap = rotaingImageView(degree, photo);
+                if (isCamera) {
+                    mdPicaBitmap = rotaingImageView(degree, photo);
+                } else {
+                    mdPicaBitmap = photo;
+                }
                 img_mdpic_a.setImageBitmap(mdPicaBitmap);
                 img_mdpic_a_delete.setVisibility(View.VISIBLE);
                 img_mdpic_a_center.setVisibility(View.GONE);
                 hasPic_mdPic_a = true;
             } else if (currentImage == 1) {
-                mdPicbBitmap = rotaingImageView(degree, photo);
+                if (isCamera) {
+                    mdPicbBitmap = rotaingImageView(degree, photo);
+                } else {
+                    mdPicbBitmap = photo;
+                }
                 img_mdpic_b.setImageBitmap(mdPicbBitmap);
                 img_mdpic_b_delete.setVisibility(View.VISIBLE);
                 img_mdpic_b_center.setVisibility(View.GONE);
                 hasPic_mdPic_b = true;
             } else if (currentImage == 2) {
-                mdPiccBitmap = rotaingImageView(degree, photo);
+                if (isCamera) {
+                    mdPiccBitmap = rotaingImageView(degree, photo);
+                } else {
+                    mdPiccBitmap = photo;
+                }
                 img_mdpic_c.setImageBitmap(mdPiccBitmap);
                 img_mdpic_c_delete.setVisibility(View.VISIBLE);
                 img_mdpic_c_center.setVisibility(View.GONE);
                 hasPic_mdPic_c = true;
             } else if (currentImage == 3) {
-                yyzzPicBitmap = rotaingImageView(degree, photo);
+                if (isCamera) {
+                    yyzzPicBitmap = rotaingImageView(degree, photo);
+                } else {
+                    yyzzPicBitmap = photo;
+                }
                 img_yyzz.setImageBitmap(yyzzPicBitmap);
                 img_yyzz_delete.setVisibility(View.VISIBLE);
                 img_yyzz_center.setVisibility(View.GONE);
                 hasPic_yyzz = true;
             } else if (currentImage == 4) {
-                shouPicBitmap = rotaingImageView(degree, photo);
+                if (isCamera) {
+                    shouPicBitmap = rotaingImageView(degree, photo);
+                } else {
+                    shouPicBitmap = photo;
+                }
                 img_shou_a.setImageBitmap(shouPicBitmap);
                 img_shou_a_delete.setVisibility(View.VISIBLE);
                 img_shou_a_center.setVisibility(View.GONE);
@@ -1454,7 +1483,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 pa.addBodyParameter("indoor_img", new File(mdpicbPath));
                 pa.addBodyParameter("factory_img", new File(mdpiccPath));
                 pa.addBodyParameter("id_img", new File(shouPath));
-                pa.setConnectTimeout(6000);
                 x.http().post(pa, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {

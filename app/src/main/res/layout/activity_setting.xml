@@ -81,6 +81,7 @@
                         android:src="@drawable/ic_gaishoujihao" />
 
                     <TextView
+                        android:id="@+id/change_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -122,6 +123,7 @@
                         android:src="@drawable/ic_question" />
 
                     <TextView
+                        android:id="@+id/talk"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -163,6 +165,7 @@
                         android:src="@drawable/ic_about" />
 
                     <TextView
+                        android:id="@+id/understand_us"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"

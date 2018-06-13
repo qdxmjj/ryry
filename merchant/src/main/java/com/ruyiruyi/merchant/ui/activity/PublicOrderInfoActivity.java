@@ -55,6 +55,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     private List<PublicBarCode> barCodeList = new ArrayList<>();
     private List<PublicShoeFlag> shoeFlagList = new ArrayList<>();
     private List<PublicGoodsInfo> goodsInfoList = new ArrayList<>();
+    private List<PublicOneaddPic> repairList = new ArrayList<>();
     private MultiTypeAdapter adapter;
 
     private String orderNo;
@@ -211,7 +212,9 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                                 getUserCarShoeBarCodeList(data);
                             }
                         }
-                        if (orderType.equals("4")) {//轮胎修补订单
+                        if (orderType.equals("4")) {//轮胎修补订单 TODO
+                            // 获取展示轮胎修补订单信息
+                            getTireRepairOrderVoList(data);
 
                         }
                         initData();
@@ -350,6 +353,22 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 }
             }
         }
+        if (orderType.equals("4")) {//轮胎修补订单
+            if (orderState.equals("6")) {//6待车主确认服务
+                items.add(new PublicOneaddPic("用户名", userName, false, true));
+                items.add(new PublicOneaddPic("联系电话", userPhone, true, true));
+                items.add(new PublicOneaddPic("车牌号", platNumber, false, true));
+                items.add(new PublicOneaddPic("店铺名", storeName, false, true));
+                items.add(new PublicOneaddPic("订单类型", orderTypeStr, false, true));
+                items.add(new PublicOneaddPic("订单编号", orderNo, false, true));
+                items.add(new PublicOneaddPic("轮胎条码", "修补次数", false, false));
+                for (int i = 0; i < repairList.size(); i++) {
+                    PublicOneaddPic bean = repairList.get(i);
+                    items.add(new PublicOneaddPic(bean.getTitle(), bean.getContent(), false, true));
+                }
+            }
+
+        }
 
         //更新适配器
         assertAllRegistered(adapter, items);
@@ -414,15 +433,15 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     * //获取免费再换订单信息by data
     * */
     private void getFreeChangeOrderVoList(JSONObject data) {
-        JSONArray firstChangeOrderVoList = null;
+        JSONArray freeChangeOrderVoList = null;
         try {
-            firstChangeOrderVoList = data.getJSONArray("freeChangeOrderVoList");
-            if (firstChangeOrderVoList == null || firstChangeOrderVoList.length() == 0) {
-                //首次更换订单列表为空 不操作
+            freeChangeOrderVoList = data.getJSONArray("freeChangeOrderVoList");
+            if (freeChangeOrderVoList == null || freeChangeOrderVoList.length() == 0) {
+                //免费再换订单列表为空 不操作
             } else {
                 shoeFlagList.clear();
-                for (int i = 0; i < firstChangeOrderVoList.length(); i++) {
-                    JSONObject obj = (JSONObject) firstChangeOrderVoList.get(i);
+                for (int i = 0; i < freeChangeOrderVoList.length(); i++) {
+                    JSONObject obj = (JSONObject) freeChangeOrderVoList.get(i);
                     String flag = obj.getString("fontRearFlag");
                     PublicShoeFlag shoeFlagbean = new PublicShoeFlag();
                     if (flag.equals("1")) {
@@ -448,11 +467,11 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                         shoeFlagbean.setHasTopline("1");
                         shoeFlagbean.setHasBottomline("0");
                     }
-                    if (i == firstChangeOrderVoList.length() - 1) {
+                    if (i == freeChangeOrderVoList.length() - 1) {
                         shoeFlagbean.setHasTopline("1");
                         shoeFlagbean.setHasBottomline("1");
                     }
-                    if (i != 0 && i != firstChangeOrderVoList.length() - 1) {
+                    if (i != 0 && i != freeChangeOrderVoList.length() - 1) {
                         shoeFlagbean.setHasTopline("1");
                         shoeFlagbean.setHasBottomline("0");
                     }
@@ -460,6 +479,27 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
 
                 }
             }
+        } catch (JSONException e) {
+        }
+
+    }
+
+
+    /*
+    * //获取轮胎修补订单信息by data
+    * */
+    private void getTireRepairOrderVoList(JSONObject data) {
+        JSONArray tireRepairOrderVoList = null;
+        try {
+            tireRepairOrderVoList = data.getJSONArray("userCarShoeOldBarCodeList");
+            for (int i = 0; i < tireRepairOrderVoList.length(); i++) {
+                PublicOneaddPic bean = new PublicOneaddPic();
+                JSONObject objBean = (JSONObject) tireRepairOrderVoList.get(i);
+                bean.setTitle(objBean.getString("barCode"));
+                bean.setContent(objBean.getInt("repairAmount") + "");
+                repairList.add(bean);
+            }
+
         } catch (JSONException e) {
         }
 
@@ -818,7 +858,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                     saveServerFreeChange();//免费再换订单
                 }
                 if (orderType.equals("4")) {
-                    saveServerShoeRepair();//轮胎修补订单
+                    //轮胎修补订单   (不存在此状态)
                 }
 
             }
@@ -889,75 +929,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     }
 
 
-    /*00copy
-    * 确认提交 请求server//轮胎修补订单
-    * */
-    private void saveServerShoeRepair() {
-        showDialogProgress(progressDialog, "信息提交中...");
-        //提交事件
-        List<BarCode> barCodeList = new ArrayList<BarCode>();
-        if (isNoConsistent_a_ != null) {
-            BarCode code_a_ = new BarCode(barCode_a_, isNoConsistent_a_, barCode_id_a_, orderNo);
-            barCodeList.add(code_a_);
-        }
-        if (isNoConsistent_b_ != null) {
-            BarCode code_b_ = new BarCode(barCode_b_, isNoConsistent_b_, barCode_id_b_, orderNo);
-            barCodeList.add(code_b_);
-        }
-        if (isNoConsistent_c_ != null) {
-            BarCode code_c_ = new BarCode(barCode_c_, isNoConsistent_c_, barCode_id_c_, orderNo);
-            barCodeList.add(code_c_);
-        }
-        if (isNoConsistent_d_ != null) {
-            BarCode code_d_ = new BarCode(barCode_d_, isNoConsistent_d_, barCode_id_d_, orderNo);
-            barCodeList.add(code_d_);
-        }
-
-        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeConfirmReceiptShoes");
-        params.addBodyParameter("reqJson", barCodeList.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
-        params.setConnectTimeout(6000);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                try {
-                    JSONObject object = new JSONObject(result);
-                    String msg = object.getString("msg");
-                    int status = object.getInt("status");
-                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                    if (status == 1) {
-                        finish();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("page", "order");
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
-
-
-                } catch (JSONException e) {
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(getApplicationContext(), "提交失败,请检查网络", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-                hideDialogProgress(progressDialog);
-            }
-        });
-    }
-
-
-    /*00copy
+    /*
     * 确认提交 请求server//免费再换订单
     * */
     private void saveServerFreeChange() {

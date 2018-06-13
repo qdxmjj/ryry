@@ -130,6 +130,7 @@ public class GoodsInfoActivity extends BaseActivity {
             }
         }
     };
+    private String path_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -358,7 +359,7 @@ public class GoodsInfoActivity extends BaseActivity {
 
     //清空数据
     private void clearMyAllData() {
-        mGoodsImg.setImageResource(R.drawable.circle_head);
+        mGoodsImg.setImageResource(R.drawable.circle_head_theam);
         imgBitmap = null;
         mGoodsName.setText("");
         mGoodsPrice.setText("");
@@ -410,7 +411,6 @@ public class GoodsInfoActivity extends BaseActivity {
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "addStock");
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("stock_img", new File(img_Path));
-                params.setConnectTimeout(6000);
                 Log.e(TAG, "onClick: 012 img_Path = add " + img_Path);
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
@@ -660,6 +660,7 @@ public class GoodsInfoActivity extends BaseActivity {
         File file = null;
         file = new File(Environment
                 .getExternalStorageDirectory(), "goodsinfoimg.jpg");
+        path_ = file.getPath();
 
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= 24) {
@@ -682,10 +683,10 @@ public class GoodsInfoActivity extends BaseActivity {
             switch (requestCode) {
                 case CHOOSE_PICTURE:
                     Uri uri = data.getData();
-                    setImageToViewFromPhone(uri);
+                    setImageToViewFromPhone(uri, false);
                     break;
                 case TAKE_PICTURE:
-                    setImageToViewFromPhone(tempUri);
+                    setImageToViewFromPhone(tempUri, true);
                     break;
 
             }
@@ -693,15 +694,22 @@ public class GoodsInfoActivity extends BaseActivity {
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(uri.toString());
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_);
+        }
         if (uri != null) {
             Bitmap photo = null;
             try {
                 photo = ImageUtils.getBitmapFormUri(getApplicationContext(), uri);
             } catch (IOException e) {
             }
-            imgBitmap = rotaingImageView(degree, photo);
+            if (isCamera) {
+                imgBitmap = rotaingImageView(degree, photo);
+            } else {
+                imgBitmap = photo;
+            }
 //   2          mGoodsImg.setImageBitmap(imgBitmap);
             //Glide 加载BitMap需要先将bitmap对象转换为字节,在加载;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
