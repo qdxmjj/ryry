@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -38,15 +40,27 @@ import java.util.List;
 
 public class StartAppActivity extends BaseActivity {
     private final String TAG = StartAppActivity.class.getSimpleName();
-    TimeCount mTimeCount;
+    //    TimeCount mTimeCount;
     private int isLogin = 0;  //0 未登录  1 已登录
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    //下载
+                    initProvinceData();
+                    break;
+                case 1:
+                    goMain();
+                    break;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_app);
-        //权限获取
-        requestPower();
+            }
+
+        }
+    };
+
+    private void goMain() {
         //initIsLogin
         DbConfig dbConfig = new DbConfig();
         if (dbConfig.getIsLogin()) {
@@ -55,11 +69,57 @@ public class StartAppActivity extends BaseActivity {
             isLogin = 0;
         }
 
-        mTimeCount = new TimeCount(3000, 1000);
-        mTimeCount.start();
 
-        initProvinceData();
+        //跳转
+        if (isLogin == 0) {
+            Intent intent = new Intent(StartAppActivity.this, LoginActivity.class);
+            startActivity(intent);
+            StartAppActivity.this.finish();
+        } else {
+            Intent intent = new Intent(StartAppActivity.this, MainActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("page", "my");
+            intent.putExtras(bundle);
+            startActivity(intent);
+            StartAppActivity.this.finish();
+        }
+    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_start_app);
+        //权限获取
+        requestPower();
+/*        mTimeCount = new TimeCount(3000, 1000);
+        mTimeCount.start();*/
+
+        /*initProvinceData();*/
+    }
+
+
+    private void judgePower() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
     }
 
@@ -100,6 +160,11 @@ public class StartAppActivity extends BaseActivity {
                     String msg = jsonObject.getString("msg");
                     JSONArray data = jsonObject.getJSONArray("data");
                     Log.e(TAG, "onSuccess: getData and To Db ??  status = " + status + "msg = " + msg + "data = " + data.toString());
+
+                    //下载并存储完毕
+                    Message message = new Message();
+                    message.what = 1;
+                    handler.sendMessageDelayed(message, 2000);
                     saveProvinceToDb(data);
                 } catch (JSONException e) {
                 }
@@ -139,6 +204,8 @@ public class StartAppActivity extends BaseActivity {
                 province.setName(obj.getString("name"));
 //                Log.e(TAG, "saveProvinceToDb: definition==>" + province.getDefinition());
                 db.saveOrUpdate(province);
+
+
             } catch (JSONException e) {
 
             } catch (DbException e) {
@@ -152,10 +219,25 @@ public class StartAppActivity extends BaseActivity {
         //判断是否已经赋予权限
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
             //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true。
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {//这里可以写个对话框之类的项向用户解释为什么要申请权限，并在对话框的确认键后续再次申请权限
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.CAMERA,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        }, 1);
             } else {
                 //申请权限，字符串数组内是一个或多个要申请的权限，1是申请权限结果的返回参数，在onRequestPermissionsResult可以得知申请结果
                 ActivityCompat.requestPermissions(this,
@@ -165,19 +247,17 @@ public class StartAppActivity extends BaseActivity {
                                 Manifest.permission.ACCESS_FINE_LOCATION
                         }, 1);
             }
+        } else {
+            //用户全部点击授权
+            Message message = new Message();
+            message.what = 0;
+            handler.sendMessage(message);
         }
     }
 
 
-    class TimeCount extends CountDownTimer {
+    /*class TimeCount extends CountDownTimer {
 
-        /**
-         * @param millisInFuture    The number of millis in the future from the call
-         *                          to {@link #start()} until the countdown is done and {@link #onFinish()}
-         *                          is called.
-         * @param countDownInterval The interval along the way to receive
-         *                          {@link #onTick(long)} callbacks.
-         */
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
@@ -201,6 +281,30 @@ public class StartAppActivity extends BaseActivity {
                 intent.putExtras(bundle);
                 startActivity(intent);
                 StartAppActivity.this.finish();
+            }
+        }
+    }*/
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Log.e(TAG, "onRequestPermissionsResult:requestCode --" + requestCode);
+        Log.e(TAG, "onRequestPermissionsResult: permissions--" + permissions);
+        Log.e(TAG, "onRequestPermissionsResult: grantResults--" + grantResults);
+        if (requestCode == 1) {
+            boolean isPassPermision = true;
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] == -1) {
+                    isPassPermision = false;
+                }
+            }
+            if (isPassPermision) {
+                //权限通过
+                Message message = new Message();
+                message.what = 0;
+                handler.sendMessage(message);
+            } else {
+                //有未授权权限
+                judgePower();
             }
         }
     }

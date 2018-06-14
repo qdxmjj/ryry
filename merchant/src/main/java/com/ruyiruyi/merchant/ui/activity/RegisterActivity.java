@@ -462,7 +462,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         object.put("code", code);
                     } catch (JSONException e) {
                     }
-                    RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "verificationCode");
+                    RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeVerificationCode");
                     params.addBodyParameter("reqJson", object.toString());
                     Log.e(TAG, "afterTextChanged:---------------------------- " + params.toString());
                     x.http().post(params, new Callback.CommonCallback<String>() {
@@ -482,6 +482,10 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                                     Message message = Message.obtain();
                                     message.what = 0;
                                     mHandler.sendMessage(message);
+                                } else if (status.equals("111111")) {
+                                    showDialog("该手机号已注册!");
+                                } else {
+                                    Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                             }

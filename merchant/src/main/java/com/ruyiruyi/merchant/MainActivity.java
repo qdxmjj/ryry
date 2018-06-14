@@ -193,25 +193,25 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
