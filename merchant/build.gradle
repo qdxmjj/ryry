@@ -12,12 +12,12 @@ android {
         config {
             keyAlias 'xiaomajiajiamerchant'
             keyPassword 'qdxmjj'
-            storeFile file('E:/kaifa/xmjjworkspace/ryry/merchant/keystore.jks')
+            storeFile file('keystore.jks')
             storePassword 'qdxmjj'
             println("====== signingConfigs.config ======")
         }
         debug {
-            storeFile file('E:/kaifa/xmjjworkspace/ryry/merchant/keystore.jks')//签名文件路径
+            storeFile file('keystore.jks')//签名文件路径
             storePassword "qdxmjj"
             keyAlias "xiaomajiajiamerchant"
             keyPassword "qdxmjj"  //签名密码

@@ -59,7 +59,7 @@ public class PaymentActivity extends RyBaseActivity {
     public static String ALL_PRICE = "ALLPRICE";
     public static String ORDERNO = "ORDERNO";
     public static String STOREID = "STOREID";
-    public static String ORDER_TYPE = "ORDER_TYPE";//  0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
+    public static String ORDER_TYPE = "ORDER_TYPE";//  0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单  5畅行无忧
     public static String ORDER_STATE = "ORDER_STATE";//轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货
     public static String ORDER_STAGE = "ORDER_STAGE";//orderStage:订单二段状态 1 默认(不需要支付差价)  2 待车主支付差价 3 已支付差价 4 待车主支付运费 5 已支付运费
     // 订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
@@ -205,9 +205,13 @@ public class PaymentActivity extends RyBaseActivity {
                                 return;
                             }
                             if (orderType == 0) {        //轮胎订单
-                                postTireOrder();
+                                Toast.makeText(PaymentActivity.this, "不支持信用值支付，请选择其他支付方式", Toast.LENGTH_SHORT).show();
+                              //  postTireOrder();
                             } else if (orderType == 1) {  //商品订单
                                 postGoodsOrder();
+                            }else if (orderType == 99){  //畅行无忧
+                              //  postTireOrder();
+                                Toast.makeText(PaymentActivity.this, "不支持信用值支付，请选择其他支付方式", Toast.LENGTH_SHORT).show();
                             }
 
 
@@ -497,10 +501,19 @@ public class PaymentActivity extends RyBaseActivity {
         Log.e(TAG, "getSign: orderno-" + orderno);
         try {
             jsonObject.put("orderNo", orderno);
-            jsonObject.put("orderType", orderType);
+            if (orderType == 99){
+                jsonObject.put("orderType", 0);
+            }else {
+                jsonObject.put("orderType", orderType);
+            }
+
             if (orderType == 0) {    //轮胎订单
                 jsonObject.put("orderName", "轮胎购买");
-            } else {     //商品订单
+            }else if (orderType == 99){
+                jsonObject.put("orderName", "畅行无忧购买");
+            }else if (orderType == 3){
+                jsonObject.put("orderName", "轮胎补差");
+            }else {     //商品订单
                 jsonObject.put("orderName", "商品购买");
             }
             jsonObject.put("orderPrice", 0.01);
@@ -588,7 +601,12 @@ public class PaymentActivity extends RyBaseActivity {
 
     @Override
     public void onBackPressed() {
-        showDialog("您确认要离开支付订单界面，离开订单会变为代付款订单，可在待付款订单中查看");
+        if(orderType == 3){
+            super.onBackPressed();
+        }else {
+            showDialog("您确认要离开支付订单界面，离开订单会变为代付款订单，可在待付款订单中查看");
+
+        }
 
     }
 

@@ -12,6 +12,10 @@ import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.multiType.Code;
+import com.ruyiruyi.ruyiruyi.ui.multiType.CodeViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.CountOne;
+import com.ruyiruyi.ruyiruyi.ui.multiType.CountOneViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CxwyOrder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CxwyOrderViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsInfo;
@@ -60,6 +64,11 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
     private int orderFrom;
     public TireInfo tireInfo;
     public CxwyOrder cxwyOrder;
+    public List<TireInfo> tireInfoList;
+    public List<String> codeList;
+    public List<String> oldCodeList;
+    public List<TireInfo> buchaTireList;
+    private int userCarId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +88,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
 
                         if (orderType == 0){
                             cancleTireOrder();
-                        }else {
+                        }  else {
                             cancleOrder();
                         }
 
@@ -90,9 +99,16 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
 
 
         goodsInfoList = new ArrayList<>();
+        tireInfoList = new ArrayList<>();
+        codeList = new ArrayList<>();
+        oldCodeList = new ArrayList<>();
+        buchaTireList = new ArrayList<>();
         Intent intent = getIntent();
         orderno = intent.getStringExtra(PaymentActivity.ORDERNO);
         orderType = intent.getIntExtra(PaymentActivity.ORDER_TYPE, 0);
+        if (orderType == 99){
+            orderType = 0;
+        }
         orderFrom = intent.getIntExtra(PaymentActivity.ORDER_FROM, 0);
 
         initView();
@@ -301,6 +317,29 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                             initData();
                         } else {
                         }
+                    }else if (orderType == 6){
+                        jsonObject1 = new JSONObject(result);
+                        String status = jsonObject1.getString("status");
+                        String msg = jsonObject1.getString("msg");
+                        if (status.equals("1")) {
+                            JSONObject data = jsonObject1.getJSONObject("data");
+                            orderImg = data.getString("orderImg");
+                            orderTotalPrice = data.getString("orderTotalPrice");
+                            carNumber = data.getString("platNumber");
+                            storeId = data.getString("storeId");
+                            storeName = data.getString("storeName");
+                            userName = data.getString("userName");
+                            userPhone = data.getString("userPhone");
+                            initData();
+                           /* JSONObject data = jsonObject1.getJSONObject("data");
+                            getFreeTireOrderInfo(data);
+                            getFreeTireOrderCode(data);
+                            getFreeTireOrderOldCode(data);
+                            initData();*/
+                        }
+
+
+
                     }
                 } catch (JSONException e) {
 
@@ -325,6 +364,82 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
         });
     }
 
+    /**
+     * 免费再换
+     * @param data
+     * @throws JSONException
+     */
+    private void getFreeTireOrderInfo(JSONObject data) throws JSONException {
+        orderImg = data.getString("orderImg");
+        orderTotalPrice = data.getString("orderTotalPrice");
+        carNumber = data.getString("platNumber");
+        storeId = data.getString("storeId");
+        storeName = data.getString("storeName");
+        userName = data.getString("userName");
+        userPhone = data.getString("userPhone");
+        JSONArray array = data.getJSONArray("freeChangeOrderVoList");
+        tireInfoList.clear();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject object = array.getJSONObject(i);
+            String shoeName = object.getString("shoeName");
+            String shoeImg = object.getString("shoeImg");
+            String fontRearFlag = object.getString("fontRearFlag");
+            int fontAmount = object.getInt("fontAmount");
+            int rearAmount = object.getInt("rearAmount");
+            TireInfo tireInfo = null;
+            if (fontRearFlag.equals("2")){ //后轮
+                tireInfo = new TireInfo(orderImg,shoeName,rearAmount,0.00,fontRearFlag);
+            }else if (fontRearFlag.equals("1")){ //前轮
+                tireInfo = new TireInfo(orderImg,shoeName,fontAmount,0.00,fontRearFlag);
+            }else {//前后轮一致
+                tireInfo = new TireInfo(orderImg,shoeName,fontAmount + rearAmount,0.00,fontRearFlag);
+            }
+            tireInfoList.add(tireInfo);
+        }
+    }
+
+    /**
+     * 获取免费再换新轮胎条形码
+     * @param data
+     * @throws JSONException
+     */
+    private void getFreeTireOrderCode(JSONObject data) throws JSONException {
+        codeList.clear();
+        JSONArray userCarShoeBarCodeList = data.getJSONArray("userCarShoeBarCodeList");
+        for (int i = 0; i < userCarShoeBarCodeList.length(); i++) {
+            String barCode = userCarShoeBarCodeList.getJSONObject(i).getString("barCode");
+            codeList.add(barCode);
+        }
+    }
+
+    /* 获取免费在换 旧轮胎条形吗
+    * @param data
+    * @throws JSONException
+    */
+    private void getFreeTireOrderOldCode(JSONObject data) throws JSONException {
+        oldCodeList.clear();
+        buchaTireList.clear();
+        JSONArray userCarShoeBarOldCodeList = data.getJSONArray("userCarShoeOldBarCodeList");
+        for (int i = 0; i < userCarShoeBarOldCodeList.length(); i++) {
+            JSONObject object = userCarShoeBarOldCodeList.getJSONObject(i);
+            String barCode = object.getString("barCode");
+            int stage = object.getInt("stage");
+            oldCodeList.add(barCode);
+
+            if (stage == 1){
+                String shoeName = object.getString("shoeName");
+                String shoeImgUrl = object.getString("shoeImgUrl");
+                userCarId = object.getInt("userCarId");
+                String fontRearFlag = object.getString("fontRearFlag");
+                Double price = object.getDouble("price");
+                TireInfo tireInfo =  new TireInfo(shoeImgUrl, shoeName, 1, price, fontRearFlag);
+                tireInfo.setBarCode(barCode);
+                buchaTireList.add(tireInfo);
+            }
+
+        }
+    }
+
     private void initData() {
         items.clear();
         if (orderType == 0) { //轮胎
@@ -332,7 +447,9 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
             items.add(new InfoOne("联系电话", userPhone, false));
             items.add(new InfoOne("车牌号", carNumber, false));
             items.add(new InfoOne("订单总价", "￥" + orderTotalPrice, true));
-            items.add(tireInfo);
+            if (tireInfo.getTireCount() > 0){
+                items.add(tireInfo);
+            }
             if (cxwyOrder != null) {
                 items.add(cxwyOrder);
             }
@@ -344,6 +461,36 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
             for (int i = 0; i < goodsInfoList.size(); i++) {
                 items.add(goodsInfoList.get(i));
             }
+        }else if (orderType == 6){  //补差订单
+            items.add(new InfoOne("联系人", userName, false));
+            items.add(new InfoOne("联系电话", userPhone, false));
+            items.add(new InfoOne("车牌号", carNumber, false));
+            items.add(new InfoOne("服务项目", "轮胎补差订单", false));
+            items.add(new InfoOne("订单总价", "￥" + orderTotalPrice, true));
+            /*for (int i = 0; i < tireInfoList.size(); i++) {
+                items.add(tireInfoList.get(i));
+            }
+            items.add(new InfoOne("新轮胎条码", "", false));
+            for (int i = 0; i < codeList.size(); i++) {
+                items.add(new Code(codeList.get(i)));
+            }
+            items.add(new InfoOne("旧轮胎条码", "", false));
+            for (int i = 0; i < oldCodeList.size(); i++) {
+                items.add(new Code(oldCodeList.get(i)));
+            }
+            items.add(new InfoOne("需要补差得轮胎", "", false));
+            List<Double> priceList= new ArrayList<>();*/
+           /* for (int i = 0; i < buchaTireList.size(); i++) {
+                items.add(buchaTireList.get(i));
+                currentPrice = currentPrice  + buchaTireList.get(i).getTirePrice();
+                priceList.add(buchaTireList.get(i).getTirePrice());
+            }
+
+            if (cxwyCount > buchaTireList.size()){  //判断畅行无忧得数量 跟轮胎得数量
+                items.add(new CountOne(buchaTireList.size(),currentCxwyCount,priceList));
+            }else {
+                items.add(new CountOne(cxwyCount,currentCxwyCount,priceList));
+            }*/
         }
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
@@ -380,6 +527,9 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
         adapter.register(InfoOne.class, infoOneViewBinder);
         adapter.register(CxwyOrder.class, new CxwyOrderViewBinder());
         adapter.register(TireInfo.class, new TireInfoViewBinder(this));
+        adapter.register(Code.class, new CodeViewBinder());
+        CountOneViewBinder countOneViewBinder = new CountOneViewBinder(this);
+        adapter.register(CountOne.class, countOneViewBinder);
     }
 
     @Override

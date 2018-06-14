@@ -1179,7 +1179,6 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
      * @param
      */
     protected void setImageToViewFromPhone(Uri uri) {
-
         int degree = ImageUtils.readPictureDegree(uri.toString());
 
         if (uri != null) {

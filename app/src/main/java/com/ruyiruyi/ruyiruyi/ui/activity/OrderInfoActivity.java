@@ -72,6 +72,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
     private TextView orderButton;
     public List<String> codeList;
     public List<String> oldCodeList;
+    public List<InfoOne> freeRepairList;
     public TireInfo tireInfo;
     public CxwyOrder cxwyOrder;
     private int orderStage =1;
@@ -81,7 +82,11 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
     private int cxwyCount = 0;
     private int currentCxwyCount = 0;
     private int userCarId;
-    private Double currentPrice;
+    private Double currentPrice = 0.00;
+    private String associationOrderNo;
+    private String makeUpDifferencePrice;
+    private int usedCxwAmount;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +117,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         codeList = new ArrayList<>();
         oldCodeList = new ArrayList<>();
         buchaTireList = new ArrayList<>();
+        freeRepairList = new ArrayList<>();
         Intent intent = getIntent();
         // OrderType 0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
         //轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货
@@ -148,6 +154,8 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 }
             }else if (orderStage == 2){
                 actionBar.setTitle("待车主补差");
+            }else if (orderStage == 3){
+                actionBar.setTitle("已补差");
             }
 
         }
@@ -329,8 +337,13 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                             if (orderState == 3 ||orderState == 9 || orderState == 10 || orderState == 4) {  //已完成
                                 getTireOrderInfo(data);
                             }
+                        }else if (orderType == 4){  //免费再换订单
+                            getFreeRepairOrderInfo(data);
                         }
-                        initData();
+                        if (orderStage!=2){
+                            initData();
+                        }
+
                     } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
@@ -357,6 +370,27 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
 
             }
         });
+    }
+
+    /**
+     * 免费修补
+     * @param data
+     */
+    private void getFreeRepairOrderInfo(JSONObject data) throws JSONException {
+        orderImg = data.getString("orderImg");
+        orderTotalPrice = data.getString("orderTotalPrice");
+        carNumber = data.getString("platNumber");
+        storeId = data.getString("storeId");
+        storeName = data.getString("storeName");
+        userName = data.getString("userName");
+        userPhone = data.getString("userPhone");
+        JSONArray array = data.getJSONArray("userCarShoeOldBarCodeList");
+        freeRepairList.clear();
+        for (int i = 0; i < array.length(); i++) {
+            String barCode = array.getJSONObject(i).getString("barCode");
+            String repairAmount = array.getJSONObject(i).getString("repairAmount");
+            freeRepairList.add(new InfoOne(barCode,repairAmount,false));
+        }
     }
 
     /**
@@ -389,6 +423,8 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     if (status.equals("1")){
                         JSONArray data = jsonObject1.getJSONArray("data");
                         cxwyCount = data.length();
+                        initData();
+                        Log.e(TAG, "onSuccess:--cxwyCount---- " + cxwyCount);
                     }
                 } catch (JSONException e) {
 
@@ -475,6 +511,10 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
             }
 
         }
+
+        for (int i = 0; i < buchaTireList.size(); i++) {
+            currentPrice = currentPrice  + buchaTireList.get(i).getTirePrice();
+        }
     }
 
     /**
@@ -498,6 +538,9 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
      */
     private void getFreeTireOrderInfo(JSONObject data) throws JSONException {
         orderImg = data.getString("orderImg");
+        usedCxwAmount = data.getInt("usedCxwAmount");
+        makeUpDifferencePrice = data.getString("makeUpDifferencePrice");
+        associationOrderNo = data.getString("associationOrderNo");
         orderTotalPrice = data.getString("orderTotalPrice");
         carNumber = data.getString("platNumber");
         storeId = data.getString("storeId");
@@ -643,7 +686,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 }
             }
         }else if (orderType == 3){ //免费再换
-            if (orderStage == 2){       //补差订单
+            if (orderStage == 2 || orderStage ==3){       //补差订单
                 items.add(new InfoOne("联系人", userName, false));
                 items.add(new InfoOne("联系电话", userPhone, false));
                 items.add(new InfoOne("车牌号", carNumber, false));
@@ -660,18 +703,25 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 for (int i = 0; i < oldCodeList.size(); i++) {
                     items.add(new Code(oldCodeList.get(i)));
                 }
-                items.add(new InfoOne("需要补差得轮胎", "", false));
-                List<Double> priceList= new ArrayList<>();
-                for (int i = 0; i < buchaTireList.size(); i++) {
-                    items.add(buchaTireList.get(i));
-                    priceList.add(buchaTireList.get(i).getTirePrice());
+
+                Log.e(TAG, "initData:---- " + cxwyCount);
+                if (orderStage == 2){           //需要补差
+                    items.add(new InfoOne("需要补差得轮胎", "", false));
+                    List<Double> priceList= new ArrayList<>();
+                    for (int i = 0; i < buchaTireList.size(); i++) {
+                        items.add(buchaTireList.get(i));
+                        priceList.add(buchaTireList.get(i).getTirePrice());
+                    }
+                    if (cxwyCount > buchaTireList.size()){  //判断畅行无忧得数量 跟轮胎得数量
+                        items.add(new CountOne(buchaTireList.size(),currentCxwyCount,priceList,currentPrice));
+                    }else {
+                        items.add(new CountOne(cxwyCount,currentCxwyCount,priceList,currentPrice));
+                    }
+                }else if (orderStage == 3){ //补差完
+                    items.add(new InfoOne("使用畅行无忧数量", usedCxwAmount+"", false));
+                    items.add(new InfoOne("补差金额", "￥" + makeUpDifferencePrice, false));
                 }
 
-                if (cxwyCount > buchaTireList.size()){  //判断畅行无忧得数量 跟轮胎得数量
-                    items.add(new CountOne(buchaTireList.size(),currentCxwyCount,priceList));
-                }else {
-                    items.add(new CountOne(cxwyCount,currentCxwyCount,priceList));
-                }
 
             }else {                 //普通订单
                 if (orderState == 5){ //5 待支付
@@ -720,11 +770,29 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
             items.add(new InfoOne("联系人", userName, false));
             items.add(new InfoOne("联系电话", userPhone, false));
             items.add(new InfoOne("车牌号", carNumber, false));
-            items.add(new InfoOne("服务项目", "轮胎购买", false));
+            if (tireInfo.getTireCount() == 0){
+                items.add(new InfoOne("服务项目", "畅行无忧购买", false));
+            }else {
+                items.add(new InfoOne("服务项目", "轮胎购买", false));
+            }
+
             items.add(new InfoOne("订单总价", "￥" + orderTotalPrice, true));
-            items.add(tireInfo);
+            if (tireInfo.getTireCount() != 0){
+                items.add(tireInfo);
+            }
+
             if (cxwyOrder != null) {
                 items.add(cxwyOrder);
+            }
+        }else if (orderType == 4){
+            items.add(new InfoOne("联系人", userName, false));
+            items.add(new InfoOne("联系电话", userPhone, false));
+            items.add(new InfoOne("车牌号", carNumber, false));
+            items.add(new InfoOne("服务项目", "免费修补", false));
+            items.add(new InfoOne("店铺名称", storeName, true, true));
+            items.add(new InfoOne("轮胎条码", "修补次数", false));
+            for (int i = 0; i < freeRepairList.size(); i++) {
+                items.add(freeRepairList.get(i));
             }
         }
         assertAllRegistered(adapter, items);
@@ -804,14 +872,15 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "initOrderFromService:--- " + orderType);
         try {
-            jsonObject.put("associationOrderNo", orderNo);
+            jsonObject.put("associationOrderNo", associationOrderNo);
+            jsonObject.put("orderNo", orderNo);
             jsonObject.put("userId", userId);
             jsonObject.put("userCarId", userCarId);
             jsonObject.put("price", currentPrice);
             jsonObject.put("cxwyAmount", currentCxwyCount);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "refuseMakeUpDifferenceOrder");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addMakeUpDifferenceOrder");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig().getToken();
@@ -827,6 +896,12 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
                         Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
+                        intent.putExtra(PaymentActivity.ALL_PRICE, currentPrice);
+                        intent.putExtra(PaymentActivity.ORDERNO, orderNo);
+                        intent.putExtra(PaymentActivity.ORDER_TYPE, orderType);  //3
+                        startActivity(intent);
+
                         finish();
                     }
                 } catch (JSONException e) {
@@ -988,9 +1063,16 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     orderButton.setClickable(false);
                     orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
                 } else if (orderState == 3) { //待商家确认服务
-                    orderButton.setText("待商家确认服务");
-                    orderButton.setClickable(false);
-                    orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+
+                    if (orderStage == 3){
+                        orderButton.setText("已补差，待商家服务");
+                        orderButton.setClickable(false);
+                        orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+                    }else {
+                        orderButton.setText("待商家确认服务");
+                        orderButton.setClickable(false);
+                        orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+                    }
                 } else if (orderState == 6) { //待车主确认服务
                     orderButton.setText("确认服务");
                     orderButton.setClickable(true);
@@ -1076,7 +1158,11 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
     @Override
     public void onCxwyCountClikcListener(int currentCxwyCount,Double currentPrice) {
         Log.e(TAG, "onCxwyCountClikcListener: " + currentCxwyCount );
+        Log.e(TAG, "onCxwyCountClikcListener:currentPrice- " + currentPrice );
         this.currentPrice = currentPrice;
+        this.currentCxwyCount = currentCxwyCount;
+        Log.e(TAG, "onCxwyCountClikcListener: currentPrice-" + currentPrice);
+        Log.e(TAG, "onCxwyCountClikcListener: currentCxwyCount-" + currentCxwyCount);
        // initData();
     }
 

@@ -6,12 +6,22 @@ public class CountOne {
     public int cxwyCount;
     public int currentCxwyCount;
     public List<Double> priceList;
+    public Double allPrice;
 
 
-    public CountOne(int cxwyCount, int currentCxwyCount, List<Double> priceList) {
+    public CountOne(int cxwyCount, int currentCxwyCount, List<Double> priceList, Double allPrice) {
         this.cxwyCount = cxwyCount;
         this.currentCxwyCount = currentCxwyCount;
         this.priceList = priceList;
+        this.allPrice = allPrice;
+    }
+
+    public Double getAllPrice() {
+        return allPrice;
+    }
+
+    public void setAllPrice(Double allPrice) {
+        this.allPrice = allPrice;
     }
 
     public List<Double> getPriceList() {

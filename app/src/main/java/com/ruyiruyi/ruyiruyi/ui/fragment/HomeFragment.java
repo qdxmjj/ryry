@@ -418,7 +418,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 return;
             }
             Intent intent = new Intent(getContext(), ShopChooseActivity.class);
-            intent.putExtra(MerchantFragment.SHOP_TYPE, 2);
+            intent.putExtra(MerchantFragment.SHOP_TYPE, 3);
             startActivity(intent);
         } else if (tag.equals("mrqx")) {//（美容清洗）//2
             //判断是否登录（未登录提示登录）
@@ -426,7 +426,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 return;
             }
             Intent intent = new Intent(getContext(), ShopChooseActivity.class);
-            intent.putExtra(MerchantFragment.SHOP_TYPE, 3);
+            intent.putExtra(MerchantFragment.SHOP_TYPE, 2);
             startActivity(intent);
         }
     }

@@ -201,7 +201,7 @@ public class OrderFragment extends RyBaseFragment implements OrderViewBinder.OnO
         //轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货
         //订单状态(orderType:1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
         //orderStage:订单二段状态 1 默认(不需要支付差价)  2 待车主支付差价 3 已支付差价 4 待车主支付运费 5 已支付运费
-        if ((orderType.equals("1") && orderState.equals("8")) || (orderType.equals("0") && orderState.equals("5"))) { //待支付
+        if ((orderType.equals("1") && orderState.equals("8")) || (orderType.equals("0") && orderState.equals("5")) || orderType.equals("6")) { //待支付
             Intent intent = new Intent(getContext(), PendingOrderActivity.class);
             intent.putExtra(PaymentActivity.ORDERNO, orderNo);
             intent.putExtra(PaymentActivity.ORDER_TYPE, Integer.parseInt(orderType));

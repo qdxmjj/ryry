@@ -1,14 +1,17 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
@@ -20,8 +23,16 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.PublicBigPic;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PublicBigPicViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PublicCheckNum;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PublicCheckNumViewBinder;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +45,7 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumViewBinder.OnPubCheckNumItemClick {
 
+    private static final String TAG = BuyCxwyActivity.class.getSimpleName();
     private ActionBar actionBar;
     private ImageView img_agree;
     private TextView agreement;
@@ -43,9 +55,12 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
     private List<Object> items = new ArrayList<>();//Object!!!
 
     private int buyNum = 1; //默认买一个
-    private String platNumber;
+    private String carNumber;
     private String cxwyPrice;
     private boolean isAgree = false; //是否勾选  默认false 未勾选
+
+    private String finalCxwyPrice;
+    private double allPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +81,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
 
         initView();
         initData();
-        setView();
+
         bindView();
 
     }
@@ -104,6 +119,79 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
                     showDialog("购买数量至少选择1个");
                     return;
                 }
+
+                postCxwyOrder();
+            }
+        });
+    }
+
+    /**
+     * 提交畅行无忧订单
+     */
+    private void postCxwyOrder() {
+        User user = new DbConfig().getUser();
+        int carId = user.getCarId();
+        int userId = user.getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("shoeId", 0);
+            jsonObject.put("userId", userId);
+            jsonObject.put("fontRearFlag", 0);
+            jsonObject.put("amount", 0);
+            jsonObject.put("shoeName", "");
+            jsonObject.put("shoeTotalPrice", 0);
+            jsonObject.put("shoePrice", 0);
+            jsonObject.put("cxwyAmount", buyNum);
+            jsonObject.put("cxwyPrice", finalCxwyPrice);
+            jsonObject.put("cxwyTotalPrice", allPrice);
+            jsonObject.put("totalPrice", allPrice);
+            jsonObject.put("orderImg", "");
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserShoeOrder");
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess:------ " + result);
+                try {
+                    JSONObject jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")) {
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        String orderNo = data.getString("orderNo");
+
+                        Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
+                        intent.putExtra(PaymentActivity.ALL_PRICE, allPrice);
+                        intent.putExtra(PaymentActivity.ORDERNO, orderNo);
+                        intent.putExtra(PaymentActivity.ORDER_TYPE, 99);
+                        startActivity(intent);
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
             }
         });
     }
@@ -114,8 +202,8 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
         items.add(new PublicBigPic());
         items.add(new InfoOne("用户名", user.getNick(), true));
         items.add(new InfoOne("联系电话", user.getPhone(), true));
-        items.add(new InfoOne("车牌号", platNumber, true));
-        items.add(new InfoOne("畅行无忧价格", cxwyPrice, true));
+        items.add(new InfoOne("车牌号", carNumber, true));
+        items.add(new InfoOne("畅行无忧价格", finalCxwyPrice, true));
         items.add(new PublicCheckNum("购买数量", 999, buyNum, "1"));
 
         //更新适配器
@@ -124,7 +212,108 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
     }
 
     private void initData() {
+        User user = new DbConfig().getUser();
+        int carId = user.getCarId();
+        int userId = user.getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", userId);
+            jsonObject.put("userCarId", carId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarByUserIdAndCarId");
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        carNumber = data.getString("platNumber");
 
+                        initCXWYData();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 获取畅行无忧的价格
+     */
+    private void initCXWYData() {
+        User user = new DbConfig().getUser();
+        int carId = user.getCarId();
+        int userId = user.getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", userId);
+            jsonObject.put("shoeId", "");
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getShoeDetailByShoeId");
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig().getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: ------" +  result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        finalCxwyPrice = data.getString("finalCxwyPrice");
+                        setView();
+                    }
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initView() {
@@ -164,6 +353,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+
             }
         });
         dialog.show();
@@ -175,5 +365,8 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
     @Override
     public void onPubCheckNumItemClickListener(int num) {
         buyNum = num;
+        double cxwyPrice = Double.parseDouble(finalCxwyPrice);
+        allPrice = cxwyPrice * num;
+
     }
 }

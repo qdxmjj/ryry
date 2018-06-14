@@ -45,16 +45,22 @@ public class CountOneViewBinder extends ItemViewProvider<CountOne, CountOneViewB
     protected void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull final CountOne countOne) {
         priceList = countOne.getPriceList();
         Collections.sort(priceList);
-        for (int i = 0; i < priceList.size(); i++) {
+       /* for (int i = 0; i < priceList.size(); i++) {
             allPrice  = allPrice + priceList.get(i);
-        }
-        holder.buchaPriceText.setText("￥"+ allPrice);
+        }*/
+        holder.buchaPriceText.setText("￥"+ countOne.getAllPrice());
+        holder.amountView.setAmount(countOne.getCurrentCxwyCount());
         holder.amountView.setGoods_storage(countOne.getCxwyCount());
         holder.amountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
                 if (amount == countOne.getCxwyCount()){
-                    Toast.makeText(context,"已达到最大数", Toast.LENGTH_SHORT).show();
+                    if (amount == 0){
+                        Toast.makeText(context,"无可用畅行无忧", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(context,"已达到最大数", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
                 currentCount =amount;
                 allPrice = 0.00;

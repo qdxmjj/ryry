@@ -56,7 +56,7 @@ public class ShopViewBinder extends ItemViewProvider<Shop, ShopViewBinder.ViewHo
         if (shop.getStoreDistence().equals("")){
             holder.distenceText.setText(shop.getStoreDistence());
         }else {
-            holder.distenceText.setText(shop.getStoreDistence() + "km");
+            holder.distenceText.setText(shop.getStoreDistence() + "m");
         }
 
         holder.shopTypeText.setText(shop.getStoreTypeName());
