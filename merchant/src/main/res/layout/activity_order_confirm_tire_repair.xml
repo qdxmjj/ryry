@@ -27,7 +27,7 @@
             <!--联系人-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -63,7 +63,7 @@
             <!--联系电话-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -109,7 +109,7 @@
             <!--车牌号-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -145,7 +145,7 @@
             <!--店铺名-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -181,7 +181,7 @@
             <!--订单类型-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -217,7 +217,7 @@
             <!--订单编号-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -583,7 +583,7 @@
             <FrameLayout
                 android:id="@+id/fl_full_change_title"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
@@ -601,12 +601,6 @@
                     android:textColor="@color/c7"
                     android:textSize="16sp" />
 
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_gravity="bottom"
-                    android:background="@color/c1" />
             </FrameLayout>
 
             <LinearLayout
@@ -838,7 +832,7 @@
                 <!--标题加拍照示例-->
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:layout_marginTop="5dp"
                     android:background="#ffffff">
 
@@ -1358,7 +1352,7 @@
             <!--标题加拍照示例-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:background="#ffffff">
 
@@ -1455,7 +1449,7 @@
             <!--标题加拍照示例-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:background="#ffffff">
 

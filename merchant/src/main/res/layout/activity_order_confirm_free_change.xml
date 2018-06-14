@@ -25,7 +25,7 @@
             <!--联系人-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -61,7 +61,7 @@
             <!--联系电话-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -107,7 +107,7 @@
             <!--车牌号-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -143,7 +143,7 @@
             <!--店铺名-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -179,7 +179,7 @@
             <!--订单类型-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -215,7 +215,7 @@
             <!--订单编号-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -578,7 +578,7 @@
             <FrameLayout
                 android:id="@+id/fl_full_change_title"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
@@ -614,7 +614,7 @@
                 <FrameLayout
                     android:id="@+id/fl_full_barcode_a_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -681,7 +681,7 @@
                 <FrameLayout
                     android:id="@+id/fl_full_barcode_b_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -748,7 +748,7 @@
                 <FrameLayout
                     android:id="@+id/fl_full_barcode_c_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -815,7 +815,7 @@
                 <FrameLayout
                     android:id="@+id/fl_full_barcode_d_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -878,7 +878,7 @@
             <FrameLayout
                 android:id="@+id/fl_broken_change_title"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
@@ -914,7 +914,7 @@
                 <FrameLayout
                     android:id="@+id/fl_broken_barcode_a_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -981,7 +981,7 @@
                 <FrameLayout
                     android:id="@+id/fl_broken_barcode_b_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -1048,7 +1048,7 @@
                 <FrameLayout
                     android:id="@+id/fl_broken_barcode_c_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -1115,7 +1115,7 @@
                 <FrameLayout
                     android:id="@+id/fl_broken_barcode_d_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -1717,7 +1717,7 @@
             <!--标题加拍照示例-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:background="#ffffff">
 
@@ -1827,7 +1827,7 @@
             <!--标题加拍照示例-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:background="#ffffff">
 

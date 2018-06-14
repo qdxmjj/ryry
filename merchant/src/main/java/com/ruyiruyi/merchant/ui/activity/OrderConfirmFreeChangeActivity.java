@@ -191,6 +191,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private ActionBar actionBar;
     private String orderNo;
     private String orderType;
+    private String orderStage;
     private String storeId;
     private String userName;
     private String userPhone;
@@ -262,6 +263,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private String code_null_ = "";
     private int newShoeNum = 0;
     private String path_;
+    private ProgressDialog mainDialog;
 
 
     @Override
@@ -283,11 +285,29 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         //获取传递数据
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
+        orderStage = getIntent().getStringExtra("orderStage");
         storeId = new DbConfig().getId() + "";
 
+        mainDialog = new ProgressDialog(this);
+        showDialogProgress(mainDialog, "订单信息加载中...");
+
         initView();
+
+        //根据orderStage判断是否已经补差 隐藏补差按钮
+        judgeOrderStage();
+
         initData();
 
+    }
+
+    /*
+    * 根据orderStage判断是否已经补差 隐藏补差按钮
+    * */
+    private void judgeOrderStage() {
+        if (orderStage.equals("3")) {
+            tv_bottom_b.setVisibility(View.GONE);
+            tv_bottom_c.setVisibility(View.GONE);
+        }
     }
 
     private void bindView() {
@@ -2016,6 +2036,8 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         setData();
                         //绑定监听
                         bindView();
+
+                        hideDialogProgress(mainDialog);
 
 
                     } else {

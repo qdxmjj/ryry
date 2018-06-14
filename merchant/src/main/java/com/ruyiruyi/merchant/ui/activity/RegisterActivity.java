@@ -125,6 +125,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     public int currentShengPosition = 0;
     public int currentShiPosition = 0;
     public int currentXianPosition = 0;
+    public String currentlTime = "00:00:00";
+    public String currentrTime = "00:00:00";
     public int currentlTimePosition = 0;
     public int currentrTimePosition = 0;
     private boolean isChecdXieyi = false;
@@ -132,7 +134,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private int areaId_shi = 8888;
     private List<String> lTime_list;
     private List<String> rTime_list;
-    private String shopTimes = "00:00:00 至 00:00:00";
     private int currentImage = 0;//3-yyzz,0-mdpica,1-mdpicb,2-mdpicc,4-shou;
     private boolean hasPic_yyzz = false;
     private boolean hasPic_mdPic_a = false;
@@ -824,6 +825,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
                 break;
             case R.id.tv_shoptime:
+                currentlTime = "00:00:00";//每次进入dialog初始化
+                currentrTime = "00:00:00";//每次进入dialog初始化
                 View v_shoptime = LayoutInflater.from(this).inflate(R.layout.dialog_shoptime_view, null);
                 whv_lTime = (WheelView) v_shoptime.findViewById(R.id.whv_ltime);
                 whv_rTime = (WheelView) v_shoptime.findViewById(R.id.whv_rtime);
@@ -835,9 +838,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         currentlTimePosition = whv_lTime.getSelectedPosition();
                         rTime_list = getRTimeList(selectedIndex);
                         whv_rTime.setItems(rTime_list, 0);
-                        shopTimeL = item;
-                        shopTimeR = rTime_list.get(0);
-                        shopTimes = shopTimeL + "  至  " + shopTimeR;
+                        currentlTime = item;
+                        currentrTime = rTime_list.get(0);
                     }
                 });
                 whv_rTime.setItems(rTime_list, currentrTimePosition);
@@ -845,8 +847,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     @Override
                     public void onItemSelected(int selectedIndex, String item) {
                         currentrTimePosition = whv_rTime.getSelectedPosition();
-                        shopTimeR = item;
-                        shopTimes = shopTimeL + "  至  " + shopTimeR;
+                        currentrTime = item;
                     }
                 });
                 whv_lTime.setIsLoop(false);
@@ -858,7 +859,9 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 dialog2.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        tv_ShopTime.setText(shopTimes);
+                        shopTimeL = currentlTime;//点击确定再更新值
+                        shopTimeR = currentrTime;//点击确定再更新值
+                        tv_ShopTime.setText(currentlTime + " 至 " + currentrTime);
                     }
                 });
                 dialog2.show();

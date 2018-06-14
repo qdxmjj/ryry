@@ -30,6 +30,7 @@ import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.FreeChangeNewShoeBean;
 import com.ruyiruyi.merchant.bean.FreeChangeOldShoeBean;
 import com.ruyiruyi.merchant.bean.OldNewBarCode;
+import com.ruyiruyi.merchant.bean.RepairAmount;
 import com.ruyiruyi.merchant.bean.ShoeRepair;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
@@ -173,6 +174,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
     private boolean hasPic_car = false;//已拍照拍不可点击标志位
     private String TAG = OrderConfirmTireRepairActivity.class.getSimpleName();
     private ProgressDialog progressDialog;
+    private ProgressDialog mainDialog;
     private final int maxRepairNum = 3;  //预设轮胎最大修补次数
     private int currentCount_a_ = 0;
     private int currentCount_b_ = 0;
@@ -206,6 +208,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
     private String path_shoeCBarcodeBitmap = "";
     private String path_shoeDBitmap = "";
     private String path_shoeDBarcodeBitmap = "";
+    private List<RepairAmount> repairAmountList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,6 +230,9 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
         storeId = new DbConfig().getId() + "";
+
+        mainDialog = new ProgressDialog(this);
+        showDialogProgress(mainDialog, "订单信息加载中...");
 
         initView();
         initData();
@@ -284,6 +290,8 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                         setData();
                         //绑定监听
                         bindView();
+
+                        hideDialogProgress(mainDialog);
 
 
                     } else {
@@ -351,7 +359,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         RxViewAction.clickNoDouble(pic_b_left_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                if (hasPic_a_left) {
+                if (hasPic_b_left) {
                     return;
                 }
                 currentImage = 3;
@@ -361,7 +369,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         RxViewAction.clickNoDouble(pic_b_right_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                if (hasPic_a_right) {
+                if (hasPic_b_right) {
                     return;
                 }
                 currentImage = 4;
@@ -371,7 +379,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         RxViewAction.clickNoDouble(pic_c_left_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                if (hasPic_a_left) {
+                if (hasPic_c_left) {
                     return;
                 }
                 currentImage = 5;
@@ -381,7 +389,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         RxViewAction.clickNoDouble(pic_c_right_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                if (hasPic_a_right) {
+                if (hasPic_c_right) {
                     return;
                 }
                 currentImage = 6;
@@ -391,7 +399,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         RxViewAction.clickNoDouble(pic_d_left_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                if (hasPic_a_left) {
+                if (hasPic_d_left) {
                     return;
                 }
                 currentImage = 7;
@@ -401,7 +409,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         RxViewAction.clickNoDouble(pic_d_right_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                if (hasPic_a_right) {
+                if (hasPic_d_right) {
                     return;
                 }
                 currentImage = 8;
@@ -604,9 +612,9 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 
                         } catch (JSONException e) {
                         }
-                        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "");
+                        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectShoeRepairOrderType");
                         params.addBodyParameter("reqJson", object.toString());
-//                        params.addBodyParameter("changeBarCodeVoList", oldNewBarCodeList.toString());
+                        params.addBodyParameter("repairBarCodeList", repairAmountList.toString());
                         params.addBodyParameter("token", new DbConfig().getToken());
                         params.addBodyParameter("drivingLicenseImg", new File(path_licenseBitmap));
                         params.addBodyParameter("carImg", new File(path_carBitmap));
@@ -659,7 +667,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 
                             @Override
                             public void onError(Throwable ex, boolean isOnCallback) {
-                                Toast.makeText(getApplicationContext(), "网络异常,请检查网络", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getApplicationContext(), "网络异常,请检查网络", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -683,9 +691,8 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 
                         } catch (JSONException e) {
                         }
-                        RequestParams params3 = new RequestParams(UtilsURL.REQUEST_URL + "");
+                        RequestParams params3 = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectShoeRepairOrderType");
                         params3.addBodyParameter("reqJson", object3.toString());
-//                        params3.addBodyParameter("changeBarCodeVoList", oldNewBarCodeList.toString());
                         params3.addBodyParameter("token", new DbConfig().getToken());
                         x.http().post(params3, new Callback.CommonCallback<String>() {
                             @Override
@@ -711,7 +718,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 
                             @Override
                             public void onError(Throwable ex, boolean isOnCallback) {
-                                Toast.makeText(getApplicationContext(), "网络异常,请检查网络", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getApplicationContext(), "网络异常,请检查网络", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -1026,6 +1033,14 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         fl_repair_b_.setVisibility(View.GONE);
         fl_repair_c_.setVisibility(View.GONE);
         fl_repair_d_.setVisibility(View.GONE);
+        pic_a_titleno.setVisibility(View.GONE);
+        pic_b_titleno.setVisibility(View.GONE);
+        pic_c_titleno.setVisibility(View.GONE);
+        pic_d_titleno.setVisibility(View.GONE);
+        ll_pic_a.setVisibility(View.GONE);
+        ll_pic_b.setVisibility(View.GONE);
+        ll_pic_c.setVisibility(View.GONE);
+        ll_pic_d.setVisibility(View.GONE);
         for (int i = 0; i < shoeRepairList.size(); i++) {
             final ShoeRepair bean = shoeRepairList.get(i);
             if (i == 0) {
@@ -1033,6 +1048,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 code_repair_a_.setText(bean.getBarCode());
                 pic_a_titleno.setText(bean.getBarCode());//照片标题
                 pic_a_titleno.setVisibility(View.VISIBLE);//照片标题
+                ll_pic_a.setVisibility(View.VISIBLE);
                 oldCount_a_ = Integer.parseInt(bean.getRepairAmount());
                 repair_num_a_.setAmount(oldCount_a_);
                 repair_num_a_.setGoods_storage(maxRepairNum);
@@ -1056,6 +1072,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 code_repair_b_.setText(bean.getBarCode());
                 pic_b_titleno.setText(bean.getBarCode());//照片标题
                 pic_b_titleno.setVisibility(View.VISIBLE);//照片标题
+                ll_pic_b.setVisibility(View.VISIBLE);
                 oldCount_b_ = Integer.parseInt(bean.getRepairAmount());
                 repair_num_b_.setAmount(oldCount_b_);
                 repair_num_b_.setGoods_storage(maxRepairNum);
@@ -1078,6 +1095,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 code_repair_c_.setText(bean.getBarCode());
                 pic_c_titleno.setText(bean.getBarCode());//照片标题
                 pic_c_titleno.setVisibility(View.VISIBLE);//照片标题
+                ll_pic_c.setVisibility(View.VISIBLE);
                 oldCount_c_ = Integer.parseInt(bean.getRepairAmount());
                 repair_num_c_.setAmount(oldCount_c_);
                 repair_num_c_.setGoods_storage(maxRepairNum);
@@ -1100,6 +1118,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 code_repair_d_.setText(bean.getBarCode());
                 pic_d_titleno.setText(bean.getBarCode());//照片标题
                 pic_d_titleno.setVisibility(View.VISIBLE);//照片标题
+                ll_pic_d.setVisibility(View.VISIBLE);
                 oldCount_d_ = Integer.parseInt(bean.getRepairAmount());
                 repair_num_d_.setAmount(oldCount_d_);
                 repair_num_d_.setGoods_storage(maxRepairNum);
@@ -1123,6 +1142,20 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 
     private void initBeforePost() {
         //1.数据
+        for (int i = 0; i < shoeRepairList.size(); i++) {
+            if (i == 0) {
+                repairAmountList.add(new RepairAmount(code_repair_a_.getText().toString(), currentCount_a_ + ""));
+            }
+            if (i == 1) {
+                repairAmountList.add(new RepairAmount(code_repair_b_.getText().toString(), currentCount_b_ + ""));
+            }
+            if (i == 2) {
+                repairAmountList.add(new RepairAmount(code_repair_c_.getText().toString(), currentCount_c_ + ""));
+            }
+            if (i == 3) {
+                repairAmountList.add(new RepairAmount(code_repair_d_.getText().toString(), currentCount_d_ + ""));
+            }
+        }
 
         //2.照片   最后在onDestroy中根据图片Path删除照片
         path_licenseBitmap = ImageUtils.savePhoto(licenseBitmap, Environment
@@ -1250,6 +1283,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 
         shoeFlagList = new ArrayList<>();
         shoeRepairList = new ArrayList<>();
+        repairAmountList = new ArrayList<>();
         progressDialog = new ProgressDialog(OrderConfirmTireRepairActivity.this);
     }
 

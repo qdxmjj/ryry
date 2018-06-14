@@ -95,6 +95,7 @@ public class MyGoodsActivity extends FragmentActivity {
                     break;
                 case 5:
                     //以下操作
+                    leftTypeList.add("全部分类");
                     if (servicesBean2a.size() != 0) {
                         leftTypeList.add("汽车保养");
                     }
@@ -107,7 +108,6 @@ public class MyGoodsActivity extends FragmentActivity {
                     if (servicesBean5a.size() != 0) {
                         leftTypeList.add("轮胎服务");
                     }
-                    leftTypeList.add("全部分类");
                     bindView();
                     break;
             }
@@ -178,9 +178,9 @@ public class MyGoodsActivity extends FragmentActivity {
         whvL.setItems(leftTypeList, currentLeftPosition);
         String s = leftTypeList.get(0);
         List<String> strings = getRightStringList(s);
-        whvR.setItems(strings, currentRightPosition);
+        whvR.setItems(strings, 0);
         currentLeftString = leftTypeList.get(0);//每次弹Dialog 初始化
-        currentRightString = strings.get(currentRightPosition);//每次弹Dialog 初始化
+        currentRightString = strings.get(0);//每次弹Dialog 初始化
         whvL.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
@@ -188,8 +188,8 @@ public class MyGoodsActivity extends FragmentActivity {
                 currentLeftPosition = whvL.getSelectedPosition();
                 currentLeftString = whvL.getSelectedItem();
                 List<String> strings2 = getRightStringList(currentLeftString);
-                whvR.setItems(strings2, currentRightPosition);
-                currentRightString = strings2.get(currentRightPosition);//每次点击 初始化
+                whvR.setItems(strings2, 0);
+                currentRightString = strings2.get(0);//每次点击 初始化
             }
         });
         whvR.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {

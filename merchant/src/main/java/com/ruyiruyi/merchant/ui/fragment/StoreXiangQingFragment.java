@@ -78,13 +78,12 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
 
     private WheelView whv_lTime, whv_rTime;
 
-    public String currentlTime = "请选择";
-    public String currentrTime = "请选择";
+    public String currentlTime = "00:00:00";
+    public String currentrTime = "00:00:00";
     public int currentlTimePosition = 0;
     public int currentrTimePosition = 0;
     private List<String> lTime_list;
     private List<String> rTime_list;
-    private String shopTimes = "00:00:00 至 00:00:00";
     private List<XiangmusBean> list_xms = new ArrayList<>();
     private List<String> serviceTypeList = new ArrayList<>();
     private String serviceTypeListString;
@@ -287,31 +286,29 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
         RxViewAction.clickNoDouble(tv_shoptime).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
+                currentlTime = "00:00:00";//每次进入dialog初始化
+                currentrTime = "00:00:00";//每次进入dialog初始化
                 View v_shoptime = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_shoptime_view, null);
                 whv_lTime = (WheelView) v_shoptime.findViewById(R.id.whv_ltime);
                 whv_rTime = (WheelView) v_shoptime.findViewById(R.id.whv_rtime);
-                whv_lTime.setItems(getStrLTime(), currentlTimePosition);
-                whv_rTime.setItems(getRTimeList(0), currentrTimePosition);
+                whv_lTime.setItems(getStrLTime(), 0);
+                whv_rTime.setItems(getRTimeList(0), 0);
                 whv_lTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(int selectedIndex, String item) {
                         currentlTimePosition = whv_lTime.getSelectedPosition();
-                        currentlTime = whv_lTime.getSelectedItem();
                         rTime_list = getRTimeList(selectedIndex);
                         whv_rTime.setItems(rTime_list, 0);
-                        shopTimeL = item;
-                        shopTimeR = rTime_list.get(0);
-                        shopTimes = shopTimeL + "  至  " + shopTimeR;
+                        currentlTime = item;
+                        currentrTime = rTime_list.get(0);
                     }
                 });
-                whv_rTime.setItems(rTime_list, currentrTimePosition);
+                whv_rTime.setItems(rTime_list, 0);
                 whv_rTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(int selectedIndex, String item) {
                         currentrTimePosition = whv_rTime.getSelectedPosition();
-                        currentrTime = whv_rTime.getSelectedItem();
-                        shopTimeR = item;
-                        shopTimes = shopTimeL + "  至  " + shopTimeR;
+                        currentrTime = item;
                     }
                 });
                 new AlertDialog.Builder(getActivity())
@@ -320,7 +317,9 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                tv_shoptime.setText(shopTimes);
+                                shopTimeL = currentlTime;//点击确定再更新值
+                                shopTimeR = currentrTime;//点击确定再更新值
+                                tv_shoptime.setText(currentlTime + " 至 " + currentrTime);
                             }
                         }).show();
             }

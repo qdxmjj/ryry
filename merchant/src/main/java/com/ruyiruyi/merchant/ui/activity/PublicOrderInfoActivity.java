@@ -95,6 +95,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     private String isNoConsistent_c_;//false
     private String isNoConsistent_d_;//false
     private ProgressDialog progressDialog;
+    private ProgressDialog mainDialog;
     private String TAG = PublicOrderInfoActivity.class.getSimpleName();
 
     @Override
@@ -144,6 +145,9 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 actionBar.setTitle("订单详情");
             }
         }
+        if (orderType.equals("4")) {//轮胎修补订单
+            actionBar.setTitle("订单详情");
+        }
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
@@ -154,6 +158,9 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 }
             }
         });
+
+        mainDialog = new ProgressDialog(this);
+        showDialogProgress(mainDialog, "订单信息加载中...");
 
         initView();
         initPost();
@@ -364,7 +371,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 items.add(new PublicOneaddPic("轮胎条码", "修补次数", false, false));
                 for (int i = 0; i < repairList.size(); i++) {
                     PublicOneaddPic bean = repairList.get(i);
-                    items.add(new PublicOneaddPic(bean.getTitle(), bean.getContent(), false, true));
+                    items.add(new PublicOneaddPic(bean.getTitle(), bean.getContent(), false, !(i + 1 == repairList.size())));
                 }
             }
 
@@ -373,6 +380,8 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
         //更新适配器
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
+
+        hideDialogProgress(mainDialog);
     }
 
 
@@ -873,8 +882,8 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
 
 
     /*
-   * 确认提交 请求server//普通商品订单
-   * */
+    * 确认提交 请求server//普通商品订单
+    * */
     private void saveServerOrdinarygoods() {
         showDialogProgress(progressDialog, "信息提交中...");
 

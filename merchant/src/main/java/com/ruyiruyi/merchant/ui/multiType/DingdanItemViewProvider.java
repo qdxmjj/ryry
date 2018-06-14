@@ -72,17 +72,18 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
                 /*orderType:  1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单*/
                 /*orderState:订单状态(): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付*/
 
-                if (dingdan.getOrderType().equals("2") && dingdan.getOrderState().equals("3") && dingdan.getOrderStage().equals("1")) {//(2:首次更换订单  3 待商家确认服务  1 非补差)
+                if (dingdan.getOrderType().equals("2") && dingdan.getOrderState().equals("3")) {//(2:首次更换订单  3 待商家确认服务  1 非补差)
                     Intent intent = new Intent(context, OrderConfirmFirstChangeActivity.class);
                     intent.putExtra("orderNo", dingdan.getOrderNo());
                     intent.putExtra("orderType", dingdan.getOrderType());
                     context.startActivity(intent);
-                } else if (dingdan.getOrderType().equals("3") && dingdan.getOrderState().equals("3") && dingdan.getOrderStage().equals("1")) {//(3:免费再换订单  3 待商家确认服务  1 非补差)
+                } else if (dingdan.getOrderType().equals("3") && dingdan.getOrderState().equals("3") && (dingdan.getOrderStage().equals("1") || dingdan.getOrderStage().equals("3"))) {//(3:免费再换订单  3 待商家确认服务  1 非补差)
                     Intent intent = new Intent(context, OrderConfirmFreeChangeActivity.class);
                     intent.putExtra("orderNo", dingdan.getOrderNo());
                     intent.putExtra("orderType", dingdan.getOrderType());
+                    intent.putExtra("orderStage", dingdan.getOrderStage());
                     context.startActivity(intent);
-                } else if (dingdan.getOrderType().equals("4") && dingdan.getOrderState().equals("3") && dingdan.getOrderStage().equals("1")) {//(4:轮胎修补订单  3 待商家确认服务  1 非补差)
+                } else if (dingdan.getOrderType().equals("4") && dingdan.getOrderState().equals("3")) {//(4:轮胎修补订单  3 待商家确认服务  1 非补差)
                     Intent intent = new Intent(context, OrderConfirmTireRepairActivity.class);
                     intent.putExtra("orderNo", dingdan.getOrderNo());
                     intent.putExtra("orderType", dingdan.getOrderType());

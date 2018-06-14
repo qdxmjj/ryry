@@ -120,6 +120,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
     private String path_carBitmap = "";
     private List<FreeChangeNewShoeBean> newShoeList; //条形码轮胎list
     private String path_;
+    private ProgressDialog mainDialog;
 
 
     @Override
@@ -142,6 +143,9 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
         storeId = new DbConfig().getId() + "";
+
+        mainDialog = new ProgressDialog(this);
+        showDialogProgress(mainDialog, "订单信息加载中...");
 
         initView();
         initData();
@@ -230,6 +234,8 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                         setData();
                         //绑定监听
                         bindView();
+
+                        hideDialogProgress(mainDialog);
 
 
                     } else {

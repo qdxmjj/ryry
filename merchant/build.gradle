@@ -1,5 +1,25 @@
 apply plugin: 'com.android.application'
 
+def VERSION_CODE = 1
+def VERSION_NAME = "1.5.9"
+def keystoreFilepath = ''
+def keystorePSW = ''
+def keystoreAlias = ''
+def keystoreAliasPSW = ''
+// default keystore file, PLZ config file path in local.properties
+def keyfile = file('s.keystore.temp')
+
+Properties properties = new Properties()
+// local.properties file in the root director
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+keystoreFilepath = properties.getProperty("keystore.path")
+
+if (keystoreFilepath) {
+    keystorePSW = properties.getProperty("keystore.password")
+    keystoreAlias = properties.getProperty("keystore.alias")
+    keystoreAliasPSW = properties.getProperty("keystore.alias_password")
+    keyfile = file(keystoreFilepath)
+}
 repositories {
     flatDir {
         dir 'libs'
@@ -12,12 +32,12 @@ android {
         config {
             keyAlias 'xiaomajiajiamerchant'
             keyPassword 'qdxmjj'
-            storeFile file('E:/kaifa/xmjjworkspace/ryry/merchant/keystore.jks')
+            storeFile file('keystore.jks')
             storePassword 'qdxmjj'
             println("====== signingConfigs.config ======")
         }
         debug {
-            storeFile file('E:/kaifa/xmjjworkspace/ryry/merchant/keystore.jks')//签名文件路径
+            storeFile file('keystore.jks')//签名文件路径
             storePassword "qdxmjj"
             keyAlias "xiaomajiajiamerchant"
             keyPassword "qdxmjj"  //签名密码
@@ -30,8 +50,8 @@ android {
         applicationId "com.ruyiruyi.merchant"
         minSdkVersion 15
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
     }
     task clean(type: Delete) {
         delete rootProject.buildDir
@@ -47,12 +67,56 @@ android {
     }
     buildTypes {
         release {
+            //是否混淆
             minifyEnabled false
+            //是否移除无用资源
+            zipAlignEnabled true
+            //混淆配置
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //签名文件存在，则签名
+            if (keyfile.exists()) {
+                println("WITH -> buildTypes -> release: using jks key")
+                signingConfig signingConfigs.config
+            } else {
+                println("WITH -> buildTypes -> release: using default key")
+            }
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为merchant_v1.0_wandoujia.apk
+                        def fileName = "ryrymerchant_v${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
             signingConfig signingConfigs.config
         }
         debug {
             signingConfig signingConfigs.config
+        }
+    }
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+    android {
+        productFlavors {
+            kuan {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "kuan"]
+            }
+            xiaomi {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+            }
+            qh360 {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "qh360"]
+            }
+            baidu {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
+            }
+            wandoujia {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+            }
         }
     }
     packagingOptions {
