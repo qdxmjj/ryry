@@ -1,12 +1,1597 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="com.ruyiruyi.merchant.ui.activity.OrderConfirmTireRepairActivity">
 
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/open_order_freechange_acbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:id="@+id/scrollView_"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/open_order_freechange_acbar"
+        android:background="@color/c1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--联系人-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="联系人"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_vertical"
+                    android:text="付所无无无哇多"
+                    android:textColor="@color/c6"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/c1" />
+            </FrameLayout>
+            <!--联系电话-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="联系电话"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/user_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="36dp"
+                    android:gravity="center_vertical"
+                    android:text="18254455789"
+                    android:textColor="@color/c6"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/user_phone_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="8dp"
+                    android:gravity="center_vertical"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_call" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/c1" />
+            </FrameLayout>
+            <!--车牌号-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="车牌号"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/car_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_vertical"
+                    android:text="鲁B 456789"
+                    android:textColor="@color/c6"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/c1" />
+            </FrameLayout>
+            <!--店铺名-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="店铺名"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/store_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_vertical"
+                    android:text="小马驾驾"
+                    android:textColor="@color/c6"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/c1" />
+            </FrameLayout>
+            <!--订单类型-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="订单类型"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/store_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_vertical"
+                    android:text="免费再换订单"
+                    android:textColor="@color/c6"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/c1" />
+            </FrameLayout>
+            <!--订单编号-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="订单编号"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/order_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center_vertical"
+                    android:text="400555888455"
+                    android:textColor="@color/c6"
+                    android:textSize="16sp" />
+
+            </FrameLayout>
+            <!--前胎(删)-->
+            <LinearLayout
+                android:id="@+id/ll_shoe_font"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/shoe_img_font"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_order_luntai" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/shoe_name_font"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="ROADCRUZA/运动操控/255/45R17/102W/W"
+                        android:textColor="@color/c7"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="服务项目:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/shoe_type_font"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="免费再换"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="更换位置:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/shoe_location_font"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="前轮"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="更换数量:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/shoe_amount_font"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="2"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <!--后胎(删)-->
+            <LinearLayout
+                android:id="@+id/ll_shoe_rear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/shoe_img_rear"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_order_luntai" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/shoe_name_rear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="ROADCRUZA/运动操控/255/45R17/102W/W"
+                        android:textColor="@color/c7"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="服务项目:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/shoe_type_rear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="免费再换"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="更换位置:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/shoe_location_rear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="后轮"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="更换数量:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/shoe_amount_rear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="2"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <!--前后胎一致(删)-->
+            <LinearLayout
+                android:id="@+id/ll_shoe_consistent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/shoe_img_consistent"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginLeft="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_order_luntai" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/shoe_name_consistent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="ROADCRUZA/运动操控/255/45R17/102W/W"
+                        android:textColor="@color/c7"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="服务项目:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/shoe_type_consistent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="免费再换"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="更换位置:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/shoe_location_consistent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="前轮/后轮"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="更换数量:"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/shoe_amount_consistent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="2"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--补胎编号-->
+            <FrameLayout
+                android:id="@+id/fl_full_change_title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp">
+
+                <TextView
+                    android:id="@+id/tv_full_change_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="补胎编号"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/fl_repair_a_"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    android:paddingLeft="26dp"
+                    android:paddingRight="26dp">
+
+                    <TextView
+                        android:id="@+id/code_repair_a_"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:text="NO.78945615"
+                        android:textColor="@color/c6"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
+                        android:orientation="horizontal">
+
+                        <com.ruyiruyi.rylibrary.cell.AmountView
+                            android:id="@+id/repair_num_a_"
+                            android:layout_width="wrap_content"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            app:btnTextSize="8sp"
+                            app:btnWidth="26dp"
+                            app:tvWidth="40dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"
+                            android:text="处"
+                            android:textColor="@color/c6"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_gravity="bottom"
+                        android:background="@color/c1" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_repair_b_"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    android:paddingLeft="26dp"
+                    android:paddingRight="26dp">
+
+                    <TextView
+                        android:id="@+id/code_repair_b_"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:text="NO.78945615"
+                        android:textColor="@color/c6"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
+                        android:orientation="horizontal">
+
+                        <com.ruyiruyi.rylibrary.cell.AmountView
+                            android:id="@+id/repair_num_b_"
+                            android:layout_width="wrap_content"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            app:btnTextSize="8sp"
+                            app:btnWidth="26dp"
+                            app:tvWidth="40dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"
+                            android:text="处"
+                            android:textColor="@color/c6"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_gravity="bottom"
+                        android:background="@color/c1" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_repair_c_"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    android:paddingLeft="26dp"
+                    android:paddingRight="26dp">
+
+                    <TextView
+                        android:id="@+id/code_repair_c_"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:text="NO.78945615"
+                        android:textColor="@color/c6"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
+                        android:orientation="horizontal">
+
+                        <com.ruyiruyi.rylibrary.cell.AmountView
+                            android:id="@+id/repair_num_c_"
+                            android:layout_width="wrap_content"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            app:btnTextSize="8sp"
+                            app:btnWidth="26dp"
+                            app:tvWidth="40dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"
+                            android:text="处"
+                            android:textColor="@color/c6"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_gravity="bottom"
+                        android:background="@color/c1" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/fl_repair_d_"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    android:paddingLeft="26dp"
+                    android:paddingRight="26dp">
+
+                    <TextView
+                        android:id="@+id/code_repair_d_"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:text="NO.78945615"
+                        android:textColor="@color/c6"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="10dp"
+                        android:orientation="horizontal">
+
+                        <com.ruyiruyi.rylibrary.cell.AmountView
+                            android:id="@+id/repair_num_d_"
+                            android:layout_width="wrap_content"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            app:btnTextSize="8sp"
+                            app:btnWidth="26dp"
+                            app:tvWidth="40dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center"
+                            android:text="处"
+                            android:textColor="@color/c6"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+
+            <!--轮胎照片-->
+            <LinearLayout
+                android:id="@+id/ll_pic_luntai"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--标题加拍照示例-->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#ffffff">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="36dp"
+                        android:paddingRight="26dp"
+                        android:text="轮胎图片"
+                        android:textColor="@color/c7"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_shoepic_sample"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="36dp"
+                        android:background="@drawable/register_huise_button"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="6dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="6dp"
+                        android:text="拍照示例"
+                        android:textColor="@color/c6"
+                        android:textSize="12sp" />
+                </FrameLayout>
+
+
+                <!--轮胎a 标题加照片-->
+                <TextView
+                    android:id="@+id/pic_a_titleno"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:background="#ffffff"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="36dp"
+                    android:text=""
+                    android:textColor="@color/c6"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/ll_pic_a"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_weight="2">
+
+                        <ImageView
+                            android:id="@+id/pic_a_left"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
+
+                        <ImageView
+                            android:id="@+id/pic_a_left_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/pic_a_left_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_add" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="3dp"
+                                android:text="轮胎正面照"
+                                android:textColor="@color/c6"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:layout_weight="2">
+
+                        <ImageView
+                            android:id="@+id/pic_a_right"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
+
+                        <ImageView
+                            android:id="@+id/pic_a_right_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/pic_a_right_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_add" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="3dp"
+                                android:text="条形码特写照"
+                                android:textColor="@color/c6"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="#ffffff" />
+                <!--轮胎b 标题加照片-->
+                <TextView
+                    android:id="@+id/pic_b_titleno"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:background="#ffffff"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="36dp"
+                    android:text=""
+                    android:textColor="@color/c6"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/ll_pic_b"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_weight="2">
+
+                        <ImageView
+                            android:id="@+id/pic_b_left"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
+
+                        <ImageView
+                            android:id="@+id/pic_b_left_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/pic_b_left_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_add" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="3dp"
+                                android:text="轮胎正面照"
+                                android:textColor="@color/c6"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:layout_weight="2">
+
+                        <ImageView
+                            android:id="@+id/pic_b_right"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
+
+                        <ImageView
+                            android:id="@+id/pic_b_right_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/pic_b_right_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_add" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="3dp"
+                                android:text="条形码特写照"
+                                android:textColor="@color/c6"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="#ffffff" />
+                <!--轮胎c 标题加照片-->
+                <TextView
+                    android:id="@+id/pic_c_titleno"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:background="#ffffff"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="36dp"
+                    android:text=""
+                    android:textColor="@color/c6"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/ll_pic_c"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_weight="2">
+
+                        <ImageView
+                            android:id="@+id/pic_c_left"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
+
+                        <ImageView
+                            android:id="@+id/pic_c_left_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/pic_c_left_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_add" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="3dp"
+                                android:text="轮胎正面照"
+                                android:textColor="@color/c6"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:layout_weight="2">
+
+                        <ImageView
+                            android:id="@+id/pic_c_right"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
+
+                        <ImageView
+                            android:id="@+id/pic_c_right_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/pic_c_right_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_add" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="3dp"
+                                android:text="条形码特写照"
+                                android:textColor="@color/c6"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="#ffffff" />
+                <!--轮胎d 标题加照片-->
+                <TextView
+                    android:id="@+id/pic_d_titleno"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:background="#ffffff"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="36dp"
+                    android:text=""
+                    android:textColor="@color/c6"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/ll_pic_d"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_weight="2">
+
+                        <ImageView
+                            android:id="@+id/pic_d_left"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
+
+                        <ImageView
+                            android:id="@+id/pic_d_left_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/pic_d_left_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_add" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="3dp"
+                                android:text="轮胎正面照"
+                                android:textColor="@color/c6"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50dp"
+                        android:layout_weight="2">
+
+                        <ImageView
+                            android:id="@+id/pic_d_right"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
+
+                        <ImageView
+                            android:id="@+id/pic_d_right_delete"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|top"
+                            android:src="@drawable/ic_delete"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/pic_d_right_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_add" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="3dp"
+                                android:text="条形码特写照"
+                                android:textColor="@color/c6"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+                    </FrameLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <!--线-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#ffffff" />
+
+            <!--行驶证照片-->
+            <!--标题加拍照示例-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="#ffffff">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="36dp"
+                    android:paddingRight="26dp"
+                    android:text="行驶证照片"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_licencepic_sample"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="36dp"
+                    android:background="@drawable/register_huise_button"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="6dp"
+                    android:text="拍照示例"
+                    android:textColor="@color/c6"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/pic_xingshizheng"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/img_bg_dark" />
+
+                    <ImageView
+                        android:id="@+id/pic_xingshizheng_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|top"
+                        android:src="@drawable/ic_delete"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/pic_xingshizheng_center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_add" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="3dp"
+                            android:text="行驶证照片"
+                            android:textColor="@color/c6"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#ffffff" />
+
+            <!--车辆照片-->
+            <!--标题加拍照示例-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="#ffffff">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="36dp"
+                    android:paddingRight="26dp"
+                    android:text="车辆照片"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_carpic_sample"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="36dp"
+                    android:background="@drawable/register_huise_button"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="6dp"
+                    android:text="拍照示例"
+                    android:textColor="@color/c6"
+                    android:textSize="12sp" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/pic_car"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/img_bg_dark" />
+
+                    <ImageView
+                        android:id="@+id/pic_car_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|top"
+                        android:src="@drawable/ic_delete"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/pic_car_center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_add" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="3dp"
+                            android:text="行驶证照片"
+                            android:textColor="@color/c6"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="#ffffff" />
+
+            <!--底部按钮-->
+            <LinearLayout
+                android:id="@+id/ll_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="#ffffff"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_bottom_a"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/login_code_button"
+                    android:gravity="center"
+                    android:text="确认服务"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_bottom_b"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/register_theam_button"
+                    android:gravity="center"
+                    android:text="补差服务"
+                    android:textColor="@color/theme_primary"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_bottom_c"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/register_theam_button"
+                    android:gravity="center"
+                    android:text="拒绝服务"
+                    android:textColor="@color/theme_primary"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

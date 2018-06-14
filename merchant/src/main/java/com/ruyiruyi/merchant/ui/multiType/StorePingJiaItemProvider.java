@@ -3,6 +3,7 @@ package com.ruyiruyi.merchant.ui.multiType;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,38 +74,49 @@ public class StorePingJiaItemProvider extends ItemViewProvider<StorePingJiaBean,
                 .setSquare(true)// setSquare和build为必须设置
                 .build();
         if (storePingJiaBean.getPingjia_pica_url() != null && storePingJiaBean.getPingjia_pica_url().length() != 0) {
+            holder.img_pingjia_a.setVisibility(View.VISIBLE);
             hasPic_a_ = 1;
             x.image().bind(holder.img_pingjia_a, storePingJiaBean.getPingjia_pica_url(), options);
         } else {
             holder.img_pingjia_a.setVisibility(View.GONE);
         }
         if (storePingJiaBean.getPingjia_picb_url() != null && storePingJiaBean.getPingjia_picb_url().length() != 0) {
+            holder.img_pingjia_b.setVisibility(View.VISIBLE);
             hasPic_b_ = 1;
             x.image().bind(holder.img_pingjia_b, storePingJiaBean.getPingjia_picb_url(), options);
         } else {
             holder.img_pingjia_b.setVisibility(View.GONE);
         }
         if (storePingJiaBean.getPingjia_picc_url() != null && storePingJiaBean.getPingjia_picc_url().length() != 0) {
+            holder.img_pingjia_c.setVisibility(View.VISIBLE);
             hasPic_c_ = 1;
             x.image().bind(holder.img_pingjia_c, storePingJiaBean.getPingjia_picc_url(), options);
         } else {
             holder.img_pingjia_c.setVisibility(View.GONE);
         }
         if (storePingJiaBean.getPingjia_picd_url() != null && storePingJiaBean.getPingjia_picd_url().length() != 0) {
+            holder.img_pingjia_d.setVisibility(View.VISIBLE);
             hasPic_d_ = 1;
             x.image().bind(holder.img_pingjia_d, storePingJiaBean.getPingjia_picd_url(), options);
         } else {
             holder.img_pingjia_d.setVisibility(View.GONE);
         }
         if (storePingJiaBean.getPingjia_pice_url() != null && storePingJiaBean.getPingjia_pice_url().length() != 0) {
+            holder.img_pingjia_e.setVisibility(View.VISIBLE);
             hasPic_e_ = 1;
             x.image().bind(holder.img_pingjia_e, storePingJiaBean.getPingjia_pice_url(), options);
         } else {
             holder.img_pingjia_e.setVisibility(View.GONE);
         }
-        if (hasPic_a_ == 0 && hasPic_b_ == 0 && hasPic_c_ == 0 && hasPic_d_ == 0 && hasPic_e_ == 0) {
+        if ((storePingJiaBean.getPingjia_pice_url() != null && storePingJiaBean.getPingjia_pice_url().length() != 0) || (storePingJiaBean.getPingjia_picd_url() != null && storePingJiaBean.getPingjia_picd_url().length() != 0) || (storePingJiaBean.getPingjia_picc_url() != null && storePingJiaBean.getPingjia_picc_url().length() != 0) || (storePingJiaBean.getPingjia_picb_url() != null && storePingJiaBean.getPingjia_picb_url().length() != 0) || (storePingJiaBean.getPingjia_pica_url() != null && storePingJiaBean.getPingjia_pica_url().length() != 0)) {
+            holder.ll_pingjia_pics.setVisibility(View.VISIBLE);
+        } else {
             holder.ll_pingjia_pics.setVisibility(View.GONE);
-        }
+        }/* if (hasPic_a_ != 0 || hasPic_b_ != 0 || hasPic_c_ != 0 || hasPic_d_ != 0 || hasPic_e_ != 0) { (图片加载异步  错乱)
+            holder.ll_pingjia_pics.setVisibility(View.VISIBLE);
+        } else {
+            holder.ll_pingjia_pics.setVisibility(View.GONE);
+        }*/
 
 
         //绑定图片查看监听

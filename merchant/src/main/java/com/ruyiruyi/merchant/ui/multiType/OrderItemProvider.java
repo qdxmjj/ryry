@@ -48,25 +48,35 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
             case "5":
                 statusStr = "待发货";
                 holder.tv_orderstatus.setText(statusStr);
+                holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
                 break;
             case "2":
                 statusStr = "待收货";
                 holder.tv_orderstatus.setText(statusStr);
+                holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
                 break;
             case "3"://3 待商家确认服务
                 statusStr = "待服务";
                 holder.tv_orderstatus.setText(statusStr);
+                holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
                 break;
             case "6"://6 待车主确认服务
                 statusStr = "待服务";
                 holder.tv_orderstatus.setText(statusStr);
+                holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
                 break;
             case "1":
                 statusStr = "已完成";
                 holder.tv_orderstatus.setText(statusStr);
                 holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button_huise);
                 break;
+            case "7":
+                statusStr = "待评价";
+                holder.tv_orderstatus.setText(statusStr);
+                holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
+                break;
         }
+
         Glide.with(context)
                 .load(orderItemBean.getImgUrl())
                 .into(holder.img_order);
@@ -82,6 +92,7 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                 bundle.putString("orderType", orderItemBean.getOrderType());
                 bundle.putString("orderState", orderItemBean.getStatus());
                 bundle.putString("storeId", new DbConfig().getId() + "");
+                bundle.putString("whereIn", "MyOrderItem");
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }

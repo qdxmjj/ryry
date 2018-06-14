@@ -40,6 +40,7 @@ import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
@@ -97,6 +98,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
     private String img_Path;
     private FormatDateUtil formatUtil;
     private String TAG = UserInfoActivity.class.getSimpleName();
+    private String path_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,19 +157,19 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
                 showPicInputDialog();
             }
         });
-        RxViewAction.clickNoDouble(user_sex).subscribe(new Action1<Void>() {
+        RxViewAction.clickNoDouble(ll_sex).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 showSexDialog();
             }
         });
-        RxViewAction.clickNoDouble(user_email).subscribe(new Action1<Void>() {
+        RxViewAction.clickNoDouble(ll_email).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 showEmailDialog();
             }
         });
-        RxViewAction.clickNoDouble(user_birth).subscribe(new Action1<Void>() {
+        RxViewAction.clickNoDouble(ll_birth).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 showBirthDialog();
@@ -331,6 +333,8 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
         File file = null;
         file = new File(Environment
                 .getExternalStorageDirectory(), "userinfoimg.jpg");
+        path_ = file.getPath();
+        Log.e(TAG, "takePicture: path_ = " + path_);
 
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= 24) {
@@ -352,10 +356,10 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
             switch (requestCode) {
                 case CHOOSE_PICTURE:
                     Uri uri = data.getData();
-                    setImageToViewFromPhone(uri);
+                    setImageToViewFromPhone(uri, false);
                     break;
                 case TAKE_PICTURE:
-                    setImageToViewFromPhone(tempUri);
+                    setImageToViewFromPhone(tempUri, true);
                     break;
 
             }
@@ -363,15 +367,22 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(uri.toString());
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_);
+        }
         if (uri != null) {
             Bitmap photo = null;
             try {
                 photo = ImageUtils.getBitmapFormUri(UserInfoActivity.this, uri);
             } catch (IOException e) {
             }
-            imgBitmap = rotaingImageView(degree, photo);
+            if (isCamera) {
+                imgBitmap = rotaingImageView(degree, photo);
+            } else {
+                imgBitmap = photo;
+            }
 //   2          mGoodsImg.setImageBitmap(imgBitmap);
             //Glide 加载BitMap需要先将bitmap对象转换为字节,在加载;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

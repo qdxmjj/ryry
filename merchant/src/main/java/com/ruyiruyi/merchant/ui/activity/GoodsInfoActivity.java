@@ -130,6 +130,7 @@ public class GoodsInfoActivity extends BaseActivity {
             }
         }
     };
+    private String path_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -358,7 +359,7 @@ public class GoodsInfoActivity extends BaseActivity {
 
     //清空数据
     private void clearMyAllData() {
-        mGoodsImg.setImageResource(R.drawable.circle_head);
+        mGoodsImg.setImageResource(R.drawable.circle_head_theam);
         imgBitmap = null;
         mGoodsName.setText("");
         mGoodsPrice.setText("");
@@ -410,7 +411,6 @@ public class GoodsInfoActivity extends BaseActivity {
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "addStock");
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("stock_img", new File(img_Path));
-                params.setConnectTimeout(6000);
                 Log.e(TAG, "onClick: 012 img_Path = add " + img_Path);
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
@@ -422,6 +422,7 @@ public class GoodsInfoActivity extends BaseActivity {
                                 Toast.makeText(GoodsInfoActivity.this, "添加商品成功", Toast.LENGTH_SHORT).show();
                                 switch (type) {
                                     case 1:
+                                        /*startActivity(new Intent(getApplicationContext(), MyGoodsActivity.class));*///（暂未用 MyGoodsActivity已重写onResume）
                                         finish();
                                         break;
                                     case 2:
@@ -511,24 +512,25 @@ public class GoodsInfoActivity extends BaseActivity {
         currentLeftPosition = 0;//每次弹Dialog 初始化
         currentRightPosition = 0;//每次弹Dialog 初始化
         currentForId = 0;//每次弹Dialog 初始化
-        leftWheel.setItems(leftTypeList, currentLeftPosition);
         if (leftTypeList == null || leftTypeList.size() == 0) {
             Toast.makeText(GoodsInfoActivity.this, "请先选择您的服务小类", Toast.LENGTH_SHORT).show();
             return;
         }
+        leftWheel.setItems(leftTypeList, 0);
+        currentLeftString = leftTypeList.get(0);//每次弹Dialog 初始化
         String s = leftTypeList.get(0);
         List<String> strings = getRightStringList(s);
-        rightWheel.setItems(strings, currentRightPosition);
-        currentLeftString = leftTypeList.get(0);//每次弹Dialog 初始化
-        currentRightString = strings.get(currentRightPosition);//每次弹Dialog 初始化
+        rightWheel.setItems(strings, 0);
+        currentRightString = strings.get(0);//每次弹Dialog 初始化
         leftWheel.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
                 currentLeftPosition = leftWheel.getSelectedPosition();
                 currentLeftString = leftWheel.getSelectedItem();
                 List<String> strings2 = getRightStringList(currentLeftString);
-                rightWheel.setItems(strings2, currentRightPosition);
-                currentRightString = strings2.get(currentRightPosition);//每次点击 初始化
+                rightWheel.setItems(strings2, 0);
+                currentRightString = strings2.get(0);//每次点击 初始化
+                currentRightPosition = 0;//初始化 R position
             }
         });
         rightWheel.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
@@ -658,6 +660,7 @@ public class GoodsInfoActivity extends BaseActivity {
         File file = null;
         file = new File(Environment
                 .getExternalStorageDirectory(), "goodsinfoimg.jpg");
+        path_ = file.getPath();
 
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= 24) {
@@ -680,10 +683,10 @@ public class GoodsInfoActivity extends BaseActivity {
             switch (requestCode) {
                 case CHOOSE_PICTURE:
                     Uri uri = data.getData();
-                    setImageToViewFromPhone(uri);
+                    setImageToViewFromPhone(uri, false);
                     break;
                 case TAKE_PICTURE:
-                    setImageToViewFromPhone(tempUri);
+                    setImageToViewFromPhone(tempUri, true);
                     break;
 
             }
@@ -691,15 +694,22 @@ public class GoodsInfoActivity extends BaseActivity {
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(uri.toString());
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_);
+        }
         if (uri != null) {
             Bitmap photo = null;
             try {
                 photo = ImageUtils.getBitmapFormUri(getApplicationContext(), uri);
             } catch (IOException e) {
             }
-            imgBitmap = rotaingImageView(degree, photo);
+            if (isCamera) {
+                imgBitmap = rotaingImageView(degree, photo);
+            } else {
+                imgBitmap = photo;
+            }
 //   2          mGoodsImg.setImageBitmap(imgBitmap);
             //Glide 加载BitMap需要先将bitmap对象转换为字节,在加载;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

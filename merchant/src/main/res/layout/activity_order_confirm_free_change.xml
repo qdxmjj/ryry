@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.ruyiruyi.merchant.ui.activity.OrderConfirmFreeChangeActivity">
 
 
@@ -26,7 +25,7 @@
             <!--联系人-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -62,7 +61,7 @@
             <!--联系电话-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -108,7 +107,7 @@
             <!--车牌号-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -144,7 +143,7 @@
             <!--店铺名-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -180,7 +179,7 @@
             <!--订单类型-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -216,7 +215,7 @@
             <!--订单编号-->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
                 android:paddingLeft="26dp"
@@ -323,7 +322,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
-                            android:text="前胎"
+                            android:text="前轮"
                             android:textColor="@color/c6"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -433,7 +432,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
-                            android:text="后胎"
+                            android:text="后轮"
                             android:textColor="@color/c6"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -543,7 +542,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
-                            android:text="前胎/后胎"
+                            android:text="前轮/后轮"
                             android:textColor="@color/c6"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -579,7 +578,7 @@
             <FrameLayout
                 android:id="@+id/fl_full_change_title"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
@@ -615,7 +614,7 @@
                 <FrameLayout
                     android:id="@+id/fl_full_barcode_a_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -682,7 +681,7 @@
                 <FrameLayout
                     android:id="@+id/fl_full_barcode_b_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -749,7 +748,7 @@
                 <FrameLayout
                     android:id="@+id/fl_full_barcode_c_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -816,7 +815,7 @@
                 <FrameLayout
                     android:id="@+id/fl_full_barcode_d_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -879,7 +878,7 @@
             <FrameLayout
                 android:id="@+id/fl_broken_change_title"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:background="#ffffff"
                 android:orientation="horizontal"
@@ -915,7 +914,7 @@
                 <FrameLayout
                     android:id="@+id/fl_broken_barcode_a_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -982,7 +981,7 @@
                 <FrameLayout
                     android:id="@+id/fl_broken_barcode_b_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -1049,7 +1048,7 @@
                 <FrameLayout
                     android:id="@+id/fl_broken_barcode_c_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -1116,7 +1115,7 @@
                 <FrameLayout
                     android:id="@+id/fl_broken_barcode_d_"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:background="#ffffff"
                     android:orientation="horizontal"
                     android:paddingLeft="26dp"
@@ -1183,18 +1182,41 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <!--标题加拍照示例-->
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="5dp"
-                    android:background="#ffffff"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="36dp"
-                    android:paddingRight="26dp"
-                    android:text="轮胎图片"
-                    android:textColor="@color/c7"
-                    android:textSize="16sp" />
+                    android:background="#ffffff">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="36dp"
+                        android:paddingRight="26dp"
+                        android:text="轮胎图片"
+                        android:textColor="@color/c7"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_shoepic_sample"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="36dp"
+                        android:background="@drawable/register_huise_button"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="6dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="6dp"
+                        android:text="拍照示例"
+                        android:textColor="@color/c6"
+                        android:textSize="12sp" />
+                </FrameLayout>
+
 
                 <!--轮胎a 标题加照片-->
                 <TextView
@@ -1692,17 +1714,41 @@
                     android:background="@color/c1" />
             </LinearLayout>
             <!--行驶证照片-->
-            <TextView
+            <!--标题加拍照示例-->
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="#ffffff"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="36dp"
-                android:paddingRight="26dp"
-                android:text="行驶证照片"
-                android:textColor="@color/c7"
-                android:textSize="16sp" />
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="#ffffff">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="36dp"
+                    android:paddingRight="26dp"
+                    android:text="行驶证照片"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_licencepic_sample"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="36dp"
+                    android:background="@drawable/register_huise_button"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="6dp"
+                    android:text="拍照示例"
+                    android:textColor="@color/c6"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -1778,17 +1824,40 @@
             </LinearLayout>
 
             <!--车辆照片-->
-            <TextView
+            <!--标题加拍照示例-->
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="#ffffff"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="36dp"
-                android:paddingRight="26dp"
-                android:text="车辆照片"
-                android:textColor="@color/c7"
-                android:textSize="16sp" />
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="#ffffff">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="36dp"
+                    android:paddingRight="26dp"
+                    android:text="车辆照片"
+                    android:textColor="@color/c7"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_carpic_sample"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="36dp"
+                    android:background="@drawable/register_huise_button"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="6dp"
+                    android:text="拍照示例"
+                    android:textColor="@color/c6"
+                    android:textSize="12sp" />
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

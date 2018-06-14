@@ -7,10 +7,20 @@ public class Dingdan {
     private String orderName;
     private String platNumber;
     private String orderType;
+    private String orderStage;
     private String orderNo;
     private String orderState;
     private long orderTime;
     private String isRead;
+
+    public void setOrderStage(String orderStage) {
+        this.orderStage = orderStage;
+    }
+
+    public String getOrderStage() {
+
+        return orderStage;
+    }
 
     public void setOrderImage(String orderImage) {
         this.orderImage = orderImage;

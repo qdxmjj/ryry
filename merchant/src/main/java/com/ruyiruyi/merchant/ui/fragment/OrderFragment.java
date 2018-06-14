@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,12 +20,14 @@ import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.ItemBottomBean;
 import com.ruyiruyi.merchant.bean.ItemNullBean;
 import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.ui.activity.MyOrderActivity;
 import com.ruyiruyi.merchant.ui.multiType.DingdanItemViewProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemBottomProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemNullProvider;
 import com.ruyiruyi.merchant.ui.multiType.listener.OnLoadMoreListener;
 import com.ruyiruyi.merchant.ui.multiType.modle.Dingdan;
 import com.ruyiruyi.merchant.utils.UtilsURL;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseFragment;
 
 import org.json.JSONArray;
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.drakeet.multitype.MultiTypeAdapter;
+import rx.functions.Action1;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
@@ -55,6 +59,7 @@ public class OrderFragment extends BaseFragment {
     private boolean isLoadMore = false;
     private boolean isLoadOver = false;
     private boolean isLoadMoreSingle = false;//上拉单次标志位
+    private boolean isFirstLoad = true;
 
     private String totalNum;
     private String finishedNum;
@@ -64,6 +69,8 @@ public class OrderFragment extends BaseFragment {
     private TextView tv_ywcdd_num;
     private SwipeRefreshLayout mSwipeLayout;
     private ProgressDialog startDialog;
+    private LinearLayout ll_wwcdd;
+    private LinearLayout ll_ywcdd;
 
     @Nullable
     @Override
@@ -151,7 +158,9 @@ public class OrderFragment extends BaseFragment {
     private void requestFromServer() {
         //数据加载完成前显示加载动画
         startDialog = new ProgressDialog(getContext());
-        showDialogProgress(startDialog, "信息加载中...");
+        if (isFirstLoad) {
+            showDialogProgress(startDialog, "信息加载中...");
+        }
 
 
         isLoadOver = false;
@@ -177,7 +186,7 @@ public class OrderFragment extends BaseFragment {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: result = " + result);
+                Log.e(TAG, "onSuccess: result656 = " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     JSONObject data = jsonObject.getJSONObject("data");
@@ -197,6 +206,7 @@ public class OrderFragment extends BaseFragment {
                         dingdan.setOrderName(order.getString("orderName"));
                         dingdan.setPlatNumber(order.getString("platNumber"));
                         dingdan.setOrderType(order.getString("orderType"));
+                        dingdan.setOrderStage(order.getString("orderStage"));
                         dingdan.setOrderNo(order.getString("orderNo"));
                         dingdan.setOrderState(order.getString("orderState"));
                         dingdan.setOrderTime(order.getLong("orderTime"));
@@ -231,7 +241,10 @@ public class OrderFragment extends BaseFragment {
             @Override
             public void onFinished() {
                 //加载完成 隐藏加载动画
-                hideDialogProgress(startDialog);
+                if (isFirstLoad) {
+                    hideDialogProgress(startDialog);
+                    isFirstLoad = false;
+                }
             }
         });
     }
@@ -250,7 +263,22 @@ public class OrderFragment extends BaseFragment {
     }
 
     private void bindView() {
-
+        RxViewAction.clickNoDouble(ll_wwcdd).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getContext(), MyOrderActivity.class);
+                intent.putExtra("page", "1");
+                startActivity(intent);
+            }
+        });
+        RxViewAction.clickNoDouble(ll_ywcdd).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getContext(), MyOrderActivity.class);
+                intent.putExtra("page", "4");
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView() {
@@ -258,6 +286,8 @@ public class OrderFragment extends BaseFragment {
         tv_wwcdd_num = getView().findViewById(R.id.tv_wwcdd_num);
         tv_ywcdd_num = getView().findViewById(R.id.tv_ywcdd_num);
         mSwipeLayout = getView().findViewById(R.id.my_swp);
+        ll_wwcdd = getView().findViewById(R.id.ll_wwcdd);
+        ll_ywcdd = getView().findViewById(R.id.ll_ywcdd);
 
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.rlv_dingdan);
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);

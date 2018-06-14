@@ -144,8 +144,8 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/login_code_button"
         android:gravity="center"
-        android:text="开始拍照"
+        android:text="好的，我已了解"
         android:textColor="#ffffff"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
 </RelativeLayout>

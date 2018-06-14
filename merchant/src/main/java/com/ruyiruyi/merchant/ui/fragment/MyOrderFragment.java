@@ -175,6 +175,8 @@ public class MyOrderFragment extends BaseFragment {
                     //更新数据
                     updataData();
 
+                    isLoadMoreSingle = false;//重置加载更多单次标志位
+
 
                 } catch (JSONException e) {
                 }

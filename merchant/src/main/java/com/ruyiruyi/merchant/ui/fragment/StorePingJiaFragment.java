@@ -62,6 +62,7 @@ public class StorePingJiaFragment extends BaseFragment implements StorePingJiaIt
     private boolean isLoadOver = false;
     private boolean isLoadMoreSingle = false;//上拉单次标志位
     private ProgressDialog startDialog;
+    private boolean isFirstLoad = true;
 
 
     @Nullable
@@ -105,8 +106,9 @@ public class StorePingJiaFragment extends BaseFragment implements StorePingJiaIt
     private void initDataByLoadMoreType() {
         //数据加载完成前显示加载动画
         startDialog = new ProgressDialog(getContext());
-        showDialogProgress(startDialog, "评价信息加载中...");
-
+        if (isFirstLoad) {
+            showDialogProgress(startDialog, "信息加载中...");
+        }
 
         isLoadOver = false;
 
@@ -131,6 +133,7 @@ public class StorePingJiaFragment extends BaseFragment implements StorePingJiaIt
             @Override
             public void onSuccess(String result) {
                 try {
+                    Log.e(TAG, "onSuccess: result = " + result);
                     JSONObject jsonObject = new JSONObject(result);
                     JSONObject data = jsonObject.getJSONObject("data");
                     String msg = jsonObject.getString("msg");
@@ -157,10 +160,13 @@ public class StorePingJiaFragment extends BaseFragment implements StorePingJiaIt
                         String strings = new UtilsRY().getTimestampToStringAll(time);
                         String pjtime = strings.substring(0, 10);
                         bean.setPj_time(pjtime);
+
                         pingjiaBeanList.add(bean);
                     }
 
                     upDataData();//更新数据
+
+                    isLoadMoreSingle = false;//重置加载更多单次标志位
 
 
                 } catch (JSONException e) {
@@ -169,7 +175,7 @@ public class StorePingJiaFragment extends BaseFragment implements StorePingJiaIt
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(getContext(), "评价信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -180,7 +186,10 @@ public class StorePingJiaFragment extends BaseFragment implements StorePingJiaIt
             @Override
             public void onFinished() {
                 //加载完成 隐藏加载动画
-                hideDialogProgress(startDialog);
+                if (isFirstLoad) {
+                    hideDialogProgress(startDialog);
+                    isFirstLoad = false;
+                }
             }
         });
 

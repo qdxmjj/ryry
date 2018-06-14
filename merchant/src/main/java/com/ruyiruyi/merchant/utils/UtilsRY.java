@@ -1,11 +1,14 @@
 package com.ruyiruyi.merchant.utils;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -50,6 +53,7 @@ public class UtilsRY {
 
     /**
      * Try to return the absolute file path from the given Uri
+     * (Uri 转 Path)
      *
      * @param context
      * @param uri
@@ -93,5 +97,75 @@ public class UtilsRY {
             }
         }
     }
+
+    /**
+     * (Path 转 Uri)  有bug  未用
+     */
+    public static Uri getUri(String path, Context context) {
+        Uri uri = null;
+        if (path != null) {
+            path = Uri.decode(path);
+            ContentResolver cr = context.getContentResolver();
+            StringBuffer buff = new StringBuffer();
+            buff.append("(")
+                    .append(MediaStore.Images.ImageColumns.DATA)
+                    .append("=")
+                    .append("'" + path + "'")
+                    .append(")");
+            Cursor cur = cr.query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    new String[]{MediaStore.Images.ImageColumns._ID},
+                    buff.toString(), null, null);
+            int index = 0;
+            for (cur.moveToFirst(); !cur.isAfterLast(); cur
+                    .moveToNext()) {
+                index = cur.getColumnIndex(MediaStore.Images.ImageColumns._ID);
+                // set _id value
+                index = cur.getInt(index);
+            }
+            if (index == 0) {
+                Log.e("do nothing", "getUri: ");
+                //do nothing
+            } else {
+                Uri uri_temp = Uri.parse("content://media/external/images/media/" + index);
+                if (uri_temp != null) {
+                    uri = uri_temp;
+                    Log.e("getUri", "uri =  " + uri);
+                }
+            }
+        }
+        return uri;
+    }
+
+
+    /*
+    * 根据String Path 删除图片
+    * */
+    public static void deleteImage(String imgPath, Context context) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = MediaStore.Images.Media.query(resolver, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media._ID}, MediaStore.Images.Media.DATA + "=?",
+                new String[]{imgPath}, null);
+        boolean result = false;
+        if (cursor.moveToFirst()) {
+            long id = cursor.getLong(0);
+            Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            Uri uri = ContentUris.withAppendedId(contentUri, id);
+            int count = context.getContentResolver().delete(uri, null, null);
+            result = count == 1;
+        } else {
+            File file = new File(imgPath);
+            result = file.delete();
+        }
+
+        if (result) {
+         /*   imageList.remove(imgPath);
+            adapter.notifyDataSetChanged();
+            Toast.makeText(context, "删除成功", Toast.LENGTH_LONG).show();*/
+            Log.e("UtilsRY ", "DeleteImage: 图片删除成功");
+        } else {
+            Log.e("UtilsRY ", "DeleteImage: 图片删除失败");
+        }
+    }
+
 
 }

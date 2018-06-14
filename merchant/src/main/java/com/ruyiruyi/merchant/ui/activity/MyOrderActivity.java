@@ -23,6 +23,7 @@ public class MyOrderActivity extends FragmentActivity {
     private ViewPager mVPager;
     private List<Fragment> fragments;
     private List<String> title_list;
+    private String selectPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +41,13 @@ public class MyOrderActivity extends FragmentActivity {
                 }
             }
         });
+        //获取传递数据
+        selectPage = getIntent().getStringExtra("page");
 
         initView();
 
     }
+
 
     private void initView() {
         mTab = (TabLayout) findViewById(R.id.myorder_tab);
@@ -73,6 +77,9 @@ public class MyOrderActivity extends FragmentActivity {
             }
         });
         mTab.setupWithViewPager(mVPager);
+
+        //根据传递page设置选中页数
+        mVPager.setCurrentItem(Integer.parseInt(selectPage));
 
 
     }
@@ -120,5 +127,11 @@ public class MyOrderActivity extends FragmentActivity {
         fragments.add(wancheng_fg);
 
         return fragments;
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

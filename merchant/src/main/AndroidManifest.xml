@@ -27,7 +27,7 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_logo_huise"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -37,7 +37,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="standard" />
         <activity
             android:name=".ui.activity.LoginActivity"
             android:launchMode="singleTask" />
@@ -45,7 +45,9 @@
         <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.base.BaseActivityb" />
         <activity android:name=".ui.activity.StoreManageActivity" />
-        <activity android:name=".ui.activity.MyOrderActivity" />
+        <activity
+            android:name=".ui.activity.MyOrderActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.activity.GoodsInfoReeditActivity"
             android:launchMode="singleTask" />
@@ -68,7 +70,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.MyGoodsActivity" />
+        <activity
+            android:name=".ui.activity.MyGoodsActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.activity.GoodsInfoActivity"
             android:launchMode="singleTop" />

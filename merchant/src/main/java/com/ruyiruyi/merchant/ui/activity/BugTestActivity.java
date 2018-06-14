@@ -39,21 +39,21 @@ public class BugTestActivity extends BaseActivity {
             case R.id.open_order_photosample_xiubu:
                 Intent intent6 = new Intent(this, PhotoSampleActivity.class);
                 Bundle bundle6 = new Bundle();
-                bundle6.putString("OrderType", "xiubu");
+                bundle6.putString("type", "xiubu");
                 intent6.putExtras(bundle6);
                 startActivity(intent6);
                 break;
             case R.id.open_order_photosample_change:
                 Intent intent7 = new Intent(this, PhotoSampleActivity.class);
                 Bundle bundle7 = new Bundle();
-                bundle7.putString("OrderType", "change");
+                bundle7.putString("type", "change");
                 intent7.putExtras(bundle7);
                 startActivity(intent7);
                 break;
             case R.id.open_order_photosample_car:
                 Intent intent8 = new Intent(this, PhotoSampleActivity.class);
                 Bundle bundle8 = new Bundle();
-                bundle8.putString("OrderType", "car");
+                bundle8.putString("type", "car");
                 intent8.putExtras(bundle8);
                 startActivity(intent8);
                 break;

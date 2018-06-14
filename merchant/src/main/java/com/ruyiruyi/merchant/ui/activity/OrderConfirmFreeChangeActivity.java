@@ -33,6 +33,7 @@ import com.ruyiruyi.merchant.bean.OldNewBarCode;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
 import com.ruyiruyi.merchant.ui.multiType.PublicShoeFlag;
+import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -181,10 +182,16 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private ImageView pic_car_delete;
     private LinearLayout pic_car_center;
 
+    //拍照示例
+    private TextView tv_shoepic_sample;
+    private TextView tv_licencepic_sample;
+    private TextView tv_carpic_sample;
+
 
     private ActionBar actionBar;
     private String orderNo;
     private String orderType;
+    private String orderStage;
     private String storeId;
     private String userName;
     private String userPhone;
@@ -198,6 +205,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private List<FreeChangeOldShoeBean> oldShoeReachFiveList; //旧轮胎满五年list
     private List<FreeChangeOldShoeBean> oldShoeNoFiveList; //旧轮胎达到磨损list
     private List<FreeChangeNewShoeBean> newShoeList; //新轮胎list
+    private List<String> newShoeListStr; //新轮胎listStr
     private List<String> list; //新轮胎list --> StrList
     private int currentSelect_a_ = 0;//替换dialog 选择器当前选择位置 默认0 （第一个）
     private int currentSelect_b_ = 0;//替换dialog 选择器当前选择位置 默认0 （第一个）
@@ -216,6 +224,14 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private boolean hasPic_license = false;//已拍照拍不可点击标志位
     private boolean hasPic_car = false;//已拍照拍不可点击标志位
     private String TAG = OrderConfirmFreeChangeActivity.class.getSimpleName();
+    private boolean isBucha_a_ = false;//补差dialog是否选择标志位默认未选
+    private boolean isBucha_b_ = false;//补差dialog是否选择标志位
+    private boolean isBucha_c_ = false;//补差dialog是否选择标志位
+    private boolean isBucha_d_ = false;//补差dialog是否选择标志位
+    private String buchaBarCode_a_ = "";//补差提交的条形码
+    private String buchaBarCode_b_ = "";
+    private String buchaBarCode_c_ = "";
+    private String buchaBarCode_d_ = "";
 
     private ProgressDialog progressDialog;
     /*提交参数*/
@@ -240,6 +256,14 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private String path_shoeCBarcodeBitmap = "";
     private String path_shoeDBitmap = "";
     private String path_shoeDBarcodeBitmap = "";
+    private String code_a_ = "";
+    private String code_b_ = "";
+    private String code_c_ = "";
+    private String code_d_ = "";
+    private String code_null_ = "";
+    private int newShoeNum = 0;
+    private String path_;
+    private ProgressDialog mainDialog;
 
 
     @Override
@@ -261,11 +285,29 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         //获取传递数据
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
+        orderStage = getIntent().getStringExtra("orderStage");
         storeId = new DbConfig().getId() + "";
 
+        mainDialog = new ProgressDialog(this);
+        showDialogProgress(mainDialog, "订单信息加载中...");
+
         initView();
+
+        //根据orderStage判断是否已经补差 隐藏补差按钮
+        judgeOrderStage();
+
         initData();
 
+    }
+
+    /*
+    * 根据orderStage判断是否已经补差 隐藏补差按钮
+    * */
+    private void judgeOrderStage() {
+        if (orderStage.equals("3")) {
+            tv_bottom_b.setVisibility(View.GONE);
+            tv_bottom_c.setVisibility(View.GONE);
+        }
     }
 
     private void bindView() {
@@ -290,7 +332,12 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     return;
                 }
                 String tag = full_code_a_change.getTag().toString();
-                showChangeDialog(tag);
+                //根据新轮胎列表str的size判断是否可点击替换
+                if (newShoeListStr.size() > 0) {
+                    showChangeDialog(tag);
+                } else {
+                    showErrorDialog("没有可替换的轮胎了!");
+                }
             }
         });
         RxViewAction.clickNoDouble(full_code_b_change).subscribe(new Action1<Void>() {
@@ -300,7 +347,12 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     return;
                 }
                 String tag = full_code_b_change.getTag().toString();
-                showChangeDialog(tag);
+                //根据新轮胎列表str的size判断是否可点击替换
+                if (newShoeListStr.size() > 0) {
+                    showChangeDialog(tag);
+                } else {
+                    showErrorDialog("没有可替换的轮胎了!");
+                }
             }
         });
         RxViewAction.clickNoDouble(full_code_c_change).subscribe(new Action1<Void>() {
@@ -310,7 +362,12 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     return;
                 }
                 String tag = full_code_c_change.getTag().toString();
-                showChangeDialog(tag);
+                //根据新轮胎列表str的size判断是否可点击替换
+                if (newShoeListStr.size() > 0) {
+                    showChangeDialog(tag);
+                } else {
+                    showErrorDialog("没有可替换的轮胎了!");
+                }
             }
         });
         RxViewAction.clickNoDouble(full_code_d_change).subscribe(new Action1<Void>() {
@@ -320,7 +377,12 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     return;
                 }
                 String tag = full_code_d_change.getTag().toString();
-                showChangeDialog(tag);
+                //根据新轮胎列表str的size判断是否可点击替换
+                if (newShoeListStr.size() > 0) {
+                    showChangeDialog(tag);
+                } else {
+                    showErrorDialog("没有可替换的轮胎了!");
+                }
             }
         });
         RxViewAction.clickNoDouble(broken_code_a_change).subscribe(new Action1<Void>() {
@@ -330,7 +392,12 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     return;
                 }
                 String tag = broken_code_a_change.getTag().toString();
-                showChangeDialog(tag);
+                //根据新轮胎列表str的size判断是否可点击替换
+                if (newShoeListStr.size() > 0) {
+                    showChangeDialog(tag);
+                } else {
+                    showErrorDialog("没有可替换的轮胎了!");
+                }
             }
         });
         RxViewAction.clickNoDouble(broken_code_b_change).subscribe(new Action1<Void>() {
@@ -340,7 +407,12 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     return;
                 }
                 String tag = broken_code_b_change.getTag().toString();
-                showChangeDialog(tag);
+                //根据新轮胎列表str的size判断是否可点击替换
+                if (newShoeListStr.size() > 0) {
+                    showChangeDialog(tag);
+                } else {
+                    showErrorDialog("没有可替换的轮胎了!");
+                }
             }
         });
         RxViewAction.clickNoDouble(broken_code_c_change).subscribe(new Action1<Void>() {
@@ -350,7 +422,12 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     return;
                 }
                 String tag = broken_code_c_change.getTag().toString();
-                showChangeDialog(tag);
+                //根据新轮胎列表str的size判断是否可点击替换
+                if (newShoeListStr.size() > 0) {
+                    showChangeDialog(tag);
+                } else {
+                    showErrorDialog("没有可替换的轮胎了!");
+                }
             }
         });
         RxViewAction.clickNoDouble(broken_code_d_change).subscribe(new Action1<Void>() {
@@ -360,7 +437,12 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     return;
                 }
                 String tag = broken_code_d_change.getTag().toString();
-                showChangeDialog(tag);
+                //根据新轮胎列表str的size判断是否可点击替换
+                if (newShoeListStr.size() > 0) {
+                    showChangeDialog(tag);
+                } else {
+                    showErrorDialog("没有可替换的轮胎了!");
+                }
             }
         });
         //替换 隐藏后 出现的x 取消code 控件监听
@@ -374,120 +456,120 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
             @Override
             public void call(Void aVoid) {
                 if (pic_a_titleno.getText() == null || pic_a_titleno.getText().toString().length() == 0) {
-                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "请先选择替换轮胎", Toast.LENGTH_SHORT).show();
+                    showErrorDialog("请先选择替换轮胎!");
                     return;
                 }
                 if (hasPic_a_left) {
                     return;
                 }
-                String code = pic_a_titleno.getText().toString();
+                code_a_ = pic_a_titleno.getText().toString();
                 currentImage = 1;
-                showPicInputDialog(code);
+                showPicInputDialog(code_a_);
             }
         });
         RxViewAction.clickNoDouble(pic_a_right_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 if (pic_a_titleno.getText() == null || pic_a_titleno.getText().toString().length() == 0) {
-                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "请先选择替换轮胎", Toast.LENGTH_SHORT).show();
+                    showErrorDialog("请先选择替换轮胎!");
                     return;
                 }
                 if (hasPic_a_right) {
                     return;
                 }
-                String code = pic_a_titleno.getText().toString();
+                code_a_ = pic_a_titleno.getText().toString();
                 currentImage = 2;
-                showPicInputDialog(code);
+                showPicInputDialog(code_a_);
             }
         });
         RxViewAction.clickNoDouble(pic_b_left_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 if (pic_b_titleno.getText() == null || pic_b_titleno.getText().toString().length() == 0) {
-                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "请先选择替换轮胎", Toast.LENGTH_SHORT).show();
+                    showErrorDialog("请先选择替换轮胎!");
                     return;
                 }
                 if (hasPic_b_left) {
                     return;
                 }
-                String code = pic_b_titleno.getText().toString();
+                code_b_ = pic_b_titleno.getText().toString();
                 currentImage = 3;
-                showPicInputDialog(code);
+                showPicInputDialog(code_b_);
             }
         });
         RxViewAction.clickNoDouble(pic_b_right_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 if (pic_b_titleno.getText() == null || pic_b_titleno.getText().toString().length() == 0) {
-                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "请先选择替换轮胎", Toast.LENGTH_SHORT).show();
+                    showErrorDialog("请先选择替换轮胎!");
                     return;
                 }
                 if (hasPic_b_right) {
                     return;
                 }
-                String code = pic_b_titleno.getText().toString();
+                code_b_ = pic_b_titleno.getText().toString();
                 currentImage = 4;
-                showPicInputDialog(code);
+                showPicInputDialog(code_b_);
             }
         });
         RxViewAction.clickNoDouble(pic_c_left_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 if (pic_c_titleno.getText() == null || pic_c_titleno.getText().toString().length() == 0) {
-                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "请先选择替换轮胎", Toast.LENGTH_SHORT).show();
+                    showErrorDialog("请先选择替换轮胎!");
                     return;
                 }
                 if (hasPic_c_left) {
                     return;
                 }
-                String code = pic_c_titleno.getText().toString();
+                code_c_ = pic_c_titleno.getText().toString();
                 currentImage = 5;
-                showPicInputDialog(code);
+                showPicInputDialog(code_c_);
             }
         });
         RxViewAction.clickNoDouble(pic_c_right_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 if (pic_c_titleno.getText() == null || pic_c_titleno.getText().toString().length() == 0) {
-                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "请先选择替换轮胎", Toast.LENGTH_SHORT).show();
+                    showErrorDialog("请先选择替换轮胎!");
                     return;
                 }
                 if (hasPic_c_right) {
                     return;
                 }
-                String code = pic_c_titleno.getText().toString();
+                code_c_ = pic_c_titleno.getText().toString();
                 currentImage = 6;
-                showPicInputDialog(code);
+                showPicInputDialog(code_c_);
             }
         });
         RxViewAction.clickNoDouble(pic_d_left_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 if (pic_d_titleno.getText() == null || pic_d_titleno.getText().toString().length() == 0) {
-                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "请先选择替换轮胎", Toast.LENGTH_SHORT).show();
+                    showErrorDialog("请先选择替换轮胎!");
                     return;
                 }
                 if (hasPic_d_left) {
                     return;
                 }
-                String code = pic_d_titleno.getText().toString();
+                code_d_ = pic_d_titleno.getText().toString();
                 currentImage = 7;
-                showPicInputDialog(code);
+                showPicInputDialog(code_d_);
             }
         });
         RxViewAction.clickNoDouble(pic_d_right_center).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 if (pic_d_titleno.getText() == null || pic_d_titleno.getText().toString().length() == 0) {
-                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "请先选择替换轮胎", Toast.LENGTH_SHORT).show();
+                    showErrorDialog("请先选择替换轮胎!");
                     return;
                 }
                 if (hasPic_d_right) {
                     return;
                 }
-                String code = pic_d_titleno.getText().toString();
+                code_d_ = pic_d_titleno.getText().toString();
                 currentImage = 8;
-                showPicInputDialog(code);
+                showPicInputDialog(code_d_);
             }
         });
         //车辆行驶证照片监听
@@ -497,9 +579,9 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 if (hasPic_license) {
                     return;
                 }
-                String code = "";
+                code_null_ = "";
                 currentImage = 9;
-                showPicInputDialog(code);
+                showPicInputDialog(code_null_);
             }
         });
         //车辆拍照监听
@@ -509,9 +591,9 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 if (hasPic_car) {
                     return;
                 }
-                String code = "";
+                code_null_ = "";
                 currentImage = 10;
-                showPicInputDialog(code);
+                showPicInputDialog(code_null_);
             }
         });
         //删除照片
@@ -608,6 +690,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
 
 
         /*底部订单处理按钮监听*/
+        //确认服务
         RxViewAction.clickNoDouble(tv_bottom_a).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -616,14 +699,17 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 }
             }
         });
+        //补差服务
         RxViewAction.clickNoDouble(tv_bottom_b).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 if (judgeBeforeSave("2")) {
-                    showOrderDialog("2");
+                    showBuchaDialog();
                 }
+
             }
         });
+        //拒绝服务
         RxViewAction.clickNoDouble(tv_bottom_c).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -632,16 +718,267 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 }
             }
         });
+
+        //拍照示例
+        RxViewAction.clickNoDouble(tv_shoepic_sample).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getApplicationContext(), PhotoSampleActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "change");
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        RxViewAction.clickNoDouble(tv_carpic_sample).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getApplicationContext(), PhotoSampleActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "car");
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void showBuchaDialog() {
+        final AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_bucha, null);
+        LinearLayout ll_bucha_a_ = (LinearLayout) dialogView.findViewById(R.id.ll_bucha_a_);
+        final ImageView img_bucha_a_ = (ImageView) dialogView.findViewById(R.id.img_bucha_a_);
+        TextView tv_bucha_a_ = (TextView) dialogView.findViewById(R.id.tv_bucha_a_);
+        LinearLayout ll_bucha_b_ = (LinearLayout) dialogView.findViewById(R.id.ll_bucha_b_);
+        final ImageView img_bucha_b_ = (ImageView) dialogView.findViewById(R.id.img_bucha_b_);
+        TextView tv_bucha_b_ = (TextView) dialogView.findViewById(R.id.tv_bucha_b_);
+        LinearLayout ll_bucha_c_ = (LinearLayout) dialogView.findViewById(R.id.ll_bucha_c_);
+        final ImageView img_bucha_c_ = (ImageView) dialogView.findViewById(R.id.img_bucha_c_);
+        TextView tv_bucha_c_ = (TextView) dialogView.findViewById(R.id.tv_bucha_c_);
+        LinearLayout ll_bucha_d_ = (LinearLayout) dialogView.findViewById(R.id.ll_bucha_d_);
+        final ImageView img_bucha_d_ = (ImageView) dialogView.findViewById(R.id.img_bucha_d_);
+        TextView tv_bucha_d_ = (TextView) dialogView.findViewById(R.id.tv_bucha_d_);
+        dialog.setTitle("选择需要补差的轮胎");
+        dialog.setIcon(R.drawable.ic_logo_huise);
+        ll_bucha_a_.setVisibility(View.GONE);//初始化全部隐藏
+        ll_bucha_b_.setVisibility(View.GONE);
+        ll_bucha_c_.setVisibility(View.GONE);
+        ll_bucha_d_.setVisibility(View.GONE);
+        if (noFiveYearsShoeAmount >= 1) {//根据需要补差轮胎的个数显示
+            ll_bucha_a_.setVisibility(View.VISIBLE);
+            buchaBarCode_a_ = oldShoeNoFiveList.get(0).getBarCode();//提交所需的条形码
+            tv_bucha_a_.setText(buchaBarCode_a_);
+            //记录dismiss前点击选择的补差条形码
+            if (isBucha_a_) {
+                img_bucha_a_.setImageResource(R.drawable.ic_check);
+            } else {
+                img_bucha_a_.setImageResource(R.drawable.ic_notcheck);
+            }
+            //监听
+            RxViewAction.clickNoDouble(img_bucha_a_).subscribe(new Action1<Void>() {
+                @Override
+                public void call(Void aVoid) {
+                    if (!isBucha_a_) {
+                        img_bucha_a_.setImageResource(R.drawable.ic_check);
+                        isBucha_a_ = true;
+                    } else {
+                        img_bucha_a_.setImageResource(R.drawable.ic_notcheck);
+                        isBucha_a_ = false;
+                    }
+                }
+            });
+        }
+        if (noFiveYearsShoeAmount >= 2) {
+            ll_bucha_b_.setVisibility(View.VISIBLE);
+            buchaBarCode_b_ = oldShoeNoFiveList.get(1).getBarCode();
+            tv_bucha_b_.setText(buchaBarCode_b_);
+            //记录dismiss前点击选择的补差条形码
+            if (isBucha_b_) {
+                img_bucha_b_.setImageResource(R.drawable.ic_check);
+            } else {
+                img_bucha_b_.setImageResource(R.drawable.ic_notcheck);
+            }
+            //监听
+            RxViewAction.clickNoDouble(img_bucha_b_).subscribe(new Action1<Void>() {
+                @Override
+                public void call(Void aVoid) {
+                    if (!isBucha_b_) {
+                        img_bucha_b_.setImageResource(R.drawable.ic_check);
+                        isBucha_b_ = true;
+                    } else {
+                        img_bucha_b_.setImageResource(R.drawable.ic_notcheck);
+                        isBucha_b_ = false;
+                    }
+                }
+            });
+        }
+        if (noFiveYearsShoeAmount >= 3) {
+            ll_bucha_c_.setVisibility(View.VISIBLE);
+            buchaBarCode_c_ = oldShoeNoFiveList.get(2).getBarCode();
+            tv_bucha_c_.setText(buchaBarCode_c_);
+            //记录dismiss前点击选择的补差条形码
+            if (isBucha_c_) {
+                img_bucha_c_.setImageResource(R.drawable.ic_check);
+            } else {
+                img_bucha_c_.setImageResource(R.drawable.ic_notcheck);
+            }
+            //监听
+            RxViewAction.clickNoDouble(img_bucha_c_).subscribe(new Action1<Void>() {
+                @Override
+                public void call(Void aVoid) {
+                    if (!isBucha_c_) {
+                        img_bucha_c_.setImageResource(R.drawable.ic_check);
+                        isBucha_c_ = true;
+                    } else {
+                        img_bucha_c_.setImageResource(R.drawable.ic_notcheck);
+                        isBucha_c_ = false;
+                    }
+                }
+            });
+        }
+        if (noFiveYearsShoeAmount >= 4) {
+            ll_bucha_d_.setVisibility(View.VISIBLE);
+            buchaBarCode_d_ = oldShoeNoFiveList.get(3).getBarCode();
+            tv_bucha_d_.setText(buchaBarCode_d_);
+            //记录dismiss前点击选择的补差条形码
+            if (isBucha_d_) {
+                img_bucha_d_.setImageResource(R.drawable.ic_check);
+            } else {
+                img_bucha_d_.setImageResource(R.drawable.ic_notcheck);
+            }
+            //监听
+            RxViewAction.clickNoDouble(img_bucha_d_).subscribe(new Action1<Void>() {
+                @Override
+                public void call(Void aVoid) {
+                    if (!isBucha_d_) {
+                        img_bucha_d_.setImageResource(R.drawable.ic_check);
+                        isBucha_d_ = true;
+                    } else {
+                        img_bucha_d_.setImageResource(R.drawable.ic_notcheck);
+                        isBucha_d_ = false;
+                    }
+                }
+            });
+        }
+        dialog.setView(dialogView);
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //先判断是否选择补差轮胎
+                if (!isBucha_a_ && !isBucha_b_ && !isBucha_c_ && isBucha_d_) {
+                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "请选择需要补差的轮胎!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                //再提交
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("orderNo", orderNo);
+                    object.put("serviceType", "2");
+                    object.put("orderType", orderType);
+
+                } catch (JSONException e) {
+                }
+                RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectChangeShoeOrderType");
+                params.addBodyParameter("reqJson", object.toString());
+                params.addBodyParameter("token", new DbConfig().getToken());
+                List<OldNewBarCode> c_list = new ArrayList<OldNewBarCode>();
+                if (isBucha_a_) {
+                    c_list.add(new OldNewBarCode(buchaBarCode_a_, ""));
+                }
+                if (isBucha_b_) {
+                    c_list.add(new OldNewBarCode(buchaBarCode_b_, ""));
+                }
+                if (isBucha_c_) {
+                    c_list.add(new OldNewBarCode(buchaBarCode_c_, ""));
+                }
+                if (isBucha_d_) {
+                    c_list.add(new OldNewBarCode(buchaBarCode_d_, ""));
+                }
+                params.addBodyParameter("changeBarCodeVoList", c_list.toString());
+                x.http().post(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            String msg = jsonObject.getString("msg");
+                            int status = jsonObject.getInt("status");
+                            Toast.makeText(OrderConfirmFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            if (status == 1) {
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("page", "order");
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                });
+
+            }
+        });
+        dialog.show();
+        //设置按钮颜色
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
     }
 
     private boolean judgeBeforeSave(String type) {
         switch (type) {
-            case "1":
-                if (!hasPic_a_left && !hasPic_b_left && !hasPic_c_left && !hasPic_d_left) {
+            case "1"://确认服务
+                int picNumShoe = 0;
+                int picNumCode = 0;
+                if (hasPic_a_left) {
+                    picNumShoe++;
+                }
+                if (hasPic_b_left) {
+                    picNumShoe++;
+                }
+                if (hasPic_c_left) {
+                    picNumShoe++;
+                }
+                if (hasPic_d_left) {
+                    picNumShoe++;
+                }
+                if (picNumShoe < newShoeNum) {
                     showErrorDialog("请补全轮胎正面照!");
                     return false;
                 }
-                if (!hasPic_a_right && !hasPic_b_right && !hasPic_c_right && !hasPic_d_right) {
+                if (hasPic_a_right) {
+                    picNumCode++;
+                }
+                if (hasPic_b_right) {
+                    picNumCode++;
+                }
+                if (hasPic_c_right) {
+                    picNumCode++;
+                }
+                if (hasPic_d_right) {
+                    picNumCode++;
+                }
+                if (picNumCode < newShoeNum) {
                     showErrorDialog("请补全轮胎条形码特写照!");
                     return false;
                 }
@@ -654,9 +991,15 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     return false;
                 }
                 break;
-            case "2":
+            case "2"://补差服务
+                //判断补差  --》 dialog--》post
+                if (noFiveYearsShoeAmount == 0) {//达到磨损程度的轮胎数量为零则不能补差
+                    showErrorDialog("没有可补差的轮胎(达到磨损程度且未满五年的轮胎)!");
+                    return false;
+                }
                 break;
-            case "3":
+            case "3"://拒绝服务
+                //(无需判断)
                 break;
         }
         return true;
@@ -692,7 +1035,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 error_text.setText("确定确认服务吗?");
                 break;
             case "2":
-//                error_text.setText("确定补差服务吗?");
+                error_text.setText("确定补差服务吗?");
                 break;
             case "3":
                 error_text.setText("确定拒绝服务吗?");
@@ -758,7 +1101,6 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                             params.addBodyParameter("shoe4BarCodeImg", new File(path_shoeDBarcodeBitmap));
                         }
                         Log.e(TAG, "onClick:  params.toString() = " + params.toString());
-//                        params.setConnectTimeout(10000);
                         x.http().post(params, new Callback.CommonCallback<String>() {
                             @Override
                             public void onSuccess(String result) {
@@ -802,6 +1144,55 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         break;
                     case "3":
                         //拒绝
+                        JSONObject object3 = new JSONObject();
+                        try {
+                            object3.put("orderNo", orderNo);
+                            object3.put("serviceType", "3");
+                            object3.put("orderType", orderType);
+
+                        } catch (JSONException e) {
+                        }
+                        RequestParams params3 = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectChangeShoeOrderType");
+                        params3.addBodyParameter("reqJson", object3.toString());
+                        params3.addBodyParameter("changeBarCodeVoList", oldNewBarCodeList.toString());
+                        params3.addBodyParameter("token", new DbConfig().getToken());
+                        x.http().post(params3, new Callback.CommonCallback<String>() {
+                            @Override
+                            public void onSuccess(String result) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(result);
+                                    int status = jsonObject.getInt("status");
+                                    String msg = jsonObject.getString("msg");
+                                    Toast.makeText(OrderConfirmFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                    if (status == 1) {
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("page", "order");
+                                        intent.putExtras(bundle);
+                                        finish();
+                                        startActivity(intent);
+                                    }
+
+
+                                } catch (JSONException e) {
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable ex, boolean isOnCallback) {
+                                Toast.makeText(OrderConfirmFreeChangeActivity.this, "网络异常,请检查网络", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancelled(CancelledException cex) {
+
+                            }
+
+                            @Override
+                            public void onFinished() {
+                                hideDialogProgress(progressDialog);
+                            }
+                        });
                         break;
                 }
             }
@@ -863,42 +1254,42 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
             OldNewBarCode oldNewBarCode = new OldNewBarCode(oldCode, newCode);
             oldNewBarCodeList.add(oldNewBarCode);
         }
-        //2.照片
+        //2.照片   最后在onDestroy中根据图片Path删除照片
         path_licenseBitmap = ImageUtils.savePhoto(licenseBitmap, Environment
                 .getExternalStorageDirectory().getAbsolutePath(), "licensePic");
         path_carBitmap = ImageUtils.savePhoto(carBitmap, Environment
-                .getExternalStorageDirectory().getAbsolutePath(), "licensePic");
+                .getExternalStorageDirectory().getAbsolutePath(), "carPic");
         if (hasPic_a_left) {
             path_shoeABitmap = ImageUtils.savePhoto(shoeAbitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeAPic");
+                    .getExternalStorageDirectory().getAbsolutePath(), "shoeAPic" + code_a_);
         }
         if (hasPic_a_right) {
             path_shoeABarcodeBitmap = ImageUtils.savePhoto(shoeACodebitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeACodePic");
+                    .getExternalStorageDirectory().getAbsolutePath(), "shoeACodePic" + code_a_);
         }
         if (hasPic_b_left) {
             path_shoeBBitmap = ImageUtils.savePhoto(shoeBbitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeBPic");
+                    .getExternalStorageDirectory().getAbsolutePath(), "shoeBPic" + code_b_);
         }
         if (hasPic_b_right) {
             path_shoeBBarcodeBitmap = ImageUtils.savePhoto(shoeBCodebitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeBCodePic");
+                    .getExternalStorageDirectory().getAbsolutePath(), "shoeBCodePic" + code_b_);
         }
         if (hasPic_c_left) {
             path_shoeCBitmap = ImageUtils.savePhoto(shoeCbitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeCPic");
+                    .getExternalStorageDirectory().getAbsolutePath(), "shoeCPic" + code_c_);
         }
         if (hasPic_c_right) {
             path_shoeCBarcodeBitmap = ImageUtils.savePhoto(shoeCCodebitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeCCodePic");
+                    .getExternalStorageDirectory().getAbsolutePath(), "shoeCCodePic" + code_c_);
         }
         if (hasPic_d_left) {
             path_shoeDBitmap = ImageUtils.savePhoto(shoeDbitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeDPic");
+                    .getExternalStorageDirectory().getAbsolutePath(), "shoeDPic" + code_d_);
         }
         if (hasPic_d_right) {
             path_shoeDBarcodeBitmap = ImageUtils.savePhoto(shoeDCodebitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeDCodePic");
+                    .getExternalStorageDirectory().getAbsolutePath(), "shoeDCodePic" + code_d_);
         }
 
     }
@@ -940,34 +1331,44 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         File file = null;
         if (currentImage == 1) {
             file = new File(Environment
-                    .getExternalStorageDirectory(), "shoea" + code + ".jpg");
+                    .getExternalStorageDirectory(), "shoea.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 2) {
             file = new File(Environment
-                    .getExternalStorageDirectory(), "shoeacode" + code + ".jpg");
+                    .getExternalStorageDirectory(), "shoeacode.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 3) {
             file = new File(Environment
-                    .getExternalStorageDirectory(), "shoeb" + code + ".jpg");
+                    .getExternalStorageDirectory(), "shoeb.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 4) {
             file = new File(Environment
-                    .getExternalStorageDirectory(), "shoebcode" + code + ".jpg");
+                    .getExternalStorageDirectory(), "shoebcode.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 5) {
             file = new File(Environment
-                    .getExternalStorageDirectory(), "shoec" + code + ".jpg");
+                    .getExternalStorageDirectory(), "shoec.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 6) {
             file = new File(Environment
-                    .getExternalStorageDirectory(), "shoeccode" + code + ".jpg");
+                    .getExternalStorageDirectory(), "shoeccode.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 7) {
             file = new File(Environment
-                    .getExternalStorageDirectory(), "shoed" + code + ".jpg");
+                    .getExternalStorageDirectory(), "shoed.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 8) {
             file = new File(Environment
-                    .getExternalStorageDirectory(), "shoedcode" + code + ".jpg");
+                    .getExternalStorageDirectory(), "shoedcode.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 9) {
             file = new File(Environment
-                    .getExternalStorageDirectory(), "license" + code + ".jpg");
+                    .getExternalStorageDirectory(), "license.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 10) {
             file = new File(Environment
-                    .getExternalStorageDirectory(), "car" + code + ".jpg");
+                    .getExternalStorageDirectory(), "car.jpg");
+            path_ = file.getPath();
         }
 
         //判断是否是AndroidN以及更高的版本
@@ -998,7 +1399,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
 
     //未剪辑照片
     private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(uri.toString());
+        int degree = ImageUtils.readPictureDegree(path_);
         if (uri != null) {
             Bitmap photo = null;
             try {
@@ -1101,7 +1502,8 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private void showChangeDialog(final String tag) {
         View v_category = LayoutInflater.from(this).inflate(R.layout.dialog_category_view, null);
         whv_change = (WheelView) v_category.findViewById(R.id.whv_category);
-        whv_change.setItems(getNewShoeCodeList(), 0);
+        whv_change.setItems(newShoeListStr, 0);
+        judgeInitTagChoose(tag);
         whv_change.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
@@ -1132,17 +1534,23 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 switch (tag) {
                     case "1":
                         pic_a_titleno.setVisibility(View.VISIBLE);
-                        pic_a_titleno.setText(list.get(currentSelect_a_));
+                        pic_a_titleno.setText(list.get(currentSelect_a_));//设置第1次
                         //只有full_a 和 broken_a 可能是1
                         if (full_code_a_change.getTag() != null && full_code_a_change.getTag().toString().equals("1")) {
                             full_code_a_change.setVisibility(View.GONE);
                             ll_full_code_a_new.setVisibility(View.VISIBLE);
-                            full_code_a_new.setText(list.get(currentSelect_a_));//新
+                            full_code_a_new.setText(list.get(currentSelect_a_));//新   //设置第2次
+                            newShoeListStr.remove(currentSelect_a_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(full_code_a_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     full_code_a_change.setVisibility(View.VISIBLE);
                                     ll_full_code_a_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(full_code_a_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     full_code_a_new.setText("");//新重置
                                     pic_a_titleno.setText("");//图片title code重置并隐藏
                                     pic_a_titleno.setVisibility(View.GONE);
@@ -1152,12 +1560,18 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         if (broken_code_a_change.getTag() != null && broken_code_a_change.getTag().toString().equals("1")) {
                             broken_code_a_change.setVisibility(View.GONE);
                             ll_broken_code_a_new.setVisibility(View.VISIBLE);
-                            broken_code_a_new.setText(list.get(currentSelect_a_));//新
+                            broken_code_a_new.setText(list.get(currentSelect_a_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_a_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(broken_code_a_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     broken_code_a_change.setVisibility(View.VISIBLE);
                                     ll_broken_code_a_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(broken_code_a_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     broken_code_a_new.setText("");//新重置
                                     pic_a_titleno.setText("");//图片title code重置并隐藏
                                     pic_a_titleno.setVisibility(View.GONE);
@@ -1167,17 +1581,23 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         break;
                     case "2":
                         pic_b_titleno.setVisibility(View.VISIBLE);
-                        pic_b_titleno.setText(list.get(currentSelect_b_));
+                        pic_b_titleno.setText(list.get(currentSelect_b_));//设置第1次
                         //只有full_b 和 broken_a 和 broken_b可能是2
                         if (full_code_b_change.getTag() != null && full_code_b_change.getTag().toString().equals("2")) {
                             full_code_b_change.setVisibility(View.GONE);
                             ll_full_code_b_new.setVisibility(View.VISIBLE);
-                            full_code_b_new.setText(list.get(currentSelect_b_));//新
+                            full_code_b_new.setText(list.get(currentSelect_b_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_b_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(full_code_b_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     full_code_b_change.setVisibility(View.VISIBLE);
                                     ll_full_code_b_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(broken_code_b_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     full_code_b_new.setText("");//新重置
                                     pic_b_titleno.setText("");//图片title code重置并隐藏
                                     pic_b_titleno.setVisibility(View.GONE);
@@ -1187,12 +1607,18 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         if (broken_code_a_change.getTag() != null && broken_code_a_change.getTag().toString().equals("2")) {
                             broken_code_a_change.setVisibility(View.GONE);
                             ll_broken_code_a_new.setVisibility(View.VISIBLE);
-                            broken_code_a_new.setText(list.get(currentSelect_b_));//新
+                            broken_code_a_new.setText(list.get(currentSelect_b_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_b_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(broken_code_a_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     broken_code_a_change.setVisibility(View.VISIBLE);
                                     ll_broken_code_a_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(broken_code_a_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     broken_code_a_new.setText("");//新重置
                                     pic_b_titleno.setText("");//图片title code重置并隐藏
                                     pic_b_titleno.setVisibility(View.GONE);
@@ -1202,12 +1628,18 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         if (broken_code_b_change.getTag() != null && broken_code_b_change.getTag().toString().equals("2")) {
                             broken_code_b_change.setVisibility(View.GONE);
                             ll_broken_code_b_new.setVisibility(View.VISIBLE);
-                            broken_code_b_new.setText(list.get(currentSelect_b_));//新
+                            broken_code_b_new.setText(list.get(currentSelect_b_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_b_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(broken_code_b_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     broken_code_b_change.setVisibility(View.VISIBLE);
                                     ll_broken_code_b_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(broken_code_b_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     broken_code_b_new.setText("");//新重置
                                     pic_b_titleno.setText("");//图片title code重置并隐藏
                                     pic_b_titleno.setVisibility(View.GONE);
@@ -1218,17 +1650,23 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         break;
                     case "3":
                         pic_c_titleno.setVisibility(View.VISIBLE);
-                        pic_c_titleno.setText(list.get(currentSelect_c_));
+                        pic_c_titleno.setText(list.get(currentSelect_c_));//设置第1次
                         //只有full_c 和 broken_a 和 broken_b和 broken_c可能是3
                         if (full_code_c_change.getTag() != null && full_code_c_change.getTag().toString().equals("3")) {
                             full_code_c_change.setVisibility(View.GONE);
                             ll_full_code_c_new.setVisibility(View.VISIBLE);
-                            full_code_c_new.setText(list.get(currentSelect_c_));//新
+                            full_code_c_new.setText(list.get(currentSelect_c_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_c_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(full_code_c_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     full_code_c_change.setVisibility(View.VISIBLE);
                                     ll_full_code_c_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(full_code_c_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     full_code_c_new.setText("");//新重置
                                     pic_c_titleno.setText("");//图片title code重置并隐藏
                                     pic_c_titleno.setVisibility(View.GONE);
@@ -1238,12 +1676,18 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         if (broken_code_a_change.getTag() != null && broken_code_a_change.getTag().toString().equals("3")) {
                             broken_code_a_change.setVisibility(View.GONE);
                             ll_broken_code_a_new.setVisibility(View.VISIBLE);
-                            broken_code_a_new.setText(list.get(currentSelect_c_));//新
+                            broken_code_a_new.setText(list.get(currentSelect_c_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_c_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(broken_code_a_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     broken_code_a_change.setVisibility(View.VISIBLE);
                                     ll_broken_code_a_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(broken_code_a_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     broken_code_a_new.setText("");//新重置
                                     pic_c_titleno.setText("");//图片title code重置并隐藏
                                     pic_c_titleno.setVisibility(View.GONE);
@@ -1253,12 +1697,18 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         if (broken_code_b_change.getTag() != null && broken_code_b_change.getTag().toString().equals("3")) {
                             broken_code_b_change.setVisibility(View.GONE);
                             ll_broken_code_b_new.setVisibility(View.VISIBLE);
-                            broken_code_b_new.setText(list.get(currentSelect_c_));//新
+                            broken_code_b_new.setText(list.get(currentSelect_c_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_c_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(broken_code_b_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     broken_code_b_change.setVisibility(View.VISIBLE);
                                     ll_broken_code_b_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(broken_code_b_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     broken_code_b_new.setText("");//新重置
                                     pic_c_titleno.setText("");//图片title code重置并隐藏
                                     pic_c_titleno.setVisibility(View.GONE);
@@ -1268,12 +1718,18 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         if (broken_code_c_change.getTag() != null && broken_code_c_change.getTag().toString().equals("3")) {
                             broken_code_c_change.setVisibility(View.GONE);
                             ll_broken_code_c_new.setVisibility(View.VISIBLE);
-                            broken_code_c_new.setText(list.get(currentSelect_c_));//新
+                            broken_code_c_new.setText(list.get(currentSelect_c_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_c_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(broken_code_c_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     broken_code_c_change.setVisibility(View.VISIBLE);
                                     ll_broken_code_c_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(broken_code_c_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     broken_code_c_new.setText("");//新重置
                                     pic_c_titleno.setText("");//图片title code重置并隐藏
                                     pic_c_titleno.setVisibility(View.GONE);
@@ -1283,17 +1739,23 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         break;
                     case "4":
                         pic_d_titleno.setVisibility(View.VISIBLE);
-                        pic_d_titleno.setText(list.get(currentSelect_d_));
+                        pic_d_titleno.setText(list.get(currentSelect_d_));//设置第1次
                         //只有full_d 和 broken_a 和 broken_b和 broken_c和 broken_d可能是4
                         if (full_code_d_change.getTag() != null && full_code_d_change.getTag().toString().equals("4")) {
                             full_code_d_change.setVisibility(View.GONE);
                             ll_full_code_d_new.setVisibility(View.VISIBLE);
-                            full_code_d_new.setText(list.get(currentSelect_d_));//新
+                            full_code_d_new.setText(list.get(currentSelect_d_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_d_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(full_code_d_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     full_code_d_change.setVisibility(View.VISIBLE);
                                     ll_full_code_d_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(full_code_d_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     full_code_d_new.setText("");//新重置
                                     pic_d_titleno.setText("");//图片title code重置并隐藏
                                     pic_d_titleno.setVisibility(View.GONE);
@@ -1303,12 +1765,18 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         if (broken_code_a_change.getTag() != null && broken_code_a_change.getTag().toString().equals("4")) {
                             broken_code_a_change.setVisibility(View.GONE);
                             ll_broken_code_a_new.setVisibility(View.VISIBLE);
-                            broken_code_a_new.setText(list.get(currentSelect_d_));//新
+                            broken_code_a_new.setText(list.get(currentSelect_d_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_d_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(broken_code_a_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     broken_code_a_change.setVisibility(View.VISIBLE);
                                     ll_broken_code_a_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(broken_code_a_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     broken_code_a_new.setText("");//新重置
                                     pic_d_titleno.setText("");//图片title code重置并隐藏
                                     pic_d_titleno.setVisibility(View.GONE);
@@ -1318,12 +1786,18 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         if (broken_code_b_change.getTag() != null && broken_code_b_change.getTag().toString().equals("4")) {
                             broken_code_b_change.setVisibility(View.GONE);
                             ll_broken_code_b_new.setVisibility(View.VISIBLE);
-                            broken_code_b_new.setText(list.get(currentSelect_d_));//新
+                            broken_code_b_new.setText(list.get(currentSelect_d_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_d_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(broken_code_b_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     broken_code_b_change.setVisibility(View.VISIBLE);
                                     ll_broken_code_b_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(broken_code_b_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     broken_code_b_new.setText("");//新重置
                                     pic_d_titleno.setText("");//图片title code重置并隐藏
                                     pic_d_titleno.setVisibility(View.GONE);
@@ -1333,12 +1807,18 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         if (broken_code_c_change.getTag() != null && broken_code_c_change.getTag().toString().equals("4")) {
                             broken_code_c_change.setVisibility(View.GONE);
                             ll_broken_code_c_new.setVisibility(View.VISIBLE);
-                            broken_code_c_new.setText(list.get(currentSelect_d_));//新
+                            broken_code_c_new.setText(list.get(currentSelect_d_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_d_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(broken_code_c_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     broken_code_c_change.setVisibility(View.VISIBLE);
                                     ll_broken_code_c_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(broken_code_c_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     broken_code_c_new.setText("");//新重置
                                     pic_d_titleno.setText("");//图片title code重置并隐藏
                                     pic_d_titleno.setVisibility(View.GONE);
@@ -1348,12 +1828,18 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         if (broken_code_d_change.getTag() != null && broken_code_d_change.getTag().toString().equals("4")) {
                             broken_code_d_change.setVisibility(View.GONE);
                             ll_broken_code_d_new.setVisibility(View.VISIBLE);
-                            broken_code_d_new.setText(list.get(currentSelect_d_));//新
+                            broken_code_d_new.setText(list.get(currentSelect_d_));//新  //设置第2次
+                            newShoeListStr.remove(currentSelect_d_);//设置2次后在listStr中删除次此条形码
+                            //根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+                            judgeLayout();
                             RxViewAction.clickNoDouble(broken_code_d_new_delete).subscribe(new Action1<Void>() {
                                 @Override
                                 public void call(Void aVoid) {
                                     broken_code_d_change.setVisibility(View.VISIBLE);
                                     ll_broken_code_d_new.setVisibility(View.GONE);
+                                    newShoeListStr.add(broken_code_d_new.getText().toString());//点击delete  x后再次添加次条形码在listStr中
+                                    //重新添加listStr中完成后显示全部拍照布局
+                                    showAllPicLayout();
                                     broken_code_d_new.setText("");//新重置
                                     pic_d_titleno.setText("");//图片title code重置并隐藏
                                     pic_d_titleno.setVisibility(View.GONE);
@@ -1368,6 +1854,67 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         //设置按钮颜色
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
 
+    }
+
+    private void showAllPicLayout() {
+        ll_pic_a.setVisibility(View.VISIBLE);
+        ll_pic_b.setVisibility(View.VISIBLE);
+        ll_pic_c.setVisibility(View.VISIBLE);
+        ll_pic_d.setVisibility(View.VISIBLE);
+    }
+
+
+    /*
+    *  根据newShoeListStr的size是否为0判断隐藏底部拍照布局
+    * */
+    private void judgeLayout() {
+        if (newShoeListStr.size() == 0) {
+            if (pic_a_titleno.getText().length() == 0) {
+                pic_a_titleno.setVisibility(View.GONE);
+                ll_pic_a.setVisibility(View.GONE);
+            }
+            if (pic_b_titleno.getText().length() == 0) {
+                pic_b_titleno.setVisibility(View.GONE);
+                ll_pic_b.setVisibility(View.GONE);
+            }
+            if (pic_c_titleno.getText().length() == 0) {
+                pic_c_titleno.setVisibility(View.GONE);
+                ll_pic_c.setVisibility(View.GONE);
+            }
+            if (pic_d_titleno.getText().length() == 0) {
+                pic_d_titleno.setVisibility(View.GONE);
+                ll_pic_d.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void judgeInitTagChoose(String tag) {
+        switch (tag) {
+            case "1":
+                currentSelect_a_ = 0;
+                currentSelect_b_ = 0;
+                currentSelect_c_ = 0;
+                currentSelect_d_ = 0;
+                break;
+            case "2":
+                currentSelect_a_ = 0;
+                currentSelect_b_ = 0;
+                currentSelect_c_ = 0;
+                currentSelect_d_ = 0;
+                break;
+            case "3":
+                currentSelect_a_ = 0;
+                currentSelect_b_ = 0;
+                currentSelect_c_ = 0;
+                currentSelect_d_ = 0;
+                break;
+            case "4":
+                currentSelect_a_ = 0;
+                currentSelect_b_ = 0;
+                currentSelect_c_ = 0;
+                currentSelect_d_ = 0;
+                break;
+        }
     }
 
 
@@ -1457,7 +2004,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                             bean.setBarCode(objBean.getString("barCode"));
                             bean.setIsReach5Years(objBean.getInt("isReach5Years") + "");
                             bean.setOrderNo(objBean.getString("orderNo"));
-                            bean.setTime(objBean.getLong("time"));
+//                            bean.setTime(objBean.getLong("time"));
                             bean.setUserCarId(objBean.getInt("userCarId") + "");
                             bean.setUserId(objBean.getInt("userId") + "");
                             oldShoeList.add(bean);
@@ -1474,16 +2021,23 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                             bean.setId(objBean.getInt("id") + "");
                             bean.setBarCode(objBean.getString("barCode"));
                             bean.setOrderNo(objBean.getString("orderNo"));
-                            bean.setTime(objBean.getLong("time"));
+//                            bean.setTime(objBean.getLong("time"));
                             bean.setStatus(objBean.getInt("status") + "");
                             newShoeList.add(bean);
                         }
+                        //根据新轮胎数据获取条形码StrList(选择器数据)
+                        newShoeListStr.clear();
+                        newShoeListStr = getNewShoeCodeList();
+                        newShoeNum = newShoeListStr.size();
+
                         Log.e(TAG, "onSuccess: " + "onSuccess");
 
                         //设置数据
                         setData();
                         //绑定监听
                         bindView();
+
+                        hideDialogProgress(mainDialog);
 
 
                     } else {
@@ -1565,8 +2119,12 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
             }
         }
         //分别设置数据
-        fiveYearsShoeAmount = oldShoeReachFiveList.size();
-        noFiveYearsShoeAmount = oldShoeNoFiveList.size();
+        if (oldShoeReachFiveList != null) {
+            fiveYearsShoeAmount = oldShoeReachFiveList.size();/*轮胎满五年条数*/
+        }
+        if (oldShoeNoFiveList != null) {
+            noFiveYearsShoeAmount = oldShoeNoFiveList.size();/*轮胎不满五年条数*/
+        }
         if (oldShoeReachFiveList.size() == 0) {//满五年
             fl_full_change_title.setVisibility(View.GONE);
             ll_full_change_content.setVisibility(View.GONE);
@@ -1642,6 +2200,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
             fl_broken_barcode_d_.setVisibility(View.GONE);
             broken_code_a.setText(oldShoeNoFiveList.get(0).getBarCode());
             broken_code_a_change.setTag(fiveYearsShoeAmount + 1 + "");
+
         }
         if (oldShoeNoFiveList.size() == 2) {
             fl_broken_change_title.setVisibility(View.VISIBLE);
@@ -1695,17 +2254,11 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
             for (int i = 0; i < shoeFlagList.size(); i++) {
                 PublicShoeFlag bean = shoeFlagList.get(i);
                 if (shoeFlagList.get(i).getShoeFlag().equals("1")) {
-                    ll_shoe_font.setVisibility(View.VISIBLE);
-                    ll_shoe_rear.setVisibility(View.GONE);
-                    ll_shoe_consistent.setVisibility(View.GONE);
                     shoe_name_font.setText(bean.getShoeName());
                     shoe_amount_font.setText(bean.getShoeAmount());
                     Glide.with(getApplicationContext()).load(bean.getShoeImgUrl()).into(shoe_img_font);
                 }
                 if (shoeFlagList.get(i).getShoeFlag().equals("2")) {
-                    ll_shoe_font.setVisibility(View.GONE);
-                    ll_shoe_rear.setVisibility(View.VISIBLE);
-                    ll_shoe_consistent.setVisibility(View.GONE);
                     shoe_name_rear.setText(bean.getShoeName());
                     shoe_amount_rear.setText(bean.getShoeAmount());
                     Glide.with(getApplicationContext()).load(bean.getShoeImgUrl()).into(shoe_img_rear);
@@ -1862,13 +2415,69 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         pic_car_delete = findViewById(R.id.pic_car_delete);
         pic_car_center = findViewById(R.id.pic_car_center);
 
+        //拍照示例
+        tv_shoepic_sample = findViewById(R.id.tv_shoepic_sample);
+        tv_licencepic_sample = findViewById(R.id.tv_licencepic_sample);
+        tv_carpic_sample = findViewById(R.id.tv_carpic_sample);
+
         shoeFlagList = new ArrayList<>();
         oldShoeList = new ArrayList<>();
         oldShoeReachFiveList = new ArrayList<>();
         oldShoeNoFiveList = new ArrayList<>();
         newShoeList = new ArrayList<>();
+        newShoeListStr = new ArrayList<>();
         oldNewBarCodeList = new ArrayList<>();
 
         progressDialog = new ProgressDialog(OrderConfirmFreeChangeActivity.this);
+    }
+
+
+    /*  onDestroy()
+    * 判断删除带有条形码的图片
+    * */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //根据Path删除转换的照片
+        if (path_licenseBitmap != null && path_licenseBitmap.length() != 0) {
+            UtilsRY.deleteImage(path_licenseBitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_licenseBitmap");
+        }
+        if (path_carBitmap != null && path_carBitmap.length() != 0) {
+            UtilsRY.deleteImage(path_carBitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_carBitmap");
+        }
+        if (path_shoeABitmap != null && path_shoeABitmap.length() != 0) {
+            UtilsRY.deleteImage(path_shoeABitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_shoeABitmap");
+        }
+        if (path_shoeABarcodeBitmap != null && path_shoeABarcodeBitmap.length() != 0) {
+            UtilsRY.deleteImage(path_shoeABarcodeBitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_shoeABarcodeBitmap");
+        }
+        if (path_shoeBBitmap != null && path_shoeBBitmap.length() != 0) {
+            UtilsRY.deleteImage(path_shoeBBitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_shoeBBitmap");
+        }
+        if (path_shoeBBarcodeBitmap != null && path_shoeBBarcodeBitmap.length() != 0) {
+            UtilsRY.deleteImage(path_shoeBBarcodeBitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_shoeBBarcodeBitmap");
+        }
+        if (path_shoeCBitmap != null && path_shoeCBitmap.length() != 0) {
+            UtilsRY.deleteImage(path_shoeCBitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_shoeCBitmap");
+        }
+        if (path_shoeCBarcodeBitmap != null && path_shoeCBarcodeBitmap.length() != 0) {
+            UtilsRY.deleteImage(path_shoeCBarcodeBitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_shoeCBarcodeBitmap");
+        }
+        if (path_shoeDBitmap != null && path_shoeDBitmap.length() != 0) {
+            UtilsRY.deleteImage(path_shoeDBitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_shoeDBitmap");
+        }
+        if (path_shoeDBarcodeBitmap != null && path_shoeDBarcodeBitmap.length() != 0) {
+            UtilsRY.deleteImage(path_shoeDBarcodeBitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_shoeDBarcodeBitmap");
+        }
     }
 }

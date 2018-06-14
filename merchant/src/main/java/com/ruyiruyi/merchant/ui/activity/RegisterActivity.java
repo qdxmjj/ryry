@@ -125,6 +125,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     public int currentShengPosition = 0;
     public int currentShiPosition = 0;
     public int currentXianPosition = 0;
+    public String currentlTime = "00:00:00";
+    public String currentrTime = "00:00:00";
     public int currentlTimePosition = 0;
     public int currentrTimePosition = 0;
     private boolean isChecdXieyi = false;
@@ -132,7 +134,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private int areaId_shi = 8888;
     private List<String> lTime_list;
     private List<String> rTime_list;
-    private String shopTimes = "00:00:00 至 00:00:00";
     private int currentImage = 0;//3-yyzz,0-mdpica,1-mdpicb,2-mdpicc,4-shou;
     private boolean hasPic_yyzz = false;
     private boolean hasPic_mdPic_a = false;
@@ -196,6 +197,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         }
     };
     private String areStr = "";
+    private String path_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -653,18 +655,23 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         if (currentImage == 0) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "mdpicaaa.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 1) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "mdpicbbb.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 2) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "mdpicccc.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 3) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "yyzz.jpg");
+            path_ = file.getPath();
         } else if (currentImage == 4) {
             file = new File(Environment
                     .getExternalStorageDirectory(), "shou.jpg");
+            path_ = file.getPath();
         }
 
         //判断是否是AndroidN以及更高的版本
@@ -695,10 +702,10 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             switch (requestCode) {
                 case CHOOSE_PICTURE:
                     Uri uri = data.getData();
-                    setImageToViewFromPhone(uri);
+                    setImageToViewFromPhone(uri, false);
                     break;
                 case TAKE_PICTURE:
-                    setImageToViewFromPhone(tempUri);
+                    setImageToViewFromPhone(tempUri, true);
                     break;
 
             }
@@ -706,8 +713,11 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(uri.toString());
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_);
+        }
         if (uri != null) {
             Bitmap photo = null;
             try {
@@ -715,31 +725,51 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             } catch (IOException e) {
             }
             if (currentImage == 0) {
-                mdPicaBitmap = rotaingImageView(degree, photo);
+                if (isCamera) {
+                    mdPicaBitmap = rotaingImageView(degree, photo);
+                } else {
+                    mdPicaBitmap = photo;
+                }
                 img_mdpic_a.setImageBitmap(mdPicaBitmap);
                 img_mdpic_a_delete.setVisibility(View.VISIBLE);
                 img_mdpic_a_center.setVisibility(View.GONE);
                 hasPic_mdPic_a = true;
             } else if (currentImage == 1) {
-                mdPicbBitmap = rotaingImageView(degree, photo);
+                if (isCamera) {
+                    mdPicbBitmap = rotaingImageView(degree, photo);
+                } else {
+                    mdPicbBitmap = photo;
+                }
                 img_mdpic_b.setImageBitmap(mdPicbBitmap);
                 img_mdpic_b_delete.setVisibility(View.VISIBLE);
                 img_mdpic_b_center.setVisibility(View.GONE);
                 hasPic_mdPic_b = true;
             } else if (currentImage == 2) {
-                mdPiccBitmap = rotaingImageView(degree, photo);
+                if (isCamera) {
+                    mdPiccBitmap = rotaingImageView(degree, photo);
+                } else {
+                    mdPiccBitmap = photo;
+                }
                 img_mdpic_c.setImageBitmap(mdPiccBitmap);
                 img_mdpic_c_delete.setVisibility(View.VISIBLE);
                 img_mdpic_c_center.setVisibility(View.GONE);
                 hasPic_mdPic_c = true;
             } else if (currentImage == 3) {
-                yyzzPicBitmap = rotaingImageView(degree, photo);
+                if (isCamera) {
+                    yyzzPicBitmap = rotaingImageView(degree, photo);
+                } else {
+                    yyzzPicBitmap = photo;
+                }
                 img_yyzz.setImageBitmap(yyzzPicBitmap);
                 img_yyzz_delete.setVisibility(View.VISIBLE);
                 img_yyzz_center.setVisibility(View.GONE);
                 hasPic_yyzz = true;
             } else if (currentImage == 4) {
-                shouPicBitmap = rotaingImageView(degree, photo);
+                if (isCamera) {
+                    shouPicBitmap = rotaingImageView(degree, photo);
+                } else {
+                    shouPicBitmap = photo;
+                }
                 img_shou_a.setImageBitmap(shouPicBitmap);
                 img_shou_a_delete.setVisibility(View.VISIBLE);
                 img_shou_a_center.setVisibility(View.GONE);
@@ -795,6 +825,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
                 break;
             case R.id.tv_shoptime:
+                currentlTime = "00:00:00";//每次进入dialog初始化
+                currentrTime = "00:00:00";//每次进入dialog初始化
                 View v_shoptime = LayoutInflater.from(this).inflate(R.layout.dialog_shoptime_view, null);
                 whv_lTime = (WheelView) v_shoptime.findViewById(R.id.whv_ltime);
                 whv_rTime = (WheelView) v_shoptime.findViewById(R.id.whv_rtime);
@@ -806,9 +838,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         currentlTimePosition = whv_lTime.getSelectedPosition();
                         rTime_list = getRTimeList(selectedIndex);
                         whv_rTime.setItems(rTime_list, 0);
-                        shopTimeL = item;
-                        shopTimeR = rTime_list.get(0);
-                        shopTimes = shopTimeL + "  至  " + shopTimeR;
+                        currentlTime = item;
+                        currentrTime = rTime_list.get(0);
                     }
                 });
                 whv_rTime.setItems(rTime_list, currentrTimePosition);
@@ -816,8 +847,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     @Override
                     public void onItemSelected(int selectedIndex, String item) {
                         currentrTimePosition = whv_rTime.getSelectedPosition();
-                        shopTimeR = item;
-                        shopTimes = shopTimeL + "  至  " + shopTimeR;
+                        currentrTime = item;
                     }
                 });
                 whv_lTime.setIsLoop(false);
@@ -829,7 +859,9 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 dialog2.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        tv_ShopTime.setText(shopTimes);
+                        shopTimeL = currentlTime;//点击确定再更新值
+                        shopTimeR = currentrTime;//点击确定再更新值
+                        tv_ShopTime.setText(currentlTime + " 至 " + currentrTime);
                     }
                 });
                 dialog2.show();
@@ -1454,7 +1486,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 pa.addBodyParameter("indoor_img", new File(mdpicbPath));
                 pa.addBodyParameter("factory_img", new File(mdpiccPath));
                 pa.addBodyParameter("id_img", new File(shouPath));
-                pa.setConnectTimeout(6000);
                 x.http().post(pa, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {

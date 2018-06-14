@@ -125,6 +125,7 @@ public class PromotionActivity extends RyBaseActivity implements PromotionViewBi
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess:  result789 = " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String status = jsonObject.getString("status");
@@ -149,7 +150,7 @@ public class PromotionActivity extends RyBaseActivity implements PromotionViewBi
                             String phone = bean.getString("phone");
                             String subPhone = phone.substring(0, 3) + "****" + phone.substring(7, 11);
                             hasperson.setUserPhone(subPhone);
-                            if (i == 1) {
+                            if (i == 0) {
                                 hasperson.setFirst(true);
                             } else {
                                 hasperson.setFirst(false);

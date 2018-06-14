@@ -14,8 +14,8 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/mygoods_tab"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="3dp" />
+        android:layout_height="55dp"
+        android:layout_marginTop="1dp" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -31,7 +31,8 @@
         <LinearLayout
             android:id="@+id/ll_bottom"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="55dp"
+            android:background="#ffff12"
             android:layout_gravity="bottom"
             android:orientation="horizontal"
             android:weightSum="2">
@@ -41,6 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="#ffffff"
                 android:gravity="center"
                 android:text="添加商品"
                 android:textColor="@color/c6"
@@ -53,9 +55,9 @@
                 android:background="@color/theme_primary">
 
                 <LinearLayout
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:orientation="horizontal">
 
                     <TextView
@@ -78,7 +80,7 @@
                         android:gravity="center"
                         android:text="全部分类"
                         android:textColor="#ffffff"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:id="@+id/img_bottom"
