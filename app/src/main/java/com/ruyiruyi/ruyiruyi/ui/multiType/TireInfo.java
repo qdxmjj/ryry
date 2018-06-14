@@ -4,10 +4,11 @@ public class TireInfo {
     public String tireImage;
     public String tireName;
     public int tireCount;
-    public String tirePrice;
+    public Double tirePrice;
     public String fontRearFlag;  //0前后轮 1前轮 2后轮
+    public String barCode;
 
-    public TireInfo(String tireImage, String tireName, int tireCount, String tirePrice, String fontRearFlag) {
+    public TireInfo(String tireImage, String tireName, int tireCount, Double tirePrice, String fontRearFlag) {
         this.tireImage = tireImage;
         this.tireName = tireName;
         this.tireCount = tireCount;
@@ -15,7 +16,22 @@ public class TireInfo {
         this.fontRearFlag = fontRearFlag;
     }
 
+    public TireInfo(String tireImage, String tireName, int tireCount, Double tirePrice, String fontRearFlag, String barCode) {
+        this.tireImage = tireImage;
+        this.tireName = tireName;
+        this.tireCount = tireCount;
+        this.tirePrice = tirePrice;
+        this.fontRearFlag = fontRearFlag;
+        this.barCode = barCode;
+    }
 
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
+    }
 
     public String getFontRearFlag() {
         return fontRearFlag;
@@ -49,13 +65,11 @@ public class TireInfo {
         this.tireCount = tireCount;
     }
 
-    public String getTirePrice() {
+    public Double getTirePrice() {
         return tirePrice;
     }
 
-    public void setTirePrice(String tirePrice) {
+    public void setTirePrice(Double tirePrice) {
         this.tirePrice = tirePrice;
     }
-
-
 }

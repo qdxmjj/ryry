@@ -10,18 +10,20 @@ public class OrderGoods {
     public String storeName;
     public String totalPrice;
     public List<GoodsInfo> goodsInfoList;
+    public int salesId;
 
     public OrderGoods(int userId, List<GoodsInfo> goodsInfoList) {
         this.userId = userId;
         this.goodsInfoList = goodsInfoList;
     }
 
-    public OrderGoods(int userId, int storeId, String storeName, String totalPrice, List<GoodsInfo> goodsInfoList) {
+    public OrderGoods(int userId, int storeId, String storeName, String totalPrice, List<GoodsInfo> goodsInfoList, int salesId) {
         this.userId = userId;
         this.storeId = storeId;
         this.storeName = storeName;
         this.totalPrice = totalPrice;
         this.goodsInfoList = goodsInfoList;
+        this.salesId = salesId;
     }
 
     public int getUserId() {

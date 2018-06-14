@@ -39,6 +39,14 @@
                 android:textColor="@color/c6"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"/>
+            <TextView
+                android:id="@+id/tire_code_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="条形码：12321321"
+                android:textColor="@color/c6"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"/>
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

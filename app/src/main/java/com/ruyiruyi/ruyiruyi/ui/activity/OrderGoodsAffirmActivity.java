@@ -38,7 +38,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class OrderGoodsAffirmActivity extends RyBaseActivity {
+public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneViewBinder.OnInfoItemClick {
     private static final String TAG = OrderGoodsAffirmActivity.class.getSimpleName();
     private ActionBar actionBar;
     private List<Object> items = new ArrayList<>();
@@ -49,11 +49,16 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity {
     private List<GoodsNew> goodslist;
     private List<GoodsInfo> goodsInfoList;
     private double allprice = 0.00;
+    private double currentPrice = 0.00;
     private TextView allPriceText;
     private TextView goodsBuyButton;
     private int userId;
     private int storeid;
     private String storename;
+    public static int COUPON_REQUEST = 10;
+    private int couponchoose;
+    private String couponName = "选择优惠券";
+    private int couponId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +109,13 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity {
     }
 
     private void sendDataToService() {
-        OrderGoods orderGoods = new OrderGoods(userId, storeid, storename, allprice + "", goodsInfoList);
+        OrderGoods orderGoods = null;
+        if (couponchoose == 0) {    //weixuan
+            orderGoods= new OrderGoods(userId, storeid, storename, allprice + "", goodsInfoList,couponId);
+        }else {
+            orderGoods = new OrderGoods(userId, storeid, storename, allprice + "", goodsInfoList,couponId);
+        }
+
         Gson gson = new Gson();
         String json = gson.toJson(orderGoods);
         Log.e(TAG, "sendDataToService: ---" + json);
@@ -125,7 +136,11 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity {
                         String orderNo = jsonObject1.getString("data");
 
                         Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
-                        intent.putExtra(PaymentActivity.ALL_PRICE, allprice);
+                        if (couponchoose == 0) {    //weixuan
+                            intent.putExtra(PaymentActivity.ALL_PRICE, allprice);
+                        }else {
+                            intent.putExtra(PaymentActivity.ALL_PRICE, currentPrice);
+                        }
                         intent.putExtra(PaymentActivity.ORDERNO, orderNo);
                         intent.putExtra(PaymentActivity.ORDER_TYPE, 1);
                         startActivity(intent);
@@ -167,6 +182,8 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity {
         for (int i = 0; i < goodsInfoList.size(); i++) {
             items.add(goodsInfoList.get(i));
         }
+        items.add(new InfoOne("优惠券", couponName, true,true));
+
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
@@ -194,6 +211,113 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity {
 
     private void register() {
         adapter.register(GoodsInfo.class, new GoodsInfoViewBinder(this));
-        adapter.register(InfoOne.class, new InfoOneViewBinder());
+        InfoOneViewBinder infoOneViewBinder = new InfoOneViewBinder();
+        infoOneViewBinder.setListener(this);
+        adapter.register(InfoOne.class, infoOneViewBinder);
+
+    }
+
+    /**
+     * 优惠券点击选择
+     * @param name
+     */
+    @Override
+    public void onInfoItemClickListener(String name) {
+
+        if (name.equals("优惠券")){
+
+            boolean isXiche = false;
+            boolean isDingwei = false;
+            for (int i = 0; i < goodslist.size(); i++) {
+                if (goodslist.get(i).getGoodsName().equals("精致洗车")) {
+                    isXiche = true;
+                }else if (goodslist.get(i).getGoodsName().equals("四轮定位")){
+                    isDingwei = true;
+                }
+            }
+            User user = new DbConfig().getUser();
+            int carId = user.getCarId();
+            if (isXiche && isDingwei){
+                Intent intent = new Intent(this, CouponActivity.class);
+                intent.putExtra(CouponActivity.FROM_TYPE,1);
+                intent.putExtra(CouponActivity.CHOOSE_TYPE,3);
+                intent.putExtra(CouponActivity.CAR_ID,carId);
+                startActivityForResult(intent,COUPON_REQUEST);
+            }else if (isXiche && !isDingwei){
+                Intent intent = new Intent(this, CouponActivity.class);
+                intent.putExtra(CouponActivity.FROM_TYPE,1);
+                intent.putExtra(CouponActivity.CHOOSE_TYPE,1);
+                intent.putExtra(CouponActivity.CAR_ID,carId);
+                startActivityForResult(intent,COUPON_REQUEST);
+            }else if (!isXiche && isDingwei){
+                Intent intent = new Intent(this, CouponActivity.class);
+                intent.putExtra(CouponActivity.FROM_TYPE,1);
+                intent.putExtra(CouponActivity.CHOOSE_TYPE,2);
+                intent.putExtra(CouponActivity.CAR_ID,carId);
+                startActivityForResult(intent,COUPON_REQUEST);
+            }else {
+                Intent intent = new Intent(this, CouponActivity.class);
+                intent.putExtra(CouponActivity.FROM_TYPE,1);
+                intent.putExtra(CouponActivity.CHOOSE_TYPE,5);
+                intent.putExtra(CouponActivity.CAR_ID,carId);
+                startActivityForResult(intent,COUPON_REQUEST);
+            }
+
+
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == COUPON_REQUEST){
+            couponchoose = data.getIntExtra("COUPONCHOOSE",0);  //是未选优惠券  1是选择优惠券
+            if (couponchoose == 1){
+                couponName = data.getStringExtra("COUPONNAME");
+                couponId = data.getIntExtra("COUPONID", 0);
+                initCouponView();
+            }else {
+                couponName = "请选择优惠券";
+                couponId = 0;
+                initData();
+                allPriceText.setText(allprice+"");
+            }
+        }
+    }
+
+    /**
+     * 初始化优惠券
+     */
+    private void initCouponView() {
+        if (couponName.equals("精致洗车券")){
+            double price = 0.00;
+            for (int i = 0; i < goodslist.size(); i++) {
+                if (goodslist.get(i).getGoodsName().equals("精致洗车")) {
+                    price = Double.parseDouble(goodslist.get(i).getGoodsPrice());
+                }
+            }
+            currentPrice = allprice - price;
+            if (currentPrice < 0.00){
+                currentPrice = 0.00;
+            }
+        }else if (couponName.equals("四轮定位券")){
+            double price = 0.00;
+            for (int i = 0; i < goodslist.size(); i++) {
+                if (goodslist.get(i).getGoodsName().equals("四轮定位")) {
+                    price = Double.parseDouble(goodslist.get(i).getGoodsPrice());
+                }
+            }
+            currentPrice = allprice - price;
+            if (currentPrice < 0.00){
+                currentPrice = 0.00;
+            }
+        }else if (couponName.equals("10元现金券")){
+            currentPrice = allprice - 10.00;
+            if (currentPrice < 0.00){
+                currentPrice = 0.00;
+            }
+        }
+        initData();
+        allPriceText.setText(currentPrice+"");
     }
 }

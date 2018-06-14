@@ -54,6 +54,10 @@ public class PaySuccessActivity extends RyBaseActivity {
             goSeeView.setText("去换胎");
         }else if (ordertype == 1){
             goSeeView.setText("去服务");
+        }else if (ordertype == 99){
+            goSeeView.setText("查看畅行无忧");
+        }else if (ordertype == 3){
+            goSeeView.setText("去服务");
         }
 
         RxViewAction.clickNoDouble(goSeeView)
@@ -68,6 +72,18 @@ public class PaySuccessActivity extends RyBaseActivity {
                             finish();
                         }else if (ordertype == 0){  //轮胎订单
                             startActivity(new Intent(getApplicationContext(),TireWaitChangeActivity.class));
+                        }else if (ordertype == 99){
+                            Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                            intent.putExtra(OrderFragment.ORDER_TYPE, "YWC");
+                            intent.putExtra(OrderActivity.ORDER_FROM,1);
+                            startActivity(intent);
+                            finish();
+                        }else if (ordertype==3){
+                            Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                            intent.putExtra(OrderFragment.ORDER_TYPE, "DFW");
+                            intent.putExtra(OrderActivity.ORDER_FROM,1);
+                            startActivity(intent);
+                            finish();
                         }
                     }
                 });
@@ -86,7 +102,6 @@ public class PaySuccessActivity extends RyBaseActivity {
     @Override
     public void onBackPressed() {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
     }
 
 

@@ -30,6 +30,12 @@ public class TireInfoViewBinder extends ItemViewProvider<TireInfo, TireInfoViewB
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull TireInfo tireInfo) {
+        if (tireInfo.getBarCode() != null) {
+            holder.tireCodeView.setVisibility(View.VISIBLE);
+            holder.tireCodeView.setText("条形码 ："+tireInfo.getBarCode());
+        }else {
+            holder.tireCodeView.setVisibility(View.GONE);
+        }
         Glide.with(context).load(tireInfo.getTireImage()).into(holder.tireImage);
         holder.tireName.setText(tireInfo.getTireName());
         if (tireInfo.getFontRearFlag().equals("0")){  //0:前后一致 1:前轮 2:后轮
@@ -55,6 +61,7 @@ public class TireInfoViewBinder extends ItemViewProvider<TireInfo, TireInfoViewB
         private final TextView tirePrice;
         private final TextView tireCount;
         private final TextView tirePlace;
+        private final TextView tireCodeView;
         ViewHolder(View itemView) {
             super(itemView);
             tireImage = ((ImageView) itemView.findViewById(R.id.tire_image));
@@ -62,6 +69,7 @@ public class TireInfoViewBinder extends ItemViewProvider<TireInfo, TireInfoViewB
             tirePrice = ((TextView) itemView.findViewById(R.id.tire_price_text_order));
             tireCount = ((TextView) itemView.findViewById(R.id.tire_count_order));
             tirePlace = ((TextView) itemView.findViewById(R.id.tire_place_text));
+            tireCodeView = ((TextView) itemView.findViewById(R.id.tire_code_text));
         }
     }
 }

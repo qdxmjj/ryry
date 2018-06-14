@@ -9,9 +9,10 @@ public class Coupon {
     public String startTime;
     public String endTime;
     public String carNumber;
+    public boolean isCanUse;
 
 
-    public Coupon(int couponId, String couponName, int couponType, int couponViewTypeId, int couponStates, String startTime, String endTime, String carNumber) {
+    public Coupon(int couponId, String couponName, int couponType, int couponViewTypeId, int couponStates, String startTime, String endTime, String carNumber, boolean isCanUse) {
         this.couponId = couponId;
         this.couponName = couponName;
         this.couponType = couponType;
@@ -20,6 +21,7 @@ public class Coupon {
         this.startTime = startTime;
         this.endTime = endTime;
         this.carNumber = carNumber;
+        this.isCanUse = isCanUse;
     }
 
     public String getCarNumber() {

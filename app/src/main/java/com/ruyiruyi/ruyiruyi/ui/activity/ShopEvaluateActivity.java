@@ -223,6 +223,7 @@ public class ShopEvaluateActivity extends RyBaseActivity implements EvaImageView
         listView = (RecyclerView) findViewById(R.id.evaluate_listview);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         listView.setLayoutManager(linearLayoutManager);
+
         adapter = new MultiTypeAdapter(items);
         register();
 

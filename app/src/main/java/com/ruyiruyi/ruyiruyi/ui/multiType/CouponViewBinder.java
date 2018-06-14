@@ -2,6 +2,7 @@ package com.ruyiruyi.ruyiruyi.ui.multiType;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
 import me.drakeet.multitype.ItemViewProvider;
+import rx.functions.Action1;
 
 public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.ViewHolder> {
+
+    private static final String TAG = CouponViewBinder.class.getSimpleName();
+    public OnCouponClick listener;
+
+    public void setListener(OnCouponClick listener) {
+        this.listener = listener;
+    }
 
     @NonNull
     @Override
@@ -23,27 +33,35 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull Coupon coupon) {
+    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Coupon coupon) {
 
         holder.couponNameView.setText(coupon.getCouponName());
         holder.couponBigNameView.setText(coupon.getCouponName());
         holder.couponStartTimeView.setText("开始时间： " + coupon.getStartTime());
         holder.couponEndTimwView.setText("结束时间： " + coupon.getEndTime());
 
+
         if (coupon.getCouponStates() == 1){     //已使用
             holder.couponTypeView.setText("已使用");
             holder.couponColorLayout.setBackgroundResource(R.drawable.ic_huise);
         }else  if (coupon.getCouponStates() == 2){  //未使用
             holder.couponTypeView.setText("未使用");
-            if (coupon.couponViewTypeId == 2){      //精致洗车券
-                holder.couponColorLayout.setBackgroundResource(R.drawable.ic_blue);
-            }else if (coupon.couponViewTypeId == 3){    //四轮定位券
-                holder.couponColorLayout.setBackgroundResource(R.drawable.ic_red);
-            }else if (coupon.couponViewTypeId == 7){    //10元现金券
-                holder.couponColorLayout.setBackgroundResource(R.drawable.ic_yellow);
+            if (coupon.isCanUse){
+                if (coupon.couponViewTypeId == 2){      //精致洗车券
+                    Log.e(TAG, "onBindViewHolder: ----------" );
+                    holder.couponColorLayout.setBackgroundResource(R.drawable.ic_blue);
+                }else if (coupon.couponViewTypeId == 3){    //四轮定位券
+                    holder.couponColorLayout.setBackgroundResource(R.drawable.ic_red);
+                }else if (coupon.couponViewTypeId == 7){    //10元现金券
+                    holder.couponColorLayout.setBackgroundResource(R.drawable.ic_yellow);
+                }
+            }else {
+                Log.e(TAG, "onBindViewHolder: -++++++++-" );
+                holder.couponColorLayout.setBackgroundResource(R.drawable.ic_huise);
             }
         }else  if (coupon.getCouponStates() == 3){  //已过期
             holder.couponTypeView.setText("已过期");
+            Log.e(TAG, "onBindViewHolder: -++-----++-" );
             holder.couponColorLayout.setBackgroundResource(R.drawable.ic_huise);
         }
 
@@ -54,7 +72,19 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
             holder.couponCarText.setVisibility(View.GONE);
         }
 
+
+        RxViewAction.clickNoDouble(holder.couponLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        if (coupon.isCanUse){
+                            listener.onCouponClcikListener(coupon.getCouponId(),coupon.getCouponName());
+                        }
+
+                    }
+                });
     }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -80,5 +110,9 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
 
 
         }
+    }
+
+    public interface OnCouponClick{
+        void onCouponClcikListener(int couponId,String couponName);
     }
 }

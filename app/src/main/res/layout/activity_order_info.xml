@@ -32,6 +32,40 @@
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
+            android:visibility="gone"
             android:background="@drawable/bg_button"/>
+        <LinearLayout
+            android:id="@+id/order_bucha_layout"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:id="@+id/jujue_bucha_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="拒绝补差"
+                    android:textSize="17sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tongyi_bucha_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@color/theme_primary"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="同意补差"
+                    android:textColor="#ffffff"
+                    android:textSize="17sp"/>
+            </LinearLayout>
+        </LinearLayout>
     </FrameLayout>
 </LinearLayout>

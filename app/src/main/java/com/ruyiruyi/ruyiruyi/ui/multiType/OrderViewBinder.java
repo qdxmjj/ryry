@@ -65,6 +65,10 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
                 holder.orderTypeText.setText("待支付");
             }else if (order.getOrderState().equals("6")){
                 holder.orderTypeText.setText("已退货");
+            }else if (order.getOrderState().equals("9")){
+                holder.orderTypeText.setText("退款中");
+            }else if (order.getOrderState().equals("10")){
+                holder.orderTypeText.setText("退款成功");
             }
         }
         else {//订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
@@ -87,6 +91,10 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
                     holder.orderTypeText.setText("待评价");
                 }else if (order.getOrderState().equals("8")){
                     holder.orderTypeText.setText("待支付");
+                }else if (order.getOrderState().equals("9")){
+                    holder.orderTypeText.setText("退款中");
+                }else if (order.getOrderState().equals("10")){
+                    holder.orderTypeText.setText("退款成功");
                 }
             }else if (order.getOrderStage().equals("2")){
                 holder.orderTypeText.setText("待车主支付差价");
