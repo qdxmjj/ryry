@@ -49,7 +49,7 @@ import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-public class MainActivity extends RyBaseFragmentActivity {
+public class MainActivity extends RyBaseFragmentActivity implements HomeFragment.OnIconClikc {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -149,7 +149,7 @@ public class MainActivity extends RyBaseFragmentActivity {
     }
 
     private void initProvice() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<Province> provinceList = null;
         try {
@@ -224,7 +224,7 @@ public class MainActivity extends RyBaseFragmentActivity {
     }
 
     private void saveProvinceIntoDb(List<Province> provinceArrayList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             Log.e(TAG, "provinceArrayList: 添加成功" + provinceArrayList.size());
@@ -236,7 +236,7 @@ public class MainActivity extends RyBaseFragmentActivity {
     }
 
     private void initTireType() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<TireType> tireTypeList = null;
         try {
@@ -314,7 +314,7 @@ public class MainActivity extends RyBaseFragmentActivity {
     }
 
     private void saveTireTypeIntoDb(List<TireType> tireTypeArrayList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             Log.e(TAG, "tireTypeArrayList: 添加成功" + tireTypeArrayList.size());
@@ -325,7 +325,7 @@ public class MainActivity extends RyBaseFragmentActivity {
     }
 
     private void initCarrTireInfo() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<CarTireInfo> carTireInfoList = null;
         try {
@@ -408,7 +408,7 @@ public class MainActivity extends RyBaseFragmentActivity {
     }
 
     private void savaCarTireIntoDb(List<CarTireInfo> carTireInfoArrayList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             Log.e(TAG, "savaCarTireIntoDb: 添加成功");
@@ -419,7 +419,7 @@ public class MainActivity extends RyBaseFragmentActivity {
     }
 
     private void initCarVerhicle() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<CarVerhicle> carVerhicleList = null;
         try {
@@ -496,7 +496,7 @@ public class MainActivity extends RyBaseFragmentActivity {
     }
 
     private void savaCarVerhicleIntoDb(List<CarVerhicle> verhiclesList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(verhiclesList);
@@ -506,7 +506,7 @@ public class MainActivity extends RyBaseFragmentActivity {
     }
 
     private void initCarBrand() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<CarBrand> carBrandList = null;
         try {
@@ -583,7 +583,7 @@ public class MainActivity extends RyBaseFragmentActivity {
     }
 
     private void saveCarBrandIntoDb(List<CarBrand> brandList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(brandList);
@@ -594,7 +594,7 @@ public class MainActivity extends RyBaseFragmentActivity {
 
 
     private void initCarDataIntoDb() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<CarFactory> carList = null;
         try {
@@ -669,7 +669,7 @@ public class MainActivity extends RyBaseFragmentActivity {
      * @param factoryList
      */
     private void savaCarFactoryIntoDb(List<CarFactory> factoryList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(factoryList);
@@ -682,6 +682,7 @@ public class MainActivity extends RyBaseFragmentActivity {
         Log.e(TAG, "initFragment: -2-" + ischoos);
         List<Fragment> fragments = new ArrayList<>();
         HomeFragment homeFragment = new HomeFragment();
+        homeFragment.setListener(this);
         Bundle bundle = new Bundle();
         homeFragment.setArguments(bundle);
         fragments.add(homeFragment);
@@ -690,7 +691,8 @@ public class MainActivity extends RyBaseFragmentActivity {
         bundleMerchant.putInt(MerchantFragment.SHOP_TYPE, 0);
         merchantFragment.setArguments(bundleMerchant);
         fragments.add(merchantFragment);
-        fragments.add(new GoodsClassFragment());
+        GoodsClassFragment goodsClassFragment = new GoodsClassFragment();
+        fragments.add(goodsClassFragment);
         fragments.add(new MyFragment());
 
         return fragments;
@@ -711,6 +713,15 @@ public class MainActivity extends RyBaseFragmentActivity {
         tabsCell.addView(R.drawable.ic_shangpin, R.drawable.ic_shangpin_2, "分类");
         tabsCell.addView(R.drawable.ic_my, R.drawable.ic_my_pressed, "我的 ");
 
+    }
+
+    /**
+     * 商品分类点击回调
+     */
+    @Override
+    public void onShopClassClickListener() {
+        viewPager.setCurrentItem(2);
+        tabsCell.setSelected(2);
     }
 
     class HomePagerAdapeter extends FragmentViewPagerAdapter {
@@ -769,25 +780,25 @@ public class MainActivity extends RyBaseFragmentActivity {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
             finish();
         }
     }

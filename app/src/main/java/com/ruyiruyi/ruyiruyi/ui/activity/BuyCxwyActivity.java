@@ -106,7 +106,9 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
         RxViewAction.clickNoDouble(agreement).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-
+                Intent intent = new Intent(getApplicationContext(), AgreementActivity.class);
+                intent.putExtra("AGREEMENTTYPE",0);
+                startActivity(intent);
             }
         });
         //确认购买
@@ -131,7 +133,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
      * 提交畅行无忧订单
      */
     private void postCxwyOrder() {
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         int carId = user.getCarId();
         int userId = user.getId();
         JSONObject jsonObject = new JSONObject();
@@ -152,7 +154,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserShoeOrder");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -199,7 +201,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
     }
 
     private void setView() {
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         items.clear();
         items.add(new PublicBigPic());
         items.add(new InfoOne("用户名", user.getNick(), true));
@@ -214,7 +216,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
     }
 
     private void initData() {
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         int carId = user.getCarId();
         int userId = user.getId();
         JSONObject jsonObject = new JSONObject();
@@ -225,7 +227,8 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarByUserIdAndCarId");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        Log.e(TAG, "initData: " + jsonObject.toString());
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -269,7 +272,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
      * 获取畅行无忧的价格
      */
     private void initCXWYData() {
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         int carId = user.getCarId();
         int userId = user.getId();
         JSONObject jsonObject = new JSONObject();
@@ -280,7 +283,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getShoeDetailByShoeId");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

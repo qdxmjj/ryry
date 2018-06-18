@@ -299,7 +299,7 @@ public class RegisterActivity extends RyBaseActivity implements DatePicker.OnDat
 
     private void savaUserToDb(User user) {
         Log.e(TAG, "savaUserToDb: 1111111");
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
         DbManager db = x.getDb(daoConfig);
         List<User> data = new ArrayList<>();

@@ -84,7 +84,11 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     private LocationService locationService;
     private int fromFragment;
     private int ischoos;
+    public OnIconClikc listener;
 
+    public void setListener(OnIconClikc listener) {
+        this.listener = listener;
+    }
 
     @Nullable
     @Override
@@ -124,7 +128,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
 
 
         //获取位置
-        Location location = new DbConfig().getLocation();
+        Location location = new DbConfig(getContext()).getLocation();
         if (location != null) {
             currentCity = location.getCity();
             jingdu = location.getJingdu();
@@ -139,7 +143,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
 
 
     private void initdataFromService() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(getContext());
         int id = dbConfig.getId();
 
         JSONObject jsonObject = new JSONObject();
@@ -151,7 +155,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAndroidHomeDate");
         params.addBodyParameter("reqJson", jsonObject.toString());
         Log.e(TAG, "initdataFromService: --" + jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(getContext()).getToken();
         params.addParameter("token", token);
         Log.e(TAG, "initdataFromService: -----------------" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -186,12 +190,20 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                                 tireSame = carObject.getBoolean("same");
                                 carId = carObject.getInt("car_id");
                                 int uesrCarId = carObject.getInt("user_car_id");
-                                User user = new DbConfig().getUser();
+                                User user = new DbConfig(getContext()).getUser();
+                                user.setCarId(uesrCarId);
+                                saveUserIntoDb(user);
+                            }else {
+                                int uesrCarId = 0;
+                                User user = new DbConfig(getContext()).getUser();
                                 user.setCarId(uesrCarId);
                                 saveUserIntoDb(user);
                             }
                         } catch (JSONException e) {
-
+                           /* int uesrCarId = 0;
+                            User user = new DbConfig().getUser();
+                            user.setCarId(uesrCarId);
+                            saveUserIntoDb(user);*/
                         }
 
 
@@ -224,7 +236,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     }
 
     private void saveUserIntoDb(User user) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(getContext());
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(user);
@@ -234,7 +246,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     }
 
     private void saveLunboInToDb() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(getContext());
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(lunbos);
@@ -261,9 +273,14 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     }
 
     private void initdata() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(getContext());
         User user = new User();
         user = dbConfig.getUser();
+        if (user!=null){
+            int carId = user.getCarId();
+        }
+
+
         List<Lunbo> lunboList = new ArrayList<>();
         lunboList = dbConfig.getLunbo();
 
@@ -274,8 +291,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             images.add(lunboList.get(i).getContentImageUrl());
         }
         if (!(user == null)) {
-            int firstAddCar1 = user.getFirstAddCar();
-            if (firstAddCar1 == 0) {
+            //int firstAddCar1 = user.getFirstAddCar();
+            if (carId == 0) {
                 items.add(new Hometop(images, "添加我的宝驹", "邀请好友绑定车辆可免费洗车", 1, currentCity));
             } else {
                 Hometop carInfo = new Hometop(images, carName, "一次性购买四条轮胎送洗车券", 2, currentCity);
@@ -394,7 +411,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             }
             startActivity(new Intent(getContext(), TireRepairActivity.class));
         } else if (type == 3) {
-
+            listener.onShopClassClickListener();
         }
     }
 
@@ -418,7 +435,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 return;
             }
             Intent intent = new Intent(getContext(), ShopChooseActivity.class);
-            intent.putExtra(MerchantFragment.SHOP_TYPE, 3);
+            intent.putExtra(MerchantFragment.SHOP_TYPE, 2);
             startActivity(intent);
         } else if (tag.equals("mrqx")) {//（美容清洗）//2
             //判断是否登录（未登录提示登录）
@@ -426,8 +443,12 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 return;
             }
             Intent intent = new Intent(getContext(), ShopChooseActivity.class);
-            intent.putExtra(MerchantFragment.SHOP_TYPE, 2);
+            intent.putExtra(MerchantFragment.SHOP_TYPE, 3);
             startActivity(intent);
         }
+    }
+
+    public interface OnIconClikc{
+        void onShopClassClickListener();
     }
 }

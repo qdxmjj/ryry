@@ -81,7 +81,7 @@ public class OrderFragment extends RyBaseFragment implements OrderViewBinder.OnO
 
     private void initDataFromService() {
         JSONObject jsonObject = new JSONObject();
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(getContext()).getId();
         try {
             jsonObject.put("userId", userId);
             if (orderType.equals("ALL")) {
@@ -99,7 +99,7 @@ public class OrderFragment extends RyBaseFragment implements OrderViewBinder.OnO
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserGeneralOrderByState");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(getContext()).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

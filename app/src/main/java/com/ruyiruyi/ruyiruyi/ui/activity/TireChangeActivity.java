@@ -130,7 +130,7 @@ public class TireChangeActivity extends RyBaseActivity {
     }
 
     private void initFreeTireFromService() {
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         int carId = user.getCarId();
         int userId = user.getId();
         JSONObject jsonObject = new JSONObject();
@@ -142,7 +142,7 @@ public class TireChangeActivity extends RyBaseActivity {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserChangedShoeNumAnd5Year");
         params.addBodyParameter("reqJson",jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
 
@@ -192,7 +192,7 @@ public class TireChangeActivity extends RyBaseActivity {
     }
 
     private void initDataFromService() {
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         int carId = user.getCarId();
         int userId = user.getId();
         JSONObject jsonObject = new JSONObject();
@@ -204,7 +204,7 @@ public class TireChangeActivity extends RyBaseActivity {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserUnusedShoeNum");
         params.addBodyParameter("reqJson",jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token",token);
         Log.e(TAG, "initDataFromService: -----------------------" +jsonObject.toString() );
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -253,7 +253,7 @@ public class TireChangeActivity extends RyBaseActivity {
     }
 
     private void initShop() {
-        Location location = new DbConfig().getLocation();
+        Location location = new DbConfig(this).getLocation();
         String city = location.getCity();
         Double jingdu = location.getJingdu();
         Double weidu = location.getWeidu();
@@ -276,7 +276,7 @@ public class TireChangeActivity extends RyBaseActivity {
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "selectStoreByCondition");
         Log.e(TAG, "initDataFromService:---------- " + jsonObject.toString() );
         params.addBodyParameter("reqJson",jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -520,7 +520,7 @@ public class TireChangeActivity extends RyBaseActivity {
         if (currentRearCount ==0 && currentFontCount == 0){
             Toast.makeText(TireChangeActivity.this, "请选择轮胎数量", Toast.LENGTH_SHORT).show();
         }
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         int userId = user.getId();
         int userCarId = user.getCarId();
         JSONObject jsonObject = new JSONObject();
@@ -551,7 +551,7 @@ public class TireChangeActivity extends RyBaseActivity {
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserFreeChangeOrder");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString() );
         params.addBodyParameter("reqJson",jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -597,7 +597,7 @@ public class TireChangeActivity extends RyBaseActivity {
      */
     private void postChangeOrder() {
         if (currentChangeType == 0){//首次更换
-            User user = new DbConfig().getUser();
+            User user = new DbConfig(this).getUser();
             int userId = user.getId();
             int userCarId = user.getCarId();
             JSONObject jsonObject = new JSONObject();
@@ -614,7 +614,7 @@ public class TireChangeActivity extends RyBaseActivity {
             RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addFirstChangeShoeOrder");
             Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString() );
             params.addBodyParameter("reqJson",jsonObject.toString());
-            String token = new DbConfig().getToken();
+            String token = new DbConfig(this).getToken();
             params.addParameter("token",token);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override

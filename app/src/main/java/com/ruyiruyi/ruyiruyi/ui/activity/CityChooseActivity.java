@@ -120,7 +120,7 @@ public class CityChooseActivity extends RyBaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         Location location1 = new Location(1, currentCity, jingdu, weidu);
-                        DbManager db = new DbConfig().getDbManager();
+                        DbManager db = new DbConfig(getApplicationContext()).getDbManager();
                         try {
                             db.saveOrUpdate(location1);
                         } catch (DbException e) {
@@ -150,7 +150,7 @@ public class CityChooseActivity extends RyBaseActivity {
             public void onItemClick(View v, int originalPosition, int currentPosition, UserEntity entity) {
                 if (originalPosition >= 0) {
                     Location location1 = new Location(1, entity.getNick(),jingdu, weidu);
-                    DbManager db = new DbConfig().getDbManager();
+                    DbManager db = new DbConfig(getApplicationContext()).getDbManager();
                     try {
                         db.saveOrUpdate(location1);
                     } catch (DbException e) {
@@ -246,7 +246,7 @@ public class CityChooseActivity extends RyBaseActivity {
     }
 
     private List<UserEntity> initDatas() {
-        DbManager db = new DbConfig().getDbManager();
+        DbManager db = new DbConfig(this).getDbManager();
         List<Province> provinceList = new ArrayList<>();
         try {
             provinceList  = db.selector(Province.class)

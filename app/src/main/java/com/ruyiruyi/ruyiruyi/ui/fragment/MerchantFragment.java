@@ -131,7 +131,7 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
         isCleanData = true;
 
         //获取位置
-        Location location = new DbConfig().getLocation();
+        Location location = new DbConfig(getContext()).getLocation();
         if (location!=null){
             currentCity = location.getCity();
             jingdu = location.getJingdu();
@@ -184,7 +184,7 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "selectStoreByCondition");
         Log.e(TAG, "initDataFromService:---------- " + jsonObject.toString() );
         params.addBodyParameter("reqJson",jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(getContext()).getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -312,11 +312,11 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
             fragmentTitle.setText("轮胎服务");
             shaixuan.add("轮胎服务");
         }else if (shopType ==2 ){
-            fragmentTitle.setText("美容清洗");
-            shaixuan.add("美容清洗");
-        }else if (shopType ==3 ){
             fragmentTitle.setText("汽车保养");
             shaixuan.add("汽车保养");
+        }else if (shopType ==3 ){
+            fragmentTitle.setText("美容清洗");
+            shaixuan.add("美容清洗");
         }
 
         cityLayout.setVisibility(shopType==0?View.VISIBLE:View.GONE);

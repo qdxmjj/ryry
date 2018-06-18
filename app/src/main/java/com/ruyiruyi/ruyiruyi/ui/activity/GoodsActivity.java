@@ -108,7 +108,7 @@ public class GoodsActivity extends RyBaseActivity implements GoodsVerticalViewBi
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getStockByCondition");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

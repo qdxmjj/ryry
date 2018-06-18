@@ -1,6 +1,7 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -94,6 +95,8 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
     private NewRatingBar ratingBar;
     private String orderNo;
     private String storeId;
+    private ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +127,7 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
         orderNo = intent.getStringExtra(PaymentActivity.ORDERNO);
         storeId = intent.getStringExtra(PaymentActivity.STOREID);
 
+        progressDialog = new ProgressDialog(this);
         //配置点击查看大图
         initImageLoader();
         initView();
@@ -149,7 +153,7 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
 
         evaluateEditText = (CustomEditText) findViewById(R.id.evaluate_edittext);
         evaluateEditText.clearFocus();
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         headimgurl = user.getHeadimgurl();
         glideRequest = Glide.with(this);
         glideRequest.load(headimgurl).transform(new GlideCircleTransform(this)).into(userImage);
@@ -168,6 +172,7 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
      * 提交评价
      */
     private void postEvaluate() {
+        showDialogProgress(progressDialog,"评价提交中...");
         Log.e(TAG, "postEvaluate: -*-" + list.size());
         for (int i = 0; i < list.size(); i++) {
             try {
@@ -197,7 +202,7 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
 
 
 
-        final int userId = new DbConfig().getId();
+        final int userId = new DbConfig(this).getId();
         float starStep = ratingBar.starStep;
         String content = evaluateEditText.getText().toString();
         Log.e(TAG, "postEvaluate: " + starStep);
@@ -238,7 +243,7 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
                     .getExternalStorageDirectory().getAbsolutePath(), "evaluateFive");
             params.addBodyParameter("img5" ,new File(evaluateFive) );
         }
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -274,7 +279,7 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(progressDialog);
             }
         });
 

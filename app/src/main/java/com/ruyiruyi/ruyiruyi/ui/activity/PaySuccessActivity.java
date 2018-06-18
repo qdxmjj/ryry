@@ -19,6 +19,7 @@ public class PaySuccessActivity extends RyBaseActivity {
     private int ordertype;
     private TextView goSeeView;
     private TextView goMainView;
+    private int orderStage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class PaySuccessActivity extends RyBaseActivity {
         });
         intent = getIntent();
         ordertype = intent.getIntExtra("ORDERTYPE",0);  //0轮胎订单  1商品订单;
-
+        orderStage = intent.getIntExtra(PaymentActivity.ORDER_STAGE,0);
 
 
         initView();
@@ -57,7 +58,12 @@ public class PaySuccessActivity extends RyBaseActivity {
         }else if (ordertype == 99){
             goSeeView.setText("查看畅行无忧");
         }else if (ordertype == 3){
-            goSeeView.setText("去服务");
+            if (orderStage == 4){
+                goSeeView.setText("查看订单");
+            }else {
+                goSeeView.setText("去服务");
+            }
+
         }
 
         RxViewAction.clickNoDouble(goSeeView)

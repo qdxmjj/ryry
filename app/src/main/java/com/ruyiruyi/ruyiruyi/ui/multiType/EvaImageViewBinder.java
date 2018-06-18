@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.ui.activity.EvaluateActivity;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -43,7 +44,11 @@ public class EvaImageViewBinder extends ItemViewProvider<EvaImage, EvaImageViewB
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final EvaImage evaImage) {
         Log.e(TAG, "onBindViewHolder: "+evaImage.getImageUrl());
 
-        Glide.with(context).load(evaImage.getImageUrl()).into(holder.evaluateImageView);
+        Glide.with(context).load(evaImage.getImageUrl())
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.evaluateImageView);
+
 
 
         RxViewAction.clickNoDouble(holder.evaluateImageView)

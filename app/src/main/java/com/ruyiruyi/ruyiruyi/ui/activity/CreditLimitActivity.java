@@ -74,13 +74,13 @@ public class CreditLimitActivity extends RyBaseActivity {
 
         JSONObject object = new JSONObject();
         try {
-            object.put("userId", new DbConfig().getId());
+            object.put("userId", new DbConfig(this).getId());
 
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCarInfo/queryCarCreditInfo");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(this).getToken());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

@@ -3,6 +3,7 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -99,6 +100,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
     private FormatDateUtil formatUtil;
     private String TAG = UserInfoActivity.class.getSimpleName();
     private String path_;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +123,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
         date = new StringBuffer();
         formatUtil = new FormatDateUtil();
 
+        progressDialog = new ProgressDialog(this);
         initView();
         initData();
         initDateTime();
@@ -131,7 +134,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
 
     private void initData() {
         //get
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         headimgurl = user.getHeadimgurl();
         nick = user.getNick();
         gender = user.getGender(); //1 男 2 女
@@ -473,9 +476,10 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final JSONObject object = new JSONObject();
+                showDialogProgress(progressDialog,"正在提交用户信息...");
                 try {
-                    object.put("userId", new DbConfig().getId());
-                    object.put("id", new DbConfig().getId());
+                    object.put("userId", new DbConfig(getApplicationContext()).getId());
+                    object.put("id", new DbConfig(getApplicationContext()).getId());
                     object.put("phone", phone);
                     object.put("remark", remark);
                     object.put("age", 0);//age 已去除  传0
@@ -489,7 +493,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
                 }
                 RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "updateUser");
                 params.addBodyParameter("reqJson", object.toString());
-                params.addBodyParameter("token", new DbConfig().getToken());
+                params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                 if (isNewPic) {
                     params.addBodyParameter("user_head_img", new File(img_Path));
                 }
@@ -505,7 +509,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
                             int status = objects.getInt("status");
                             if (status == 1) {
                                 Log.e(TAG, "onSuccess: msg1 = " + msg);
-                                User user = new DbConfig().getUser();
+                                User user = new DbConfig(getApplicationContext()).getUser();
                                 user.setNick(nick);
                                 user.setGender(gender);
                                 user.setHeadimgurl(headimgurl);
@@ -553,7 +557,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
     }
 
     private void saveUserToDb(User user) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
         DbManager db = x.getDb(daoConfig);
         List<User> data = new ArrayList<>();

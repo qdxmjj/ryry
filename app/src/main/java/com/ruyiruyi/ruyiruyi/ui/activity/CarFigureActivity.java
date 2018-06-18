@@ -78,7 +78,7 @@ public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInt
 
     private void getDataFromService() {
         tireFigureList.clear();
-        int uesrId = new DbConfig().getId();
+        int uesrId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("shoeSize", tiresize);
@@ -88,7 +88,7 @@ public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInt
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getShoeBySize");
         params.addBodyParameter("reqJson", jsonObject.toString());
         Log.e(TAG, "getDataFromService:---- " + jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

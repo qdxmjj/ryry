@@ -119,7 +119,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
      * 取消轮胎订单
      */
     private void cancleTireOrder() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "initOrderFromService:--- " + orderType);
         try {
@@ -130,7 +130,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "cancelShoeCxwyOrder");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -172,7 +172,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
      * 取消商品订单
      */
     private void cancleOrder() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "initOrderFromService:--- " + orderType);
         try {
@@ -183,7 +183,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "cancelStockOrder");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -222,7 +222,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
     }
 
     private void initOrderFromService() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "initOrderFromService:--- " + orderType);
         try {
@@ -234,7 +234,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserOrderInfoByNoAndType");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

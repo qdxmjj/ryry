@@ -85,7 +85,7 @@ public class GoodsClassFragment extends RyBaseFragment implements LeftViewBinder
     private void initClassData() {
        /* User user = new DbConfig().getUser();
         int userId = user.getId();*/
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(getContext()).getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId",userId);
@@ -95,7 +95,7 @@ public class GoodsClassFragment extends RyBaseFragment implements LeftViewBinder
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "serviceInfo/showServicesList");
         params.addBodyParameter("reqJson",jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(getContext()).getToken();
         params.addParameter("token",token);
         Log.e(TAG, "initClassData: " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {

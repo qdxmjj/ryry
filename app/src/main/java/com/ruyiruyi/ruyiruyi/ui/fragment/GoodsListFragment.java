@@ -93,7 +93,7 @@ public class GoodsListFragment extends RyBaseFragment implements GoodsItemViewBi
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getStoreAddedServices");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(getContext()).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

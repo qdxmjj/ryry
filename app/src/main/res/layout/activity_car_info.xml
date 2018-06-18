@@ -335,6 +335,7 @@
                         </FrameLayout>
 
                         <FrameLayout
+                            android:id="@+id/fu_ye_layout"
                             android:layout_width="150dp"
                             android:layout_height="100dp"
                             android:background="@color/c2"
@@ -391,6 +392,7 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:gravity="center_vertical"
+                    android:visibility="gone"
                     android:paddingTop="13dp"
                     android:paddingBottom="13dp">
                     <ImageView
@@ -399,6 +401,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_check"/>
                     <TextView
+                        android:id="@+id/has_lichengbiao_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="里程表损坏  (以下信息可以不填写)"
@@ -442,6 +445,7 @@
                     </FrameLayout>
 
                     <LinearLayout
+                        android:id="@+id/lichengbiao_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"

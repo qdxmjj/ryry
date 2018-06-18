@@ -74,7 +74,7 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
     }
 
     private void initDataFromService() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId", userId);
@@ -83,7 +83,7 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUnusedShoeOrder");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

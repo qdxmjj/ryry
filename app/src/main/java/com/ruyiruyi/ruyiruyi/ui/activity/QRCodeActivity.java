@@ -92,7 +92,7 @@ public class QRCodeActivity extends RyBaseActivity {
 
       /* 设置数据 */
         bottom_txt.setText(content);
-        user = new DbConfig().getUser();
+        user = new DbConfig(this).getUser();
         headimgurl = user.getHeadimgurl();
         if (headimgurl == null || headimgurl.length() == 0) {//headimgurl（userImg）判空
             headimgurl = "http://180.76.243.205:8383/images/userHeadimgurl/default/383614945.jpg";

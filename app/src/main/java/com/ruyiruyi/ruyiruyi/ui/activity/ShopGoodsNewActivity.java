@@ -159,7 +159,7 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
         progressDialog = new ProgressDialog(this);
 
         //获取位置
-        Location location = new DbConfig().getLocation();
+        Location location = new DbConfig(this).getLocation();
         if (location != null) {
             currentCity = location.getCity();
             jingdu = location.getJingdu();
@@ -212,7 +212,7 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
         initBigClassView();
         showDialogProgress(progressDialog,"加载中...");
         initClassDataFromService();
-        initGoodsDataFromService();
+
 
     }
 
@@ -226,7 +226,7 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getStoreInfoByStoreId");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -294,7 +294,7 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "stockInfo/queryStockListByStore");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -324,6 +324,7 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                         Log.e(TAG, "onSuccess: ----------------------");
 
                         initClassData();
+                        //initGoodsData();
 
                     }
                 } catch (JSONException e) {
@@ -344,10 +345,11 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
 
             @Override
             public void onFinished() {
-                goodsLoadIsTrue = true;
+                hideDialogProgress(progressDialog);
+               /* goodsLoadIsTrue = true;
                 if (classLoadIsTrue){
                     hideDialogProgress(progressDialog);
-                }
+                }*/
             }
         });
     }
@@ -360,7 +362,7 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getStoreAddedServices");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -372,84 +374,118 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
-                        JSONArray mrqxObject = data.getJSONArray("美容清洗");
-                        JSONArray qcbyObject = data.getJSONArray("汽车保养");
-                        JSONArray azgzObject = data.getJSONArray("安装改装");
-                        JSONArray ltfwObject = data.getJSONArray("轮胎服务");
+                        JSONArray mrqxObject = null;
+                        JSONArray qcbyObject = null;
+
+                        JSONArray azgzObject = null;
+                        JSONArray ltfwObject = null;
+                        try {
+                            mrqxObject = data.getJSONArray("美容清洗");
+                        }catch (Exception e){
+
+                        }
+                        try {
+                            qcbyObject = data.getJSONArray("汽车保养");
+                        }catch (Exception e){
+
+                        }
+                        try {
+                            azgzObject = data.getJSONArray("安装改装");
+                        }catch (Exception e){
+
+                        }
+                        try {
+                            ltfwObject = data.getJSONArray("轮胎服务");
+                        }catch (Exception e){
+
+                        }
+
+
                         //美容清洗的 class
-                        for (int i = 0; i < mrqxObject.length(); i++) {
-                            JSONObject objectJSONObject = mrqxObject.getJSONObject(i);
-                            String serviceId = objectJSONObject.getString("serviceId");
-                            int serviceIdInt = Integer.parseInt(serviceId);
-                            String serviceName = objectJSONObject.getString("serviceName");
-                            String serviceTypeId = objectJSONObject.getString("serviceTypeId");
-                            String serviceTypeName = objectJSONObject.getString("serviceTypeName");
-                            Left left = null;
-                            if (i == 0){
-                                left = new Left(serviceName, true);
-                                left.setClassId(serviceId);
-                            }else {
-                                left = new Left(serviceName, false);
-                                left.setClassId(serviceId);
-                            }
-                            mrqxClassList.add(left);
-                        }
-                        //汽车保养的 class
-                        for (int i = 0; i < qcbyObject.length(); i++) {
-                            JSONObject objectJSONObject = qcbyObject.getJSONObject(i);
-                            String serviceId = objectJSONObject.getString("serviceId");
-                            int serviceIdInt = Integer.parseInt(serviceId);
-                            String serviceName = objectJSONObject.getString("serviceName");
-                            String serviceTypeId = objectJSONObject.getString("serviceTypeId");
-                            String serviceTypeName = objectJSONObject.getString("serviceTypeName");
-                            Left left = null;
-                            if (i == 0){
-                                if (fromType==0){
-                                    currentClassId = serviceIdInt;
+                        if (mrqxObject!=null){
+                            for (int i = 0; i < mrqxObject.length(); i++) {
+                                JSONObject objectJSONObject = mrqxObject.getJSONObject(i);
+                                String serviceId = objectJSONObject.getString("serviceId");
+                                int serviceIdInt = Integer.parseInt(serviceId);
+                                String serviceName = objectJSONObject.getString("serviceName");
+                                String serviceTypeId = objectJSONObject.getString("serviceTypeId");
+                                String serviceTypeName = objectJSONObject.getString("serviceTypeName");
+                                Left left = null;
+                                if (i == 0){
+                                    left = new Left(serviceName, true);
+                                    left.setClassId(serviceId);
+                                }else {
+                                    left = new Left(serviceName, false);
+                                    left.setClassId(serviceId);
                                 }
-                                left = new Left(serviceName, true);
-                                left.setClassId(serviceId);
-                            }else {
-                                left = new Left(serviceName, false);
-                                left.setClassId(serviceId);
+                                mrqxClassList.add(left);
                             }
-                            qcbyClassList.add(left);
                         }
-                        //安装改装的 class
-                        for (int i = 0; i < azgzObject.length(); i++) {
-                            JSONObject objectJSONObject = azgzObject.getJSONObject(i);
-                            String serviceId = objectJSONObject.getString("serviceId");
-                            int serviceIdInt = Integer.parseInt(serviceId);
-                            String serviceName = objectJSONObject.getString("serviceName");
-                            String serviceTypeId = objectJSONObject.getString("serviceTypeId");
-                            String serviceTypeName = objectJSONObject.getString("serviceTypeName");
-                            Left left = null;
-                            if (i == 0){
-                                left = new Left(serviceName, true);
-                                left.setClassId(serviceId);
-                            }else {
-                                left = new Left(serviceName, false);
-                                left.setClassId(serviceId);
+                       if (qcbyObject != null){
+                           //汽车保养的 class
+                           for (int i = 0; i < qcbyObject.length(); i++) {
+                               JSONObject objectJSONObject = qcbyObject.getJSONObject(i);
+                               String serviceId = objectJSONObject.getString("serviceId");
+                               int serviceIdInt = Integer.parseInt(serviceId);
+                               String serviceName = objectJSONObject.getString("serviceName");
+                               String serviceTypeId = objectJSONObject.getString("serviceTypeId");
+                               String serviceTypeName = objectJSONObject.getString("serviceTypeName");
+                               Left left = null;
+                               if (i == 0){
+                                   if (fromType==0){
+                                       currentClassId = serviceIdInt;
+                                   }
+                                   left = new Left(serviceName, true);
+                                   left.setClassId(serviceId);
+                               }else {
+                                   left = new Left(serviceName, false);
+                                   left.setClassId(serviceId);
+                               }
+                               qcbyClassList.add(left);
+                           }
+                       }
+
+                        if (azgzObject !=null){
+                            //安装改装的 class
+                            for (int i = 0; i < azgzObject.length(); i++) {
+                                JSONObject objectJSONObject = azgzObject.getJSONObject(i);
+                                String serviceId = objectJSONObject.getString("serviceId");
+                                int serviceIdInt = Integer.parseInt(serviceId);
+                                String serviceName = objectJSONObject.getString("serviceName");
+                                String serviceTypeId = objectJSONObject.getString("serviceTypeId");
+                                String serviceTypeName = objectJSONObject.getString("serviceTypeName");
+                                Left left = null;
+                                if (i == 0){
+                                    left = new Left(serviceName, true);
+                                    left.setClassId(serviceId);
+                                }else {
+                                    left = new Left(serviceName, false);
+                                    left.setClassId(serviceId);
+                                }
+                                azgzClassList.add(left);
                             }
-                            azgzClassList.add(left);
                         }
-                        //轮胎服务的 class
-                        for (int i = 0; i < ltfwObject.length(); i++) {
-                            JSONObject objectJSONObject = ltfwObject.getJSONObject(i);
-                            String serviceId = objectJSONObject.getString("serviceId");
-                            String serviceName = objectJSONObject.getString("serviceName");
-                            String serviceTypeId = objectJSONObject.getString("serviceTypeId");
-                            String serviceTypeName = objectJSONObject.getString("serviceTypeName");
-                            Left left = null;
-                            if (i == 0){
-                                left = new Left(serviceName, true);
-                                left.setClassId(serviceId);
-                            }else {
-                                left = new Left(serviceName, false);
-                                left.setClassId(serviceId);
+
+                        if (ltfwObject !=null){
+                            //轮胎服务的 class
+                            for (int i = 0; i < ltfwObject.length(); i++) {
+                                JSONObject objectJSONObject = ltfwObject.getJSONObject(i);
+                                String serviceId = objectJSONObject.getString("serviceId");
+                                String serviceName = objectJSONObject.getString("serviceName");
+                                String serviceTypeId = objectJSONObject.getString("serviceTypeId");
+                                String serviceTypeName = objectJSONObject.getString("serviceTypeName");
+                                Left left = null;
+                                if (i == 0){
+                                    left = new Left(serviceName, true);
+                                    left.setClassId(serviceId);
+                                }else {
+                                    left = new Left(serviceName, false);
+                                    left.setClassId(serviceId);
+                                }
+                                ltfwClassList.add(left);
                             }
-                            ltfwClassList.add(left);
                         }
+
                         Log.e(TAG, "onSuccess: ++++++++++++++++++++");
 
 
@@ -488,8 +524,8 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                                 }
                             }
                         }
-
-                        initClassData();
+                        initGoodsDataFromService();
+                       // initClassData();
                     }
                 } catch (JSONException e) {
 
@@ -508,10 +544,11 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
 
             @Override
             public void onFinished() {
-                classLoadIsTrue = true;
+                hideDialogProgress(progressDialog);
+               /* classLoadIsTrue = true;
                 if (goodsLoadIsTrue){
                     hideDialogProgress(progressDialog);
-                }
+                }*/
             }
         });
     }
@@ -553,6 +590,9 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
             }
         }
         if (goodsItems.size() == 0){
+            goodsItems.add(new EmptyBig());
+        }
+        if (classItems.size() == 0){
             goodsItems.add(new EmptyBig());
         }
 
@@ -714,11 +754,16 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                     @Override
                     public void call(Void aVoid) {
                         currentBigType = 2;
-                        for (int i = 0; i < qcbyClassList.size(); i++) {
-                            if (qcbyClassList.get(i).isCheck) {
-                                currentClassId = Integer.parseInt(qcbyClassList.get(i).getClassId());
+                        if (qcbyClassList.size() > 0){
+                            for (int i = 0; i < qcbyClassList.size(); i++) {
+                                if (qcbyClassList.get(i).isCheck) {
+                                    currentClassId = Integer.parseInt(qcbyClassList.get(i).getClassId());
+                                }
                             }
+                        }else {
+                            currentClassId = 0;
                         }
+
                         initBigClassView();
                         initClassData();
 
@@ -730,11 +775,16 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                     @Override
                     public void call(Void aVoid) {
                         currentBigType = 3;
-                        for (int i = 0; i < mrqxClassList.size(); i++) {
-                            if (mrqxClassList.get(i).isCheck) {
-                                currentClassId = Integer.parseInt(mrqxClassList.get(i).getClassId());
+                        if (mrqxClassList.size() > 0){
+                            for (int i = 0; i < mrqxClassList.size(); i++) {
+                                if (mrqxClassList.get(i).isCheck) {
+                                    currentClassId = Integer.parseInt(mrqxClassList.get(i).getClassId());
+                                }
                             }
+                        }else {
+                            currentClassId = 0;
                         }
+
                         initBigClassView();
                         initClassData();
                     }
@@ -744,11 +794,16 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                     @Override
                     public void call(Void aVoid) {
                         currentBigType = 4;
-                        for (int i = 0; i < azgzClassList.size(); i++) {
-                            if (azgzClassList.get(i).isCheck) {
-                                currentClassId = Integer.parseInt(azgzClassList.get(i).getClassId());
+                        if (azgzClassList.size() > 0){
+                            for (int i = 0; i < azgzClassList.size(); i++) {
+                                if (azgzClassList.get(i).isCheck) {
+                                    currentClassId = Integer.parseInt(azgzClassList.get(i).getClassId());
+                                }
                             }
+                        }else {
+                            currentClassId = 0;
                         }
+
                         initBigClassView();
                         initClassData();
                     }
@@ -758,11 +813,16 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                     @Override
                     public void call(Void aVoid) {
                         currentBigType = 5;
-                        for (int i = 0; i < ltfwClassList.size(); i++) {
-                            if (ltfwClassList.get(i).isCheck) {
-                                currentClassId = Integer.parseInt(ltfwClassList.get(i).getClassId());
+                        if (ltfwClassList.size() > 0){
+                            for (int i = 0; i < ltfwClassList.size(); i++) {
+                                if (ltfwClassList.get(i).isCheck) {
+                                    currentClassId = Integer.parseInt(ltfwClassList.get(i).getClassId());
+                                }
                             }
+                        }else {
+                            currentClassId = 0 ;
                         }
+
                         initBigClassView();
                         initClassData();
                     }

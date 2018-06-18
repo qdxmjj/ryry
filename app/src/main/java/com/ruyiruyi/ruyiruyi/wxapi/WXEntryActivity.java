@@ -338,7 +338,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
             user.setStatus(data.getString("status"));
             user.setFirstAddCar(data.getInt("firstAddCar"));
             user.setIsLogin("1");
-            DbConfig dbConfig = new DbConfig();
+            DbConfig dbConfig = new DbConfig(this);
             DbManager db = dbConfig.getDbManager();
             db.saveOrUpdate(user);
         } catch (JSONException e) {

@@ -101,7 +101,7 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
     }
 
     private void initDataFromService() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
 
@@ -110,7 +110,7 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "preferentialInfo/selectsUserCoupons");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

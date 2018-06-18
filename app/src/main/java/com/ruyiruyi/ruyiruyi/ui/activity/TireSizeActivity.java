@@ -175,7 +175,7 @@ public class TireSizeActivity extends RyBaseActivity {
 
     private void getWidth() {
         //从数据库中获取轮胎型号
-        DbManager db = new DbConfig().getDbManager();
+        DbManager db = new DbConfig(this).getDbManager();
         List<TireType> tireType = new ArrayList<>();
         try {
             tireType  = db.selector(TireType.class)
@@ -214,7 +214,7 @@ public class TireSizeActivity extends RyBaseActivity {
     }
 
     private void getDiameter() {
-        DbManager db = new DbConfig().getDbManager();
+        DbManager db = new DbConfig(this).getDbManager();
         List<TireType> tireType = new ArrayList<>();
         try {
             tireType  = db.selector(TireType.class)
@@ -255,7 +255,7 @@ public class TireSizeActivity extends RyBaseActivity {
 
     private void getRatio() {
         //从数据库中获取轮胎型号
-        DbManager db = new DbConfig().getDbManager();
+        DbManager db = new DbConfig(this).getDbManager();
         List<TireType> tireType = new ArrayList<>();
         try {
             tireType  = db.selector(TireType.class)

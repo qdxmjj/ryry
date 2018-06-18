@@ -1,6 +1,7 @@
 package com.ruyiruyi.ruyiruyi.ui.fragment;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -76,6 +77,8 @@ public class MyFragment extends RyBaseFragment {
     private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
     private LinearLayout ll_promotion;
     private LinearLayout couponLayout;
+    private ImageView noLoginImage;
+    private ImageView messageView;
 
     @Nullable
     @Override
@@ -131,7 +134,7 @@ public class MyFragment extends RyBaseFragment {
     }
 
     private void initDataFromDb() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(getContext());
         User user = dbConfig.getUser();
         String headimgurl = user.getHeadimgurl();
         String userName = user.getNick();
@@ -163,6 +166,18 @@ public class MyFragment extends RyBaseFragment {
         cxwyLayout = (LinearLayout) getView().findViewById(R.id.cxwy_layout);
         ll_promotion = (LinearLayout) getView().findViewById(R.id.ll_promotion);
         couponLayout = (LinearLayout) getView().findViewById(R.id.coupon_layout);
+        noLoginImage = (ImageView) getView().findViewById(R.id.no_login_image);
+        Glide.with(getContext()).load(R.drawable.ic_launcher).into(noLoginImage);
+        messageView = (ImageView) getView().findViewById(R.id.message_view);
+
+        //消息列表显示
+        RxViewAction.clickNoDouble(messageView)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        
+                    }
+                });
 
         //优惠券
         RxViewAction.clickNoDouble(couponLayout)
@@ -173,7 +188,7 @@ public class MyFragment extends RyBaseFragment {
                         if (!judgeIsLogin()) {
                             return;
                         }
-                        User user = new DbConfig().getUser();
+                        User user = new DbConfig(getContext()).getUser();
                         int carId = user.getCarId();
                         Intent intent = new Intent(getContext(), CouponActivity.class);
                         intent.putExtra(CouponActivity.FROM_TYPE,0);
@@ -319,7 +334,7 @@ public class MyFragment extends RyBaseFragment {
                 });
 
 
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(getContext());
         isLogin = dbConfig.getIsLogin();
         userInfoLayout.setVisibility(isLogin ? View.VISIBLE : View.GONE);
         noLoginLayout.setVisibility(isLogin ? View.GONE : View.VISIBLE);
@@ -379,7 +394,7 @@ public class MyFragment extends RyBaseFragment {
                         if (!judgeIsLogin()) {
                             return;
                         }
-                        int userId = new DbConfig().getId();
+                        int userId = new DbConfig(getContext()).getId();
                         Intent intent = new Intent(getContext(), ShopEvaluateActivity.class);
                         intent.putExtra("USERID", userId);
                         intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE, 1);

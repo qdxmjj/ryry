@@ -119,7 +119,7 @@ public class ShopChooseCell extends LinearLayout{
         if (shopDistence == null || shopDistence.equals("")){
             distenceView.setText("");
         }else {
-            distenceView.setText(shopDistence + "km");
+            distenceView.setText(shopDistence + "m");
         }
 
 

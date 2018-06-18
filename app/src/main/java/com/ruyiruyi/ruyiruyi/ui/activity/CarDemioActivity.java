@@ -61,7 +61,7 @@ public class CarDemioActivity extends RyBaseActivity implements CarVersionViewBi
     }
 
     private void initData() {
-        DbManager db = new DbConfig().getDbManager();
+        DbManager db = new DbConfig(this).getDbManager();
         List<CarFactoryM> carFactoryData = new ArrayList<>();
         List<CarVersion> carVersionData = new ArrayList<>();
         try {

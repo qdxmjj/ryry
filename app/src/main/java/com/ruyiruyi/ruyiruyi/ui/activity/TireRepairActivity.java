@@ -43,6 +43,9 @@ public class TireRepairActivity extends RyBaseActivity {
 
     private Shop shop;
     private TextView tireRepairButton;
+    private TextView userNameText;
+    private TextView userPhoneText;
+    private TextView carNumberText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +64,15 @@ public class TireRepairActivity extends RyBaseActivity {
             }
         });
 
-        initData();
+
         initView();
+        initData();
         initShop();
 
     }
 
     private void initShop() {
-        Location location = new DbConfig().getLocation();
+        Location location = new DbConfig(this).getLocation();
         String city = location.getCity();
         Double jingdu = location.getJingdu();
         Double weidu = location.getWeidu();
@@ -91,7 +95,7 @@ public class TireRepairActivity extends RyBaseActivity {
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "selectStoreByCondition");
         Log.e(TAG, "initDataFromService:---------- " + jsonObject.toString() );
         params.addBodyParameter("reqJson",jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -157,11 +161,57 @@ public class TireRepairActivity extends RyBaseActivity {
     }
 
     private void initData() {
-        typeList = new ArrayList<>();
-        typeList.add(new StoreType(1,"快修店"));
-        typeList.add(new StoreType(2,"4s"));
-        typeList.add(new StoreType(3,"轮胎"));
-        typeList.add(new StoreType(4,"轮胎"));
+        User user = new DbConfig(this).getUser();
+        int carId = user.getCarId();
+        int userId = user.getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", userId);
+            jsonObject.put("userCarId", carId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarByUserIdAndCarId");
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            private String carNumber;
+
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        carNumber = data.getString("platNumber");
+                        carNumberText.setText(carNumber);
+
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
 
     }
 
@@ -169,6 +219,10 @@ public class TireRepairActivity extends RyBaseActivity {
         mInflater = LayoutInflater.from(this);
         shopChooseView = (ShopChooseCell) findViewById(R.id.shop_choose_cell);
         tireRepairButton = (TextView) findViewById(R.id.tire_repair_button);
+        userNameText = (TextView) findViewById(R.id.user_name_text);
+        userPhoneText = (TextView) findViewById(R.id.user_phone_text);
+        carNumberText = (TextView) findViewById(R.id.car_number_text);
+
 
         RxViewAction.clickNoDouble(tireRepairButton)
                 .subscribe(new Action1<Void>() {
@@ -190,11 +244,15 @@ public class TireRepairActivity extends RyBaseActivity {
 
        /* shopChooseView.setValue("青岛汽车总店","http://180.76.243.205:8111/images/flgure/970FB91D-D680-437D-606D-0AFAEC4E5F10.jpg",
                 "青岛市城阳区天安数码城","15km",typeList,mInflater);*/
-
+        User user = new DbConfig(this).getUser();
+        String userNick = user.getNick();
+        String userPhone = user.getPhone();
+        userNameText.setText(userNick);
+        userPhoneText.setText(userPhone);
     }
 
     private void postRepairOrder() {
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         int userId = user.getId();
         int carId = user.getCarId();
         JSONObject jsonObject = new JSONObject();
@@ -207,7 +265,7 @@ public class TireRepairActivity extends RyBaseActivity {
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addShoeRepairOrder");
         Log.e(TAG, "initDataFromService:---------- " + jsonObject.toString() );
         params.addBodyParameter("reqJson",jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

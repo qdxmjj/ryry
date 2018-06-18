@@ -148,7 +148,7 @@ public class OrderAffirmActivity extends RyBaseActivity {
     }
 
     private void postOrder() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("shoeId", shoeid);
@@ -168,7 +168,7 @@ public class OrderAffirmActivity extends RyBaseActivity {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserShoeOrder");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

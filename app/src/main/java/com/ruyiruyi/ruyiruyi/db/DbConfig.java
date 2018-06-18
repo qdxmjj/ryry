@@ -1,5 +1,6 @@
 package com.ruyiruyi.ruyiruyi.db;
 
+        import android.content.Context;
         import android.os.Environment;
 
         import com.ruyiruyi.ruyiruyi.db.model.Location;
@@ -16,12 +17,17 @@ package com.ruyiruyi.ruyiruyi.db;
         import java.util.List;
 
 public class DbConfig {
+    public Context context;
+
+    public DbConfig(Context context) {
+        this.context = context;
+    }
 
     public DbManager.DaoConfig getDaoConfig() {
         DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
                 .setDbName("ruyiruyi.db")
                 .setAllowTransaction(true)
-                .setDbDir(Environment.getExternalStorageDirectory())
+                .setDbDir(context.getFilesDir())
                 .setDbVersion(10);
         return daoConfig;
     }
