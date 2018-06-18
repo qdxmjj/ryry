@@ -54,6 +54,9 @@ public class StartAppActivity extends BaseActivity {
                 case 1:
                     goMain();
                     break;
+                case 2:
+                    finish();
+                    break;
 
             }
 
@@ -161,23 +164,27 @@ public class StartAppActivity extends BaseActivity {
                     JSONArray data = jsonObject.getJSONArray("data");
                     Log.e(TAG, "onSuccess: getData and To Db ??  status = " + status + "msg = " + msg + "data = " + data.toString());
 
-                    //下载并存储完毕
+                    //下载完毕
                     Message message = new Message();
                     message.what = 1;
+                    saveProvinceToDb(data);//异步存储同时继续向下执行
                     handler.sendMessageDelayed(message, 2000);
-                    saveProvinceToDb(data);
                 } catch (JSONException e) {
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Log.e(TAG, "onError: getData and To Db ?? ");
+                //下载失败
+                Message message = new Message();
+                message.what = 2;
+                Toast.makeText(StartAppActivity.this, "网络异常,请检查网络!", Toast.LENGTH_SHORT).show();
+                handler.sendMessageDelayed(message, 2000);
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
-                Log.e(TAG, "onCancelled: getData and To Db ??");
+
             }
 
             @Override

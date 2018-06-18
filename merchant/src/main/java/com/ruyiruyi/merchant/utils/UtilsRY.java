@@ -17,6 +17,17 @@ import java.text.SimpleDateFormat;
 
 public class UtilsRY {
 
+    public static String delZero(String number) {
+        while (number.length() != 1) {
+            if (number.substring(0, 1).equals("0")) {
+                number = number.substring(1, number.length());
+            } else {
+                return number;
+            }
+        }
+        return number;
+    }
+
     public static boolean isMobile(String number) {
         String num = "[1][34578]\\d{9}";
         if (TextUtils.isEmpty(number)) {

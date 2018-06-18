@@ -176,9 +176,9 @@ public class MyFragment extends RyBaseFragment {
                         User user = new DbConfig().getUser();
                         int carId = user.getCarId();
                         Intent intent = new Intent(getContext(), CouponActivity.class);
-                        intent.putExtra(CouponActivity.FROM_TYPE,0);
-                        intent.putExtra(CouponActivity.CAR_ID,carId);
-                        intent.putExtra(CouponActivity.CHOOSE_TYPE,0);
+                        intent.putExtra(CouponActivity.FROM_TYPE, 0);
+                        intent.putExtra(CouponActivity.CAR_ID, carId);
+                        intent.putExtra(CouponActivity.CHOOSE_TYPE, 0);
                         startActivity(intent);
                     }
                 });
@@ -216,7 +216,8 @@ public class MyFragment extends RyBaseFragment {
                         if (!judgeIsLogin()) {
                             return;
                         }
-                        startActivity(new Intent(getContext(), MyLimitActivity.class));
+                        Intent intent = new Intent(getContext(), MyLimitActivity.class);
+                        startActivity(intent);
                     }
                 });
         //信用额度

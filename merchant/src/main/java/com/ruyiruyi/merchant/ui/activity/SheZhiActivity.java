@@ -27,7 +27,7 @@ public class SheZhiActivity extends BaseActivity {
 
     private ActionBar mActionBar;
     private RelativeLayout rl_change_pw;
-    private RelativeLayout rl_exit;
+    private TextView tv_exit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class SheZhiActivity extends BaseActivity {
 
 
         rl_change_pw = findViewById(R.id.rl_change_pw);
-        rl_exit = findViewById(R.id.rl_exit);
+        tv_exit = findViewById(R.id.tv_exit);
         RxViewAction.clickNoDouble(rl_change_pw).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -57,7 +57,7 @@ public class SheZhiActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        RxViewAction.clickNoDouble(rl_exit).subscribe(new Action1<Void>() {
+        RxViewAction.clickNoDouble(tv_exit).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 showExitDialog("确定退出当前账号吗？");

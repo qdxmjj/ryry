@@ -24,7 +24,7 @@ import rx.functions.Action1;
 public class SettingActivity extends RyBaseActivity {
     private ActionBar actionBar;
     private FrameLayout fl_change_pw;
-    private FrameLayout fl_change_phone;
+    //    private FrameLayout fl_change_phone;
     private FrameLayout fl_talk;
     private FrameLayout fl_understand_us;
     private TextView tv_exit;
@@ -62,7 +62,7 @@ public class SettingActivity extends RyBaseActivity {
                 startActivity(new Intent(getApplicationContext(), ChangePwActivity.class));
             }
         });
-        //修改手机号
+/*        //修改手机号 (暂删)
         RxViewAction.clickNoDouble(fl_change_phone).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -72,7 +72,7 @@ public class SettingActivity extends RyBaseActivity {
                 }
 
             }
-        });
+        });*/
         //联系客服
         RxViewAction.clickNoDouble(fl_talk).subscribe(new Action1<Void>() {
             @Override
@@ -81,7 +81,7 @@ public class SettingActivity extends RyBaseActivity {
                 if (!judgeIsLogin()) {
                     return;
                 }
-                startActivity(new Intent(getApplicationContext(),ContactServiceActivity.class));
+                startActivity(new Intent(getApplicationContext(), ContactServiceActivity.class));
 
             }
         });
@@ -89,7 +89,7 @@ public class SettingActivity extends RyBaseActivity {
         RxViewAction.clickNoDouble(fl_understand_us).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                startActivity(new Intent(getApplicationContext(),UnderstandUsActivity.class));
+                startActivity(new Intent(getApplicationContext(), UnderstandUsActivity.class));
             }
         });
         //退出登录
@@ -140,7 +140,7 @@ public class SettingActivity extends RyBaseActivity {
 
     private void initView() {
         fl_change_pw = findViewById(R.id.fl_change_pw);
-        fl_change_phone = findViewById(R.id.fl_change_phone);
+//        fl_change_phone = findViewById(R.id.fl_change_phone);
         fl_talk = findViewById(R.id.fl_talk);
         fl_understand_us = findViewById(R.id.fl_understand_us);
         tv_exit = findViewById(R.id.tv_exit);

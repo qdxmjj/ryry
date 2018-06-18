@@ -165,6 +165,7 @@ public class MyOrderFragment extends BaseFragment {
                         bean.setImgUrl(orders.getString("orderImage"));
                         bean.setTitle(orders.getString("orderName"));
                         bean.setBianhao(orders.getString("orderNo"));
+                        bean.setOrderStage(orders.getString("orderStage"));
                         bean.setPrice(orders.getString("orderPrice"));
                         bean.setStatus(orders.getString("orderState"));
                         bean.setOrderTime(orders.getLong("orderTime"));

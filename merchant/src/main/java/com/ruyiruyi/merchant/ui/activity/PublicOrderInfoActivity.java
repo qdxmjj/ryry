@@ -702,7 +702,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 //提交监听
                 bindButtonFreeChange();
             }
-            if (orderState.equals("3")) {//待商家确认服务(在DingdanItemViewProvider中  只有orderStage！=1 为补差时进入此页面)
+            if (orderState.equals("3")) {//待商家确认服务(在DingdanItemViewProvider中  只有orderStage！=2 为补差时进入此页面)
                 stateButton.setText("待车主支付差价");
             }
             if (orderState.equals("4")) {
