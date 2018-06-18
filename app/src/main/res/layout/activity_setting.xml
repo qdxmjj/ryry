@@ -25,7 +25,7 @@
             <FrameLayout
                 android:id="@+id/fl_change_pw"
                 android:layout_width="match_parent"
-                android:layout_height="45dp">
+                android:layout_height="50dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -66,7 +66,8 @@
             <FrameLayout
                 android:id="@+id/fl_change_phone"
                 android:layout_width="match_parent"
-                android:layout_height="45dp">
+                android:layout_height="50dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -98,17 +99,18 @@
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginRight="22dp"
                     android:src="@drawable/ic_right_car" />
-            </FrameLayout>
+            </FrameLayout><!--暂删-->
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/c1" />
+                android:background="@color/c1"
+                android:visibility="gone" /><!--暂删-->
 
             <FrameLayout
                 android:id="@+id/fl_talk"
                 android:layout_width="match_parent"
-                android:layout_height="45dp">
+                android:layout_height="50dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -120,7 +122,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_question" />
+                        android:src="@drawable/ic_lianxi" />
 
                     <TextView
                         android:id="@+id/talk"
@@ -150,7 +152,7 @@
             <FrameLayout
                 android:id="@+id/fl_understand_us"
                 android:layout_width="match_parent"
-                android:layout_height="45dp">
+                android:layout_height="50dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"

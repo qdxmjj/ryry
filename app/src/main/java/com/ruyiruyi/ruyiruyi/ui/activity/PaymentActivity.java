@@ -220,11 +220,11 @@ public class PaymentActivity extends RyBaseActivity {
                             }
                             if (orderType == 0) {        //轮胎订单
                                 Toast.makeText(PaymentActivity.this, "不支持信用值支付，请选择其他支付方式", Toast.LENGTH_SHORT).show();
-                              //  postTireOrder();
+                                //  postTireOrder();
                             } else if (orderType == 1) {  //商品订单
                                 postGoodsOrder();
-                            }else if (orderType == 99){  //畅行无忧
-                              //  postTireOrder();
+                            } else if (orderType == 99) {  //畅行无忧
+                                //  postTireOrder();
                                 Toast.makeText(PaymentActivity.this, "不支持信用值支付，请选择其他支付方式", Toast.LENGTH_SHORT).show();
                             }
 
@@ -299,6 +299,7 @@ public class PaymentActivity extends RyBaseActivity {
                     JSONObject data = new JSONObject(result);
                     PayReq req = new PayReq();
                     req.appId = data.getString("appid");
+                    ;
                     req.partnerId = data.getString("partnerid");
                     req.prepayId = data.getString("prepayid");
                     req.nonceStr = data.getString("noncestr");
@@ -644,7 +645,7 @@ public class PaymentActivity extends RyBaseActivity {
         }
         Log.e(TAG, "getSign: " + orderno);
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAliPaySign");
-        String token = new DbConfig(this).getToken();
+        String token = new DbConfig().getToken();
         String jsonByToken = "";
         try {
             jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(), token);

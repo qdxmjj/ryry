@@ -14,7 +14,7 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/myservice_tab"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_below="@+id/myservice_acbar" />
 
     <View
@@ -34,11 +34,11 @@
     <TextView
         android:id="@+id/tv_myservice_save"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="3dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:layout_marginTop="3dp"
         android:background="@drawable/login_code_button"
         android:gravity="center"

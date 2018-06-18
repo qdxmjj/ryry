@@ -105,6 +105,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private CheckBox ckbox_sl;
     private CheckBox ckbox_bsl;
     private TextView tv_save;
+    private TextView tv_xieyi;
     private WheelView whv_sheng, whv_shi, whv_xian;
     private WheelView whv_category;
     private WheelView whv_lTime, whv_rTime;
@@ -425,6 +426,12 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     }
 
     private void bindView() {
+        RxViewAction.clickNoDouble(tv_xieyi).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                startActivity(new Intent(getApplicationContext(), UserAgreementActivity.class));
+            }
+        });
         RxViewAction.clickNoDouble(tv_getCode)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -462,7 +469,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         object.put("code", code);
                     } catch (JSONException e) {
                     }
-                    RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "verificationCode");
+                    RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeVerificationCode");
                     params.addBodyParameter("reqJson", object.toString());
                     Log.e(TAG, "afterTextChanged:---------------------------- " + params.toString());
                     x.http().post(params, new Callback.CommonCallback<String>() {
@@ -482,6 +489,10 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                                     Message message = Message.obtain();
                                     message.what = 0;
                                     mHandler.sendMessage(message);
+                                } else if (status.equals("111111")) {
+                                    showDialog("该手机号已注册!");
+                                } else {
+                                    Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                             }
@@ -1268,6 +1279,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         ckbox_bsl.setOnCheckedChangeListener(listener);
         checkbox_xieyi.setOnCheckedChangeListener(listener);
         tv_save = (TextView) findViewById(R.id.tv_save);
+        tv_xieyi = (TextView) findViewById(R.id.tv_xieyi);
         mTimeCount = new TimeCount(60000, 1000);
 
         RxViewAction.clickNoDouble(tv_save).subscribe(new Action1<Void>() {

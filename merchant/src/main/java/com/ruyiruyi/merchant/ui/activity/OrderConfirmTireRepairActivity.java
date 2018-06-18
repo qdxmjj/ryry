@@ -535,7 +535,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
             public void call(Void aVoid) {
                 Intent intent = new Intent(getApplicationContext(), PhotoSampleActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("type", "change");
+                bundle.putString("type", "xiubu");
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

@@ -3,186 +3,290 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context="com.ruyiruyi.ruyiruyi.ui.activity.MyLimitActivity">
 
     <com.ruyiruyi.rylibrary.cell.ActionBar
         android:id="@+id/my_action"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="60dp"
-            >
+            android:layout_marginBottom="60dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/ic_ground">
+                    android:background="@drawable/ic_ground"
+                    android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="可用额度"
-                        android:textSize="20sp"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="30dp"
-                        android:layout_marginLeft="30dp"
-                        android:textColor="#ffffff"/>
+                        android:text="信用额度"
+                        android:textColor="#ffffff"
+                        android:textSize="20sp" />
+
                     <TextView
+                        android:id="@+id/top_xyed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#ffffff"
-                        android:textSize="50sp"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
-                        android:layout_marginLeft="30dp"
-                        android:text="30,000"/>
+                        android:text="30,000"
+                        android:textColor="#ffffff"
+                        android:textSize="50sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:background="@color/background_coloe"
                     android:orientation="horizontal">
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:background="#ffffff"
                         android:layout_marginRight="1dp"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:background="#ffffff"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="信用额度"
-                            android:textSize="16sp"/>
+                            android:text="应还金额"
+                            android:textSize="16sp" />
+
                         <TextView
+                            android:id="@+id/left_yhed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
                             android:text="1000"
-                            android:textSize="15sp"
-                            android:layout_marginTop="5dp"/>
+                            android:textSize="15sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
+                        android:layout_weight="1"
                         android:background="#ffffff"
-                        android:layout_weight="1">
+                        android:gravity="center"
+                        android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="剩余信用额度"
-                            android:textSize="16sp"/>
+                            android:textSize="16sp" />
+
                         <TextView
-                            android:id="@+id/credit_limit_my_text"
+                            android:id="@+id/right_syed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
                             android:text="1000"
-                            android:textSize="15sp"
-                            android:layout_marginTop="5dp"/>
+                            android:textSize="15sp" />
                     </LinearLayout>
                 </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/c2"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="充值金额"
-                    android:textSize="17sp"
-                    android:textColor="@color/c6"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"/>
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/money_grid_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="10dp"/>
 
-                <EditText
-                    android:id="@+id/other_money_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="请输入充值金额"
-                    android:padding="10dp"
-                    android:background="@drawable/money_bg"
-                    />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:background="@color/c2"
-                    android:layout_marginTop="10dp"/>
+                    android:background="@color/c2" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="充值方式"
-                    android:textSize="17sp"
-                    android:textColor="@color/c6"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="20dp"
+                    android:text="还款"
+                    android:textColor="@color/c7"
+                    android:textSize="17sp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/et_money"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@drawable/edit_background_noline_white"
+                        android:inputType="number"
+                        android:maxLength="9"
+                        android:text="500.00"
+                        android:textColor="@color/c7"
+                        android:textCursorDrawable="@drawable/edit_cursor_color"
+                        android:textSize="36sp" />
+
+                    <ImageView
+                        android:id="@+id/img_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="100dp"
+                        android:layout_marginTop="20dp"
+                        android:padding="5dp"
+                        android:src="@drawable/icon_delete" />
+
+                    <TextView
+                        android:id="@+id/tv_change"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="20dp"
+                        android:text="修改金额"
+                        android:textColor="@color/theme_primary"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="60dp"
+                        android:background="@color/c1" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="70dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="最多还款"
+                            android:textColor="@color/c6"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_maxmoney"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="500"
+                            android:textColor="@color/c6"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="元"
+                            android:textColor="@color/c6"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </FrameLayout>
+                <!--   <android.support.v7.widget.RecyclerView
+                       android:id="@+id/money_grid_list"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_marginLeft="15dp"
+                       android:layout_marginRight="15dp"
+                       android:layout_marginTop="10dp"/>
+
+                   <EditText
+                       android:id="@+id/other_money_edit"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_marginLeft="20dp"
+                       android:layout_marginRight="20dp"
+                       android:layout_marginTop="10dp"
+                       android:hint="请输入充值金额"
+                       android:padding="10dp"
+                       android:background="@drawable/money_bg"
+                       />-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/c2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="支付方式"
+                    android:textColor="@color/c6"
+                    android:textSize="17sp" />
+
                 <FrameLayout
                     android:id="@+id/weixin_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_wechat"
-                        android:layout_marginLeft="30dp"/>
+                        android:layout_marginLeft="30dp"
+                        android:src="@drawable/ic_wechat" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="微信支付"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="90dp"
-                        android:textSize="18sp"/>
+                        android:text="微信支付"
+                        android:textSize="18sp" />
+
                     <ImageView
                         android:id="@+id/weixin_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_check"
                         android:layout_gravity="right|center_vertical"
-                        android:layout_marginRight="30dp"/>
+                        android:layout_marginRight="30dp"
+                        android:src="@drawable/ic_check" />
                 </FrameLayout>
+
                 <FrameLayout
                     android:id="@+id/zhifubao_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_pay"
-                        android:layout_marginLeft="30dp"/>
+                        android:layout_marginLeft="30dp"
+                        android:src="@drawable/ic_pay" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="微信支付"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="90dp"
-                        android:textSize="18sp"/>
+                        android:text="微信支付"
+                        android:textSize="18sp" />
+
                     <ImageView
                         android:id="@+id/zhifubao_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_check_no"
                         android:layout_gravity="right|center_vertical"
-                        android:layout_marginRight="30dp"/>
+                        android:layout_marginRight="30dp"
+                        android:src="@drawable/ic_check_no" />
                 </FrameLayout>
             </LinearLayout>
         </ScrollView>
@@ -191,17 +295,17 @@
             android:id="@+id/save_car"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="立即充值"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
             android:layout_gravity="bottom"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_button"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bg_button"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="立即还款"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
     </FrameLayout>
 
 

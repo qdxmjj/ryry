@@ -9,10 +9,19 @@ public class OrderItemBean {
     private String imgUrl;
     private String title;
     private String bianhao;
+    private String orderStage;
     private String price;
     private String status;
     private long orderTime;
     private String orderType;
+
+    public void setOrderStage(String orderStage) {
+        this.orderStage = orderStage;
+    }
+
+    public String getOrderStage() {
+        return orderStage;
+    }
 
     public void setOrderTime(long orderTime) {
         this.orderTime = orderTime;
