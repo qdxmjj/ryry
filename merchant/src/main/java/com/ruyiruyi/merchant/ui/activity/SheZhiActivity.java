@@ -97,7 +97,11 @@ public class SheZhiActivity extends BaseActivity {
                     }
                     Intent intent = new Intent(SheZhiActivity.this, LoginActivity.class);
                     startActivity(intent);
-                    SheZhiActivity.this.finish();
+                    //发送广播退出所有
+                    Intent intent2 = new Intent("qd.xmjj.baseActivity");
+                    intent2.putExtra("closeAll", 1);
+                    sendBroadcast(intent2);//发送广播*/
+
                 }
             }
         });

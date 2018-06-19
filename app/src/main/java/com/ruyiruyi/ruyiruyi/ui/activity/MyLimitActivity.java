@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
+import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
@@ -98,8 +99,13 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
             if (TextUtils.equals(resultStatus, "9000")) {
                 // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                 Toast.makeText(MyLimitActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-                //支付成功 刷新页面数据
-                initData();
+                /*//支付成功 刷新页面数据
+                initData();*/
+                //支付成功 跳转主页面
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("", "");
+                startActivity(intent);
+
 
             } else {
                 // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
