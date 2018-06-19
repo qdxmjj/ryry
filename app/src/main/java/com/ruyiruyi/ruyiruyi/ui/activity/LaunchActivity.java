@@ -51,6 +51,7 @@ public class LaunchActivity extends RyBaseActivity {
     private double jingdu = 0.00;
     private double weidu = 0.00;
     private LocationService locationService;
+    public boolean isHasPermission = true;
 
     private Handler handler = new Handler() {
         @Override
@@ -63,6 +64,9 @@ public class LaunchActivity extends RyBaseActivity {
 
     private void goMain() {
 
+
+        //判断权限
+      //  judgePower();
 
         initCarDataIntoDb();
         //获取车辆图标数据
@@ -78,10 +82,43 @@ public class LaunchActivity extends RyBaseActivity {
         initDingwei();
         //获取车辆品牌数据
         Log.e(TAG, "goMain: --+--+-" + currentCity);
-        Intent intent = new Intent(this, MainActivity.class);
 
+
+        Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+
+    private void judgePower() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            isHasPermission = false;
+            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            isHasPermission = false;
+            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            isHasPermission = false;
+            Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
+            finish();    finish();
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            isHasPermission = false;
+            Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     private void initDingwei() {
@@ -99,7 +136,8 @@ public class LaunchActivity extends RyBaseActivity {
         setContentView(R.layout.activity_launch);
         //权限获取
         requestPower();
-        handler.sendEmptyMessageDelayed(0, 3000);
+      //  handler.sendEmptyMessageDelayed(0, 3000);
+
         //  handler.sendEmptyMessageDelayed(0,3000);
 
        /* initView();
@@ -126,7 +164,7 @@ public class LaunchActivity extends RyBaseActivity {
 
 
     private void initCarDataIntoDb() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<CarFactory> carList = null;
         try {
@@ -204,7 +242,7 @@ public class LaunchActivity extends RyBaseActivity {
      * @param factoryList
      */
     private void savaCarFactoryIntoDb(List<CarFactory> factoryList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(factoryList);
@@ -214,7 +252,7 @@ public class LaunchActivity extends RyBaseActivity {
     }
 
     private void initCarBrand() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<CarBrand> carBrandList = null;
         try {
@@ -293,7 +331,7 @@ public class LaunchActivity extends RyBaseActivity {
     }
 
     private void saveCarBrandIntoDb(List<CarBrand> brandList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(brandList);
@@ -303,7 +341,7 @@ public class LaunchActivity extends RyBaseActivity {
     }
 
     private void initCarVerhicle() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<CarVerhicle> carVerhicleList = null;
         try {
@@ -380,7 +418,7 @@ public class LaunchActivity extends RyBaseActivity {
     }
 
     private void savaCarVerhicleIntoDb(List<CarVerhicle> verhiclesList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(verhiclesList);
@@ -390,7 +428,7 @@ public class LaunchActivity extends RyBaseActivity {
     }
 
     private void initCarrTireInfo() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<CarTireInfo> carTireInfoList = null;
         try {
@@ -473,7 +511,7 @@ public class LaunchActivity extends RyBaseActivity {
     }
 
     private void savaCarTireIntoDb(List<CarTireInfo> carTireInfoArrayList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(carTireInfoArrayList);
@@ -483,7 +521,7 @@ public class LaunchActivity extends RyBaseActivity {
     }
 
     private void initTireType() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<TireType> tireTypeList = null;
         try {
@@ -561,7 +599,7 @@ public class LaunchActivity extends RyBaseActivity {
     }
 
     private void saveTireTypeIntoDb(List<TireType> tireTypeArrayList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(tireTypeArrayList);
@@ -571,7 +609,7 @@ public class LaunchActivity extends RyBaseActivity {
     }
 
     private void initProvice() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         List<Province> provinceList = null;
         try {
@@ -664,7 +702,7 @@ public class LaunchActivity extends RyBaseActivity {
                 jingdu = location.getLongitude();
                 weidu = location.getLatitude();
                 Location location1 = new Location(1, currentCity, jingdu, weidu);
-                DbManager db = new DbConfig().getDbManager();
+                DbManager db = new DbConfig(getApplicationContext()).getDbManager();
                 try {
                     db.saveOrUpdate(location1);
                 } catch (DbException e) {
@@ -677,7 +715,7 @@ public class LaunchActivity extends RyBaseActivity {
 
 
     private void saveProvinceIntoDb(List<Province> provinceArrayList) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(provinceArrayList);
@@ -691,10 +729,27 @@ public class LaunchActivity extends RyBaseActivity {
         //判断是否已经赋予权限
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED ) {
             //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true。
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {//这里可以写个对话框之类的项向用户解释为什么要申请权限，并在对话框的确认键后续再次申请权限
+                    Manifest.permission.CAMERA)) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.CAMERA,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        }, 1);
+                Toast.makeText(LaunchActivity.this, "1111", Toast.LENGTH_SHORT).show();
+                //这里可以写个对话框之类的项向用户解释为什么要申请权限，并在对话框的确认键后续再次申请权限
             } else {
                 //申请权限，字符串数组内是一个或多个要申请的权限，1是申请权限结果的返回参数，在onRequestPermissionsResult可以得知申请结果
                 ActivityCompat.requestPermissions(this,
@@ -704,7 +759,43 @@ public class LaunchActivity extends RyBaseActivity {
                                 Manifest.permission.ACCESS_FINE_LOCATION
                         }, 1);
             }
+        }else {
+            handler.sendEmptyMessageDelayed(0, 2000);
         }
+
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+       /* Log.e(TAG, "onRequestPermissionsResult:requestCode --" + requestCode);
+
+        Log.e(TAG, "onRequestPermissionsResult: permissions--" + permissions.toString());
+        Log.e(TAG, "onRequestPermissionsResult:  permissions.length--" +  permissions.length);
+        Log.e(TAG, "onRequestPermissionsResult: grantResults--" + grantResults.toString());
+        Log.e(TAG, "onRequestPermissionsResult: grantResults.length--" + grantResults.length);
+*/
+        for (int i = 0; i < permissions.length; i++) {
+
+            Log.e(TAG, "onRequestPermissionsResult: permissions------" +  permissions[i]);
+        }
+
+
+        if (requestCode == 1){
+
+            boolean isPremission = true;
+            for (int i = 0; i < grantResults.length; i++) {
+                Log.e(TAG, "onRequestPermissionsResult: permissions++++++" +  grantResults[i]);
+                if (grantResults[i] == -1){
+                    isPremission = false;
+                }
+              //  Log.e(TAG, "onRequestPermissionsResult: permissions++++++" +  grantResults[i]);
+            }
+
+            if (isPremission){          //有权限
+                handler.sendEmptyMessageDelayed(0, 2000);
+            }else {
+                judgePower();
+            }
+        }
+    }
 }

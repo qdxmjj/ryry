@@ -37,7 +37,7 @@
                 android:textColor="@color/c7"
                 android:textSize="17sp"
                 android:layout_marginTop="10dp"
-                android:text="免费更换标准"/>
+                android:text="免费修补标准"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="轮胎购买年限满五年"
+                    android:text="胎面破损直径小于6MM"
                     android:layout_marginLeft="10dp"
                     android:textSize="15sp"/>
             </LinearLayout>
@@ -70,7 +70,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="轮胎花纹磨损到达更换程度"
+                    android:text="该条轮胎修补小于3处"
                     android:layout_marginLeft="10dp"
                     android:textSize="15sp"/>
             </LinearLayout>

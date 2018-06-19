@@ -87,7 +87,7 @@ public class CxwyActivity extends RyBaseActivity {
     }
 
     private void initDataFromService() {
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         int userId = user.getId();
         int carId = user.getCarId();
         JSONObject jsonObject = new JSONObject();
@@ -98,7 +98,7 @@ public class CxwyActivity extends RyBaseActivity {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCarInfo/queryCarCxwyInfo");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         Log.e(TAG, "initDataFromService: " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {

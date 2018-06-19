@@ -163,14 +163,14 @@ public class ChangePwActivity extends RyBaseActivity {
                 try {
                     object.put("oldPassword", passWord_yuan_);
                     object.put("newPassword", passWord_xin_a_);
-                    User user = new DbConfig().getUser();
+                    User user = new DbConfig(getApplicationContext()).getUser();
                     object.put("phone", user.getPhone());
 
                 } catch (JSONException e) {
                 }
                 RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "changeStorePwdByOldPwd");
                 params.addBodyParameter("reqJson", object.toString());
-                params.addBodyParameter("token", new DbConfig().getToken());
+                params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                 params.setConnectTimeout(6000);
                 Log.e(TAG, "onClick: params.toString() " + params.toString());
                 x.http().post(params, new Callback.CommonCallback<String>() {
@@ -185,9 +185,9 @@ public class ChangePwActivity extends RyBaseActivity {
                             Toast.makeText(ChangePwActivity.this, msg, Toast.LENGTH_SHORT).show();
                             if (status == 1) {
                                 //退出登录更改本地用户信息并跳转登录界面
-                                User user = new DbConfig().getUser();
+                                User user = new DbConfig(getApplicationContext()).getUser();
                                 user.setIsLogin("0");
-                                DbManager dbManager = new DbConfig().getDbManager();
+                                DbManager dbManager = new DbConfig(getApplicationContext()).getDbManager();
                                 try {
                                     dbManager.saveOrUpdate(user);
                                 } catch (DbException e) {

@@ -4,10 +4,14 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,6 +84,7 @@ public class LoginActivity extends RyBaseActivity {
     private String headUrl;
     private String nickName;
     private String openId;
+    private TextView agreementText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +112,23 @@ public class LoginActivity extends RyBaseActivity {
         getCodeButton = (TextView) findViewById(R.id.get_code_button);
         forgetPassword = (TextView) findViewById(R.id.forget_password);
         weixinLoginLayout = (LinearLayout) findViewById(R.id.weixin_login_layout);
+        agreementText = (TextView) findViewById(R.id.agreement_view_text);
+
+
+        SpannableString msp = new SpannableString("未注册如驿如意账号的手机号，登录时将自动完成注册，且代表您已阅读并同意《如驿如意用户协议》");
+        msp.setSpan(new ForegroundColorSpan(Color.BLUE), 35,45, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);  //设置前景色为洋红色
+        agreementText.setText(msp);
+
+
+        RxViewAction.clickNoDouble(agreementText)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(getApplicationContext(), AgreementActivity.class);
+                        intent.putExtra("AGREEMENTTYPE",1);
+                        startActivity(intent);
+                    }
+                });
 
         mTime = new TimeCount(60000,1000);
 
@@ -299,7 +321,7 @@ public class LoginActivity extends RyBaseActivity {
             user.setStatus(data.getString("status"));
             user.setFirstAddCar(data.getInt("firstAddCar"));
             user.setIsLogin("1");
-            DbConfig dbConfig = new DbConfig();
+            DbConfig dbConfig = new DbConfig(this);
             DbManager db = dbConfig.getDbManager();
             db.saveOrUpdate(user);
         } catch (JSONException e) {
@@ -314,7 +336,7 @@ public class LoginActivity extends RyBaseActivity {
      * 保存用户到数据库
      */
     private void savaUserDb(String phone ,String token) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
         DbManager db = x.getDb(daoConfig);
         List<User> data = new ArrayList<>();
@@ -526,7 +548,7 @@ public class LoginActivity extends RyBaseActivity {
 
 
     private void initDataFromDb() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
 
         DbManager db = x.getDb(daoConfig);

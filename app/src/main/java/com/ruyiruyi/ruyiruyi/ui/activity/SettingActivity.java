@@ -120,7 +120,7 @@ public class SettingActivity extends RyBaseActivity {
         dialog.setPositiveButton("是的", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                DbConfig dbConfig = new DbConfig();
+                DbConfig dbConfig = new DbConfig(getApplicationContext());
                 if (dbConfig.getIsLogin()) {
                     User user = dbConfig.getUser();
                     user.setIsLogin("0");

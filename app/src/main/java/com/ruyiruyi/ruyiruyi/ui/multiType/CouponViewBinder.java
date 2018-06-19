@@ -54,13 +54,19 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
                     holder.couponColorLayout.setBackgroundResource(R.drawable.ic_red);
                 }else if (coupon.couponViewTypeId == 7){    //10元现金券
                     holder.couponColorLayout.setBackgroundResource(R.drawable.ic_yellow);
+                }else {
+                    holder.couponColorLayout.setBackgroundResource(R.drawable.ic_blue);
                 }
             }else {
                 Log.e(TAG, "onBindViewHolder: -++++++++-" );
                 holder.couponColorLayout.setBackgroundResource(R.drawable.ic_huise);
             }
-        }else  if (coupon.getCouponStates() == 3){  //已过期
+        }/*else  if (coupon.getCouponStates() == 3){  //已过期
             holder.couponTypeView.setText("已过期");
+            Log.e(TAG, "onBindViewHolder: -++-----++-" );
+            holder.couponColorLayout.setBackgroundResource(R.drawable.ic_huise);
+        }*/else {
+            holder.couponTypeView.setText("已过期");  //coupon.getCouponStates() == 3){  //已过期`
             Log.e(TAG, "onBindViewHolder: -++-----++-" );
             holder.couponColorLayout.setBackgroundResource(R.drawable.ic_huise);
         }
@@ -69,6 +75,8 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
             holder.couponCarText.setVisibility(View.VISIBLE);
             holder.couponCarText.setText("仅限" + coupon.getCarNumber() + "车辆使用");
         }else if (coupon.getCouponType() == 2){ //现金券
+            holder.couponCarText.setVisibility(View.GONE);
+        }else {
             holder.couponCarText.setVisibility(View.GONE);
         }
 

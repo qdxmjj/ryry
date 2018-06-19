@@ -93,7 +93,7 @@ public class CarBrandActivity extends RyBaseActivity {
             UserEntity contactEntity = new UserEntity(contactStrings.get(i), mobileStrings.get(i));
             list.add(contactEntity);
         }*/
-        DbManager db = new DbConfig().getDbManager();
+        DbManager db = new DbConfig(this).getDbManager();
         try {
             List<CarBrand> brandList = db.selector(CarBrand.class).findAll();
             for (int i = 0; i < brandList.size(); i++) {

@@ -47,7 +47,7 @@ public class RyBaseFragmentActivity extends BaseFragmentActivity {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 //登录失效 更新本地User信息
-                DbConfig dbConfig = new DbConfig();
+                DbConfig dbConfig = new DbConfig(getApplicationContext());
                 User user = dbConfig.getUser();
                 user.setIsLogin("0");
                 DbManager db = dbConfig.getDbManager();
@@ -77,7 +77,7 @@ public class RyBaseFragmentActivity extends BaseFragmentActivity {
     *
     * */
     public boolean judgeIsLogin() {
-        if (!new DbConfig().getIsLogin()) {
+        if (!new DbConfig(getApplicationContext()).getIsLogin()) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
             TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
@@ -100,6 +100,6 @@ public class RyBaseFragmentActivity extends BaseFragmentActivity {
             });
             dialog.show();
         }
-        return new DbConfig().getIsLogin();
+        return new DbConfig(getApplicationContext()).getIsLogin();
     }
 }

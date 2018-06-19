@@ -21,6 +21,7 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.PayResult;
+import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.XMJJUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -83,6 +84,7 @@ public class PaymentActivity extends RyBaseActivity {
                 //支付成功 跳转到待更换轮胎界面
                 Intent intent1 = new Intent(getApplicationContext(), PaySuccessActivity.class);
                 intent1.putExtra("ORDERTYPE", orderType);
+                intent1.putExtra(ORDER_STAGE, orderStage);
                 startActivity(intent1);
 
             } else {
@@ -92,6 +94,7 @@ public class PaymentActivity extends RyBaseActivity {
             // Toast.makeText(PaymentActivity.this, payResult.getResult(), Toast.LENGTH_LONG).show();
         }
 
+        ;
     };
 
     /**
@@ -106,7 +109,7 @@ public class PaymentActivity extends RyBaseActivity {
     private ProgressDialog progressDialog;
 
     //微信
-    private static final String APP_ID = "wxfff9348898072d7c";
+    private static final String APP_ID = "wx407c59de8b10c601";
     private static final int THUMB_SIZE = 150;
     private IWXAPI api;
     private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
@@ -119,11 +122,9 @@ public class PaymentActivity extends RyBaseActivity {
     private ImageView weixinImage;
     private ImageView zhifubaoImage;
     public double lineCredit = 1000.00;
+    private TextView otherPayLayout;
+    private int orderStage;
 
-    private void regToWx() {
-        api = WXAPIFactory.createWXAPI(this, APP_ID, true);
-        api.registerApp(APP_ID);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,12 +143,25 @@ public class PaymentActivity extends RyBaseActivity {
                 }
             }
         });
-        regToWx();
+        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
+        api.registerApp(Constants.APP_ID);
         progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
         allprice = intent.getDoubleExtra(ALL_PRICE, 0.00);
+        Log.e(TAG, "onCreate: +---" + allprice);
         orderno = intent.getStringExtra(ORDERNO);
         orderType = intent.getIntExtra(ORDER_TYPE, 0);
+        if (orderType == 3){
+            orderStage = intent.getIntExtra(ORDER_STAGE,0);
+        }
+
+        if (orderType == 1){
+            currentType = 0;
+        }else {
+            currentType = 1;
+        }
+
+
         initView();
         getDataFromService();
     }
@@ -166,6 +180,7 @@ public class PaymentActivity extends RyBaseActivity {
         yuEImage = (ImageView) findViewById(R.id.yu_e_image);
         weixinImage = (ImageView) findViewById(R.id.weixin_image);
         zhifubaoImage = (ImageView) findViewById(R.id.zhifubao_image);
+        otherPayLayout = (TextView) findViewById(R.id.other_pay_layout);
         initZhifuLayout();
 
         RxViewAction.clickNoDouble(yuELayout)
@@ -273,7 +288,7 @@ public class PaymentActivity extends RyBaseActivity {
     }
 
     private void weixinPay() {
-        JSONObject jsonObject = new JSONObject();
+      /*  JSONObject jsonObject = new JSONObject();
         RequestParams params = new RequestParams("http://wxpay.wxutil.com/pub_v2/app/app_pay.php");
 
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -312,7 +327,104 @@ public class PaymentActivity extends RyBaseActivity {
             public void onFinished() {
 
             }
+        });*/
+
+
+        int userId = new DbConfig(this).getId();
+        JSONObject jsonObject = new JSONObject();
+        Log.e(TAG, "getSign: orderno-" + orderno);
+        try {
+            jsonObject.put("orderNo", orderno);
+            if (orderType == 99){
+                jsonObject.put("orderType", 0);
+            }else {
+                jsonObject.put("orderType", orderType);
+            }
+
+            if (orderType == 0) {    //轮胎订单
+                jsonObject.put("orderName", "轮胎购买");
+            }else if (orderType == 99){
+                jsonObject.put("orderName", "畅行无忧购买");
+            }else if (orderType == 3){
+                if (orderStage == 4){
+                    jsonObject.put("orderName", "轮胎补差");
+                }else {
+                    jsonObject.put("orderName", "补邮费");
+                }
+
+            }else {     //商品订单
+                jsonObject.put("orderName", "商品购买");
+            }
+            jsonObject.put("orderPrice", "0.1");
+            jsonObject.put("userId", userId);
+        } catch (JSONException e) {
+        }
+        Log.e(TAG, "getSign: " + orderno);
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getWeixinPaySign");
+        String token = new DbConfig(this).getToken();
+        String jsonByToken = "";
+        try {
+            jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(), token);
+
+
+        } catch (UnsupportedEncodingException e) {
+
+        } catch (IllegalBlockSizeException e) {
+
+        } catch (InvalidKeyException e) {
+
+        } catch (BadPaddingException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        } catch (NoSuchPaddingException e) {
+
+        }
+        String s2 = jsonByToken.replaceAll("\\n", "");
+        params.addBodyParameter("reqJson", s2);
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: --------" + result);
+                try {
+                    JSONObject jsonObject1 = new JSONObject(result);;
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("200")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        PayReq req = new PayReq();
+                        req.appId = data.getString("appid");
+                        req.partnerId = data.getString("partnerid");
+                        req.prepayId = data.getString("prepayid");
+                        req.nonceStr = data.getString("noncestr");
+                        req.timeStamp = data.getString("timestamp");
+                        req.packageValue = data.getString("package");
+                        req.sign = data.getString("sign");
+                        api.sendReq(req);
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
         });
+
 
     }
 
@@ -320,7 +432,7 @@ public class PaymentActivity extends RyBaseActivity {
      * 提交商品订单
      */
     private void postGoodsOrder() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("orderNo", orderno);
@@ -329,7 +441,7 @@ public class PaymentActivity extends RyBaseActivity {
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addConfirmStockOrder");
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         String jsonByToken = "";
         try {
             jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(), token);
@@ -398,7 +510,7 @@ public class PaymentActivity extends RyBaseActivity {
      * 提交轮胎订单
      */
     private void postTireOrder() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("orderNo", orderno);
@@ -407,7 +519,7 @@ public class PaymentActivity extends RyBaseActivity {
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addConfirmUserShoeCxwyOrder");
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         String jsonByToken = "";
         try {
             jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(), token);
@@ -479,6 +591,13 @@ public class PaymentActivity extends RyBaseActivity {
 
 
     private void initZhifuLayout() {
+        if (orderType == 1){
+            yuELayout.setVisibility(View.VISIBLE);
+            otherPayLayout.setVisibility(View.VISIBLE);
+        }else {
+            yuELayout.setVisibility(View.GONE);
+            otherPayLayout.setVisibility(View.GONE);
+        }
         if (currentType == 0) {  //余额
             yuEImage.setImageResource(R.drawable.ic_yes);
             weixinImage.setImageResource(R.drawable.ic_no);
@@ -495,24 +614,29 @@ public class PaymentActivity extends RyBaseActivity {
     }
 
     private void getSign() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "getSign: orderno-" + orderno);
         try {
             jsonObject.put("orderNo", orderno);
-            if (orderType == 99) {
+            if (orderType == 99){
                 jsonObject.put("orderType", 0);
-            } else {
+            }else {
                 jsonObject.put("orderType", orderType);
             }
 
             if (orderType == 0) {    //轮胎订单
                 jsonObject.put("orderName", "轮胎购买");
-            } else if (orderType == 99) {
+            }else if (orderType == 99){
                 jsonObject.put("orderName", "畅行无忧购买");
-            } else if (orderType == 3) {
-                jsonObject.put("orderName", "轮胎补差");
-            } else {     //商品订单
+            }else if (orderType == 3){
+                if (orderStage == 4){
+                    jsonObject.put("orderName", "轮胎补差");
+                }else {
+                    jsonObject.put("orderName", "补邮费");
+                }
+
+            }else {     //商品订单
                 jsonObject.put("orderName", "商品购买");
             }
             jsonObject.put("orderPrice", 0.01);
@@ -600,10 +724,10 @@ public class PaymentActivity extends RyBaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (orderType == 3) {
+        if(orderType == 3){
             super.onBackPressed();
-        } else {
-            showDialog("您确认要离开支付订单界面，离开订单会变为待付款订单，可在待付款订单中查看");
+        }else {
+            showDialog("您确认要离开支付订单界面，离开订单会变为代付款订单，可在待付款订单中查看");
 
         }
 

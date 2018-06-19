@@ -105,7 +105,7 @@ public class  GoodsShopActivity extends RyBaseActivity implements GoodsShopViewB
             actionBar.setTitle(searchStr);;
         }
         //获取位置
-        Location location = new DbConfig().getLocation();
+        Location location = new DbConfig(this).getLocation();
         if (location!=null){
             currentCity = location.getCity();
             jingdu = location.getJingdu();
@@ -181,7 +181,7 @@ public class  GoodsShopActivity extends RyBaseActivity implements GoodsShopViewB
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "stockInfo/queryStockListByService");
         params.addBodyParameter("reqJson", jsonObject.toString());
         Log.e(TAG, "initDataFromService: --" + jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

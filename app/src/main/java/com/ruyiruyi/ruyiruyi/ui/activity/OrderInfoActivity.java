@@ -86,6 +86,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
     private String associationOrderNo;
     private String makeUpDifferencePrice;
     private int usedCxwAmount;
+    private String postage;
 
 
     @Override
@@ -129,6 +130,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         if (orderType!=0){
             orderStage = intent.getIntExtra(PaymentActivity.ORDER_STAGE,1);
         }
+        Log.e(TAG, "onCreate: ----*-----" + orderStage);
         if (orderType == 0){
             if (orderState == 3){
                 actionBar.setTitle("交易完成");
@@ -156,19 +158,14 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 actionBar.setTitle("待车主补差");
             }else if (orderStage == 3){
                 actionBar.setTitle("已补差");
+            }else if (orderStage == 4){
+                actionBar.setTitle("待支付邮费");
+            }else if (orderStage == 5){
+                actionBar.setTitle("已支付邮费");
             }
 
         }
 
-        if (orderType == 1){
-            if (orderState == 3) {
-                actionBar.setRightView("退款");
-            }
-        }else if (orderType == 0){
-            if (orderState == 3 ){
-                actionBar.setRightView("退款");
-            }
-        }
 
 
 
@@ -177,11 +174,31 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         initOrderFromService();
     }
 
+    /**'
+     * 初始化action Righ
+     */
+    private void initActionRight() {
+        if (orderType == 1){
+            if (orderState == 3) {
+                actionBar.setRightView("退款");
+            }
+        }else if (orderType == 0){
+            if (orderState == 3 ){
+                if (tireInfo.getTireCount() != 0){  //畅行无忧订单不可退款
+                    actionBar.setRightView("退款");
+                }
+
+            }
+        }
+
+    }
+
+
     /**
      * 轮胎退款
      */
     private void tireTuikuan() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "initOrderFromService:--- " + orderType);
         try {
@@ -192,7 +209,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "refundShoeCxwyOrder");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -234,7 +251,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
      * 商品退款
      */
     private void goodsTuikuan() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "initOrderFromService:--- " + orderType);
         try {
@@ -245,7 +262,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "refundStockOrder");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -285,7 +302,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
     }
 
     private void initOrderFromService() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("orderNo", orderNo);
@@ -296,7 +313,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserOrderInfoByNoAndType");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -320,11 +337,12 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                         } else if (orderType == 1) { //商品订单
                             if (orderState == 3 || orderState == 6 || orderState ==1 || orderState == 9 || orderState == 10 || orderState == 4) {//待商家确认服务 || 待车主确认服务
                                 getGoodsOrderInfo(data);
+                                initActionRight();
                             }
                         }else if (orderType == 3){ //免费再换
                             if (orderState == 5) {  //代发货
                                 getFreeTireOrderInfo(data);
-                            } else if (orderState == 3 || orderState == 2 || orderState == 6 || orderState ==1) { //待商家确认服务 || 待收货  ||待车主确认服务
+                            } else if (orderState == 3 || orderState == 2 || orderState == 6 || orderState ==1 || orderState == 4 ) { //待商家确认服务 || 待收货  ||待车主确认服务
                                 codeList.clear();
                                 getFreeTireOrderInfo(data);
                                 getFreeTireOrderCode(data);
@@ -336,6 +354,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                         }else if (orderType == 0){  //轮胎购买订单
                             if (orderState == 3 ||orderState == 9 || orderState == 10 || orderState == 4) {  //已完成
                                 getTireOrderInfo(data);
+                                initActionRight();
                             }
                         }else if (orderType == 4){  //免费再换订单
                             getFreeRepairOrderInfo(data);
@@ -343,6 +362,8 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                         if (orderStage!=2){
                             initData();
                         }
+
+                        initActionRight();
 
                     } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
@@ -372,6 +393,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         });
     }
 
+
     /**
      * 免费修补
      * @param data
@@ -397,7 +419,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
      * 获取畅行无忧数量
      */
     private void getCXWYCountFromService() {
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         int userId = user.getId();
       //  int uesrCarId = user.getCarId();
         JSONObject jsonObject = new JSONObject();
@@ -409,7 +431,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCarInfo/queryCarCxwyInfo");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -425,6 +447,9 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                         cxwyCount = data.length();
                         initData();
                         Log.e(TAG, "onSuccess:--cxwyCount---- " + cxwyCount);
+                    }else if (status.equals("0")){
+                        cxwyCount = 0;
+                        initData();
                     }
                 } catch (JSONException e) {
 
@@ -542,6 +567,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         makeUpDifferencePrice = data.getString("makeUpDifferencePrice");
         associationOrderNo = data.getString("associationOrderNo");
         orderTotalPrice = data.getString("orderTotalPrice");
+        postage = data.getString("postage");
         carNumber = data.getString("platNumber");
         storeId = data.getString("storeId");
         storeName = data.getString("storeName");
@@ -686,7 +712,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 }
             }
         }else if (orderType == 3){ //免费再换
-            if (orderStage == 2 || orderStage ==3){       //补差订单
+            if (orderStage == 2 || orderStage ==3 || orderStage == 4 || orderStage==5){       //补差订单
                 items.add(new InfoOne("联系人", userName, false));
                 items.add(new InfoOne("联系电话", userPhone, false));
                 items.add(new InfoOne("车牌号", carNumber, false));
@@ -720,6 +746,10 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 }else if (orderStage == 3){ //补差完
                     items.add(new InfoOne("使用畅行无忧数量", usedCxwAmount+"", false));
                     items.add(new InfoOne("补差金额", "￥" + makeUpDifferencePrice, false));
+                }else if (orderStage == 4){
+                    items.add(new InfoOne("需补邮费", "￥" + postage, false));
+                }else if (orderStage == 5){
+                    items.add(new InfoOne("已支付邮费", "￥" + postage, false));
                 }
 
 
@@ -819,27 +849,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(getApplicationContext());
-                        View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_error, null);
-                        TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
-                        error_text.setText("是否拒绝补差？");
-                        dialog.setTitle("如意如驿");
-                        dialog.setIcon(R.drawable.ic_logo_login);
-                        dialog.setView(dialogView);
-                        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                cancleBucha();
-                            }
-                        });
-                        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.show();
+                        showBuchaDialog();
 
 
                     }
@@ -857,18 +867,64 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (orderState == 6) {   //待车主确认服务
-                            userAffirmService();
+                        if (orderStage == 1){
+                            if (orderState == 6) {   //待车主确认服务
+                                userAffirmService();
+                            }
+                        }else if (orderStage == 4){ //支付邮费
+                                buYoufei();
                         }
+
                     }
                 });
+    }
+
+    /**
+     * 补邮费
+     */
+    private void buYoufei() {
+        Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
+        Log.e(TAG, "buYoufei: --" + postage);
+        intent.putExtra(PaymentActivity.ALL_PRICE, Double.parseDouble(postage));
+        intent.putExtra(PaymentActivity.ORDERNO, orderNo);
+        intent.putExtra(PaymentActivity.ORDER_TYPE, orderType);  //3
+        intent.putExtra(PaymentActivity.ORDER_STAGE, orderStage);  //3
+        startActivity(intent);
+    }
+
+    /**
+     * 补差的dialog
+     */
+    private void showBuchaDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_error, null);
+        TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
+        error_text.setText("是否拒绝补差？");
+        dialog.setTitle("如意如驿");
+        dialog.setIcon(R.drawable.ic_logo_login);
+        dialog.setView(dialogView);
+        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                cancleBucha();
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
     }
 
     /**
      * 生成补差订单
      */
     private void buchaOrder() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "initOrderFromService:--- " + orderType);
         try {
@@ -883,7 +939,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addMakeUpDifferenceOrder");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -931,7 +987,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
      * 拒绝补差
      */
     private void cancleBucha() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "initOrderFromService:--- " + orderType);
         try {
@@ -942,7 +998,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "refuseMakeUpDifferenceOrder");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -984,7 +1040,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
      * 车主确认服务
      */
     private void userAffirmService() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("orderNo", orderNo);
@@ -995,7 +1051,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userConfirmOrderServiced");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -1043,6 +1099,18 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         if (orderStage == 2){
             orderBuchaLayout.setVisibility(View.VISIBLE);
             orderButton.setVisibility(View.GONE);
+        }else if (orderStage == 4){
+            orderBuchaLayout.setVisibility(View.GONE);
+            orderButton.setVisibility(View.VISIBLE);
+            orderButton.setText("前往补邮费");
+            orderButton.setClickable(true);
+            orderButton.setBackgroundResource(R.drawable.bg_button);
+        }else if (orderStage == 5){
+            orderBuchaLayout.setVisibility(View.GONE);
+            orderButton.setVisibility(View.VISIBLE);
+            orderButton.setText("已支付运费");
+            orderButton.setClickable(false);
+            orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
         }else {
             orderBuchaLayout.setVisibility(View.GONE);
             orderButton.setVisibility(View.VISIBLE);

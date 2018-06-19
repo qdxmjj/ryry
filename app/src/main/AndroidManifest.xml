@@ -224,9 +224,6 @@
         <activity android:name=".ui.activity.RouteMapActivity" />
         <activity android:name=".ui.activity.UserInfoActivity" />
         <activity android:name=".ui.activity.PromotionActivity" />
-        <activity android:name=".ui.activity.UserInfoActivity" />
-        <!-- 支付宝 -->
-        <activity android:name=".ui.activity.UserInfoActivity" />
         <!-- 支付宝 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
@@ -253,7 +250,6 @@
             android:exported="true"
             android:launchMode="singleTop" />
         <activity android:name=".ui.activity.GoodsShopActivity" />
-        <activity android:name=".ui.activity.WxPhoneActivity" />
         <activity android:name=".ui.activity.QRCodeActivity" />
         <activity android:name=".ui.activity.SettingActivity" />
         <activity android:name=".ui.activity.BuyCxwyActivity" />
@@ -261,7 +257,9 @@
         <activity android:name=".ui.activity.ShopGoodsNewActivity" />
         <activity android:name=".ui.activity.CouponActivity" />
         <activity android:name=".ui.activity.UnderstandUsActivity" />
-        <activity android:name=".ui.activity.ContactServiceActivity"></activity>
+        <activity android:name=".ui.activity.ContactServiceActivity" />
+        <activity android:name=".ui.activity.MessageActivity" />
+        <activity android:name=".ui.activity.AgreementActivity"></activity>
     </application>
 
 </manifest>

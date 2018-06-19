@@ -83,7 +83,7 @@ public class CarManagerActivity extends RyBaseActivity {
     }
 
     private void initDataFromService() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         int id = dbConfig.getId();
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "initDataFromService: " + id);
@@ -94,7 +94,7 @@ public class CarManagerActivity extends RyBaseActivity {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarListByUserId");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -107,21 +107,28 @@ public class CarManagerActivity extends RyBaseActivity {
                     if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         carList.clear();
-                        for (int i = 0; i < data.length(); i++) {
-                            ;
-                            int car_id = data.getJSONObject(i).getInt("car_id");
-                            int uesrCarId = data.getJSONObject(i).getInt("user_car_id");
-                            int moren = data.getJSONObject(i).getInt("is_default");
-                            String name = data.getJSONObject(i).getString("car_name");
-                            String number = data.getJSONObject(i).getString("plat_number");
-                            String icon = data.getJSONObject(i).getString("car_brand");
-                            carList.add(new Car(car_id, uesrCarId, name, number, icon, moren));
-                            if (moren == 1) {
-                                User user = new DbConfig().getUser();
-                                user.setCarId(uesrCarId);
-                                saveUserIntoDb(user);
+                        if (data.length() == 0){
+                            User user = new DbConfig(getApplicationContext()).getUser();
+                            user.setCarId(0);
+                            saveUserIntoDb(user);
+                        }else {
+                            for (int i = 0; i < data.length(); i++) {
+                                ;
+                                int car_id = data.getJSONObject(i).getInt("car_id");
+                                int uesrCarId = data.getJSONObject(i).getInt("user_car_id");
+                                int moren = data.getJSONObject(i).getInt("is_default");
+                                String name = data.getJSONObject(i).getString("car_name");
+                                String number = data.getJSONObject(i).getString("plat_number");
+                                String icon = data.getJSONObject(i).getString("car_brand");
+                                carList.add(new Car(car_id, uesrCarId, name, number, icon, moren));
+                                if (moren == 1) {
+                                    User user = new DbConfig(getApplicationContext()).getUser();
+                                    user.setCarId(uesrCarId);
+                                    saveUserIntoDb(user);
+                                }
                             }
                         }
+
                         Log.e(TAG, "onSuccess: " + carList.size());
                     } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
@@ -235,7 +242,7 @@ public class CarManagerActivity extends RyBaseActivity {
     }
 
     private void deleteCar(int userCarId) {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId", userId);
@@ -244,7 +251,7 @@ public class CarManagerActivity extends RyBaseActivity {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "deleteCar");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -282,7 +289,7 @@ public class CarManagerActivity extends RyBaseActivity {
     }
 
     private void setMorenCar(int userCarId) {
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         int userId = user.getId();
         user.setCarId(userCarId);
         saveUserIntoDb(user);
@@ -294,7 +301,7 @@ public class CarManagerActivity extends RyBaseActivity {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "changeDefaultCar");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -332,7 +339,7 @@ public class CarManagerActivity extends RyBaseActivity {
     }
 
     private void saveUserIntoDb(User user) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(user);

@@ -45,7 +45,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class ShopEvaluateActivity extends RyBaseActivity implements EvaImageViewBinder.OnEvaluateImageClick {
+public class ShopEvaluateActivity extends RyBaseActivity implements UserEvaluateViewBinder.OnImageItemClick {
     private static final String TAG = ShopEvaluateActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;
@@ -61,6 +61,7 @@ public class ShopEvaluateActivity extends RyBaseActivity implements EvaImageView
     public boolean isCleanData = false;
     public static String EVALUATE_TYPE = "EVALUATE_TYPE";
     public int evaluateType = 0; //0是门店评价  1是我的评价
+    public boolean isFirstGetData = true;
 
 
     @Override
@@ -93,9 +94,12 @@ public class ShopEvaluateActivity extends RyBaseActivity implements EvaImageView
 
         userEvaluateList = new ArrayList<>();
         isCleanData = true;
+        isFirstGetData = true;
 
         initView();
         initDataFromService();
+
+
         //  initdata();
         //配置点击查看大图
         initImageLoader();
@@ -119,7 +123,7 @@ public class ShopEvaluateActivity extends RyBaseActivity implements EvaImageView
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCommitByCondition");
         Log.e(TAG, "initDataFromService: " + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             private int total;
@@ -146,6 +150,7 @@ public class ShopEvaluateActivity extends RyBaseActivity implements EvaImageView
                         for (int i = 0; i < rows.length(); i++) {
                             JSONObject object = rows.getJSONObject(i);
                             int id = object.getInt("id");
+                            int starNo = object.getInt("starNo");
                             String userImage = object.getString("storeCommitUserHeadImg");
                             String usetName = object.getString("storeCommitUserName");
                             Long evaluateTime = object.getLong("time");
@@ -156,6 +161,9 @@ public class ShopEvaluateActivity extends RyBaseActivity implements EvaImageView
                             String img3Url = object.getString("img3Url");
                             String img4Url = object.getString("img4Url");
                             String img5Url = object.getString("img5Url");
+                            String storeAddress = object.getString("storeAddress");
+                            String storeName = object.getString("storeName");
+                            String storeImg = object.getString("storeImg");
                             List<String> imageList = new ArrayList<String>();
                             if (!img1Url.equals("")) {
                                 imageList.add(img1Url);
@@ -172,9 +180,10 @@ public class ShopEvaluateActivity extends RyBaseActivity implements EvaImageView
                             if (!img5Url.equals("")) {
                                 imageList.add(img5Url);
                             }
-                            UserEvaluate userEvaluate = new UserEvaluate(id, userImage, usetName, evaluateTimeStr, evaluateContent, imageList);
+                            UserEvaluate userEvaluate = new UserEvaluate(id, starNo,userImage, usetName, evaluateTimeStr, evaluateContent, imageList,storeImg,storeName,storeAddress);
                             userEvaluateList.add(userEvaluate);
                         }
+
                         initdata();
                     } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
@@ -256,6 +265,7 @@ public class ShopEvaluateActivity extends RyBaseActivity implements EvaImageView
     private void register() {
         UserEvaluateViewBinder userEvaluateViewBinder = new UserEvaluateViewBinder(this);
         userEvaluateViewBinder.setListener(this);
+        userEvaluateViewBinder.setEvaluateType(evaluateType);
         adapter.register(UserEvaluate.class, userEvaluateViewBinder);
         adapter.register(Empty.class, new EmptyViewBinder());
         adapter.register(EmptyBig.class, new EmptyBigViewBinder());
@@ -288,10 +298,13 @@ public class ShopEvaluateActivity extends RyBaseActivity implements EvaImageView
         isCleanData = false;
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
+
+
     }
 
+
     @Override
-    public void onEvaluateImageClickListener(String url, int evaluateId) {
+    public void onImageItemClickListener(String url, int evaluateId) {
         ArrayList<String> picList = new ArrayList<>();
         picList.add(url);
         String content = "";

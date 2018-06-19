@@ -129,7 +129,7 @@ public class TestActivity extends RyBaseActivity {
     }
 
     private void initDataFromDb() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(this);
         DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
 
         DbManager db = x.getDb(daoConfig);

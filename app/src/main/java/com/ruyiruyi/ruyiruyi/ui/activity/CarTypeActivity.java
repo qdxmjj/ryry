@@ -64,7 +64,7 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
     }
 
     private void initData() {
-        DbManager db = new DbConfig().getDbManager();
+        DbManager db = new DbConfig(this).getDbManager();
         List<CarTitle> titleList = new ArrayList<>();
         List<CarType>  typeList = new ArrayList<>();
         CarType carType = new CarType();
@@ -185,7 +185,7 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
         }else if (currentType == 1){
             currentYear = title;
         }else {
-            DbManager db = new DbConfig().getDbManager();
+            DbManager db = new DbConfig(this).getDbManager();
             try {
                 List<CarTireInfo> carTireInfoList = db.selector(CarTireInfo.class)
                         .where("name", "=", title)

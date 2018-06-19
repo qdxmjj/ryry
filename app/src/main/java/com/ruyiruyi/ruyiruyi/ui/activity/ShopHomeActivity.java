@@ -52,7 +52,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class ShopHomeActivity extends RyBaseActivity implements EvaImageViewBinder.OnEvaluateImageClick, ShopStrViewBinder.OnAllEvaluateClick {
+public class ShopHomeActivity extends RyBaseActivity implements UserEvaluateViewBinder.OnImageItemClick, ShopStrViewBinder.OnAllEvaluateClick {
     private static final String TAG = ShopHomeActivity.class.getSimpleName();
     private ActionBar actionBar;
     private List<Object> items = new ArrayList<>();
@@ -118,7 +118,7 @@ public class ShopHomeActivity extends RyBaseActivity implements EvaImageViewBind
         serviceTypeList = new ArrayList<>();
         imageList = new ArrayList<>();
         //获取位置
-        Location location = new DbConfig().getLocation();
+        Location location = new DbConfig(this).getLocation();
         if (location != null) {
             currentCity = location.getCity();
             jingdu = location.getJingdu();
@@ -168,7 +168,7 @@ public class ShopHomeActivity extends RyBaseActivity implements EvaImageViewBind
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getStoreInfoByStoreId");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
 
@@ -224,6 +224,7 @@ public class ShopHomeActivity extends RyBaseActivity implements EvaImageViewBind
                         userEvaluateList.clear();
                         if (commit != null) {
                             commitId = commit.getInt("id");
+                            int starNo = commitId = commit.getInt("starNo");
                             storeCommitUserName = commit.getString("storeCommitUserName");
                             storeCommitUserHeadImg = commit.getString("storeCommitUserHeadImg");
                             long time = commit.getLong("time");
@@ -235,7 +236,7 @@ public class ShopHomeActivity extends RyBaseActivity implements EvaImageViewBind
                             imageList.add(commit.getString("img3Url"));
                             imageList.add(commit.getString("img4Url"));
                             imageList.add(commit.getString("img5Url"));
-                            userEvaluateList.add(new UserEvaluate(commitId, storeCommitUserHeadImg, storeCommitUserName, storeCommitTime, storeConnet, imageList));
+                            userEvaluateList.add(new UserEvaluate(commitId,starNo, storeCommitUserHeadImg, storeCommitUserName, storeCommitTime, storeConnet, imageList));
 
                         }
                         initdata();
@@ -347,6 +348,7 @@ public class ShopHomeActivity extends RyBaseActivity implements EvaImageViewBind
         adapter.register(ShopStr.class, shopStrViewBinder);
         UserEvaluateViewBinder userEvaluateViewBinder = new UserEvaluateViewBinder(this);
         userEvaluateViewBinder.setListener(this);
+        userEvaluateViewBinder.setEvaluateType(0);
         adapter.register(UserEvaluate.class, userEvaluateViewBinder);
         adapter.register(Empty.class, new EmptyViewBinder());
         // ShopGoodsViewBinder shopGoodsViewBinder = new ShopGoodsViewBinder(this,getSupportFragmentManager());
@@ -354,8 +356,17 @@ public class ShopHomeActivity extends RyBaseActivity implements EvaImageViewBind
 
     }
 
+
     @Override
-    public void onEvaluateImageClickListener(String url, int evaluateId) {
+    public void onAllEvaluate() {
+        Intent intent = new Intent(this, ShopEvaluateActivity.class);
+        intent.putExtra("STOREID", storeid);
+        intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE, 0);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onImageItemClickListener(String url, int evaluateId) {
         Log.e(TAG, "onEvaluateImageClickListener: 1111");
         ArrayList<String> picList = new ArrayList<>();
         picList.add(url);
@@ -375,13 +386,5 @@ public class ShopHomeActivity extends RyBaseActivity implements EvaImageViewBind
         imagPagerUtil.setContentText(content);
         imagPagerUtil.show();
 
-    }
-
-    @Override
-    public void onAllEvaluate() {
-        Intent intent = new Intent(this, ShopEvaluateActivity.class);
-        intent.putExtra("STOREID", storeid);
-        intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE, 0);
-        startActivity(intent);
     }
 }

@@ -115,13 +115,13 @@ public class PromotionActivity extends RyBaseActivity implements PromotionViewBi
         //下载数据
         JSONObject object = new JSONObject();
         try {
-            object.put("userId", new DbConfig().getId());
+            object.put("userId", new DbConfig(this).getId());
 
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "preferentialInfo/queryShareInfo");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(this).getToken());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -251,7 +251,7 @@ public class PromotionActivity extends RyBaseActivity implements PromotionViewBi
     }
 
     private void shareToWexin() {
-        int id = new DbConfig().getId();
+        int id = new DbConfig(this).getId();
         WXWebpageObject webpage = new WXWebpageObject();
         webpage.webpageUrl = "http://192.168.0.190:8060/preferentialInfo/share?userId=" + id;
         WXMediaMessage msg = new WXMediaMessage(webpage);

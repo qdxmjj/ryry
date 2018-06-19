@@ -85,7 +85,7 @@ public class TireCountActivity extends RyBaseActivity {
     }
 
     private void initDataFromService() {
-        int userId = new DbConfig().getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("shoeId", shoeId);
@@ -94,7 +94,7 @@ public class TireCountActivity extends RyBaseActivity {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getShoeDetailByShoeId");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         Log.e(TAG, "initDataFromService:------- " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {

@@ -99,7 +99,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
             }
         }
 
-        User user = new DbConfig().getUser();
+        User user = new DbConfig(this).getUser();
         username = user.getNick();
         phone = user.getPhone();
         userId = user.getId();
@@ -121,7 +121,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
         Log.e(TAG, "sendDataToService: ---" + json);
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addStockOrder");
         params.addBodyParameter("reqJson", json);
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -235,7 +235,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                     isDingwei = true;
                 }
             }
-            User user = new DbConfig().getUser();
+            User user = new DbConfig(this).getUser();
             int carId = user.getCarId();
             if (isXiche && isDingwei){
                 Intent intent = new Intent(this, CouponActivity.class);
