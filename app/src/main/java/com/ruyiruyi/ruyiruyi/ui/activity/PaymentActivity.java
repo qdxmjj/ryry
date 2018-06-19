@@ -645,7 +645,7 @@ public class PaymentActivity extends RyBaseActivity {
         }
         Log.e(TAG, "getSign: " + orderno);
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAliPaySign");
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         String jsonByToken = "";
         try {
             jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(), token);

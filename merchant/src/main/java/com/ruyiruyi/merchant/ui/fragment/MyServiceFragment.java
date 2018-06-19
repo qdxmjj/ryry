@@ -99,7 +99,7 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
     private void myRequestPostForDataBy(final String s) {
         JSONObject jsonObject = new JSONObject();
         try {
-            String storeId = new DbConfig().getId() + "";
+            String storeId = new DbConfig(getActivity()).getId() + "";
             jsonObject.put("storeId", storeId);
             jsonObject.put("serviceTypeId", s);
         } catch (JSONException e) {

@@ -328,7 +328,7 @@ public class MyGoodsActivity extends FragmentActivity {
         final List<ServicesBean> servicesBean = new ArrayList<>();
         JSONObject jsonObject = new JSONObject();
         try {
-            String storeId = new DbConfig().getId() + "";
+            String storeId = new DbConfig(getApplicationContext()).getId() + "";
             jsonObject.put("storeId", storeId);
             jsonObject.put("serviceTypeId", s);
         } catch (JSONException e) {

@@ -185,7 +185,7 @@ public class MyGoodsFragment extends BaseFragment {
 
         //下载数据
         JSONObject object = new JSONObject();
-        String storeId = new DbConfig().getId() + "";
+        String storeId = new DbConfig(getActivity()).getId() + "";
         try {
             object.put("storeId", storeId);
             object.put("serviceTypeId", leftid);//空为查询所有数据

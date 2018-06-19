@@ -219,7 +219,7 @@ public class LoginActivity extends BaseActivityb {
             user.setUpdateTime(data.getString("updateTime"));
             user.setPhone(data.getString("phone"));
             user.setIsLogin("1");
-            DbConfig dbConfig = new DbConfig();
+            DbConfig dbConfig = new DbConfig(getApplicationContext());
             DbManager db = dbConfig.getDbManager();
 
 
@@ -234,7 +234,7 @@ public class LoginActivity extends BaseActivityb {
      * 保存用户到数据库
      */
     private void savaUserDb(String phone, String token) {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(getApplicationContext());
         DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
         DbManager db = x.getDb(daoConfig);
         List<User> data = new ArrayList<>();

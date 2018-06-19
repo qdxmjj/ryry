@@ -1,5 +1,6 @@
 package com.ruyiruyi.merchant.db;
 
+import android.content.Context;
 import android.os.Environment;
 
 //import com.ruyiruyi.merchant.db.model.Lunbo;
@@ -16,13 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DbConfig {
+    public Context context;
+
+    public DbConfig(Context context) {
+        this.context = context;
+    }
+
 
     public DbManager.DaoConfig getDaoConfig() {
         DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
                 .setDbName("merchant.db")
                 .setAllowTransaction(true)
-                .setDbDir(Environment.getExternalStorageDirectory())
-                .setDbVersion(1);
+                .setDbDir(context.getFilesDir())
+                .setDbVersion(10);
         return daoConfig;
     }
 

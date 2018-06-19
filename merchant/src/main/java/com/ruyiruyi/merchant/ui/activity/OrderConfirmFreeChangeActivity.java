@@ -286,7 +286,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
         orderStage = getIntent().getStringExtra("orderStage");
-        storeId = new DbConfig().getId() + "";
+        storeId = new DbConfig(getApplicationContext()).getId() + "";
 
         mainDialog = new ProgressDialog(this);
         showDialogProgress(mainDialog, "订单信息加载中...");
@@ -885,7 +885,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 }
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectChangeShoeOrderType");
                 params.addBodyParameter("reqJson", object.toString());
-                params.addBodyParameter("token", new DbConfig().getToken());
+                params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                 List<OldNewBarCode> c_list = new ArrayList<OldNewBarCode>();
                 if (isBucha_a_) {
                     c_list.add(new OldNewBarCode(buchaBarCode_a_, ""));
@@ -1073,7 +1073,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectChangeShoeOrderType");
                         params.addBodyParameter("reqJson", object.toString());
                         params.addBodyParameter("changeBarCodeVoList", oldNewBarCodeList.toString());
-                        params.addBodyParameter("token", new DbConfig().getToken());
+                        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                         params.addBodyParameter("drivingLicenseImg", new File(path_licenseBitmap));
                         params.addBodyParameter("carImg", new File(path_carBitmap));
                         if (hasPic_a_left) {
@@ -1155,7 +1155,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         RequestParams params3 = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectChangeShoeOrderType");
                         params3.addBodyParameter("reqJson", object3.toString());
                         params3.addBodyParameter("changeBarCodeVoList", oldNewBarCodeList.toString());
-                        params3.addBodyParameter("token", new DbConfig().getToken());
+                        params3.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                         x.http().post(params3, new Callback.CommonCallback<String>() {
                             @Override
                             public void onSuccess(String result) {
@@ -1941,7 +1941,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreOrderInfoByNoAndType");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

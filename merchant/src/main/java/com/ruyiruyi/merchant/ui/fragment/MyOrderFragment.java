@@ -78,7 +78,7 @@ public class MyOrderFragment extends BaseFragment {
 
         Bundle bundle = getArguments();
         order_type = bundle.getString(ORDER_TYPE);
-        storeId = new DbConfig().getId() + "";
+        storeId = new DbConfig(getActivity()).getId() + "";
         state = "";
 
         initView();
@@ -144,7 +144,7 @@ public class MyOrderFragment extends BaseFragment {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreGeneralOrderByState");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getActivity()).getToken());
         params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

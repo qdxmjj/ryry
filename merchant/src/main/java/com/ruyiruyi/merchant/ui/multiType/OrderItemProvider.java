@@ -113,7 +113,7 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                     bundle.putString("orderNo", orderItemBean.getBianhao());
                     bundle.putString("orderType", orderItemBean.getOrderType());
                     bundle.putString("orderState", orderItemBean.getStatus());
-                    bundle.putString("storeId", new DbConfig().getId() + "");
+                    bundle.putString("storeId", new DbConfig(context).getId() + "");
                     bundle.putString("whereIn", "MyOrderItem");
                     intent.putExtras(bundle);
                     context.startActivity(intent);

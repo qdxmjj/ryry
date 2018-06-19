@@ -40,7 +40,7 @@ public class MerchantBaseFragment extends BaseFragment {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 //登录失效 更新本地User信息
-                DbConfig dbConfig = new DbConfig();
+                DbConfig dbConfig = new DbConfig(getActivity());
                 User user = dbConfig.getUser();
                 user.setIsLogin("0");
                 DbManager db = dbConfig.getDbManager();
@@ -73,7 +73,7 @@ public class MerchantBaseFragment extends BaseFragment {
     *
     * */
     public boolean judgeIsLogin() {
-        if (!new DbConfig().getIsLogin()) {
+        if (!new DbConfig(getActivity()).getIsLogin()) {
             AlertDialog dialog = new AlertDialog.Builder(getContext()).create();
             View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_error, null);
             TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
@@ -99,6 +99,6 @@ public class MerchantBaseFragment extends BaseFragment {
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.theme_primary));
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
         }
-        return new DbConfig().getIsLogin();
+        return new DbConfig(getActivity()).getIsLogin();
     }
 }

@@ -65,7 +65,7 @@ public class StartAppActivity extends BaseActivity {
 
     private void goMain() {
         //initIsLogin
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(getApplicationContext());
         if (dbConfig.getIsLogin()) {
             isLogin = 1;
         } else {
@@ -131,7 +131,7 @@ public class StartAppActivity extends BaseActivity {
 //   0     date = new Date();
         List<Province> provinceList = null;
         try {
-            provinceList = new DbConfig().getDbManager().selector(Province.class).orderBy("time").findAll();
+            provinceList = new DbConfig(getApplicationContext()).getDbManager().selector(Province.class).orderBy("time").findAll();
         } catch (DbException e) {
 
         }
@@ -196,7 +196,7 @@ public class StartAppActivity extends BaseActivity {
 
     private void saveProvinceToDb(JSONArray data) {
         Province province;
-        DbManager db = (new DbConfig()).getDbManager();
+        DbManager db = (new DbConfig(getApplicationContext())).getDbManager();
         for (int i = 0; i < data.length(); i++) {
             province = new Province();
             try {

@@ -86,7 +86,7 @@ public class SheZhiActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //退出登录
-                DbConfig dbConfig = new DbConfig();
+                DbConfig dbConfig = new DbConfig(getApplicationContext());
                 User user = dbConfig.getUser();
                 if (user != null) {
                     user.setIsLogin("0");

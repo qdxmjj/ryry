@@ -265,7 +265,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
-                    android:text="上传门店照片"
+                    android:text="门店照片"
                     android:textColor="@color/c7"
                     android:textSize="15sp" />
 

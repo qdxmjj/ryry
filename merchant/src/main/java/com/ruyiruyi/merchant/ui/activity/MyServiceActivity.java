@@ -86,7 +86,7 @@ public class MyServiceActivity extends BaseFragmentActivity implements MyService
                 showDialogProgress(progressDialog, "保存提交中...");
                 Log.e(TAG, "call: 000servicesBeanList_all = >" + "all" + "<--" + selectServicesList.size());
                 JSONObject object = new JSONObject();
-                String storeId = new DbConfig().getId() + "";
+                String storeId = new DbConfig(getApplicationContext()).getId() + "";
                 for (int i = 0; i < selectServicesList.size(); i++) {
                     if (i == selectServicesList.size() - 1) {
                         selectServicesListString = selectServicesListString + selectServicesList.get(i);

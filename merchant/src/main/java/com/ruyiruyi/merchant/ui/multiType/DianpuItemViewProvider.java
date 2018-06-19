@@ -99,7 +99,7 @@ public class DianpuItemViewProvider extends ItemViewProvider<Dianpu, DianpuItemV
                 bundle.putString("orderNo", dianpu.getOrderNo());
                 bundle.putString("orderType", dianpu.getOrderType());
                 bundle.putString("orderState", dianpu.getOrderState());
-                bundle.putString("storeId", new DbConfig().getId() + "");
+                bundle.putString("storeId", new DbConfig(context).getId() + "");
                 bundle.putString("whereIn", "MainStoreItem");
                 intent.putExtras(bundle);
                 context.startActivity(intent);

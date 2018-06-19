@@ -98,6 +98,7 @@ public class MyFragment extends BaseFragment {
     public void setListener(ForRefreshMy listener) {
         this.listener = listener;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -118,6 +119,14 @@ public class MyFragment extends BaseFragment {
     }
 
     private void bindView() {
+        //店主有话说
+        RxViewAction.clickNoDouble(rl_dzyhs).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Toast.makeText(getActivity(), "敬请期待...", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //推广奖励
         RxViewAction.clickNoDouble(rl_tgjl).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -126,6 +135,7 @@ public class MyFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        //我的商品
         RxViewAction.clickNoDouble(rl_wdsp).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -134,6 +144,7 @@ public class MyFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        //我的服务
         RxViewAction.clickNoDouble(rl_wdfw).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -142,6 +153,7 @@ public class MyFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        //管理店铺
         RxViewAction.clickNoDouble(tv_mid_gldp).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -150,6 +162,7 @@ public class MyFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        //我的订单
         RxViewAction.clickNoDouble(tv_mid_wddd).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -159,6 +172,7 @@ public class MyFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        //设置
         RxViewAction.clickNoDouble(rl_shezhi).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -166,6 +180,7 @@ public class MyFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        //头像
         RxViewAction.clickNoDouble(img_user_top).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -174,15 +189,19 @@ public class MyFragment extends BaseFragment {
         });
 
 
-        //测试用 测试栏
+        //测试用 测试栏 <---
+        boolean isOpen = true;//测试栏开关
         TextView main_test = getView().findViewById(R.id.main_test);
+        if (!isOpen) {
+            main_test.setVisibility(View.GONE);
+        }
         RxViewAction.clickNoDouble(main_test).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 Intent intent = new Intent(mContext, BugTestActivity.class);
                 startActivity(intent);
             }
-        });
+        });   // 测试栏 --->
     }
 
     private void initView() {
@@ -309,20 +328,20 @@ public class MyFragment extends BaseFragment {
                 .getExternalStorageDirectory().getAbsolutePath(), "forpoststoreheadimg");//为提交请求所生成图片 每次提交被替换
         JSONObject object = new JSONObject();
         try {
-            object.put("storeId", new DbConfig().getId() + "");
-            User user = new DbConfig().getUser();
+            object.put("storeId", new DbConfig(getActivity()).getId() + "");
+            User user = new DbConfig(getActivity()).getUser();
             object.put("headImgUrl", user.getStoreImgUrl());
 
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreHeadImgByStoreId");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getActivity()).getToken());
         params.addBodyParameter("store_head_img", new File(img_Path));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: xmjj my"  );
+                Log.e(TAG, "onSuccess: xmjj my");
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String msg = jsonObject.getString("msg");
@@ -339,13 +358,13 @@ public class MyFragment extends BaseFragment {
                                     .transform(new GlideCircleTransform(getActivity()))
                                     .into(img_user_top);*/
                         //修改本地用户信息后跳转
-                        User user = new DbConfig().getUser();
+                        User user = new DbConfig(getActivity()).getUser();
                         user.setStoreImgUrl(url);
 
                         Log.e(TAG, "onSuccess: get0=" + url);
                         Log.e(TAG, "onSuccess: get=" + user.getStoreImgUrl());
 
-                        DbConfig dbConfig = new DbConfig();
+                        DbConfig dbConfig = new DbConfig(getActivity());
                         DbManager db = dbConfig.getDbManager();
                         try {
                             db.saveOrUpdate(user);
@@ -353,7 +372,7 @@ public class MyFragment extends BaseFragment {
                         } catch (DbException e) {
                         }
 
-                        String storeImgUrl = new DbConfig().getUser().getStoreImgUrl();
+                        String storeImgUrl = new DbConfig(getActivity()).getUser().getStoreImgUrl();
                         Log.e(TAG, "onSuccess: get2=" + storeImgUrl);
 
 //                        Intent intent = new Intent(getContext(), MainActivity.class);
@@ -375,7 +394,7 @@ public class MyFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Log.e(TAG, "onError: xmjj my"  );
+                Log.e(TAG, "onError: xmjj my");
 //                Toast.makeText(mContext, "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
@@ -411,7 +430,7 @@ public class MyFragment extends BaseFragment {
     }
 
     private void initDataFromDbAndSetView() {
-        DbConfig dbConfig = new DbConfig();
+        DbConfig dbConfig = new DbConfig(getActivity());
         User user = dbConfig.getUser();
         String topimgurl = user.getStoreImgUrl();
         String storeName = user.getStoreName();

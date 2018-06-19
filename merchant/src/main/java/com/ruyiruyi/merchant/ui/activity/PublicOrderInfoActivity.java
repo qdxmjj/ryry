@@ -179,7 +179,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreOrderInfoByNoAndType");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -897,7 +897,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectStockOrderType");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
         params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -964,7 +964,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
 
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeConfirmReceiptShoes");
         params.addBodyParameter("reqJson", barCodeList.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
         params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -1032,7 +1032,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
 
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeConfirmReceiptShoes");
         params.addBodyParameter("reqJson", barCodeList.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
         params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
