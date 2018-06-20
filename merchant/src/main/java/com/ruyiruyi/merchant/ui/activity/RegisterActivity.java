@@ -841,7 +841,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 View v_shoptime = LayoutInflater.from(this).inflate(R.layout.dialog_shoptime_view, null);
                 whv_lTime = (WheelView) v_shoptime.findViewById(R.id.whv_ltime);
                 whv_rTime = (WheelView) v_shoptime.findViewById(R.id.whv_rtime);
-                whv_lTime.setItems(getStrLTime(), currentlTimePosition);
+                whv_lTime.setItems(getStrLTime(), 0);
                 whv_rTime.setItems(getRTimeList(0), 0);
                 whv_lTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
@@ -853,7 +853,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         currentrTime = rTime_list.get(0);
                     }
                 });
-                whv_rTime.setItems(rTime_list, currentrTimePosition);
                 whv_rTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(int selectedIndex, String item) {
