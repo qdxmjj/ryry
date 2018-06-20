@@ -66,14 +66,14 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
      //   startActivity(new Intent(WXEntryActivity.this, SendToWXActivity.class));
        // finish();
-        RxViewAction.clickNoDouble(shareText)
+        /*RxViewAction.clickNoDouble(shareText)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
                         startActivity(new Intent(WXEntryActivity.this, SendToWXActivity.class));
                         finish();
                     }
-                });
+                });*/
         try {
             api.handleIntent(getIntent(), this);
         } catch (Exception e) {

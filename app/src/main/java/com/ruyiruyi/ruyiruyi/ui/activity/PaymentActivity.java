@@ -31,6 +31,7 @@ import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -109,7 +110,7 @@ public class PaymentActivity extends RyBaseActivity {
     private ProgressDialog progressDialog;
 
     //微信
-    private static final String APP_ID = "wx407c59de8b10c601";
+  // private static final String APP_ID = "wx407c59de8b10c601";
     private static final int THUMB_SIZE = 150;
     private IWXAPI api;
     private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
@@ -124,6 +125,7 @@ public class PaymentActivity extends RyBaseActivity {
     public double lineCredit = 1000.00;
     private TextView otherPayLayout;
     private int orderStage;
+    private TextView limitText;
 
 
     @Override
@@ -143,7 +145,7 @@ public class PaymentActivity extends RyBaseActivity {
                 }
             }
         });
-        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
+        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
         api.registerApp(Constants.APP_ID);
         progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
@@ -158,12 +160,59 @@ public class PaymentActivity extends RyBaseActivity {
         if (orderType == 1){
             currentType = 0;
         }else {
-            currentType = 1;
+            currentType = 2;
         }
 
 
         initView();
         getDataFromService();
+        inirMyLimit();
+    }
+
+    private void inirMyLimit() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("userId", new DbConfig(getApplicationContext()).getId());
+            object.put("userCarId", new DbConfig(getApplicationContext()).getUser().getCarId());
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCarInfo/queryCarCreditInfo");
+        params.addBodyParameter("reqJson", object.toString());
+        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: result = " + result);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    int status = jsonObject.getInt("status");
+                    String msg = jsonObject.getString("msg");
+                    if (status == 1) {
+                        JSONArray data = jsonObject.getJSONArray("data");
+                        JSONObject objBean = (JSONObject) data.get(0);
+                        lineCredit = objBean.getDouble("remain"); // 剩余额度
+                        limitText.setText("余额:" +lineCredit );
+                    }
+
+                } catch (JSONException e) {
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void getDataFromService() {
@@ -181,6 +230,7 @@ public class PaymentActivity extends RyBaseActivity {
         weixinImage = (ImageView) findViewById(R.id.weixin_image);
         zhifubaoImage = (ImageView) findViewById(R.id.zhifubao_image);
         otherPayLayout = (TextView) findViewById(R.id.other_pay_layout);
+        limitText = (TextView) findViewById(R.id.limit_text);
         initZhifuLayout();
 
         RxViewAction.clickNoDouble(yuELayout)
@@ -645,7 +695,7 @@ public class PaymentActivity extends RyBaseActivity {
         }
         Log.e(TAG, "getSign: " + orderno);
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAliPaySign");
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         String jsonByToken = "";
         try {
             jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(), token);
@@ -750,6 +800,7 @@ public class PaymentActivity extends RyBaseActivity {
                 intent.putExtra(ORDER_TYPE, orderType);
                 intent.putExtra(ORDER_FROM, 0);
                 startActivity(intent);
+                finish();
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {

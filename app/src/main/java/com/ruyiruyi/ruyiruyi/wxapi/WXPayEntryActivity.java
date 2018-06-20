@@ -17,7 +17,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 
-public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
+public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEventHandler {
 
     private static final String TAG = "MicroMsg.SDKSample.WXPayEntryActivity";
 
@@ -29,7 +29,13 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
         setContentView(R.layout.pay_result);
 
         api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
-        api.handleIntent(getIntent(), this);
+        api.registerApp(Constants.APP_ID);
+
+        try {
+            api.handleIntent(getIntent(), this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -47,13 +53,15 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 
     @Override
     public void onResp(BaseResp resp) {
+
        // Log.d(TAG, "onPayFinish, errCode = " + resp.errCode);
-        if (resp.getType() == 0){
-            startActivity(new Intent(getApplicationContext(), PaySuccessActivity.class));
-            finish();
-        }
+
 
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+            if (resp.errCode ==0) {
+                startActivity(new Intent(getApplicationContext(), PaySuccessActivity.class));
+                finish();
+            }
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.app_tip);
             builder.setMessage(getString(R.string.pay_result_callback_msg, String.valueOf(resp.errCode)));

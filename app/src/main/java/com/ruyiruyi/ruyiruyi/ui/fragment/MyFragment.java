@@ -167,7 +167,7 @@ public class MyFragment extends RyBaseFragment {
         ll_promotion = (LinearLayout) getView().findViewById(R.id.ll_promotion);
         couponLayout = (LinearLayout) getView().findViewById(R.id.coupon_layout);
         noLoginImage = (ImageView) getView().findViewById(R.id.no_login_image);
-        Glide.with(getContext()).load(R.drawable.ic_launcher).into(noLoginImage);
+        Glide.with(getContext()).load(R.drawable.ic_notlogged).into(noLoginImage);
         messageView = (ImageView) getView().findViewById(R.id.message_view);
 
         //消息列表显示

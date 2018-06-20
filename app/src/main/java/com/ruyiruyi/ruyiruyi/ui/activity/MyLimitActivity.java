@@ -80,7 +80,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
     private String xyed;
     private String yhed;
     private String syed;
-    public int payType = 0;  //0是微信支付 1是支付宝支付
+    public int payType =1;  //0是微信支付 1是支付宝支付
     private ProgressDialog payDialog;
     private ProgressDialog startDialog;
     private String TAG = MyLimitActivity.class.getSimpleName();
@@ -146,13 +146,13 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
         showDialogProgress(startDialog, "信息加载中...");
         JSONObject object = new JSONObject();
         try {
-            object.put("userId", new DbConfig().getId());
-            object.put("userCarId", new DbConfig().getUser().getCarId());
+            object.put("userId", new DbConfig(getApplicationContext()).getId());
+            object.put("userCarId", new DbConfig(getApplicationContext()).getUser().getCarId());
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCarInfo/queryCarCreditInfo");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -164,9 +164,9 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
                     if (status == 1) {
                         JSONArray data = jsonObject.getJSONArray("data");
                         JSONObject objBean = (JSONObject) data.get(0);
-                        xyed = objBean.getInt("credit") + "";// 信用额度
-                        syed = objBean.getInt("remain") + "";// 剩余额度
-                        yhed = objBean.getInt("credit") - objBean.getInt("remain") + "";// 应还额度
+                        xyed = objBean.getDouble("credit") + "";// 信用额度
+                        syed = objBean.getDouble("remain") + "";// 剩余额度
+                        yhed = objBean.getDouble("credit") - objBean.getInt("remain") + "";// 应还额度
                         initView();
                     } else if (status == -999) {
                         hideDialogProgress(startDialog);
@@ -260,7 +260,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
         RxViewAction.clickNoDouble(tv_pay).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                if (Integer.parseInt(et_money.getText().toString()) < 1) {
+                if (Double.parseDouble(et_money.getText().toString()) < 1) {
                     Toast.makeText(MyLimitActivity.this, "每次还款不能少于1元!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -322,8 +322,8 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
 
     private void getOrderNoBeforeSign() {
         showDialogProgress(payDialog, "订单提交中...");
-        int userId = new DbConfig().getId();
-        int userCarId = new DbConfig().getUser().getCarId();
+        int userId = new DbConfig(this).getId();
+        int userCarId = new DbConfig(this).getUser().getCarId();
         money = et_money.getText().toString();
 
         JSONObject object = new JSONObject();
@@ -336,7 +336,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addRechargeCreditOrder");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(this).getToken());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -379,7 +379,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
     private void getSign(String price, String associationOrderNo) {
         JSONObject object = new JSONObject();
         try {
-            object.put("userId", new DbConfig().getId() + "");
+            object.put("userId", new DbConfig(this).getId() + "");
             object.put("orderNo", associationOrderNo);
             object.put("orderName", "额度充值");
 //            object.put("orderPrice", price);//正式
@@ -388,7 +388,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAliPaySign");
-        String token = new DbConfig().getToken();
+        String token = new DbConfig(this).getToken();
         String jsonByToken = "";
         try {
             jsonByToken = XMJJUtils.encodeJsonByToken(object.toString(), token);

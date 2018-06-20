@@ -43,7 +43,7 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -245,10 +245,18 @@
         <activity android:name=".ui.activity.SendToWXActivity" />
         <activity android:name=".ui.activity.ShowFromWXActivity" />
         <activity android:name=".ui.activity.WxPhoneActivity" />
+
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="wx407c59de8b10c601"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name=".ui.activity.GoodsShopActivity" />
         <activity android:name=".ui.activity.QRCodeActivity" />
         <activity android:name=".ui.activity.SettingActivity" />
