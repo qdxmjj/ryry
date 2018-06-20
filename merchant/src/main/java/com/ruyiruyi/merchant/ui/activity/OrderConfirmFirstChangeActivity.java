@@ -142,7 +142,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         //获取传递数据
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
-        storeId = new DbConfig().getId() + "";
+        storeId = new DbConfig(getApplicationContext()).getId() + "";
 
         mainDialog = new ProgressDialog(this);
         showDialogProgress(mainDialog, "订单信息加载中...");
@@ -163,7 +163,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreOrderInfoByNoAndType");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -394,7 +394,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                         }
                         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectFirstChangeShoeOrderType");
                         params.addBodyParameter("reqJson", object.toString());
-                        params.addBodyParameter("token", new DbConfig().getToken());
+                        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                         params.addBodyParameter("drivingLicenseImg", new File(path_licenseBitmap));
                         params.addBodyParameter("carImg", new File(path_carBitmap));
                         Log.e(TAG, "onClick:  params.toString() = " + params.toString());
@@ -448,7 +448,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                         }
                         RequestParams params2 = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectFirstChangeShoeOrderType");
                         params2.addBodyParameter("reqJson", object2.toString());
-                        params2.addBodyParameter("token", new DbConfig().getToken());
+                        params2.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                         Log.e(TAG, "onClick:  params.toString() = " + params2.toString());
                         x.http().post(params2, new Callback.CommonCallback<String>() {
                             @Override
@@ -504,7 +504,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                         }
                         RequestParams params3 = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectFirstChangeShoeOrderType");
                         params3.addBodyParameter("reqJson", object3.toString());
-                        params3.addBodyParameter("token", new DbConfig().getToken());
+                        params3.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                         params3.addBodyParameter("drivingLicenseImg", new File(path_licenseBitmap));
                         params3.addBodyParameter("carImg", new File(path_carBitmap));
                         Log.e(TAG, "onClick:  params.toString() = " + params3.toString());

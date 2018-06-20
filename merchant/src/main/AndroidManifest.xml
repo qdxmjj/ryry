@@ -95,6 +95,7 @@
         <activity android:name=".ui.activity.OrderConfirmFirstChangeActivity" />
         <activity android:name=".ui.activity.OrderConfirmTireRepairActivity" />
         <activity android:name=".ui.activity.UserAgreementActivity"></activity>
+        <activity android:name=".ui.activity.QRCodeActivity"></activity>
     </application>
 
 </manifest>

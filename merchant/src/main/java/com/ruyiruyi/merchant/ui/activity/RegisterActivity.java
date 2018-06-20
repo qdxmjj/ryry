@@ -239,7 +239,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 // 0       date_category = new Date();
         List<Category> categoryList = null;
         try {
-            categoryList = new DbConfig().getDbManager().selector(Category.class).orderBy("time").findAll();
+            categoryList = new DbConfig(getApplicationContext()).getDbManager().selector(Category.class).orderBy("time").findAll();
 
         } catch (DbException e) {
         }
@@ -317,7 +317,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 //   0     date_serviceType = new Date();
         List<ServiceType> serviceTypeList = null;
         try {
-            serviceTypeList = new DbConfig().getDbManager().selector(ServiceType.class).orderBy("time").findAll();
+            serviceTypeList = new DbConfig(getApplicationContext()).getDbManager().selector(ServiceType.class).orderBy("time").findAll();
 
         } catch (DbException e) {
         }
@@ -953,7 +953,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                                 areaId = 0;//没县 没市 全部默认0  省id 暂时忽略；
                                 areaId_shi = 0;
                             } else {     //没有县 有市 获取市id
-                                DbManager db = new DbConfig().getDbManager();
+                                DbManager db = new DbConfig(getApplicationContext()).getDbManager();
                                 List<Province> provinceList = new ArrayList<>();
                                 try {
                                     provinceList = db.selector(Province.class)
@@ -968,7 +968,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
                             }
                         } else {//获取县id
-                            DbManager db = new DbConfig().getDbManager();
+                            DbManager db = new DbConfig(getApplicationContext()).getDbManager();
                             List<Province> provinceList = new ArrayList<>();
                             List<Province> provinceListCity = new ArrayList<>();
                             try {
@@ -1054,7 +1054,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
     private void getSheng() {
         shengList.clear();
-        DbManager db = new DbConfig().getDbManager();
+        DbManager db = new DbConfig(getApplicationContext()).getDbManager();
         List<Province> provinceList = new ArrayList<>();
         try {
             provinceList = db.selector(Province.class)
@@ -1073,7 +1073,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
     private void getShi() {
         shiList.clear();
-        DbManager db = new DbConfig().getDbManager();
+        DbManager db = new DbConfig(getApplicationContext()).getDbManager();
         List<Province> provinceList = new ArrayList<>();
         Log.e(TAG, "getShi: " + currentSheng);
         try {
@@ -1106,7 +1106,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
     private void getXian() {
         xianList.clear();
-        DbManager db = new DbConfig().getDbManager();
+        DbManager db = new DbConfig(getApplicationContext()).getDbManager();
         List<Province> provinceList = new ArrayList<>();
         try {
             provinceList = db.selector(Province.class)

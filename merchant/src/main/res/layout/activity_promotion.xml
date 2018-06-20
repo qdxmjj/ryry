@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ruyiruyi.ruyiruyi.ui.activity.PromotionActivity">
+    tools:context="com.ruyiruyi.merchant.ui.activity.PromotionActivity">
 
     <com.ruyiruyi.rylibrary.cell.ActionBar
         android:id="@+id/my_acbar"
@@ -13,6 +13,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_rlv"
+        android:background="#FFD030"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -164,7 +164,7 @@ public class GoodsInfoActivity extends BaseActivity {
         final List<ServicesBean> servicesBean = new ArrayList<>();
         JSONObject jsonObject = new JSONObject();
         try {
-            String storeId = new DbConfig().getId() + "";
+            String storeId = new DbConfig(getApplicationContext()).getId() + "";
             jsonObject.put("storeId", storeId);
             jsonObject.put("serviceTypeId", s);
         } catch (JSONException e) {
@@ -278,6 +278,10 @@ public class GoodsInfoActivity extends BaseActivity {
         RxViewAction.clickNoDouble(mGoodsType).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
+                if (leftTypeList == null || leftTypeList.size() == 0) {
+                    showErrorToMyServiceActDialog("请先选择您的服务小类!");
+                    return;
+                }
                 showGoodsTypeDialog();
             }
         });
@@ -309,6 +313,34 @@ public class GoodsInfoActivity extends BaseActivity {
             }
         });
 
+    }
+
+    private void showErrorToMyServiceActDialog(String error) {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
+        TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
+        error_text.setText(error);
+        dialog.setTitle("如意如驿商家版");
+        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setView(dialogView);
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "去选择", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getApplicationContext(), MyServiceActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        dialog.show();
+        //设置按钮颜色
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
     }
 
     private void commitData(int type) {
@@ -399,7 +431,7 @@ public class GoodsInfoActivity extends BaseActivity {
                 showDialogProgress(progressDialog, "商品提交中...");
                 JSONObject object = new JSONObject();
                 try {
-                    object.put("storeId", new DbConfig().getId());
+                    object.put("storeId", new DbConfig(getApplicationContext()).getId());
                     object.put("name", mGoodsName.getText());
                     object.put("serviceTypeId", leftTypeId);
                     object.put("serviceId", rightTypeId);
@@ -512,10 +544,6 @@ public class GoodsInfoActivity extends BaseActivity {
         currentLeftPosition = 0;//每次弹Dialog 初始化
         currentRightPosition = 0;//每次弹Dialog 初始化
         currentForId = 0;//每次弹Dialog 初始化
-        if (leftTypeList == null || leftTypeList.size() == 0) {
-            Toast.makeText(GoodsInfoActivity.this, "请先选择您的服务小类", Toast.LENGTH_SHORT).show();
-            return;
-        }
         leftWheel.setItems(leftTypeList, 0);
         currentLeftString = leftTypeList.get(0);//每次弹Dialog 初始化
         String s = leftTypeList.get(0);

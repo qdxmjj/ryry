@@ -194,7 +194,7 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
     }
 
     private void getData() {
-        String id_ = new DbConfig().getId() + "";
+        String id_ = new DbConfig(getActivity()).getId() + "";
         JSONObject object = new JSONObject();
         try {
             object.put("storeId", id_);
@@ -416,7 +416,7 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 showDialogProgress(progressDialog, "店铺信息保存中...");
-                String storeId = new DbConfig().getId() + "";
+                String storeId = new DbConfig(getActivity()).getId() + "";
                 JSONObject object = new JSONObject();
                 try {
                     object.put("id", storeId);

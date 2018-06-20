@@ -21,7 +21,7 @@ public class UnderstandUsActivity extends RyBaseActivity {
         setContentView(R.layout.activity_understand_us);
         mActionBar = (ActionBar) findViewById(R.id.acbar);
         mActionBar.setTitle("关于我们");
-        mActionBar.setRightImage(R.drawable.ic_kefu);
+        /*mActionBar.setRightImage(R.drawable.ic_kefu);*/
         mActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
@@ -29,9 +29,9 @@ public class UnderstandUsActivity extends RyBaseActivity {
                     case -1:
                         onBackPressed();
                         break;
-                    case -2:
+                  /*  case -2:
                         Toast.makeText(UnderstandUsActivity.this, "hello", Toast.LENGTH_SHORT).show();
-                        break;
+                        break;*/
                 }
             }
         });

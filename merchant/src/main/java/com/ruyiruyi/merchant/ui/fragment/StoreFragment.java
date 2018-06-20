@@ -156,14 +156,14 @@ public class StoreFragment extends BaseFragment {
         try {
             object.put("page", current_page);
             object.put("rows", mRows);
-            object.put("storeId", new DbConfig().getId() + "");
+            object.put("storeId", new DbConfig(getActivity()).getId() + "");
             object.put("type", "1");//type: 1:商品订单 2:如意如意平台订单
 
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreGeneralOrderByType");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getActivity()).getToken());
         params.setConnectTimeout(6000);
         Log.e(TAG, "requestFromServer: oov" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -327,7 +327,7 @@ public class StoreFragment extends BaseFragment {
         storeImage = getView().findViewById(R.id.img_user);
         storeName = getView().findViewById(R.id.tv_username);
         //头像 店铺名称
-        DbConfig config = new DbConfig();
+        DbConfig config = new DbConfig(getActivity());
         User user = config.getUser();
         storeName.setText(user.getStoreName());
         Glide.with(this).load(user.getStoreImgUrl()).
@@ -465,15 +465,15 @@ public class StoreFragment extends BaseFragment {
                 .getExternalStorageDirectory().getAbsolutePath(), "forpoststoreheadimg");//为提交请求所生成图片 每次提交被替换
         JSONObject object = new JSONObject();
         try {
-            object.put("storeId", new DbConfig().getId() + "");
-            User user = new DbConfig().getUser();
+            object.put("storeId", new DbConfig(getActivity()).getId() + "");
+            User user = new DbConfig(getActivity()).getUser();
             object.put("headImgUrl", user.getStoreImgUrl());
 
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreHeadImgByStoreId");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getActivity()).getToken());
         params.addBodyParameter("store_head_img", new File(img_Path));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -495,9 +495,9 @@ public class StoreFragment extends BaseFragment {
                                     .transform(new GlideCircleTransform(getActivity()))
                                     .into(storeImage);*/
                         //修改本地用户信息后跳转
-                        User user = new DbConfig().getUser();
+                        User user = new DbConfig(getActivity()).getUser();
                         user.setStoreImgUrl(url);
-                        DbConfig dbConfig = new DbConfig();
+                        DbConfig dbConfig = new DbConfig(getActivity());
                         DbManager db = dbConfig.getDbManager();
                         try {
                             db.saveOrUpdate(user);

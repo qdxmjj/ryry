@@ -280,7 +280,7 @@ public class StorePingJiaFragment extends BaseFragment implements StorePingJiaIt
         assertHasTheSameAdapter(mRlv, multiTypeAdapter);
 
         pingjiaBeanList = new ArrayList<>();
-        storeId = new DbConfig().getId() + "";
+        storeId = new DbConfig(getActivity()).getId() + "";
     }
 
     @Override

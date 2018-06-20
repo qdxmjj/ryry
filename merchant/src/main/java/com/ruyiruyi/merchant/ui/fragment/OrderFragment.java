@@ -175,13 +175,13 @@ public class OrderFragment extends BaseFragment {
         try {
             object.put("page", current_page);
             object.put("rows", mRows);
-            object.put("storeId", new DbConfig().getId() + "");
+            object.put("storeId", new DbConfig(getActivity()).getId() + "");
             object.put("type", "2");//type: 1:商品订单 2:如意如意平台订单
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreGeneralOrderByType");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getActivity()).getToken());
         params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

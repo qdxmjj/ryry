@@ -245,7 +245,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         price = bundle.getString("price");
         imgurl = bundle.getString("imgurl");
         Log.e(TAG, "onCreate:  imgurl = " + imgurl);
-        storeId = new DbConfig().getId() + "";
+        storeId = new DbConfig(getApplicationContext()).getId() + "";
 
         serviceList = new ArrayList<>();
         initView();
@@ -260,7 +260,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         final List<ServicesBean> servicesBean = new ArrayList<>();
         JSONObject jsonObject = new JSONObject();
         try {
-            String storeId = new DbConfig().getId() + "";
+            String storeId = new DbConfig(getApplicationContext()).getId() + "";
             jsonObject.put("storeId", storeId);
             jsonObject.put("serviceTypeId", s);
         } catch (JSONException e) {
@@ -368,6 +368,10 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         RxViewAction.clickNoDouble(mGoodsType).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
+                if (leftTypeList == null || leftTypeList.size() == 0) {
+                    showErrorToMyServiceActDialog("请先选择您的服务小类!");
+                    return;
+                }
                 showGoodsTypeDialog();
             }
         });
@@ -590,6 +594,37 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
     }
 
+
+    private void showErrorToMyServiceActDialog(String error) {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
+        TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
+        error_text.setText(error);
+        dialog.setTitle("如意如驿商家版");
+        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setView(dialogView);
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "去选择", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getApplicationContext(), MyServiceActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        dialog.show();
+        //设置按钮颜色
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+    }
+
+
+
     private void showGoodsTypeDialog() {
         View v_goodstype = LayoutInflater.from(this).inflate(R.layout.dialog_two_horizontal_wheel_view, null);
         leftWheel = (WheelView) v_goodstype.findViewById(R.id.whv_left);
@@ -597,11 +632,6 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         currentLeftPosition = 0;//每次弹Dialog 初始化
         currentRightPosition = 0;//每次弹Dialog 初始化
         currentForId = 0;//每次弹Dialog 初始化
-        leftWheel.setItems(leftTypeList, currentLeftPosition);
-        if (leftTypeList == null || leftTypeList.size() == 0) {
-            Toast.makeText(GoodsInfoReeditActivity.this, "请先选择您的服务小类", Toast.LENGTH_SHORT).show();
-            return;
-        }
         leftWheel.setItems(leftTypeList, 0);
         currentLeftString = leftTypeList.get(0);//每次弹Dialog 初始化
         String s = leftTypeList.get(0);

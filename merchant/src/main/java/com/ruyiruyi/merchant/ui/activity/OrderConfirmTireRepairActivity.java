@@ -176,6 +176,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
     private ProgressDialog progressDialog;
     private ProgressDialog mainDialog;
     private final int maxRepairNum = 3;  //预设轮胎最大修补次数
+    private String maxErrorMsg = "每条轮胎最多修补三次!";//预设轮胎最大修补次数提示
     private int currentCount_a_ = 0;
     private int currentCount_b_ = 0;
     private int currentCount_c_ = 0;
@@ -185,8 +186,12 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
     private int oldCount_c_ = 0;
     private int oldCount_d_ = 0;
     private int currentImage = 0;
-    private String path_ = "";
 
+    private String path_ = "";
+    private int numPic_a_ = 0;// 默认0商家未增加补胎数量  >0已增加修补数
+    private int numPic_b_ = 0;// 默认0商家未增加补胎数量  >0已增加修补数
+    private int numPic_c_ = 0;// 默认0商家未增加补胎数量  >0已增加修补数
+    private int numPic_d_ = 0;// 默认0商家未增加补胎数量  >0已增加修补数
     /*提交参数*/
     private Bitmap shoeAbitmap;//10张照片
     private Bitmap shoeACodebitmap;
@@ -229,7 +234,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         //获取传递数据
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
-        storeId = new DbConfig().getId() + "";
+        storeId = new DbConfig(getApplicationContext()).getId() + "";
 
         mainDialog = new ProgressDialog(this);
         showDialogProgress(mainDialog, "订单信息加载中...");
@@ -250,7 +255,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreOrderInfoByNoAndType");
         params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig().getToken());
+        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -615,7 +620,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectShoeRepairOrderType");
                         params.addBodyParameter("reqJson", object.toString());
                         params.addBodyParameter("repairBarCodeList", repairAmountList.toString());
-                        params.addBodyParameter("token", new DbConfig().getToken());
+                        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                         params.addBodyParameter("drivingLicenseImg", new File(path_licenseBitmap));
                         params.addBodyParameter("carImg", new File(path_carBitmap));
                         if (hasPic_a_left) {
@@ -693,7 +698,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                         }
                         RequestParams params3 = new RequestParams(UtilsURL.REQUEST_URL + "storeSelectShoeRepairOrderType");
                         params3.addBodyParameter("reqJson", object3.toString());
-                        params3.addBodyParameter("token", new DbConfig().getToken());
+                        params3.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                         x.http().post(params3, new Callback.CommonCallback<String>() {
                             @Override
                             public void onSuccess(String result) {
@@ -744,37 +749,15 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
     private boolean judgeBeforeSave(String type) {
         switch (type) {
             case "1"://确认服务
-                int picNumShoe = 0;
-                int picNumCode = 0;
-                if (hasPic_a_left) {
-                    picNumShoe++;
-                }
-                if (hasPic_b_left) {
-                    picNumShoe++;
-                }
-                if (hasPic_c_left) {
-                    picNumShoe++;
-                }
-                if (hasPic_d_left) {
-                    picNumShoe++;
-                }
-                if (picNumShoe < shoeRepairList.size()) {
-                    showErrorDialog("请补全轮胎正面照!");
+                if (numPic_a_ == 0 && numPic_b_ == 0 && numPic_c_ == 0 && numPic_d_ == 0) {
+                    showErrorDialog("您还没有添加补胎数量!");
                     return false;
                 }
-                if (hasPic_a_right) {
-                    picNumCode++;
+                if ((numPic_a_ > 0 && !hasPic_a_left) || (numPic_b_ > 0 && !hasPic_b_left) || (numPic_c_ > 0 && !hasPic_c_left) || (numPic_d_ > 0 && !hasPic_d_left)) {
+                    showErrorDialog("请补全轮胎条正面照!");
+                    return false;
                 }
-                if (hasPic_b_right) {
-                    picNumCode++;
-                }
-                if (hasPic_c_right) {
-                    picNumCode++;
-                }
-                if (hasPic_d_right) {
-                    picNumCode++;
-                }
-                if (picNumCode < shoeRepairList.size()) {
+                if ((numPic_a_ > 0 && !hasPic_a_right) || (numPic_b_ > 0 && !hasPic_b_right) || (numPic_c_ > 0 && !hasPic_c_right) || (numPic_d_ > 0 && !hasPic_d_right)) {
                     showErrorDialog("请补全轮胎条形码特写照!");
                     return false;
                 }
@@ -1047,23 +1030,43 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 fl_repair_a_.setVisibility(View.VISIBLE);
                 code_repair_a_.setText(bean.getBarCode());
                 pic_a_titleno.setText(bean.getBarCode());//照片标题
-                pic_a_titleno.setVisibility(View.VISIBLE);//照片标题
-                ll_pic_a.setVisibility(View.VISIBLE);
+//                pic_a_titleno.setVisibility(View.VISIBLE);//照片标题
+//                ll_pic_a.setVisibility(View.VISIBLE);//照片
                 oldCount_a_ = Integer.parseInt(bean.getRepairAmount());
+                repair_num_a_.setGoods_storage(maxRepairNum);//必须先设置good_storege 否则默认为1
                 repair_num_a_.setAmount(oldCount_a_);
-                repair_num_a_.setGoods_storage(maxRepairNum);
                 repair_num_a_.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
                     @Override
                     public void onAmountChange(View view, int amount) {
                         if (amount == maxRepairNum) {
-                            Toast.makeText(getApplicationContext(), "每条轮胎最多修补三次!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), maxErrorMsg, Toast.LENGTH_SHORT).show();
                         }
                         if (amount < oldCount_a_) {
                             repair_num_a_.setAmount(amount + 1);
                             return;
                         }
+                        if (amount == oldCount_a_) {
+                            Log.e(TAG, "onAmountChange:  amount == oldCount_a_");
+                            //减到初始值时 先隐藏
+                            pic_a_titleno.setVisibility(View.GONE);//照片标题
+                            ll_pic_a.setVisibility(View.GONE);//照片
+                            //再删除照片显示
+                            pic_a_left_delete.setVisibility(View.GONE);
+                            pic_a_left_center.setVisibility(View.VISIBLE);
+                            pic_a_left.setImageResource(R.drawable.img_bg_dark);
+                            hasPic_a_left = false;
+                            pic_a_right_delete.setVisibility(View.GONE);
+                            pic_a_right_center.setVisibility(View.VISIBLE);
+                            pic_a_right.setImageResource(R.drawable.img_bg_dark);
+                            hasPic_a_right = false;
+                            currentCount_a_ = amount;
+                            numPic_a_ = 0;
+                            return;
+                        }
+                        pic_a_titleno.setVisibility(View.VISIBLE);//照片标题
+                        ll_pic_a.setVisibility(View.VISIBLE);//照片
                         currentCount_a_ = amount;
-                        Log.e(TAG, "onAmountChange: currentCount_a_ = " + currentCount_a_);
+                        numPic_a_++;
                     }
                 });
             }
@@ -1071,22 +1074,42 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 fl_repair_b_.setVisibility(View.VISIBLE);
                 code_repair_b_.setText(bean.getBarCode());
                 pic_b_titleno.setText(bean.getBarCode());//照片标题
-                pic_b_titleno.setVisibility(View.VISIBLE);//照片标题
-                ll_pic_b.setVisibility(View.VISIBLE);
+//                pic_b_titleno.setVisibility(View.VISIBLE);//照片标题
+//                ll_pic_b.setVisibility(View.VISIBLE);
                 oldCount_b_ = Integer.parseInt(bean.getRepairAmount());
-                repair_num_b_.setAmount(oldCount_b_);
                 repair_num_b_.setGoods_storage(maxRepairNum);
+                repair_num_b_.setAmount(oldCount_b_);
                 repair_num_b_.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
                     @Override
                     public void onAmountChange(View view, int amount) {
                         if (amount == maxRepairNum) {
-                            Toast.makeText(getApplicationContext(), "每条轮胎最多修补三次!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), maxErrorMsg, Toast.LENGTH_SHORT).show();
                         }
                         if (amount < oldCount_b_) {
                             repair_num_b_.setAmount(amount + 1);
                             return;
                         }
+                        if (amount == oldCount_b_) {
+                            //减到初始值时 先隐藏
+                            pic_b_titleno.setVisibility(View.GONE);//照片标题
+                            ll_pic_b.setVisibility(View.GONE);//照片
+                            //再删除照片显示
+                            pic_b_left_delete.setVisibility(View.GONE);
+                            pic_b_left_center.setVisibility(View.VISIBLE);
+                            pic_b_left.setImageResource(R.drawable.img_bg_dark);
+                            hasPic_b_left = false;
+                            pic_b_right_delete.setVisibility(View.GONE);
+                            pic_b_right_center.setVisibility(View.VISIBLE);
+                            pic_b_right.setImageResource(R.drawable.img_bg_dark);
+                            hasPic_b_right = false;
+                            currentCount_b_ = amount;
+                            numPic_b_ = 0;
+                            return;
+                        }
+                        pic_b_titleno.setVisibility(View.VISIBLE);//照片标题
+                        ll_pic_b.setVisibility(View.VISIBLE);//照片
                         currentCount_b_ = amount;
+                        numPic_b_++;
                     }
                 });
             }
@@ -1094,22 +1117,42 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 fl_repair_c_.setVisibility(View.VISIBLE);
                 code_repair_c_.setText(bean.getBarCode());
                 pic_c_titleno.setText(bean.getBarCode());//照片标题
-                pic_c_titleno.setVisibility(View.VISIBLE);//照片标题
-                ll_pic_c.setVisibility(View.VISIBLE);
+//                pic_c_titleno.setVisibility(View.VISIBLE);//照片标题
+//                ll_pic_c.setVisibility(View.VISIBLE);
                 oldCount_c_ = Integer.parseInt(bean.getRepairAmount());
-                repair_num_c_.setAmount(oldCount_c_);
                 repair_num_c_.setGoods_storage(maxRepairNum);
+                repair_num_c_.setAmount(oldCount_c_);
                 repair_num_c_.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
                     @Override
                     public void onAmountChange(View view, int amount) {
                         if (amount == maxRepairNum) {
-                            Toast.makeText(getApplicationContext(), "每条轮胎最多修补三次!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), maxErrorMsg, Toast.LENGTH_SHORT).show();
                         }
                         if (amount < oldCount_c_) {
                             repair_num_c_.setAmount(amount + 1);
                             return;
                         }
+                        if (amount == oldCount_c_) {
+                            //减到初始值时 先隐藏
+                            pic_c_titleno.setVisibility(View.GONE);//照片标题
+                            ll_pic_c.setVisibility(View.GONE);//照片
+                            //再删除照片显示
+                            pic_c_left_delete.setVisibility(View.GONE);
+                            pic_c_left_center.setVisibility(View.VISIBLE);
+                            pic_c_left.setImageResource(R.drawable.img_bg_dark);
+                            hasPic_c_left = false;
+                            pic_c_right_delete.setVisibility(View.GONE);
+                            pic_c_right_center.setVisibility(View.VISIBLE);
+                            pic_c_right.setImageResource(R.drawable.img_bg_dark);
+                            hasPic_c_right = false;
+                            currentCount_c_ = amount;
+                            numPic_c_ = 0;
+                            return;
+                        }
+                        pic_c_titleno.setVisibility(View.VISIBLE);//照片标题
+                        ll_pic_c.setVisibility(View.VISIBLE);//照片
                         currentCount_c_ = amount;
+                        numPic_c_++;
                     }
                 });
             }
@@ -1117,22 +1160,42 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 fl_repair_d_.setVisibility(View.VISIBLE);
                 code_repair_d_.setText(bean.getBarCode());
                 pic_d_titleno.setText(bean.getBarCode());//照片标题
-                pic_d_titleno.setVisibility(View.VISIBLE);//照片标题
-                ll_pic_d.setVisibility(View.VISIBLE);
+//                pic_d_titleno.setVisibility(View.VISIBLE);//照片标题
+//                ll_pic_d.setVisibility(View.VISIBLE);
                 oldCount_d_ = Integer.parseInt(bean.getRepairAmount());
-                repair_num_d_.setAmount(oldCount_d_);
                 repair_num_d_.setGoods_storage(maxRepairNum);
+                repair_num_d_.setAmount(oldCount_d_);
                 repair_num_d_.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
                     @Override
                     public void onAmountChange(View view, int amount) {
                         if (amount == maxRepairNum) {
-                            Toast.makeText(getApplicationContext(), "每条轮胎最多修补三次!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), maxErrorMsg, Toast.LENGTH_SHORT).show();
                         }
                         if (amount < oldCount_d_) {
                             repair_num_d_.setAmount(amount + 1);
                             return;
                         }
+                        if (amount == oldCount_d_) {
+                            //减到初始值时 先隐藏
+                            pic_d_titleno.setVisibility(View.GONE);//照片标题
+                            ll_pic_d.setVisibility(View.GONE);//照片
+                            //再删除照片显示
+                            pic_d_left_delete.setVisibility(View.GONE);
+                            pic_d_left_center.setVisibility(View.VISIBLE);
+                            pic_d_left.setImageResource(R.drawable.img_bg_dark);
+                            hasPic_d_left = false;
+                            pic_d_right_delete.setVisibility(View.GONE);
+                            pic_d_right_center.setVisibility(View.VISIBLE);
+                            pic_d_right.setImageResource(R.drawable.img_bg_dark);
+                            hasPic_d_right = false;
+                            currentCount_d_ = amount;
+                            numPic_d_ = 0;
+                            return;
+                        }
+                        pic_d_titleno.setVisibility(View.VISIBLE);//照片标题
+                        ll_pic_d.setVisibility(View.VISIBLE);//照片
                         currentCount_d_ = amount;
+                        numPic_d_++;
                     }
                 });
             }
