@@ -52,9 +52,9 @@ public class PublicBarCodeProvider extends ItemViewProvider<PublicBarCode, Publi
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {//status:   "1" 一致  "2" 不一致    默认不选 1 一致  选中 2 不一致
-                    listener.OnBarCodeSwitchClickListener(bean.getBarCode(), bean.getId(), bean.getOrderNo(), "2", bean.getAbcd());
+                    listener.OnBarCodeSwitchClickListener(bean.getBarCode(), "2", bean.getOrderNo(), bean.getId(), bean.getAbcd());
                 } else {
-                    listener.OnBarCodeSwitchClickListener(bean.getBarCode(), bean.getId(), bean.getOrderNo(), "1", bean.getAbcd());
+                    listener.OnBarCodeSwitchClickListener(bean.getBarCode(), "1", bean.getOrderNo(), bean.getId(), bean.getAbcd());
                 }
             }
         });

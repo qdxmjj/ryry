@@ -11,6 +11,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,10 @@ public class GuideActivity extends RyBaseActivity {
     private boolean isFirstToThree = true; //只有第一次进入第三页才播放倒计时动画标记
     private TimeCount mTimeCount;
     private int progress = 0;
+    private int fuckProgress = 0;
+    private boolean isfuckFirst = true;
     private MyReceiver receiver = null;
+    private String TAG = GuideActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +72,20 @@ public class GuideActivity extends RyBaseActivity {
     public class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            fuckProgress = 0;
+            if (!isfuckFirst) {
+                mTimeCount.cancel();
+                mTimeCount.onFinish();
+            }
+            isfuckFirst = false;
             Bundle bundle = intent.getExtras();
             int count = bundle.getInt("count");
             progress = progress + count;
             tv_num.setText(progress + "%");
+            if (fuckProgress == 0) {
+                mTimeCount = new TimeCount(14000, 1000);
+                mTimeCount.start();
+            }
 
             bt_home.setAlpha(0);
             bt_home.setClickable(false);
@@ -169,19 +183,6 @@ public class GuideActivity extends RyBaseActivity {
         });
     }
 
-
-    /*
-    * 播放倒计时动画
-    * */
-    private void actionAnimator() {
-        //播放倒计时动画
-        mTimeCount = new TimeCount(10000, 1000);
-        mTimeCount.start();
-        bt_home.setAlpha(0);
-        bt_home.setClickable(false);
-    }
-
-
     class TimeCount extends CountDownTimer {
 
         public TimeCount(long millisInFuture, long countDownInterval) {
@@ -191,17 +192,14 @@ public class GuideActivity extends RyBaseActivity {
         @Override
         public void onTick(long millisUntilFinished) {
             //进行中
-            tv_num.setText(millisUntilFinished / 1000 + "s");
+            tv_num.setText(progress + (13 - millisUntilFinished / 1000) + "%");
         }
 
         @Override
         public void onFinish() {
             //结束
-            tv_num.setVisibility(View.GONE);
-            tv_welcome.setVisibility(View.VISIBLE);
-            //播放显示进入主页按钮动画
-            openAnimator();
-//            closeAnimator();
+            Log.e(TAG, "onFinish: ~~~~~~");
+
         }
     }
 
