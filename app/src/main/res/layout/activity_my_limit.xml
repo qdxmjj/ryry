@@ -79,7 +79,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="1000"
+                            android:text="0"
                             android:textSize="15sp" />
                     </LinearLayout>
 
@@ -102,7 +102,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="1000"
+                            android:text="0"
                             android:textSize="15sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -134,7 +134,7 @@
                         android:background="@drawable/edit_background_noline_white"
                         android:inputType="number"
                         android:maxLength="9"
-                        android:text="500.00"
+                        android:text="0"
                         android:textColor="@color/c7"
                         android:textCursorDrawable="@drawable/edit_cursor_color"
                         android:textSize="36sp" />

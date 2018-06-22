@@ -1,22 +1,18 @@
-package com.ruyiruyi.ruyiruyi.ui.activity;
+package com.ruyiruyi.ruyiruyi.ui.service;
 
-import android.Manifest;
+import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
-import com.bumptech.glide.Glide;
-import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.MyApplication;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
@@ -27,9 +23,7 @@ import com.ruyiruyi.ruyiruyi.db.model.CarVerhicle;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.TireType;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
-import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
-import com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService;
+import com.ruyiruyi.ruyiruyi.ui.activity.GuideActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 
@@ -45,135 +39,112 @@ import org.xutils.x;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LaunchActivity extends RyBaseActivity {
-
-    private static final String TAG = LaunchActivity.class.getSimpleName();
-    private ImageView launchImage;
+public class LuncherDownlodeService extends Service {
+    private String TAG = LuncherDownlodeService.class.getSimpleName();
     public String currentCity = "";
-    private double jingdu = 0.00;
-    private double weidu = 0.00;
     private LocationService locationService;
-    public boolean isHasPermission = true;
-    private static final int GO_NEXT = 99;
-    private static final int GO_MAIN = 100;
-    private static final int GO_GUIDE = 101;
-    private static final int GO_NEXT_TIME = 2000;
 
-    private Handler handler = new Handler() {
+
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case GO_NEXT:
-                    goNext();
+                case 1:
+                    /*initCarDataIntoDb();*/
+
+                    initCarDataIntoDb();
+                    //获取车辆图标数据
+                    initCarBrand();
+                    //获取车辆型号数据
+                    initCarVerhicle();
+                    //获取车辆轮胎和排量数据
+                    initCarrTireInfo();
+                    //获取轮胎型号
+                    initTireType();
+                    //获取省市县
+                    initProvice();
+                    initDingwei();
+                    //获取车辆品牌数据
                     break;
-                case GO_MAIN:
-                    //开启服务下载
-                    StartDownlodeService();
-                    goMain();
+                case 2:
+                    /*initCarBrand();*/
+                    //发送广播
+                    Intent intent2 = new Intent();
+                    intent2.putExtra("count", 14);
+                    intent2.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
+                    sendBroadcast(intent2);
                     break;
-                case GO_GUIDE:
-                    goGuide();
+                case 3:
+                   /* initCarVerhicle();*/
+                    //发送广播
+                    Intent intent3 = new Intent();
+                    intent3.putExtra("count", 14);
+                    intent3.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
+                    sendBroadcast(intent3);
+                    break;
+                case 4:
+                    /*initCarrTireInfo();*/
+                    //发送广播
+                    Intent intent4 = new Intent();
+                    intent4.putExtra("count", 14);
+                    intent4.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
+                    sendBroadcast(intent4);
+                    break;
+                case 5:
+                 /*   initTireType();*/
+                    //发送广播
+                    Intent intent5 = new Intent();
+                    intent5.putExtra("count", 14);
+                    intent5.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
+                    sendBroadcast(intent5);
+                    break;
+                case 6:
+                   /* initProvice();*/
+                    //发送广播
+                    Intent intent6 = new Intent();
+                    intent6.putExtra("count", 14);
+                    intent6.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
+                    sendBroadcast(intent6);
+                    break;
+                case 7:
+                  /*  initDingwei();*/
+                    //发送广播
+                    Intent intent7 = new Intent();
+                    intent7.putExtra("count", 14);
+                    intent7.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
+                    sendBroadcast(intent7);
+                    break;
+                case 8:
+                    //发送广播
+                    Intent intent8 = new Intent();
+                    intent8.putExtra("count", 16);
+                    intent8.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
+                    sendBroadcast(intent8);
                     break;
             }
-
         }
     };
 
-    private void goNext() {
+    private int startId;
 
-        //判断是否为第一次登陆
-        JudgeToMain();
-
+    public enum Control {
+        PLAY, PAUSE, STOP
     }
 
-    private void JudgeToMain() {
-        SharedPreferences sf = getSharedPreferences("data", MODE_PRIVATE);//判断是否是第一次进入
-        boolean isFirstIn = sf.getBoolean("isFirstIn", true);
-        SharedPreferences.Editor editor = sf.edit();
-        if (isFirstIn) {     //若为true，则是第一次进入
-           /* editor.putBoolean("isFirstIn", false);  修改标志位移动到service下载完毕数据后*/
-            handler.sendEmptyMessage(GO_GUIDE);//将message设置为跳转到引导页SplashActivity，跳转在goGuide中实现
-        } else {
-            handler.sendEmptyMessage(GO_MAIN);//将message设置文跳转到MainActivity，跳转功能在goMain中实现
-        }
-        editor.commit();
-
+    public LuncherDownlodeService() {
     }
-
-    private void goMain() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
-    private void goGuide() {
-        Intent intent = new Intent(this, GuideActivity.class);
-        startActivity(intent);
-    }
-
-    public void StartDownlodeService() {
-        Intent intent = new Intent(this, LuncherDownlodeService.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Key", LuncherDownlodeService.Control.PLAY);
-        intent.putExtras(bundle);
-        startService(intent);
-
-    }
-
-    private void judgePower() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            isHasPermission = false;
-            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            isHasPermission = false;
-            Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            isHasPermission = false;
-            Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
-            finish();
-            finish();
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            isHasPermission = false;
-            Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
-    private void initDingwei() {
-        locationService = ((MyApplication) getApplication()).locationService;
-        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
-        locationService.registerListener(mListener);
-        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
-        locationService.start();// 定位SDK
-    }
-
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_launch);
-        //权限获取
-        requestPower();
-        //  handler.sendEmptyMessageDelayed(0, 3000);
+    public void onCreate() {
+/*        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.music);
+            mediaPlayer.setLooping(false);
+        }*/
+        Message message = new Message();
+        message.what = 1;
+        mHandler.sendMessage(message);
 
-        //  handler.sendEmptyMessageDelayed(0,3000);
-
-       /* initView();
-      //  handler.sendEmptyMessageDelayed(0,3000);
-        //获取车辆品牌数据
+/*    //测试  bingo
         initCarDataIntoDb();
         //获取车辆图标数据
         initCarBrand();
@@ -184,13 +155,13 @@ public class LaunchActivity extends RyBaseActivity {
         //获取轮胎型号
         initTireType();
         //获取省市县
-        initProvice();*/
-    }
+        initProvice();
+        initDingwei();
+        //获取车辆品牌数据*/
 
 
-    private void initView() {
-        launchImage = (ImageView) findViewById(R.id.launch_image);
-        Glide.with(this).load("http://180.76.243.205:8111/images/launch/launch.jpg").into(launchImage);
+        Log.e(TAG, "onCreate");
+        super.onCreate();
     }
 
 
@@ -239,8 +210,6 @@ public class LaunchActivity extends RyBaseActivity {
                             factoryList.add(new CarFactory(id, carBrandId, factory, timestampToStringAll));
                         }
                         savaCarFactoryIntoDb(factoryList);
-                    } else if (status.equals("-999")) {
-                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
                         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
@@ -277,6 +246,11 @@ public class LaunchActivity extends RyBaseActivity {
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(factoryList);
+
+            Message message = new Message();
+            message.what = 2;
+            mHandler.sendMessage(message);
+
         } catch (DbException e) {
 
         }
@@ -336,7 +310,7 @@ public class LaunchActivity extends RyBaseActivity {
                         }
                         saveCarBrandIntoDb(carBrandArrayList);
                     } else {
-                        Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -366,6 +340,11 @@ public class LaunchActivity extends RyBaseActivity {
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(brandList);
+
+            Message message = new Message();
+            message.what = 3;
+            mHandler.sendMessage(message);
+
         } catch (DbException e) {
 
         }
@@ -423,7 +402,7 @@ public class LaunchActivity extends RyBaseActivity {
                         }
                         savaCarVerhicleIntoDb(carVerhicleArrayList);
                     } else {
-                        Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -453,6 +432,11 @@ public class LaunchActivity extends RyBaseActivity {
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(verhiclesList);
+
+            Message message = new Message();
+            message.what = 4;
+            mHandler.sendMessage(message);
+
         } catch (DbException e) {
 
         }
@@ -516,7 +500,7 @@ public class LaunchActivity extends RyBaseActivity {
                         }
                         savaCarTireIntoDb(carTireInfoArrayList);
                     } else {
-                        Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -546,6 +530,11 @@ public class LaunchActivity extends RyBaseActivity {
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(carTireInfoArrayList);
+
+            Message message = new Message();
+            message.what = 5;
+            mHandler.sendMessage(message);
+
         } catch (DbException e) {
 
         }
@@ -603,7 +592,7 @@ public class LaunchActivity extends RyBaseActivity {
 
                         saveTireTypeIntoDb(tireTypeArrayList);
                     } else {
-                        Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -634,6 +623,11 @@ public class LaunchActivity extends RyBaseActivity {
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(tireTypeArrayList);
+
+            Message message = new Message();
+            message.what = 6;
+            mHandler.sendMessage(message);
+
         } catch (DbException e) {
 
         }
@@ -689,7 +683,7 @@ public class LaunchActivity extends RyBaseActivity {
 
                         saveProvinceIntoDb(provinceArrayList);
                     } else {
-                        Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -736,6 +730,11 @@ public class LaunchActivity extends RyBaseActivity {
                 DbManager db = new DbConfig(getApplicationContext()).getDbManager();
                 try {
                     db.saveOrUpdate(location1);
+
+                    Message message = new Message();
+                    message.what = 8;
+                    mHandler.sendMessage(message);
+
                 } catch (DbException e) {
 
                 }
@@ -744,89 +743,89 @@ public class LaunchActivity extends RyBaseActivity {
 
     };
 
+    private void initDingwei() {
+        locationService = ((MyApplication) getApplication()).locationService;
+        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
+        locationService.registerListener(mListener);
+        locationService.setLocationOption(locationService.getDefaultLocationClientOption());
+        locationService.start();// 定位SDK
+    }
 
     private void saveProvinceIntoDb(List<Province> provinceArrayList) {
         DbConfig dbConfig = new DbConfig(this);
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(provinceArrayList);
+
+            Message message = new Message();
+            message.what = 7;
+            mHandler.sendMessage(message);
+
         } catch (DbException e) {
 
         }
     }
 
-    //权限获取
-    public void requestPower() {
-        //判断是否已经赋予权限
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.CAMERA)
-                        != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true。
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.CAMERA)) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.CAMERA,
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                        }, 1);
-                Toast.makeText(LaunchActivity.this, "1111", Toast.LENGTH_SHORT).show();
-                //这里可以写个对话框之类的项向用户解释为什么要申请权限，并在对话框的确认键后续再次申请权限
-            } else {
-                //申请权限，字符串数组内是一个或多个要申请的权限，1是申请权限结果的返回参数，在onRequestPermissionsResult可以得知申请结果
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.CAMERA,
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                        }, 1);
-            }
-        } else {
-            handler.sendEmptyMessageDelayed(GO_NEXT, GO_NEXT_TIME);
-        }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        this.startId = startId;
+        Log.e(TAG, "onStartCommand---startId: " + startId);
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            Control control = (Control) bundle.getSerializable("Key");
+            if (control != null) {
+                switch (control) {
+                    case PLAY:
+                        play();
+                        break;
+                    case PAUSE:
+                        pause();
+                        break;
+                    case STOP:
+                        stop();
+                        break;
+                }
+            }
+        }
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-       /* Log.e(TAG, "onRequestPermissionsResult:requestCode --" + requestCode);
-
-        Log.e(TAG, "onRequestPermissionsResult: permissions--" + permissions.toString());
-        Log.e(TAG, "onRequestPermissionsResult:  permissions.length--" +  permissions.length);
-        Log.e(TAG, "onRequestPermissionsResult: grantResults--" + grantResults.toString());
-        Log.e(TAG, "onRequestPermissionsResult: grantResults.length--" + grantResults.length);
-*/
-        for (int i = 0; i < permissions.length; i++) {
-
-            Log.e(TAG, "onRequestPermissionsResult: permissions------" + permissions[i]);
-        }
-
-
-        if (requestCode == 1) {
-
-            boolean isPremission = true;
-            for (int i = 0; i < grantResults.length; i++) {
-                Log.e(TAG, "onRequestPermissionsResult: permissions++++++" + grantResults[i]);
-                if (grantResults[i] == -1) {
-                    isPremission = false;
-                }
-                //  Log.e(TAG, "onRequestPermissionsResult: permissions++++++" +  grantResults[i]);
-            }
-
-            if (isPremission) {          //有权限
-                handler.sendEmptyMessageDelayed(GO_NEXT, GO_NEXT_TIME);
-            } else {
-                judgePower();
-            }
-        }
+    public void onDestroy() {
+        Log.e(TAG, "onDestroy");
+/*        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }*/
+        super.onDestroy();
     }
+
+    private void play() {
+/*        if (!mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+        }*/
+    }
+
+    private void pause() {
+/*        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }*/
+    }
+
+    private void stop() {
+/*        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }*/
+        stopSelf(startId);
+        onDestroy();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        Log.e(TAG, "onBind");
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
 }

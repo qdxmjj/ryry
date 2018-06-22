@@ -1155,11 +1155,12 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     JSONObject jsonObject1 = new JSONObject(result);
                     Log.e(TAG, "geyCode-->onSuccess: code_result ==>" + result.toString());
                     status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
                     if (status.equals("1")) {
-                        Toast.makeText(RegisterActivity.this, "发送成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
                         mTimeCount.start();
                     } else {
-                        Toast.makeText(RegisterActivity.this, "发送失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
                         tv_getCode.setText("重新发送");
                     }
                 } catch (JSONException e) {
