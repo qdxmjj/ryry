@@ -106,6 +106,9 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        getWindow().setSoftInputMode
+                (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN|
+                        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_user_info);
         mActionBar = (ActionBar) findViewById(R.id.acbar_info);
         mActionBar.setTitle("个人信息");
@@ -521,6 +524,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
                                 Intent intent = new Intent(UserInfoActivity.this, MainActivity.class);
                                 intent.putExtra(MyFragment.FROM_FRAGMENT, "MYFRAGMENT");
                                 startActivity(intent);
+                                finish();
                             } else if (status == -999) {
                                 showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                             } else {

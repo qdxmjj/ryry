@@ -11,16 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <TextView
+
+    <WebView
         android:id="@+id/agreement_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fl_"
         android:background="#ffffff"
-        android:textColor="@color/c6"
-        android:paddingBottom="20dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="20dp" />
+        android:paddingLeft="5dp"
+        android:textColor="@color/c6"  />
 
 </LinearLayout>

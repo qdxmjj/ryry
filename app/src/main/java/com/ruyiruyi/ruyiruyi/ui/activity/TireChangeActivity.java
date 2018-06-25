@@ -46,7 +46,7 @@ import rx.functions.Action1;
 public class TireChangeActivity extends RyBaseActivity {
     public final static String CHANGE_TIRE = "CHANGE_TIRE";
     public static final int CHOOSE_SHOP = 2;
-    private static final String TAG = TireChangeActivity.class.getSimpleName();
+    public static final String TAG = TireChangeActivity.class.getSimpleName();
     public int currentChangeType = 0;  //0是首次更换  1是免费更换
 
     private ActionBar actionBar;

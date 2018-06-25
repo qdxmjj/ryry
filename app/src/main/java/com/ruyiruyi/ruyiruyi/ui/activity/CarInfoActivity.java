@@ -863,11 +863,11 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
      * 保存数据图片到服务器
      */
     private void uploadPic() {
-
+/*
         if (zhuyeBitmap == null){
             Toast.makeText(CarInfoActivity.this, "请上传驾驶证主页", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
       /*  if (fuyeBitmap == null){
             Toast.makeText(CarInfoActivity.this, "请上传驾驶证副页", Toast.LENGTH_SHORT).show();
             return;
@@ -882,8 +882,8 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                     .getExternalStorageDirectory().getAbsolutePath(),"lichengbiao");
         }*/
 
-       String zhuyePath = ImageUtils.savePhoto(zhuyeBitmap, Environment
-                .getExternalStorageDirectory().getAbsolutePath(), "zhuye");
+    /*   String zhuyePath = ImageUtils.savePhoto(zhuyeBitmap, Environment
+                .getExternalStorageDirectory().getAbsolutePath(), "zhuye");*/
 
      /*  String fuyePath = ImageUtils.savePhoto(fuyeBitmap, Environment
                 .getExternalStorageDirectory().getAbsolutePath(), "fuye");*/
@@ -958,7 +958,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserCar");
         params.addBodyParameter("reqJson",jsonObject.toString());
         params.setConnectTimeout(20000);
-        params.addBodyParameter("jiashizhengzhuye" ,new File(zhuyePath) );
+      //  params.addBodyParameter("jiashizhengzhuye" ,new File(zhuyePath) );
       //  params.addBodyParameter("jiashizhengfuye" ,new File(fuyePath) );
        /* if (hasLichengbiao){
             params.addBodyParameter("lichengbiao" ,new File(lcbPath) );

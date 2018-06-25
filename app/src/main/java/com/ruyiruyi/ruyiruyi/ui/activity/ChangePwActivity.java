@@ -164,11 +164,13 @@ public class ChangePwActivity extends RyBaseActivity {
                     object.put("oldPassword", passWord_yuan_);
                     object.put("newPassword", passWord_xin_a_);
                     User user = new DbConfig(getApplicationContext()).getUser();
+
                     object.put("phone", user.getPhone());
+                    object.put("userId", user.getId());
 
                 } catch (JSONException e) {
                 }
-                RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "changeStorePwdByOldPwd");
+                RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "changeUserPwdByOldPwd");
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                 params.setConnectTimeout(6000);

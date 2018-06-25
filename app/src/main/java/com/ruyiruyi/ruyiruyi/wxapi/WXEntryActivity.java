@@ -66,14 +66,14 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
      //   startActivity(new Intent(WXEntryActivity.this, SendToWXActivity.class));
        // finish();
-        RxViewAction.clickNoDouble(shareText)
+        /*RxViewAction.clickNoDouble(shareText)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
                         startActivity(new Intent(WXEntryActivity.this, SendToWXActivity.class));
                         finish();
                     }
-                });
+                });*/
         try {
             api.handleIntent(getIntent(), this);
         } catch (Exception e) {
@@ -195,7 +195,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
                 result = R.string.errcode_usuall;;
                 break;
             default:
-                result = R.string.errcode_unknown;
+                result = R.string.errcode_fail;
                 break;
         }
 
@@ -284,6 +284,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
                     //    Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
+                        finish();
                     }else if (status.equals("2")){    //微信未注册   调到填写信息界面
                         Toast.makeText(WXEntryActivity.this, "chenggong", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), WxPhoneActivity.class);

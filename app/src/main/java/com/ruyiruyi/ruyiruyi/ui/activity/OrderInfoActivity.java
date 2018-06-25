@@ -131,9 +131,17 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
             orderStage = intent.getIntExtra(PaymentActivity.ORDER_STAGE,1);
         }
         Log.e(TAG, "onCreate: ----*-----" + orderStage);
-        if (orderType == 0){
+        if (orderType == 0){//轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货 7退款中 8是已退款 9作废
             if (orderState == 3){
                 actionBar.setTitle("交易完成");
+            }else if (orderState == 6){
+                actionBar.setTitle("已退货");
+            }else if (orderState == 7){
+                actionBar.setTitle("退款中");
+            }else if (orderState == 8){
+                actionBar.setTitle("已退款");
+            }else if (orderState == 9){
+                actionBar.setTitle("作废");
             }
         }else {
             if (orderStage ==1){
@@ -222,6 +230,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
                         Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    //    setResult(TireWaitChangeActivity.TIREWAIT, new Intent());
                         finish();
                     }
                 } catch (JSONException e) {
@@ -275,6 +284,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
                         Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                      //  setResult(TireWaitChangeActivity.TIREWAIT, new Intent());
                         finish();
                     }
                 } catch (JSONException e) {
@@ -352,12 +362,14 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                                 }
                             }
                         }else if (orderType == 0){  //轮胎购买订单
-                            if (orderState == 3 ||orderState == 9 || orderState == 10 || orderState == 4) {  //已完成
+                       //     if (orderState == 3 ||orderState == 9 || orderState == 10 || orderState == 4) {  //已完成
                                 getTireOrderInfo(data);
                                 initActionRight();
-                            }
+                         //   }
                         }else if (orderType == 4){  //免费再换订单
                             getFreeRepairOrderInfo(data);
+                        }else if (orderType == 5){
+                            getLimitInfo(data);
                         }
                         if (orderStage!=2){
                             initData();
@@ -391,6 +403,17 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
 
             }
         });
+    }
+
+    private void getLimitInfo(JSONObject data) throws JSONException {
+        orderImg = data.getString("orderImg");
+        orderTotalPrice = data.getString("orderTotalPrice");
+        carNumber = data.getString("platNumber");
+        storeId = data.getString("storeId");
+        storeName = data.getString("storeName");
+        userName = data.getString("userName");
+        userPhone = data.getString("userPhone");
+        orderTotalPrice = data.getString("orderTotalPrice");
     }
 
 
@@ -475,6 +498,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
     }
 
     private void getTireOrderInfo(JSONObject data) throws JSONException {
+
         orderImg = data.getString("orderImg");
         orderTotalPrice = data.getString("orderTotalPrice");
         carNumber = data.getString("platNumber");
@@ -824,6 +848,12 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
             for (int i = 0; i < freeRepairList.size(); i++) {
                 items.add(freeRepairList.get(i));
             }
+        }else if (orderType == 5){
+            items.add(new InfoOne("联系人", userName, false));
+            items.add(new InfoOne("联系电话", userPhone, false));
+            items.add(new InfoOne("车牌号", carNumber, false));
+            items.add(new InfoOne("服务项目", "信用额度补差", false));
+            items.add(new InfoOne("补差金额", orderTotalPrice+"", true));
         }
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
@@ -1121,6 +1151,23 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     orderButton.setClickable(false);
                     orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
                 }
+                else if (orderState == 6){
+                    orderButton.setText("已退货");
+                    orderButton.setClickable(false);
+                    orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+                }else if (orderState == 7){
+                    orderButton.setText("退款中");
+                    orderButton.setClickable(false);
+                    orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+                }else if (orderState == 8){ ;
+                    orderButton.setText("已退款");
+                    orderButton.setClickable(false);
+                    orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+                }else if (orderState == 9){
+                    orderButton.setText("作废");
+                    orderButton.setClickable(false);
+                    orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+                }
             }else {
                 if (orderState == 5) {
                     orderButton.setText("等待发货");
@@ -1213,10 +1260,10 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
     @Override
     public void onInfoItemClickListener(String name) {
         if (name.equals("店铺名称")) {
-          /*  Log.e(TAG, "onInfoItemClickListener: storeid :" + storeId );
+            Log.e(TAG, "onInfoItemClickListener: storeid :" + storeId );
             Intent intent = new Intent(this, ShopHomeActivity.class);
             intent.putExtra("STOREID",Integer.parseInt(storeId));
-            startActivity(intent);*/
+            startActivity(intent);
         }
     }
 

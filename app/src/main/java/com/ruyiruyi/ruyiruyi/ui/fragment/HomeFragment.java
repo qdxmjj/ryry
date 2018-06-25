@@ -344,6 +344,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     public void onCityLayoutClickListener() {
         Intent intent = new Intent(getContext(), CityChooseActivity.class);
         startActivityForResult(intent, CITY_CHOOSE);
+
     }
 
     @Override
@@ -374,6 +375,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             Intent intent = new Intent(getContext(), CarManagerActivity.class);
             intent.putExtra("FRAGMENT", "HOMEFRAGMENT");
             startActivityForResult(intent, MainActivity.HOMEFRAGMENT_RESULT);
+            getActivity().finish();
         }
     }
 

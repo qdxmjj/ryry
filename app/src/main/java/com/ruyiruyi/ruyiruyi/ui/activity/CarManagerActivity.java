@@ -390,6 +390,7 @@ public class CarManagerActivity extends RyBaseActivity {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra(MyFragment.FROM_FRAGMENT, fromFragment);
         startActivity(intent);
+        finish();
     }
     /*
     @Override

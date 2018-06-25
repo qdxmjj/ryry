@@ -14,10 +14,18 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.CarTitle;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarTitleViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarTypeViewBinder;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.DbManager;
+import org.xutils.common.Callback;
 import org.xutils.ex.DbException;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +40,15 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
     private ActionBar actionBar;
     private RecyclerView listView;
     private List<Object> items = new ArrayList<>();
+    public  List<CarTitle> titleList ;
+    public  List<CarTireInfo> carTireInfoList;
     private MultiTypeAdapter adapter;
     private int vercicleid;
     public static int currentType = 0;
     public static String currentPaiLiang ;
     public static String currentYear ;
     public static boolean ishave = false;
+    private CarType carType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +66,126 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
                 }
             }
         });
+        titleList = new ArrayList<>();
+        carTireInfoList = new ArrayList<>();
         Intent intent = getIntent();
         vercicleid = intent.getIntExtra("VERCICLEID",0);
+        carType = new CarType();
 
         initView();
         currentType = 0;
-        initData();
+        //initData();
+
+        initDataFromService();
+    }
+
+    private void initDataFromService() {
+        int userId = new DbConfig(this).getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            if (currentType == 0){
+                jsonObject.put("verhicleId", vercicleid);
+                jsonObject.put("pailiang", "");
+                jsonObject.put("year", "");
+            }else if (currentType == 1){
+                jsonObject.put("verhicleId", vercicleid);
+                jsonObject.put("pailiang", currentPaiLiang);
+                jsonObject.put("year", "");
+            }else {
+                jsonObject.put("verhicleId", vercicleid);
+                jsonObject.put("pailiang", currentPaiLiang);
+                jsonObject.put("year", currentYear);
+            }
+
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarTireInfoByCondition");
+        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONArray data = jsonObject1.getJSONArray("data");
+                        carTireInfoList.clear();
+                        titleList.clear();
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject object = data.getJSONObject(i);
+                            String brand = object.getString("brand");
+                            String font = object.getString("font");
+                            String rear = object.getString("rear");
+                            String name = object.getString("name");
+                            String verhicle = object.getString("verhicle");
+                            String pailiang = object.getString("pailiang");
+                            String year = object.getString("year");
+                            long time = object.getLong("time");
+                            String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
+                            int carBrandId = object.getInt("carBrandId");
+                            int id = object.getInt("id");
+                            int verhicleId = object.getInt("verhicleId");
+                            Double price = object.getDouble("price");
+                            CarTireInfo carTireInfo = new CarTireInfo(id, brand, carBrandId, verhicle, verhicleId, pailiang, year, name, font, rear, timestampToStringAll);
+                            carTireInfoList.add(carTireInfo);
+                        }
+                        if (currentType == 0){
+                            for (int i = 0; i < carTireInfoList.size(); i++) {
+                                CarTitle carTitle = new CarTitle(carTireInfoList.get(i).getPailiang());
+                                titleList.add(carTitle);
+                            }
+                            carType.setCarType(0);
+                        }else if (currentType == 1){
+                            for (int i = 0; i < carTireInfoList.size(); i++) {
+                                CarTitle carTitle = new CarTitle(carTireInfoList.get(i).getYear());
+                                titleList.add(carTitle);
+                            }
+                            carType.setCarType(1);
+                            carType.setPailiang(currentPaiLiang);
+                        }else {
+                            for (int i = 0; i < carTireInfoList.size(); i++) {
+                                CarTitle carTitle = new CarTitle(carTireInfoList.get(i).getName());
+                                titleList.add(carTitle);
+                            }
+                            carType.setCarType(2);
+                            carType.setPailiang(currentPaiLiang);
+                            carType.setYear(currentYear);
+                        }
+
+                        initData();
+
+
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initData() {
-        DbManager db = new DbConfig(this).getDbManager();
+      /*  DbManager db = new DbConfig(this).getDbManager();
         List<CarTitle> titleList = new ArrayList<>();
         List<CarType>  typeList = new ArrayList<>();
         CarType carType = new CarType();
@@ -132,7 +253,7 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
 
         }
 
-
+*/
 
         items.clear();
         items.add(carType);
@@ -169,13 +290,13 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
     public void onCarYearLayoutClickListener(int type, String pailiang) {
         currentType = type;
         currentPaiLiang = pailiang;
-        initData();
+        initDataFromService();;
     }
 
     @Override
     public void onCarPaiLiangLayoutClickListener(int type) {
         currentType = type;
-        initData();
+        initDataFromService();;
     }
 
     @Override
@@ -185,7 +306,16 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
         }else if (currentType == 1){
             currentYear = title;
         }else {
-            DbManager db = new DbConfig(this).getDbManager();
+            for (int i = 0; i < carTireInfoList.size(); i++) {
+                if (carTireInfoList.get(i).getName().equals(title)) {
+                    int id = carTireInfoList.get(i).getId();
+                    Intent intent = new Intent(this, CarInfoActivity.class);
+                    intent.putExtra("CARTIREIINFO",id);
+                    intent.putExtra("FROM",0);
+                    startActivity(intent);
+                }
+            }
+          /*  DbManager db = new DbConfig(this).getDbManager();
             try {
                 List<CarTireInfo> carTireInfoList = db.selector(CarTireInfo.class)
                         .where("name", "=", title)
@@ -200,9 +330,9 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
                 startActivity(intent);
             } catch (DbException e) {
 
-            }
+            }*/
         }
         currentType += 1;
-        initData();
+        initDataFromService();;
     }
 }

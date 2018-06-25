@@ -99,6 +99,7 @@ public class PaySuccessActivity extends RyBaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        finish();
                     }
                 });
 
@@ -108,6 +109,7 @@ public class PaySuccessActivity extends RyBaseActivity {
     @Override
     public void onBackPressed() {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
     }
 
 

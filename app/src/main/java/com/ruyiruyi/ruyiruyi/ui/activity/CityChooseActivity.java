@@ -128,6 +128,7 @@ public class CityChooseActivity extends RyBaseActivity {
                         }
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
+                        finish();
                      //   CityChooseActivity.this.intent.putExtra("CITY",currentCity);
                        // setResult(HomeFragment.CITY_CHOOSE, CityChooseActivity.this.intent);
                        // finish();

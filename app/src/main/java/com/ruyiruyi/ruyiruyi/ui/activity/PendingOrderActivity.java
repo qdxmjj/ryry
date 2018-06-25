@@ -143,7 +143,13 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
                         Toast.makeText(PendingOrderActivity.this, "取消订单成功", Toast.LENGTH_SHORT).show();
-                        finish();
+                        if (orderFrom == 0) {
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
+                        } else {
+                            finish();
+                        }
+
                     }
                 } catch (JSONException e) {
 
@@ -196,7 +202,12 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
                         Toast.makeText(PendingOrderActivity.this, "取消订单成功", Toast.LENGTH_SHORT).show();
-                        finish();
+                        if (orderFrom == 0) {
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
+                        } else {
+                            finish();
+                        }
                     }
                 } catch (JSONException e) {
 
@@ -536,6 +547,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
     public void onBackPressed() {
         if (orderFrom == 0) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
         } else {
             super.onBackPressed();
         }

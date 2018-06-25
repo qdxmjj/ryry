@@ -12,6 +12,9 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnFigureItemInterface;
+import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
+import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBig;
+import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBigViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireFigure;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireFigureViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireRank;
@@ -186,6 +189,9 @@ public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInt
         for (int i = 0; i < tireFigureList.size(); i++) {
             items.add(tireFigureList.get(i));
         }
+        if (tireFigureList.size() == 0){
+            items.add(new EmptyBig());
+        }
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
@@ -220,6 +226,8 @@ public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInt
                                         startActivity(intent);
                                     }
                                 }
+                            }else {
+                                Toast.makeText(CarFigureActivity.this, "请选择轮胎规格", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -232,6 +240,7 @@ public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInt
         tireFigureViewBinder.setListener(this);
         // tireFigureViewBinder.setRanklistener(this);
         adapter.register(TireFigure.class, tireFigureViewBinder);
+        adapter.register(EmptyBig.class,new EmptyBigViewBinder());
     }
 
     @Override

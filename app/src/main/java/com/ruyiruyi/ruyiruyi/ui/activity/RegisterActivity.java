@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -74,6 +75,9 @@ public class RegisterActivity extends RyBaseActivity implements DatePicker.OnDat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode
+                (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN|
+                        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_register, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("完善个人资料");
@@ -266,6 +270,7 @@ public class RegisterActivity extends RyBaseActivity implements DatePicker.OnDat
                         user.setFirstAddCar(firstAddCar);
                         savaUserToDb(user);//保存到数据库
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        finish();
                         //UIOpenHelper.openHomeActivity(getApplicationContext());
                     } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");

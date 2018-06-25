@@ -28,6 +28,7 @@ public class DbConfig {
                 .setDbName("ruyiruyi.db")
                 .setAllowTransaction(true)
                 .setDbDir(context.getFilesDir())
+              //  .setDbDir(Environment.getExternalStorageDirectory())
                 .setDbVersion(10);
         return daoConfig;
     }

@@ -81,7 +81,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
     private String xyed;
     private String yhed;
     private String syed;
-    public int payType = 0;  //0是微信支付 1是支付宝支付
+    public int payType =1;  //0是微信支付 1是支付宝支付
     private ProgressDialog payDialog;
     private ProgressDialog startDialog;
     private String TAG = MyLimitActivity.class.getSimpleName();
@@ -104,7 +104,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
                 //支付成功 跳转主页面
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
-
+                finish();
 
             } else {
                 // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
@@ -169,9 +169,9 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
                     if (status == 1) {
                         JSONArray data = jsonObject.getJSONArray("data");
                         JSONObject objBean = (JSONObject) data.get(0);
-                        xyed = objBean.getInt("credit") + "";// 信用额度
-                        syed = objBean.getInt("remain") + "";// 剩余额度
-                        yhed = objBean.getInt("credit") - objBean.getInt("remain") + "";// 应还额度
+                        xyed = objBean.getDouble("credit") + "";// 信用额度
+                        syed = objBean.getDouble("remain") + "";// 剩余额度
+                        yhed = objBean.getDouble("credit") - objBean.getInt("remain") + "";// 应还额度
                         initView();
                     } else if (status == -999) {
                         hideDialogProgress(startDialog);
@@ -265,7 +265,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
         RxViewAction.clickNoDouble(tv_pay).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                if (Integer.parseInt(et_money.getText().toString()) < 1) {
+                if (Double.parseDouble(et_money.getText().toString()) < 1) {
                     Toast.makeText(MyLimitActivity.this, "每次还款不能少于1元!", Toast.LENGTH_SHORT).show();
                     return;
                 }

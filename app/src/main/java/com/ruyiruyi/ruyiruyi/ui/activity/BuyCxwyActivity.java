@@ -102,12 +102,12 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
                 }
             }
         });
-        //用户协议
+
         RxViewAction.clickNoDouble(agreement).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 Intent intent = new Intent(getApplicationContext(), AgreementActivity.class);
-                intent.putExtra("AGREEMENTTYPE",0);
+                intent.putExtra("AGREEMENTTYPE",3);
                 startActivity(intent);
             }
         });
