@@ -58,7 +58,7 @@ public class LuncherDownlodeService extends Service {
                     //获取车辆型号数据
                     initCarVerhicle();
                     //获取车辆轮胎和排量数据
-                    initCarrTireInfo();
+//                    initCarrTireInfo();   初次下载删除
                     //获取轮胎型号
                     initTireType();
                     //获取省市县
@@ -70,56 +70,17 @@ public class LuncherDownlodeService extends Service {
                     /*initCarBrand();*/
                     //发送广播
                     Intent intent2 = new Intent();
-                    intent2.putExtra("count", 14);
+                    intent2.putExtra("count", 16);
                     intent2.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
                     sendBroadcast(intent2);
                     break;
                 case 3:
-                   /* initCarVerhicle();*/
+                    /*initCarBrand();*/
                     //发送广播
                     Intent intent3 = new Intent();
-                    intent3.putExtra("count", 14);
+                    intent3.putExtra("count", 20);
                     intent3.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
                     sendBroadcast(intent3);
-                    break;
-                case 4:
-                    /*initCarrTireInfo();*/
-                    //发送广播
-                    Intent intent4 = new Intent();
-                    intent4.putExtra("count", 14);
-                    intent4.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
-                    sendBroadcast(intent4);
-                    break;
-                case 5:
-                 /*   initTireType();*/
-                    //发送广播
-                    Intent intent5 = new Intent();
-                    intent5.putExtra("count", 14);
-                    intent5.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
-                    sendBroadcast(intent5);
-                    break;
-                case 6:
-                   /* initProvice();*/
-                    //发送广播
-                    Intent intent6 = new Intent();
-                    intent6.putExtra("count", 14);
-                    intent6.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
-                    sendBroadcast(intent6);
-                    break;
-                case 7:
-                  /*  initDingwei();*/
-                    //发送广播
-                    Intent intent7 = new Intent();
-                    intent7.putExtra("count", 14);
-                    intent7.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
-                    sendBroadcast(intent7);
-                    break;
-                case 8:
-                    //发送广播
-                    Intent intent8 = new Intent();
-                    intent8.putExtra("count", 16);
-                    intent8.setAction("com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService");
-                    sendBroadcast(intent8);
                     break;
             }
         }
@@ -342,7 +303,7 @@ public class LuncherDownlodeService extends Service {
             db.saveOrUpdate(brandList);
 
             Message message = new Message();
-            message.what = 3;
+            message.what = 2;
             mHandler.sendMessage(message);
 
         } catch (DbException e) {
@@ -434,7 +395,7 @@ public class LuncherDownlodeService extends Service {
             db.saveOrUpdate(verhiclesList);
 
             Message message = new Message();
-            message.what = 4;
+            message.what = 2;
             mHandler.sendMessage(message);
 
         } catch (DbException e) {
@@ -532,7 +493,7 @@ public class LuncherDownlodeService extends Service {
             db.saveOrUpdate(carTireInfoArrayList);
 
             Message message = new Message();
-            message.what = 5;
+            message.what = 2;
             mHandler.sendMessage(message);
 
         } catch (DbException e) {
@@ -625,7 +586,7 @@ public class LuncherDownlodeService extends Service {
             db.saveOrUpdate(tireTypeArrayList);
 
             Message message = new Message();
-            message.what = 6;
+            message.what = 2;
             mHandler.sendMessage(message);
 
         } catch (DbException e) {
@@ -732,7 +693,7 @@ public class LuncherDownlodeService extends Service {
                     db.saveOrUpdate(location1);
 
                     Message message = new Message();
-                    message.what = 8;
+                    message.what = 2;
                     mHandler.sendMessage(message);
 
                 } catch (DbException e) {
@@ -758,7 +719,7 @@ public class LuncherDownlodeService extends Service {
             db.saveOrUpdate(provinceArrayList);
 
             Message message = new Message();
-            message.what = 7;
+            message.what = 3;
             mHandler.sendMessage(message);
 
         } catch (DbException e) {

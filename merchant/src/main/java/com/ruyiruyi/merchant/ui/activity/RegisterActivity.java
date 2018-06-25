@@ -1365,27 +1365,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 if (yyzzPicBitmap == null || !hasPic_yyzz) {
                     showDialog("请上传营业执照");
                     return;
-                } else {
-                    yyzzPath = ImageUtils.savePhoto(yyzzPicBitmap, Environment
-                            .getExternalStorageDirectory().getAbsolutePath(), "yyzzPic");
                 }
                 if (mdPicaBitmap == null || mdPicbBitmap == null || mdPiccBitmap == null || !hasPic_mdPic_a || !hasPic_mdPic_b || !hasPic_mdPic_c) {
                     showDialog("请上传门店照片");
                     return;
-                } else {
-                    mdpicaPath = ImageUtils.savePhoto(mdPicaBitmap, Environment
-                            .getExternalStorageDirectory().getAbsolutePath(), "mdPica");
-                    mdpicbPath = ImageUtils.savePhoto(mdPicbBitmap, Environment
-                            .getExternalStorageDirectory().getAbsolutePath(), "mdPicb");
-                    mdpiccPath = ImageUtils.savePhoto(mdPiccBitmap, Environment
-                            .getExternalStorageDirectory().getAbsolutePath(), "mdPicc");
                 }
                 if (shouPicBitmap == null || !hasPic_shou_a) {
                     showDialog("请上传手持身份证照片");
                     return;
-                } else {
-                    shouPath = ImageUtils.savePhoto(shouPicBitmap, Environment
-                            .getExternalStorageDirectory().getAbsolutePath(), "shouPic");
                 }
                 if (serviceTypeList == null || serviceTypeList.size() == 0) {
                     showDialog("请选择合作项目");
@@ -1452,6 +1439,16 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 showDialogProgress(progressDialog, "注册信息提交中...");
+                mdpicaPath = ImageUtils.savePhoto(mdPicaBitmap, Environment
+                        .getExternalStorageDirectory().getAbsolutePath(), "mdPica");
+                mdpicbPath = ImageUtils.savePhoto(mdPicbBitmap, Environment
+                        .getExternalStorageDirectory().getAbsolutePath(), "mdPicb");
+                mdpiccPath = ImageUtils.savePhoto(mdPiccBitmap, Environment
+                        .getExternalStorageDirectory().getAbsolutePath(), "mdPicc");
+                shouPath = ImageUtils.savePhoto(shouPicBitmap, Environment
+                        .getExternalStorageDirectory().getAbsolutePath(), "shouPic");
+                yyzzPath = ImageUtils.savePhoto(yyzzPicBitmap, Environment
+                        .getExternalStorageDirectory().getAbsolutePath(), "yyzzPic");
                  /*    //提交参数---<
                 private String persionName;
                 private String persionPhone;
