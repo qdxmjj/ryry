@@ -1,20 +1,26 @@
 package com.ruyiruyi.merchant.ui.activity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ruyiruyi.merchant.R;
+import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
+import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
+
 public class UserAgreementActivity extends MerchantBaseActivity {
-    private TextView tv_content;
-    private String contentStr = "\t\t如驿如意“一次换轮胎 终身免费开”,自此车主再也不用担心爱车轮胎！\n\n\t\t我们立志于将高性价比且符合" +
-            "中国车主习惯的轮胎推荐给广大车主，从而解决困扰车主的“换胎贵 换胎难”问题;同时,如驿如意用户可以享受免费" +
-            "动平衡、免费四轮定位、免费洗车、免费轮胎换位、免费补胎等超级VIP服务。我们将联合上游供应厂商和终端服务门店，继续" +
-            "提高实惠、全面的汽车养护服务。\n\n\t\t在繁重的生活压力下，我们不仅仅希望能给车主解决一些轮胎问题！我们更想让车主" +
-            "养车更省钱省心省时间！\n\n\t\t最后，我们的征途是星辰大海！！！";
+    private WebView web_content;
+    private String contentStr;
     private ActionBar mActionBar;
 
     @Override
@@ -34,17 +40,55 @@ public class UserAgreementActivity extends MerchantBaseActivity {
             }
         });
 
-
         initView();
-        setView();
+        initData();
 
+    }
+
+    private void initData() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("dealId", "1");//dealId:1:用户版 2:商家版 3用户畅行无忧
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getDeal");
+        params.addBodyParameter("reqJson", object.toString());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e("123", "onSuccess: " + result);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject data = jsonObject.getJSONObject("data");
+                    contentStr = data.getString("content");
+                    Log.e("123", "onSuccess: contentStr = " + contentStr);
+                    setView();
+                } catch (JSONException e) {
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void setView() {
-        tv_content.setText(contentStr);
+        web_content.loadData(contentStr, "text/html; charset=UTF-8", null);
     }
 
     private void initView() {
-        tv_content = findViewById(R.id.tv_content);
+        web_content = findViewById(R.id.web_content);
     }
 }

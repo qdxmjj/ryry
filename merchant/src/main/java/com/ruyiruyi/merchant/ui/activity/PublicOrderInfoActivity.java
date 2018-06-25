@@ -964,6 +964,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
 
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeConfirmReceiptShoes");
         params.addBodyParameter("reqJson", barCodeList.toString());
+        Log.e(TAG, "saveServerFreeChange:  barCodeList.toString() = " +  barCodeList.toString() );
         params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
         params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {

@@ -2,6 +2,7 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
@@ -28,6 +29,7 @@ import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.TireType;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
+import com.ruyiruyi.ruyiruyi.ui.service.LuncherDownlodeService;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 
@@ -52,44 +54,75 @@ public class LaunchActivity extends RyBaseActivity {
     private double weidu = 0.00;
     private LocationService locationService;
     public boolean isHasPermission = true;
+    private static final int GO_NEXT = 99;
+    private static final int GO_MAIN = 100;
+    private static final int GO_GUIDE = 101;
+    private static final int GO_END = 102;
+    private static final int GO_NEXT_TIME = 1000;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            goMain();
+            switch (msg.what) {
+                case GO_NEXT:
+                    goNext();
+                    break;
+                case GO_MAIN:
+                    //开启服务下载
+                    StartDownlodeService();
+                    handler.sendEmptyMessageDelayed(GO_END, 2000);
+                    break;
+                case GO_GUIDE:
+                    goGuide();
+                    break;
+                case GO_END:
+                    goMain();
+                    break;
+            }
 
         }
     };
 
+    private void goNext() {
+
+        //判断是否为第一次登陆
+        JudgeToMain();
+
+    }
+
+    private void JudgeToMain() {
+        SharedPreferences sf = getSharedPreferences("data", MODE_PRIVATE);//判断是否是第一次进入
+        boolean isFirstIn = sf.getBoolean("isFirstIn", true);
+        SharedPreferences.Editor editor = sf.edit();
+        if (isFirstIn) {     //若为true，则是第一次进入
+           /* editor.putBoolean("isFirstIn", false);  修改标志位移动到service下载完毕数据后*/
+            handler.sendEmptyMessage(GO_GUIDE);//将message设置为跳转到引导页SplashActivity，跳转在goGuide中实现
+        } else {
+            handler.sendEmptyMessage(GO_MAIN);//将message设置文跳转到MainActivity，跳转功能在goMain中实现
+        }
+        editor.commit();
+
+    }
+
     private void goMain() {
-
-
-        //判断权限
-      //  judgePower();
-        //获取车辆轮胎和排量数据
-        initCarrTireInfo();
-
-        initCarDataIntoDb();
-        //获取车辆图标数据
-        initCarBrand();
-        //获取车辆型号数据
-        initCarVerhicle();
-
-        //获取轮胎型号
-        initTireType();
-        //获取省市县
-        initProvice();
-        initDingwei();
-        //获取车辆品牌数据
-        Log.e(TAG, "goMain: --+--+-" + currentCity);
-
-
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
+    private void goGuide() {
+        Intent intent = new Intent(this, GuideActivity.class);
+        startActivity(intent);
+    }
+
+    public void StartDownlodeService() {
+        Intent intent = new Intent(this, LuncherDownlodeService.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Key", LuncherDownlodeService.Control.PLAY);
+        intent.putExtras(bundle);
+        startService(intent);
+
+    }
 
     private void judgePower() {
         if (ContextCompat.checkSelfPermission(this,
@@ -111,7 +144,8 @@ public class LaunchActivity extends RyBaseActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             isHasPermission = false;
             Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
-            finish();    finish();
+            finish();
+            finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -137,7 +171,7 @@ public class LaunchActivity extends RyBaseActivity {
         setContentView(R.layout.activity_launch);
         //权限获取
         requestPower();
-      //  handler.sendEmptyMessageDelayed(0, 3000);
+        //  handler.sendEmptyMessageDelayed(0, 3000);
 
         //  handler.sendEmptyMessageDelayed(0,3000);
 
@@ -282,7 +316,7 @@ public class LaunchActivity extends RyBaseActivity {
             @Override
             public void onSuccess(String result) {
                 try {
-                    Log.e(TAG, "onSuccess: initCarBrand-" + result);
+                    Log.e(TAG, "onSuccess: " + result);
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
@@ -371,7 +405,7 @@ public class LaunchActivity extends RyBaseActivity {
             @Override
             public void onSuccess(String result) {
                 try {
-                    Log.e(TAG, "onSuccess: initCarVerhicle-" + result);
+                    Log.e(TAG, "onSuccess: " + result);
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
@@ -457,7 +491,7 @@ public class LaunchActivity extends RyBaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:initCarrTireInfo---" + result);
+                Log.e(TAG, "onSuccess:getCarTireInfoData---" + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
@@ -550,7 +584,7 @@ public class LaunchActivity extends RyBaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:initTireType---" + result);
+                Log.e(TAG, "onSuccess:getTireTypeData---" + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
@@ -635,7 +669,7 @@ public class LaunchActivity extends RyBaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:initProvice---" + result);
+                Log.e(TAG, "onSuccess:getTireTypeData---" + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
@@ -732,14 +766,14 @@ public class LaunchActivity extends RyBaseActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED ||
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA)
                         != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this,
                         Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED ) {
+                        != PackageManager.PERMISSION_GRANTED) {
             //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true。
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.CAMERA)) {
@@ -760,8 +794,8 @@ public class LaunchActivity extends RyBaseActivity {
                                 Manifest.permission.ACCESS_FINE_LOCATION
                         }, 1);
             }
-        }else {
-            handler.sendEmptyMessageDelayed(0, 4000);
+        } else {
+            handler.sendEmptyMessageDelayed(GO_NEXT, GO_NEXT_TIME);
         }
 
     }
@@ -777,24 +811,24 @@ public class LaunchActivity extends RyBaseActivity {
 */
         for (int i = 0; i < permissions.length; i++) {
 
-            Log.e(TAG, "onRequestPermissionsResult: permissions------" +  permissions[i]);
+            Log.e(TAG, "onRequestPermissionsResult: permissions------" + permissions[i]);
         }
 
 
-        if (requestCode == 1){
+        if (requestCode == 1) {
 
             boolean isPremission = true;
             for (int i = 0; i < grantResults.length; i++) {
-                Log.e(TAG, "onRequestPermissionsResult: permissions++++++" +  grantResults[i]);
-                if (grantResults[i] == -1){
+                Log.e(TAG, "onRequestPermissionsResult: permissions++++++" + grantResults[i]);
+                if (grantResults[i] == -1) {
                     isPremission = false;
                 }
-              //  Log.e(TAG, "onRequestPermissionsResult: permissions++++++" +  grantResults[i]);
+                //  Log.e(TAG, "onRequestPermissionsResult: permissions++++++" +  grantResults[i]);
             }
 
-            if (isPremission){          //有权限
-                handler.sendEmptyMessageDelayed(0, 2000);
-            }else {
+            if (isPremission) {          //有权限
+                handler.sendEmptyMessageDelayed(GO_NEXT, GO_NEXT_TIME);
+            } else {
                 judgePower();
             }
         }

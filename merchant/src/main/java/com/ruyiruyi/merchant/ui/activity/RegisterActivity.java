@@ -841,7 +841,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 View v_shoptime = LayoutInflater.from(this).inflate(R.layout.dialog_shoptime_view, null);
                 whv_lTime = (WheelView) v_shoptime.findViewById(R.id.whv_ltime);
                 whv_rTime = (WheelView) v_shoptime.findViewById(R.id.whv_rtime);
-                whv_lTime.setItems(getStrLTime(), currentlTimePosition);
+                whv_lTime.setItems(getStrLTime(), 0);
                 whv_rTime.setItems(getRTimeList(0), 0);
                 whv_lTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
@@ -853,7 +853,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         currentrTime = rTime_list.get(0);
                     }
                 });
-                whv_rTime.setItems(rTime_list, currentrTimePosition);
                 whv_rTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(int selectedIndex, String item) {
@@ -1156,11 +1155,12 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     JSONObject jsonObject1 = new JSONObject(result);
                     Log.e(TAG, "geyCode-->onSuccess: code_result ==>" + result.toString());
                     status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
                     if (status.equals("1")) {
-                        Toast.makeText(RegisterActivity.this, "发送成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
                         mTimeCount.start();
                     } else {
-                        Toast.makeText(RegisterActivity.this, "发送失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
                         tv_getCode.setText("重新发送");
                     }
                 } catch (JSONException e) {

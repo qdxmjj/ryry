@@ -100,8 +100,8 @@
 
                 <ImageView
                     android:id="@+id/img_wdfw"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
                     android:src="@drawable/ic_service" />
@@ -142,8 +142,8 @@
 
                 <ImageView
                     android:id="@+id/img_wdsp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
                     android:src="@drawable/ic_thing" />
@@ -184,8 +184,8 @@
 
                 <ImageView
                     android:id="@+id/img_tgjl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
                     android:src="@drawable/ic_gift" />
@@ -218,6 +218,48 @@
                 android:background="@color/c2" />
 
             <RelativeLayout
+                android:id="@+id/rl_wyzd"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <ImageView
+                    android:id="@+id/img_wyzd"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/ic_zhiding" />
+
+                <TextView
+                    android:id="@+id/tv_wyzd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/img_wyzd"
+                    android:text="我要置顶"
+                    android:textColor="@color/c6"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_jiantou" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/c2" />
+
+            <RelativeLayout
                 android:id="@+id/rl_dzyhs"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -226,8 +268,8 @@
 
                 <ImageView
                     android:id="@+id/img_dzyhs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
                     android:src="@drawable/ic_word" />
@@ -268,11 +310,11 @@
 
                 <ImageView
                     android:id="@+id/img_shezhi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_word" />
+                    android:src="@drawable/ic_m_shezhi" />
 
                 <TextView
                     android:id="@+id/tv_shezhi"

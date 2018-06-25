@@ -560,7 +560,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         path_licenseBitmap = ImageUtils.savePhoto(licenseBitmap, Environment
                 .getExternalStorageDirectory().getAbsolutePath(), "licensePic");
         path_carBitmap = ImageUtils.savePhoto(carBitmap, Environment
-                .getExternalStorageDirectory().getAbsolutePath(), "licensePic");
+                .getExternalStorageDirectory().getAbsolutePath(), "carPic");
     }
 
     private boolean judgeBeforeSave(String type) {

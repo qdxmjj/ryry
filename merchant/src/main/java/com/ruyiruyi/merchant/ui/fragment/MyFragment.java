@@ -74,6 +74,7 @@ public class MyFragment extends BaseFragment {
     private RelativeLayout rl_wdfw;
     private RelativeLayout rl_wdsp;
     private RelativeLayout rl_tgjl;
+    private RelativeLayout rl_wyzd;
     private RelativeLayout rl_dzyhs;
     private RelativeLayout rl_shezhi;
     private ImageView img_user_top;
@@ -119,7 +120,13 @@ public class MyFragment extends BaseFragment {
     }
 
     private void bindView() {
-        //店主有话说
+        //我要置顶
+        RxViewAction.clickNoDouble(rl_wyzd).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Toast.makeText(getActivity(), "敬请期待...", Toast.LENGTH_SHORT).show();
+            }
+        });   //店主有话说
         RxViewAction.clickNoDouble(rl_dzyhs).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -211,6 +218,7 @@ public class MyFragment extends BaseFragment {
         rl_wdfw = (RelativeLayout) getView().findViewById(R.id.rl_wdfw);
         rl_wdsp = (RelativeLayout) getView().findViewById(R.id.rl_wdsp);
         rl_tgjl = (RelativeLayout) getView().findViewById(R.id.rl_tgjl);
+        rl_wyzd = (RelativeLayout) getView().findViewById(R.id.rl_wyzd);
         rl_dzyhs = (RelativeLayout) getView().findViewById(R.id.rl_dzyhs);
         rl_shezhi = (RelativeLayout) getView().findViewById(R.id.rl_shezhi);
         img_user_top = (ImageView) getView().findViewById(R.id.img_user_top);

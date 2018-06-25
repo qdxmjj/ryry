@@ -53,6 +53,12 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="b7kFFRry07570VIKQPcDpblFjNLhhecC" />
 
+        <service
+            android:name=".ui.service.LuncherDownlodeService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/app_name" />
+
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
@@ -267,7 +273,8 @@
         <activity android:name=".ui.activity.UnderstandUsActivity" />
         <activity android:name=".ui.activity.ContactServiceActivity" />
         <activity android:name=".ui.activity.MessageActivity" />
-        <activity android:name=".ui.activity.AgreementActivity"></activity>
+        <activity android:name=".ui.activity.AgreementActivity" />
+        <activity android:name=".ui.activity.GuideActivity"></activity>
     </application>
 
 </manifest>

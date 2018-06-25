@@ -1,5 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -7,6 +8,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +49,8 @@ public class QRCodeActivity extends RyBaseActivity {
     private TextView user_province;
     private TextView user_city;
     private TextView bottom_txt;
+    private ProgressDialog startDialog;
+    private FrameLayout fl_main;
 
     private Bitmap logo;
     private static final int IMAGE_HALFWIDTH = 20;//宽度值，影响中间图片大小
@@ -78,6 +83,10 @@ public class QRCodeActivity extends RyBaseActivity {
                 }
             }
         });
+        startDialog = new ProgressDialog(this);
+        fl_main = findViewById(R.id.fl_main);
+        fl_main.setVisibility(View.INVISIBLE);
+        showDialogProgress(startDialog, "二维码信息加载中...");
 
         //获取传递数据
         url = getIntent().getStringExtra("url");
@@ -131,6 +140,11 @@ public class QRCodeActivity extends RyBaseActivity {
         }
         user_name.setText(user.getNick());
         user_city.setText(user.getPhone());
+
+
+        //隐藏动画,显示数据页面
+        fl_main.setVisibility(View.VISIBLE);
+        hideDialogProgress(startDialog);
     }
 
     /*

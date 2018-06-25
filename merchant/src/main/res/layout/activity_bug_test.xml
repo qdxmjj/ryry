@@ -105,4 +105,14 @@
         android:onClick="bugtestclick"
         android:text="ConfirmReceiveActivity已删"
         android:textSize="21sp" />
+
+    <TextView
+        android:id="@+id/qrcode_circlelogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:onClick="bugtestclick"
+        android:text="TestCircleLogoQrCodeActivity"
+        android:textSize="21sp" />
 </LinearLayout>
