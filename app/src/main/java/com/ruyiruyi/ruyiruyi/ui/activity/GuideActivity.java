@@ -83,12 +83,10 @@ public class GuideActivity extends RyBaseActivity {
             progress = progress + count;
             tv_num.setText(progress + "%");
             if (fuckProgress == 0) {
-                mTimeCount = new TimeCount(14000, 1000);
+                mTimeCount = new TimeCount(9000, 600);//
                 mTimeCount.start();
             }
 
-            bt_home.setAlpha(0);
-            bt_home.setClickable(false);
             if (progress == 100) {
                 //修改判断是否是第一次进入的标志位
                 SharedPreferences sf = getSharedPreferences("data", MODE_PRIVATE);//判断是否是第一次进入
@@ -181,6 +179,8 @@ public class GuideActivity extends RyBaseActivity {
                 finish();
             }
         });
+        bt_home.setAlpha(0);
+        bt_home.setClickable(false);
     }
 
     class TimeCount extends CountDownTimer {
@@ -192,7 +192,7 @@ public class GuideActivity extends RyBaseActivity {
         @Override
         public void onTick(long millisUntilFinished) {
             //进行中
-            tv_num.setText(progress + (13 - millisUntilFinished / 1000) + "%");
+            tv_num.setText(progress + (14 - millisUntilFinished / 600) + "%");
         }
 
         @Override

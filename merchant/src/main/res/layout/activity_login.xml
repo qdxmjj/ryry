@@ -6,6 +6,7 @@
     android:orientation="vertical"
     tools:context="com.ruyiruyi.merchant.ui.activity.LoginActivity">
     <LinearLayout
+        android:background="#ffffff"
         android:orientation="vertical"
         android:focusable="true"
         android:focusableInTouchMode="true"

@@ -1,16 +1,26 @@
 package com.ruyiruyi.merchant.ui.fragment;
 
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -37,6 +47,7 @@ import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.base.BaseFragment;
+import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
 import com.ruyiruyi.rylibrary.utils.glide.GlideRoundTransform;
 
@@ -51,6 +62,7 @@ import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +86,25 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
     private ImageView img_mdpic_a;
     private ImageView img_mdpic_b;
     private ImageView img_mdpic_c;
+    private ImageView img_mdpic_a_delete;
+    private ImageView img_mdpic_b_delete;
+    private ImageView img_mdpic_c_delete;
+    private ImageView img_mdpic_a_center;
+    private ImageView img_mdpic_b_center;
+    private ImageView img_mdpic_c_center;
+    private boolean hasPicA = true;
+    private boolean hasPicB = true;
+    private boolean hasPicC = true;
+    private boolean isNewPicA = false;
+    private boolean isNewPicB = false;
+    private boolean isNewPicC = false;
     private Switch mSwitch;
+
+    /*
+    * 照片对应 :  mdPic_a_url = data.getString("locationImgUrl");
+                    mdPic_b_url = data.getString("indoorImgUrl");
+                    mdPic_c_url = data.getString("factoryImgUrl");
+    * */
 
     private WheelView whv_lTime, whv_rTime;
 
@@ -121,6 +151,17 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             }
         }
     };
+    private final int CHOOSE_PICTURE = 0;
+    private final int TAKE_PICTURE = 1;
+    private int currentImage = 0;// 0  1  2
+    private String path_;
+    protected static Uri tempUri;
+    private Bitmap mdPicaBitmap;
+    private Bitmap mdPicbBitmap;
+    private Bitmap mdPiccBitmap;
+    private String mdpicaPath;
+    private String mdpicbPath;
+    private String mdpiccPath;
 
     @Nullable
     @Override
@@ -280,6 +321,60 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
     }
 
     private void bindView() {
+        //修改照片 删除点击事件
+        RxViewAction.clickNoDouble(img_mdpic_a_delete).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                img_mdpic_a.setImageResource(R.drawable.img_bg_dark);
+                img_mdpic_a_delete.setVisibility(View.GONE);
+                img_mdpic_a_center.setVisibility(View.VISIBLE);
+                hasPicA = false;
+                isNewPicA = true;
+            }
+        });
+        RxViewAction.clickNoDouble(img_mdpic_b_delete).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                img_mdpic_b.setImageResource(R.drawable.img_bg_dark);
+                img_mdpic_b_delete.setVisibility(View.GONE);
+                img_mdpic_b_center.setVisibility(View.VISIBLE);
+                hasPicB = false;
+                isNewPicB = true;
+            }
+        });
+        RxViewAction.clickNoDouble(img_mdpic_c_delete).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                img_mdpic_c.setImageResource(R.drawable.img_bg_dark);
+                img_mdpic_c_delete.setVisibility(View.GONE);
+                img_mdpic_c_center.setVisibility(View.VISIBLE);
+                hasPicC = false;
+                isNewPicC = true;
+            }
+        });
+        //修改照片 添加照片点击事件
+        RxViewAction.clickNoDouble(img_mdpic_a_center).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                currentImage = 0;
+                showPicInputDialog();
+            }
+        });
+        RxViewAction.clickNoDouble(img_mdpic_b_center).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                currentImage = 1;
+                showPicInputDialog();
+            }
+        });
+        RxViewAction.clickNoDouble(img_mdpic_c_center).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                currentImage = 2;
+                showPicInputDialog();
+            }
+        });
+
         //mSwitch 点击事件在数据获取之后 绑定 （在setData方法中）
 
         //shopTime
@@ -351,6 +446,18 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
                     }
                     Log.e(TAG, "call: XiangQing serviceTypeListString" + serviceTypeListString);
                 }
+                if (isNewPicA && !hasPicA) {
+                    Toast.makeText(getActivity(), "请补全门店照片", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (isNewPicB && !hasPicB) {
+                    Toast.makeText(getActivity(), "请补全门店照片", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (isNewPicC && !hasPicC) {
+                    Toast.makeText(getActivity(), "请补全门店照片", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
 
                 showSaveDialog();
@@ -363,6 +470,9 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             @Override
             public void call(Void aVoid) {
                 /*showPicDialog(mdPic_a_url);*/
+                if (!hasPicA) {
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), MyPicDialogActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("imgUrl", mdPic_a_url);
@@ -375,6 +485,9 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             @Override
             public void call(Void aVoid) {
                 /*showPicDialog(mdPic_b_url);*/
+                if (!hasPicB) {
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), MyPicDialogActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("imgUrl", mdPic_b_url);
@@ -387,6 +500,9 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             @Override
             public void call(Void aVoid) {
               /*  showPicDialog(mdPic_c_url);*/
+                if (!hasPicC) {
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), MyPicDialogActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("imgUrl", mdPic_c_url);
@@ -395,6 +511,160 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             }
         });
     }
+
+    private void showPicInputDialog() {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        builder.setTitle("上传照片");
+        String[] items = {"选择本地照片", "拍照"};
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case CHOOSE_PICTURE://选择本地照片
+                        Intent openBendiPicIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                        openBendiPicIntent.setType("image/*");
+                        startActivityForResult(openBendiPicIntent, CHOOSE_PICTURE);
+                        break;
+                    case TAKE_PICTURE://拍照
+                        takePicture();
+                        break;
+                }
+            }
+        });
+        final android.support.v7.app.AlertDialog dialog = builder.create();
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        //设置按钮颜色
+        dialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+    }
+
+    private void takePicture() {
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (Build.VERSION.SDK_INT >= 23) {
+            // 需要申请动态权限
+            int check = ContextCompat.checkSelfPermission(getActivity(), permissions[0]);
+            // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
+            if (check != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
+        Intent openCameraIntent = new Intent(
+                MediaStore.ACTION_IMAGE_CAPTURE);
+        File file = null;
+        if (currentImage == 0) {
+            file = new File(Environment
+                    .getExternalStorageDirectory(), "mdpicaaa.jpg");
+            path_ = file.getPath();
+        } else if (currentImage == 1) {
+            file = new File(Environment
+                    .getExternalStorageDirectory(), "mdpicbbb.jpg");
+            path_ = file.getPath();
+        } else if (currentImage == 2) {
+            file = new File(Environment
+                    .getExternalStorageDirectory(), "mdpicccc.jpg");
+            path_ = file.getPath();
+        }
+
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= 24) {
+            openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            tempUri = FileProvider.getUriForFile(getActivity(), "com.ruyiruyi.merchant.fileProvider", file);
+        } else {
+            tempUri = Uri.fromFile(new File(Environment
+                    .getExternalStorageDirectory(), "image.jpg"));
+        }
+        Log.e(TAG, "takePicture: " + tempUri);
+        // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
+        openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
+        startActivityForResult(openCameraIntent, TAKE_PICTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+            case CHOOSE_PICTURE:
+                Uri uri = data.getData();
+                setImageToViewFromPhone(uri, false);
+                break;
+            case TAKE_PICTURE:
+                setImageToViewFromPhone(tempUri, true);
+                break;
+
+        }
+
+    }
+
+    //未剪辑照片
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_);
+        }
+        if (uri != null) {
+            Bitmap photo = null;
+            try {
+                photo = ImageUtils.getBitmapFormUri(getActivity(), uri);
+            } catch (IOException e) {
+            }
+            if (currentImage == 0) {
+                if (isCamera) {
+                    mdPicaBitmap = rotaingImageView(degree, photo);
+                } else {
+                    mdPicaBitmap = photo;
+                }
+                img_mdpic_a.setImageBitmap(mdPicaBitmap);
+                img_mdpic_a_delete.setVisibility(View.VISIBLE);
+                img_mdpic_a_center.setVisibility(View.GONE);
+                hasPicA = true;
+            } else if (currentImage == 1) {
+                if (isCamera) {
+                    mdPicbBitmap = rotaingImageView(degree, photo);
+                } else {
+                    mdPicbBitmap = photo;
+                }
+                img_mdpic_b.setImageBitmap(mdPicbBitmap);
+                img_mdpic_b_delete.setVisibility(View.VISIBLE);
+                img_mdpic_b_center.setVisibility(View.GONE);
+                hasPicB = true;
+            } else if (currentImage == 2) {
+                if (isCamera) {
+                    mdPiccBitmap = rotaingImageView(degree, photo);
+                } else {
+                    mdPiccBitmap = photo;
+                }
+                img_mdpic_c.setImageBitmap(mdPiccBitmap);
+                img_mdpic_c_delete.setVisibility(View.VISIBLE);
+                img_mdpic_c_center.setVisibility(View.GONE);
+                hasPicC = true;
+            }
+        }
+    }
+
+    public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
+        Bitmap returnBm = null;
+        // 根据旋转角度，生成旋转矩阵
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        try {
+            // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
+            returnBm = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        } catch (OutOfMemoryError e) {
+        }
+        if (returnBm == null) {
+            returnBm = bitmap;
+        }
+        if (bitmap != returnBm) {
+            bitmap.recycle();
+        }
+        return returnBm;
+    }
+
 
     private void showSaveDialog() {
         android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(getActivity()).create();
@@ -416,11 +686,24 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 showDialogProgress(progressDialog, "店铺信息保存中...");
+                if (isNewPicA) {
+                    mdpicaPath = ImageUtils.savePhoto(mdPicaBitmap, Environment
+                            .getExternalStorageDirectory().getAbsolutePath(), "mdPica");
+                }
+                if (isNewPicB) {
+                    mdpicbPath = ImageUtils.savePhoto(mdPicbBitmap, Environment
+                            .getExternalStorageDirectory().getAbsolutePath(), "mdPicb");
+                }
+                if (isNewPicC) {
+                    mdpiccPath = ImageUtils.savePhoto(mdPiccBitmap, Environment
+                            .getExternalStorageDirectory().getAbsolutePath(), "mdPicc");
+                }
                 String storeId = new DbConfig(getActivity()).getId() + "";
                 JSONObject object = new JSONObject();
                 try {
                     object.put("id", storeId);
                     object.put("status", isOpen + "");
+                    object.put("phone", new DbConfig(getActivity()).getUser().getPhone());
                     Log.e(TAG, "showd:10010 isOpen = " + isOpen);
                     object.put("startTime", "2000-01-01T" + shopTimeL + ".000+0800");
                     object.put("endTime", "2000-01-01T" + shopTimeR + ".000+0800");
@@ -430,6 +713,15 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreInfoByStoreId");
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("serviceTypeList", serviceTypeListString);
+                if (isNewPicA) {
+                    params.addBodyParameter("location_img", new File(mdpicaPath));
+                }
+                if (isNewPicB) {
+                    params.addBodyParameter("indoor_img", new File(mdpicbPath));
+                }
+                if (isNewPicC) {
+                    params.addBodyParameter("factory_img", new File(mdpiccPath));
+                }
                 params.setConnectTimeout(6000);
                 Log.e(TAG, "onClick:110 serviceTypeListString = " + serviceTypeListString);
                 x.http().post(params, new Callback.CommonCallback<String>() {
@@ -489,6 +781,12 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
         img_mdpic_a = (ImageView) getView().findViewById(R.id.img_mdpic_a);
         img_mdpic_b = (ImageView) getView().findViewById(R.id.img_mdpic_b);
         img_mdpic_c = (ImageView) getView().findViewById(R.id.img_mdpic_c);
+        img_mdpic_a_delete = (ImageView) getView().findViewById(R.id.img_mdpic_a_delete);
+        img_mdpic_b_delete = (ImageView) getView().findViewById(R.id.img_mdpic_b_delete);
+        img_mdpic_c_delete = (ImageView) getView().findViewById(R.id.img_mdpic_c_delete);
+        img_mdpic_a_center = (ImageView) getView().findViewById(R.id.img_mdpic_a_center);
+        img_mdpic_b_center = (ImageView) getView().findViewById(R.id.img_mdpic_b_center);
+        img_mdpic_c_center = (ImageView) getView().findViewById(R.id.img_mdpic_c_center);
         mSwitch = (Switch) getView().findViewById(R.id.swch_isopen);
 
     }

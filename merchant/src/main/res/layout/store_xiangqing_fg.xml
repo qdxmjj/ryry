@@ -283,41 +283,104 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="80dp"
                     android:layout_below="@+id/tv_mdpic"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
                     android:weightSum="3">
 
-
-                    <ImageView
-                        android:id="@+id/img_mdpic_a"
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/img_bg_dark" />
+                        android:layout_margin="3dp"
+                        android:layout_weight="1">
 
+                        <ImageView
+                            android:id="@+id/img_mdpic_a"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
 
-                    <ImageView
-                        android:id="@+id/img_mdpic_b"
+                        <ImageView
+                            android:id="@+id/img_mdpic_a_delete"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="right|top"
+                            android:onClick="registerPicClick"
+                            android:src="@drawable/ic_delete" />
+
+                        <ImageView
+                            android:id="@+id/img_mdpic_a_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_add"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/img_bg_dark" />
+                        android:layout_margin="3dp"
+                        android:layout_weight="1">
 
+                        <ImageView
+                            android:id="@+id/img_mdpic_b"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
 
-                    <ImageView
-                        android:id="@+id/img_mdpic_c"
+                        <ImageView
+                            android:id="@+id/img_mdpic_b_delete"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="right|top"
+                            android:onClick="registerPicClick"
+                            android:src="@drawable/ic_delete" />
+
+                        <ImageView
+                            android:id="@+id/img_mdpic_b_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_add"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="20dp"
-                        android:layout_weight="1"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/img_bg_dark" />
+                        android:layout_margin="3dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/img_mdpic_c"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_bg_dark" />
+
+                        <ImageView
+                            android:id="@+id/img_mdpic_c_delete"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="right|top"
+                            android:onClick="registerPicClick"
+                            android:src="@drawable/ic_delete" />
+
+                        <ImageView
+                            android:id="@+id/img_mdpic_c_center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_add"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
 
                 </LinearLayout>
             </RelativeLayout>
