@@ -57,7 +57,8 @@ public class LaunchActivity extends RyBaseActivity {
     private static final int GO_NEXT = 99;
     private static final int GO_MAIN = 100;
     private static final int GO_GUIDE = 101;
-    private static final int GO_NEXT_TIME = 2000;
+    private static final int GO_END = 102;
+    private static final int GO_NEXT_TIME = 1000;
 
     private Handler handler = new Handler() {
         @Override
@@ -69,10 +70,13 @@ public class LaunchActivity extends RyBaseActivity {
                 case GO_MAIN:
                     //开启服务下载
                     StartDownlodeService();
-                    goMain();
+                    handler.sendEmptyMessageDelayed(GO_END, 2000);
                     break;
                 case GO_GUIDE:
                     goGuide();
+                    break;
+                case GO_END:
+                    goMain();
                     break;
             }
 

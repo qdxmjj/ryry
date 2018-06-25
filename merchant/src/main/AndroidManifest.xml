@@ -96,7 +96,8 @@
         <activity android:name=".ui.activity.OrderConfirmTireRepairActivity" />
         <activity android:name=".ui.activity.UserAgreementActivity" />
         <activity android:name=".ui.activity.QRCodeActivity" />
-        <activity android:name=".ui.activity.MerchantHasWordActivity"></activity>
+        <activity android:name=".ui.activity.MerchantHasWordActivity" />
+        <activity android:name=".ui.activity.TestCircleLogoQrCodeActivity"></activity>
     </application>
 
 </manifest>

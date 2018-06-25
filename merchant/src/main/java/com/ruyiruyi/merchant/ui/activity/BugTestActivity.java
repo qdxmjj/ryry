@@ -61,6 +61,10 @@ public class BugTestActivity extends BaseActivity {
                 Intent intent9 = new Intent(this, ChangeBianmaActivity.class);
                 startActivity(intent9);
                 break;
+            case R.id.qrcode_circlelogo:
+                Intent intent10 = new Intent(this, TestCircleLogoQrCodeActivity.class);
+                startActivity(intent10);
+                break;
         }
     }
 }

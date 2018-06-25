@@ -84,7 +84,6 @@ public class TireChangeActivity extends RyBaseActivity {
     private int fontFreeAmount;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,27 +104,28 @@ public class TireChangeActivity extends RyBaseActivity {
         Intent intent = getIntent();
         currentChangeType = intent.getIntExtra(CHANGE_TIRE, 0);
 
-        if (currentChangeType == 0){
-            actionBar.setTitle("首次更换");;
-        }else if (currentChangeType == 1){
-            actionBar.setTitle("免费再换");;
+        if (currentChangeType == 0) {
+            actionBar.setTitle("首次更换");
+            ;
+        } else if (currentChangeType == 1) {
+            actionBar.setTitle("免费再换");
+            ;
         }
 
 
-
         initData();
-        if (currentChangeType == 0){
+        if (currentChangeType == 0) {
             initDataFromService();  //获取首次更换数据
-        }else if (currentChangeType == 1){
+        } else if (currentChangeType == 1) {
             initFreeTireFromService();
         }
 
         initShop();
         initView();
         initReasonView();
-      //  fontRearFlag = 0;
-      //  fontAvaliableAmount = 3;
-      //  rearAvaliableAmount = 0;
+        //  fontRearFlag = 0;
+        //  fontAvaliableAmount = 3;
+        //  rearAvaliableAmount = 0;
 
     }
 
@@ -135,37 +135,38 @@ public class TireChangeActivity extends RyBaseActivity {
         int userId = user.getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId",userId);
-            jsonObject.put("userCarId",carId);
+            jsonObject.put("userId", userId);
+            jsonObject.put("userCarId", carId);
         } catch (JSONException e) {
 
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserChangedShoeNumAnd5Year");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig(this).getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
 
             @Override
             public void onSuccess(String result) {
                 JSONObject jsonObject1 = null;
-                Log.e(TAG, "onSuccess:----------------------+- " + result );
+                Log.e(TAG, "onSuccess:----------------------+- " + result);
                 try {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
-                        fontFreeAmount = data.getInt("fontAmount");;
+                        fontFreeAmount = data.getInt("fontAmount");
+                        ;
                         rearFreeAmount = data.getInt("rearAmount");
                         fontRearFlag = data.getInt("fontRearFlag");
                         isReach5Years = data.getInt("isReach5Years");
 
-                        if (fontFreeAmount == 0 && rearFreeAmount == 0){
+                        if (fontFreeAmount == 0 && rearFreeAmount == 0) {
                             Toast.makeText(TireChangeActivity.this, "暂无可更换轮胎", Toast.LENGTH_SHORT).show();
                         }
                         initAmountView();
-                    }else {
+                    } else {
                         Toast.makeText(TireChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
@@ -197,26 +198,26 @@ public class TireChangeActivity extends RyBaseActivity {
         int userId = user.getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId",userId);
-            jsonObject.put("userCarId",carId);
+            jsonObject.put("userId", userId);
+            jsonObject.put("userCarId", carId);
         } catch (JSONException e) {
 
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserUnusedShoeNum");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig(this).getToken();
-        params.addParameter("token",token);
-        Log.e(TAG, "initDataFromService: -----------------------" +jsonObject.toString() );
+        params.addParameter("token", token);
+        Log.e(TAG, "initDataFromService: -----------------------" + jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 JSONObject jsonObject1 = null;
-                Log.e(TAG, "onSuccess:----------------------+- " + result );
+                Log.e(TAG, "onSuccess:----------------------+- " + result);
                 try {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         fontRearFlag = data.getInt("fontRearFlag");
                         fontAvaliableAmount = data.getInt("fontAvaliableAmount");
@@ -259,25 +260,25 @@ public class TireChangeActivity extends RyBaseActivity {
         Double weidu = location.getWeidu();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("page",1);
-            jsonObject.put("rows",1);
-            jsonObject.put("cityName",city);
-            jsonObject.put("storeName","");
-            jsonObject.put("storeType","");//门店类型  1:4S店   2:快修店  3:维修厂  4:美容店
+            jsonObject.put("page", 1);
+            jsonObject.put("rows", 1);
+            jsonObject.put("cityName", city);
+            jsonObject.put("storeName", "");
+            jsonObject.put("storeType", "");//门店类型  1:4S店   2:快修店  3:维修厂  4:美容店
 
-            jsonObject.put("rankType",1);//排序方式  0:默认排序  1：附近优先
-           //门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
-            jsonObject.put("serviceType",5); //针对性门店
+            jsonObject.put("rankType", 1);//排序方式  0:默认排序  1：附近优先
+            //门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
+            jsonObject.put("serviceType", 5); //针对性门店
 
-            jsonObject.put("longitude",jingdu + "");
-            jsonObject.put("latitude",weidu + "");
+            jsonObject.put("longitude", jingdu + "");
+            jsonObject.put("latitude", weidu + "");
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "selectStoreByCondition");
-        Log.e(TAG, "initDataFromService:---------- " + jsonObject.toString() );
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        Log.e(TAG, "initDataFromService:---------- " + jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig(this).getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -287,7 +288,7 @@ public class TireChangeActivity extends RyBaseActivity {
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
 
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         JSONArray storeQuaryResVos = data.getJSONArray("storeQuaryResVos");
 
@@ -307,11 +308,11 @@ public class TireChangeActivity extends RyBaseActivity {
                             JSONObject service = serviceObject.getJSONObject("service");
                             String color = service.getString("color");
                             String name = service.getString("name");
-                            serviceTypeList.add(new ServiceType(name,color));
+                            serviceTypeList.add(new ServiceType(name, color));
                         }
-                        shop = new Shop(storeIdInt,storeType,storeTypeColor,storeName,storeImg,storeAddress,distance);
+                        shop = new Shop(storeIdInt, storeType, storeTypeColor, storeName, storeImg, storeAddress, distance);
                         shop.setServiceTypeList(serviceTypeList);
-                        shopChooseView.setValue(shop.getStoreName(),shop.getStoreImage(), shop.getStoreAddress(),shop.getStoreDistence(),shop.getServiceTypeList(),mInflater);
+                        shopChooseView.setValue(shop.getStoreName(), shop.getStoreImage(), shop.getStoreAddress(), shop.getStoreDistence(), shop.getServiceTypeList(), mInflater);
 
                     } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
@@ -349,10 +350,10 @@ public class TireChangeActivity extends RyBaseActivity {
 
     private void initData() {
         typeList = new ArrayList<>();
-        typeList.add(new StoreType(1,"快修店"));
-        typeList.add(new StoreType(2,"4s"));
-        typeList.add(new StoreType(3,"轮胎"));
-        typeList.add(new StoreType(4,"轮胎"));
+        typeList.add(new StoreType(1, "快修店"));
+        typeList.add(new StoreType(2, "4s"));
+        typeList.add(new StoreType(3, "轮胎"));
+        typeList.add(new StoreType(4, "轮胎"));
     }
 
     private void initView() {
@@ -375,9 +376,9 @@ public class TireChangeActivity extends RyBaseActivity {
                     @Override
                     public void call(Void aVoid) {
 
-                        if (currentChangeType == 0){
+                        if (currentChangeType == 0) {
                             postChangeOrder();
-                        }else if (currentChangeType == 1){
+                        } else if (currentChangeType == 1) {
                             freeChangeOrder();
                         }
 
@@ -389,13 +390,13 @@ public class TireChangeActivity extends RyBaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), ShopChooseActivity.class);
-                        intent.putExtra(MerchantFragment.SHOP_TYPE,5);
-                        startActivityForResult(intent,CHOOSE_SHOP);
+                        intent.putExtra(MerchantFragment.SHOP_TYPE, 5);
+                        startActivityForResult(intent, CHOOSE_SHOP);
                     }
                 });
 
 
-        freeChangeLayout.setVisibility(currentChangeType == 0? View.GONE:View.VISIBLE);
+        freeChangeLayout.setVisibility(currentChangeType == 0 ? View.GONE : View.VISIBLE);
 
 
         initAmountView();
@@ -404,23 +405,22 @@ public class TireChangeActivity extends RyBaseActivity {
             public void onAmountChange(View view, int amount) {
                 currentFontCount = amount;
                 initAmountView();
-                if (amount == fontMaxCount){
+                if (amount == fontMaxCount) {
                     Toast.makeText(TireChangeActivity.this, "轮胎数量达到购买上限", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-       // rearAmountView.setGoods_storage(2);
+        // rearAmountView.setGoods_storage(2);
         rearAmountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
                 currentRearCount = amount;
                 initAmountView();
-                if (amount == rearMaxCount){
+                if (amount == rearMaxCount) {
                     Toast.makeText(TireChangeActivity.this, "轮胎数量达到购买上限", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
 
 
         List<String> imageList = new ArrayList<>();
@@ -442,7 +442,7 @@ public class TireChangeActivity extends RyBaseActivity {
             public void updateUI(Context context, View view, int position, String entity) {
                 Glide.with(context).load(entity).into((ImageView) view);
             }
-        },imageList)//                //设置指示器为普通指示器
+        }, imageList)//                //设置指示器为普通指示器
 //                .setIndicatorStyle(CustomBanner.IndicatorStyle.ORDINARY)
 //                //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
 //                .setIndicatorRes(R.drawable.shape_point_select, R.drawable.shape_point_unselect)
@@ -485,7 +485,7 @@ public class TireChangeActivity extends RyBaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getApplicationContext(),TireLiuchengActivity.class));
+                        startActivity(new Intent(getApplicationContext(), TireLiuchengActivity.class));
                     }
                 });
 
@@ -494,10 +494,10 @@ public class TireChangeActivity extends RyBaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (isReach5Years == 1){
+                        if (isReach5Years == 1) {
                             oneReasonCheck = !oneReasonCheck;
                             initReasonView();
-                        }else {
+                        } else {
                             Toast.makeText(TireChangeActivity.this, "您的轮胎不满5年", Toast.LENGTH_SHORT).show();
                         }
 
@@ -517,42 +517,43 @@ public class TireChangeActivity extends RyBaseActivity {
      * 免费再换
      */
     private void freeChangeOrder() {
-        if (currentRearCount ==0 && currentFontCount == 0){
+        if (currentRearCount == 0 && currentFontCount == 0) {
             Toast.makeText(TireChangeActivity.this, "请选择轮胎数量", Toast.LENGTH_SHORT).show();
+            return;
         }
         User user = new DbConfig(this).getUser();
         int userId = user.getId();
         int userCarId = user.getCarId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("storeId",shop.getStoreId());
-            jsonObject.put("userCarId",userCarId);
-            jsonObject.put("userId",userId);
-            if (fontRearFlag == 0){
-                jsonObject.put("fontAmount",currentFontCount + currentRearCount);
-                jsonObject.put("rearAmount",0);
-            }else {
-                jsonObject.put("fontAmount",currentFontCount);
-                jsonObject.put("rearAmount",currentRearCount);
+            jsonObject.put("storeId", shop.getStoreId());
+            jsonObject.put("userCarId", userCarId);
+            jsonObject.put("userId", userId);
+            if (fontRearFlag == 0) {
+                jsonObject.put("fontAmount", currentFontCount + currentRearCount);
+                jsonObject.put("rearAmount", 0);
+            } else {
+                jsonObject.put("fontAmount", currentFontCount);
+                jsonObject.put("rearAmount", currentRearCount);
             }
 
-            jsonObject.put("fontRearFlag",fontRearFlag);
-            jsonObject.put("orderType",3);
-            if (oneReasonCheck && twoReasonCheck){
-                jsonObject.put("reason",3);
-            }else if (oneReasonCheck && !twoReasonCheck){
-                jsonObject.put("reason",1);
-            }else if (!oneReasonCheck && twoReasonCheck){
-                jsonObject.put("reason",2);
+            jsonObject.put("fontRearFlag", fontRearFlag);
+            jsonObject.put("orderType", 3);
+            if (oneReasonCheck && twoReasonCheck) {
+                jsonObject.put("reason", 3);
+            } else if (oneReasonCheck && !twoReasonCheck) {
+                jsonObject.put("reason", 1);
+            } else if (!oneReasonCheck && twoReasonCheck) {
+                jsonObject.put("reason", 2);
             }
 
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserFreeChangeOrder");
-        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString() );
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig(this).getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -562,12 +563,12 @@ public class TireChangeActivity extends RyBaseActivity {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){ //添加成功
+                    if (status.equals("1")) { //添加成功
                         Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
-                        intent.putExtra(OrderFragment.ORDER_TYPE,"ALL");
+                        intent.putExtra(OrderFragment.ORDER_TYPE, "ALL");
                         startActivity(intent);
                         finish();
-                    }else {
+                    } else {
                         Toast.makeText(TireChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
@@ -596,26 +597,30 @@ public class TireChangeActivity extends RyBaseActivity {
      * 首次更换
      */
     private void postChangeOrder() {
-        if (currentChangeType == 0){//首次更换
+        if (currentRearCount == 0 && currentFontCount == 0) {
+            Toast.makeText(TireChangeActivity.this, "请选择轮胎数量", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (currentChangeType == 0) {//首次更换
             User user = new DbConfig(this).getUser();
             int userId = user.getId();
             int userCarId = user.getCarId();
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("storeId",shop.getStoreId());
-                jsonObject.put("userCarId",userCarId);
-                jsonObject.put("userId",userId);
-                jsonObject.put("fontAmount",currentFontCount);
-                jsonObject.put("rearAmount",currentRearCount);
-                jsonObject.put("fontRearFlag",fontRearFlag);
-                jsonObject.put("orderType",2);
+                jsonObject.put("storeId", shop.getStoreId());
+                jsonObject.put("userCarId", userCarId);
+                jsonObject.put("userId", userId);
+                jsonObject.put("fontAmount", currentFontCount);
+                jsonObject.put("rearAmount", currentRearCount);
+                jsonObject.put("fontRearFlag", fontRearFlag);
+                jsonObject.put("orderType", 2);
             } catch (JSONException e) {
             }
             RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addFirstChangeShoeOrder");
-            Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString() );
-            params.addBodyParameter("reqJson",jsonObject.toString());
+            Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
+            params.addBodyParameter("reqJson", jsonObject.toString());
             String token = new DbConfig(this).getToken();
-            params.addParameter("token",token);
+            params.addParameter("token", token);
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -625,9 +630,9 @@ public class TireChangeActivity extends RyBaseActivity {
                         jsonObject1 = new JSONObject(result);
                         String status = jsonObject1.getString("status");
                         String msg = jsonObject1.getString("msg");
-                        if (status.equals("1")){ //添加成功
+                        if (status.equals("1")) { //添加成功
                             Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
-                            intent.putExtra(OrderFragment.ORDER_TYPE,"ALL");
+                            intent.putExtra(OrderFragment.ORDER_TYPE, "ALL");
                             startActivity(intent);
                             finish();
                         } else if (status.equals("-999")) {
@@ -656,68 +661,68 @@ public class TireChangeActivity extends RyBaseActivity {
 
                 }
             });
-        }else {
+        } else {
         }
     }
 
     private void initAmountView() {
-        if (currentChangeType ==0 ){//首次更换
-            if (fontRearFlag == 0){//前后轮一致
-                if (fontAvaliableAmount >= 4){ //当轮胎数大于4时 最大选择两个
+        if (currentChangeType == 0) {//首次更换
+            if (fontRearFlag == 0) {//前后轮一致
+                if (fontAvaliableAmount >= 4) { //当轮胎数大于4时 最大选择两个
                     fontAmountView.setGoods_storage(2);
                     rearAmountView.setGoods_storage(2);
                     fontMaxCount = 2;
                     rearMaxCount = 2;
-                }else { //当轮胎数小于4时  前后轮加起来不能超过轮胎数   没达到轮胎数时  设置最大选择两个
+                } else { //当轮胎数小于4时  前后轮加起来不能超过轮胎数   没达到轮胎数时  设置最大选择两个
                     fontMaxCount = 2;
                     rearMaxCount = 2;
                     fontAmountView.setGoods_storage(2);
                     rearAmountView.setGoods_storage(2);
-                    if (currentFontCount + currentRearCount == fontAvaliableAmount){        //达到最大轮胎数时 设置为最大数
+                    if (currentFontCount + currentRearCount == fontAvaliableAmount) {        //达到最大轮胎数时 设置为最大数
                         fontAmountView.setGoods_storage(currentFontCount);
                         rearAmountView.setGoods_storage(currentRearCount);
                         fontMaxCount = currentFontCount;
                         rearMaxCount = currentRearCount;
                     }
                 }
-            }else {     //前后轮不一致
-                if (fontAvaliableAmount > 2){
+            } else {     //前后轮不一致
+                if (fontAvaliableAmount > 2) {
                     fontMaxCount = 2;
                     fontAmountView.setGoods_storage(2);
-                }else {
+                } else {
                     fontMaxCount = fontAvaliableAmount;
                     fontAmountView.setGoods_storage(fontAvaliableAmount);
                 }
 
-                if (rearAvaliableAmount > 2){
+                if (rearAvaliableAmount > 2) {
                     rearMaxCount = 2;
                     rearAmountView.setGoods_storage(2);
-                }else {
+                } else {
                     rearMaxCount = rearAvaliableAmount;
                     rearAmountView.setGoods_storage(rearAvaliableAmount);
                 }
 
             }
 
-        }else { //免费再换
-            if (fontRearFlag == 0){ //前后轮一致
+        } else { //免费再换
+            if (fontRearFlag == 0) { //前后轮一致
                 fontMaxCount = 2;
                 rearMaxCount = 2;
-                if (fontFreeAmount == 4){   //一共四条轮胎
+                if (fontFreeAmount == 4) {   //一共四条轮胎
                     fontAmountView.setGoods_storage(2);
                     rearAmountView.setGoods_storage(2);
-                }else {     //不足四条轮胎
+                } else {     //不足四条轮胎
 
                     fontAmountView.setGoods_storage(2);
                     rearAmountView.setGoods_storage(2);
-                    if (currentFontCount + currentRearCount == fontFreeAmount){        //达到最大轮胎数时 设置为最大数
+                    if (currentFontCount + currentRearCount == fontFreeAmount) {        //达到最大轮胎数时 设置为最大数
                         fontAmountView.setGoods_storage(currentFontCount);
                         rearAmountView.setGoods_storage(currentRearCount);
                         fontMaxCount = currentFontCount;
                         rearMaxCount = currentRearCount;
                     }
                 }
-            }else {     //前后轮不一致
+            } else {     //前后轮不一致
                 fontMaxCount = fontFreeAmount;
                 rearMaxCount = rearFreeAmount;
                 fontAmountView.setGoods_storage(fontFreeAmount);
@@ -729,10 +734,10 @@ public class TireChangeActivity extends RyBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == CHOOSE_SHOP){
+        if (resultCode == CHOOSE_SHOP) {
             Bundle bundle = data.getExtras();
             shop = ((Shop) bundle.getSerializable("shop"));
-            shopChooseView.setValue(shop.getStoreName(),shop.getStoreImage(), shop.getStoreAddress(),shop.getStoreDistence(),shop.getServiceTypeList(),mInflater);
+            shopChooseView.setValue(shop.getStoreName(), shop.getStoreImage(), shop.getStoreAddress(), shop.getStoreDistence(), shop.getServiceTypeList(), mInflater);
 
             Log.e(TAG, "onActivityResult: " + shop.getStoreId());
             Log.e(TAG, "onActivityResult: " + shop.getStoreName());

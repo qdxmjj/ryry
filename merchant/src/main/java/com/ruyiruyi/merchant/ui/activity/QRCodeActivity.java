@@ -1,13 +1,24 @@
 package com.ruyiruyi.merchant.ui.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,9 +58,11 @@ public class QRCodeActivity extends BaseActivity {
     private TextView user_province;
     private TextView user_city;
     private TextView bottom_txt;
+    private FrameLayout fl_main;
+    private ProgressDialog startDialog;
 
     private Bitmap logo;
-    private static final int IMAGE_HALFWIDTH = 20;//宽度值，影响中间图片大小
+    private static final int IMAGE_HALFWIDTH = 18;//宽度值，影响中间图片大小
     private User user;
     private Handler mHandler = new Handler() {
         @Override
@@ -79,6 +92,10 @@ public class QRCodeActivity extends BaseActivity {
                 }
             }
         });
+        fl_main = findViewById(R.id.fl_main);
+        startDialog = new ProgressDialog(this);
+        fl_main.setVisibility(View.INVISIBLE);
+        showDialogProgress(startDialog, "二维码信息加载中...");
 
         //获取传递数据
         url = getIntent().getStringExtra("url");
@@ -130,7 +147,12 @@ public class QRCodeActivity extends BaseActivity {
 
         user_name.setText(user.getStoreName());
         user_city.setText(user.getPhone());
+
+        fl_main.setVisibility(View.VISIBLE);
+        hideDialogProgress(startDialog);
     }
+
+
 
     /*
     * 不带logo()暂未用

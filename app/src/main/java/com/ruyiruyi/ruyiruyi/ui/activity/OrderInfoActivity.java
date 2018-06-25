@@ -144,7 +144,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 } else if (orderState == 3) {
                     actionBar.setTitle("待商家确认服务");
                 } else if (orderState == 6) {
-                    actionBar.setTitle("待车主确认服务");
+                    actionBar.setTitle("确认服务");
                 }else if (orderState == 1) {
                     actionBar.setTitle("交易完成");
                 }else if (orderState == 9){
