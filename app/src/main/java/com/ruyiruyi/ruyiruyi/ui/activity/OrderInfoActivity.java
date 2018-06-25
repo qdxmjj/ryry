@@ -230,6 +230,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
                         Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    //    setResult(TireWaitChangeActivity.TIREWAIT, new Intent());
                         finish();
                     }
                 } catch (JSONException e) {
@@ -283,6 +284,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
                         Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                      //  setResult(TireWaitChangeActivity.TIREWAIT, new Intent());
                         finish();
                     }
                 } catch (JSONException e) {
@@ -496,6 +498,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
     }
 
     private void getTireOrderInfo(JSONObject data) throws JSONException {
+
         orderImg = data.getString("orderImg");
         orderTotalPrice = data.getString("orderTotalPrice");
         carNumber = data.getString("platNumber");
@@ -1257,10 +1260,10 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
     @Override
     public void onInfoItemClickListener(String name) {
         if (name.equals("店铺名称")) {
-          /*  Log.e(TAG, "onInfoItemClickListener: storeid :" + storeId );
+            Log.e(TAG, "onInfoItemClickListener: storeid :" + storeId );
             Intent intent = new Intent(this, ShopHomeActivity.class);
             intent.putExtra("STOREID",Integer.parseInt(storeId));
-            startActivity(intent);*/
+            startActivity(intent);
         }
     }
 

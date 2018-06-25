@@ -45,7 +45,7 @@ public class TireInfoViewBinder extends ItemViewProvider<TireInfo, TireInfoViewB
         }else if (tireInfo.getFontRearFlag().equals("2")){
             holder.tirePlace.setText("位置： 后轮");
         }
-        if (tireInfo.getTirePrice().equals("0.00")){
+        if (tireInfo.getTirePrice() == 0.00){
             holder.tirePrice.setVisibility(View.GONE);
         } else {
             holder.tirePrice.setVisibility(View.VISIBLE);

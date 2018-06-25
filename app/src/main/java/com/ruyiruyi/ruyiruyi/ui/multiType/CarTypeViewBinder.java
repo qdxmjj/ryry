@@ -38,7 +38,7 @@ public class CarTypeViewBinder extends ItemViewProvider<CarType, CarTypeViewBind
             holder.carPailiangLayout.setVisibility(View.VISIBLE);
             holder.carPailiang.setText(carType.getPailiang());
             holder.carYearLayout.setVisibility(View.GONE);
-            holder.carType.setText("请选择年份");
+            holder.carType.setText("请选择生产年份");
         }else {
             holder.carPailiangLayout.setVisibility(View.VISIBLE);
             holder.carPailiang.setText(carType.getPailiang());

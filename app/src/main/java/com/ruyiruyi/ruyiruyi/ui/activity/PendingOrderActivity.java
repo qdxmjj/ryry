@@ -145,6 +145,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                         Toast.makeText(PendingOrderActivity.this, "取消订单成功", Toast.LENGTH_SHORT).show();
                         if (orderFrom == 0) {
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
                         } else {
                             finish();
                         }
@@ -203,6 +204,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                         Toast.makeText(PendingOrderActivity.this, "取消订单成功", Toast.LENGTH_SHORT).show();
                         if (orderFrom == 0) {
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
                         } else {
                             finish();
                         }
@@ -545,6 +547,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
     public void onBackPressed() {
         if (orderFrom == 0) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
         } else {
             super.onBackPressed();
         }

@@ -762,16 +762,12 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
             mHandler.sendEmptyMessageDelayed(0, 2000);
         } else {
             Log.e(TAG, "exit: -----");
-           /* Intent intent = new Intent("qd.xmjj.baseActivity");
-            intent.putExtra("closeAll", 1);
-            sendBroadcast(intent);//发送广播*/
-            //removeALLActivity();
             Intent intent = new Intent("qd.xmjj.baseActivity");
             intent.putExtra("closeAll", 1);
-            sendBroadcast(intent);//发送广播*/
+            sendBroadcast(intent);//发送广播
 
-            // this.finish();
-            //System.exit(0);
+            /* this.finish();
+             System.exit(0);*/
         }
     }
 

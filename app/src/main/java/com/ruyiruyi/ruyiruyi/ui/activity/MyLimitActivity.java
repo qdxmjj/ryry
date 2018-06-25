@@ -104,7 +104,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
                 //支付成功 跳转主页面
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
-
+                finish();
 
             } else {
                 // 该笔订单真实的支付结果，需要依赖服务端的异步通知。

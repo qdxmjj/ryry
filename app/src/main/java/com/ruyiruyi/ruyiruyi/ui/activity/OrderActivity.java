@@ -174,6 +174,7 @@ public class OrderActivity extends RyBaseFragmentActivity {
     public void onBackPressed() {
         if (orderFrom == 1) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
         } else {
             super.onBackPressed();
         }

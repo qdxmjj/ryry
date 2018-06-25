@@ -59,6 +59,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
     private int couponchoose;
     private String couponName = "选择优惠券";
     private int couponId = 0;
+    private int carId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,12 +104,22 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
         username = user.getNick();
         phone = user.getPhone();
         userId = user.getId();
+        carId = user.getCarId();
         initView();
         initData();
         //sendDataToService();
     }
 
     private void sendDataToService() {
+        for (int i = 0; i < goodsInfoList.size(); i++) {
+            if (goodsInfoList.get(i).getGoodsName().equals("精致洗车") || goodsInfoList.get(i).getGoodsName().equals("四轮定位")) {
+                if (carId ==0) {
+                    Toast.makeText(OrderGoodsAffirmActivity.this, "特殊商品，需要绑定车辆购买", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        }
+
         OrderGoods orderGoods = null;
         if (couponchoose == 0) {    //weixuan
             orderGoods= new OrderGoods(userId, storeid, storename, allprice + "", goodsInfoList,couponId);

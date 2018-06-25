@@ -43,6 +43,7 @@ public class ActionBar extends FrameLayout {
     private ImageView imageView;
     public OnRightImageClick listener;
     private TextView rightView;
+    private FrameLayout backgroundLayout;
 
     public void setListener(OnRightImageClick listener) {
         this.listener = listener;
@@ -79,12 +80,15 @@ public class ActionBar extends FrameLayout {
         content.setBackgroundColor(0xfffc6421);
         addView(content,LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,130));
 
+        backgroundLayout = new FrameLayout(context);
+        content.addView(backgroundLayout, LayoutHelper.createFrame(200,LayoutHelper.MATCH_PARENT,Gravity.CENTER_VERTICAL,20,0,0,0));
+
         backButtonImageView = new ImageView(context);
         backButtonImageView.setScaleType(ImageView.ScaleType.CENTER);
         backButtonImageView.setImageResource(R.drawable.ic_back);
-        content.addView(backButtonImageView, LayoutHelper.createFrame(60,60,Gravity.CENTER_VERTICAL,20,0,0,0));
+        backgroundLayout.addView(backButtonImageView, LayoutHelper.createFrame(60,60,Gravity.CENTER_VERTICAL,20,0,0,0));
 
-        RxViewAction.clickNoDouble(backButtonImageView)
+        RxViewAction.clickNoDouble(backgroundLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {

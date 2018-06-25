@@ -13,6 +13,8 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
+import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBig;
+import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBigViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireWait;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireWaitViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
@@ -37,6 +39,7 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitViewBinder.OnWaitTireClick {
     private static final String TAG = TireWaitChangeActivity.class.getSimpleName();
+    public static final int TIREWAIT = 3;
     private ActionBar actionBar;
     private RecyclerView listView;
     private List<Object> items = new ArrayList<>();
@@ -57,6 +60,7 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
                 switch ((var1)) {
                     case -1:
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        finish();
                         break;
                 }
             }
@@ -72,6 +76,7 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
         // initData();
         initDataFromService();
     }
+
 
     private void initDataFromService() {
         int userId = new DbConfig(this).getId();
@@ -126,9 +131,9 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
                                 TireWait tireWait = new TireWait(orderImg, fontShoeName, name, rearAmount, platNumber, tirePlace, orderNo, rejectStatus,shoeAvailableNo);
                                 tireWaitList.add(tireWait);
                             }
-                            initData();
-
                         }
+
+                        initData();
 
                     } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
@@ -164,6 +169,9 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
         for (int i = 0; i < tireWaitList.size(); i++) {
             items.add(tireWaitList.get(i));
         }
+        if (tireWaitList.size() == 0){
+            items.add(new EmptyBig());
+        }
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
@@ -195,6 +203,7 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
         TireWaitViewBinder tireWaitViewBinder = new TireWaitViewBinder(this);
         tireWaitViewBinder.setListener(this);
         adapter.register(TireWait.class, tireWaitViewBinder);
+        adapter.register(EmptyBig.class,new EmptyBigViewBinder());
     }
 
     @Override
@@ -202,6 +211,7 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra(MyFragment.FROM_FRAGMENT, fromFragment);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -210,6 +220,17 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
         intent.putExtra(PaymentActivity.ORDERNO, orderNo);
         intent.putExtra(PaymentActivity.ORDER_TYPE, 0);
         intent.putExtra(PaymentActivity.ORDER_STATE, 3);
-        startActivity(intent);
+        startActivityForResult(intent,TIREWAIT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e(TAG, "onActivityResult: --+--");
+        initDataFromService();
+      /*  if (resultCode == TIREWAIT){
+            Log.e(TAG, "onActivityResult: ------");
+            tireWaitList.clear();
+
+        }*/
     }
 }

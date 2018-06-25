@@ -90,7 +90,7 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
                     holder.orderPriceText.setVisibility(View.INVISIBLE);
                     holder.orderTypeText.setText("待发货");
                 }else if (order.getOrderState().equals("6")){
-                    holder.orderTypeText.setText("待车主确认服务");
+                    holder.orderTypeText.setText("确认服务");
                 }else if (order.getOrderState().equals("7")){
                     holder.orderTypeText.setText("待评价");
                 }else if (order.getOrderState().equals("8")){
@@ -103,11 +103,11 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
                     holder.orderTypeText.setText("其他状态");
                 }
             }else if (order.getOrderStage().equals("2")){
-                holder.orderTypeText.setText("待车主支付差价");
+                holder.orderTypeText.setText("前往支付差价");
             }else if (order.getOrderStage().equals("3")){
                 holder.orderTypeText.setText("已支付差价");
             }else if (order.getOrderStage().equals("4")){
-                holder.orderTypeText.setText("待车主支付运费");
+                holder.orderTypeText.setText("前往支付运费");
             }else if (order.getOrderStage().equals("5")){
                 holder.orderTypeText.setText("已支付运费");
             }else {

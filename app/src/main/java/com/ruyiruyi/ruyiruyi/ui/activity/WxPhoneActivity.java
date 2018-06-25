@@ -149,6 +149,7 @@ public class WxPhoneActivity extends RyBaseActivity {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         saveUserToDb(data);//保存用户信息到数据库
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        finish();
                     }else {
                         Toast.makeText(WxPhoneActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }

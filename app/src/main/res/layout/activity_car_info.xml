@@ -219,6 +219,8 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="13dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:paddingBottom="13dp">
                     <TextView
                         android:layout_width="wrap_content"
@@ -281,6 +283,7 @@
                     android:paddingRight="20dp"
                     android:paddingTop="13dp"
                     android:paddingBottom="13dp"
+                    android:visibility="gone"
                     >
                     <TextView
                         android:layout_width="wrap_content"
@@ -382,6 +385,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
+                    android:visibility="gone"
                     android:background="@color/c3"/>
 
                 <LinearLayout

@@ -450,6 +450,7 @@ public class LoginActivity extends RyBaseActivity {
                         Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
+                        finish();
                     }else {
                         Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
