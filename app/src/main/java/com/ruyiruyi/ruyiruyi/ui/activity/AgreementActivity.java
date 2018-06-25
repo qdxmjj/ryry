@@ -34,7 +34,7 @@ public class AgreementActivity extends RyBaseActivity {
         setContentView(R.layout.activity_agreement);
 
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("用户协议");;
+
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
             @Override
             public void onItemClick(int var1) {
@@ -47,6 +47,11 @@ public class AgreementActivity extends RyBaseActivity {
         });
         Intent intent = getIntent();
         agreementtype = intent.getIntExtra("AGREEMENTTYPE",0);  //1用户   3是畅行无忧
+        if (agreementtype == 0){
+            actionBar.setTitle("用户协议");;
+        }else if (agreementtype == 1){
+            actionBar.setTitle("畅行无忧协议");;
+        }
 
         initView();
         initDataFromService();
@@ -73,7 +78,7 @@ public class AgreementActivity extends RyBaseActivity {
                     if (status.equals("1")){
                         JSONObject data = jsonObject1.getJSONObject("data");
                         content = data.getString("content");
-                        agreementText.loadData(content,"text/html","UTF-8");
+                        agreementText.loadData(content,"text/html;charset=UTF-8","UTF-8");
 
                     }
 

@@ -67,14 +67,15 @@ public class LaunchActivity extends RyBaseActivity {
 
         //判断权限
       //  judgePower();
+        //获取车辆轮胎和排量数据
+        initCarrTireInfo();
 
         initCarDataIntoDb();
         //获取车辆图标数据
         initCarBrand();
         //获取车辆型号数据
         initCarVerhicle();
-        //获取车辆轮胎和排量数据
-        initCarrTireInfo();
+
         //获取轮胎型号
         initTireType();
         //获取省市县
@@ -281,7 +282,7 @@ public class LaunchActivity extends RyBaseActivity {
             @Override
             public void onSuccess(String result) {
                 try {
-                    Log.e(TAG, "onSuccess: " + result);
+                    Log.e(TAG, "onSuccess: initCarBrand-" + result);
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
@@ -370,7 +371,7 @@ public class LaunchActivity extends RyBaseActivity {
             @Override
             public void onSuccess(String result) {
                 try {
-                    Log.e(TAG, "onSuccess: " + result);
+                    Log.e(TAG, "onSuccess: initCarVerhicle-" + result);
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
@@ -456,7 +457,7 @@ public class LaunchActivity extends RyBaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:getCarTireInfoData---" + result);
+                Log.e(TAG, "onSuccess:initCarrTireInfo---" + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
@@ -549,7 +550,7 @@ public class LaunchActivity extends RyBaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:getTireTypeData---" + result);
+                Log.e(TAG, "onSuccess:initTireType---" + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
@@ -634,7 +635,7 @@ public class LaunchActivity extends RyBaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:getTireTypeData---" + result);
+                Log.e(TAG, "onSuccess:initProvice---" + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
@@ -760,7 +761,7 @@ public class LaunchActivity extends RyBaseActivity {
                         }, 1);
             }
         }else {
-            handler.sendEmptyMessageDelayed(0, 2000);
+            handler.sendEmptyMessageDelayed(0, 4000);
         }
 
     }

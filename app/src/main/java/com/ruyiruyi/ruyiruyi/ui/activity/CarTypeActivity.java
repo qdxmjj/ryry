@@ -71,7 +71,7 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
         try {
             if (currentType == 0){      //选择排量
                 List<CarTireInfo> carTireInfoList = db.selector(CarTireInfo.class)
-                        .where("verhicle_id", "=", vercicleid)
+                       // .where("verhicle_id", "=", vercicleid)
                         .findAll();
                 for (int i = 0; i < carTireInfoList.size(); i++) {
                     String pailiang = carTireInfoList.get(i).getPailiang();

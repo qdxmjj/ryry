@@ -195,7 +195,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
                 result = R.string.errcode_usuall;;
                 break;
             default:
-                result = R.string.errcode_unknown;
+                result = R.string.errcode_fail;
                 break;
         }
 
