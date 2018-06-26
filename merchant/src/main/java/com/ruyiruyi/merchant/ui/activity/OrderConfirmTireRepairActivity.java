@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -835,44 +834,34 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
         if (currentImage == 1) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "shoea.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "shoea.jpg");
             path_ = file.getPath();
         } else if (currentImage == 2) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "shoeacode.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "shoeacode.jpg");
             path_ = file.getPath();
         } else if (currentImage == 3) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "shoeb.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "shoeb.jpg");
             path_ = file.getPath();
         } else if (currentImage == 4) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "shoebcode.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "shoebcode.jpg");
             path_ = file.getPath();
         } else if (currentImage == 5) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "shoec.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "shoec.jpg");
             path_ = file.getPath();
         } else if (currentImage == 6) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "shoeccode.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "shoeccode.jpg");
             path_ = file.getPath();
         } else if (currentImage == 7) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "shoed.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "shoed.jpg");
             path_ = file.getPath();
         } else if (currentImage == 8) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "shoedcode.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "shoedcode.jpg");
             path_ = file.getPath();
         } else if (currentImage == 9) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "license.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "license.jpg");
             path_ = file.getPath();
         } else if (currentImage == 10) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "car.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "car.jpg");
             path_ = file.getPath();
         }
 
@@ -881,8 +870,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             tempUri = FileProvider.getUriForFile(getApplicationContext(), "com.ruyiruyi.merchant.fileProvider", file);
         } else {
-            tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "image.jpg"));
+            tempUri = Uri.fromFile(new File(this.getObbDir().getAbsolutePath(), "image.jpg"));
         }
         Log.e(TAG, "takePicture: " + tempUri);
         // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
@@ -1221,41 +1209,31 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         }
 
         //2.照片   最后在onDestroy中根据图片Path删除照片
-        path_licenseBitmap = ImageUtils.savePhoto(licenseBitmap, Environment
-                .getExternalStorageDirectory().getAbsolutePath(), "licensePic");
-        path_carBitmap = ImageUtils.savePhoto(carBitmap, Environment
-                .getExternalStorageDirectory().getAbsolutePath(), "carPic");
+        path_licenseBitmap = ImageUtils.savePhoto(licenseBitmap, this.getObbDir().getAbsolutePath(), "licensePic");
+        path_carBitmap = ImageUtils.savePhoto(carBitmap, this.getObbDir().getAbsolutePath(), "carPic");
         if (hasPic_a_left) {
-            path_shoeABitmap = ImageUtils.savePhoto(shoeAbitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeAPic" + pic_a_titleno.getText().toString());
+            path_shoeABitmap = ImageUtils.savePhoto(shoeAbitmap, this.getObbDir().getAbsolutePath(), "shoeAPic" + pic_a_titleno.getText().toString());
         }
         if (hasPic_a_right) {
-            path_shoeABarcodeBitmap = ImageUtils.savePhoto(shoeACodebitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeACodePic" + pic_a_titleno.getText().toString());
+            path_shoeABarcodeBitmap = ImageUtils.savePhoto(shoeACodebitmap, this.getObbDir().getAbsolutePath(), "shoeACodePic" + pic_a_titleno.getText().toString());
         }
         if (hasPic_b_left) {
-            path_shoeBBitmap = ImageUtils.savePhoto(shoeBbitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeBPic" + pic_b_titleno.getText().toString());
+            path_shoeBBitmap = ImageUtils.savePhoto(shoeBbitmap, this.getObbDir().getAbsolutePath(), "shoeBPic" + pic_b_titleno.getText().toString());
         }
         if (hasPic_b_right) {
-            path_shoeBBarcodeBitmap = ImageUtils.savePhoto(shoeBCodebitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeBCodePic" + pic_b_titleno.getText().toString());
+            path_shoeBBarcodeBitmap = ImageUtils.savePhoto(shoeBCodebitmap, this.getObbDir().getAbsolutePath(), "shoeBCodePic" + pic_b_titleno.getText().toString());
         }
         if (hasPic_c_left) {
-            path_shoeCBitmap = ImageUtils.savePhoto(shoeCbitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeCPic" + pic_c_titleno.getText().toString());
+            path_shoeCBitmap = ImageUtils.savePhoto(shoeCbitmap, this.getObbDir().getAbsolutePath(), "shoeCPic" + pic_c_titleno.getText().toString());
         }
         if (hasPic_c_right) {
-            path_shoeCBarcodeBitmap = ImageUtils.savePhoto(shoeCCodebitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeCCodePic" + pic_c_titleno.getText().toString());
+            path_shoeCBarcodeBitmap = ImageUtils.savePhoto(shoeCCodebitmap, this.getObbDir().getAbsolutePath(), "shoeCCodePic" + pic_c_titleno.getText().toString());
         }
         if (hasPic_d_left) {
-            path_shoeDBitmap = ImageUtils.savePhoto(shoeDbitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeDPic" + pic_d_titleno.getText().toString());
+            path_shoeDBitmap = ImageUtils.savePhoto(shoeDbitmap, this.getObbDir().getAbsolutePath(), "shoeDPic" + pic_d_titleno.getText().toString());
         }
         if (hasPic_d_right) {
-            path_shoeDBarcodeBitmap = ImageUtils.savePhoto(shoeDCodebitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "shoeDCodePic" + pic_d_titleno.getText().toString());
+            path_shoeDBarcodeBitmap = ImageUtils.savePhoto(shoeDCodebitmap, this.getObbDir().getAbsolutePath(), "shoeDCodePic" + pic_d_titleno.getText().toString());
         }
 
     }

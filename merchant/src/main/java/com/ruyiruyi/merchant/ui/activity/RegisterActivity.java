@@ -1265,10 +1265,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                         break;
                     case R.id.ckbox_xieyi:
                         if (isChecked) {
-                            ckbox_sl.setChecked(true);
                             isChecdXieyi = true;
                         } else {
-                            ckbox_sl.setChecked(false);
                             isChecdXieyi = false;
                         }
                         break;

@@ -174,7 +174,7 @@ public class MyGoodsFragment extends BaseFragment {
     private void initDataByLoadMoreType() {
         //数据加载完成前显示加载动画
         startDialog = new ProgressDialog(getContext());
-        showDialogProgress(startDialog, "商品信息加载中...");
+//        showDialogProgress(startDialog, "商品信息加载中...");
 
         isLoadOver = false;
 
@@ -258,7 +258,7 @@ public class MyGoodsFragment extends BaseFragment {
             @Override
             public void onFinished() {
                 //加载完成 隐藏加载动画
-                hideDialogProgress(startDialog);
+//                hideDialogProgress(startDialog);
             }
         });
     }

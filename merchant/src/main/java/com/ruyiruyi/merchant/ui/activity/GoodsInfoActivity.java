@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -345,8 +344,7 @@ public class GoodsInfoActivity extends BaseActivity {
 
     private void commitData(int type) {
         if (imgBitmap != null) {
-            img_Path = ImageUtils.savePhoto(imgBitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "forpostaddgoodsimg");//为提交请求所生成图片 每次提交被替换
+            img_Path = ImageUtils.savePhoto(imgBitmap, this.getObbDir().getAbsolutePath(), "forpostaddgoodsimg");//为提交请求所生成图片 每次提交被替换
         } else {
             Toast.makeText(GoodsInfoActivity.this, "请上传商品照片", Toast.LENGTH_SHORT).show();
             return;
@@ -391,7 +389,7 @@ public class GoodsInfoActivity extends BaseActivity {
 
     //清空数据
     private void clearMyAllData() {
-        mGoodsImg.setImageResource(R.drawable.circle_head_theam);
+        mGoodsImg.setImageResource(R.drawable.ic_shancghuantp);
         imgBitmap = null;
         mGoodsName.setText("");
         mGoodsPrice.setText("");
@@ -686,8 +684,7 @@ public class GoodsInfoActivity extends BaseActivity {
         Intent openCameraIntent = new Intent(
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
-        file = new File(Environment
-                .getExternalStorageDirectory(), "goodsinfoimg.jpg");
+        file = new File(this.getObbDir().getAbsolutePath(), "goodsinfoimg.jpg");
         path_ = file.getPath();
 
         //判断是否是AndroidN以及更高的版本
@@ -695,8 +692,7 @@ public class GoodsInfoActivity extends BaseActivity {
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             tempUri = FileProvider.getUriForFile(GoodsInfoActivity.this, "com.ruyiruyi.merchant.fileProvider", file);
         } else {
-            tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "image.jpg"));
+            tempUri = Uri.fromFile(new File(this.getObbDir().getAbsolutePath(), "image.jpg"));
         }
         Log.e(TAG, "takePicture: " + tempUri);
         // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换

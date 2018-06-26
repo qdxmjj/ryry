@@ -15,10 +15,13 @@ import com.ruyiruyi.merchant.ui.multiType.PromotionHaspersonViewBinder;
 import com.ruyiruyi.merchant.ui.multiType.modle.PromotionNoperson;
 import com.ruyiruyi.merchant.ui.multiType.PromotionNopersonViewBinder;
 import com.ruyiruyi.merchant.ui.multiType.PromotionViewBinder;
+import com.ruyiruyi.merchant.utils.Constants;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +53,7 @@ public class PromotionActivity extends BaseActivity {
     private String url;
     private String invitationCode;
     private String TAG = PromotionActivity.class.getSimpleName();
+    private IWXAPI api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,8 @@ public class PromotionActivity extends BaseActivity {
 
 
         });
+        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
+        api.registerApp(Constants.APP_ID);
 
         initView();
         initData();

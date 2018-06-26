@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -33,6 +32,7 @@ import com.ruyiruyi.merchant.bean.FreeChangeOldShoeBean;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
 import com.ruyiruyi.merchant.ui.multiType.PublicShoeFlag;
+import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -557,10 +557,8 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
 
     private void initBeforePost() {
         //处理照片
-        path_licenseBitmap = ImageUtils.savePhoto(licenseBitmap, Environment
-                .getExternalStorageDirectory().getAbsolutePath(), "licensePic");
-        path_carBitmap = ImageUtils.savePhoto(carBitmap, Environment
-                .getExternalStorageDirectory().getAbsolutePath(), "carPic");
+        path_licenseBitmap = ImageUtils.savePhoto(licenseBitmap, this.getObbDir().getAbsolutePath(), "licensePic");
+        path_carBitmap = ImageUtils.savePhoto(carBitmap, this.getObbDir().getAbsolutePath(), "carPic");
     }
 
     private boolean judgeBeforeSave(String type) {
@@ -649,12 +647,10 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
         if (currentImage == 1) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "license" + code + ".jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "license" + code + ".jpg");
             path_ = file.getPath();
         } else if (currentImage == 2) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "car" + code + ".jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "car" + code + ".jpg");
             path_ = file.getPath();
         }
 
@@ -663,8 +659,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             tempUri = FileProvider.getUriForFile(getApplicationContext(), "com.ruyiruyi.merchant.fileProvider", file);
         } else {
-            tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "image.jpg"));
+            tempUri = Uri.fromFile(new File(this.getObbDir().getAbsolutePath(), "image.jpg"));
         }
         Log.e(TAG, "takePicture: " + tempUri);
         // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
@@ -769,6 +764,24 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
             code_d.setText(newShoeList.get(3).getBarCode());
         }
     }
+
+    /*  onDestroy()
+* 判断删除带有条形码的图片
+* */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //根据Path删除转换的照片
+        if (path_licenseBitmap != null && path_licenseBitmap.length() != 0) {
+            UtilsRY.deleteImage(path_licenseBitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_licenseBitmap");
+        }
+        if (path_carBitmap != null && path_carBitmap.length() != 0) {
+            UtilsRY.deleteImage(path_carBitmap, getApplicationContext());
+            Log.e(TAG, "onDestroy: path_carBitmap");
+        }
+    }
+
 
     private void setShoeFlagData() {
         if (shoeFlagList.size() == 2) {

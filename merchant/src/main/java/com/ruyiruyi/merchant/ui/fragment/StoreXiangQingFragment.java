@@ -13,7 +13,6 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -136,6 +135,7 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
     private boolean isClicked = false;
     private int isOpen = 1; //默认开店营业 2 不营业 1 营业
     private ProgressDialog progressDialog;
+    private ProgressDialog startDialog;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -173,6 +173,8 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         progressDialog = new ProgressDialog(getActivity());
+        startDialog = new ProgressDialog(getActivity());
+        showDialogProgress(startDialog, "店铺信息加载中...");
 
         initView();
         initRegisterServiceTypeData();
@@ -232,6 +234,7 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             }
         });
 
+        hideDialogProgress(startDialog);
     }
 
     private void getData() {
@@ -557,16 +560,13 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
         if (currentImage == 0) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "mdpicaaa.jpg");
+            file = new File(getActivity().getObbDir().getAbsolutePath(), "mdpicaaa.jpg");
             path_ = file.getPath();
         } else if (currentImage == 1) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "mdpicbbb.jpg");
+            file = new File(getActivity().getObbDir().getAbsolutePath(), "mdpicbbb.jpg");
             path_ = file.getPath();
         } else if (currentImage == 2) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "mdpicccc.jpg");
+            file = new File(getActivity().getObbDir().getAbsolutePath(), "mdpicccc.jpg");
             path_ = file.getPath();
         }
 
@@ -575,8 +575,7 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             tempUri = FileProvider.getUriForFile(getActivity(), "com.ruyiruyi.merchant.fileProvider", file);
         } else {
-            tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "image.jpg"));
+            tempUri = Uri.fromFile(new File(getActivity().getObbDir().getAbsolutePath(), "image.jpg"));
         }
         Log.e(TAG, "takePicture: " + tempUri);
         // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
@@ -687,16 +686,13 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             public void onClick(DialogInterface dialog, int which) {
                 showDialogProgress(progressDialog, "店铺信息保存中...");
                 if (isNewPicA) {
-                    mdpicaPath = ImageUtils.savePhoto(mdPicaBitmap, Environment
-                            .getExternalStorageDirectory().getAbsolutePath(), "mdPica");
+                    mdpicaPath = ImageUtils.savePhoto(mdPicaBitmap, getActivity().getObbDir().getAbsolutePath(), "mdPica");
                 }
                 if (isNewPicB) {
-                    mdpicbPath = ImageUtils.savePhoto(mdPicbBitmap, Environment
-                            .getExternalStorageDirectory().getAbsolutePath(), "mdPicb");
+                    mdpicbPath = ImageUtils.savePhoto(mdPicbBitmap, getActivity().getObbDir().getAbsolutePath(), "mdPicb");
                 }
                 if (isNewPicC) {
-                    mdpiccPath = ImageUtils.savePhoto(mdPiccBitmap, Environment
-                            .getExternalStorageDirectory().getAbsolutePath(), "mdPicc");
+                    mdpiccPath = ImageUtils.savePhoto(mdPiccBitmap, getActivity().getObbDir().getAbsolutePath(), "mdPicc");
                 }
                 String storeId = new DbConfig(getActivity()).getId() + "";
                 JSONObject object = new JSONObject();

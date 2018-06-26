@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def VERSION_CODE = 1
-def VERSION_NAME = "1.8.3"
+def VERSION_NAME = "1.8.5"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''
@@ -137,6 +137,8 @@ dependencies {
     compile system_dependencies.design
     compile system_dependencies.xutils
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    /*微信*/
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     compile project(':rylibrary')
     compile files('libs/BaiduLBS_Android.jar')
     compile files('libs/core-3.2.1.jar')

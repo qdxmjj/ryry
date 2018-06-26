@@ -97,7 +97,8 @@
         <activity android:name=".ui.activity.UserAgreementActivity" />
         <activity android:name=".ui.activity.QRCodeActivity" />
         <activity android:name=".ui.activity.MerchantHasWordActivity" />
-        <activity android:name=".ui.activity.TestCircleLogoQrCodeActivity"></activity>
+        <activity android:name=".ui.activity.TestCircleLogoQrCodeActivity" />
+        <activity android:name=".wxapi.WXEntryActivity"></activity>
     </application>
 
 </manifest>

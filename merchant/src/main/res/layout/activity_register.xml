@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
+    android:background="#ffffff"
     android:focusableInTouchMode="true"
     android:scrollbars="none">
 
@@ -24,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="#ffffff"
             tools:context="com.ruyiruyi.merchant.ui.activity.RegisterActivity">
 
             <RelativeLayout
@@ -805,8 +805,8 @@
                 android:background="#ffffff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:orientation="horizontal">
 
                 <CheckBox

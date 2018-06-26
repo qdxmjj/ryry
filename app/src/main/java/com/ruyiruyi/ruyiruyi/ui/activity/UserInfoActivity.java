@@ -14,8 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
@@ -107,7 +105,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getWindow().setSoftInputMode
-                (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN|
+                (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN |
                         WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_user_info);
         mActionBar = (ActionBar) findViewById(R.id.acbar_info);
@@ -337,8 +335,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
         Intent openCameraIntent = new Intent(
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
-        file = new File(Environment
-                .getExternalStorageDirectory(), "userinfoimg.jpg");
+        file = new File(this.getObbDir().getAbsolutePath(), "userinfoimg.jpg");
         path_ = file.getPath();
         Log.e(TAG, "takePicture: path_ = " + path_);
 
@@ -347,8 +344,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             tempUri = FileProvider.getUriForFile(UserInfoActivity.this, "com.ruyiruyi.ruyiruyi.fileProvider", file);
         } else {
-            tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "image.jpg"));
+            tempUri = Uri.fromFile(new File(this.getObbDir().getAbsolutePath(), "image.jpg"));
         }
         // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
         openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
@@ -400,8 +396,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
 
             //此时记录头像已更改 并生成文件地址
             isNewPic = true;
-            img_Path = ImageUtils.savePhoto(imgBitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "userheadimg");
+            img_Path = ImageUtils.savePhoto(imgBitmap, this.getObbDir().getAbsolutePath(), "userheadimg");
         }
     }
 
@@ -479,7 +474,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final JSONObject object = new JSONObject();
-                showDialogProgress(progressDialog,"正在提交用户信息...");
+                showDialogProgress(progressDialog, "正在提交用户信息...");
                 try {
                     object.put("userId", new DbConfig(getApplicationContext()).getId());
                     object.put("id", new DbConfig(getApplicationContext()).getId());

@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -219,28 +218,28 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
         params.addBodyParameter("reqJson",jsonObject.toString());
         params.setConnectTimeout(10000);
         if (evaluateOne!=null){
-            String evaluateOne = ImageUtils.savePhoto(this.evaluateOne, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "evaluateOne");
+            String evaluateOne = ImageUtils.savePhoto(this.evaluateOne, this.getObbDir().getAbsolutePath()
+                    , "evaluateOne");
             params.addBodyParameter("img1" ,new File(evaluateOne) );
         }
         if (evaluateTwo!=null){
-            String evaluateTwo = ImageUtils.savePhoto(this.evaluateTwo, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "evaluateTwo");
+            String evaluateTwo = ImageUtils.savePhoto(this.evaluateTwo, this.getObbDir().getAbsolutePath()
+                    , "evaluateTwo");
             params.addBodyParameter("img2" ,new File(evaluateTwo) );
         }
         if (evaluateThree!=null){
-            String evaluateThree = ImageUtils.savePhoto(this.evaluateThree, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "evaluateThree");
+            String evaluateThree = ImageUtils.savePhoto(this.evaluateThree, this.getObbDir().getAbsolutePath()
+                    , "evaluateThree");
             params.addBodyParameter("img3" ,new File(evaluateThree) );
         }
         if (evaluateFour!=null){
-            String evaluateFour = ImageUtils.savePhoto(this.evaluateFour, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "evaluateFour");
+            String evaluateFour = ImageUtils.savePhoto(this.evaluateFour, this.getObbDir().getAbsolutePath()
+                    , "evaluateFour");
             params.addBodyParameter("img4" ,new File(evaluateFour) );
         }
         if (evaluateFive!=null){
-            String evaluateFive = ImageUtils.savePhoto(this.evaluateFive, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "evaluateFive");
+            String evaluateFive = ImageUtils.savePhoto(this.evaluateFive, this.getObbDir().getAbsolutePath()
+                    , "evaluateFive");
             params.addBodyParameter("img5" ,new File(evaluateFive) );
         }
         String token = new DbConfig(this).getToken();

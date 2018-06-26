@@ -10,7 +10,6 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -408,8 +407,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
     private void commitData(int type) {
         if (imgBitmap != null) {
             isOldPic = false;
-            img_Path = ImageUtils.savePhoto(imgBitmap, Environment
-                    .getExternalStorageDirectory().getAbsolutePath(), "forpostxiugaigoodsimg");//为提交请求所生成图片 每次提交被替换
+            img_Path = ImageUtils.savePhoto(imgBitmap, this.getObbDir().getAbsolutePath(), "forpostxiugaigoodsimg");//为提交请求所生成图片 每次提交被替换
         } else {
             isOldPic = true;
         }
@@ -774,8 +772,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         Intent openCameraIntent = new Intent(
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
-        file = new File(Environment
-                .getExternalStorageDirectory(), "goodsinforedeitimg.jpg");
+        file = new File(this.getObbDir().getAbsolutePath(), "goodsinforedeitimg.jpg");
         path_takepic = file.getPath();
 
         //判断是否是AndroidN以及更高的版本
@@ -783,8 +780,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             tempUri = FileProvider.getUriForFile(GoodsInfoReeditActivity.this, "com.ruyiruyi.merchant.fileProvider", file);
         } else {
-            tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "image.jpg"));
+            tempUri = Uri.fromFile(new File(this.getObbDir().getAbsolutePath(), "image.jpg"));
         }
         Log.e(TAG, "takePicture: " + tempUri);
         // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
