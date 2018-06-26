@@ -49,9 +49,9 @@ public class TireWaitViewBinder extends ItemViewProvider<TireWait, TireWaitViewB
         holder.avaliabText.setText("可用数量：  " + tireWait.getAvaliableShoeNo());
        // holder.caozuoButton.setVisibility(tireWait.rejectStatus?View.VISIBLE:View.GONE);
         if (tireWait.getTireCount() != tireWait.getAvaliableShoeNo()){
-            holder.caozuoButton.setVisibility(View.VISIBLE);
-        }else {
             holder.caozuoButton.setVisibility(View.GONE);
+        }else {
+            holder.caozuoButton.setVisibility(View.VISIBLE);
         }
 
         RxViewAction.clickNoDouble(holder.tireLayout)

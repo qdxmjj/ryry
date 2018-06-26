@@ -162,6 +162,9 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private FrameLayout fuyeLayout;
     private LinearLayout lichengbiaoImageLayout;
     private TextView lichengbiaoHasText;
+    private String font;
+    private String rear;
+    private String brand;
 
 
     @Override
@@ -186,17 +189,25 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         Intent intent = getIntent();
         canClick = intent.getIntExtra("CANCLICK", 0);
         Log.e(TAG, "onCreate: " +canClick);
+        initView();
 
         int from = intent.getIntExtra("FROM",0); // 0是车型选择返回  1是carManagetActivity返回
         if (from == 0){ //车型选择
             carTiteInfoId = intent.getIntExtra("CARTIREIINFO",0);
+            font = intent.getStringExtra("FONT");
+            rear = intent.getStringExtra("REAR");
+            brand = intent.getStringExtra("BRAND");
+            carFontText.setText(font);
+            carRearText.setText(rear);
+            carTypeChoose.setText(brand);
+
         }else if (from == 1){//查看车辆信息
             userCarId = intent.getIntExtra("USERCARID",0);
             initDataByUseridAndCarId();
         }
 
 
-        initView();
+
 
 
         isEnergySwich.setChecked(false);
@@ -212,7 +223,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         shiList  = new ArrayList<>();
         xianList  = new ArrayList<>();
 
-        initData();
+        //initData();
         initDateTime();
         initLichengbiao();
         getSheng();
@@ -422,6 +433,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
 
     }
 
+/*
     private void initData() {
         if (carTiteInfoId != 0){
             DbManager db = new DbConfig(this).getDbManager();
@@ -445,6 +457,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
 
         }
     }
+*/
 
     private void initView() {
 
@@ -982,6 +995,19 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                         setResult(CarManagerActivity.CARMANAMGER_RESULT,intent);
                         finish();*/
                         startActivity(new Intent(getApplicationContext(),CarManagerActivity.class));
+                        User user = new DbConfig(getApplicationContext()).getUser();
+                        user.setFirstAddCar(1);
+
+                        DbConfig dbConfig = new DbConfig(getApplicationContext());
+                        DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
+                        DbManager db = x.getDb(daoConfig);
+
+                        try {
+                            db.saveOrUpdate(user);
+                        } catch (DbException e) {
+
+                        }
+
 
 
                     }else {

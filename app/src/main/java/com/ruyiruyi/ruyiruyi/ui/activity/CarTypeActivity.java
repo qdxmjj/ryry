@@ -309,8 +309,15 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
             for (int i = 0; i < carTireInfoList.size(); i++) {
                 if (carTireInfoList.get(i).getName().equals(title)) {
                     int id = carTireInfoList.get(i).getId();
+                    String font = carTireInfoList.get(i).getFont();
+                    String rear = carTireInfoList.get(i).getRear();
+                    String brand = carTireInfoList.get(i).getBrand();
+                    Log.e(TAG, "onCarTitleItemClikcListener: ----" + id );
                     Intent intent = new Intent(this, CarInfoActivity.class);
                     intent.putExtra("CARTIREIINFO",id);
+                    intent.putExtra("FONT",font);
+                    intent.putExtra("REAR",rear);
+                    intent.putExtra("BRAND",brand);
                     intent.putExtra("FROM",0);
                     startActivity(intent);
                 }

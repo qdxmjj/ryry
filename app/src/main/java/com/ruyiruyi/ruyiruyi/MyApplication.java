@@ -42,8 +42,8 @@ public class MyApplication extends Application {
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
 
-        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
-        api.registerApp(Constants.APP_ID);
+     //   api = WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
+     //   api.registerApp(Constants.APP_ID);
 
 
 

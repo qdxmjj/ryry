@@ -160,7 +160,7 @@ public class PaymentActivity extends RyBaseActivity {
         if (orderType == 1){
             currentType = 0;
         }else {
-            currentType = 2;
+            currentType = 1;
         }
 
 
@@ -567,6 +567,7 @@ public class PaymentActivity extends RyBaseActivity {
             jsonObject.put("userId", userId);
 
         } catch (JSONException e) {
+
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addConfirmUserShoeCxwyOrder");
         String token = new DbConfig(this).getToken();
