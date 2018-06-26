@@ -30,6 +30,7 @@ public class DbConfig {
                 .setDbDir(context.getFilesDir())
               //  .setDbDir(Environment.getExternalStorageDirectory())
                 .setDbVersion(10);
+
         return daoConfig;
     }
     public DbManager getDbManager(){
