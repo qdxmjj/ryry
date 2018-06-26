@@ -11,7 +11,6 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -270,8 +269,7 @@ public class MyFragment extends BaseFragment {
         Intent openCameraIntent = new Intent(
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
-        file = new File(Environment
-                .getExternalStorageDirectory(), "newwodetopimg.jpg");
+        file = new File(getActivity().getObbDir().getAbsolutePath(), "newwodetopimg.jpg");
         path_takepic = file.getPath();
 
         //判断是否是AndroidN以及更高的版本
@@ -279,8 +277,7 @@ public class MyFragment extends BaseFragment {
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             tempUri = FileProvider.getUriForFile(mContext, "com.ruyiruyi.merchant.fileProvider", file);
         } else {
-            tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "newwodetopimg.jpg"));
+            tempUri = Uri.fromFile(new File(getActivity().getObbDir().getAbsolutePath(), "newwodetopimg.jpg"));
         }
         Log.e(TAG, "takePicture: " + tempUri);
         // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换(最后删除)
@@ -332,8 +329,7 @@ public class MyFragment extends BaseFragment {
             /**/                      //请求修改头像
         showDialogProgress(progressDialog, "头像修改中...");
 
-        img_Path = ImageUtils.savePhoto(imgBitmap, Environment
-                .getExternalStorageDirectory().getAbsolutePath(), "forpoststoreheadimg");//为提交请求所生成图片 每次提交被替换
+        img_Path = ImageUtils.savePhoto(imgBitmap, getActivity().getObbDir().getAbsolutePath(), "forpoststoreheadimg");//为提交请求所生成图片 每次提交被替换
         JSONObject object = new JSONObject();
         try {
             object.put("storeId", new DbConfig(getActivity()).getId() + "");

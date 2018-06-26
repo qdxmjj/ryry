@@ -23,8 +23,7 @@ public class PromotionNopersonViewBinder extends ItemViewProvider<PromotionNoper
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final PromotionNoperson promotionNoperson) {
-
-        holder.tv_txt.setText(promotionNoperson.getTxt());
+        
 
     }
 

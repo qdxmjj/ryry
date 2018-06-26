@@ -231,7 +231,7 @@
                 android:background="@drawable/circle"
                 android:padding="16dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/circle_head_theam" />
+                android:src="@drawable/ic_shancghuantp" />
 
         </FrameLayout>
     </ScrollView>

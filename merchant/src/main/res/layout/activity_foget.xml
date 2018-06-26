@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#ffffff"
     tools:context=".ui.activity.FogetActivity">
 
     <com.ruyiruyi.rylibrary.cell.ActionBar
@@ -16,7 +17,6 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:background="#ffffff"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:focusable="true"

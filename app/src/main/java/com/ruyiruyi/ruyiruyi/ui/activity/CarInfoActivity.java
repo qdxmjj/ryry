@@ -12,7 +12,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -1272,14 +1271,11 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
         if (currentImage == 0){
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "zhashizhengzhuye.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "zhashizhengzhuye.jpg");
         }else if (currentImage == 1){
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "zhashizhengfuye.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "zhashizhengfuye.jpg");
         }else if (currentImage == 2){
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "lichengbiao.jpg");
+            file = new File(this.getObbDir().getAbsolutePath(), "lichengbiao.jpg");
         }
 
         //判断是否是AndroidN以及更高的版本
@@ -1287,8 +1283,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             tempUri = FileProvider.getUriForFile(CarInfoActivity.this, "com.ruyiruyi.ruyiruyi.fileProvider", file);
         } else {
-            tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "image.jpg"));
+            tempUri = Uri.fromFile(new File(this.getObbDir().getAbsolutePath(), "image.jpg"));
         }
         Log.e(TAG, "takePicture: " + tempUri);
         // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
