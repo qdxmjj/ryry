@@ -287,8 +287,6 @@ public class TireRepairActivity extends RyBaseActivity {
                 } catch (JSONException e) {
 
                 }
-
-
             }
 
             @Override
