@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +30,16 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
     private Context context;
     private String TAG = OrderItemProvider.class.getSimpleName();
     private String statusStr;
+    private ForFinishFg listener;
+    private String typestatus;
 
-    public OrderItemProvider(Context context) {
+    public void setListener(ForFinishFg listener) {
+        this.listener = listener;
+    }
+
+    public OrderItemProvider(Context context, String typestatus) {
         this.context = context;
+        this.typestatus = typestatus;
     }
 
     @NonNull
@@ -95,18 +103,46 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                     Intent intent = new Intent(context, OrderConfirmFirstChangeActivity.class);
                     intent.putExtra("orderNo", orderItemBean.getBianhao());
                     intent.putExtra("orderType", orderItemBean.getOrderType());
+                    if (typestatus.equals("all")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        Log.e(TAG, "call:   whereIn = MyOrderItem ");
+                    }
+                    if (typestatus.equals("pingtai")) {
+                        intent.putExtra("whereIn", "MainOrderTop");
+                        Log.e(TAG, "call:   whereIn = MainOrderTop ");
+                    }
                     context.startActivity(intent);
+                    listener.forFinishFgListener();
                 } else if (orderItemBean.getOrderType().equals("3") && orderItemBean.getStatus().equals("3") && (orderItemBean.getOrderStage().equals("1") || orderItemBean.getOrderStage().equals("3"))) {//(3:免费再换订单  3 待商家确认服务  1 非补差)
                     Intent intent = new Intent(context, OrderConfirmFreeChangeActivity.class);
                     intent.putExtra("orderNo", orderItemBean.getBianhao());
                     intent.putExtra("orderType", orderItemBean.getOrderType());
                     intent.putExtra("orderStage", orderItemBean.getOrderStage());
+                    if (typestatus.equals("all")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        Log.e(TAG, "call:   whereIn = MyOrderItem ");
+                    }
+                    if (typestatus.equals("pingtai")) {
+                        intent.putExtra("whereIn", "MainOrderTop");
+                        Log.e(TAG, "call:   whereIn = MainOrderTop ");
+                    }
                     context.startActivity(intent);
+                    listener.forFinishFgListener();
                 } else if (orderItemBean.getOrderType().equals("4") && orderItemBean.getStatus().equals("3")) {//(4:轮胎修补订单  3 待商家确认服务  1 非补差)
                     Intent intent = new Intent(context, OrderConfirmTireRepairActivity.class);
                     intent.putExtra("orderNo", orderItemBean.getBianhao());
                     intent.putExtra("orderType", orderItemBean.getOrderType());
+                    intent.putExtra("whereIn", "MyOrderItem");
+                    if (typestatus.equals("all")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        Log.e(TAG, "call:   whereIn = MyOrderItem ");
+                    }
+                    if (typestatus.equals("pingtai")) {
+                        intent.putExtra("whereIn", "MainOrderTop");
+                        Log.e(TAG, "call:   whereIn = MainOrderTop ");
+                    }
                     context.startActivity(intent);
+                    listener.forFinishFgListener();
                 } else {
                     Intent intent = new Intent(context, PublicOrderInfoActivity.class);//其余各订单orderType各状态orderState均复用此页面(
                     Bundle bundle = new Bundle();
@@ -114,9 +150,17 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                     bundle.putString("orderType", orderItemBean.getOrderType());
                     bundle.putString("orderState", orderItemBean.getStatus());
                     bundle.putString("storeId", new DbConfig(context).getId() + "");
-                    bundle.putString("whereIn", "MyOrderItem");
+                    if (typestatus.equals("all")) {
+                        bundle.putString("whereIn", "MyOrderItem");
+                        Log.e(TAG, "call:   whereIn = MyOrderItem ");
+                    }
+                    if (typestatus.equals("pingtai")) {
+                        bundle.putString("whereIn", "MainOrderTop");
+                        Log.e(TAG, "call:   whereIn = MainOrderTop ");
+                    }
                     intent.putExtras(bundle);
                     context.startActivity(intent);
+                    listener.forFinishFgListener();
                 }
             }
         });
@@ -140,6 +184,14 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
             img_order = ((ImageView) itemView.findViewById(R.id.img_order));
             order_item_fl = ((FrameLayout) itemView.findViewById(R.id.order_item_fl));
         }
+    }
+
+    /*
+    * 跳转后让MyorderFragment  finish 接口
+    * */
+    public interface ForFinishFg {
+        void forFinishFgListener();// 跳转后通知MyorderFragment  finish
+
     }
 
 }

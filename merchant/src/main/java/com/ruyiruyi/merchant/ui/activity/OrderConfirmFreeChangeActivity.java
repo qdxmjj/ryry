@@ -190,6 +190,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private ActionBar actionBar;
     private String orderNo;
     private String orderType;
+    private String whereIn;
     private String orderStage;
     private String storeId;
     private String userName;
@@ -284,6 +285,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         //获取传递数据
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
+        whereIn = getIntent().getStringExtra("whereIn");
         orderStage = getIntent().getStringExtra("orderStage");
         storeId = new DbConfig(getApplicationContext()).getId() + "";
 
@@ -2458,4 +2460,38 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
             Log.e(TAG, "onDestroy: path_shoeDBarcodeBitmap");
         }
     }
+
+    /*
+    * 重写回退键监听
+    * */
+    @Override
+    public void onBackPressed() {
+        Log.e(TAG, "   before  onBackPressed: ");
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+
+        if (whereIn.equals("MainOrderItem")) {
+            intent.setClass(getApplicationContext(), MainActivity.class);
+            Log.e(TAG, "onBackPressed: MainOrderItem");
+            bundle.putString("page", "order");
+        }
+        if (whereIn.equals("MyOrderItem")) {
+            intent.setClass(getApplicationContext(), MyOrderActivity.class);
+            Log.e(TAG, "onBackPressed: MyOrderItem" );
+            intent.putExtra("page", "0");
+            intent.putExtra("typestate", "all");
+        }
+        if (whereIn.equals("MainOrderTop")) {
+            intent.setClass(getApplicationContext(), MyOrderActivity.class);
+            Log.e(TAG, "onBackPressed: MainOrderTop");
+            intent.putExtra("page", "0");
+            intent.putExtra("typestate", "pingtai");
+        }
+
+
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+    }
+
 }

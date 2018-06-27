@@ -78,10 +78,10 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
     private TextView right_syed;
     private TextView left_yhed;
     private TextView top_xyed;
-    private String xyed;
-    private String yhed;
-    private String syed;
-    public int payType =1;  //0是微信支付 1是支付宝支付
+    private double xyed;
+    private double yhed;
+    private double syed;
+    public int payType = 1;  //0是微信支付 1是支付宝支付
     private ProgressDialog payDialog;
     private ProgressDialog startDialog;
     private String TAG = MyLimitActivity.class.getSimpleName();
@@ -169,9 +169,9 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
                     if (status == 1) {
                         JSONArray data = jsonObject.getJSONArray("data");
                         JSONObject objBean = (JSONObject) data.get(0);
-                        xyed = objBean.getDouble("credit") + "";// 信用额度
-                        syed = objBean.getDouble("remain") + "";// 剩余额度
-                        yhed = objBean.getDouble("credit") - objBean.getInt("remain") + "";// 应还额度
+                        xyed = objBean.getDouble("credit");// 信用额度
+                        syed = objBean.getDouble("remain");// 剩余额度
+                        yhed = xyed - syed;// 应还额度
                         initView();
                     } else if (status == -999) {
                         hideDialogProgress(startDialog);
@@ -226,12 +226,12 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
         tv_maxmoney = (TextView) findViewById(R.id.tv_maxmoney);
 
         //设置下载数据
-        top_xyed.setText(xyed);
-        left_yhed.setText(yhed);
-        right_syed.setText(syed);
-        et_money.setText(yhed);
+        top_xyed.setText(xyed + "");
+        left_yhed.setText(yhed + "");
+        right_syed.setText(syed + "");
+        et_money.setText(yhed + "");
         et_money.setFocusable(false);
-        tv_maxmoney.setText(yhed);
+        tv_maxmoney.setText(yhed + "");
 
         initPayLayout();
 
@@ -311,8 +311,8 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
             public void afterTextChanged(Editable editable) {
                 if (et_money.getText() != null && et_money.getText().length() != 0) {//不为空
                     //不能超出应还额度
-                    if (Integer.parseInt(et_money.getText().toString()) > Integer.parseInt(yhed)) {
-                        et_money.setText(yhed);
+                    if (Double.parseDouble(et_money.getText().toString()) > yhed) {
+                        et_money.setText(yhed + "");
                     }
 
 

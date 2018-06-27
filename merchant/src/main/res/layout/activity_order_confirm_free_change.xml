@@ -1905,7 +1905,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="3dp"
-                            android:text="行驶证照片"
+                            android:text="车辆照片"
                             android:textColor="@color/c6"
                             android:textSize="12sp" />
 
