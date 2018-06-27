@@ -219,7 +219,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                                 getUserCarShoeBarCodeList(data);
                             }
                         }
-                        if (orderType.equals("4")) {//轮胎修补订单 TODO
+                        if (orderType.equals("4")) {//轮胎修补订单
                             // 获取展示轮胎修补订单信息
                             getTireRepairOrderVoList(data);
 
@@ -362,6 +362,32 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
         }
         if (orderType.equals("4")) {//轮胎修补订单
             if (orderState.equals("6")) {//6待车主确认服务
+                items.add(new PublicOneaddPic("用户名", userName, false, true));
+                items.add(new PublicOneaddPic("联系电话", userPhone, true, true));
+                items.add(new PublicOneaddPic("车牌号", platNumber, false, true));
+                items.add(new PublicOneaddPic("店铺名", storeName, false, true));
+                items.add(new PublicOneaddPic("订单类型", orderTypeStr, false, true));
+                items.add(new PublicOneaddPic("订单编号", orderNo, false, true));
+                items.add(new PublicOneaddPic("轮胎条码", "修补次数", false, false));
+                for (int i = 0; i < repairList.size(); i++) {
+                    PublicOneaddPic bean = repairList.get(i);
+                    items.add(new PublicOneaddPic(bean.getTitle(), bean.getContent(), false, !(i + 1 == repairList.size())));
+                }
+            }
+            if (orderState.equals("7")) {//7待评价
+                items.add(new PublicOneaddPic("用户名", userName, false, true));
+                items.add(new PublicOneaddPic("联系电话", userPhone, true, true));
+                items.add(new PublicOneaddPic("车牌号", platNumber, false, true));
+                items.add(new PublicOneaddPic("店铺名", storeName, false, true));
+                items.add(new PublicOneaddPic("订单类型", orderTypeStr, false, true));
+                items.add(new PublicOneaddPic("订单编号", orderNo, false, true));
+                items.add(new PublicOneaddPic("轮胎条码", "修补次数", false, false));
+                for (int i = 0; i < repairList.size(); i++) {
+                    PublicOneaddPic bean = repairList.get(i);
+                    items.add(new PublicOneaddPic(bean.getTitle(), bean.getContent(), false, !(i + 1 == repairList.size())));
+                }
+            }
+            if (orderState.equals("1")) {//1已完成
                 items.add(new PublicOneaddPic("用户名", userName, false, true));
                 items.add(new PublicOneaddPic("联系电话", userPhone, true, true));
                 items.add(new PublicOneaddPic("车牌号", platNumber, false, true));
@@ -761,20 +787,31 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     * */
     @Override
     public void onBackPressed() {
+        Log.e(TAG, "   before  onBackPressed: ");
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
 
         if (whereIn.equals("MainOrderItem")) {
             intent.setClass(getApplicationContext(), MainActivity.class);
+            Log.e(TAG, "onBackPressed: MainOrderItem");
             bundle.putString("page", "order");
         }
         if (whereIn.equals("MainStoreItem")) {
             intent.setClass(getApplicationContext(), MainActivity.class);
+            Log.e(TAG, "onBackPressed: MainStoreItem");
             bundle.putString("page", "store");
         }
         if (whereIn.equals("MyOrderItem")) {
             intent.setClass(getApplicationContext(), MyOrderActivity.class);
-            bundle.putString("page", "0");
+            Log.e(TAG, "onBackPressed: MyOrderItem");
+            intent.putExtra("page", "0");
+            intent.putExtra("typestate", "all");
+        }
+        if (whereIn.equals("MainOrderTop")) {
+            intent.setClass(getApplicationContext(), MyOrderActivity.class);
+            Log.e(TAG, "onBackPressed: MainOrderTop");
+            intent.putExtra("page", "0");
+            intent.putExtra("typestate", "pingtai");
         }
 
 
@@ -964,7 +1001,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
 
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "storeConfirmReceiptShoes");
         params.addBodyParameter("reqJson", barCodeList.toString());
-        Log.e(TAG, "saveServerFreeChange:  barCodeList.toString() = " +  barCodeList.toString() );
+        Log.e(TAG, "saveServerFreeChange:  barCodeList.toString() = " + barCodeList.toString());
         params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
         params.setConnectTimeout(6000);
         x.http().post(params, new Callback.CommonCallback<String>() {

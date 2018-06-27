@@ -10,7 +10,6 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -664,24 +663,29 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
         if (currentImage == 0) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "mdpicaaa.jpg");
+            file = new File(
+                    this.getObbDir().getAbsolutePath()
+                    , "mdpicaaa.jpg");
             path_ = file.getPath();
         } else if (currentImage == 1) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "mdpicbbb.jpg");
+            file = new File(
+                    this.getObbDir().getAbsolutePath()
+                    , "mdpicbbb.jpg");
             path_ = file.getPath();
         } else if (currentImage == 2) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "mdpicccc.jpg");
+            file = new File(
+                    this.getObbDir().getAbsolutePath()
+                    , "mdpicccc.jpg");
             path_ = file.getPath();
         } else if (currentImage == 3) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "yyzz.jpg");
+            file = new File(
+                    this.getObbDir().getAbsolutePath()
+                    , "yyzz.jpg");
             path_ = file.getPath();
         } else if (currentImage == 4) {
-            file = new File(Environment
-                    .getExternalStorageDirectory(), "shou.jpg");
+            file = new File(
+                    this.getObbDir().getAbsolutePath()
+                    , "shou.jpg");
             path_ = file.getPath();
         }
 
@@ -690,8 +694,9 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             tempUri = FileProvider.getUriForFile(RegisterActivity.this, "com.ruyiruyi.merchant.fileProvider", file);
         } else {
-            tempUri = Uri.fromFile(new File(Environment
-                    .getExternalStorageDirectory(), "image.jpg"));
+            tempUri = Uri.fromFile(new File(
+                    this.getObbDir().getAbsolutePath()
+                    , "image.jpg"));
         }
         Log.e(TAG, "takePicture: " + tempUri);
         // 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
@@ -1437,16 +1442,13 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 showDialogProgress(progressDialog, "注册信息提交中...");
-                mdpicaPath = ImageUtils.savePhoto(mdPicaBitmap, Environment
-                        .getExternalStorageDirectory().getAbsolutePath(), "mdPica");
-                mdpicbPath = ImageUtils.savePhoto(mdPicbBitmap, Environment
-                        .getExternalStorageDirectory().getAbsolutePath(), "mdPicb");
-                mdpiccPath = ImageUtils.savePhoto(mdPiccBitmap, Environment
-                        .getExternalStorageDirectory().getAbsolutePath(), "mdPicc");
-                shouPath = ImageUtils.savePhoto(shouPicBitmap, Environment
-                        .getExternalStorageDirectory().getAbsolutePath(), "shouPic");
-                yyzzPath = ImageUtils.savePhoto(yyzzPicBitmap, Environment
-                        .getExternalStorageDirectory().getAbsolutePath(), "yyzzPic");
+                mdpicaPath = ImageUtils.savePhoto(mdPicaBitmap,
+                        getApplicationContext().getObbDir().getAbsolutePath()
+                        , "mdPica");
+                mdpicbPath = ImageUtils.savePhoto(mdPicbBitmap, getApplicationContext().getObbDir().getAbsolutePath(), "mdPicb");
+                mdpiccPath = ImageUtils.savePhoto(mdPiccBitmap, getApplicationContext().getObbDir().getAbsolutePath(), "mdPicc");
+                shouPath = ImageUtils.savePhoto(shouPicBitmap, getApplicationContext().getObbDir().getAbsolutePath(), "shouPic");
+                yyzzPath = ImageUtils.savePhoto(yyzzPicBitmap, getApplicationContext().getObbDir().getAbsolutePath(), "yyzzPic");
                  /*    //提交参数---<
                 private String persionName;
                 private String persionPhone;

@@ -267,7 +267,8 @@ public class OrderFragment extends BaseFragment {
             @Override
             public void call(Void aVoid) {
                 Intent intent = new Intent(getContext(), MyOrderActivity.class);
-                intent.putExtra("page", "1");
+                intent.putExtra("page", "0");
+                intent.putExtra("typestate", "pingtai");
                 startActivity(intent);
             }
         });
@@ -275,7 +276,8 @@ public class OrderFragment extends BaseFragment {
             @Override
             public void call(Void aVoid) {
                 Intent intent = new Intent(getContext(), MyOrderActivity.class);
-                intent.putExtra("page", "4");
+                intent.putExtra("page", "1");
+                intent.putExtra("typestate", "pingtai");
                 startActivity(intent);
             }
         });

@@ -46,7 +46,7 @@ import me.drakeet.multitype.MultiTypeAdapter;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class MyOrderFragment extends BaseFragment {
+public class MyOrderFragment extends BaseFragment implements OrderItemProvider.ForFinishFg {
     public static String ORDER_TYPE = "ORDER_TYPE";
     private SwipeRefreshLayout mSwipeLayout;
     private RecyclerView mRlv;
@@ -109,29 +109,109 @@ public class MyOrderFragment extends BaseFragment {
         switch (order_type) {
             case "QUANBU":
                 state = "0";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
-                requestFromServer(storeId, state);
+                requestFromServerAll(storeId, state);
                 break;
             case "DAIFAHUO":
                 state = "1";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
-                requestFromServer(storeId, state);
+                requestFromServerAll(storeId, state);
                 break;
             case "DAISHOUHUO":
                 state = "2";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
-                requestFromServer(storeId, state);
+                requestFromServerAll(storeId, state);
                 break;
             case "DAIFUWU":
                 state = "3";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
-                requestFromServer(storeId, state);
+                requestFromServerAll(storeId, state);
                 break;
             case "YIWANCHENG":
                 state = "4";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
-                requestFromServer(storeId, state);
+                requestFromServerAll(storeId, state);
+                break;
+            case "PT_WWC":
+                state = "1";//state: 1:未完成 2:已完成
+                requestFromServerPingtai(storeId, state);
+                break;
+            case "PT_YWC":
+                state = "2";//state: 1:未完成 2:已完成
+                requestFromServerPingtai(storeId, state);
                 break;
         }
 
     }
 
-    private void requestFromServer(final String storeId, String state) {
+    private void requestFromServerPingtai(final String storeId, String state) {
+
+        JSONObject object = new JSONObject();
+        try {
+            object.put("storeId", storeId);
+            object.put("state", state);
+            object.put("type", "2");// type: 1:商品订单 2:如意如意平台订单
+            object.put("page", current_page);
+            object.put("rows", mRows);
+
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreGeneralOrderByTypeAndState");
+        params.addBodyParameter("reqJson", object.toString());
+        params.addBodyParameter("token", new DbConfig(getActivity()).getToken());
+        params.setConnectTimeout(6000);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess0808: result =  " + result);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject data = jsonObject.getJSONObject("data");
+                    total_all_page = (data.getInt("total")) / mRows;//处理页数
+                    if (data.getInt("total") % mRows > 0) {
+                        total_all_page++;
+                    }
+                    JSONArray rows = data.getJSONArray("rows");
+                    for (int i = 0; i < rows.length(); i++) {
+                        JSONObject orders = (JSONObject) rows.get(i);
+                        OrderItemBean bean = new OrderItemBean();
+                        bean.setStoreId(storeId);
+                        bean.setImgUrl(orders.getString("orderImage"));
+                        bean.setTitle(orders.getString("orderName"));
+                        bean.setBianhao(orders.getString("orderNo"));
+                        bean.setOrderStage(orders.getString("orderStage"));
+                        bean.setPrice(orders.getString("orderPrice"));
+                        bean.setStatus(orders.getString("orderState"));
+                        bean.setOrderTime(orders.getLong("orderTime"));
+                        bean.setOrderType(orders.getString("orderType"));
+                        orderBeanList.add(bean);
+                    }
+
+                    //更新数据
+                    updataData();
+
+                    isLoadMoreSingle = false;//重置加载更多单次标志位
+
+
+                } catch (JSONException e) {
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(getContext(), "订单信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                //加载完成 隐藏加载动画
+//                hideDialogProgress(startDialog);
+            }
+        });
+    }
+
+
+    private void requestFromServerAll(final String storeId, String state) {
 
         JSONObject object = new JSONObject();
         try {
@@ -225,8 +305,17 @@ public class MyOrderFragment extends BaseFragment {
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRlv.setLayoutManager(manager);
         multiTypeAdapter = new MultiTypeAdapter(items);
-        OrderItemProvider provider = new OrderItemProvider(getActivity());
-        multiTypeAdapter.register(OrderItemBean.class, provider);
+        if (order_type.equals("PT_WWC") || order_type.equals("PT_YWC")) {//判断 向OrderItemProvider传递MyOrderActivity的类型
+            OrderItemProvider provider = new OrderItemProvider(getActivity(), "pingtai");
+            Log.e(TAG, "initView:     pingtai");
+            provider.setListener(this);
+            multiTypeAdapter.register(OrderItemBean.class, provider);
+        } else {
+            OrderItemProvider provider = new OrderItemProvider(getActivity(), "all");
+            Log.e(TAG, "initView:     all");
+            provider.setListener(this);
+            multiTypeAdapter.register(OrderItemBean.class, provider);
+        }
         multiTypeAdapter.register(ItemNullBean.class, new ItemNullProvider());
         multiTypeAdapter.register(ItemBottomBean.class, new ItemBottomProvider());
         mRlv.setAdapter(multiTypeAdapter);
@@ -286,4 +375,13 @@ public class MyOrderFragment extends BaseFragment {
         initDataByLoadMoreType();
     }
 
+
+    /*
+    * 接口回调  OrderItemProvider
+    * */
+    @Override
+    public void forFinishFgListener() {
+        Log.e(TAG, "forFinishFgListener:     finish ");
+        getActivity().finish();
+    }
 }

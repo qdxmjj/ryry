@@ -59,11 +59,14 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
     private ActionBar actionBar;
     private String orderNo;
     private String orderType;
+    private String whereIn;
     private String storeId;
     private String userName;
     private String userPhone;
     private String platNumber;
     private String storeName;
+    //拍照示例
+    private TextView tv_carpic_sample;
     //底部接单控件
     private TextView tv_bottom_a;
     private TextView tv_bottom_b;
@@ -142,6 +145,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         //获取传递数据
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
+        whereIn = getIntent().getStringExtra("whereIn");
         storeId = new DbConfig(getApplicationContext()).getId() + "";
 
         mainDialog = new ProgressDialog(this);
@@ -342,6 +346,17 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                 if (judgeBeforeSave("3")) {
                     showOrderDialog("3");
                 }
+            }
+        });
+        //拍照示例
+        RxViewAction.clickNoDouble(tv_carpic_sample).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getApplicationContext(), PhotoSampleActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "car");
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 
@@ -839,6 +854,8 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         store_name = findViewById(R.id.store_name);
         order_num = findViewById(R.id.order_num);
         user_phone_img = findViewById(R.id.user_phone_img);
+        //拍照示例
+        tv_carpic_sample = findViewById(R.id.tv_carpic_sample);
         //底部接单控件
         tv_bottom_a = findViewById(R.id.tv_bottom_a);
         tv_bottom_b = findViewById(R.id.tv_bottom_b);
@@ -877,5 +894,39 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         shoeFlagList = new ArrayList<>();
         newShoeList = new ArrayList<>();
         progressDialog = new ProgressDialog(OrderConfirmFirstChangeActivity.this);
+    }
+
+
+    /*
+    * 重写回退键监听
+    * */
+    @Override
+    public void onBackPressed() {
+        Log.e(TAG, "   before  onBackPressed: ");
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+
+        if (whereIn.equals("MainOrderItem")) {
+            intent.setClass(getApplicationContext(), MainActivity.class);
+            Log.e(TAG, "onBackPressed: MainOrderItem");
+            bundle.putString("page", "order");
+        }
+        if (whereIn.equals("MyOrderItem")) {
+            intent.setClass(getApplicationContext(), MyOrderActivity.class);
+            Log.e(TAG, "onBackPressed: MyOrderItem");
+            intent.putExtra("page", "0");
+            intent.putExtra("typestate", "all");
+        }
+        if (whereIn.equals("MainOrderTop")) {
+            intent.setClass(getApplicationContext(), MyOrderActivity.class);
+            Log.e(TAG, "onBackPressed: MainOrderTop");
+            intent.putExtra("page", "0");
+            intent.putExtra("typestate", "pingtai");
+        }
+
+
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 }

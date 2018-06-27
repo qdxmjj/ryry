@@ -174,6 +174,7 @@ public class MyFragment extends BaseFragment {
             public void call(Void aVoid) {
                 Intent intent = new Intent();
                 intent.putExtra("page", "0");
+                intent.putExtra("typestate", "all");
                 intent.setClass(mContext, MyOrderActivity.class);
                 startActivity(intent);
             }

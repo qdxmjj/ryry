@@ -90,7 +90,9 @@
         <activity android:name=".ui.activity.SheZhiActivity" />
         <activity android:name=".ui.activity.ChangePwActivity" />
         <activity android:name=".ui.activity.PromotionActivity" />
-        <activity android:name=".ui.activity.PublicOrderInfoActivity" />
+        <activity
+            android:name=".ui.activity.PublicOrderInfoActivity"
+            android:launchMode="standard" />
         <activity android:name=".ui.activity.OrderConfirmFreeChangeActivity" />
         <activity android:name=".ui.activity.OrderConfirmFirstChangeActivity" />
         <activity android:name=".ui.activity.OrderConfirmTireRepairActivity" />
@@ -98,7 +100,11 @@
         <activity android:name=".ui.activity.QRCodeActivity" />
         <activity android:name=".ui.activity.MerchantHasWordActivity" />
         <activity android:name=".ui.activity.TestCircleLogoQrCodeActivity" />
-        <activity android:name=".wxapi.WXEntryActivity"></activity>
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <!--android:theme="@style/AppTheme.Fullscreen.Translucent"-->
     </application>
 
 </manifest>
