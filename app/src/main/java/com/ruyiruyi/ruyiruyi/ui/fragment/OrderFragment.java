@@ -19,6 +19,9 @@ import com.ruyiruyi.ruyiruyi.ui.activity.OrderInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PaymentActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PendingOrderActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
+import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
+import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBig;
+import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBigViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Order;
 import com.ruyiruyi.ruyiruyi.ui.multiType.OrderViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.FullyLinearLayoutManager;
@@ -163,6 +166,9 @@ public class OrderFragment extends RyBaseFragment implements OrderViewBinder.OnO
         for (int i = 0; i < orderList.size(); i++) {
             items.add(orderList.get(i));
         }
+        if (orderList.size() == 0){
+            items.add(new EmptyBig());
+        }
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
@@ -193,6 +199,7 @@ public class OrderFragment extends RyBaseFragment implements OrderViewBinder.OnO
         OrderViewBinder orderViewBinder = new OrderViewBinder(getContext());
         orderViewBinder.setListener(this);
         adapter.register(Order.class, orderViewBinder);
+        adapter.register(EmptyBig.class,new EmptyBigViewBinder());
     }
 
     @Override
@@ -213,7 +220,7 @@ public class OrderFragment extends RyBaseFragment implements OrderViewBinder.OnO
             intent.putExtra(PaymentActivity.ORDER_TYPE, Integer.parseInt(orderType));
             intent.putExtra(PaymentActivity.ORDER_STATE, Integer.parseInt(orderState));
             startActivity(intent);
-        }else if (orderState.equals("7") && (orderType.equals("1") || orderType.equals("2") || orderType.equals("3") || orderType.equals("4")  )) {  //待评价
+        }else if (orderState.equals("7") && ((orderType.equals("1") || orderType.equals("2") || orderType.equals("3") || orderType.equals("4")  ))) {  //待评价
             Intent intent = new Intent(getContext(), EvaluateActivity.class);
             intent.putExtra(PaymentActivity.ORDERNO, orderNo);
             intent.putExtra(PaymentActivity.STOREID, storeId);

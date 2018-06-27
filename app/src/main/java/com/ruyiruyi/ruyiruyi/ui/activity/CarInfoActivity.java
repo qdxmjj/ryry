@@ -164,6 +164,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private String font;
     private String rear;
     private String brand;
+    private String serviceYear;
 
 
     @Override
@@ -730,6 +731,10 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (date.length() == 0){
+                            Toast.makeText(CarInfoActivity.this, "请先选择行驶证注册日期", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         chooseServiceTime();
                     }
                 });
@@ -787,43 +792,47 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
 
     private void chooseServiceTime() {
         View v_shoptime = LayoutInflater.from(this).inflate(R.layout.dialog_choose_time, null);
-        whv_lTime = (WheelView) v_shoptime.findViewById(R.id.whv_ltime);
+       // whv_lTime = (WheelView) v_shoptime.findViewById(R.id.whv_ltime);
         whv_rTime = (WheelView) v_shoptime.findViewById(R.id.whv_rtime);
-        whv_lTime.setIsLoop(false);
+      //  whv_lTime.setIsLoop(false);
         whv_rTime.setIsLoop(false);
-        whv_lTime.setItems(getStrLTime(), 0);
+     //   whv_lTime.setItems(getStrLTime(), 0);
         whv_rTime.setItems(getRTimeList(), currentRtime);
-        whv_lTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
+    /*    whv_lTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
 
             }
-        });
+        });*/
 
         whv_rTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
+
+
             @Override
             public void onItemSelected(int selectedIndex, String item) {
                 currentRtime = whv_rTime.getSelectedPosition();
-                endYear = whv_rTime.getSelectedItem();
+               // endYear = whv_rTime.getSelectedItem();
+                serviceYear = whv_rTime.getSelectedItem();
             }
         });
         new android.support.v7.app.AlertDialog.Builder(this)
-                .setTitle("选择汽车服务时间")
+                .setTitle("选择汽车服务年限")
                 .setView(v_shoptime)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (endDate.length()>0){
+                        /*if (endDate.length()>0){
                             endDate.delete(0,endDate.length());
-                        }
+                        }*/
                         //date.append(String.valueOf(year)).append("-").append(String.valueOf(month +1)).append("-").append(day)
-                        if (year % 4 == 0){
+                        /*if (year % 4 == 0){
                             int currentMoth = month + 2;
                             xszEndTimeText.setText(endDate.append(endYear + "-" +currentMoth + "-" + 1));
                         }else {
                             int currentmoth = month + 1;
                             xszEndTimeText.setText(endDate.append(endYear + "-" +currentmoth + "-" + day));
-                        }
+                        }*/
+                        xszEndTimeText.setText(serviceYear + "年");
 
 
                     }
@@ -840,7 +849,8 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         String year = String.valueOf(date.get(Calendar.YEAR));
         int currentYear = Integer.parseInt(year) + 1;
         for (int i = 0; i < xszEndYear - currentYear; i++) {
-            rTime_list.add(currentYear + i+"");
+          //  rTime_list.add(currentYear + i+"");
+            rTime_list.add(i+1 +"");
         }
         endYear = currentYear+"";
         return rTime_list;
@@ -913,7 +923,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
             jsonObject.put("font",carFontText.getText().toString());
             jsonObject.put("rear",carRearText.getText().toString());
             jsonObject.put("driving_license_date",xszRegisterTimeText.getText().toString());
-            jsonObject.put("service_end_date",xszEndTimeText.getText().toString());
+            jsonObject.put("service_end_date","2025-6-27");
           //  ArrayList<Integer> jingchang = new ArrayList<>();
             StringBuffer jingchang = new StringBuffer();
             for (int i = 0; i < jingchangList.size(); i++) {

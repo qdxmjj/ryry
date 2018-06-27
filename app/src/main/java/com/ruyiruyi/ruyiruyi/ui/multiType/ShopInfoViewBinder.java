@@ -76,7 +76,7 @@ public class ShopInfoViewBinder extends ItemViewProvider<ShopInfo, ShopInfoViewB
             @Override
             public View createView(Context context, int position) {
                 ImageView imageView = new ImageView(context);
-                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+             //   imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                 return imageView;
             }
 
