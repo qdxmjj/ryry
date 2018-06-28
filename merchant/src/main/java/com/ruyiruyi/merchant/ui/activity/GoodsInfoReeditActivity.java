@@ -795,12 +795,10 @@ public class GoodsInfoReeditActivity extends BaseActivity {
             switch (requestCode) {
                 case CHOOSE_PICTURE:
                     Uri uri = data.getData();
-                    setImageToViewFromPhone(uri, uri.toString());
-                    Log.e(TAG, "onActivityResult: " + uri.getPath());
+                    setImageToViewFromPhone(uri, false);
                     break;
                 case TAKE_PICTURE:
-                    setImageToViewFromPhone(tempUri, path_takepic);
-                    Log.e(TAG, "onActivityResult: " + tempUri.getPath());
+                    setImageToViewFromPhone(tempUri, true);
                     break;
 
             }
@@ -808,8 +806,13 @@ public class GoodsInfoReeditActivity extends BaseActivity {
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri, String paths) {
-        int degree = ImageUtils.readPictureDegree(paths);
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_takepic);
+        } else {
+            degree = ImageUtils.getOrientation(getApplicationContext(), uri);
+        }
         if (uri != null) {
             Bitmap photo = null;
             try {

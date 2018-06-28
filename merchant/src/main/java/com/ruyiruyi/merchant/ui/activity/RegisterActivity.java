@@ -733,6 +733,8 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         int degree = 0;
         if (isCamera) {
             degree = ImageUtils.readPictureDegree(path_);
+        } else {
+            degree = ImageUtils.getOrientation(getApplicationContext(), uri);
         }
         if (uri != null) {
             Bitmap photo = null;
@@ -741,51 +743,41 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             } catch (IOException e) {
             }
             if (currentImage == 0) {
-                if (isCamera) {
-                    mdPicaBitmap = rotaingImageView(degree, photo);
-                } else {
-                    mdPicaBitmap = photo;
-                }
+
+                mdPicaBitmap = rotaingImageView(degree, photo);
+
                 img_mdpic_a.setImageBitmap(mdPicaBitmap);
                 img_mdpic_a_delete.setVisibility(View.VISIBLE);
                 img_mdpic_a_center.setVisibility(View.GONE);
                 hasPic_mdPic_a = true;
             } else if (currentImage == 1) {
-                if (isCamera) {
-                    mdPicbBitmap = rotaingImageView(degree, photo);
-                } else {
-                    mdPicbBitmap = photo;
-                }
+
+                mdPicbBitmap = rotaingImageView(degree, photo);
+
                 img_mdpic_b.setImageBitmap(mdPicbBitmap);
                 img_mdpic_b_delete.setVisibility(View.VISIBLE);
                 img_mdpic_b_center.setVisibility(View.GONE);
                 hasPic_mdPic_b = true;
             } else if (currentImage == 2) {
-                if (isCamera) {
-                    mdPiccBitmap = rotaingImageView(degree, photo);
-                } else {
-                    mdPiccBitmap = photo;
-                }
+
+                mdPiccBitmap = rotaingImageView(degree, photo);
+
                 img_mdpic_c.setImageBitmap(mdPiccBitmap);
                 img_mdpic_c_delete.setVisibility(View.VISIBLE);
                 img_mdpic_c_center.setVisibility(View.GONE);
                 hasPic_mdPic_c = true;
             } else if (currentImage == 3) {
-                if (isCamera) {
-                    yyzzPicBitmap = rotaingImageView(degree, photo);
-                } else {
-                    yyzzPicBitmap = photo;
-                }
+
+                yyzzPicBitmap = rotaingImageView(degree, photo);
+
                 img_yyzz.setImageBitmap(yyzzPicBitmap);
                 img_yyzz_delete.setVisibility(View.VISIBLE);
                 img_yyzz_center.setVisibility(View.GONE);
                 hasPic_yyzz = true;
             } else if (currentImage == 4) {
-                if (isCamera) {
-                    shouPicBitmap = rotaingImageView(degree, photo);
-                } else {
-                    shouPicBitmap = photo;
-                }
+
+                shouPicBitmap = rotaingImageView(degree, photo);
+
                 img_shou_a.setImageBitmap(shouPicBitmap);
                 img_shou_a_delete.setVisibility(View.VISIBLE);
                 img_shou_a_center.setVisibility(View.GONE);

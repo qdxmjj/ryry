@@ -420,13 +420,13 @@ public class StoreFragment extends BaseFragment {
                 if (data != null) {
                     isCamera = false;
                     Uri uri = data.getData();
-                    setImageToViewFromPhone(uri, uri.toString());
+                    setImageToViewFromPhone(uri, false);
                 }
                 break;
             case TAKE_PICTURE:
                 if (tempUri != null) {
                     isCamera = true;
-                    setImageToViewFromPhone(tempUri, path_takepic);
+                    setImageToViewFromPhone(tempUri, true);
                 }
                 break;
 
@@ -434,8 +434,13 @@ public class StoreFragment extends BaseFragment {
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri, String paths) {
-        int degree = ImageUtils.readPictureDegree(paths);
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_takepic);
+        } else {
+            degree = ImageUtils.getOrientation(getActivity(), uri);
+        }
         if (uri != null) {
             Bitmap photo = null;
             try {
@@ -474,7 +479,7 @@ public class StoreFragment extends BaseFragment {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: xmjj store"  );
+                Log.e(TAG, "onSuccess: xmjj store");
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String msg = jsonObject.getString("msg");
@@ -519,7 +524,7 @@ public class StoreFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Log.e(TAG, "onError: xmjj store"  );
+                Log.e(TAG, "onError: xmjj store");
 //                Toast.makeText(mContext, "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 

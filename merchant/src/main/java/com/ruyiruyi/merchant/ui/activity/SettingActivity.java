@@ -3,9 +3,7 @@ package com.ruyiruyi.merchant.ui.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -23,7 +21,7 @@ import org.xutils.ex.DbException;
 
 import rx.functions.Action1;
 
-public class SheZhiActivity extends BaseActivity {
+public class SettingActivity extends BaseActivity {
 
     private ActionBar mActionBar;
     private RelativeLayout rl_change_pw;
@@ -53,7 +51,7 @@ public class SheZhiActivity extends BaseActivity {
             @Override
             public void call(Void aVoid) {
                 //修改密码
-                Intent intent = new Intent(SheZhiActivity.this, ChangePwActivity.class);
+                Intent intent = new Intent(SettingActivity.this, ChangePwActivity.class);
                 startActivity(intent);
             }
         });
@@ -95,7 +93,7 @@ public class SheZhiActivity extends BaseActivity {
                         dbManager.saveOrUpdate(user);
                     } catch (DbException e) {
                     }
-                    Intent intent = new Intent(SheZhiActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
                     startActivity(intent);
                     //发送广播退出所有
                     Intent intent2 = new Intent("qd.xmjj.baseActivity");

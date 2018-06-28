@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -29,7 +28,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.User;
@@ -38,7 +36,7 @@ import com.ruyiruyi.merchant.ui.activity.MyGoodsActivity;
 import com.ruyiruyi.merchant.ui.activity.MyOrderActivity;
 import com.ruyiruyi.merchant.ui.activity.MyServiceActivity;
 import com.ruyiruyi.merchant.ui.activity.PromotionActivity;
-import com.ruyiruyi.merchant.ui.activity.SheZhiActivity;
+import com.ruyiruyi.merchant.ui.activity.SettingActivity;
 import com.ruyiruyi.merchant.ui.activity.StoreManageActivity;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
@@ -55,11 +53,8 @@ import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import rx.functions.Action1;
 
@@ -183,7 +178,7 @@ public class MyFragment extends BaseFragment {
         RxViewAction.clickNoDouble(rl_shezhi).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Intent intent = new Intent(mContext, SheZhiActivity.class);
+                Intent intent = new Intent(mContext, SettingActivity.class);
                 startActivity(intent);
             }
         });
@@ -294,20 +289,25 @@ public class MyFragment extends BaseFragment {
                 if (data != null) {
                     isCamera = false;
                     Uri uri = data.getData();
-                    setImageToViewFromPhone(uri, uri.toString());
+                    setImageToViewFromPhone(uri, false);
                 }
                 break;
             case TAKE_PICTURE:
                 isCamera = true;
-                setImageToViewFromPhone(tempUri, path_takepic);
+                setImageToViewFromPhone(tempUri, true);
                 break;
 
         }
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri, String paths) {
-        int degree = ImageUtils.readPictureDegree(paths);
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_takepic);
+        } else {
+            degree = ImageUtils.getOrientation(getActivity(), uri);
+        }
         if (uri != null) {
             Bitmap photo = null;
             try {

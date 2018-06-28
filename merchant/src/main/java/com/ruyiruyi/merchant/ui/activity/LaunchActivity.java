@@ -1,45 +1,34 @@
 package com.ruyiruyi.merchant.ui.activity;
 
 import android.Manifest;
-import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.db.DbConfig;
-import com.ruyiruyi.merchant.db.model.Category;
-import com.ruyiruyi.merchant.db.model.Province;
-import com.ruyiruyi.merchant.db.model.ServiceType;
-import com.ruyiruyi.merchant.utils.UtilsRY;
-import com.ruyiruyi.merchant.utils.UtilsURL;
+import com.ruyiruyi.merchant.ui.service.LuncherDownlodeService;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.DbManager;
-import org.xutils.common.Callback;
-import org.xutils.ex.DbException;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
-
-import java.util.Date;
-import java.util.List;
-
-public class StartAppActivity extends BaseActivity {
-    private final String TAG = StartAppActivity.class.getSimpleName();
+public class LaunchActivity extends BaseActivity {
+    private final String TAG = LaunchActivity.class.getSimpleName();
+    private TextView tv_num;
+    private TextView tv_txt;
+    private boolean isFirst = false;
     //    TimeCount mTimeCount;
     private int isLogin = 0;  //0 未登录  1 已登录
     private Handler handler = new Handler() {
@@ -48,20 +37,42 @@ public class StartAppActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
-                    //下载
-                    initProvinceData();
+                    //判断是否是首次进入 1.(初次进入)开启并监测下载服务Service并开始计时  2.(再次进入)开启后台下载服务Service
+                    SharedPreferences sf = getSharedPreferences("data", MODE_PRIVATE);//判断是否是第一次进入
+                    boolean isFirstIn = sf.getBoolean("isFirstIn", true);
+                    SharedPreferences.Editor editor = sf.edit();
+                    if (isFirstIn) {//初次进入
+                    /* editor.putBoolean("isFirstIn", false);  修改标志位移动到service下载完毕数据后*/
+                        isFirst = true;
+                        tv_txt.setVisibility(View.VISIBLE);
+                        tv_num.setVisibility(View.VISIBLE);
+                        registerService();
+                        StartDownlodeService();
+                        mTimeCount = new TimeCount(8000, 80);
+                        mTimeCount.start();
+                    } else {//再次进入
+                        isFirst = false;
+                        tv_txt.setVisibility(View.GONE);
+                        tv_num.setVisibility(View.GONE);
+                        StartDownlodeService();
+                        Message message = new Message();
+                        message.what = 1;
+                        handler.sendMessageDelayed(message, 3000);
+                    }
+                    editor.commit();
+
                     break;
                 case 1:
                     goMain();
-                    break;
-                case 2:
-                    finish();
-                    break;
 
+                    break;
             }
 
         }
     };
+    private int progress = 0;
+    private MyReceiver receiver = null;
+    private TimeCount mTimeCount;
 
     private void goMain() {
         //initIsLogin
@@ -75,16 +86,16 @@ public class StartAppActivity extends BaseActivity {
 
         //跳转
         if (isLogin == 0) {
-            Intent intent = new Intent(StartAppActivity.this, LoginActivity.class);
+            Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
             startActivity(intent);
-            StartAppActivity.this.finish();
+            LaunchActivity.this.finish();
         } else {
-            Intent intent = new Intent(StartAppActivity.this, MainActivity.class);
+            Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("page", "my");
             intent.putExtras(bundle);
             startActivity(intent);
-            StartAppActivity.this.finish();
+            LaunchActivity.this.finish();
         }
     }
 
@@ -92,12 +103,15 @@ public class StartAppActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_app);
+        tv_num = findViewById(R.id.tv_num);
+        tv_txt = findViewById(R.id.tv_txt);
+
+        tv_txt.setVisibility(View.GONE);
+        tv_num.setVisibility(View.GONE);
+
         //权限获取
         requestPower();
-/*        mTimeCount = new TimeCount(3000, 1000);
-        mTimeCount.start();*/
 
-        /*initProvinceData();*/
     }
 
 
@@ -127,99 +141,24 @@ public class StartAppActivity extends BaseActivity {
     }
 
 
-    private void initProvinceData() {
-//   0     date = new Date();
-        List<Province> provinceList = null;
-        try {
-            provinceList = new DbConfig(getApplicationContext()).getDbManager().selector(Province.class).orderBy("time").findAll();
-        } catch (DbException e) {
-
-        }
-        JSONObject jsonObject = new JSONObject();
-        try {
-            //时间请求 ！！
-            if (provinceList == null) {
-                jsonObject.put("time", "2000-00-00 00:00:00");
-            } else {
-                String time = provinceList.get(provinceList.size() - 1).getTime();
-                jsonObject.put("time", time);
-//                Log.e(TAG, "initProvinceData: time = " + time);
-            }
-
-        } catch (JSONException e) {
-
-        }
-        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getAllPositon");
-        params.addBodyParameter("reqJson", jsonObject.toString());
-        Log.e(TAG, "initProvinceData: params = " + params);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: " + result);
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(result);
-                    String status = jsonObject.getString("status");
-                    String msg = jsonObject.getString("msg");
-                    JSONArray data = jsonObject.getJSONArray("data");
-                    Log.e(TAG, "onSuccess: getData and To Db ??  status = " + status + "msg = " + msg + "data = " + data.toString());
-
-                    //下载完毕
-                    Message message = new Message();
-                    message.what = 1;
-                    saveProvinceToDb(data);//异步存储同时继续向下执行
-                    handler.sendMessageDelayed(message, 2000);
-                } catch (JSONException e) {
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                //下载失败
-                Message message = new Message();
-                message.what = 2;
-                Toast.makeText(StartAppActivity.this, "网络异常,请检查网络!", Toast.LENGTH_SHORT).show();
-                handler.sendMessageDelayed(message, 2000);
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
+    public void StartDownlodeService() {
+        //启动服务
+        Intent intent = new Intent(this, LuncherDownlodeService.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Key", LuncherDownlodeService.Control.PLAY);
+        intent.putExtras(bundle);
+        startService(intent);
     }
 
-    private void saveProvinceToDb(JSONArray data) {
-        Province province;
-        DbManager db = (new DbConfig(getApplicationContext())).getDbManager();
-        for (int i = 0; i < data.length(); i++) {
-            province = new Province();
-            try {
-                JSONObject obj = (JSONObject) data.get(i);
-                //保存并转换time请求的time
-                long time = obj.getLong("time");
-                String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-                province.setTime(timestampToStringAll);
-                province.setDefinition(obj.getInt("definition"));
-                province.setFid(obj.getInt("fid"));
-                province.setId(obj.getInt("id"));
-                province.setName(obj.getString("name"));
-//                Log.e(TAG, "saveProvinceToDb: definition==>" + province.getDefinition());
-                db.saveOrUpdate(province);
+    public void registerService() {
+        //注册广播接收器
+        receiver = new MyReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.ruyiruyi.merchant.ui.service.LuncherDownlodeService");
+        LaunchActivity.this.registerReceiver(receiver, filter);
 
-
-            } catch (JSONException e) {
-
-            } catch (DbException e) {
-
-            }
-        }
     }
+
 
     //权限获取
     public void requestPower() {
@@ -263,35 +202,6 @@ public class StartAppActivity extends BaseActivity {
     }
 
 
-    /*class TimeCount extends CountDownTimer {
-
-        public TimeCount(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-            //进行中
-        }
-
-        @Override
-        public void onFinish() {
-            //结束
-            if (isLogin == 0) {
-                Intent intent = new Intent(StartAppActivity.this, LoginActivity.class);
-                startActivity(intent);
-                StartAppActivity.this.finish();
-            } else {
-                Intent intent = new Intent(StartAppActivity.this, MainActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("page", "my");
-                intent.putExtras(bundle);
-                startActivity(intent);
-                StartAppActivity.this.finish();
-            }
-        }
-    }*/
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         Log.e(TAG, "onRequestPermissionsResult:requestCode --" + requestCode);
@@ -314,5 +224,65 @@ public class StartAppActivity extends BaseActivity {
                 judgePower();
             }
         }
+    }
+
+
+    public class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            int count = bundle.getInt("count");
+            progress = progress + count;
+            tv_num.setText(progress + "%");
+
+            if (progress == 100) {
+                //修改判断是否是第一次进入的标志位
+                SharedPreferences sf = getSharedPreferences("data", MODE_PRIVATE);//判断是否是第一次进入
+                SharedPreferences.Editor editor = sf.edit();
+                if (isFirst) {//首次
+                    editor.putBoolean("isFirstIn", false);
+                    mTimeCount.cancel();
+                } else {//非首次
+                }
+                editor.commit();
+
+                Message message = new Message();
+                message.what = 1;
+                handler.sendMessage(message);
+            }
+        }
+    }
+
+    class TimeCount extends CountDownTimer {
+
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            //进行中
+            tv_num.setText((99 - millisUntilFinished / 80) + "%");
+            Log.e(TAG, "onTick:   ===" + (99 - millisUntilFinished / 80) + "%");
+        }
+
+        @Override
+        public void onFinish() {
+            //结束
+            Log.e(TAG, "onFinish: ~~~~~~");
+
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        //结束服务
+        stopService(new Intent(LaunchActivity.this, LuncherDownlodeService.class));
+        //取消注册广播
+        if (isFirst) {
+            unregisterReceiver(receiver);
+        }
+        super.onDestroy();
     }
 }

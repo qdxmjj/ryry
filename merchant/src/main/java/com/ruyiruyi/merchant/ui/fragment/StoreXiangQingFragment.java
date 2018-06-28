@@ -604,6 +604,8 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
         int degree = 0;
         if (isCamera) {
             degree = ImageUtils.readPictureDegree(path_);
+        } else {
+            degree = ImageUtils.getOrientation(getActivity(), uri);
         }
         if (uri != null) {
             Bitmap photo = null;
@@ -612,31 +614,19 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             } catch (IOException e) {
             }
             if (currentImage == 0) {
-                if (isCamera) {
-                    mdPicaBitmap = rotaingImageView(degree, photo);
-                } else {
-                    mdPicaBitmap = photo;
-                }
+                mdPicaBitmap = rotaingImageView(degree, photo);
                 img_mdpic_a.setImageBitmap(mdPicaBitmap);
                 img_mdpic_a_delete.setVisibility(View.VISIBLE);
                 img_mdpic_a_center.setVisibility(View.GONE);
                 hasPicA = true;
             } else if (currentImage == 1) {
-                if (isCamera) {
-                    mdPicbBitmap = rotaingImageView(degree, photo);
-                } else {
-                    mdPicbBitmap = photo;
-                }
+                mdPicbBitmap = rotaingImageView(degree, photo);
                 img_mdpic_b.setImageBitmap(mdPicbBitmap);
                 img_mdpic_b_delete.setVisibility(View.VISIBLE);
                 img_mdpic_b_center.setVisibility(View.GONE);
                 hasPicB = true;
             } else if (currentImage == 2) {
-                if (isCamera) {
-                    mdPiccBitmap = rotaingImageView(degree, photo);
-                } else {
-                    mdPiccBitmap = photo;
-                }
+                mdPiccBitmap = rotaingImageView(degree, photo);
                 img_mdpic_c.setImageBitmap(mdPiccBitmap);
                 img_mdpic_c_delete.setVisibility(View.VISIBLE);
                 img_mdpic_c_center.setVisibility(View.GONE);
@@ -718,7 +708,6 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
                 if (isNewPicC) {
                     params.addBodyParameter("factory_img", new File(mdpiccPath));
                 }
-                params.setConnectTimeout(6000);
                 Log.e(TAG, "onClick:110 serviceTypeListString = " + serviceTypeListString);
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override

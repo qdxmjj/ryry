@@ -10,6 +10,9 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,14 +26,14 @@ import java.net.URLConnection;
 
 public class ImageUtils {
     private int picType;//0表示默认png图片；1表示jpg或者jpeg
-    public static ImageUtils getIntance(){
+
+    public static ImageUtils getIntance() {
         return new ImageUtils();
     }
 
     public void setPicType(int picType) {
         this.picType = picType;
     }
-
 
 
     public static Bitmap getBitmapFormUri(Context ac, Uri uri) throws FileNotFoundException, IOException {
@@ -68,6 +71,7 @@ public class ImageUtils {
 
         return compressImage(bitmap);//再进行质量压缩
     }
+
     /**
      * 质量压缩方法
      *
@@ -129,7 +133,7 @@ public class ImageUtils {
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         if (baos.toByteArray().length / 1024 > 1024) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
             baos.reset();//重置baos即清空baos
-            Bitmap.CompressFormat Type=picType==0?Bitmap.CompressFormat.PNG:Bitmap.CompressFormat.JPEG;
+            Bitmap.CompressFormat Type = picType == 0 ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG;
             //image.compress(Bitmap.CompressFormat.JPEG, 50, baos);//这里压缩50%，把压缩后的数据存放到baos中
             image.compress(Type, 50, baos);//这里压缩50%，把压缩后的数据存放到baos中
         }
@@ -160,29 +164,33 @@ public class ImageUtils {
         return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
     }
 
-    /**判断图片类型*/
-    public void getPicTypeByUrl(String url){
-        if(url==null){
+    /**
+     * 判断图片类型
+     */
+    public void getPicTypeByUrl(String url) {
+        if (url == null) {
             return;
         }
-        if(url.equals("")){
+        if (url.equals("")) {
             return;
         }
-        String[] picArray=url.split("/");
-        String picStr="";
-        if(picArray.length>0){
-            picStr=picArray[picArray.length-1];
-        }else{
-            picStr=picArray[0];
+        String[] picArray = url.split("/");
+        String picStr = "";
+        if (picArray.length > 0) {
+            picStr = picArray[picArray.length - 1];
+        } else {
+            picStr = picArray[0];
         }
-        if(picStr.toLowerCase().contains(".png")){
-            picType=0;
-        }else if(picStr.toLowerCase().contains(".jpg")||picStr.toLowerCase().contains(".jpeg")){
-            picType=1;
+        if (picStr.toLowerCase().contains(".png")) {
+            picType = 0;
+        } else if (picStr.toLowerCase().contains(".jpg") || picStr.toLowerCase().contains(".jpeg")) {
+            picType = 1;
         }
     }
 
-    /**通过图片url生成Bitmap对象
+    /**
+     * 通过图片url生成Bitmap对象
+     *
      * @param urlpath
      * @return Bitmap
      * 根据图片url获取图片对象
@@ -201,12 +209,15 @@ public class ImageUtils {
         }
         return map;
     }
-    /**通过图片url生成Drawable对象
+
+    /**
+     * 通过图片url生成Drawable对象
+     *
      * @param urlpath
      * @return Bitmap
      * 根据url获取布局背景的对象
      */
-    public static Drawable getDrawable(String urlpath){
+    public static Drawable getDrawable(String urlpath) {
         Drawable drawable = null;
         try {
             URL url = new URL(urlpath);
@@ -221,13 +232,70 @@ public class ImageUtils {
         return drawable;
     }
 
+    /*  相册照片
+    * 读取图片属性：旋转的角度
+    * */
+    public static int getOrientation(Context context, Uri uri) {
+        //图片旋转
+        ExifInterface exifInterface = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = context.getContentResolver().openInputStream(uri);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                exifInterface = new ExifInterface(inputStream);
+            }
+        } catch (IOException e) {
+        }
+        //获取图片的旋转角度
+        int tag = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+        int orientation = 0;
+        if (tag == ExifInterface.ORIENTATION_ROTATE_90) {
+            orientation = 90;
+        } else if (tag == ExifInterface.ORIENTATION_ROTATE_180) {
+            orientation = 180;
+        } else if (tag == ExifInterface.ORIENTATION_ROTATE_270) {
+            orientation = 270;
+        }
+        //关闭流
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return orientation;
+    }
+
+    /*
+    *根据旋转角度旋转照片
+    * */
+    public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
+        Bitmap returnBm = null;
+        // 根据旋转角度，生成旋转矩阵
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        try {
+            // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
+            returnBm = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        } catch (OutOfMemoryError e) {
+        }
+        if (returnBm == null) {
+            returnBm = bitmap;
+        }
+        if (bitmap != returnBm) {
+            bitmap.recycle();
+        }
+        return returnBm;
+    }
+
+
     /**
      * 读取图片属性：旋转的角度
+     *
      * @param path 图片绝对路径
      * @return degree旋转的角度
      */
     public static int readPictureDegree(String path) {
-        int degree  = 0;
+        int degree = 0;
         try {
             ExifInterface exifInterface = new ExifInterface(path);
             int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
@@ -300,12 +368,13 @@ public class ImageUtils {
 
     /**
      * 通过Uri获取文件
+     *
      * @param ac
      * @param uri
      * @return
      */
     public static File getFileFromMediaUri(Context ac, Uri uri) {
-        if(uri.getScheme().toString().compareTo("content") == 0){
+        if (uri.getScheme().toString().compareTo("content") == 0) {
             ContentResolver cr = ac.getContentResolver();
             Cursor cursor = cr.query(uri, null, null, null, null);// 根据Uri从数据库中找
             if (cursor != null) {
@@ -316,11 +385,12 @@ public class ImageUtils {
                     return new File(filePath);
                 }
             }
-        }else if(uri.getScheme().toString().compareTo("file") == 0){
-            return new File(uri.toString().replace("file://",""));
+        } else if (uri.getScheme().toString().compareTo("file") == 0) {
+            return new File(uri.toString().replace("file://", ""));
         }
         return null;
     }
+
     /**
      * 读取图片的旋转的角度
      *

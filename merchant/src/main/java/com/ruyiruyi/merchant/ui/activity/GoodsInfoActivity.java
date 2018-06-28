@@ -722,6 +722,8 @@ public class GoodsInfoActivity extends BaseActivity {
         int degree = 0;
         if (isCamera) {
             degree = ImageUtils.readPictureDegree(path_);
+        } else {
+            degree = ImageUtils.getOrientation(getApplicationContext(), uri);
         }
         if (uri != null) {
             Bitmap photo = null;
@@ -729,11 +731,7 @@ public class GoodsInfoActivity extends BaseActivity {
                 photo = ImageUtils.getBitmapFormUri(getApplicationContext(), uri);
             } catch (IOException e) {
             }
-            if (isCamera) {
-                imgBitmap = rotaingImageView(degree, photo);
-            } else {
-                imgBitmap = photo;
-            }
+            imgBitmap = rotaingImageView(degree, photo);
 //   2          mGoodsImg.setImageBitmap(imgBitmap);
             //Glide 加载BitMap需要先将bitmap对象转换为字节,在加载;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
