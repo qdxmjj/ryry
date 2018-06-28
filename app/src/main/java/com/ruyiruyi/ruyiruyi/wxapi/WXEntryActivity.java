@@ -103,7 +103,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
             case ConstantsAPI.COMMAND_SHOWMESSAGE_FROM_WX:
             //    goToShowMsg((ShowMessageFromWX.Req) req);
 
-                Toast.makeText(WXEntryActivity.this, "111", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(WXEntryActivity.this, "111", Toast.LENGTH_SHORT).show();
                 goToShowMsg((ShowMessageFromWX.Req) req);
                 break;
             default:

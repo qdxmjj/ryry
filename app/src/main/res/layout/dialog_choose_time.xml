@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="5"
+    android:gravity="center_horizontal"
     android:orientation="horizontal">
 
 
-    <com.ruyiruyi.rylibrary.ui.cell.WheelView
+  <!--  <com.ruyiruyi.rylibrary.ui.cell.WheelView
         android:id="@+id/whv_ltime"
         android:layout_width="0dp"
         android:layout_weight="2"
@@ -20,14 +21,15 @@
         app:textColorCenter="@color/theme_primary"
         app:textColorOuter="@color/c3"
         app:textSizeCenter="12dp"
-        app:textSizeOuter="10dp" />
+        app:textSizeOuter="10dp" />-->
     <TextView
-        android:text="至"
+        android:text="选择服务年限"
         android:textSize="15sp"
         android:textColor="@color/theme_primary"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center"
         android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
 
@@ -41,6 +43,7 @@
         app:itemVisibleNum="3"
         app:lineColor="@color/theme_primary"
         app:lineSpaceingDimens="10dp"
+        android:layout_marginLeft="10dp"
         app:textColorCenter="@color/theme_primary"
         app:textColorOuter="@color/c3"
         app:textSizeCenter="12dp"

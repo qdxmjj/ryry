@@ -637,7 +637,7 @@ public class LoginActivity extends RyBaseActivity {
                     String msg = jsonObject.getString("msg");
                     Log.e(TAG, "onSuccess: " + status);
                     if(status.equals("1")){
-                        Toast.makeText(LoginActivity.this, "chenggong", Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(LoginActivity.this, "chenggong", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), WxPhoneActivity.class);
                         intent.putExtra(HEADURL,headUrl);
                         intent.putExtra(NICKNAME,nickName);

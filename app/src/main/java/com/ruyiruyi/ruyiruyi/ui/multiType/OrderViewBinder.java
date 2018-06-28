@@ -44,7 +44,7 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
         holder.orderNoText.setText("订单编号： " + order.getOrderNo());
         holder.orderTimeText.setText("下单时间： " + order.getOrderTime());
 
-        if (order.getOrderType().equals("2")){
+        if (order.getOrderType().equals("2") || order.getOrderType().equals("3") || order.getOrderType().equals("4")){
             holder.orderPriceText.setVisibility(View.INVISIBLE);
         }else {
             holder.orderPriceText.setVisibility(View.VISIBLE);
@@ -70,7 +70,7 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
             }else if (order.getOrderState().equals("8")){
                 holder.orderTypeText.setText("退款成功");
             }else if (order.getOrderState().equals("9")){
-                holder.orderTypeText.setText("作废");
+                holder.orderTypeText.setText("订单已取消");
             }else {
                 holder.orderTypeText.setText("其他状态");
             }
@@ -85,7 +85,7 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
                 }else if (order.getOrderState().equals("3")){
                     holder.orderTypeText.setText("待商家确认服务");
                 }else if (order.getOrderState().equals("4")){
-                    holder.orderTypeText.setText("作废");
+                    holder.orderTypeText.setText("订单已取消");
                 }else if (order.getOrderState().equals("5")){
                     holder.orderPriceText.setVisibility(View.INVISIBLE);
                     holder.orderTypeText.setText("待发货");

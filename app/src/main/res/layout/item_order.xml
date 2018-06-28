@@ -65,6 +65,7 @@
                 android:paddingRight="7dp"
                 android:textSize="15sp"
                 android:textColor="#ffffff"
+                android:layout_marginBottom="2dp"
                 android:gravity="center"
                 android:background="@drawable/bg_button"
                 android:layout_gravity="bottom|right"/>

@@ -7,4 +7,4 @@ W /*  左下角打开Terminal，输入命令行
         gradlew assembleWandoujia
         此命令会生成wandoujia渠道的Release和Debug版本
         同理我想打全部Release版本：
-        gradlew assembleRelease*/
+        gradlew assembleRelease*/ n

@@ -107,6 +107,10 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                             goodsTuikuan();
                         }else if (orderType == 0){
                             tireTuikuan();
+                        }else if (orderType == 2){
+                            cancleFirstTire();
+                        }else if (orderType == 4){
+                            cancleTireRepair();
                         }
 
                         break;
@@ -141,7 +145,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
             }else if (orderState == 8){
                 actionBar.setTitle("已退款");
             }else if (orderState == 9){
-                actionBar.setTitle("作废");
+                actionBar.setTitle("订单已取消");
             }
         }else {
             if (orderStage ==1){
@@ -160,7 +164,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 }else if (orderState == 10){
                     actionBar.setTitle("退款成功");
                 }else if (orderState == 4){
-                    actionBar.setTitle("作废");
+                    actionBar.setTitle("订单已取消");
                 }
             }else if (orderStage == 2){
                 actionBar.setTitle("待车主补差");
@@ -182,6 +186,8 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         initOrderFromService();
     }
 
+
+
     /**'
      * 初始化action Righ
      */
@@ -197,8 +203,124 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 }
 
             }
+        }else if (orderType == 2){
+            if (orderState == 5){
+                actionBar.setRightView("取消订单");
+            }
+        }else if (orderType == 4){
+            if (orderState == 3){
+                actionBar.setRightView("取消订单");
+            }
         }
 
+    }
+
+    /**
+     * 取消轮胎修补订单
+     */
+    private void cancleTireRepair() {
+        int userId = new DbConfig(this).getId();
+        JSONObject jsonObject = new JSONObject();
+        Log.e(TAG, "initOrderFromService:--- " + orderType);
+        try {
+            jsonObject.put("orderNo", orderNo);
+            jsonObject.put("userId", userId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "cancelShoeRepairOrder");
+        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        //    setResult(TireWaitChangeActivity.TIREWAIT, new Intent());
+                        finish();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 取消首次更换订单
+     */
+    private void cancleFirstTire() {
+        int userId = new DbConfig(this).getId();
+        JSONObject jsonObject = new JSONObject();
+        Log.e(TAG, "initOrderFromService:--- " + orderType);
+        try {
+            jsonObject.put("orderNo", orderNo);
+            jsonObject.put("userId", userId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "cancelFirstChangeOrder");
+        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        //    setResult(TireWaitChangeActivity.TIREWAIT, new Intent());
+                        finish();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
 
@@ -339,7 +461,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                         if (orderType == 2) {//首次更换订单
                             if (orderState == 5) {  //代发货
                                 getFirstTireOrderInfo(data);
-                            } else if (orderState == 3 || orderState == 2 || orderState == 6 || orderState ==1) { //待商家确认服务 || 待收货  ||待车主确认服务
+                            } else if (orderState == 3 || orderState == 2 || orderState == 6 || orderState ==1 || orderState == 4) { //待商家确认服务 || 待收货  ||待车主确认服务
                                 codeList.clear();
                                 getFirstTireOrderInfo(data);
                                 getFirstTireOrderCode(data);
@@ -701,7 +823,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         //订单状态(orderType:1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
         items.clear();
         if (orderType == 2) {    //首次更换
-            if (orderState == 5) {   //5 待支付
+            if (orderState == 5 || orderState == 4) {   //5 待支付  || 已取消
                 items.add(new InfoOne("联系人", userName, false));
                 items.add(new InfoOne("联系电话", userPhone, false));
                 items.add(new InfoOne("车牌号", carNumber, false));
@@ -710,7 +832,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 for (int i = 0; i < tireInfoList.size(); i++) {
                     items.add(tireInfoList.get(i));
                 }
-            } else if (orderState == 3 || orderState == 2 || orderState == 6 || orderState ==1) { //待商家确认服务 || 待收货 || 带车主确认服务 ||交易完成
+            } else if (orderState == 3 || orderState == 2 || orderState == 6 || orderState ==1 ) { //待商家确认服务 || 待收货 || 带车主确认服务 ||交易完成
                 items.add(new InfoOne("联系人", userName, false));
                 items.add(new InfoOne("联系电话", userPhone, false));
                 items.add(new InfoOne("车牌号", carNumber, false));
@@ -778,7 +900,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
 
 
             }else {                 //普通订单
-                if (orderState == 5){ //5 待支付
+                if (orderState == 5 || orderState == 4){ //5 待支付
                     items.add(new InfoOne("联系人",userName,false));
                     items.add(new InfoOne("联系电话",userPhone,false));
                     items.add(new InfoOne("车牌号",carNumber,false));
@@ -1164,7 +1286,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     orderButton.setClickable(false);
                     orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
                 }else if (orderState == 9){
-                    orderButton.setText("作废");
+                    orderButton.setText("订单已取消");
                     orderButton.setClickable(false);
                     orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
                 }
@@ -1205,7 +1327,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     orderButton.setClickable(false);
                     orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
                 }else if (orderState == 4){
-                    orderButton.setText("作废订单");
+                    orderButton.setText("订单已取消");
                     orderButton.setClickable(false);
                     orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
                 }
