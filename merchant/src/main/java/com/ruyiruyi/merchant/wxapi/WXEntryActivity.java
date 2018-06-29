@@ -54,29 +54,28 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     * */
     @Override
     public void onResp(BaseResp baseResp) {
-/*        int result = 0;
+        String result = "";
         switch (baseResp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
-                result = R.string.errcode_success;//发送成功
-                String code = ((SendAuth.Resp) baseResp).code;
-                LogUtil.i(code);
-                getAccessToken(code);
+                result = "发送成功";//发送成功
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL://发送取消
-                result = R.string.errcode_cancel;
-                finish();
+                result = "发送取消";
+//                finish();
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED://发送被拒绝
-                result = R.string.errcode_deny;
+                result = "发送被拒绝";
                 break;
             case BaseResp.ErrCode.ERR_UNSUPPORT:
-                result = R.string.errcode_unsupported;//不支持错误
+                result = "不支持错误";//不支持错误
                 break;
             default:
-                result = R.string.errcode_unknown;//发送返回
+                result = "发送返回";//发送返回
                 break;
         }
-        Toast.makeText(this, result, Toast.LENGTH_LONG).show();*/
+        Log.e(TAG, "onResp: result = " + result);
+        Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+        finish();
     }
 
 

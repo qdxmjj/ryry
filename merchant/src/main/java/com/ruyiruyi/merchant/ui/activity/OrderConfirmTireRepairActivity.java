@@ -1017,6 +1017,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         for (int i = 0; i < shoeRepairList.size(); i++) {
             final ShoeRepair bean = shoeRepairList.get(i);
             if (i == 0) {
+                currentCount_a_ = Integer.parseInt(bean.getRepairAmount());
                 fl_repair_a_.setVisibility(View.VISIBLE);
                 code_repair_a_.setText(bean.getBarCode());
                 pic_a_titleno.setText(bean.getBarCode());//照片标题
@@ -1061,6 +1062,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 });
             }
             if (i == 1) {
+                currentCount_b_ = Integer.parseInt(bean.getRepairAmount());
                 fl_repair_b_.setVisibility(View.VISIBLE);
                 code_repair_b_.setText(bean.getBarCode());
                 pic_b_titleno.setText(bean.getBarCode());//照片标题
@@ -1104,6 +1106,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 });
             }
             if (i == 2) {
+                currentCount_c_ = Integer.parseInt(bean.getRepairAmount());
                 fl_repair_c_.setVisibility(View.VISIBLE);
                 code_repair_c_.setText(bean.getBarCode());
                 pic_c_titleno.setText(bean.getBarCode());//照片标题
@@ -1147,6 +1150,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                 });
             }
             if (i == 3) {
+                currentCount_d_ = Integer.parseInt(bean.getRepairAmount());
                 fl_repair_d_.setVisibility(View.VISIBLE);
                 code_repair_d_.setText(bean.getBarCode());
                 pic_d_titleno.setText(bean.getBarCode());//照片标题
@@ -1397,7 +1401,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         }
         if (whereIn.equals("MyOrderItem")) {
             intent.setClass(getApplicationContext(), MyOrderActivity.class);
-            Log.e(TAG, "onBackPressed: MyOrderItem" );
+            Log.e(TAG, "onBackPressed: MyOrderItem");
             intent.putExtra("page", "0");
             intent.putExtra("typestate", "all");
         }

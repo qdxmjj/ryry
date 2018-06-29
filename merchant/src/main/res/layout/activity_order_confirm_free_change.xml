@@ -1175,12 +1175,13 @@
 
             </LinearLayout>
 
-            <!--轮胎照片-->
+            <!--轮胎照片(现版本去除)-->
             <LinearLayout
                 android:id="@+id/ll_pic_luntai"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <!--标题加拍照示例-->
                 <FrameLayout
@@ -1695,16 +1696,18 @@
                 </LinearLayout>
 
             </LinearLayout>
-            <!--线-->
+            <!--线(现版本去除)-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="#ffffff" />
-
+                android:background="#ffffff"
+                android:visibility="gone" />
+            <!--线plus(现版本去除)-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#ffffff">
+                android:background="#ffffff"
+                android:visibility="gone">
 
                 <View
                     android:layout_width="match_parent"
@@ -1713,6 +1716,8 @@
                     android:layout_marginRight="25dp"
                     android:background="@color/c1" />
             </LinearLayout>
+
+
             <!--行驶证照片-->
             <!--标题加拍照示例-->
             <FrameLayout
@@ -1815,12 +1820,6 @@
                 android:layout_height="1dp"
                 android:background="#ffffff">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:background="@color/c1" />
             </LinearLayout>
 
             <!--车辆照片-->
@@ -1925,6 +1924,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
                 android:background="#ffffff"
                 android:orientation="vertical">
 
@@ -1940,6 +1940,8 @@
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
 
+
+                <!--(现版本去除  )-->
                 <TextView
                     android:id="@+id/tv_bottom_b"
                     android:layout_width="match_parent"
@@ -1951,8 +1953,10 @@
                     android:gravity="center"
                     android:text="补差服务"
                     android:textColor="@color/theme_primary"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
+                <!--(现版本去除  )-->
                 <TextView
                     android:id="@+id/tv_bottom_c"
                     android:layout_width="match_parent"
@@ -1965,7 +1969,8 @@
                     android:gravity="center"
                     android:text="拒绝服务"
                     android:textColor="@color/theme_primary"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
 

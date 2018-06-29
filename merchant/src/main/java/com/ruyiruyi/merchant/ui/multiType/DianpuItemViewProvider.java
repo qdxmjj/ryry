@@ -78,7 +78,7 @@ public class DianpuItemViewProvider extends ItemViewProvider<Dianpu, DianpuItemV
                 holder.dianpu_tv_state.setText(stateStr);
                 break;
             case "6":
-                stateStr = "待服务";
+                stateStr = "待车主确认服务";
                 holder.dianpu_tv_state.setText(stateStr);
                 break;
             case "7":
