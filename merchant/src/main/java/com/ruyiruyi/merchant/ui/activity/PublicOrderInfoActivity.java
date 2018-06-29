@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,6 +98,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     private String isNoConsistent_d_;//false
     private ProgressDialog progressDialog;
     private ProgressDialog mainDialog;
+    private FrameLayout fl_main;
     private String TAG = PublicOrderInfoActivity.class.getSimpleName();
 
     @Override
@@ -160,7 +163,9 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
         });
 
         mainDialog = new ProgressDialog(this);
+        fl_main = findViewById(R.id.fl_main);
         showDialogProgress(mainDialog, "订单信息加载中...");
+        fl_main.setVisibility(View.INVISIBLE);
 
         initView();
         initPost();
@@ -408,6 +413,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
         adapter.notifyDataSetChanged();
 
         hideDialogProgress(mainDialog);
+        fl_main.setVisibility(View.VISIBLE);
     }
 
 
