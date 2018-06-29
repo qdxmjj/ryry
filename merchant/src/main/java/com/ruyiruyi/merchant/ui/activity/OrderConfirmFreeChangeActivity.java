@@ -700,7 +700,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 }
             }
         });
-        //补差服务
+        //补差服务      <!--(现版本去除  )-->
         RxViewAction.clickNoDouble(tv_bottom_b).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -710,7 +710,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
 
             }
         });
-        //拒绝服务
+        //拒绝服务      <!--(现版本去除  )-->
         RxViewAction.clickNoDouble(tv_bottom_c).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -949,7 +949,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private boolean judgeBeforeSave(String type) {
         switch (type) {
             case "1"://确认服务
-                int picNumShoe = 0;
+/*                int picNumShoe = 0;           (现版本去除  对应layout文件)
                 int picNumCode = 0;
                 if (hasPic_a_left) {
                     picNumShoe++;
@@ -982,7 +982,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 if (picNumCode < newShoeNum) {
                     showErrorDialog("请补全轮胎条形码特写照!");
                     return false;
-                }
+                }*/
                 if (!hasPic_license) {
                     showErrorDialog("请上传行驶证照片!");
                     return false;
@@ -993,13 +993,13 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 }
                 break;
             case "2"://补差服务
-                //判断补差  --》 dialog--》post
-                if (noFiveYearsShoeAmount == 0) {//达到磨损程度的轮胎数量为零则不能补差
+                //判断补差  --》 dialog--》post      (现版本去除  对应layout文件)
+            /*    if (noFiveYearsShoeAmount == 0) {//达到磨损程度的轮胎数量为零则不能补差
                     showErrorDialog("没有可补差的轮胎(达到磨损程度且未满五年的轮胎)!");
                     return false;
-                }
+                }*/
                 break;
-            case "3"://拒绝服务
+            case "3"://拒绝服务        (现版本去除  对应layout文件)
                 //(无需判断)
                 break;
         }
@@ -1077,7 +1077,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                         params.addBodyParameter("drivingLicenseImg", new File(path_licenseBitmap));
                         params.addBodyParameter("carImg", new File(path_carBitmap));
-                        if (hasPic_a_left) {
+/*                        if (hasPic_a_left) {    <!--(现版本去除  对应layout布局文件 )-->
                             params.addBodyParameter("shoe1Img", new File(path_shoeABitmap));
                         }
                         if (hasPic_a_right) {
@@ -1100,7 +1100,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         }
                         if (hasPic_d_right) {
                             params.addBodyParameter("shoe4BarCodeImg", new File(path_shoeDBarcodeBitmap));
-                        }
+                        }*/
                         Log.e(TAG, "onClick:  params.toString() = " + params.toString());
                         x.http().post(params, new Callback.CommonCallback<String>() {
                             @Override
@@ -2477,7 +2477,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         }
         if (whereIn.equals("MyOrderItem")) {
             intent.setClass(getApplicationContext(), MyOrderActivity.class);
-            Log.e(TAG, "onBackPressed: MyOrderItem" );
+            Log.e(TAG, "onBackPressed: MyOrderItem");
             intent.putExtra("page", "0");
             intent.putExtra("typestate", "all");
         }

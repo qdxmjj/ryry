@@ -636,6 +636,9 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
     }
 
     public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
+        if (bitmap == null) {
+            return null;
+        }
         Bitmap returnBm = null;
         // 根据旋转角度，生成旋转矩阵
         Matrix matrix = new Matrix();
