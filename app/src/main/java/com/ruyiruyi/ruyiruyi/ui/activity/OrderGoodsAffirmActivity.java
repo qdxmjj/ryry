@@ -122,9 +122,9 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
 
         OrderGoods orderGoods = null;
         if (couponchoose == 0) {    //weixuan
-            orderGoods= new OrderGoods(userId, storeid, storename, allprice + "", goodsInfoList,couponId);
+            orderGoods= new OrderGoods(userId, storeid, storename, allprice + "", goodsInfoList,couponId,allprice+"");
         }else {
-            orderGoods = new OrderGoods(userId, storeid, storename, allprice + "", goodsInfoList,couponId);
+            orderGoods = new OrderGoods(userId, storeid, storename, allprice + "", goodsInfoList,couponId,currentPrice+"");
         }
 
         Gson gson = new Gson();

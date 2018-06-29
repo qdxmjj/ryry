@@ -160,7 +160,7 @@ public class OrderActivity extends RyBaseFragmentActivity {
         List list = new ArrayList();
         list.add("全部");
         list.add("待支付");
-        list.add("待发货");
+        list.add("进行中");
         list.add("待服务");
         list.add("已完成");
         return list;

@@ -28,6 +28,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.LoginActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireChangeActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.TireFreeChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TirePlaceActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireRepairActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
@@ -403,7 +404,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             if (!judgeIsLogin()) {
                 return;
             }
-            Intent intent = new Intent(getContext(), TireChangeActivity.class);
+            Intent intent = new Intent(getContext(), TireFreeChangeActivity.class);
             intent.putExtra(TireChangeActivity.CHANGE_TIRE, 1);
             startActivity(intent);
         } else if (type == 2) {//轮胎修补

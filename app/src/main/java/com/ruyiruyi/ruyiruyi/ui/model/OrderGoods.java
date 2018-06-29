@@ -11,6 +11,7 @@ public class OrderGoods {
     public String totalPrice;
     public List<GoodsInfo> goodsInfoList;
     public int salesId;
+    public String actuallyPrice;
 
     public OrderGoods(int userId, List<GoodsInfo> goodsInfoList) {
         this.userId = userId;
@@ -24,6 +25,16 @@ public class OrderGoods {
         this.totalPrice = totalPrice;
         this.goodsInfoList = goodsInfoList;
         this.salesId = salesId;
+    }
+
+    public OrderGoods(int userId, int storeId, String storeName, String totalPrice, List<GoodsInfo> goodsInfoList, int salesId, String actuallyPrice) {
+        this.userId = userId;
+        this.storeId = storeId;
+        this.storeName = storeName;
+        this.totalPrice = totalPrice;
+        this.goodsInfoList = goodsInfoList;
+        this.salesId = salesId;
+        this.actuallyPrice = actuallyPrice;
     }
 
     public int getUserId() {

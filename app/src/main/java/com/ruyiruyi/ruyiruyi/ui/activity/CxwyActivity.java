@@ -14,6 +14,8 @@ import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Cxwy;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CxwyViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBig;
+import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBigViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.FullyLinearLayoutManager;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
@@ -63,14 +65,14 @@ public class CxwyActivity extends RyBaseActivity {
         });
         cxwyList = new ArrayList<>();
 
-        for (int i = 0; i < 8; i++) {
+     /*   for (int i = 0; i < 8; i++) {
             if (i % 2 != 0) {
                 cxwyList.add(new Cxwy(i, "2018.08.0" + i, "2019.08.0" + i, 1));
             } else {
                 cxwyList.add(new Cxwy(i, "2018.08.0" + i, "2019.08.0" + i, 2));
             }
 
-        }
+        }*/
         initView();
         initDataFromService();
         bindView();
@@ -132,7 +134,7 @@ public class CxwyActivity extends RyBaseActivity {
                     } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
-                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -163,6 +165,9 @@ public class CxwyActivity extends RyBaseActivity {
         for (int i = 0; i < cxwyList.size(); i++) {
             items.add(cxwyList.get(i));
         }
+        if (cxwyList.size() == 0){
+            items.add(new EmptyBig());
+        }
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
@@ -181,5 +186,6 @@ public class CxwyActivity extends RyBaseActivity {
 
     private void register() {
         adapter.register(Cxwy.class, new CxwyViewBinder());
+        adapter.register(EmptyBig.class,new EmptyBigViewBinder());
     }
 }

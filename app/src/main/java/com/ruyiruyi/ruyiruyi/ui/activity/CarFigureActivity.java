@@ -50,6 +50,7 @@ public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInt
     private List<TireFigure> tireFigureList;
     private String tiresize;
     private String fontrearflag;
+    public boolean isChoose = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInt
             }
         });
         tireFigureList = new ArrayList<>();
+        isChoose = false;
 
         Intent intent = getIntent();
         tiresize = intent.getStringExtra("TIRESIZE");
@@ -211,11 +213,13 @@ public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInt
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        
                         for (int i = 0; i < tireFigureList.size(); i++) {
                             if (tireFigureList.get(i).isCheck) {
                                 List<TireRank> tireRankList = tireFigureList.get(i).getTireRankList();
                                 for (int j = 0; j < tireRankList.size(); j++) {
                                     if (tireRankList.get(j).isCheck) {
+                                        isChoose = true;
                                         int shoeId = tireRankList.get(j).getId();
                                         String price = tireRankList.get(j).getPrice();
                                         Log.e(TAG, "call: ---------*--------" + shoeId);
@@ -225,10 +229,13 @@ public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInt
                                         intent.putExtra("FONTREARFLAG", fontrearflag);
                                         startActivity(intent);
                                     }
+                                    
                                 }
-                            }else {
-                                Toast.makeText(CarFigureActivity.this, "请选择轮胎规格", Toast.LENGTH_SHORT).show();
                             }
+                        }
+                        
+                        if (!isChoose){
+                            Toast.makeText(CarFigureActivity.this, "请选择轮胎规格", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
