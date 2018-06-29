@@ -50,7 +50,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBinder.OnInfoItemClick,CountOneViewBinder.OnCxwyCountClikc {
+public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBinder.OnInfoItemClick,CountOneViewBinder.OnCxwyCountClikc {
     private static final String TAG = OrderInfoActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;
