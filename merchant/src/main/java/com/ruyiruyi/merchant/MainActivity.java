@@ -161,7 +161,7 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
     private void ShowDialog(String version, final String downloadUrl) {
         new android.app.AlertDialog.Builder(this)
                 .setTitle("版本更新")
-                .setMessage("ruyiruyi_" + version)
+                .setMessage("ryry_merchant" + version)
                 .setPositiveButton("更新", new DialogInterface.OnClickListener() {
 
 
@@ -189,7 +189,8 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
                             }
                         });
                     }
-                }).show();
+                })
+                .show();
     }
 
 
@@ -360,7 +361,6 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -444,6 +444,7 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("appVersion", versionCode);
+            jsonObject.put("versionType", "store");
         } catch (JSONException e) {
 
         }
