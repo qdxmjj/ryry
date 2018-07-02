@@ -107,7 +107,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="我的额度"
+                    android:text="信用额度"
                     android:textSize="16sp" />
 
                 <TextView
@@ -132,7 +132,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="信用额度"
+                    android:text="车辆额度列表"
                     android:textSize="16sp" />
 
                 <TextView
@@ -490,13 +490,14 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:src="@drawable/ic_shezhi" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:text="开发测试类" />
-                    android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout

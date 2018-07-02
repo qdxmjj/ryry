@@ -963,10 +963,10 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                     for (int i = 0; i < codeList.size(); i++) {
                         items.add(new Code(codeList.get(i)));
                     }
-                    items.add(new InfoOne("旧轮胎条码", "", false));
+                   /* items.add(new InfoOne("旧轮胎条码", "", false));
                     for (int i = 0; i < oldCodeList.size(); i++) {
                         items.add(new Code(oldCodeList.get(i)));
-                    }
+                    }*/
                 }else if (orderState == 11){        //审核中
                     items.add(new InfoOne("联系人", userName, false));
                     items.add(new InfoOne("联系电话", userPhone, false));

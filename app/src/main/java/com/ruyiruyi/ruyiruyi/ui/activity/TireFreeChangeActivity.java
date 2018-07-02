@@ -154,6 +154,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
     private TextView tireCountText;
     private TextView postOrder;
     private ProgressDialog progressDialog;
+    private View tireImageLayoutView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,30 +185,35 @@ public class TireFreeChangeActivity extends RyBaseActivity {
 
     private void initImageView() {
         if (currentFontCount + currentRearCount == 0) {
+            tireImageLayoutView.setVisibility(View.GONE);
             imageTopLayout.setVisibility(View.GONE);
             tireImageLayout1.setVisibility(View.GONE);
             tireImageLayout2.setVisibility(View.GONE);
             tireImageLayout3.setVisibility(View.GONE);
             tireImageLayout4.setVisibility(View.GONE);
         } else if (currentFontCount + currentRearCount == 1) {
+            tireImageLayoutView.setVisibility(View.VISIBLE);
             imageTopLayout.setVisibility(View.VISIBLE);
             tireImageLayout1.setVisibility(View.VISIBLE);
             tireImageLayout2.setVisibility(View.GONE);
             tireImageLayout3.setVisibility(View.GONE);
             tireImageLayout4.setVisibility(View.GONE);
         }else if (currentFontCount + currentRearCount == 2) {
+            tireImageLayoutView.setVisibility(View.VISIBLE);
             imageTopLayout.setVisibility(View.VISIBLE);
             tireImageLayout1.setVisibility(View.VISIBLE);
             tireImageLayout2.setVisibility(View.VISIBLE);
             tireImageLayout3.setVisibility(View.GONE);
             tireImageLayout4.setVisibility(View.GONE);
         }else if (currentFontCount + currentRearCount == 3) {
+            tireImageLayoutView.setVisibility(View.VISIBLE);
             imageTopLayout.setVisibility(View.VISIBLE);
             tireImageLayout1.setVisibility(View.VISIBLE);
             tireImageLayout2.setVisibility(View.VISIBLE);
             tireImageLayout3.setVisibility(View.VISIBLE);
             tireImageLayout4.setVisibility(View.GONE);
         }else if (currentFontCount + currentRearCount == 4) {
+            tireImageLayoutView.setVisibility(View.VISIBLE);
             imageTopLayout.setVisibility(View.VISIBLE);
             tireImageLayout1.setVisibility(View.VISIBLE);
             tireImageLayout2.setVisibility(View.VISIBLE);
@@ -226,6 +232,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         carRearText = (TextView) findViewById(R.id.rear_tire_count_text);
         fontAmountView = (AmountView) findViewById(R.id.font_amount_view);
         rearAmountView = (AmountView) findViewById(R.id.area_amount_view);
+        tireImageLayoutView = (View) findViewById(R.id.tire_image_layout_view);
         //图片
         tireImageLayout1 = (LinearLayout) findViewById(R.id.tire_image_layout1);
 
@@ -578,6 +585,8 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                         intent.putExtra(OrderActivity.ORDER_FROM,1);
                         startActivity(intent);
                         finish();
+                    }else {
+                        Toast.makeText(TireFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
 
@@ -647,6 +656,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         codeImage1.setVisibility(hasCode1 ? View.VISIBLE : View.GONE);
         addCodeImage1.setVisibility(hasCode1 ? View.GONE :View.VISIBLE);
         codeImageDelete1.setVisibility(hasCode1?View.VISIBLE : View.GONE);
+
     }
 
     private void showChoosePicDialog() {
