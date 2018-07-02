@@ -27,7 +27,7 @@
             android:layout_width="115dp"
             android:layout_height="115dp"
             android:layout_marginLeft="10dp"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_head"
             attr:roundHeight="3dp"
             attr:roundWidth="3dp" />

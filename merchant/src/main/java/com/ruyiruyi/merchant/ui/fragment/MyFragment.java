@@ -192,7 +192,7 @@ public class MyFragment extends BaseFragment {
 
 
         //测试用 测试栏 <---
-        boolean isOpen = true;//测试栏开关
+        boolean isOpen = false;//测试栏开关
         TextView main_test = getView().findViewById(R.id.main_test);
         if (!isOpen) {
             main_test.setVisibility(View.GONE);

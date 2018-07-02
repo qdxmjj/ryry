@@ -230,7 +230,7 @@
                 android:layout_marginTop="50dp"
                 android:background="@drawable/circle"
                 android:padding="16dp"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_shancghuantp" />
 
         </FrameLayout>

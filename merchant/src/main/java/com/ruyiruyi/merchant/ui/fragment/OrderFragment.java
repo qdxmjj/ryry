@@ -68,7 +68,7 @@ public class OrderFragment extends BaseFragment {
     private TextView tv_wwcdd_num;
     private TextView tv_ywcdd_num;
     private SwipeRefreshLayout mSwipeLayout;
-    private ProgressDialog startDialog;
+//    private ProgressDialog startDialog;
     private LinearLayout ll_wwcdd;
     private LinearLayout ll_ywcdd;
 
@@ -157,9 +157,9 @@ public class OrderFragment extends BaseFragment {
 
     private void requestFromServer() {
         //数据加载完成前显示加载动画
-        startDialog = new ProgressDialog(getContext());
+//        startDialog = new ProgressDialog(getContext());
         if (isFirstLoad) {
-            showDialogProgress(startDialog, "信息加载中...");
+//            showDialogProgress(startDialog, "信息加载中...");
         }
 
 
@@ -242,7 +242,7 @@ public class OrderFragment extends BaseFragment {
             public void onFinished() {
                 //加载完成 隐藏加载动画
                 if (isFirstLoad) {
-                    hideDialogProgress(startDialog);
+//                    hideDialogProgress(startDialog);
                     isFirstLoad = false;
                 }
             }

@@ -115,6 +115,7 @@ public class LaunchActivity extends RyBaseActivity {
     private void goGuide() {
         Intent intent = new Intent(this, GuideActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void StartDownlodeService() {
