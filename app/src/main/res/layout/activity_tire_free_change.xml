@@ -318,6 +318,7 @@
                         android:textSize="15sp"
                         android:textColor="@color/c6"/>
                     <TextView
+                        android:id="@+id/tv_sample"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="拍照示例>"

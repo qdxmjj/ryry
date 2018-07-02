@@ -74,6 +74,7 @@
             </intent-filter>
             -->
         </activity>
+        <activity android:name=".ui.activity.PhotoSampleActivity" />
         <activity
             android:name=".ui.activity.TestActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
