@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -175,6 +176,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
     private String TAG = OrderConfirmTireRepairActivity.class.getSimpleName();
     private ProgressDialog progressDialog;
     private ProgressDialog mainDialog;
+    private ScrollView scrollView_;
     private final int maxRepairNum = 3;  //预设轮胎最大修补次数
     private String maxErrorMsg = "每条轮胎最多修补三次!";//预设轮胎最大修补次数提示
     private int currentCount_a_ = 0;
@@ -238,7 +240,9 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         storeId = new DbConfig(getApplicationContext()).getId() + "";
 
         mainDialog = new ProgressDialog(this);
+        scrollView_ = findViewById(R.id.scrollView_);
         showDialogProgress(mainDialog, "订单信息加载中...");
+        scrollView_.setVisibility(View.INVISIBLE);
 
         initView();
         initData();
@@ -298,6 +302,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                         bindView();
 
                         hideDialogProgress(mainDialog);
+                        scrollView_.setVisibility(View.VISIBLE);
 
 
                     } else {

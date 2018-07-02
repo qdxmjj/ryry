@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -265,6 +266,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private int newShoeNum = 0;
     private String path_;
     private ProgressDialog mainDialog;
+    private ScrollView scrollView_;
 
 
     @Override
@@ -291,7 +293,9 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         storeId = new DbConfig(getApplicationContext()).getId() + "";
 
         mainDialog = new ProgressDialog(this);
+        scrollView_ = findViewById(R.id.scrollView_);
         showDialogProgress(mainDialog, "订单信息加载中...");
+        scrollView_.setVisibility(View.INVISIBLE);
 
         initView();
 
@@ -2019,6 +2023,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         bindView();
 
                         hideDialogProgress(mainDialog);
+                        scrollView_.setVisibility(View.VISIBLE);
 
 
                     } else {
