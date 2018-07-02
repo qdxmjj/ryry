@@ -139,7 +139,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
     private boolean hasTire2 = false;
 
     private Bitmap codeBitmap3;
-    private boolean hasCode3 =false;
+    private boolean hasCode3 = false;
     private Bitmap tireBitmap3;
     private boolean hasTire3 = false;
 
@@ -153,6 +153,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
     private FrameLayout rearTireCountLayout;
     private TextView tireCountText;
     private TextView postOrder;
+    private TextView tv_sample;
     private ProgressDialog progressDialog;
     private View tireImageLayoutView;
 
@@ -162,11 +163,12 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         setContentView(R.layout.activity_tire_free_change);
 
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("免费再换");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("免费再换");
+        ;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -200,6 +202,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
             tireImageLayout4.setVisibility(View.GONE);
         }else if (currentFontCount + currentRearCount == 2) {
             tireImageLayoutView.setVisibility(View.VISIBLE);
+        } else if (currentFontCount + currentRearCount == 2) {
             imageTopLayout.setVisibility(View.VISIBLE);
             tireImageLayout1.setVisibility(View.VISIBLE);
             tireImageLayout2.setVisibility(View.VISIBLE);
@@ -279,6 +282,20 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         tireCountText = (TextView) findViewById(R.id.tire_count_text);
 
         postOrder = (TextView) findViewById(R.id.tire_repair_button);
+        tv_sample = (TextView) findViewById(R.id.tv_sample);
+
+
+        //拍照示例
+        RxViewAction.clickNoDouble(tv_sample).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getApplicationContext(), PhotoSampleActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "change");
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
 
         RxViewAction.clickNoDouble(postOrder)
                 .subscribe(new Action1<Void>() {
@@ -358,7 +375,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), ShopChooseActivity.class);
                         intent.putExtra(MerchantFragment.SHOP_TYPE, 5);
-                        startActivityForResult(intent,TireChangeActivity.CHOOSE_SHOP);
+                        startActivityForResult(intent, TireChangeActivity.CHOOSE_SHOP);
                     }
                 });
 
@@ -582,7 +599,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                     if (status.equals("1")){
                         Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
                         intent.putExtra(OrderFragment.ORDER_TYPE, "DFH");
-                        intent.putExtra(OrderActivity.ORDER_FROM,1);
+                        intent.putExtra(OrderActivity.ORDER_FROM, 1);
                         startActivity(intent);
                         finish();
                     }else {
@@ -656,13 +673,12 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         codeImage1.setVisibility(hasCode1 ? View.VISIBLE : View.GONE);
         addCodeImage1.setVisibility(hasCode1 ? View.GONE :View.VISIBLE);
         codeImageDelete1.setVisibility(hasCode1?View.VISIBLE : View.GONE);
-
     }
 
     private void showChoosePicDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("设置头像");
-        String[] items = { "选择本地照片", "拍照" };
+        String[] items = {"选择本地照片", "拍照"};
         builder.setNegativeButton("取消", null);
         builder.setItems(items, new DialogInterface.OnClickListener() {
 
@@ -895,6 +911,8 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                             Toast.makeText(TireFreeChangeActivity.this, "暂无可更换轮胎", Toast.LENGTH_SHORT).show();
                         }
                         initAmountView();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
                         Toast.makeText(TireFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
