@@ -179,4 +179,14 @@ public class OrderActivity extends RyBaseFragmentActivity {
             super.onBackPressed();
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 65636){
+            if (data!=null){
+                viewPager.setCurrentItem(2);
+                tabLayout.getTabAt(2).select();
+            }
+        }
+    }
 }

@@ -165,6 +165,9 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private String rear;
     private String brand;
     private String serviceYear;
+    private String xszEndTime = "";
+    private int id;
+
 
 
     @Override
@@ -230,6 +233,20 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         getShi();
         getXian();
        // viewCanClick();
+        initClickView();
+    }
+
+    /**
+     * 初始化view是否可点击
+     */
+    private void initClickView() {
+        if (canClick == 1){  //不可点击
+            isEnergySwich.setClickable(false);
+            lichengEdit.setEnabled(false);
+        }else {
+            isEnergySwich.setClickable(true);
+            lichengEdit.setEnabled(true);
+        }
     }
 
   /*  private void viewCanClick() {
@@ -269,6 +286,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         String token = new DbConfig(this).getToken();
         params.addParameter("token",token);
         x.http().post(params, new Callback.CommonCallback<String>() {
+
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: re" + result );
@@ -285,15 +303,38 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                         String proCityName = data.getString("proCityName");
                         String font = data.getString("font");
                         String rear = data.getString("rear");
+                        id = data.getInt("id");
                         Long drivingLicenseDate = data.getLong("drivingLicenseDate");
                         String xszRegisterTime = new UtilsRY().getTimestampToString(drivingLicenseDate);
-                        Long serviceEndDate = data.getLong("serviceEndDate");
-                        String xszEndTime = new UtilsRY().getTimestampToString(serviceEndDate);
+                      //  date = xszRegisterTime;
+                        date.append(xszRegisterTime);
+                        try{
+                            Long serviceEndDate = data.getLong("serviceEndDate");
+                            xszEndTime = new UtilsRY().getTimestampToString(serviceEndDate);
+                            if (xszEndTime.equals("")){
+                                canClick = 0;
+                                saveCatButton.setText("修改车辆信息");
+                            }else {
+                                canClick = 1;
+                                saveCatButton.setText("车辆信息不可修改");
+                            }
+                        }catch (Exception e){
+                            if (xszEndTime.equals("")){
+                                canClick = 0;
+                                saveCatButton.setText("修改车辆信息");
+                            }else {
+                                canClick = 1;
+                                saveCatButton.setText("车辆信息不可修改");
+                            }
+                        }
+                       /*Long serviceEndDate = data.getLong("serviceEndDate");
+                        String xszEndTime = new UtilsRY().getTimestampToString(serviceEndDate); */
                         String traveledImgInverse = data.getString("traveledImgInverse");
                         String traveledImgObverse = data.getString("traveledImgObverse");
                         String traveled = data.getString("traveled");
                         String maturityImg = data.getString("maturityImg");
                         String roadTxt = data.getString("roadTxt");
+                        String serviceYearLength = data.getString("serviceYearLength");
                         carTypeChoose.setText(carName);
                         if (isNewenergy == 0){//燃油
                             isEnergySwich.setChecked(false);
@@ -305,7 +346,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                         carFontText.setText(font);
                         carRearText.setText(rear);
                         xszRegisterTimeText.setText(xszRegisterTime);
-                        xszEndTimeText.setText(xszEndTime);
+                        xszEndTimeText.setText(serviceYearLength +"年");
                         hasZhuye = true;
                         initZhuyeLayou();
                         Glide.with(getApplicationContext()).load(traveledImgInverse).into(zhuyeImage);
@@ -324,7 +365,8 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                             Glide.with(getApplicationContext()).load(maturityImg).into(lcbImage);
                         }
                         roadConditionText.setText(roadTxt);
-                        saveCatButton.setText("暂不可修改");
+                        initClickView();
+
 
                     }else if (status.equals("-999")){
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
@@ -731,6 +773,9 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (canClick == 1){
+                            return;
+                        }
                         if (date.length() == 0){
                             Toast.makeText(CarInfoActivity.this, "请先选择行驶证注册日期", Toast.LENGTH_SHORT).show();
                             return;
@@ -923,7 +968,9 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
             jsonObject.put("font",carFontText.getText().toString());
             jsonObject.put("rear",carRearText.getText().toString());
             jsonObject.put("driving_license_date",xszRegisterTimeText.getText().toString());
-            jsonObject.put("service_end_date","2025-6-27");
+
+            jsonObject.put("serviceYearLength",serviceYear);
+          //  jsonObject.put("service_end_date","2025-6-27");
           //  ArrayList<Integer> jingchang = new ArrayList<>();
             StringBuffer jingchang = new StringBuffer();
             for (int i = 0; i < jingchangList.size(); i++) {
@@ -987,7 +1034,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         }*/
         String token = new DbConfig(this).getToken();
         params.addParameter("token",token);
-        Log.e(TAG, "uploadPic: -------------------------------------------");
+        Log.e(TAG, "uploadPic: -------------------------------------------" + params);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

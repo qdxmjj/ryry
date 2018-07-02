@@ -19,6 +19,7 @@
              android:layout_height="wrap_content"
              android:src="@drawable/ic_message"
              android:layout_gravity="right"
+             android:visibility="gone"
              android:layout_marginRight="25dp"
              android:layout_marginTop="25dp"/>
          <TextView
@@ -28,6 +29,7 @@
              android:layout_marginTop="20dp"
              android:layout_marginRight="20dp"
              android:text="1"
+             android:visibility="gone"
              android:textColor="@color/theme_primary"
              android:gravity="center"
              android:background="@drawable/ic_circle"/>

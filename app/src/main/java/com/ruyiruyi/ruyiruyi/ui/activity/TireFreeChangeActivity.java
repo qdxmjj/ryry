@@ -33,6 +33,7 @@ import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.ShopChooseCell;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
+import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChoose;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Shop;
@@ -128,24 +129,24 @@ public class TireFreeChangeActivity extends RyBaseActivity {
 
     private Bitmap imgBitmap;
     private Bitmap codeBitmap1;
-    private boolean hasCode1;
+    private boolean hasCode1 = false;
     private Bitmap tireBitmap1;
-    private boolean hasTire1;
+    private boolean hasTire1 = false;
 
     private Bitmap codeBitmap2;
-    private boolean hasCode2;
+    private boolean hasCode2 = false;
     private Bitmap tireBitmap2;
-    private boolean hasTire2;
+    private boolean hasTire2 = false;
 
     private Bitmap codeBitmap3;
-    private boolean hasCode3;
+    private boolean hasCode3 =false;
     private Bitmap tireBitmap3;
-    private boolean hasTire3;
+    private boolean hasTire3 = false;
 
     private Bitmap codeBitmap4;
-    private boolean hasCode4;
+    private boolean hasCode4 = false;
     private Bitmap tireBitmap4;
-    private boolean hasTire4;
+    private boolean hasTire4 = false;
     private FrameLayout imageTopLayout;
     private FrameLayout tireCountLayout;
     private FrameLayout fontTireCountLayout;
@@ -298,13 +299,16 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                                 Toast.makeText(TireFreeChangeActivity.this, "请上传图片", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                        }else if (currentRearCount+currentFontCount == 3){
+                        }else if (currentRearCount+currentFontCount == 4){
                             if (!hasTire1 || !hasCode1 || !hasCode2 || !hasTire2 || !hasCode3 ||!hasTire3 || !hasCode4 || !hasTire4){
                                 Toast.makeText(TireFreeChangeActivity.this, "请上传图片", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                         }
+
                         freeChangeOrder();
+
+
                     }
                 });
         //数量选择控件
@@ -563,6 +567,21 @@ public class TireFreeChangeActivity extends RyBaseActivity {
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess:---- " + result );
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                        intent.putExtra(OrderFragment.ORDER_TYPE, "DFH");
+                        intent.putExtra(OrderActivity.ORDER_FROM,1);
+                        startActivity(intent);
+                        finish();
+                    }
+                } catch (JSONException e) {
+
+                }
             }
 
             @Override

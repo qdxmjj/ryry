@@ -12,7 +12,10 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Message;
 import android.os.PowerManager;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -102,6 +105,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
     private static final String DOWNLOAD_NAME = "ruyiruyi_";
     private CommonProgressDialog mBar;
     private Uri tempUri;
+    public boolean isGengxin = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +116,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         //判断权限
         judgePower();
 
+        isGengxin = false;
         //版本更新
         getVersion();
 
@@ -176,6 +181,14 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+       if (isGengxin){
+           update();
+       }
+    }
+
     /**
      * 获取版本号
      */
@@ -207,7 +220,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                         JSONObject data = jsonObject1.getJSONObject("data");
                         downloadUrl = data.getString("downloadUrl");
                         version = data.getString("version");
-                        ShowDialog(version,downloadUrl);
+                        ShowDialog(version,downloadUrl);;//安装应用的逻辑(写自己的就可以)
                     }
                 } catch (JSONException e) {
 
@@ -232,6 +245,35 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         });
      }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        if (requestCode == 10086){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                ShowDialog(version,downloadUrl);
+            } else {
+                Intent localIntent = new Intent();
+                localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (Build.VERSION.SDK_INT >= 9) {//2.3
+                    localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                    localIntent.setData(Uri.fromParts("package", this.getPackageName(), null));
+                } else if (Build.VERSION.SDK_INT <= 8) {//2.2
+                    localIntent.setAction(Intent.ACTION_VIEW);
+                    localIntent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+                    localIntent.putExtra("com.android.settings.ApplicationPkgName", this.getPackageName());
+                }
+                this.startActivity(localIntent);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == 10086) {
+            ShowDialog(version,downloadUrl);//再次执行安装流程，包含权限判等
+        }
+    }
+
     /**
      * 弹出更新dialog
      * @param version
@@ -242,8 +284,6 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                 .setTitle("版本更新")
                 .setMessage("ruyiruyi_" + version)
                 .setPositiveButton("更新", new DialogInterface.OnClickListener() {
-
-
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
                         dialog.dismiss();
@@ -416,13 +456,30 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                 // Toast.makeText(context, "File downloaded",
                 // Toast.LENGTH_SHORT)
                 // .show();
-                update();
+                isGengxin = true;
+                if (Build.VERSION.SDK_INT >= 26) {
+                    boolean b = getPackageManager().canRequestPackageInstalls();
+                    if (b) {
+                        update();
+                    } else {
+//请求安装未知应用来源的权限
+                        //  ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.REQUEST_INSTALL_PACKAGES}, 10086);
+                        //   Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,Uri.fromParts("package:"+ getPackageName()));
+                        //  startActivityForResult(intent, 10086);
+
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{ Manifest.permission.REQUEST_INSTALL_PACKAGES}, 10086);
+                    }
+                } else {
+                    update();
+                }
+
             }
 
         }
     }
 
     private void update() {
+        isGengxin = false;
         //安装应用
       //  Intent intent = new Intent(Intent.ACTION_VIEW);
 
