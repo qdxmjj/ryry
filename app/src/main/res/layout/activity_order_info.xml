@@ -49,7 +49,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="拒绝补差"
+                    android:text="去补差"
                     android:textSize="17sp"/>
             </LinearLayout>
             <LinearLayout
@@ -62,10 +62,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="同意补差"
+                    android:text="去轮胎"
                     android:textColor="#ffffff"
                     android:textSize="17sp"/>
             </LinearLayout>
         </LinearLayout>
+
     </FrameLayout>
 </LinearLayout>

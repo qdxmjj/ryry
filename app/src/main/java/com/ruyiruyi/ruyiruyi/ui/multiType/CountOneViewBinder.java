@@ -56,9 +56,9 @@ public class CountOneViewBinder extends ItemViewProvider<CountOne, CountOneViewB
             public void onAmountChange(View view, int amount) {
                 if (amount == countOne.getCxwyCount()){
                     if (amount == 0){
-                        Toast.makeText(context,"无可用畅行无忧", Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(context,"无可用畅行无忧", Toast.LENGTH_SHORT).show();
                     }else {
-                        Toast.makeText(context,"已达到最大数", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(context,"已达到最大数", Toast.LENGTH_SHORT).show();
                     }
 
                 }

@@ -99,6 +99,10 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
                     holder.orderTypeText.setText("退款中");
                 }else if (order.getOrderState().equals("10")){
                     holder.orderTypeText.setText("退款成功");
+                }else if (order.getOrderState().equals("11")){
+                    holder.orderTypeText.setText("审核中");
+                }else if (order.getOrderState().equals("12")){
+                    holder.orderTypeText.setText("审核未通过");
                 }else {
                     holder.orderTypeText.setText("其他状态");
                 }

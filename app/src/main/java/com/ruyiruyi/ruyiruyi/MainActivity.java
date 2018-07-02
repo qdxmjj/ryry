@@ -184,9 +184,9 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
     @Override
     protected void onResume() {
         super.onResume();
-        if (isGengxin) {
-            update();
-        }
+       if (isGengxin){
+           update();
+       }
     }
 
     /**
@@ -194,7 +194,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
      */
     private void getVersion() {
         try {
-            versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+            versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(),0).versionName;
             Log.e(TAG, "getVersion: versionCode -- " + versionCode);
         } catch (PackageManager.NameNotFoundException e) {
 
@@ -216,12 +216,11 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")) {
+                    if (status.equals("1")){
                         JSONObject data = jsonObject1.getJSONObject("data");
                         downloadUrl = data.getString("downloadUrl");
                         version = data.getString("version");
-                        ShowDialog(version, downloadUrl);
-                        ;//安装应用的逻辑(写自己的就可以)
+                        ShowDialog(version,downloadUrl);;//安装应用的逻辑(写自己的就可以)
                     }
                 } catch (JSONException e) {
 
@@ -244,14 +243,14 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
             }
         });
-    }
+     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 10086) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                ShowDialog(version, downloadUrl);
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        if (requestCode == 10086){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                ShowDialog(version,downloadUrl);
             } else {
                 Intent localIntent = new Intent();
                 localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -271,13 +270,12 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == 10086) {
-            ShowDialog(version, downloadUrl);//再次执行安装流程，包含权限判等
+            ShowDialog(version,downloadUrl);//再次执行安装流程，包含权限判等
         }
     }
 
     /**
      * 弹出更新dialog
-     *
      * @param version
      * @param downloadUrl
      */
@@ -352,7 +350,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                 if (Environment.getExternalStorageState().equals(
                         Environment.MEDIA_MOUNTED)) {
                     file = new File(MainActivity.this.getObbDir().getAbsolutePath(),
-                            DOWNLOAD_NAME + version + ".apk");
+                            DOWNLOAD_NAME + version +".apk");
 
                     if (!file.exists()) {
                         // 判断父文件夹是否存在
@@ -469,7 +467,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                         //   Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,Uri.fromParts("package:"+ getPackageName()));
                         //  startActivityForResult(intent, 10086);
 
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.REQUEST_INSTALL_PACKAGES}, 10086);
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{ Manifest.permission.REQUEST_INSTALL_PACKAGES}, 10086);
                     }
                 } else {
                     update();
@@ -483,7 +481,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
     private void update() {
         isGengxin = false;
         //安装应用
-        //  Intent intent = new Intent(Intent.ACTION_VIEW);
+      //  Intent intent = new Intent(Intent.ACTION_VIEW);
 
         String fileName = MainActivity.this.getObbDir().getAbsolutePath() + "/" + DOWNLOAD_NAME + version + ".apk";
       /*  File file = null;
@@ -500,7 +498,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                 "application/vnd.android.package-archive");
         startActivity(intent);*/
         if (Build.VERSION.SDK_INT >= 24) {
-            File file = new File(fileName);
+            File file= new File(fileName);
             tempUri = FileProvider.getUriForFile(MainActivity.this, "com.ruyiruyi.ruyiruyi.fileProvider", file);
             Intent install = new Intent(Intent.ACTION_VIEW);
             install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1146,25 +1144,25 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            //  Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            //  Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            //  Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
             finish();
         }
     }

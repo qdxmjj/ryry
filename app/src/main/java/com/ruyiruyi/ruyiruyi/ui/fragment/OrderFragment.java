@@ -232,6 +232,13 @@ public class OrderFragment extends RyBaseFragment implements OrderViewBinder.OnO
             intent.putExtra(PaymentActivity.ORDER_STATE, Integer.parseInt(orderState));
             intent.putExtra(PaymentActivity.ORDER_STAGE, Integer.parseInt(orderStage));
             startActivity(intent);
+        }else if (orderState.equals("12")) {  //已完成
+            Intent intent = new Intent(getContext(), OrderInfoActivity.class);
+            intent.putExtra(PaymentActivity.ORDERNO, orderNo);
+            intent.putExtra(PaymentActivity.ORDER_TYPE, Integer.parseInt(orderType));
+            intent.putExtra(PaymentActivity.ORDER_STATE, Integer.parseInt(orderState));
+            intent.putExtra(PaymentActivity.ORDER_STAGE, Integer.parseInt(orderStage));
+            startActivityForResult(intent,100);
         }else if (orderType.equals("0")){
             Intent intent = new Intent(getContext(), OrderInfoActivity.class);
             intent.putExtra(PaymentActivity.ORDERNO, orderNo);
