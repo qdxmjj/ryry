@@ -18,7 +18,7 @@ import java.text.NumberFormat;
 /**
  * 自定义进度条
  *
- * @author 黄淑媛
+ *
  *
  */
 

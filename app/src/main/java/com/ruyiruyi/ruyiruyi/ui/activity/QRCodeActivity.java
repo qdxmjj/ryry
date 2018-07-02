@@ -53,7 +53,7 @@ public class QRCodeActivity extends RyBaseActivity {
     private FrameLayout fl_main;
 
     private Bitmap logo;
-    private static final int IMAGE_HALFWIDTH = 20;//宽度值，影响中间图片大小
+    private static final int IMAGE_HALFWIDTH = 18;//宽度值，影响中间图片大小
     private User user;
     private Handler mHandler = new Handler() {
         @Override
