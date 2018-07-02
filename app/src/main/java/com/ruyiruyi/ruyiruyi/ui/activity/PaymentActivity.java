@@ -272,7 +272,8 @@ public class PaymentActivity extends RyBaseActivity {
                                 Toast.makeText(PaymentActivity.this, "不支持信用值支付，请选择其他支付方式", Toast.LENGTH_SHORT).show();
                                 //  postTireOrder();
                             } else if (orderType == 1) {  //商品订单
-                                postGoodsOrder();
+                                showDialogYuE("使用信用额度快捷支付，在下次轮胎服务之前记得清还呦");
+
                             } else if (orderType == 99) {  //畅行无忧
                                 //  postTireOrder();
                                 Toast.makeText(PaymentActivity.this, "不支持信用值支付，请选择其他支付方式", Toast.LENGTH_SHORT).show();
@@ -802,6 +803,30 @@ public class PaymentActivity extends RyBaseActivity {
                 intent.putExtra(ORDER_FROM, 0);
                 startActivity(intent);
                 finish();
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    private void showDialogYuE(String msg) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
+        TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
+        error_text.setText(msg);
+        dialog.setTitle("如意如驿");
+        dialog.setIcon(R.drawable.ic_logo_login);
+        dialog.setView(dialogView);
+        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                postGoodsOrder();
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
