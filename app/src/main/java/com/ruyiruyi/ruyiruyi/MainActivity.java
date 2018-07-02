@@ -202,6 +202,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("appVersion", versionCode);
+            jsonObject.put("versionType", "user");
         } catch (JSONException e) {
 
         }

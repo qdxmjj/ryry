@@ -167,6 +167,8 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private String serviceYear;
     private String xszEndTime = "";
     private int id;
+    public int currentType = 0; //0是添加车辆  1是修改车辆
+    public String roadTxt;
 
 
 
@@ -205,6 +207,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
             carTypeChoose.setText(brand);
 
         }else if (from == 1){//查看车辆信息
+            currentType = 1;
             userCarId = intent.getIntExtra("USERCARID",0);
             initDataByUseridAndCarId();
         }
@@ -298,6 +301,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                     if (status.equals("1")){
                         JSONObject data = jsonObject1.getJSONObject("data");
                         String carName = data.getString("carName");
+                        carTiteInfoId = data.getInt("carId");
                         int isNewenergy = data.getInt("isNewenergy");
                         String platNumber = data.getString("platNumber");
                         String proCityName = data.getString("proCityName");
@@ -332,9 +336,10 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                         String traveledImgInverse = data.getString("traveledImgInverse");
                         String traveledImgObverse = data.getString("traveledImgObverse");
                         String traveled = data.getString("traveled");
+                        areaId = data.getInt("proCityId");
                         String maturityImg = data.getString("maturityImg");
-                        String roadTxt = data.getString("roadTxt");
-                        String serviceYearLength = data.getString("serviceYearLength");
+                        roadTxt = data.getString("roadTxt");
+                        serviceYear = data.getString("serviceYearLength");
                         carTypeChoose.setText(carName);
                         if (isNewenergy == 0){//燃油
                             isEnergySwich.setChecked(false);
@@ -346,7 +351,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                         carFontText.setText(font);
                         carRearText.setText(rear);
                         xszRegisterTimeText.setText(xszRegisterTime);
-                        xszEndTimeText.setText(serviceYearLength +"年");
+                        xszEndTimeText.setText(serviceYear +"年");
                         hasZhuye = true;
                         initZhuyeLayou();
                         Glide.with(getApplicationContext()).load(traveledImgInverse).into(zhuyeImage);
@@ -578,6 +583,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+
                         if (canClick == 0){
                             Log.e(TAG, "call: +-------------------true"  );
                         }else {
@@ -587,6 +593,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                         if (canClick == 1){
                             return;
                         }
+
                         if (carTiteInfoId == 0){
                             Toast.makeText(CarInfoActivity.this, "请选择车型", Toast.LENGTH_SHORT).show();
                             return;
@@ -608,7 +615,12 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                             return;
                         }
 
-                        uploadPic();
+                        if (currentType == 0){
+                            uploadPic();
+                        }else {
+                            updateCar();
+                        }
+
                     }
                 });
 
@@ -842,6 +854,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
       //  whv_lTime.setIsLoop(false);
         whv_rTime.setIsLoop(false);
      //   whv_lTime.setItems(getStrLTime(), 0);
+
         whv_rTime.setItems(getRTimeList(), currentRtime);
     /*    whv_lTime.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
             @Override
@@ -877,6 +890,9 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                             int currentmoth = month + 1;
                             xszEndTimeText.setText(endDate.append(endYear + "-" +currentmoth + "-" + day));
                         }*/
+                        if (serviceYear == null){
+                            serviceYear = 1 +"";
+                        }
                         xszEndTimeText.setText(serviceYear + "年");
 
 
@@ -896,6 +912,9 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         for (int i = 0; i < xszEndYear - currentYear; i++) {
           //  rTime_list.add(currentYear + i+"");
             rTime_list.add(i+1 +"");
+            if (serviceYear.equals(i+"")){
+                currentRtime = i-1;
+            }
         }
         endYear = currentYear+"";
         return rTime_list;
@@ -955,10 +974,10 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
      /*  String fuyePath = ImageUtils.savePhoto(fuyeBitmap, Environment
                 .getExternalStorageDirectory().getAbsolutePath(), "fuye");*/
         showDialogProgress(codeDialog,"车辆添加中...");
-        int id = new DbConfig(this).getId();
+        int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId",id);
+            jsonObject.put("userId",userId);
             jsonObject.put("car_id",carTiteInfoId);
             jsonObject.put("car_name",carTypeChoose.getText());
             jsonObject.put("xinnengyuan",isEnergy);
@@ -1026,7 +1045,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
 
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserCar");
         params.addBodyParameter("reqJson",jsonObject.toString());
-        params.setConnectTimeout(20000);
+    //    params.setConnectTimeout(20000);
       //  params.addBodyParameter("jiashizhengzhuye" ,new File(zhuyePath) );
       //  params.addBodyParameter("jiashizhengfuye" ,new File(fuyePath) );
        /* if (hasLichengbiao){
@@ -1091,6 +1110,135 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
             }
         });
 
+    }
+
+    public void updateCar(){
+        showDialogProgress(codeDialog,"车辆修改中...");
+        int userId = new DbConfig(this).getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id",id);
+            jsonObject.put("userId",userId);
+            jsonObject.put("carId",carTiteInfoId);
+            jsonObject.put("carName",carTypeChoose.getText());
+            if (isEnergy){
+                jsonObject.put("isNewenergy",1);
+            }else {
+                jsonObject.put("isNewenergy",0);
+            }
+
+            jsonObject.put("platNumber",carNumberText.getText().toString());
+            jsonObject.put("proCityId",areaId);
+            jsonObject.put("proCityName",provinceText.getText());
+            jsonObject.put("font",carFontText.getText().toString());
+            jsonObject.put("rear",carRearText.getText().toString());
+            jsonObject.put("drivingLicenseDate",xszRegisterTimeText.getText().toString());
+
+            jsonObject.put("serviceYearLength",serviceYear);
+            //  jsonObject.put("service_end_date","2025-6-27");
+            //  ArrayList<Integer> jingchang = new ArrayList<>();
+            StringBuffer jingchang = new StringBuffer();
+            for (int i = 0; i < jingchangList.size(); i++) {
+                // jingchang.add(jingchangList.get(i).getRoadId());
+                if (i==jingchangList.size()-1){
+                    jingchang.append(jingchangList.get(i).getRoadId());
+                }else {
+                    jingchang.append(jingchangList.get(i).getRoadId()+",");
+                }
+
+            }
+
+            //  ArrayList<String> ouer = new ArrayList<>();
+            StringBuffer ouer = new StringBuffer();
+            for (int i = 0; i < ouerList.size(); i++) {
+                //   ouer.add(ouerList.get(i).getRoadId()+"");
+                if (i==ouerList.size()-1){
+                    ouer.append(ouerList.get(i).getRoadId());
+                }else {
+                    ouer.append(ouerList.get(i).getRoadId()+",");
+                }
+            }
+
+            // ArrayList<Integer> bujingchang = new ArrayList<>();
+            StringBuffer bujingchang = new StringBuffer();
+            for (int i = 0; i < bujingchangList.size(); i++) {
+                //bujingchang.add(bujingchangList.get(i).getRoadId());
+                if (i==bujingchangList.size()-1){
+                    bujingchang.append(bujingchangList.get(i).getRoadId());
+                }else {
+                    bujingchang.append(bujingchangList.get(i).getRoadId()+",");
+                }
+            }
+            if (roadConditionText.getText().toString().equals(roadTxt)){
+                jsonObject.put("roadTxt","");
+            }else {
+                jsonObject.put("roadTxt",roadConditionText.getText().toString());
+            }
+
+            Log.e(TAG, "uploadPic: " + jingchang );
+            Log.e(TAG, "uploadPic: " + ouer );
+            Log.e(TAG, "uploadPic: " + bujingchang );
+            jsonObject.put("type_i_rate",jingchang);
+            jsonObject.put("type_ii_rate",ouer);
+            jsonObject.put("type_iii_rate",bujingchang);
+            if (hasLichengbiao){
+                jsonObject.put("traveled",lichengEdit.getText().toString());
+            }else {
+                jsonObject.put("traveled","");
+            }
+            if (firstAddCar == 0){
+                jsonObject.put("inviteCode",yaoqingmaText.getText().toString());
+            }
+        } catch (JSONException e) {
+
+        }
+
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCar/updateUserCarInfo ");
+        params.addBodyParameter("reqJson",jsonObject.toString());
+       // params.setConnectTimeout(20000);
+        //  params.addBodyParameter("jiashizhengzhuye" ,new File(zhuyePath) );
+        //  params.addBodyParameter("jiashizhengfuye" ,new File(fuyePath) );
+       /* if (hasLichengbiao){
+            params.addBodyParameter("lichengbiao" ,new File(lcbPath) );
+        }*/
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token",token);
+        Log.e(TAG, "updateCar: " + params);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),CarManagerActivity.class));
+                    }else {
+                        Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                hideDialogProgress(codeDialog);
+            }
+        });
     }
 
 

@@ -27,11 +27,15 @@ import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.PayResult;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RechargeMoney;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RechargeMoneyViewBinder;
+import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.ruyiruyi.utils.XMJJUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,6 +118,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
         }
 
     };
+    private IWXAPI api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +137,9 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
                 }
             }
         });
+        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
+        api.registerApp(Constants.APP_ID);
+
 
 
         payDialog = new ProgressDialog(this);
@@ -269,14 +277,9 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
                     Toast.makeText(MyLimitActivity.this, "每次还款不能少于1元!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                getOrderNoBeforeSign();
 
-                //pay
-                if (payType == 0) {//微信支付
 
-                }
-                if (payType == 1) {//支付宝支付
-                    getOrderNoBeforeSign();
-                }
 
 
             }
@@ -325,6 +328,89 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
         hideDialogProgress(startDialog);
     }
 
+    private void weixinPay(String price, String associationOrderNo) {
+
+        int userId = new DbConfig(this).getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("orderNo", associationOrderNo);
+
+            jsonObject.put("orderType", "5");
+
+
+
+            jsonObject.put("orderName", "信用充值");
+
+            jsonObject.put("orderPrice", "0.01");
+            jsonObject.put("userId", userId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getWeixinPaySign");
+        String token = new DbConfig(this).getToken();
+        String jsonByToken = "";
+        try {
+            jsonByToken = XMJJUtils.encodeJsonByToken(jsonObject.toString(), token);
+
+
+        } catch (UnsupportedEncodingException e) {
+
+        } catch (IllegalBlockSizeException e) {
+
+        } catch (InvalidKeyException e) {
+
+        } catch (BadPaddingException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        } catch (NoSuchPaddingException e) {
+
+        }
+        String s2 = jsonByToken.replaceAll("\\n", "");
+        params.addBodyParameter("reqJson", s2);
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: --------" + result);
+                try {
+                    JSONObject jsonObject1 = new JSONObject(result);;
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("200")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        PayReq req = new PayReq();
+                        req.appId = data.getString("appid");
+                        req.partnerId = data.getString("partnerid");
+                        req.prepayId = data.getString("prepayid");
+                        req.nonceStr = data.getString("noncestr");
+                        req.timeStamp = data.getString("timestamp");
+                        req.packageValue = data.getString("package");
+                        req.sign = data.getString("sign");
+                        api.sendReq(req);
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     private void getOrderNoBeforeSign() {
         showDialogProgress(payDialog, "订单提交中...");
         int userId = new DbConfig(this).getId();
@@ -351,8 +437,16 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
                     String msg = jsonObject.getString("msg");
                     String associationOrderNo = jsonObject.getString("data");
                     if (status == 1) {
-                        //下单成功 获取签名后的OrderInfo
-                        getSign(money, associationOrderNo);
+
+
+                        //pay
+                        if (payType == 0) {//微信支付
+                              weixinPay(money, associationOrderNo);
+                        }
+                        if (payType == 1) {//支付宝支付
+                            //下单成功 获取签名后的OrderInfo
+                            getSign(money, associationOrderNo);
+                        }
                     } else if (status == -999) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
