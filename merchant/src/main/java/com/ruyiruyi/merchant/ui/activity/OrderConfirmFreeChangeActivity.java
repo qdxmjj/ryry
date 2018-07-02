@@ -988,6 +988,10 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     showErrorDialog("请补全轮胎条形码特写照!");
                     return false;
                 }*/
+                if (newShoeListStr.size() > 0) {
+                    showErrorDialog("请选择替换新轮胎条形码!");
+                    return false;
+                }
                 if (!hasPic_license) {
                     showErrorDialog("请上传行驶证照片!");
                     return false;
