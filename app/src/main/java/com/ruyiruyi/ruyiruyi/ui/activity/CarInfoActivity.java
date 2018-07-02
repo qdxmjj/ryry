@@ -916,6 +916,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                 currentRtime = i-1;
             }
         }
+
         endYear = currentYear+"";
         return rTime_list;
     }
