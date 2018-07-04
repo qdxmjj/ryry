@@ -2,11 +2,13 @@ package com.ruyiruyi.merchant.ui.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.CountDownTimer;
@@ -150,8 +152,10 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private CheckBox checkbox_xieyi;
     protected static Uri tempUri;
     public static final int MAP_REUEST_CODE = 2;
-    private double latitude_double;
-    private double longitude_double;
+    public static final double LATITUDE_DEF = 36.32087806111286;//默认天安数码城: latitude: 36.32087806111286, longitude: 120.44349123197962
+    public static final double LONGTITUDE_DEF = 120.44349123197962;//默认天安数码城: latitude: 36.32087806111286, longitude: 120.44349123197962
+    private double latitude_double = LATITUDE_DEF;
+    private double longitude_double = LONGTITUDE_DEF;
     private LocationClient mLocationClient;
     private String cityAddress;
     private List<String> serviceTypeList = new ArrayList<String>();
@@ -1201,8 +1205,17 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 //  这里可以获取经纬度，这是回调方法
+/*                //默认天安数码城: latitude: 36.32087806111286, longitude: 120.44349123197962    (判断没有定位授权时为默认)
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                if (ContextCompat.checkSelfPermission(RegisterActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED || (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) {
+                    longitude_double = 120.44349123197962;
+                    latitude_double = 36.32087806111286;
+                } else {*/
                 longitude_double = bdLocation.getLongitude();
                 latitude_double = bdLocation.getLatitude();
+/*                }*/
                 Log.e(TAG, "registerclick11111: " + "longitude_double" + longitude_double + "latitude_double" + latitude_double);
             }
         });

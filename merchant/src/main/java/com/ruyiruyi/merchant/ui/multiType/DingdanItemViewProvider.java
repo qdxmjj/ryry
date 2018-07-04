@@ -60,11 +60,31 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
             default:
                 break;
         }
-        Glide.with(context)
-                .load(dingdan.getOrderImage())
-                .transform(new GlideCircleTransform(context))
-                .into(holder.dingdan_img);
-
+        if (dingdan.getOrderState().equals("4")) {
+            if (dingdan.getOrderType().equals("2")) {
+                Glide.with(context)
+                        .load(R.drawable.ic_shouci)
+                        .transform(new GlideCircleTransform(context))
+                        .into(holder.dingdan_img);
+            }
+            if (dingdan.getOrderType().equals("3")) {
+                Glide.with(context)
+                        .load(R.drawable.ic_hui_free)
+                        .transform(new GlideCircleTransform(context))
+                        .into(holder.dingdan_img);
+            }
+            if (dingdan.getOrderType().equals("4")) {
+                Glide.with(context)
+                        .load(R.drawable.ic_hui_xiubu)
+                        .transform(new GlideCircleTransform(context))
+                        .into(holder.dingdan_img);
+            }
+        } else {
+            Glide.with(context)
+                    .load(dingdan.getOrderImage())
+                    .transform(new GlideCircleTransform(context))
+                    .into(holder.dingdan_img);
+        }
         //根据orderType和orderState判断跳转不同订单详情
         RxViewAction.clickNoDouble(holder.rl_item).subscribe(new Action1<Void>() {
             @Override

@@ -6,7 +6,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -33,6 +40,151 @@ public class ImageUtils {
 
     public void setPicType(int picType) {
         this.picType = picType;
+    }
+
+
+    /*
+    * 图片转圆形
+    * */
+    public static Bitmap makeCircle(Bitmap bitmap, int px) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        Bitmap target = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(target);
+        canvas.drawCircle(width / 2, height / 2, (width <= height ? width : height) / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return target;
+    }
+
+    /**
+     * 圆形图加白色边框
+     */
+    public static Bitmap makeCircleSpace(Bitmap bitmap, int space) {
+        int width = bitmap.getWidth() + space * 2;
+        int height = bitmap.getHeight() + space * 2;
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        Bitmap target = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(target);
+        canvas.save();
+        canvas.drawCircle(width / 2, width / 2, width / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawRect(0, 0, width, height, paint);
+        paint.setXfermode(null);
+        canvas.restore();
+        canvas.drawBitmap(bitmap, space, space, paint);
+        return target;
+    }
+
+
+    /**
+     * 图片与边框组合
+     *
+     * @param bm  原图片
+     * @param res 边框资源
+     * @return
+     */
+    public static Bitmap combinateFrame(Bitmap bm, int[] res, Context context) {
+        Bitmap bmp = decodeBitmap(context, res[0]);
+        // 边框的宽高
+        final int smallW = bmp.getWidth();
+        final int smallH = bmp.getHeight();
+
+        // 原图片的宽高
+        final int bigW = bm.getWidth();
+        final int bigH = bm.getHeight();
+
+        int wCount = (int) Math.ceil(bigW * 1.0 / smallW);
+        int hCount = (int) Math.ceil(bigH * 1.0 / smallH);
+
+        // 组合后图片的宽高
+        int newW = (wCount + 2) * smallW;
+        int newH = (hCount + 2) * smallH;
+
+        // 重新定义大小
+        Bitmap newBitmap = Bitmap.createBitmap(newW, newH, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(newBitmap);
+        Paint p = new Paint();
+        p.setColor(Color.TRANSPARENT);
+        canvas.drawRect(new Rect(0, 0, newW, newH), p);
+
+        Rect rect = new Rect(smallW, smallH, newW - smallW, newH - smallH);
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        canvas.drawRect(rect, paint);
+
+        // 绘原图
+        canvas.drawBitmap(bm, (newW - bigW - 2 * smallW) / 2 + smallW, (newH - bigH - 2 * smallH) / 2 + smallH, null);
+        // 绘边框
+        // 绘四个角
+        int startW = newW - smallW;
+        int startH = newH - smallH;
+        Bitmap leftTopBm = decodeBitmap(context, res[0]); // 左上角
+        Bitmap leftBottomBm = decodeBitmap(context, res[2]); // 左下角
+        Bitmap rightBottomBm = decodeBitmap(context, res[4]); // 右下角
+        Bitmap rightTopBm = decodeBitmap(context, res[6]); // 右上角
+
+        canvas.drawBitmap(leftTopBm, 0, 0, null);
+        canvas.drawBitmap(leftBottomBm, 0, startH, null);
+        canvas.drawBitmap(rightBottomBm, startW, startH, null);
+        canvas.drawBitmap(rightTopBm, startW, 0, null);
+
+        leftTopBm.recycle();
+        leftTopBm = null;
+        leftBottomBm.recycle();
+        leftBottomBm = null;
+        rightBottomBm.recycle();
+        rightBottomBm = null;
+        rightTopBm.recycle();
+        rightTopBm = null;
+
+        // 绘左右边框
+        Bitmap leftBm = decodeBitmap(context, res[1]);
+        Bitmap rightBm = decodeBitmap(context, res[5]);
+        for (int i = 0, length = hCount; i < length; i++) {
+            int h = smallH * (i + 1);
+            canvas.drawBitmap(leftBm, 0, h, null);
+            canvas.drawBitmap(rightBm, startW, h, null);
+        }
+
+        leftBm.recycle();
+        leftBm = null;
+        rightBm.recycle();
+        rightBm = null;
+
+        // 绘上下边框
+        Bitmap bottomBm = decodeBitmap(context, res[3]);
+        Bitmap topBm = decodeBitmap(context, res[7]);
+        for (int i = 0, length = wCount; i < length; i++) {
+            int w = smallW * (i + 1);
+            canvas.drawBitmap(bottomBm, w, startH, null);
+            canvas.drawBitmap(topBm, w, 0, null);
+        }
+
+        bottomBm.recycle();
+        bottomBm = null;
+        topBm.recycle();
+        topBm = null;
+
+        canvas.save(Canvas.ALL_SAVE_FLAG);
+        canvas.restore();
+
+        return newBitmap;
+    }
+
+    /**
+     * 将R.drawable.*转换成Bitmap
+     *
+     * @param res
+     * @return
+     */
+    private static Bitmap decodeBitmap(Context context, int res) {
+        return BitmapFactory.decodeResource(context.getResources(), res);
     }
 
 

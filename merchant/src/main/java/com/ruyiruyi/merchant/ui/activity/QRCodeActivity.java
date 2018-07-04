@@ -34,7 +34,9 @@ import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.User;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+import com.ruyiruyi.rylibrary.image.ImageUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -64,11 +66,15 @@ public class QRCodeActivity extends BaseActivity {
     private Bitmap logo;
     private static final int IMAGE_HALFWIDTH = 18;//宽度值，影响中间图片大小
     private User user;
+    private int[] res = {R.drawable.white_circle_bk2, R.drawable.white_circle_bk2, R.drawable.white_circle_bk2, R.drawable.white_circle_bk2, R.drawable.white_circle_bk2, R.drawable.white_circle_bk2, R.drawable.white_circle_bk2, R.drawable.white_circle_bk2};
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
+                    //下载完图片后  切成方形圆角图 加上白边框
+//                    logo = ImageUtils.makeCircle(logo, 6);
+//                    logo = ImageUtils.makeCircleSpace(logo, 6);
                     setData();
                     break;
             }
@@ -142,6 +148,12 @@ public class QRCodeActivity extends BaseActivity {
 
         //2 其它数据
         Glide.with(this).load(headimgurl).into(user_img);
+
+/*        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        logo.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+        Glide.with(this).load(bytes).into(user_img);*/
+
         sex_img.setVisibility(View.GONE);
 //        sex_img.setImageResource(R.drawable.ic_shop_weixuan);
 
@@ -152,33 +164,6 @@ public class QRCodeActivity extends BaseActivity {
         hideDialogProgress(startDialog);
     }
 
-
-
-    /*
-    * 不带logo()暂未用
-    * */
-    private Bitmap generateBitmap(String content, int width, int height) {
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        Map<EncodeHintType, String> hints = new HashMap<>();
-        hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-        try {
-            BitMatrix encode = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, width, height, hints);
-            int[] pixels = new int[width * height];
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    if (encode.get(j, i)) {
-                        pixels[i * width + j] = 0x00000000;
-                    } else {
-                        pixels[i * width + j] = 0xffffffff;
-                    }
-                }
-            }
-            return Bitmap.createBitmap(pixels, 0, width, width, height, Bitmap.Config.RGB_565);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     /**
      * 生成二维码
