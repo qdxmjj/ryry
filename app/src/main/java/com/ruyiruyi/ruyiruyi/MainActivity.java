@@ -705,6 +705,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         } catch (DbException e) {
 
         }
+
         JSONObject jsonObject = new JSONObject();
 
         try {

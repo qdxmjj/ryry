@@ -164,7 +164,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private String font;
     private String rear;
     private String brand;
-    private String serviceYear;
+    private String serviceYear = 1+"";
     private String xszEndTime = "";
     private int id;
     public int currentType = 0; //0是添加车辆  1是修改车辆
