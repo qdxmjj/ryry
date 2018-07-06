@@ -107,8 +107,7 @@ public class MyOrderActivity extends FragmentActivity {
     private List<String> getTitlesAll() {
         title_list = new ArrayList();
         title_list.add("全部");
-        title_list.add("待发货");
-        title_list.add("待收货");
+        title_list.add("进行中");
         title_list.add("待服务");
         title_list.add("已完成");
         return title_list;
@@ -116,35 +115,29 @@ public class MyOrderActivity extends FragmentActivity {
 
     private List<Fragment> getFragmentsAll() {
         fragments = new ArrayList();
-        MyOrderFragment quanbu_fg = new MyOrderFragment();
-        Bundle quanbu = new Bundle();
-        quanbu.putString(MyOrderFragment.ORDER_TYPE, "QUANBU");
-        quanbu_fg.setArguments(quanbu);
-        fragments.add(quanbu_fg);
+        MyOrderFragment fg1 = new MyOrderFragment();
+        Bundle bundle1 = new Bundle();
+        bundle1.putString(MyOrderFragment.ORDER_TYPE, "ALL_QUANBU");
+        fg1.setArguments(bundle1);
+        fragments.add(fg1);
 
-        MyOrderFragment daizhifu_fg = new MyOrderFragment();
-        Bundle daizhifu = new Bundle();
-        daizhifu.putString(MyOrderFragment.ORDER_TYPE, "DAIFAHUO");
-        daizhifu_fg.setArguments(daizhifu);
-        fragments.add(daizhifu_fg);
+        MyOrderFragment fg2 = new MyOrderFragment();
+        Bundle bundle2 = new Bundle();
+        bundle2.putString(MyOrderFragment.ORDER_TYPE, "ALL_JINXINGZHONG");
+        fg2.setArguments(bundle2);
+        fragments.add(fg2);
 
-        MyOrderFragment daifahuo_fg = new MyOrderFragment();
-        Bundle daifahuo = new Bundle();
-        daifahuo.putString(MyOrderFragment.ORDER_TYPE, "DAISHOUHUO");
-        daifahuo_fg.setArguments(daifahuo);
-        fragments.add(daifahuo_fg);
+        MyOrderFragment fg3 = new MyOrderFragment();
+        Bundle bundle3 = new Bundle();
+        bundle3.putString(MyOrderFragment.ORDER_TYPE, "ALL_DAIFUWU");
+        fg3.setArguments(bundle3);
+        fragments.add(fg3);
 
-        MyOrderFragment daifuwu_fg = new MyOrderFragment();
-        Bundle daifuwu = new Bundle();
-        daifuwu.putString(MyOrderFragment.ORDER_TYPE, "DAIFUWU");
-        daifuwu_fg.setArguments(daifuwu);
-        fragments.add(daifuwu_fg);
-
-        MyOrderFragment wancheng_fg = new MyOrderFragment();
-        Bundle wancheng = new Bundle();
-        wancheng.putString(MyOrderFragment.ORDER_TYPE, "YIWANCHENG");
-        wancheng_fg.setArguments(wancheng);
-        fragments.add(wancheng_fg);
+        MyOrderFragment fg4 = new MyOrderFragment();
+        Bundle bundle4 = new Bundle();
+        bundle4.putString(MyOrderFragment.ORDER_TYPE, "ALL_YIWANCHENG");
+        fg4.setArguments(bundle4);
+        fragments.add(fg4);
 
         return fragments;
     }

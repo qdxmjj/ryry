@@ -204,7 +204,7 @@
                     android:layout_gravity="right"
                     android:layout_marginRight="10dp"
                     android:gravity="center_vertical"
-                    android:text="免费再换订单"
+                    android:text="轮胎修补订单"
                     android:textColor="@color/c6"
                     android:textSize="16sp" />
 
@@ -261,7 +261,7 @@
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginLeft="5dp"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_order_luntai" />
 
                 <LinearLayout
@@ -372,7 +372,7 @@
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginLeft="5dp"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_order_luntai" />
 
                 <LinearLayout
@@ -483,7 +483,7 @@
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginLeft="5dp"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_order_luntai" />
 
                 <LinearLayout
@@ -896,7 +896,7 @@
                             android:id="@+id/pic_a_left"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -943,7 +943,7 @@
                             android:id="@+id/pic_a_right"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -1016,7 +1016,7 @@
                             android:id="@+id/pic_b_left"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -1063,7 +1063,7 @@
                             android:id="@+id/pic_b_right"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -1136,7 +1136,7 @@
                             android:id="@+id/pic_c_left"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -1183,7 +1183,7 @@
                             android:id="@+id/pic_c_right"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -1256,7 +1256,7 @@
                             android:id="@+id/pic_d_left"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -1303,7 +1303,7 @@
                             android:id="@+id/pic_d_right"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -1402,7 +1402,7 @@
                         android:id="@+id/pic_xingshizheng"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/img_bg_dark" />
 
                     <ImageView
@@ -1498,7 +1498,7 @@
                         android:id="@+id/pic_car"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/img_bg_dark" />
 
                     <ImageView

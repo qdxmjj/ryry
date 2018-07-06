@@ -107,24 +107,20 @@ public class MyOrderFragment extends BaseFragment implements OrderItemProvider.F
 
         //下载数据
         switch (order_type) {
-            case "QUANBU":
-                state = "0";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
+            case "ALL_QUANBU":
+                state = "0";//state:  0:全部订单  1 待发货 2: 进行中 3:待服务 4:已完成
                 requestFromServerAll(storeId, state);
                 break;
-            case "DAIFAHUO":
-                state = "1";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
+            case "ALL_JINXINGZHONG":
+                state = "2";//state:  0:全部订单  1 待发货 2: 进行中 3:待服务 4:已完成
                 requestFromServerAll(storeId, state);
                 break;
-            case "DAISHOUHUO":
-                state = "2";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
+            case "ALL_DAIFUWU":
+                state = "3";//state:  0:全部订单  1 待发货 2: 进行中 3:待服务 4:已完成
                 requestFromServerAll(storeId, state);
                 break;
-            case "DAIFUWU":
-                state = "3";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
-                requestFromServerAll(storeId, state);
-                break;
-            case "YIWANCHENG":
-                state = "4";//state:  0:全部订单 1:待发货2:待收货 3:待服务 4:已完成
+            case "ALL_YIWANCHENG":
+                state = "4";//state:  0:全部订单  1 待发货 2: 进行中 3:待服务 4:已完成
                 requestFromServerAll(storeId, state);
                 break;
             case "PT_WWC":
@@ -305,14 +301,33 @@ public class MyOrderFragment extends BaseFragment implements OrderItemProvider.F
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mRlv.setLayoutManager(manager);
         multiTypeAdapter = new MultiTypeAdapter(items);
-        if (order_type.equals("PT_WWC") || order_type.equals("PT_YWC")) {//判断 向OrderItemProvider传递MyOrderActivity的类型
-            OrderItemProvider provider = new OrderItemProvider(getActivity(), "pingtai");
-            Log.e(TAG, "initView:     pingtai");
+        if (order_type.equals("PT_WWC")) {//判断 向OrderItemProvider传递MyOrderActivity的类型
+            OrderItemProvider provider = new OrderItemProvider(getActivity(), "pingtai_0");
             provider.setListener(this);
             multiTypeAdapter.register(OrderItemBean.class, provider);
-        } else {
-            OrderItemProvider provider = new OrderItemProvider(getActivity(), "all");
-            Log.e(TAG, "initView:     all");
+        }
+        if (order_type.equals("PT_YWC")) {//判断 向OrderItemProvider传递MyOrderActivity的类型
+            OrderItemProvider provider = new OrderItemProvider(getActivity(), "pingtai_1");
+            provider.setListener(this);
+            multiTypeAdapter.register(OrderItemBean.class, provider);
+        }
+        if (order_type.equals("ALL_QUANBU")) {
+            OrderItemProvider provider = new OrderItemProvider(getActivity(), "all_0");
+            provider.setListener(this);
+            multiTypeAdapter.register(OrderItemBean.class, provider);
+        }
+        if (order_type.equals("ALL_JINXINGZHONG")) {
+            OrderItemProvider provider = new OrderItemProvider(getActivity(), "all_1");
+            provider.setListener(this);
+            multiTypeAdapter.register(OrderItemBean.class, provider);
+        }
+        if (order_type.equals("ALL_DAIFUWU")) {
+            OrderItemProvider provider = new OrderItemProvider(getActivity(), "all_2");
+            provider.setListener(this);
+            multiTypeAdapter.register(OrderItemBean.class, provider);
+        }
+        if (order_type.equals("ALL_YIWANCHENG")) {
+            OrderItemProvider provider = new OrderItemProvider(getActivity(), "all_3");
             provider.setListener(this);
             multiTypeAdapter.register(OrderItemBean.class, provider);
         }

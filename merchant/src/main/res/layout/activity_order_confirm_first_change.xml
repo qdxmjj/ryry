@@ -257,7 +257,7 @@
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginLeft="5dp"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_order_luntai" />
 
                 <LinearLayout
@@ -367,7 +367,7 @@
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginLeft="5dp"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_order_luntai" />
 
                 <LinearLayout
@@ -477,7 +477,7 @@
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginLeft="5dp"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_order_luntai" />
 
                 <LinearLayout
@@ -767,7 +767,7 @@
                         android:id="@+id/pic_xingshizheng"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/img_bg_dark" />
 
                     <ImageView
@@ -876,7 +876,7 @@
                         android:id="@+id/pic_car"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/img_bg_dark" />
 
                     <ImageView

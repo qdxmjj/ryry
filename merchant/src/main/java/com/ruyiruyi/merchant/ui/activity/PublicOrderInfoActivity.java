@@ -64,6 +64,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     private String orderType;//2首次更换订单
     private String orderState;
     private String whereIn;
+    private String select;
     private String storeId;
 
     private String userName;
@@ -111,6 +112,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
         orderType = bundle.getString("orderType");
         orderState = bundle.getString("orderState");
         whereIn = bundle.getString("whereIn");
+        select = bundle.getString("select");
         switch (orderType) {
             case "1":
                 orderTypeStr = "普通商品订单";
@@ -652,11 +654,8 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
          /*   if (orderState.equals("3")) {//待商家确认服务
                 stateButton.setVisibility(View.GONE);
             }*///已移出
-            if (orderState.equals("4")) {
+            if (orderState.equals("14")) {
                 stateButton.setText("已取消");
-            }
-            if (orderState.equals("8")) {
-                stateButton.setText("待支付");
             }
             if (orderState.equals("5")) {
                 stateButton.setText("待发货");
@@ -678,10 +677,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                 //提交监听
                 bindButtonOrdinarygoods();
             }
-            if (orderState.equals("2")) {
-                stateButton.setText("待收货");
-            }
-            if (orderState.equals("4")) {
+            if (orderState.equals("14")) {
                 stateButton.setText("已取消");
             }
             if (orderState.equals("5")) {
@@ -690,14 +686,17 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             if (orderState.equals("6")) {
                 stateButton.setText("待车主确认服务");
             }
-            if (orderState.equals("8")) {
-                stateButton.setText("待支付");
-            }
             if (orderState.equals("7")) {
                 stateButton.setText("待评价");
             }
             if (orderState.equals("1")) {
                 stateButton.setText("已完成");
+            }
+            if (orderState.equals("9")) {
+                stateButton.setText("退款中");
+            }
+            if (orderState.equals("10")) {
+                stateButton.setText("已退款");
             }
         }
         if (orderType.equals("3")) {//免费再换订单
@@ -710,11 +709,8 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             if (orderState.equals("3")) {//待商家确认服务(在DingdanItemViewProvider中  只有orderStage！=2 为补差时进入此页面)
                 stateButton.setText("待车主支付差价");
             }
-            if (orderState.equals("4")) {
+            if (orderState.equals("14")) {
                 stateButton.setText("已取消");
-            }
-            if (orderState.equals("8")) {
-                stateButton.setText("待支付");
             }
             if (orderState.equals("5")) {
                 stateButton.setText("待发货");
@@ -739,11 +735,8 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             if (orderState.equals("3")) {//待商家确认服务(在DingdanItemViewProvider中  只有orderStage！=1 为补差时进入此页面)
                 stateButton.setText("待车主支付差价");
             }
-            if (orderState.equals("4")) {
+            if (orderState.equals("14")) {
                 stateButton.setText("已取消");
-            }
-            if (orderState.equals("8")) {
-                stateButton.setText("待支付");
             }
             if (orderState.equals("5")) {
                 stateButton.setText("待发货");
@@ -783,13 +776,13 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
         if (whereIn.equals("MyOrderItem")) {
             intent.setClass(getApplicationContext(), MyOrderActivity.class);
             Log.e(TAG, "onBackPressed: MyOrderItem");
-            intent.putExtra("page", "0");
+            intent.putExtra("page", select);//帅气
             intent.putExtra("typestate", "all");
         }
         if (whereIn.equals("MainOrderTop")) {
             intent.setClass(getApplicationContext(), MyOrderActivity.class);
             Log.e(TAG, "onBackPressed: MainOrderTop");
-            intent.putExtra("page", "0");
+            intent.putExtra("page", select);//帅气
             intent.putExtra("typestate", "pingtai");
         }
 

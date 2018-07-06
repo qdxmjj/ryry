@@ -513,15 +513,15 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
 
     private List<String> initPagerTitle() {
         titles = new ArrayList<>();
-        titles.add("订单");
-        titles.add("店铺");
+        titles.add("平台订单");
+        titles.add("店铺订单");
         titles.add("我的");
         return titles;
     }
 
     private void initTitle() {
-        tabsCell.addView(R.drawable.ic_tubiao1, R.drawable.ic_tubiao1_xuanzhong, "订单 ");
-        tabsCell.addView(R.drawable.ic_shop_weixuan, R.drawable.ic_shop_xuanzhong, "店铺 ");
+        tabsCell.addView(R.drawable.ic_tubiao1, R.drawable.ic_tubiao1_xuanzhong, "平台订单 ");
+        tabsCell.addView(R.drawable.ic_shop_weixuan, R.drawable.ic_shop_xuanzhong, "店铺订单 ");
         tabsCell.addView(R.drawable.ic_wode_weixuan, R.drawable.ic_wode_xuanzhong, "我的 ");
     }
 

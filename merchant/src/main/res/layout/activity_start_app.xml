@@ -30,7 +30,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:layout_marginTop="12dp"
-        android:background="@drawable/register_w_button"
+        android:background="@drawable/register_alpha_button"
         android:gravity="center"
         android:text="100%"
         android:textColor="#ffffff"

@@ -13,7 +13,7 @@
         android:left="0.5dp"
         android:right="0.5dp"
         android:top="0.5dp" />
-    <solid android:color="@color/white" />
+    <solid android:color="#00ffffff" />
 
     <!-- padding：Button里面的文字与Button边界的间隔 -->
 

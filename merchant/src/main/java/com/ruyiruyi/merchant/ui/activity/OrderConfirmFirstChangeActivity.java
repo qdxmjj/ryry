@@ -61,6 +61,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
     private String orderNo;
     private String orderType;
     private String whereIn;
+    private String select;
     private String storeId;
     private String userName;
     private String userPhone;
@@ -148,6 +149,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
         whereIn = getIntent().getStringExtra("whereIn");
+        select = getIntent().getStringExtra("select");
         storeId = new DbConfig(getApplicationContext()).getId() + "";
 
         mainDialog = new ProgressDialog(this);
@@ -919,13 +921,13 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         if (whereIn.equals("MyOrderItem")) {
             intent.setClass(getApplicationContext(), MyOrderActivity.class);
             Log.e(TAG, "onBackPressed: MyOrderItem");
-            intent.putExtra("page", "0");
+            intent.putExtra("page", select);
             intent.putExtra("typestate", "all");
         }
         if (whereIn.equals("MainOrderTop")) {
             intent.setClass(getApplicationContext(), MyOrderActivity.class);
             Log.e(TAG, "onBackPressed: MainOrderTop");
-            intent.putExtra("page", "0");
+            intent.putExtra("page", select);
             intent.putExtra("typestate", "pingtai");
         }
 

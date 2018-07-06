@@ -72,7 +72,7 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                 holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
                 break;
             case "6"://6 待车主确认服务
-                statusStr = "待服务";
+                statusStr = "待车主确认服务";
                 holder.tv_orderstatus.setText(statusStr);
                 holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
                 break;
@@ -83,6 +83,21 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                 break;
             case "7":
                 statusStr = "待评价";
+                holder.tv_orderstatus.setText(statusStr);
+                holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
+                break;
+            case "14":
+                statusStr = "已取消";
+                holder.tv_orderstatus.setText(statusStr);
+                holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
+                break;
+            case "9":
+                statusStr = "退款中";
+                holder.tv_orderstatus.setText(statusStr);
+                holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
+                break;
+            case "10":
+                statusStr = "已退款";
                 holder.tv_orderstatus.setText(statusStr);
                 holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
                 break;
@@ -103,13 +118,29 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                     Intent intent = new Intent(context, OrderConfirmFirstChangeActivity.class);
                     intent.putExtra("orderNo", orderItemBean.getBianhao());
                     intent.putExtra("orderType", orderItemBean.getOrderType());
-                    if (typestatus.equals("all")) {
+                    if (typestatus.equals("all_0")) {
                         intent.putExtra("whereIn", "MyOrderItem");
-                        Log.e(TAG, "call:   whereIn = MyOrderItem ");
+                        intent.putExtra("select", "0");
                     }
-                    if (typestatus.equals("pingtai")) {
+                    if (typestatus.equals("all_1")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        intent.putExtra("select", "1");
+                    }
+                    if (typestatus.equals("all_2")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        intent.putExtra("select", "2");
+                    }
+                    if (typestatus.equals("all_3")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        intent.putExtra("select", "3");
+                    }
+                    if (typestatus.equals("pingtai_0")) {
                         intent.putExtra("whereIn", "MainOrderTop");
-                        Log.e(TAG, "call:   whereIn = MainOrderTop ");
+                        intent.putExtra("select", "0");
+                    }
+                    if (typestatus.equals("pingtai_1")) {
+                        intent.putExtra("whereIn", "MainOrderTop");
+                        intent.putExtra("select", "1");
                     }
                     context.startActivity(intent);
                     listener.forFinishFgListener();
@@ -118,13 +149,29 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                     intent.putExtra("orderNo", orderItemBean.getBianhao());
                     intent.putExtra("orderType", orderItemBean.getOrderType());
                     intent.putExtra("orderStage", orderItemBean.getOrderStage());
-                    if (typestatus.equals("all")) {
+                    if (typestatus.equals("all_0")) {
                         intent.putExtra("whereIn", "MyOrderItem");
-                        Log.e(TAG, "call:   whereIn = MyOrderItem ");
+                        intent.putExtra("select", "0");
                     }
-                    if (typestatus.equals("pingtai")) {
+                    if (typestatus.equals("all_1")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        intent.putExtra("select", "1");
+                    }
+                    if (typestatus.equals("all_2")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        intent.putExtra("select", "2");
+                    }
+                    if (typestatus.equals("all_3")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        intent.putExtra("select", "3");
+                    }
+                    if (typestatus.equals("pingtai_0")) {
                         intent.putExtra("whereIn", "MainOrderTop");
-                        Log.e(TAG, "call:   whereIn = MainOrderTop ");
+                        intent.putExtra("select", "0");
+                    }
+                    if (typestatus.equals("pingtai_1")) {
+                        intent.putExtra("whereIn", "MainOrderTop");
+                        intent.putExtra("select", "1");
                     }
                     context.startActivity(intent);
                     listener.forFinishFgListener();
@@ -132,14 +179,29 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                     Intent intent = new Intent(context, OrderConfirmTireRepairActivity.class);
                     intent.putExtra("orderNo", orderItemBean.getBianhao());
                     intent.putExtra("orderType", orderItemBean.getOrderType());
-                    intent.putExtra("whereIn", "MyOrderItem");
-                    if (typestatus.equals("all")) {
+                    if (typestatus.equals("all_0")) {
                         intent.putExtra("whereIn", "MyOrderItem");
-                        Log.e(TAG, "call:   whereIn = MyOrderItem ");
+                        intent.putExtra("select", "0");
                     }
-                    if (typestatus.equals("pingtai")) {
+                    if (typestatus.equals("all_1")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        intent.putExtra("select", "1");
+                    }
+                    if (typestatus.equals("all_2")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        intent.putExtra("select", "2");
+                    }
+                    if (typestatus.equals("all_3")) {
+                        intent.putExtra("whereIn", "MyOrderItem");
+                        intent.putExtra("select", "3");
+                    }
+                    if (typestatus.equals("pingtai_0")) {
                         intent.putExtra("whereIn", "MainOrderTop");
-                        Log.e(TAG, "call:   whereIn = MainOrderTop ");
+                        intent.putExtra("select", "0");
+                    }
+                    if (typestatus.equals("pingtai_1")) {
+                        intent.putExtra("whereIn", "MainOrderTop");
+                        intent.putExtra("select", "1");
                     }
                     context.startActivity(intent);
                     listener.forFinishFgListener();
@@ -150,13 +212,29 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                     bundle.putString("orderType", orderItemBean.getOrderType());
                     bundle.putString("orderState", orderItemBean.getStatus());
                     bundle.putString("storeId", new DbConfig(context).getId() + "");
-                    if (typestatus.equals("all")) {
+                    if (typestatus.equals("all_0")) {
                         bundle.putString("whereIn", "MyOrderItem");
-                        Log.e(TAG, "call:   whereIn = MyOrderItem ");
+                        bundle.putString("select", "0");
                     }
-                    if (typestatus.equals("pingtai")) {
+                    if (typestatus.equals("all_1")) {
+                        bundle.putString("whereIn", "MyOrderItem");
+                        bundle.putString("select", "1");
+                    }
+                    if (typestatus.equals("all_2")) {
+                        bundle.putString("whereIn", "MyOrderItem");
+                        bundle.putString("select", "2");
+                    }
+                    if (typestatus.equals("all_3")) {
+                        bundle.putString("whereIn", "MyOrderItem");
+                        bundle.putString("select", "3");
+                    }
+                    if (typestatus.equals("pingtai_0")) {
                         bundle.putString("whereIn", "MainOrderTop");
-                        Log.e(TAG, "call:   whereIn = MainOrderTop ");
+                        bundle.putString("select", "0");
+                    }
+                    if (typestatus.equals("pingtai_1")) {
+                        bundle.putString("whereIn", "MainOrderTop");
+                        bundle.putString("select", "1");
                     }
                     intent.putExtras(bundle);
                     context.startActivity(intent);

@@ -110,6 +110,9 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     private WheelView whv_sheng, whv_shi, whv_xian;
     private WheelView whv_category;
     private WheelView whv_lTime, whv_rTime;
+    private LinearLayout ll_store_head;
+    private LinearLayout ll_store_in;
+    private LinearLayout ll_store_workspace;
     //add XMs  !!!
     private LinearLayout ll_xms;
     private List<XiangmusBean> list_xms = new ArrayList<>();
@@ -569,19 +572,19 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
             case R.id.img_mdpic_a_delete:
                 img_mdpic_a_delete.setVisibility(View.GONE);
-                img_mdpic_a_center.setVisibility(View.VISIBLE);
+                ll_store_head.setVisibility(View.VISIBLE);
                 img_mdpic_a.setImageResource(R.drawable.img_bg_dark);
                 hasPic_mdPic_a = false;
                 break;
             case R.id.img_mdpic_b_delete:
                 img_mdpic_b_delete.setVisibility(View.GONE);
-                img_mdpic_b_center.setVisibility(View.VISIBLE);
+                ll_store_in.setVisibility(View.VISIBLE);
                 img_mdpic_b.setImageResource(R.drawable.img_bg_dark);
                 hasPic_mdPic_b = false;
                 break;
             case R.id.img_mdpic_c_delete:
                 img_mdpic_c_delete.setVisibility(View.GONE);
-                img_mdpic_c_center.setVisibility(View.VISIBLE);
+                ll_store_workspace.setVisibility(View.VISIBLE);
                 img_mdpic_c.setImageResource(R.drawable.img_bg_dark);
                 hasPic_mdPic_c = false;
                 break;
@@ -752,7 +755,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
                 img_mdpic_a.setImageBitmap(mdPicaBitmap);
                 img_mdpic_a_delete.setVisibility(View.VISIBLE);
-                img_mdpic_a_center.setVisibility(View.GONE);
+                ll_store_head.setVisibility(View.GONE);
                 hasPic_mdPic_a = true;
             } else if (currentImage == 1) {
 
@@ -760,7 +763,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
                 img_mdpic_b.setImageBitmap(mdPicbBitmap);
                 img_mdpic_b_delete.setVisibility(View.VISIBLE);
-                img_mdpic_b_center.setVisibility(View.GONE);
+                ll_store_in.setVisibility(View.GONE);
                 hasPic_mdPic_b = true;
             } else if (currentImage == 2) {
 
@@ -768,7 +771,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
 
                 img_mdpic_c.setImageBitmap(mdPiccBitmap);
                 img_mdpic_c_delete.setVisibility(View.VISIBLE);
-                img_mdpic_c_center.setVisibility(View.GONE);
+                ll_store_workspace.setVisibility(View.GONE);
                 hasPic_mdPic_c = true;
             } else if (currentImage == 3) {
 
@@ -1249,6 +1252,9 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
         img_mdpic_b_center = (ImageView) findViewById(R.id.img_mdpic_b_center);
         img_mdpic_c_center = (ImageView) findViewById(R.id.img_mdpic_c_center);
         img_shou_a_center = (ImageView) findViewById(R.id.img_shou_a_center);
+        ll_store_head = findViewById(R.id.ll_store_head);
+        ll_store_in = findViewById(R.id.ll_store_in);
+        ll_store_workspace = findViewById(R.id.ll_store_workspace);
         ckbox_sl = (CheckBox) findViewById(R.id.checkbox_sl);
         ckbox_sl.setChecked(true);//默认熟练
         isShoulian = 1;

@@ -193,6 +193,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private String orderNo;
     private String orderType;
     private String whereIn;
+    private String select;
     private String orderStage;
     private String storeId;
     private String userName;
@@ -289,6 +290,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
         whereIn = getIntent().getStringExtra("whereIn");
+        select = getIntent().getStringExtra("select");
         orderStage = getIntent().getStringExtra("orderStage");
         storeId = new DbConfig(getApplicationContext()).getId() + "";
 
@@ -2488,13 +2490,13 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         if (whereIn.equals("MyOrderItem")) {
             intent.setClass(getApplicationContext(), MyOrderActivity.class);
             Log.e(TAG, "onBackPressed: MyOrderItem");
-            intent.putExtra("page", "0");
+            intent.putExtra("page", select);
             intent.putExtra("typestate", "all");
         }
         if (whereIn.equals("MainOrderTop")) {
             intent.setClass(getApplicationContext(), MyOrderActivity.class);
             Log.e(TAG, "onBackPressed: MainOrderTop");
-            intent.putExtra("page", "0");
+            intent.putExtra("page", select);
             intent.putExtra("typestate", "pingtai");
         }
 
