@@ -59,7 +59,9 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
 
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             if (resp.errCode ==0) {
-                startActivity(new Intent(getApplicationContext(), PaySuccessActivity.class));
+                Intent intent = new Intent(getApplicationContext(), PaySuccessActivity.class);
+                intent.putExtra("ORDERTYPE",98);
+                startActivity(intent);
                 finish();
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

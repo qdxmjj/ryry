@@ -13,18 +13,21 @@ import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.model.CxwyTimesPrice;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.cell.AmountView;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +39,8 @@ public class TireCountActivity extends RyBaseActivity {
     private CustomBanner mBanner;
     private String price;
     private AmountView tireAmountView;
-    public static int maxCount = 10;
+    public static int maxCount = 7;
+    public static int maxTireCount = 4;
     public int tireCurrentCount = 0;
     public int cxwyCurrentCount = 0;
     private AmountView cxwyAmountView;
@@ -45,7 +49,7 @@ public class TireCountActivity extends RyBaseActivity {
     private TextView tireNameText;
     private String fontrearflag;//0是一致  1前轮 2后轮
     private String tireSize;
-    private String cxwyPrice;
+    private String cxwyPrice = 0+"";
     private int shoeId;
     private String tireName;
     private String tireImage;
@@ -54,6 +58,9 @@ public class TireCountActivity extends RyBaseActivity {
     private String userName;
     private TextView tireLocationText;
     private TextView cxwyPriceText;
+    public List<CxwyTimesPrice> cxwyList;
+    private String shoeBasePrice;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +80,16 @@ public class TireCountActivity extends RyBaseActivity {
             }
         });
 
+        cxwyList = new ArrayList<>();
         Intent intent = getIntent();
         shoeId = intent.getIntExtra("SHOEID", 0);
         price = intent.getStringExtra("PRICE");
         fontrearflag = intent.getStringExtra("FONTREARFLAG");
+        if (fontrearflag.equals("0")){
+            maxTireCount = 4;
+        }else {
+            maxTireCount = 2;
+        }
         Log.e(TAG, "onCreate: --------*---------" + shoeId);
 
         initView();
@@ -98,6 +111,7 @@ public class TireCountActivity extends RyBaseActivity {
         params.addParameter("token", token);
         Log.e(TAG, "initDataFromService:------- " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
+
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess:------ " + result);
@@ -109,15 +123,16 @@ public class TireCountActivity extends RyBaseActivity {
                     if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         tireName = data.getString("detailStr");
-                        cxwyPrice = data.getString("finalCxwyPrice");
+                      //  cxwyPrice = data.getString("finalCxwyPrice");
                         userName = data.getString("userName");
                         userPhone = data.getString("userPhone");
                         carNumber = data.getString("platNumber");
                         tireImage = data.getString("shoeDownImg");
+                        shoeBasePrice = data.getString("shoeBasePrice");
                         String image2 = data.getString("shoeLeftImg");
-                        String image3 = data.getString("shoeLeftImg");
-                        String image4 = data.getString("shoeLeftImg");
-                        String image5 = data.getString("shoeLeftImg");
+                        String image3 = data.getString("shoeMiddleImg");
+                        String image4 = data.getString("shoeRightImg");
+                        String image5 = data.getString("shoeUpImg");
                         tireSize = data.getString("size");
                         List<String> imageList = new ArrayList<>();
                         imageList.add(tireImage);
@@ -125,6 +140,17 @@ public class TireCountActivity extends RyBaseActivity {
                         imageList.add(image3);
                         imageList.add(image4);
                         imageList.add(image5);
+                        //获取畅行无忧的价格
+                        cxwyList.clear();
+                        JSONArray cxwyPriceParamList = data.getJSONArray("cxwyPriceParamList");
+                        for (int i = 0; i < cxwyPriceParamList.length(); i++) {
+                            JSONObject object = cxwyPriceParamList.getJSONObject(i);
+                            int id = object.getInt("id");
+                            int times = object.getInt("times");
+                            String rate = object.getString("rate");
+                            CxwyTimesPrice cxwyTimesPrice = new CxwyTimesPrice(id, rate, times);
+                            cxwyList.add(cxwyTimesPrice);
+                        }
                         mBanner.setPages(new CustomBanner.ViewCreator<String>() {
                             @Override
                             public View createView(Context context, int position) {
@@ -191,15 +217,14 @@ public class TireCountActivity extends RyBaseActivity {
 
         tirePriceText.setText(price);
 
-        tireAmountView.setGoods_storage(maxCount);
+        tireAmountView.setGoods_storage(maxTireCount);
         tireAmountView.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
             @Override
             public void onAmountChange(View view, int amount) {
-                if (amount == maxCount) {
+                if (amount == maxTireCount) {
                     Toast.makeText(TireCountActivity.this, "轮胎数量已达到购买上限", Toast.LENGTH_SHORT).show();
                 }
                 tireCurrentCount = amount;
-
             }
         });
 
@@ -211,6 +236,20 @@ public class TireCountActivity extends RyBaseActivity {
                     Toast.makeText(TireCountActivity.this, "畅行无忧已达到购买上限", Toast.LENGTH_SHORT).show();
                 }
                 cxwyCurrentCount = amount;
+                if (amount == 0){
+                    cxwyPrice = 0 + "";
+                }else {
+
+                    for (int i = 0; i < cxwyList.size(); i++) {
+                        if (cxwyList.get(i).getTimes() == cxwyCurrentCount) {
+                            double price = Double.parseDouble(cxwyList.get(i).getRate()) * Double.parseDouble(shoeBasePrice) / 100;
+                            String format = new DecimalFormat("0").format(price);
+                            cxwyPrice = format + "";
+                        }
+                    }
+                }
+
+                cxwyPriceText.setText("￥" + cxwyPrice);
 
             }
         });

@@ -49,7 +49,7 @@ public class BaseFragmentActivity extends FragmentActivity {
     public class MyBaseActiviy_Broad extends BroadcastReceiver {
 
         public void onReceive(Context arg0, Intent intent) {
-//接收发送过来的广播内容
+            //接收发送过来的广播内容
             int closeAll = intent.getIntExtra("closeAll", 0);
             if (closeAll == 1) {
                 finish();//销毁BaseActivity
@@ -58,8 +58,6 @@ public class BaseFragmentActivity extends FragmentActivity {
     }
 
     //在销毁的方法里面注销广播
-
-
     protected void setContentView(int var1, int var2){
         this.setContentView(var1);
         if (var2 != -1){
@@ -68,11 +66,13 @@ public class BaseFragmentActivity extends FragmentActivity {
         }
     }
 
+
     protected void setActionBarTitle(ActionBar var1, String var2){
         if (var1 != null){
             var1.setTitle(var2);
         }
     }
+
 
     @Override
     protected void onDestroy() {

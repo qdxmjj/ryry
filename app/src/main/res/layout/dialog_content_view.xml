@@ -48,7 +48,7 @@
             android:layout_marginRight="20sp"
             android:hint="输入新的车牌号"
             android:textSize="16sp"
-            android:inputType="text" />
+            android:inputType="textEmailAddress" />
     </LinearLayout>
 
 

@@ -268,12 +268,12 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         }
     }
 
-    @Override
+/*    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == 10086) {
             ShowDialog(version,downloadUrl);//再次执行安装流程，包含权限判等
         }
-    }
+    }*/
 
     /**
      * 弹出更新dialog

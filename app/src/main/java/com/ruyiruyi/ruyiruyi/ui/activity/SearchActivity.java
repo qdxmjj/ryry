@@ -17,7 +17,7 @@ public class SearchActivity extends RyBaseActivity {
     private static final String TAG = SearchActivity.class.getSimpleName();
     private SearchView searchView;
     public static String TYPE = "TYPE";
-    private int type = 0;  //0是搜索稳点  1是搜索商品
+    private int type = 0;  //0是搜索门店  1是搜索商品
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,7 @@ public class SearchActivity extends RyBaseActivity {
         setContentView(R.layout.activity_search);
         Intent intent = getIntent();
         type = intent.getIntExtra(TYPE,0);
+        Log.e(TAG, "onCreate: " + type);
 
         // 3. 绑定组件
         searchView = (SearchView) findViewById(R.id.search_view);
@@ -36,6 +37,7 @@ public class SearchActivity extends RyBaseActivity {
             public void SearchAciton(String string) {
                 Log.e(TAG, "SearchAciton: " + string);
                 if (type == 0){
+                    Log.e(TAG, "SearchAciton: ----1");
                     Intent intent = new Intent();
                     intent.putExtra("SEARCH_STR",string);
                     setResult(MerchantFragment.SEARCH_CODE,intent);
