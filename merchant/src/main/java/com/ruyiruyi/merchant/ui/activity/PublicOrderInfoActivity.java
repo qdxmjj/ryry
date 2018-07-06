@@ -366,45 +366,18 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             }
         }
         if (orderType.equals("4")) {//轮胎修补订单
-            if (orderState.equals("6")) {//6待车主确认服务
-                items.add(new PublicOneaddPic("用户名", userName, false, true));
-                items.add(new PublicOneaddPic("联系电话", userPhone, true, true));
-                items.add(new PublicOneaddPic("车牌号", platNumber, false, true));
-                items.add(new PublicOneaddPic("店铺名", storeName, false, true));
-                items.add(new PublicOneaddPic("订单类型", orderTypeStr, false, true));
-                items.add(new PublicOneaddPic("订单编号", orderNo, false, true));
-                items.add(new PublicOneaddPic("轮胎条码", "修补次数", false, false));
-                for (int i = 0; i < repairList.size(); i++) {
-                    PublicOneaddPic bean = repairList.get(i);
-                    items.add(new PublicOneaddPic(bean.getTitle(), bean.getContent(), false, !(i + 1 == repairList.size())));
-                }
+            items.add(new PublicOneaddPic("用户名", userName, false, true));
+            items.add(new PublicOneaddPic("联系电话", userPhone, true, true));
+            items.add(new PublicOneaddPic("车牌号", platNumber, false, true));
+            items.add(new PublicOneaddPic("店铺名", storeName, false, true));
+            items.add(new PublicOneaddPic("订单类型", orderTypeStr, false, true));
+            items.add(new PublicOneaddPic("订单编号", orderNo, false, true));
+            items.add(new PublicOneaddPic("轮胎条码", "修补次数", false, false));
+            for (int i = 0; i < repairList.size(); i++) {
+                PublicOneaddPic bean = repairList.get(i);
+                items.add(new PublicOneaddPic(bean.getTitle(), bean.getContent(), false, !(i + 1 == repairList.size())));
             }
-            if (orderState.equals("7")) {//7待评价
-                items.add(new PublicOneaddPic("用户名", userName, false, true));
-                items.add(new PublicOneaddPic("联系电话", userPhone, true, true));
-                items.add(new PublicOneaddPic("车牌号", platNumber, false, true));
-                items.add(new PublicOneaddPic("店铺名", storeName, false, true));
-                items.add(new PublicOneaddPic("订单类型", orderTypeStr, false, true));
-                items.add(new PublicOneaddPic("订单编号", orderNo, false, true));
-                items.add(new PublicOneaddPic("轮胎条码", "修补次数", false, false));
-                for (int i = 0; i < repairList.size(); i++) {
-                    PublicOneaddPic bean = repairList.get(i);
-                    items.add(new PublicOneaddPic(bean.getTitle(), bean.getContent(), false, !(i + 1 == repairList.size())));
-                }
-            }
-            if (orderState.equals("1")) {//1已完成
-                items.add(new PublicOneaddPic("用户名", userName, false, true));
-                items.add(new PublicOneaddPic("联系电话", userPhone, true, true));
-                items.add(new PublicOneaddPic("车牌号", platNumber, false, true));
-                items.add(new PublicOneaddPic("店铺名", storeName, false, true));
-                items.add(new PublicOneaddPic("订单类型", orderTypeStr, false, true));
-                items.add(new PublicOneaddPic("订单编号", orderNo, false, true));
-                items.add(new PublicOneaddPic("轮胎条码", "修补次数", false, false));
-                for (int i = 0; i < repairList.size(); i++) {
-                    PublicOneaddPic bean = repairList.get(i);
-                    items.add(new PublicOneaddPic(bean.getTitle(), bean.getContent(), false, !(i + 1 == repairList.size())));
-                }
-            }
+
 
         }
 

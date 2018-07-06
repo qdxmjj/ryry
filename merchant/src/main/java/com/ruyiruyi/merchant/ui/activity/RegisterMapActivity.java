@@ -108,8 +108,12 @@ public class RegisterMapActivity extends BaseActivity {
         });
         //获取Intent传递的值
         Intent intent_g = getIntent();
-        longitude_double = intent_g.getDoubleExtra("longitude_double", 1);
-        latitude_double = intent_g.getDoubleExtra("latitude_double", 1);
+        //默认天安数码城: latitude: 36.32087806111286, longitude: 120.44349123197962
+        longitude_double = intent_g.getDoubleExtra("longitude_double", RegisterActivity.LONGTITUDE_DEF);
+        latitude_double = intent_g.getDoubleExtra("latitude_double", RegisterActivity.LATITUDE_DEF);
+        if (longitude_double == RegisterActivity.LONGTITUDE_DEF && latitude_double == RegisterActivity.LATITUDE_DEF) {
+            Toast.makeText(RegisterMapActivity.this, "请检查授予定位权限并开启定位!", Toast.LENGTH_SHORT).show();
+        }
         Log.e(TAG, "registerclick333: " + "longitude_double" + longitude_double + "latitude_double" + latitude_double);
         //39.86017837104533   116.45288578361887
 
@@ -142,7 +146,7 @@ public class RegisterMapActivity extends BaseActivity {
         // 设置旋转角度
         matrix.setRotate(-100);
         // 重新绘制Bitmap
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),bitmap.getHeight(), matrix, true);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         mCurrentMarker = BitmapDescriptorFactory.fromBitmap(bitmap);
 // 未旋转               .fromResource(R.drawable.ic_dingwei2);
         mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
@@ -178,10 +182,10 @@ public class RegisterMapActivity extends BaseActivity {
                 Log.e(TAG, "onGetReverseGeoCodeResult: getSematicDescription ==" + result.getSematicDescription());
                 //在result中获取点击最近地址
                 List<PoiInfo> poiList = result.getPoiList();
-                if (null==poiList || poiList.size()==0) {
+                if (null == poiList || poiList.size() == 0) {
                     Toast.makeText(RegisterMapActivity.this, "请在地图点选您的正确门店位置", Toast.LENGTH_SHORT).show();
-                    mStateBar.setText( "");
-                    mStateBar2.setText( "");
+                    mStateBar.setText("");
+                    mStateBar2.setText("");
                 } else {
                     PoiInfo poiInfo = poiList.get(0);
                     cityAddress = poiInfo.address + poiInfo.name;

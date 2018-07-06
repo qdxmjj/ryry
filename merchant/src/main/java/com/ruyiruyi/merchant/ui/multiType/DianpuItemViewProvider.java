@@ -2,6 +2,7 @@ package com.ruyiruyi.merchant.ui.multiType;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -55,7 +56,6 @@ public class DianpuItemViewProvider extends ItemViewProvider<Dianpu, DianpuItemV
                 break;
         }
         holder.dianpu_tv_type.setText(dianpu.getOrderServcieTypeName());
-        holder.dianpu_tv_money.setText("+" + dianpu.getOrderPrice());
         String timestampToStringAll = new UtilsRY().getTimestampToStringAll(dianpu.getOrderTime());
         holder.dianpu_tv_time.setText(timestampToStringAll);
 
@@ -64,30 +64,44 @@ public class DianpuItemViewProvider extends ItemViewProvider<Dianpu, DianpuItemV
             case "1":
                 stateStr = "已完成";
                 holder.dianpu_tv_state.setText(stateStr);
+                holder.dianpu_tv_money.setText("+" + dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.theme_primary));
                 break;
             case "2":
                 stateStr = "待收货";
                 holder.dianpu_tv_state.setText(stateStr);
+                holder.dianpu_tv_money.setText(dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
                 break;
             case "3":
                 stateStr = "待服务";
                 holder.dianpu_tv_state.setText(stateStr);
+                holder.dianpu_tv_money.setText(dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
                 break;
             case "5":
                 stateStr = "待发货";
                 holder.dianpu_tv_state.setText(stateStr);
+                holder.dianpu_tv_money.setText(dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
                 break;
             case "6":
                 stateStr = "待车主确认服务";
                 holder.dianpu_tv_state.setText(stateStr);
+                holder.dianpu_tv_money.setText(dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
                 break;
             case "7":
                 stateStr = "待评价";
                 holder.dianpu_tv_state.setText(stateStr);
+                holder.dianpu_tv_money.setText("+" + dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.theme_primary));
                 break;
             case "8":
                 stateStr = "待支付";
                 holder.dianpu_tv_state.setText(stateStr);
+                holder.dianpu_tv_money.setText(dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
                 break;
         }
         RxViewAction.clickNoDouble(holder.rl_item).subscribe(new Action1<Void>() {
