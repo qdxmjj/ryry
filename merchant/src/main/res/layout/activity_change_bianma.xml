@@ -44,6 +44,7 @@
                     android:layout_gravity="right"
                     android:gravity="center_vertical"
                     android:onClick="changeclick"
+                    android:clickable="true"
                     android:orientation="horizontal">
 
                     <TextView
@@ -123,6 +124,7 @@
                     android:layout_gravity="right"
                     android:gravity="center_vertical"
                     android:onClick="changeclick"
+                    android:clickable="true"
                     android:orientation="horizontal">
 
                     <TextView
@@ -202,6 +204,7 @@
                     android:layout_gravity="right"
                     android:gravity="center_vertical"
                     android:onClick="changeclick"
+                    android:clickable="true"
                     android:orientation="horizontal">
 
                     <TextView
@@ -281,6 +284,7 @@
                     android:layout_gravity="right"
                     android:gravity="center_vertical"
                     android:onClick="changeclick"
+                    android:clickable="true"
                     android:orientation="horizontal">
 
                     <TextView

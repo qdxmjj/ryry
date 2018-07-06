@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
+import com.ruyiruyi.rylibrary.utils.FormatDateUtil;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 
 import org.json.JSONArray;
@@ -107,6 +109,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
     private String serviceId;
     private String status = "1";//默认出售中
     private ProgressDialog progressDialog;
+    private ProgressDialog mainDialog;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -124,16 +127,16 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                     break;
                 case 5:
                     //以下操作
-                    if (servicesBean2.size() != 0) {
+                    if (servicesBean2a.size() != 0) {
                         leftTypeList.add("汽车保养");
                     }
-                    if (servicesBean3.size() != 0) {
+                    if (servicesBean3a.size() != 0) {
                         leftTypeList.add("美容清洗");
                     }
-                    if (servicesBean4.size() != 0) {
+                    if (servicesBean4a.size() != 0) {
                         leftTypeList.add("安装");
                     }
-                    if (servicesBean5.size() != 0) {
+                    if (servicesBean5a.size() != 0) {
                         leftTypeList.add("轮胎服务");
                     }
 
@@ -145,6 +148,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         }
     };
     private String path_takepic;
+    private ScrollView scrollView;
 
     //设置商品修改前数据
     private void initOldData() {
@@ -205,6 +209,10 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 .skipMemoryCache(true)//跳过内存缓存
                 .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
                 .into(mGoodsImg);
+
+
+        hideDialogProgress(mainDialog);
+        scrollView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -225,6 +233,10 @@ public class GoodsInfoReeditActivity extends BaseActivity {
             }
         });
         progressDialog = new ProgressDialog(this);
+        mainDialog = new ProgressDialog(this);
+        showDialogProgress(mainDialog, "信息加载中...");
+        scrollView = findViewById(R.id.scrollView);
+        scrollView.setVisibility(View.GONE);
 
         Bundle bundle = getIntent().getExtras();
         goodsid = bundle.getString("goodsid");
@@ -420,18 +432,8 @@ public class GoodsInfoReeditActivity extends BaseActivity {
             Toast.makeText(GoodsInfoReeditActivity.this, "请输入商品单价", Toast.LENGTH_SHORT).show();
             return;
         }
-        String txt_price = mGoodsPrice.getText().toString();
-        int int_price = 0;
-        for (int i = 0; i < txt_price.length(); i++) {//两个以上小数点情况
-            if ((txt_price.substring(i, i + 1)).equals(".")) {
-                int_price++;
-            }
-        }
-        if ((txt_price.substring(0, 1)).equals(".") || (txt_price.substring(txt_price.length() - 1, txt_price.length())).equals(".")) {//首尾为小数点情况
-            int_price += 2;
-        }
-        if (int_price > 1) {
-            Toast.makeText(GoodsInfoReeditActivity.this, "请输入合理的商品单价", Toast.LENGTH_SHORT).show();
+        if (mGoodsPrice.getText().toString().equals("0")) {
+            Toast.makeText(GoodsInfoReeditActivity.this, "商品单价不能为0", Toast.LENGTH_SHORT).show();
             return;
         }
         if (leftTypeId == null || leftTypeId.equals("") || rightTypeId == null || rightTypeId.equals("")) {
@@ -440,6 +442,10 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         }
         if (mGoodsKucun.getText() == null || mGoodsKucun.getText().length() == 0) {
             Toast.makeText(GoodsInfoReeditActivity.this, "请输入商品库存", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mGoodsKucun.getText().toString().equals("0")) {
+            Toast.makeText(GoodsInfoReeditActivity.this, "商品库存不能为0", Toast.LENGTH_SHORT).show();
             return;
         }
         if (mGoodsStatus.getText() == null || mGoodsStatus.getText().equals("")) {
@@ -552,19 +558,20 @@ public class GoodsInfoReeditActivity extends BaseActivity {
     }
 
     private void showGoodsStatusDialog() {
+        currentSaleString = "出售中";
         View v_goodstatus = LayoutInflater.from(this).inflate(R.layout.dialog_one_horizontal_wheel_view, null);
         oneWheel = (WheelView) v_goodstatus.findViewById(R.id.whv_one);
         ArrayList<String> strlist = new ArrayList<>();
-        strlist.add("已下架");
         strlist.add("出售中");
+        strlist.add("已下架");
         oneWheel.setItems(strlist, 0);
         oneWheel.setOnItemSelectedListener(new WheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
                 if (selectedIndex == 0) {
-                    currentSale = 2;
-                } else {
                     currentSale = 1;
+                } else {
+                    currentSale = 2;
                 }
 
                 currentSaleString = item;
@@ -620,7 +627,6 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.theme_primary));
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
     }
-
 
 
     private void showGoodsTypeDialog() {

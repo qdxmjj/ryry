@@ -34,4 +34,12 @@ public class FormatDateUtil {
 
         return dates;
     }
+
+    public static boolean isNumber(String str) {
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(?!^0*(\\.0{1,2})?$)^\\d{1,13}(\\.\\d{1,2})?$");// 不为0的价格 小数点后最多两位小数
+//        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("^(([1-9]\\d*)(\\.\\d{1,2})?|0\\.([1-9]|\\d[1-9])0)$");//0.0/0.00 都不行
+        java.util.regex.Matcher match = pattern.matcher(str);
+        return match.matches();
+    }
+
 }

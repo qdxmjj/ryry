@@ -106,6 +106,9 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
     * */
 
     private WheelView whv_lTime, whv_rTime;
+    private LinearLayout ll_store_head;
+    private LinearLayout ll_store_in;
+    private LinearLayout ll_store_workspace;
 
     public String currentlTime = "00:00:00";
     public String currentrTime = "00:00:00";
@@ -330,7 +333,7 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             public void call(Void aVoid) {
                 img_mdpic_a.setImageResource(R.drawable.img_bg_dark);
                 img_mdpic_a_delete.setVisibility(View.GONE);
-                img_mdpic_a_center.setVisibility(View.VISIBLE);
+                ll_store_head.setVisibility(View.VISIBLE);
                 hasPicA = false;
                 isNewPicA = true;
             }
@@ -340,7 +343,7 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             public void call(Void aVoid) {
                 img_mdpic_b.setImageResource(R.drawable.img_bg_dark);
                 img_mdpic_b_delete.setVisibility(View.GONE);
-                img_mdpic_b_center.setVisibility(View.VISIBLE);
+                ll_store_in.setVisibility(View.VISIBLE);
                 hasPicB = false;
                 isNewPicB = true;
             }
@@ -350,7 +353,7 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
             public void call(Void aVoid) {
                 img_mdpic_c.setImageResource(R.drawable.img_bg_dark);
                 img_mdpic_c_delete.setVisibility(View.GONE);
-                img_mdpic_c_center.setVisibility(View.VISIBLE);
+                ll_store_workspace.setVisibility(View.VISIBLE);
                 hasPicC = false;
                 isNewPicC = true;
             }
@@ -588,8 +591,10 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
 
         switch (requestCode) {
             case CHOOSE_PICTURE:
-                Uri uri = data.getData();
-                setImageToViewFromPhone(uri, false);
+                if (data != null) {
+                    Uri uri = data.getData();
+                    setImageToViewFromPhone(uri, false);
+                }
                 break;
             case TAKE_PICTURE:
                 setImageToViewFromPhone(tempUri, true);
@@ -617,19 +622,19 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
                 mdPicaBitmap = rotaingImageView(degree, photo);
                 img_mdpic_a.setImageBitmap(mdPicaBitmap);
                 img_mdpic_a_delete.setVisibility(View.VISIBLE);
-                img_mdpic_a_center.setVisibility(View.GONE);
+                ll_store_head.setVisibility(View.GONE);
                 hasPicA = true;
             } else if (currentImage == 1) {
                 mdPicbBitmap = rotaingImageView(degree, photo);
                 img_mdpic_b.setImageBitmap(mdPicbBitmap);
                 img_mdpic_b_delete.setVisibility(View.VISIBLE);
-                img_mdpic_b_center.setVisibility(View.GONE);
+                ll_store_in.setVisibility(View.GONE);
                 hasPicB = true;
             } else if (currentImage == 2) {
                 mdPiccBitmap = rotaingImageView(degree, photo);
                 img_mdpic_c.setImageBitmap(mdPiccBitmap);
                 img_mdpic_c_delete.setVisibility(View.VISIBLE);
-                img_mdpic_c_center.setVisibility(View.GONE);
+                ll_store_workspace.setVisibility(View.GONE);
                 hasPicC = true;
             }
         }
@@ -776,6 +781,9 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
         img_mdpic_b_center = (ImageView) getView().findViewById(R.id.img_mdpic_b_center);
         img_mdpic_c_center = (ImageView) getView().findViewById(R.id.img_mdpic_c_center);
         mSwitch = (Switch) getView().findViewById(R.id.swch_isopen);
+        ll_store_head = getView().findViewById(R.id.ll_store_head);
+        ll_store_in = getView().findViewById(R.id.ll_store_in);
+        ll_store_workspace = getView().findViewById(R.id.ll_store_workspace);
 
     }
 

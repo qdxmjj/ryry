@@ -21,7 +21,7 @@ public abstract class BaseActivity extends Activity {
     private ActionBar a;
     private MyBaseActiviy_Broad oBaseActiviy_Broad;
 
-    public BaseActivity(){
+    public BaseActivity() {
 
     }
 
@@ -29,9 +29,9 @@ public abstract class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return;
-        }else {
+        } else {
             Window window = this.getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -60,16 +60,16 @@ public abstract class BaseActivity extends Activity {
     //在销毁的方法里面注销广播
 
 
-    protected void setContentView(int var1, int var2){
+    protected void setContentView(int var1, int var2) {
         this.setContentView(var1);
-        if (var2 != -1){
+        if (var2 != -1) {
             a = ((ActionBar) this.findViewById(var2));
             a.setBackgroundColor(getResources().getColor(R.color.theme_primary));
         }
     }
 
-    protected void setActionBarTitle(ActionBar var1, String var2){
-        if (var1 != null){
+    protected void setActionBarTitle(ActionBar var1, String var2) {
+        if (var1 != null) {
             var1.setTitle(var2);
         }
     }
@@ -77,16 +77,19 @@ public abstract class BaseActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(oBaseActiviy_Broad);//注销广播
+        if (Build.VERSION.SDK_INT >= 21) {
+            unregisterReceiver(oBaseActiviy_Broad);//注销广播
+        }
     }
 
-    public void showDialogProgress(ProgressDialog dialog,String message){
+    public void showDialogProgress(ProgressDialog dialog, String message) {
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setMessage(message);
         dialog.show();
     }
-    public void hideDialogProgress(ProgressDialog dialog){
+
+    public void hideDialogProgress(ProgressDialog dialog) {
         dialog.dismiss();
     }
 }

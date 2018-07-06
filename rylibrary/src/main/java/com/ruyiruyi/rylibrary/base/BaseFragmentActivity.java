@@ -77,7 +77,9 @@ public class BaseFragmentActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(oBaseActiviy_Broad);//注销广播
+        if (Build.VERSION.SDK_INT >= 21) {
+            unregisterReceiver(oBaseActiviy_Broad);//注销广播
+        }
     }
 
     public void showDialogProgress(ProgressDialog dialog,String message){

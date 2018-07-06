@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +25,7 @@ import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.service.LuncherDownlodeService;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 
-public class LaunchActivity extends BaseActivity {
+public class LaunchActivity extends Activity {
     private final String TAG = LaunchActivity.class.getSimpleName();
     private TextView tv_num;
     private TextView tv_txt;
@@ -46,7 +47,7 @@ public class LaunchActivity extends BaseActivity {
                         isFirst = true;
                         tv_txt.setVisibility(View.VISIBLE);
                         tv_num.setVisibility(View.VISIBLE);
-                        registerService();
+                        registerService(); //TODO
                         StartDownlodeService();
                         mTimeCount = new TimeCount(8000, 80);
                         mTimeCount.start();
@@ -277,12 +278,12 @@ public class LaunchActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        //结束服务
+        super.onDestroy();
+        //结束服务.
         stopService(new Intent(LaunchActivity.this, LuncherDownlodeService.class));
         //取消注册广播
         if (isFirst) {
             unregisterReceiver(receiver);
-        }
-        super.onDestroy();
+        } //TODO
     }
 }

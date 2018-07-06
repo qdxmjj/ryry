@@ -99,11 +99,14 @@ public class StoreFragment extends BaseFragment {
     private TextView tv_bysy_num;
     private TextView tv_zsy_num;
     private ProgressDialog progressDialog;
-//    private ProgressDialog startDialog;
+    //    private ProgressDialog startDialog;
     private ForRefreshStore listener;
     private String path_takepic;
     private boolean isCamera = false;
     private Context mContext;
+
+    public StoreFragment() {
+    }
 
     public StoreFragment(Context mContext) {
         this.mContext = mContext;

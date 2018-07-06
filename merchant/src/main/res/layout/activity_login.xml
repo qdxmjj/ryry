@@ -3,15 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#ffffff"
+    android:orientation="vertical"
     tools:context="com.ruyiruyi.merchant.ui.activity.LoginActivity">
+
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -30,12 +32,12 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:singleLine="true"
-                android:maxLength="11"
-                android:background="@drawable/edit_bg_select_noline"
+                android:background="@drawable/edit_background_noline"
                 android:hint="请输入您的账号"
                 android:inputType="number"
+                android:maxLength="11"
                 android:paddingLeft="40dp"
+                android:singleLine="true"
                 android:textColorHint="@color/c5"
                 android:textCursorDrawable="@drawable/edit_cursor_color"
                 android:textSize="15sp" />
@@ -62,11 +64,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:background="@drawable/edit_bg_select_noline"
+                android:background="@drawable/edit_background_noline"
                 android:hint="请输入您的密码"
-                android:singleLine="true"
                 android:inputType="textPassword"
                 android:paddingLeft="40dp"
+                android:singleLine="true"
                 android:textColorHint="@color/c5"
                 android:textCursorDrawable="@drawable/edit_cursor_color"
                 android:textSize="15sp" />
@@ -92,8 +94,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="50dp"
                 android:layout_marginTop="5dp"
-                android:text="忘记密码?"
+                android:clickable="true"
                 android:onClick="myclick"
+                android:text="忘记密码?"
                 android:textColor="@color/theme_primary"
                 android:textSize="12sp" />
 
@@ -123,17 +126,18 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/register_w_button"
             android:gravity="center"
+            android:onClick="myclick"
             android:paddingBottom="7dp"
             android:paddingTop="7dp"
             android:text="注册"
-            android:onClick="myclick"
+            android:clickable="true"
             android:textColor="@color/c6"
             android:textSize="17sp" />
 
         <RelativeLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:id="@+id/tv_version"

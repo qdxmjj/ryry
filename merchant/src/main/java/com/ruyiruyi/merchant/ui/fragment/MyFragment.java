@@ -86,6 +86,9 @@ public class MyFragment extends BaseFragment {
     private boolean isCamera = false;
     private Context mContext;
 
+    public MyFragment() {
+    }
+
     public MyFragment(Context mContext) {
         this.mContext = mContext;
     }

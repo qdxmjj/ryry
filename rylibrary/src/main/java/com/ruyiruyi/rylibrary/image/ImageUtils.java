@@ -395,6 +395,8 @@ public class ImageUtils {
             inputStream = context.getContentResolver().openInputStream(uri);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 exifInterface = new ExifInterface(inputStream);
+            } else {
+                return 0;
             }
         } catch (IOException e) {
         }

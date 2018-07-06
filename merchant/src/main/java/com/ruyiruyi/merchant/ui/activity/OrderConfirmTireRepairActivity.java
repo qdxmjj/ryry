@@ -154,6 +154,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
     private String storeId;
     private String orderType;
     private String whereIn;
+    private String select;
     private String orderNo;
     private String userName;
     private String userPhone;
@@ -178,7 +179,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
     private ProgressDialog mainDialog;
     private ScrollView scrollView_;
     private final int maxRepairNum = 3;  //预设轮胎最大修补次数
-    private String maxErrorMsg = "每条轮胎最多修补三次!";//预设轮胎最大修补次数提示
+    private String maxErrorMsg = "此轮胎修补次数已达上限!";//预设轮胎最大修补次数提示
     private int currentCount_a_ = 0;
     private int currentCount_b_ = 0;
     private int currentCount_c_ = 0;
@@ -237,6 +238,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         orderNo = getIntent().getStringExtra("orderNo");
         orderType = getIntent().getStringExtra("orderType");
         whereIn = getIntent().getStringExtra("whereIn");
+        select = getIntent().getStringExtra("select");
         storeId = new DbConfig(getApplicationContext()).getId() + "";
 
         mainDialog = new ProgressDialog(this);
@@ -1029,19 +1031,19 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 //                pic_a_titleno.setVisibility(View.VISIBLE);//照片标题
 //                ll_pic_a.setVisibility(View.VISIBLE);//照片
                 oldCount_a_ = Integer.parseInt(bean.getRepairAmount());
-                repair_num_a_.setGoods_storage(maxRepairNum);//必须先设置good_storege 否则默认为1
-                repair_num_a_.setAmount(oldCount_a_);
+                repair_num_a_.setGoods_storage(maxRepairNum - oldCount_a_);//必须先设置good_storege 否则默认为1
+                repair_num_a_.setAmount(0);
                 repair_num_a_.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
                     @Override
                     public void onAmountChange(View view, int amount) {
-                        if (amount == maxRepairNum) {
+                        if (amount == maxRepairNum - oldCount_a_) {
                             Toast.makeText(getApplicationContext(), maxErrorMsg, Toast.LENGTH_SHORT).show();
                         }
-                        if (amount < oldCount_a_) {
+                        if (amount < 0) {
                             repair_num_a_.setAmount(amount + 1);
                             return;
                         }
-                        if (amount == oldCount_a_) {
+                        if (amount == 0) {
                             Log.e(TAG, "onAmountChange:  amount == oldCount_a_");
                             //减到初始值时 先隐藏
                             pic_a_titleno.setVisibility(View.GONE);//照片标题
@@ -1074,19 +1076,19 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 //                pic_b_titleno.setVisibility(View.VISIBLE);//照片标题
 //                ll_pic_b.setVisibility(View.VISIBLE);
                 oldCount_b_ = Integer.parseInt(bean.getRepairAmount());
-                repair_num_b_.setGoods_storage(maxRepairNum);
-                repair_num_b_.setAmount(oldCount_b_);
+                repair_num_b_.setGoods_storage(maxRepairNum - oldCount_b_);
+                repair_num_b_.setAmount(0);
                 repair_num_b_.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
                     @Override
                     public void onAmountChange(View view, int amount) {
-                        if (amount == maxRepairNum) {
+                        if (amount == maxRepairNum - oldCount_b_) {
                             Toast.makeText(getApplicationContext(), maxErrorMsg, Toast.LENGTH_SHORT).show();
                         }
-                        if (amount < oldCount_b_) {
+                        if (amount < 0) {
                             repair_num_b_.setAmount(amount + 1);
                             return;
                         }
-                        if (amount == oldCount_b_) {
+                        if (amount == 0) {
                             //减到初始值时 先隐藏
                             pic_b_titleno.setVisibility(View.GONE);//照片标题
                             ll_pic_b.setVisibility(View.GONE);//照片
@@ -1118,19 +1120,19 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 //                pic_c_titleno.setVisibility(View.VISIBLE);//照片标题
 //                ll_pic_c.setVisibility(View.VISIBLE);
                 oldCount_c_ = Integer.parseInt(bean.getRepairAmount());
-                repair_num_c_.setGoods_storage(maxRepairNum);
-                repair_num_c_.setAmount(oldCount_c_);
+                repair_num_c_.setGoods_storage(maxRepairNum - oldCount_c_);
+                repair_num_c_.setAmount(0);
                 repair_num_c_.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
                     @Override
                     public void onAmountChange(View view, int amount) {
-                        if (amount == maxRepairNum) {
+                        if (amount == maxRepairNum - oldCount_c_) {
                             Toast.makeText(getApplicationContext(), maxErrorMsg, Toast.LENGTH_SHORT).show();
                         }
-                        if (amount < oldCount_c_) {
+                        if (amount < 0) {
                             repair_num_c_.setAmount(amount + 1);
                             return;
                         }
-                        if (amount == oldCount_c_) {
+                        if (amount == 0) {
                             //减到初始值时 先隐藏
                             pic_c_titleno.setVisibility(View.GONE);//照片标题
                             ll_pic_c.setVisibility(View.GONE);//照片
@@ -1162,19 +1164,19 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 //                pic_d_titleno.setVisibility(View.VISIBLE);//照片标题
 //                ll_pic_d.setVisibility(View.VISIBLE);
                 oldCount_d_ = Integer.parseInt(bean.getRepairAmount());
-                repair_num_d_.setGoods_storage(maxRepairNum);
-                repair_num_d_.setAmount(oldCount_d_);
+                repair_num_d_.setGoods_storage(maxRepairNum - oldCount_d_);
+                repair_num_d_.setAmount(0);
                 repair_num_d_.setOnAmountChangeListener(new AmountView.OnAmountChangeListener() {
                     @Override
                     public void onAmountChange(View view, int amount) {
-                        if (amount == maxRepairNum) {
+                        if (amount == maxRepairNum - oldCount_d_) {
                             Toast.makeText(getApplicationContext(), maxErrorMsg, Toast.LENGTH_SHORT).show();
                         }
-                        if (amount < oldCount_d_) {
+                        if (amount < 0) {
                             repair_num_d_.setAmount(amount + 1);
                             return;
                         }
-                        if (amount == oldCount_d_) {
+                        if (amount == 0) {
                             //减到初始值时 先隐藏
                             pic_d_titleno.setVisibility(View.GONE);//照片标题
                             ll_pic_d.setVisibility(View.GONE);//照片
@@ -1407,13 +1409,13 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
         if (whereIn.equals("MyOrderItem")) {
             intent.setClass(getApplicationContext(), MyOrderActivity.class);
             Log.e(TAG, "onBackPressed: MyOrderItem");
-            intent.putExtra("page", "0");
+            intent.putExtra("page", select);
             intent.putExtra("typestate", "all");
         }
         if (whereIn.equals("MainOrderTop")) {
             intent.setClass(getApplicationContext(), MyOrderActivity.class);
             Log.e(TAG, "onBackPressed: MainOrderTop");
-            intent.putExtra("page", "0");
+            intent.putExtra("page", select);
             intent.putExtra("typestate", "pingtai");
         }
 

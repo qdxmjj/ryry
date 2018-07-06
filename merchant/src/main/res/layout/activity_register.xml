@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
     android:background="#ffffff"
+    android:focusable="true"
     android:focusableInTouchMode="true"
     android:scrollbars="none">
 
@@ -244,6 +244,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
+                    android:clickable="true"
                     android:gravity="center_vertical"
                     android:onClick="registerclick"
                     android:paddingLeft="100dp"
@@ -302,6 +303,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
+                    android:clickable="true"
                     android:gravity="center_vertical"
                     android:onClick="registerclick"
                     android:paddingLeft="100dp"
@@ -330,6 +332,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
+                    android:clickable="true"
                     android:gravity="center_vertical"
                     android:onClick="registerclick"
                     android:paddingLeft="100dp"
@@ -386,6 +389,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/edit_background_noline"
+                    android:clickable="true"
                     android:gravity="center_vertical"
                     android:lines="2"
                     android:onClick="registerclick"
@@ -462,8 +466,9 @@
                             android:id="@+id/img_yyzz"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:clickable="true"
                             android:onClick="registerPicClick"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -471,6 +476,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
+                            android:clickable="true"
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
@@ -548,8 +554,9 @@
                             android:id="@+id/img_mdpic_a"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:clickable="true"
                             android:onClick="registerPicClick"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -557,16 +564,35 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
+                            android:clickable="true"
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
 
-                        <ImageView
-                            android:id="@+id/img_mdpic_a_center"
+                        <LinearLayout
+                            android:id="@+id/ll_store_head"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_add" />
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/img_mdpic_a_center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_add" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:text="门头照片"
+                                android:textColor="@color/c6"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+
                     </FrameLayout>
 
                     <FrameLayout
@@ -579,8 +605,9 @@
                             android:id="@+id/img_mdpic_b"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:clickable="true"
                             android:onClick="registerPicClick"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -588,16 +615,33 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
+                            android:clickable="true"
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
 
-                        <ImageView
-                            android:id="@+id/img_mdpic_b_center"
+                        <LinearLayout
+                            android:id="@+id/ll_store_in"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_add" />
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/img_mdpic_b_center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_add" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:text="店内照片"
+                                android:textColor="@color/c6"
+                                android:textSize="12sp" />
+                        </LinearLayout>
                     </FrameLayout>
 
                     <FrameLayout
@@ -610,8 +654,9 @@
                             android:id="@+id/img_mdpic_c"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:clickable="true"
                             android:onClick="registerPicClick"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -619,16 +664,34 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
+                            android:clickable="true"
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
 
-                        <ImageView
-                            android:id="@+id/img_mdpic_c_center"
+                        <LinearLayout
+                            android:id="@+id/ll_store_workspace"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_add" />
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/img_mdpic_c_center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_add" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:text="车间照片"
+                                android:textColor="@color/c6"
+                                android:textSize="12sp" />
+                        </LinearLayout>
                     </FrameLayout>
                 </LinearLayout>
             </RelativeLayout>
@@ -682,8 +745,9 @@
                             android:id="@+id/img_shou_a"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:clickable="true"
                             android:onClick="registerPicClick"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark" />
 
                         <ImageView
@@ -691,6 +755,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
+                            android:clickable="true"
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone" />
@@ -802,11 +867,11 @@
 
 
             <LinearLayout
-                android:background="#ffffff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:background="#ffffff"
                 android:orientation="horizontal">
 
                 <CheckBox

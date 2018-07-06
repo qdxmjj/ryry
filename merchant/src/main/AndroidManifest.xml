@@ -23,7 +23,7 @@
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
 
     <application
@@ -41,6 +41,7 @@
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name" />
+
         <activity
             android:name=".MainActivity"
             android:launchMode="standard" />
@@ -67,6 +68,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+<!--        <receiver android:name=".ui.activity.LaunchActivity$MyReceiver">
+
+            <intent-filter>
+                <action android:name="com.ruyiruyi.merchant.ui.service.LuncherDownlodeService" />
+            </intent-filter>
+
+        </receiver>-->
+
 
         <activity android:name=".ui.activity.RegisterMapActivity" />
         <activity android:name=".ui.activity.LaunchActivity">
@@ -110,7 +119,7 @@
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:launchMode="singleTask"  />
+            android:launchMode="singleTask" />
         <!--android:theme="@style/AppTheme.Fullscreen.Translucent"-->
     </application>
 

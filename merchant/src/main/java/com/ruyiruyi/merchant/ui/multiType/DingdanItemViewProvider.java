@@ -97,6 +97,7 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
                     intent.putExtra("orderNo", dingdan.getOrderNo());
                     intent.putExtra("orderType", dingdan.getOrderType());
                     intent.putExtra("whereIn", "MainOrderItem");
+                    intent.putExtra("select", "not");
                     context.startActivity(intent);
                 } else if (dingdan.getOrderType().equals("3") && dingdan.getOrderState().equals("3") && (dingdan.getOrderStage().equals("1") || dingdan.getOrderStage().equals("3"))) {//(3:免费再换订单  3 待商家确认服务      OrderStage ：1 默认 2 补差 3 补差已支付)
                     Intent intent = new Intent(context, OrderConfirmFreeChangeActivity.class);
@@ -104,12 +105,14 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
                     intent.putExtra("orderType", dingdan.getOrderType());
                     intent.putExtra("orderStage", dingdan.getOrderStage());
                     intent.putExtra("whereIn", "MainOrderItem");
+                    intent.putExtra("select", "not");
                     context.startActivity(intent);
                 } else if (dingdan.getOrderType().equals("4") && dingdan.getOrderState().equals("3")) {//(4:轮胎修补订单  3 待商家确认服务  1 默认非补差)
                     Intent intent = new Intent(context, OrderConfirmTireRepairActivity.class);
                     intent.putExtra("orderNo", dingdan.getOrderNo());
                     intent.putExtra("orderType", dingdan.getOrderType());
                     intent.putExtra("whereIn", "MainOrderItem");
+                    intent.putExtra("select", "not");
                     context.startActivity(intent);
                 } else {
                     Intent intent = new Intent(context, PublicOrderInfoActivity.class);//其余各订单orderType各状态orderState均复用此页面(
@@ -119,6 +122,7 @@ public class DingdanItemViewProvider extends ItemViewProvider<Dingdan, DingdanIt
                     bundle.putString("orderState", dingdan.getOrderState());
                     bundle.putString("storeId", new DbConfig(context).getId() + "");
                     bundle.putString("whereIn", "MainOrderItem");
+                    bundle.putString("select", "not");
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
