@@ -126,7 +126,7 @@ public class OrderAffirmActivity extends RyBaseActivity {
 
 
         tirePriceAll = Double.parseDouble(new DecimalFormat("0.00").format(tirePriceDouble * tirecount));
-        cxwyPriceAll = Double.parseDouble(new DecimalFormat("0.00").format(cxwyPriceDouble * cxwycount));
+        cxwyPriceAll = Double.parseDouble(new DecimalFormat("0.00").format(cxwyPriceDouble));
         tireAllPriceText.setText("￥" + tirePriceAll);
         cxwyAllPriceText.setText("￥" + cxwyPriceAll);
 

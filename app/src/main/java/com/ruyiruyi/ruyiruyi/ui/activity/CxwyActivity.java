@@ -118,11 +118,17 @@ public class CxwyActivity extends RyBaseActivity {
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject object = data.getJSONObject(i);
                             long cxwyBuytime = object.getLong("cxwyBuytime");
-                            String cxwyBuyTimeStr = new UtilsRY().getTimestampToStringAll(cxwyBuytime);
-                            long cxwyEndtime = object.getLong("cxwyEndtime");
-                            String cxwyEndTimeStr = new UtilsRY().getTimestampToStringAll(cxwyEndtime);
+                            String cxwyBuyTimeStr = new UtilsRY().getTimestampToString(cxwyBuytime);
+                            String cxwyEndTimeStr = "";
+                            try {
+                                long cxwyEndtime = object.getLong("cxwyEndtime");
+                                 cxwyEndTimeStr = new UtilsRY().getTimestampToString(cxwyEndtime);
+                            }catch (Exception e){
+                                 cxwyEndTimeStr = "";
+                            }
+
                             long cxwyStarttime = object.getLong("cxwyStarttime");
-                            String cxwyStartTimeStr = new UtilsRY().getTimestampToStringAll(cxwyStarttime);
+                            String cxwyStartTimeStr = new UtilsRY().getTimestampToString(cxwyStarttime);
                             int cxwyState = object.getInt("cxwyState");
                             int cxwyTypeId = object.getInt("cxwyTypeId");// 1:有期限 2:没有期限
                             int getWay = object.getInt("getWay");//获取方式 1 系统赠送 2 正常购买
@@ -133,7 +139,10 @@ public class CxwyActivity extends RyBaseActivity {
                         initData();
                     } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else if (status.equals("0")) {
+                        initData();
                     } else {
+
                       //  Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 

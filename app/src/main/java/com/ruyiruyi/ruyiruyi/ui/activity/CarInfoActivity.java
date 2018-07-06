@@ -56,8 +56,11 @@ import org.xutils.x;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import rx.functions.Action1;
@@ -317,18 +320,22 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                             xszEndTime = new UtilsRY().getTimestampToString(serviceEndDate);
                             if (xszEndTime.equals("")){
                                 canClick = 0;
-                                saveCatButton.setText("修改车辆信息");
+                                saveCatButton.setText("保存");
+                                saveCatButton.setBackgroundResource(R.drawable.bg_button);
                             }else {
                                 canClick = 1;
                                 saveCatButton.setText("车辆信息不可修改");
+                                saveCatButton.setBackgroundResource(R.drawable.bg_button_noclick);
                             }
                         }catch (Exception e){
                             if (xszEndTime.equals("")){
                                 canClick = 0;
-                                saveCatButton.setText("修改车辆信息");
+                                saveCatButton.setText("保存");
+                                saveCatButton.setBackgroundResource(R.drawable.bg_button);
                             }else {
                                 canClick = 1;
                                 saveCatButton.setText("车辆信息不可修改");
+                                saveCatButton.setBackgroundResource(R.drawable.bg_button_noclick);
                             }
                         }
                        /*Long serviceEndDate = data.getLong("serviceEndDate");
@@ -1216,6 +1223,8 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                     if (status.equals("1")){
                         Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(),CarManagerActivity.class));
+                    }else if (status.equals("-999")){
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     }else {
                         Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
@@ -1316,13 +1325,11 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         String[] items = { "选择本地照片", "拍照" };
         builder.setNegativeButton("取消", null);
         builder.setItems(items, new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case CHOOSE_PICTURE: // 选择本地照片
-                        Intent openAlbumIntent = new Intent(
-                                Intent.ACTION_GET_CONTENT);
+                        Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
                         openAlbumIntent.setType("image/*");
                         startActivityForResult(openAlbumIntent, CHOOSE_PICTURE);
                         break;
@@ -1358,7 +1365,6 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                         setImageToView(data); // 让刚才选择裁剪得到的图片显示在界面上
                     }
                     break;
-
             }
         }else if (resultCode == ROAD_CONDITITION){ //路况选择的回掉
             if (roatStr.length() > 0){
@@ -1777,6 +1783,25 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         final android.support.v7.app.AlertDialog dialog = builder.create();
         View dialogView = View.inflate(this, R.layout.dialog_date, null);
         final DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.datePicker);
+        Calendar date = Calendar.getInstance();
+        int year1 = date.get(Calendar.YEAR);
+        int month1 = date.get(Calendar.MONTH);
+        int day1 = date.get(Calendar.DATE);
+        String endData = (year1-14) + "-" + 01 + "-" + 01;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date2 = null;
+        try {
+            date2 = simpleDateFormat.parse(endData);
+        } catch (ParseException e) {
+
+        }
+        long starTimre = date2.getTime();
+
+
+        long endTimre = System.currentTimeMillis();
+
+        datePicker.setMaxDate(endTimre);
+        datePicker.setMinDate(starTimre);
 
         dialog.setTitle("设置日期");
         dialog.setView(dialogView);

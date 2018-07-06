@@ -63,7 +63,7 @@
                     android:textSize="15sp"
                     android:textColor="@color/c20"
                     android:layout_marginTop="5dp"
-                    android:text="一次购买四条轮胎赠送畅行无忧"/>
+                    android:text=" "/>
                 <TextView
                     android:id="@+id/tire_price_text"
                     android:layout_width="wrap_content"
@@ -124,7 +124,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="增值服务"
+                        android:text="意外保障服务"
                         android:layout_gravity="center_vertical"
                         android:textSize="17sp"
                         android:layout_marginLeft="10dp"/>
@@ -156,7 +156,7 @@
                             android:id="@+id/cxwy_price_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="￥200/次"
+                            android:text=""
                             android:textSize="17sp"
                             android:textColor="@color/c6"
                             android:layout_marginLeft="10dp"/>
@@ -178,7 +178,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:text="此处是对畅行无忧的描述"
+                    android:text="无论何种原因导致的如驿如意轮胎损坏经修补后无法正常使用，只要轮胎还能识别出是如驿如意的轮胎，即可免费更换新轮胎。"
                     android:layout_marginTop="5dp"
                     android:textSize="15sp"
                     />

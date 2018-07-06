@@ -18,6 +18,7 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.model.CxwyTimesPrice;
 import com.ruyiruyi.ruyiruyi.ui.multiType.InfoOne;
 import com.ruyiruyi.ruyiruyi.ui.multiType.InfoOneViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PublicBigPic;
@@ -35,6 +36,7 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +64,9 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
 
     private String finalCxwyPrice;
     private double allPrice;
+    private TextView cxwyAllPriceText;
+    public List<CxwyTimesPrice> cxwyList;
+    private String shoeBasePrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +85,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
                 }
             }
         });
+        cxwyList = new ArrayList<>();
 
         initView();
         initData();
@@ -207,7 +213,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
         items.add(new InfoOne("用户名", user.getNick(), true));
         items.add(new InfoOne("联系电话", user.getPhone(), true));
         items.add(new InfoOne("车牌号", carNumber, true));
-        items.add(new InfoOne("畅行无忧价格", finalCxwyPrice, true));
+      //  items.add(new InfoOne("畅行无忧价格", finalCxwyPrice, true));
         items.add(new PublicCheckNum("购买数量", 999, buyNum, "1"));
 
         //更新适配器
@@ -242,6 +248,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
                     if (status.equals("1")){
                         JSONObject data = jsonObject1.getJSONObject("data");
                         carNumber = data.getString("platNumber");
+
 
                         initCXWYData();
                     }
@@ -285,6 +292,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
         params.addBodyParameter("reqJson", jsonObject.toString());
         String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
+        Log.e(TAG, "initCXWYData:-- " + params);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -297,6 +305,22 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
                     if (status.equals("1")){
                         JSONObject data = jsonObject1.getJSONObject("data");
                         finalCxwyPrice = data.getString("finalCxwyPrice");
+                        shoeBasePrice = data.getString("shoeBasePrice");
+
+                        cxwyList.clear();
+                        JSONArray cxwyPriceParamList = data.getJSONArray("cxwyPriceParamList");
+                        for (int i = 0; i < cxwyPriceParamList.length(); i++) {
+                            JSONObject object = cxwyPriceParamList.getJSONObject(i);
+                            int id = object.getInt("id");
+                            int times = object.getInt("times");
+                            String rate = object.getString("rate");
+                            CxwyTimesPrice cxwyTimesPrice = new CxwyTimesPrice(id, rate, times);
+                            if (times == 1){
+                                cxwyPrice = rate;
+                            }
+                            cxwyList.add(cxwyTimesPrice);
+                        }
+
                         setView();
                     }
                 } catch (JSONException e) {
@@ -326,6 +350,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
         img_agree = findViewById(R.id.img_agree);
         agreement = findViewById(R.id.agreement);
         buy_ = findViewById(R.id.buy_);
+        cxwyAllPriceText = (TextView) findViewById(R.id.all_cxwy_price_text);
 
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
@@ -370,8 +395,20 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
     @Override
     public void onPubCheckNumItemClickListener(int num) {
         buyNum = num;
-        double cxwyPrice = Double.parseDouble(finalCxwyPrice);
-        allPrice = cxwyPrice * num;
+        if (num == 0){
+            allPrice = 0;
+        }else {
+            for (int i = 0; i < cxwyList.size(); i++) {
+                if (cxwyList.get(i).getTimes() == buyNum) {
+                    double price = Double.parseDouble(cxwyList.get(i).getRate()) * Double.parseDouble(shoeBasePrice) / 100;
+                    String format = new DecimalFormat("0").format(price);
+                    allPrice = Double.parseDouble(format);
+                }
+            }
+        }
 
+     //   double cxwyPrice = Double.parseDouble(finalCxwyPrice);
+     //   allPrice = cxwyPrice * num;
+        cxwyAllPriceText.setText(allPrice + "");
     }
 }

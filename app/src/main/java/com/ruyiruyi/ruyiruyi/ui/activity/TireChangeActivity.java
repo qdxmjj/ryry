@@ -601,6 +601,10 @@ public class TireChangeActivity extends RyBaseActivity {
             Toast.makeText(TireChangeActivity.this, "请选择轮胎数量", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (shop == null){
+            Toast.makeText(TireChangeActivity.this, "请选择门店", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (currentChangeType == 0) {//首次更换
             User user = new DbConfig(this).getUser();
             int userId = user.getId();

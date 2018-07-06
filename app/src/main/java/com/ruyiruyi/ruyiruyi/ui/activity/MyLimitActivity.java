@@ -82,9 +82,9 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
     private TextView right_syed;
     private TextView left_yhed;
     private TextView top_xyed;
-    private double xyed;
-    private double yhed;
-    private double syed;
+    private int xyed;
+    private int yhed;
+    private int syed;
     public int payType = 1;  //0是微信支付 1是支付宝支付
     private ProgressDialog payDialog;
     private ProgressDialog startDialog;
@@ -177,9 +177,16 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
                     if (status == 1) {
                         JSONArray data = jsonObject.getJSONArray("data");
                         JSONObject objBean = (JSONObject) data.get(0);
-                        xyed = objBean.getDouble("credit");// 信用额度
-                        syed = objBean.getDouble("remain");// 剩余额度
+                        double dxyed = objBean.getDouble("credit");// 信用额度
+                        double dsyed = objBean.getDouble("remain");// 剩余额度
+
+                        xyed = (int)dxyed;
+                        syed = (int)dsyed;;
                         yhed = xyed - syed;// 应还额度
+                        if (yhed < 0) {
+                            yhed = 0;
+                        }
+
                         initView();
                     } else if (status == -999) {
                         hideDialogProgress(startDialog);

@@ -113,6 +113,8 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                             cancleFirstTire();
                         }else if (orderType == 4){
                             cancleTireRepair();
+                        }else if (orderType == 3){
+                            cancleFreeTire();
                         }
 
                         break;
@@ -128,7 +130,7 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
         freeRepairList = new ArrayList<>();
         Intent intent = getIntent();
         // OrderType 0:轮胎购买订单 1:普通商品购买订单 2:首次更换订单 3:免费再换订单 4:轮胎修补订单
-        //轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货
+        //轮胎订单状态(orderType:0) :1 已安装 2 待服务 3 支付成功 4 支付失败 5 待支付 6 已退货 7退款中 8是已退款 9作废
         //订单状态(orderType:1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付  11审核中  12 审核失败
         //orderStage:订单二段状态 1 默认(不需要支付差价)  2 待车主支付差价 3 已支付差价 4 待车主支付运费 5 已支付运费
         orderNo = intent.getStringExtra(PaymentActivity.ORDERNO);
@@ -172,6 +174,8 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                     actionBar.setTitle("审核中");
                 }else if (orderState == 12){
                     actionBar.setTitle("审核未通过");
+                }else if (orderState == 13){
+                    actionBar.setTitle("审核通过");
                 }
 
             }else if (orderStage == 2){
@@ -194,6 +198,59 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
         initOrderFromService();
     }
 
+    /**
+     * 取消免费再换定的按
+     */
+    private void cancleFreeTire() {
+        int userId = new DbConfig(this).getId();
+        JSONObject jsonObject = new JSONObject();
+        Log.e(TAG, "initOrderFromService:--- " + orderType);
+        try {
+            jsonObject.put("orderNo", orderNo);
+            jsonObject.put("userId", userId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "cancelFreeChangeOrder");
+        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        //    setResult(TireWaitChangeActivity.TIREWAIT, new Intent());
+                        finish();
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
 
 
     /**'
@@ -217,6 +274,10 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
             }
         }else if (orderType == 4){
             if (orderState == 3){
+                actionBar.setRightView("取消订单");
+            }
+        }else if (orderType == 3){
+            if (orderState == 11){
                 actionBar.setRightView("取消订单");
             }
         }
@@ -362,6 +423,10 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                         Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
                     //    setResult(TireWaitChangeActivity.TIREWAIT, new Intent());
                         finish();
+                    }else if (status.equals("-1")){
+                        Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        //    setResult(TireWaitChangeActivity.TIREWAIT, new Intent());
+                        finish();
                     }
                 } catch (JSONException e) {
 
@@ -415,6 +480,10 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                     if (status.equals("1")){
                         Toast.makeText(OrderInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
                       //  setResult(TireWaitChangeActivity.TIREWAIT, new Intent());
+                        Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                        intent.putExtra(OrderFragment.ORDER_TYPE, "DFH");
+                        intent.putExtra(OrderActivity.ORDER_FROM,1);
+                        startActivity(intent);
                         finish();
                     }
                 } catch (JSONException e) {
@@ -482,7 +551,7 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                         }else if (orderType == 3){ //免费再换
                             if (orderState == 5 ||orderState == 11  ) {  //代发货  //审核中
                                 getFreeTireOrderInfo(data);
-                            } else if (orderState == 3 || orderState == 2 || orderState == 6 || orderState ==1 || orderState == 4 ) { //待商家确认服务 || 待收货  ||待车主确认服务
+                            } else if (orderState == 3 || orderState == 2 || orderState == 6 || orderState ==1 || orderState == 4 || orderState == 13) { //待商家确认服务 || 待收货  ||待车主确认服务
                                 codeList.clear();
                                 getFreeTireOrderInfo(data);
                                 getFreeTireOrderCode(data);
@@ -492,10 +561,10 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                                 }
                             }else if (orderState == 12){        //审核失败
                                 getFreeTireOrderInfo(data);
-                                getFreeTireOrderOldCode(data);
-                                if (orderStage == 2){   //补差订单 获取畅行无忧数量
+                              //  getFreeTireOrderOldCode(data);
+                               /* if (orderStage == 2){   //补差订单 获取畅行无忧数量
                                     getCXWYCountFromService();
-                                }
+                                }*/
                             }
                         }else if (orderType == 0){  //轮胎购买订单
                        //     if (orderState == 3 ||orderState == 9 || orderState == 10 || orderState == 4) {  //已完成
@@ -573,6 +642,7 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
             freeRepairList.add(new InfoOne(barCode,repairAmount,false));
         }
     }
+
 
     /**
      * 获取畅行无忧数量
@@ -732,7 +802,7 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
      * @throws JSONException
      */
     private void getFreeTireOrderInfo(JSONObject data) throws JSONException {
-        if (orderState == 12){
+        if (orderState == 13){
             origin = data.getString("origin");
         }
         orderImg = data.getString("orderImg");
@@ -890,6 +960,8 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                 items.add(new InfoOne("联系电话", userPhone, false));
                 items.add(new InfoOne("车牌号", carNumber, false));
                 items.add(new InfoOne("服务项目", "免费再换", false));
+                items.add(new InfoOne("审核情况", "审核未通过", false));
+                items.add(new InfoOne("失败原因",origin, true));
                 items.add(new InfoOne("店铺名称", storeName, true, true));
                 for (int i = 0; i < tireInfoList.size(); i++) {
                     items.add(tireInfoList.get(i));
@@ -928,7 +1000,7 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
 
 
             }else {                 //普通订单
-                if (orderState == 5 || orderState == 4){ //5 待支付
+                if (orderState == 5 || orderState == 4 ||orderState == 13){ //5 待支付   13审核通过
                     items.add(new InfoOne("联系人",userName,false));
                     items.add(new InfoOne("联系电话",userPhone,false));
                     items.add(new InfoOne("车牌号",carNumber,false));
@@ -988,7 +1060,7 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                     for (int i = 0; i < tireInfoList.size(); i++) {
                         items.add(tireInfoList.get(i));
                     }
-                    if (noBuchaTireList.size()>0){
+                /*    if (noBuchaTireList.size()>0){
                         items.add(new InfoOne("可更换得轮胎","", false));
                         for (int i = 0; i < noBuchaTireList.size(); i++) {
                             items.add(noBuchaTireList.get(i));
@@ -1009,7 +1081,7 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                         items.add(new CountOne(buchaTireList.size(),currentCxwyCount,priceList,currentPrice));
                     }else {
                         items.add(new CountOne(cxwyCount,currentCxwyCount,priceList,currentPrice));
-                    }
+                    }*/
                 }
             }
 
@@ -1105,15 +1177,19 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                         if (orderStage == 1){
                             if (orderState == 6) {   //待车主确认服务
                                 userAffirmService();
+                            }else if (orderState == 13){    //审核通过后前往更换轮胎
+                                goRepariTire();
+                            }else if (orderState == 12){  //审核未通过 重新下单
+                               startActivity(new Intent(getApplicationContext(),TireFreeChangeActivity.class));
+                                finish();
                             }
-                        }else if (orderStage == 4){ //支付邮费
-                                buYoufei();
-                        }
 
+                        }else if (orderStage == 4){ //支付邮费
+                            buYoufei();
+                        }
                     }
                 });
     }
-
 
 
     /**
@@ -1126,6 +1202,7 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
         try {
             jsonObject.put("orderNo", orderNo);
             jsonObject.put("userId", userId);
+            jsonObject.put("cxwyAmount", currentCxwyCount);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "confirmUserFreeChangeOrder");
@@ -1509,9 +1586,14 @@ public class  OrderInfoActivity extends RyBaseActivity implements InfoOneViewBin
                     orderButton.setText("审核中");
                     orderButton.setClickable(false);
                     orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+                }else if (orderState == 13){
+                    orderButton.setText("更换轮胎");
+                    orderButton.setClickable(true);
+                    orderButton.setBackgroundResource(R.drawable.bg_button);
                 }else if(orderState == 12){
-                    orderBuchaLayout.setVisibility(View.VISIBLE);
-                    orderButton.setVisibility(View.GONE);
+                    orderButton.setText("重新下单");
+                    orderButton.setClickable(true);
+                    orderButton.setBackgroundResource(R.drawable.bg_button);
                 }
             }
         }

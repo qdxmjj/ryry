@@ -101,7 +101,7 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluate,R.id.my_action);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -109,15 +109,19 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
             window.setStatusBarColor(Color.TRANSPARENT);
             window.setNavigationBarColor(Color.TRANSPARENT);
             isTranslucentStatus = true;
-        }
+        }*/
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("评价");;
+        actionBar.setRightView("提交");
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
             @Override
             public void onItemClick(int var1) {
                 switch ((var1)){
                     case -1:
                         onBackPressed();
+                        break;
+                    case -3:
+                        postEvaluate();
                         break;
                 }
             }

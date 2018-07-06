@@ -42,7 +42,7 @@ public class GoodsShopViewBinder extends ItemViewProvider<GoodsShop, GoodsShopVi
         Glide.with(context).load(goodsShop.getGoodsImage()).into(holder.goodsImageView);
         holder.goodsNameText.setText(goodsShop.getGoodsName());
         holder.gooidsPriceText.setText("￥" + goodsShop.getGoodsPrice());
-        holder.goodsDistanceText.setText(goodsShop.getGoodsDistance() + "km");
+        holder.goodsDistanceText.setText(goodsShop.getGoodsDistance() + "m");
         holder.goodsAddressText.setText(goodsShop.getStoreName());
 
         RxViewAction.clickNoDouble(holder.goodsShopLayout)

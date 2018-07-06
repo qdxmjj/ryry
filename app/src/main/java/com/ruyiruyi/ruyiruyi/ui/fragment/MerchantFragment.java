@@ -485,12 +485,12 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == HomeFragment.CITY_CHOOSE){
+        Log.e(TAG, "onActivityResult: ---2");
+        if (requestCode == HomeFragment.CITY_CHOOSE){
             String city = data.getStringExtra("CITY");
             currentCity = city;
             cityText.setText(currentCity);
-        }
-        if (resultCode == SEARCH_CODE){
+        }else if (requestCode == SEARCH_CODE){
             //搜索结果的返回
             String search_str = data.getStringExtra("SEARCH_STR");
             isCleanData = true;

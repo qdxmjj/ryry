@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.model.StoreType;
@@ -21,6 +22,8 @@ import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.flowlayout.FlowLayout;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagAdapter;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagFlowLayout;
+import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
+import com.ruyiruyi.rylibrary.utils.glide.GlideRoundTransform;
 
 import java.util.List;
 
@@ -39,6 +42,7 @@ public class ShopViewBinder extends ItemViewProvider<Shop, ShopViewBinder.ViewHo
     public ShopViewBinder(Context context) {
         this.context = context;
     }
+    private RequestManager glideRequest;
 
     @NonNull
     @Override
@@ -50,7 +54,9 @@ public class ShopViewBinder extends ItemViewProvider<Shop, ShopViewBinder.ViewHo
     @Override
     protected void onBindViewHolder(@NonNull final ViewHolder holder, @NonNull final Shop shop) {
         final LayoutInflater inflater = LayoutInflater.from(context);
-        Glide.with(context).load(shop.getStoreImage()).into(holder.shopImage);
+        glideRequest = Glide.with(context);
+        glideRequest.load(shop.getStoreImage()).transform(new GlideRoundTransform(context)).into(holder.shopImage);
+     //   Glide.with(context).load(shop.getStoreImage()).into(holder.shopImage);
         holder.shopNameText.setText(shop.getStoreName());
         holder.addressText.setText("地址： " + shop.getStoreAddress());
         if (shop.getStoreDistence().equals("")){

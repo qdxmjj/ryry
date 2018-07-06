@@ -187,6 +187,22 @@ public class TireFreeChangeActivity extends RyBaseActivity {
 
     private void initImageView() {
         if (currentFontCount + currentRearCount == 0) {
+            hasTire1 = false;
+            hasCode1 = false;
+            hasTire2 = false;
+            hasCode2 = false;
+            hasTire3 = false;
+            hasCode3 = false;
+            hasTire4 = false;
+            hasCode4 = false;
+            initTire1Layou();
+            initTire2Layou();
+            initTire3Layou();
+            initTire4Layou();
+            initCode1Layout();
+            initCode2Layout();
+            initCode3Layout();
+            initCode4Layout();
             tireImageLayoutView.setVisibility(View.GONE);
             imageTopLayout.setVisibility(View.GONE);
             tireImageLayout1.setVisibility(View.GONE);
@@ -194,21 +210,43 @@ public class TireFreeChangeActivity extends RyBaseActivity {
             tireImageLayout3.setVisibility(View.GONE);
             tireImageLayout4.setVisibility(View.GONE);
         } else if (currentFontCount + currentRearCount == 1) {
+            hasTire2 = false;
+            hasCode2 = false;
+            hasTire3 = false;
+            hasCode3 = false;
+            hasTire4 = false;
+            hasCode4 = false;
+            initTire2Layou();
+            initTire3Layou();
+            initTire4Layou();
+            initCode2Layout();
+            initCode3Layout();
+            initCode4Layout();
             tireImageLayoutView.setVisibility(View.VISIBLE);
             imageTopLayout.setVisibility(View.VISIBLE);
             tireImageLayout1.setVisibility(View.VISIBLE);
             tireImageLayout2.setVisibility(View.GONE);
             tireImageLayout3.setVisibility(View.GONE);
             tireImageLayout4.setVisibility(View.GONE);
-        }else if (currentFontCount + currentRearCount == 2) {
-            tireImageLayoutView.setVisibility(View.VISIBLE);
-        } else if (currentFontCount + currentRearCount == 2) {
+        }else if(currentFontCount + currentRearCount == 2) {
+            hasTire3 = false;
+            hasCode3 = false;
+            hasTire4 = false;
+            hasCode4 = false;
+            initTire3Layou();
+            initTire4Layou();
+            initCode3Layout();
+            initCode4Layout();
             imageTopLayout.setVisibility(View.VISIBLE);
             tireImageLayout1.setVisibility(View.VISIBLE);
             tireImageLayout2.setVisibility(View.VISIBLE);
             tireImageLayout3.setVisibility(View.GONE);
             tireImageLayout4.setVisibility(View.GONE);
         }else if (currentFontCount + currentRearCount == 3) {
+            hasTire4 = false;
+            hasCode4 = false;
+            initTire4Layou();
+            initCode4Layout();
             tireImageLayoutView.setVisibility(View.VISIBLE);
             imageTopLayout.setVisibility(View.VISIBLE);
             tireImageLayout1.setVisibility(View.VISIBLE);
@@ -216,6 +254,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
             tireImageLayout3.setVisibility(View.VISIBLE);
             tireImageLayout4.setVisibility(View.GONE);
         }else if (currentFontCount + currentRearCount == 4) {
+
             tireImageLayoutView.setVisibility(View.VISIBLE);
             imageTopLayout.setVisibility(View.VISIBLE);
             tireImageLayout1.setVisibility(View.VISIBLE);
@@ -865,6 +904,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
     private void initFreeTireFromService() {
         User user = new DbConfig(this).getUser();
         int carId = user.getCarId();
+
         int userId = user.getId();
         JSONObject jsonObject = new JSONObject();
         try {

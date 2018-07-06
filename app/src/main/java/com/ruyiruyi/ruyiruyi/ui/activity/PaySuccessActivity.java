@@ -63,7 +63,8 @@ public class PaySuccessActivity extends RyBaseActivity {
             }else {
                 goSeeView.setText("去服务");
             }
-
+        }else if (ordertype == 98){
+            goSeeView.setText("查看所有订单详情");
         }
 
         RxViewAction.clickNoDouble(goSeeView)
@@ -87,6 +88,12 @@ public class PaySuccessActivity extends RyBaseActivity {
                         }else if (ordertype==3){
                             Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
                             intent.putExtra(OrderFragment.ORDER_TYPE, "DFW");
+                            intent.putExtra(OrderActivity.ORDER_FROM,1);
+                            startActivity(intent);
+                            finish();
+                        }else if (ordertype==98){
+                            Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                            intent.putExtra(OrderFragment.ORDER_TYPE, "ALL");
                             intent.putExtra(OrderActivity.ORDER_FROM,1);
                             startActivity(intent);
                             finish();

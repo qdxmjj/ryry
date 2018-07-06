@@ -49,7 +49,7 @@ public class AgreementActivity extends RyBaseActivity {
         agreementtype = intent.getIntExtra("AGREEMENTTYPE",0);  //1用户   3是畅行无忧
         if (agreementtype == 0){
             actionBar.setTitle("用户协议");;
-        }else if (agreementtype == 1){
+        }else if (agreementtype == 3){
             actionBar.setTitle("畅行无忧协议");;
         }
 
