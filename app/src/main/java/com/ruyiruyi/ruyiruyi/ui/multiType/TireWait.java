@@ -11,8 +11,22 @@ public class TireWait {
     public String orderNo;
     public Boolean rejectStatus;
     public int avaliableShoeNo;
+    public int userCarId;
 
-    public TireWait(String tireImage, String tireTitle, String username, int tireCount, String carName, String tirePlace, String orderNo, Boolean rejectStatus,int avaliableShoeNo) {
+    public TireWait(String tireImage, String tireTitle, String username, int tireCount, String carName, String tirePlace, String orderNo, Boolean rejectStatus, int avaliableShoeNo, int userCarId) {
+        this.tireImage = tireImage;
+        this.tireTitle = tireTitle;
+        this.username = username;
+        this.tireCount = tireCount;
+        this.carName = carName;
+        this.tirePlace = tirePlace;
+        this.orderNo = orderNo;
+        this.rejectStatus = rejectStatus;
+        this.avaliableShoeNo = avaliableShoeNo;
+        this.userCarId = userCarId;
+    }
+
+    public TireWait(String tireImage, String tireTitle, String username, int tireCount, String carName, String tirePlace, String orderNo, Boolean rejectStatus, int avaliableShoeNo) {
         this.tireImage = tireImage;
         this.tireTitle = tireTitle;
         this.username = username;
@@ -49,6 +63,14 @@ public class TireWait {
     }
 
     public TireWait() {
+    }
+
+    public int getUserCarId() {
+        return userCarId;
+    }
+
+    public void setUserCarId(int userCarId) {
+        this.userCarId = userCarId;
     }
 
     public String getTireImage() {

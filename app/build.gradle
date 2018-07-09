@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def VERSION_CODE = 1
-def VERSION_NAME = "3.1.1"
+def VERSION_NAME = "3.1.2"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''
@@ -108,6 +108,12 @@ android {
             }
             wandoujia {
                 manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+            }
+            oppo {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "oppo"]
+            }
+            vivo {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "vivo"]
             }
         }
     }
