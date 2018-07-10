@@ -243,6 +243,7 @@ public class MyOrderFragment extends BaseFragment implements OrderItemProvider.F
                         bean.setBianhao(orders.getString("orderNo"));
                         bean.setOrderStage(orders.getString("orderStage"));
                         bean.setPrice(orders.getString("orderPrice"));
+                        bean.setOrderActuallyPrice(orders.getString("orderActuallyPrice"));
                         bean.setStatus(orders.getString("orderState"));
                         bean.setOrderTime(orders.getLong("orderTime"));
                         bean.setOrderType(orders.getString("orderType"));

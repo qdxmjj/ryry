@@ -154,8 +154,8 @@ public class ImagPagerUtil {
 
     protected void setOptions() {
         options = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.mipmap.ic_launcher)
-                .showImageOnFail(R.mipmap.ic_launcher)
+                .showImageForEmptyUri(R.drawable.ic_launcher)
+                .showImageOnFail(R.drawable.ic_launcher)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .considerExifParams(true)

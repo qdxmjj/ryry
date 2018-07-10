@@ -177,10 +177,10 @@ public class MyServiceActivity extends BaseFragmentActivity implements MyService
 
     private void getTitles() {
         title_list = new ArrayList();
-        title_list.add("汽车保养");
-        title_list.add("美容清洗");
-        title_list.add("安装");
-        title_list.add("轮胎服务");
+        title_list.add(MyServiceActivity.this.getString(R.string.service_type_a));
+        title_list.add(MyServiceActivity.this.getString(R.string.service_type_b));
+        title_list.add(MyServiceActivity.this.getString(R.string.service_type_c));
+        title_list.add(MyServiceActivity.this.getString(R.string.service_type_d));
 
     }
 

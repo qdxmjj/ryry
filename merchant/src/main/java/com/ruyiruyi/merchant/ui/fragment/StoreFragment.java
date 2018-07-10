@@ -188,6 +188,7 @@ public class StoreFragment extends BaseFragment {
                         JSONObject beanObj = (JSONObject) rows.get(i);
                         dianpu.setOrderImage(beanObj.getString("orderImage"));
                         dianpu.setOrderPrice(beanObj.getString("orderPrice"));
+                        dianpu.setOrderActuallyPrice(beanObj.getString("orderActuallyPrice"));
                         dianpu.setOrderTime(beanObj.getLong("orderTime"));
                         dianpu.setOrderState(beanObj.getString("orderState"));
                         String orderServcieTypeName = "";

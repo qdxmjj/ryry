@@ -41,19 +41,20 @@ public class DianpuItemViewProvider extends ItemViewProvider<Dianpu, DianpuItemV
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Dianpu dianpu) {
 
-        switch (dianpu.getOrderServcieTypeName_First()) {
-            case "汽车保养":
-                holder.dianpu_rlv_img.setImageResource(R.drawable.ic_baoyang);
-                break;
-            case "美容清洗":
-                holder.dianpu_rlv_img.setImageResource(R.drawable.ic_qingxi);
-                break;
-            case "安装":
-                holder.dianpu_rlv_img.setImageResource(R.drawable.ic_anzhuang);
-                break;
-            case "轮胎服务":
-                holder.dianpu_rlv_img.setImageResource(R.drawable.ic_luntai);
-                break;
+        if (dianpu.getOrderServcieTypeName_First().equals(context.getString(R.string.service_type_a))) {
+            holder.dianpu_rlv_img.setImageResource(R.drawable.ic_baoyang);
+        } else if (dianpu.getOrderServcieTypeName_First().equals(context.getString(R.string.service_type_b))) {
+            holder.dianpu_rlv_img.setImageResource(R.drawable.ic_qingxi);
+        } else if (dianpu.getOrderServcieTypeName_First().equals(context.getString(R.string.service_type_c))) {
+            holder.dianpu_rlv_img.setImageResource(R.drawable.ic_anzhuang);
+        } else {
+            holder.dianpu_rlv_img.setImageResource(R.drawable.ic_luntai);
+        }
+
+        if (!dianpu.getOrderActuallyPrice().equals(dianpu.getOrderPrice())) {
+            holder.tv_quan.setVisibility(View.VISIBLE);
+        } else {
+            holder.tv_quan.setVisibility(View.GONE);
         }
         holder.dianpu_tv_type.setText(dianpu.getOrderServcieTypeName());
         String timestampToStringAll = new UtilsRY().getTimestampToStringAll(dianpu.getOrderTime());
@@ -64,45 +65,46 @@ public class DianpuItemViewProvider extends ItemViewProvider<Dianpu, DianpuItemV
             case "1":
                 stateStr = "已完成";
                 holder.dianpu_tv_state.setText(stateStr);
-                holder.dianpu_tv_money.setText("+" + dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setText("+" + dianpu.getOrderActuallyPrice());
                 holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.theme_primary));
                 break;
-            case "2":
-                stateStr = "待收货";
-                holder.dianpu_tv_state.setText(stateStr);
-                holder.dianpu_tv_money.setText(dianpu.getOrderPrice());
-                holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
-                break;
             case "3":
-                stateStr = "待服务";
+                stateStr = "确认服务";
                 holder.dianpu_tv_state.setText(stateStr);
-                holder.dianpu_tv_money.setText(dianpu.getOrderPrice());
-                holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
-                break;
-            case "5":
-                stateStr = "待发货";
-                holder.dianpu_tv_state.setText(stateStr);
-                holder.dianpu_tv_money.setText(dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setText(dianpu.getOrderActuallyPrice());
                 holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
                 break;
             case "6":
                 stateStr = "待车主确认服务";
                 holder.dianpu_tv_state.setText(stateStr);
-                holder.dianpu_tv_money.setText(dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setText(dianpu.getOrderActuallyPrice());
                 holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
                 break;
             case "7":
                 stateStr = "待评价";
                 holder.dianpu_tv_state.setText(stateStr);
-                holder.dianpu_tv_money.setText("+" + dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setText("+" + dianpu.getOrderActuallyPrice());
                 holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.theme_primary));
                 break;
-            case "8":
-                stateStr = "待支付";
+            case "15":
+                stateStr = "已取消";
                 holder.dianpu_tv_state.setText(stateStr);
-                holder.dianpu_tv_money.setText(dianpu.getOrderPrice());
+                holder.dianpu_tv_money.setText(dianpu.getOrderActuallyPrice());
                 holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
                 break;
+            case "10":
+                stateStr = "已退款";
+                holder.dianpu_tv_state.setText(stateStr);
+                holder.dianpu_tv_money.setText(dianpu.getOrderActuallyPrice());
+                holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
+                break;
+            case "9":
+                stateStr = "退款中";
+                holder.dianpu_tv_state.setText(stateStr);
+                holder.dianpu_tv_money.setText(dianpu.getOrderActuallyPrice());
+                holder.dianpu_tv_money.setTextColor(context.getResources().getColor(R.color.c7));
+                break;
+
         }
         RxViewAction.clickNoDouble(holder.rl_item).subscribe(new Action1<Void>() {
             @Override
@@ -132,6 +134,8 @@ public class DianpuItemViewProvider extends ItemViewProvider<Dianpu, DianpuItemV
         @NonNull
         private TextView dianpu_tv_money;
         @NonNull
+        private TextView tv_quan;
+        @NonNull
         private TextView dianpu_tv_state;
         @NonNull
         private RelativeLayout rl_item;
@@ -142,6 +146,7 @@ public class DianpuItemViewProvider extends ItemViewProvider<Dianpu, DianpuItemV
             this.dianpu_tv_type = (TextView) itemView.findViewById(R.id.dianpu_tv_type);
             this.dianpu_tv_time = (TextView) itemView.findViewById(R.id.dianpu_tv_time);
             this.dianpu_tv_money = (TextView) itemView.findViewById(R.id.dianpu_tv_money);
+            this.tv_quan = (TextView) itemView.findViewById(R.id.tv_quan);
             this.dianpu_tv_state = (TextView) itemView.findViewById(R.id.dianpu_tv_state);
             this.rl_item = (RelativeLayout) itemView.findViewById(R.id.rl_item);
         }

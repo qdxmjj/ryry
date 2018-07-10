@@ -766,7 +766,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         final ImageView img_bucha_d_ = (ImageView) dialogView.findViewById(R.id.img_bucha_d_);
         TextView tv_bucha_d_ = (TextView) dialogView.findViewById(R.id.tv_bucha_d_);
         dialog.setTitle("选择需要补差的轮胎");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setIcon(R.drawable.ic_launcher);
         ll_bucha_a_.setVisibility(View.GONE);//初始化全部隐藏
         ll_bucha_b_.setVisibility(View.GONE);
         ll_bucha_c_.setVisibility(View.GONE);
@@ -1024,7 +1024,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setIcon(R.drawable.ic_launcher);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
             @Override
@@ -1054,7 +1054,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 break;
         }
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setIcon(R.drawable.ic_launcher);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
             @Override

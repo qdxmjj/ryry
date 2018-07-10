@@ -11,9 +11,18 @@ public class OrderItemBean {
     private String bianhao;
     private String orderStage;
     private String price;
+    private String orderActuallyPrice;
     private String status;
     private long orderTime;
     private String orderType;
+
+    public void setOrderActuallyPrice(String orderActuallyPrice) {
+        this.orderActuallyPrice = orderActuallyPrice;
+    }
+
+    public String getOrderActuallyPrice() {
+        return orderActuallyPrice;
+    }
 
     public void setOrderStage(String orderStage) {
         this.orderStage = orderStage;

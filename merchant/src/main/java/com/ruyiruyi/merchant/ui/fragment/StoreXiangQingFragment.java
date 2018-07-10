@@ -669,7 +669,7 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
         TextView error_text = (TextView) dialogView.findViewById(R.id.save_text);
         error_text.setText("确定提交保存吗");
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setIcon(R.drawable.ic_launcher);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
             @Override
@@ -969,7 +969,7 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setIcon(R.drawable.ic_launcher);
         dialog.setView(dialogView);
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override

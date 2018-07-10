@@ -54,7 +54,16 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
 
         holder.tv_ordertitle.setText(orderItemBean.getTitle());
         holder.tv_orderbianhao.setText(orderItemBean.getBianhao());
-        holder.tv_orderprice.setText(orderItemBean.getPrice());
+        if (orderItemBean.getOrderType().equals("1")) {
+            holder.tv_orderprice.setText(orderItemBean.getOrderActuallyPrice());
+            if (!orderItemBean.getOrderActuallyPrice().equals(orderItemBean.getPrice())) {
+                holder.tv_quan.setVisibility(View.VISIBLE);
+            } else {
+                holder.tv_quan.setVisibility(View.GONE);
+            }
+        } else {
+            holder.tv_orderprice.setText(orderItemBean.getPrice());
+        }
         switch (orderItemBean.getStatus()) {//orderState:订单状态(): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
             case "5":
                 statusStr = "待发货";
@@ -62,12 +71,12 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                 holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
                 break;
             case "2":
-                statusStr = "待收货";
+                statusStr = "确认收货";
                 holder.tv_orderstatus.setText(statusStr);
                 holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
                 break;
             case "3"://3 待商家确认服务
-                statusStr = "待服务";
+                statusStr = "确认服务";
                 holder.tv_orderstatus.setText(statusStr);
                 holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
                 break;
@@ -88,6 +97,11 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
                 break;
             case "14":
                 statusStr = "已取消";
+                holder.tv_orderstatus.setText(statusStr);
+                holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
+                break;
+            case "15":
+                statusStr = "用户已取消";
                 holder.tv_orderstatus.setText(statusStr);
                 holder.tv_orderstatus.setBackgroundResource(R.drawable.login_code_button);
                 break;
@@ -249,6 +263,7 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
         private final TextView tv_ordertitle;
         private final TextView tv_orderbianhao;
         private final TextView tv_orderstatus;
+        private final TextView tv_quan;
         private final TextView tv_orderprice;
         private final ImageView img_order;
         private final FrameLayout order_item_fl;
@@ -259,6 +274,7 @@ public class OrderItemProvider extends ItemViewProvider<OrderItemBean, OrderItem
             tv_orderbianhao = ((TextView) itemView.findViewById(R.id.tv_orderbianhao));
             tv_orderprice = ((TextView) itemView.findViewById(R.id.tv_orderprice));
             tv_orderstatus = ((TextView) itemView.findViewById(R.id.tv_orderstatus));
+            tv_quan = ((TextView) itemView.findViewById(R.id.tv_quan));
             img_order = ((ImageView) itemView.findViewById(R.id.img_order));
             order_item_fl = ((FrameLayout) itemView.findViewById(R.id.order_item_fl));
         }

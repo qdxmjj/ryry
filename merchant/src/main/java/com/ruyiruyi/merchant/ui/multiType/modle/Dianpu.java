@@ -10,6 +10,7 @@ public class Dianpu implements Parcelable {
     private String orderImage;
     private String orderServcieTypeName;
     private String orderPrice;
+    private String orderActuallyPrice;
     private String orderState;
     private long orderTime;
 
@@ -17,6 +18,14 @@ public class Dianpu implements Parcelable {
 
     private String orderNo;
     private String orderType;
+
+    public void setOrderActuallyPrice(String orderActuallyPrice) {
+        this.orderActuallyPrice = orderActuallyPrice;
+    }
+
+    public String getOrderActuallyPrice() {
+        return orderActuallyPrice;
+    }
 
     protected Dianpu(Parcel in) {
         orderImage = in.readString();
