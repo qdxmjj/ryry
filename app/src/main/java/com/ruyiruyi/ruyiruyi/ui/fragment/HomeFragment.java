@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.MainActivity;
@@ -387,6 +388,10 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             if (!judgeIsLogin()) {
                 return;
             }
+            if (carId == 0){
+                Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (tireSame) {  //前后轮一样
                 Intent intent = new Intent(getContext(), CarFigureActivity.class);
                 intent.putExtra("TIRESIZE", fontSize);
@@ -404,12 +409,20 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             if (!judgeIsLogin()) {
                 return;
             }
+            if (carId == 0){
+                Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Intent intent = new Intent(getContext(), TireFreeChangeActivity.class);
             intent.putExtra(TireChangeActivity.CHANGE_TIRE, 1);
             startActivity(intent);
         } else if (type == 2) {//轮胎修补
             //判断是否登录（未登录提示登录）
             if (!judgeIsLogin()) {
+                return;
+            }
+            if (carId == 0){
+                Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
                 return;
             }
             startActivity(new Intent(getContext(), TireRepairActivity.class));

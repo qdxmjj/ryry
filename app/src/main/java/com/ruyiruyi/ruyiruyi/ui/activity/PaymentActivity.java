@@ -406,7 +406,7 @@ public class PaymentActivity extends RyBaseActivity {
             }else {     //商品订单
                 jsonObject.put("orderName", "商品购买");
             }
-            jsonObject.put("orderPrice", "0.1");
+            jsonObject.put("orderPrice", allprice);
             jsonObject.put("userId", userId);
         } catch (JSONException e) {
         }
@@ -691,7 +691,7 @@ public class PaymentActivity extends RyBaseActivity {
             }else {     //商品订单
                 jsonObject.put("orderName", "商品购买");
             }
-            jsonObject.put("orderPrice", 0.01);
+            jsonObject.put("orderPrice",allprice);
             jsonObject.put("userId", userId);
         } catch (JSONException e) {
         }

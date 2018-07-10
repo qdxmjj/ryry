@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyBig;
@@ -113,22 +114,23 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
                             int fontAmount = object.getInt("fontAmount");
                             int rearAmount = object.getInt("rearAmount");
                             int shoeAvailableNo = object.getInt("shoeAvailableNo");
+                            int userCarId = object.getInt("userCarId");
                             String fontShoeName = "";
                             String tirePlace = "";
                             if (fontRearFlag == 0) {//前轮跟后轮
                                 tirePlace = "前轮/后轮";
                                 fontShoeName = object.getString("fontShoeName");
-                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus,shoeAvailableNo);
+                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus,shoeAvailableNo,userCarId);
                                 tireWaitList.add(tireWait);
                             } else if (fontRearFlag == 1) {//前轮
                                 tirePlace = "前轮";
                                 fontShoeName = object.getString("fontShoeName");
-                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus,shoeAvailableNo);
+                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, fontAmount, platNumber, tirePlace, orderNo, rejectStatus,shoeAvailableNo,userCarId);
                                 tireWaitList.add(tireWait);
                             } else { //后轮
                                 tirePlace = "后轮";
                                 fontShoeName = object.getString("rearShoeName");
-                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, rearAmount, platNumber, tirePlace, orderNo, rejectStatus,shoeAvailableNo);
+                                TireWait tireWait = new TireWait(orderImg, fontShoeName, name, rearAmount, platNumber, tirePlace, orderNo, rejectStatus,shoeAvailableNo,userCarId);
                                 tireWaitList.add(tireWait);
                             }
                         }
@@ -184,9 +186,22 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Intent intent = new Intent(getApplicationContext(), TireChangeActivity.class);
-                        intent.putExtra(TireChangeActivity.CHANGE_TIRE, 0);
-                        startActivity(intent);
+                        boolean hasTire = false;
+                        User user = new DbConfig(getApplicationContext()).getUser();
+                        int carId = user.getCarId();
+                        for (int i = 0; i < tireWaitList.size(); i++) {
+                            if (tireWaitList.get(i).getUserCarId() == carId) {
+                                hasTire = true;
+                            }
+                        }
+                        if (hasTire){
+                            Intent intent = new Intent(getApplicationContext(), TireChangeActivity.class);
+                            intent.putExtra(TireChangeActivity.CHANGE_TIRE, 0);
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(TireWaitChangeActivity.this, "您还未购买当前车俩的轮胎，快去购买换胎吧！", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
 

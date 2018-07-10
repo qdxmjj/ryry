@@ -50,7 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="轮胎更换"
+                android:text="免费更换"
                 android:textSize="14sp"
                 android:textColor="@color/c6"
                 android:layout_marginTop="5dp"
@@ -71,7 +71,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="轮胎修补"
+                android:text="免费修补"
                 android:textSize="14sp"
                 android:textColor="@color/c6"
                 android:layout_marginTop="5dp"

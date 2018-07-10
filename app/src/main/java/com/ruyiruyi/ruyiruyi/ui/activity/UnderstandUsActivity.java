@@ -1,5 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ public class UnderstandUsActivity extends RyBaseActivity {
     private TextView sign;
     private TextView content;
     private ActionBar mActionBar;
+    public String versionCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +42,14 @@ public class UnderstandUsActivity extends RyBaseActivity {
         sign = findViewById(R.id.sign);
         content = findViewById(R.id.content);
 
+        try {
+            versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(),0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+
+        }
 
         title.setText("一次换轮胎 终身免费开");
-        sign.setText("V1.0.0");
+        sign.setText("V" + versionCode);
         content.setText("\t\t如驿如意“一次换轮胎 终身免费开”,自此车主再也不用担心爱车轮胎！\n\n\t\t我们立志于将高性价比且符合" +
                 "中国车主习惯的轮胎推荐给广大车主，从而解决困扰车主的“换胎贵 换胎难”问题;同时,如驿如意用户可以享受免费" +
                 "动平衡、免费四轮定位、免费洗车、免费轮胎换位、免费补胎等超级VIP服务。我们将联合上游供应厂商和终端服务门店，继续" +

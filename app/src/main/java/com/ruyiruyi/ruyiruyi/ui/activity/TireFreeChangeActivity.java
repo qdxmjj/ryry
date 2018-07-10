@@ -381,6 +381,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
             public void onAmountChange(View view, int amount) {
                 currentFontCount = amount;
                 initAmountView();
+
                 if (amount == fontMaxCount) {
                     Toast.makeText(TireFreeChangeActivity.this, "轮胎数量达到购买上限", Toast.LENGTH_SHORT).show();
                 }
@@ -394,6 +395,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
             public void onAmountChange(View view, int amount) {
                 currentRearCount = amount;
                 initAmountView();
+
                 if (amount == rearMaxCount) {
                     Toast.makeText(TireFreeChangeActivity.this, "轮胎数量达到购买上限", Toast.LENGTH_SHORT).show();
                 }
@@ -922,12 +924,13 @@ public class TireFreeChangeActivity extends RyBaseActivity {
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: --" +  result);
                 JSONObject jsonObject1 = null;
+                JSONObject data = null;
                 try {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")) {
-                        JSONObject data = jsonObject1.getJSONObject("data");
+                        data = jsonObject1.getJSONObject("data");
                         fontFreeAmount = data.getInt("fontAmount");
                         rearFreeAmount = data.getInt("rearAmount");
                         fontRearFlag = data.getInt("fontRearFlag");
@@ -937,12 +940,17 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                             fontTireCountLayout.setVisibility(View.GONE);
                             rearTireCountLayout.setVisibility(View.GONE);
                             tireCountText.setText(fontFreeAmount+"");
-                        }else {
+                        }else if(fontRearFlag == 1){
                             tireCountLayout.setVisibility(View.GONE);
                             fontTireCountLayout.setVisibility(View.VISIBLE);
                             rearTireCountLayout.setVisibility(View.VISIBLE);
                             catFontText.setText(fontFreeAmount +"");
                             carRearText.setText(rearFreeAmount +"");
+                        }else {
+                            tireCountLayout.setVisibility(View.VISIBLE);
+                            fontTireCountLayout.setVisibility(View.GONE);
+                            rearTireCountLayout.setVisibility(View.GONE);
+                            tireCountText.setText(0+"");
                         }
 
 
@@ -957,10 +965,32 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                         Toast.makeText(TireFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
-
+                    if (data == null){
+                        Toast.makeText(TireFreeChangeActivity.this, "您未有可免费更换得轮胎，快去购买换胎吧", Toast.LENGTH_SHORT).show();
+                        fontRearFlag = 0;
+                        fontFreeAmount = 0;
+                        rearFreeAmount = 0;
+                        if (fontRearFlag == 0){
+                            tireCountLayout.setVisibility(View.VISIBLE);
+                            fontTireCountLayout.setVisibility(View.GONE);
+                            rearTireCountLayout.setVisibility(View.GONE);
+                            tireCountText.setText(fontFreeAmount+"");
+                        }else if(fontRearFlag == 1){
+                            tireCountLayout.setVisibility(View.GONE);
+                            fontTireCountLayout.setVisibility(View.VISIBLE);
+                            rearTireCountLayout.setVisibility(View.VISIBLE);
+                            catFontText.setText(fontFreeAmount +"");
+                            carRearText.setText(rearFreeAmount +"");
+                        }else {
+                            tireCountLayout.setVisibility(View.VISIBLE);
+                            fontTireCountLayout.setVisibility(View.GONE);
+                            rearTireCountLayout.setVisibility(View.GONE);
+                            tireCountText.setText(0+"");
+                        }
+                    }
                 }
 
-            }
+                }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
