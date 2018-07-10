@@ -126,7 +126,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_my_limit, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("我的额度");
+        actionBar.setTitle("信用额度");
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
@@ -348,7 +348,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
 
             jsonObject.put("orderName", "信用充值");
 
-            jsonObject.put("orderPrice", "0.01");
+            jsonObject.put("orderPrice", price);
             jsonObject.put("userId", userId);
         } catch (JSONException e) {
         }
@@ -489,7 +489,7 @@ public class MyLimitActivity extends RyBaseActivity /*implements RechargeMoneyVi
             object.put("orderNo", associationOrderNo);
             object.put("orderName", "额度充值");
 //            object.put("orderPrice", price);//正式
-            object.put("orderPrice", 0.01);//测试
+            object.put("orderPrice", price);//测试
             object.put("orderType", "5");
         } catch (JSONException e) {
         }

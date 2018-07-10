@@ -123,13 +123,19 @@ public class OrderFragment extends RyBaseFragment implements OrderViewBinder.OnO
                             String orderName = object.getString("orderName");
                             String orderNo = object.getString("orderNo");
                             String orderPrice = object.getString("orderPrice");
+                            String orderActuallyPrice = object.getString("orderActuallyPrice");
                             String orderState = object.getString("orderState");
                             String orderStage = object.getString("orderStage");
                             //  String orderTime = object.getString("orderTime");
                             String orderTimeStr = new UtilsRY().getTimestampToStringAll(object.getLong("orderTime"));
                             String orderType = object.getString("orderType");
                             String storeId = object.getString("storeId");
-                            orderList.add(new Order(orderImage, orderName, orderNo, orderPrice, orderState, orderTimeStr, orderType, storeId,orderStage));
+                            if (orderType.equals("1")){
+                                orderList.add(new Order(orderImage, orderName, orderNo, orderActuallyPrice, orderState, orderTimeStr, orderType, storeId,orderStage));
+                            }else {
+                                orderList.add(new Order(orderImage, orderName, orderNo, orderPrice, orderState, orderTimeStr, orderType, storeId,orderStage));
+                            }
+
                         }
                         initData();
                     } else if (status.equals("-999")) {
