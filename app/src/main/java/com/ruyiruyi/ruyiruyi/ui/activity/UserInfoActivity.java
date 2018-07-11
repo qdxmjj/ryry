@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import id.zelory.compressor.Compressor;
 import rx.functions.Action1;
 
 public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDateChangedListener {
@@ -99,6 +100,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
     private String TAG = UserInfoActivity.class.getSimpleName();
     private String path_;
     private ProgressDialog progressDialog;
+    private String img_path2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -397,6 +399,16 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
             //此时记录头像已更改 并生成文件地址
             isNewPic = true;
             img_Path = ImageUtils.savePhoto(imgBitmap, this.getObbDir().getAbsolutePath(), "userheadimg");
+
+          /* *//* File file = new File(img_Path);
+            long length = file.length();*//*
+            Log.e(TAG, "setImageToViewFromPhone: file1---" + length );
+            try {
+                File file1 = new Compressor(this).compressToFile(new File(img_Path));
+             //   img_path2 = ImageUtils.savePhoto(file1, this.getObbDir().getAbsolutePath(), "userheadimg1");
+            } catch (IOException e) {
+
+            }*/
         }
     }
 
@@ -492,8 +504,17 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
                 RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "updateUser");
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
+               // File file = new File(img_path2);
+                File file1 = null;
+                try {
+                    file1 = new Compressor(getApplicationContext()).compressToFile(new File(img_Path));
+                } catch (IOException e) {
+
+                }
+                long length = file1.length();
+                Log.e(TAG, "setImageToViewFromPhone: file2---" + length );
                 if (isNewPic) {
-                    params.addBodyParameter("user_head_img", new File(img_Path));
+                    params.addBodyParameter("user_head_img", file1);
                 }
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override

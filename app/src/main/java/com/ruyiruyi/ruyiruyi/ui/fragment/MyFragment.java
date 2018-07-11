@@ -79,6 +79,7 @@ public class MyFragment extends RyBaseFragment {
     private LinearLayout couponLayout;
     private ImageView noLoginImage;
     private ImageView messageView;
+    private ImageView testImage;
 
     @Nullable
     @Override
@@ -169,6 +170,7 @@ public class MyFragment extends RyBaseFragment {
         noLoginImage = (ImageView) getView().findViewById(R.id.no_login_image);
         Glide.with(getContext()).load(R.drawable.ic_notlogged).into(noLoginImage);
         messageView = (ImageView) getView().findViewById(R.id.message_view);
+        testImage = (ImageView) getView().findViewById(R.id.test_image);
 
         //消息列表显示
         RxViewAction.clickNoDouble(messageView)
@@ -256,7 +258,10 @@ public class MyFragment extends RyBaseFragment {
             }
         });
 
-        RxViewAction.clickNoDouble(testLayout)
+        /**
+         *
+         */
+        RxViewAction.clickNoDouble(testImage)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
