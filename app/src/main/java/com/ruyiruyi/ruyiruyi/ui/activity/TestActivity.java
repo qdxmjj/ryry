@@ -34,6 +34,7 @@ public class TestActivity extends RyBaseActivity {
     private Button btnCountdown;
     private Button dituButton;
     private Button evaluateButton;
+    private Button yearButton;
 
 
     @Override
@@ -77,7 +78,16 @@ public class TestActivity extends RyBaseActivity {
                     }
                 });
 
-
+        yearButton = new Button(this);
+        yearButton.setText("年份选择");
+        content.addView(yearButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT));
+        RxViewAction.clickNoDouble(yearButton)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getApplicationContext(),YearChooseActivity.class));
+                    }
+                });
 
 
     }

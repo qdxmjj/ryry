@@ -27,7 +27,7 @@
     <!-- //允许sd卡写权限，需写入地图数据，禁用后无法显示地图 -->
 
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <supports-screens
         android:anyDensity="true"
@@ -277,7 +277,8 @@
         <activity android:name=".ui.activity.MessageActivity" />
         <activity android:name=".ui.activity.AgreementActivity" />
         <activity android:name=".ui.activity.GuideActivity" />
-        <activity android:name=".ui.activity.TireFreeChangeActivity"></activity>
+        <activity android:name=".ui.activity.TireFreeChangeActivity" />
+        <activity android:name=".ui.activity.YearChooseActivity"></activity>
     </application>
 
 </manifest>

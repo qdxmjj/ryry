@@ -252,6 +252,10 @@ public class TireRepairActivity extends RyBaseActivity {
     }
 
     private void postRepairOrder() {
+        if (shop == null){
+            Toast.makeText(TireRepairActivity.this, "请选择门店", Toast.LENGTH_SHORT).show();
+            return;
+        }
         User user = new DbConfig(this).getUser();
         int userId = user.getId();
         int carId = user.getCarId();
