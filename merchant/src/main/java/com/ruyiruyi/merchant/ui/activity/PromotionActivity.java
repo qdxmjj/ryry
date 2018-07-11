@@ -251,9 +251,9 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
         WXWebpageObject webpage = new WXWebpageObject();
         webpage.webpageUrl = url;
         WXMediaMessage msg = new WXMediaMessage(webpage);
-        msg.title = "如驿如意商家版";
-        msg.description = "分享下载app，注册并添加车辆即赠送两张精致洗车券，购买轮胎，更有精美大礼赠送！";
-        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo_huise);
+        msg.title = PromotionActivity.this.getString(R.string.wx_share_title);
+        msg.description = PromotionActivity.this.getString(R.string.wx_share_description);
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
         Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
         bmp.recycle();
         msg.thumbData = Util.bmpToByteArray(thumbBmp, true);

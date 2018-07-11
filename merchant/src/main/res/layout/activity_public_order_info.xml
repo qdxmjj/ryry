@@ -5,34 +5,37 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.ruyiruyi.merchant.ui.activity.PublicOrderInfoActivity">
+
     <com.ruyiruyi.rylibrary.cell.ActionBar
         android:id="@+id/my_action"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
     <FrameLayout
         android:id="@+id/fl_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/order_info_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="55dp"/>
+            android:layout_marginBottom="55dp" />
 
         <TextView
             android:id="@+id/order_state_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="加载中..."
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:paddingTop="10dp"
             android:layout_gravity="bottom"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/login_code_button_huise"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/login_code_button_huise"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="其他状态"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
     </FrameLayout>
 </LinearLayout>

@@ -111,7 +111,7 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
         TextView error_text = (TextView) dialogView.findViewById(R.id.save_text);
         error_text.setText("确定删除商品吗");
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setIcon(R.drawable.ic_launcher);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "点错了", new DialogInterface.OnClickListener() {
             @Override

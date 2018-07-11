@@ -386,7 +386,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                 break;
         }
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setIcon(R.drawable.ic_launcher);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
             @Override
@@ -620,7 +620,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setIcon(R.drawable.ic_launcher);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
             @Override

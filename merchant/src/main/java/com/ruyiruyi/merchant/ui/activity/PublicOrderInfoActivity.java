@@ -72,6 +72,9 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     private String storeName;
     private String userPhone;
     private String orderTypeStr;
+    private String orderTotalPrice;
+    private String orderActuallyPrice;
+    private String saleName;
 
     private String fontShoeImg;
     private String fontShoeName;
@@ -201,6 +204,9 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
                         platNumber = data.getString("platNumber");
                         storeName = data.getString("storeName");
                         userPhone = data.getString("userPhone");
+                        orderTotalPrice = data.getString("orderTotalPrice");
+                        orderActuallyPrice = data.getString("orderActuallyPrice");
+                        saleName = data.getString("saleName");
 
                         if (orderType.equals("2")) {//首次更换订单
                             //获取展示首次更换订单信息
@@ -321,6 +327,15 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             for (int i = 0; i < goodsInfoList.size(); i++) {
                 items.add(goodsInfoList.get(i));
             }
+            if ((saleName == null || saleName.equals("")) && !orderActuallyPrice.equals(orderTotalPrice)) {
+                items.add(new PublicOneaddPic("优惠券类型", "优惠券已返还", false, true));
+            } else if ((saleName == null || saleName.equals("")) && orderActuallyPrice.equals(orderTotalPrice)) {
+                items.add(new PublicOneaddPic("优惠券类型", "未使用优惠券", false, true));
+            } else {
+                items.add(new PublicOneaddPic("优惠券类型", saleName, false, true));
+            }
+            items.add(new PublicOneaddPic("订单总额", orderTotalPrice, false, true));
+            items.add(new PublicOneaddPic("实付金额", orderActuallyPrice, false, false));
         }//orderType=1 普通商品订单>
 
 
@@ -635,12 +650,12 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
     }
 
     private void register() {
-        adapter.register(PublicOneaddPic.class, new PublicOneaddPicProvider(getApplicationContext()));
-        adapter.register(PublicShoeFlag.class, new PublicShoeFlagProvider(getApplicationContext()));
-        PublicBarCodeProvider barCodeProvider = new PublicBarCodeProvider(getApplicationContext());
+        adapter.register(PublicOneaddPic.class, new PublicOneaddPicProvider(this));
+        adapter.register(PublicShoeFlag.class, new PublicShoeFlagProvider(this));
+        PublicBarCodeProvider barCodeProvider = new PublicBarCodeProvider(this);
         barCodeProvider.setListener(this);
         adapter.register(PublicBarCode.class, barCodeProvider);
-        adapter.register(PublicGoodsInfo.class, new PublicGoodsInfoProvider(getApplicationContext()));
+        adapter.register(PublicGoodsInfo.class, new PublicGoodsInfoProvider(this));
     }
 
     private void initButton() {
@@ -679,6 +694,9 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             }
             if (orderState.equals("14")) {
                 stateButton.setText("已取消");
+            }
+            if (orderState.equals("15")) {
+                stateButton.setText("用户已取消");
             }
             if (orderState.equals("5")) {
                 stateButton.setText("待发货");
@@ -852,7 +870,7 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
         TextView error_text = (TextView) dialogView.findViewById(R.id.save_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setIcon(R.drawable.ic_launcher);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
             @Override

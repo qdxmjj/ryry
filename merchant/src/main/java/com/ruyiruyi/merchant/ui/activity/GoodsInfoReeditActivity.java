@@ -128,16 +128,16 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 case 5:
                     //以下操作
                     if (servicesBean2a.size() != 0) {
-                        leftTypeList.add("汽车保养");
+                        leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_a));
                     }
                     if (servicesBean3a.size() != 0) {
-                        leftTypeList.add("美容清洗");
+                        leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_b));
                     }
                     if (servicesBean4a.size() != 0) {
-                        leftTypeList.add("安装");
+                        leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_c));
                     }
                     if (servicesBean5a.size() != 0) {
-                        leftTypeList.add("轮胎服务");
+                        leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_d));
                     }
 
 
@@ -160,7 +160,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         mGoodsKucun.setText(amount);
         switch (serviceTypeId) {
             case "2":
-                goods_typeold_string = "汽车保养";
+                goods_typeold_string = GoodsInfoReeditActivity.this.getString(R.string.service_type_a);
                 for (int i = 0; i < servicesBean2a.size(); i++) {
                     if (serviceId.equals(servicesBean2a.get(i).getService_id() + "")) {
                         goods_typeold_string = goods_typeold_string + " " + servicesBean2a.get(i).getServiceInfo();
@@ -169,7 +169,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 }
                 break;
             case "3":
-                goods_typeold_string = "美容清洗";
+                goods_typeold_string = GoodsInfoReeditActivity.this.getString(R.string.service_type_b);
                 for (int i = 0; i < servicesBean3a.size(); i++) {
                     if (serviceId.equals(servicesBean3a.get(i).getService_id() + "")) {
                         goods_typeold_string = goods_typeold_string + " " + servicesBean3a.get(i).getServiceInfo();
@@ -178,7 +178,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 }
                 break;
             case "4":
-                goods_typeold_string = "安装";
+                goods_typeold_string = GoodsInfoReeditActivity.this.getString(R.string.service_type_c);
                 for (int i = 0; i < servicesBean4a.size(); i++) {
                     if (serviceId.equals(servicesBean4a.get(i).getService_id() + "")) {
                         goods_typeold_string = goods_typeold_string + " " + servicesBean4a.get(i).getServiceInfo();
@@ -187,7 +187,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 }
                 break;
             case "5":
-                goods_typeold_string = "轮胎服务";
+                goods_typeold_string = GoodsInfoReeditActivity.this.getString(R.string.service_type_d);
                 for (int i = 0; i < servicesBean5a.size(); i++) {
                     if (serviceId.equals(servicesBean5a.get(i).getService_id() + "")) {
                         goods_typeold_string = goods_typeold_string + " " + servicesBean5a.get(i).getServiceInfo();
@@ -467,7 +467,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 break;
         }
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setIcon(R.drawable.ic_launcher);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "再看看", new DialogInterface.OnClickListener() {
             @Override
@@ -606,7 +606,7 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_logo_huise);
+        dialog.setIcon(R.drawable.ic_launcher);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
             @Override
@@ -672,23 +672,18 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                         mGoodsType.setText(currentLeftString + "  " + currentRightString);
                         currentForId = currentRightPosition;
                         //获取ID
-                        switch (currentLeftString) {
-                            case "汽车保养":
-                                leftTypeId = "2";
-                                rightTypeId = servicesBean2a.get(currentForId).getService_id() + "";
-                                break;
-                            case "美容清洗":
-                                leftTypeId = "3";
-                                rightTypeId = servicesBean3a.get(currentForId).getService_id() + "";
-                                break;
-                            case "安装":
-                                leftTypeId = "4";
-                                rightTypeId = servicesBean4a.get(currentForId).getService_id() + "";
-                                break;
-                            case "轮胎服务":
-                                leftTypeId = "5";
-                                rightTypeId = servicesBean5a.get(currentForId).getService_id() + "";
-                                break;
+                        if (currentLeftString.equals(GoodsInfoReeditActivity.this.getString(R.string.service_type_a))) {
+                            leftTypeId = "2";
+                            rightTypeId = servicesBean2a.get(currentForId).getService_id() + "";
+                        } else if (currentLeftString.equals(GoodsInfoReeditActivity.this.getString(R.string.service_type_b))) {
+                            leftTypeId = "3";
+                            rightTypeId = servicesBean3a.get(currentForId).getService_id() + "";
+                        } else if (currentLeftString.equals(GoodsInfoReeditActivity.this.getString(R.string.service_type_c))) {
+                            leftTypeId = "4";
+                            rightTypeId = servicesBean4a.get(currentForId).getService_id() + "";
+                        } else {
+                            leftTypeId = "5";
+                            rightTypeId = servicesBean5a.get(currentForId).getService_id() + "";
                         }
                     }
                 }
@@ -700,27 +695,22 @@ public class GoodsInfoReeditActivity extends BaseActivity {
 
     private List<String> getRightStringList(String s) {
         ArrayList<String> strings = new ArrayList<>();
-        switch (s) {
-            case "汽车保养":
-                for (int i = 0; i < servicesBean2a.size(); i++) {
-                    strings.add(servicesBean2a.get(i).getServiceInfo());
-                }
-                break;
-            case "美容清洗":
-                for (int i = 0; i < servicesBean3a.size(); i++) {
-                    strings.add(servicesBean3a.get(i).getServiceInfo());
-                }
-                break;
-            case "安装":
-                for (int i = 0; i < servicesBean4a.size(); i++) {
-                    strings.add(servicesBean4a.get(i).getServiceInfo());
-                }
-                break;
-            case "轮胎服务":
-                for (int i = 0; i < servicesBean5a.size(); i++) {
-                    strings.add(servicesBean5a.get(i).getServiceInfo());
-                }
-                break;
+        if (s.equals(GoodsInfoReeditActivity.this.getString(R.string.service_type_a))) {
+            for (int i = 0; i < servicesBean2a.size(); i++) {
+                strings.add(servicesBean2a.get(i).getServiceInfo());
+            }
+        } else if (s.equals(GoodsInfoReeditActivity.this.getString(R.string.service_type_b))) {
+            for (int i = 0; i < servicesBean3a.size(); i++) {
+                strings.add(servicesBean3a.get(i).getServiceInfo());
+            }
+        } else if (s.equals(GoodsInfoReeditActivity.this.getString(R.string.service_type_c))) {
+            for (int i = 0; i < servicesBean4a.size(); i++) {
+                strings.add(servicesBean4a.get(i).getServiceInfo());
+            }
+        } else {
+            for (int i = 0; i < servicesBean5a.size(); i++) {
+                strings.add(servicesBean5a.get(i).getServiceInfo());
+            }
         }
         return strings;
     }
