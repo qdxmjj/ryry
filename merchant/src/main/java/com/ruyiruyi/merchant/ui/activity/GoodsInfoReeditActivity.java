@@ -206,8 +206,8 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         }
         Glide.with(this).load(imgurl)
                 .transform(new GlideCircleTransform(this))
-                .skipMemoryCache(true)//跳过内存缓存
-                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+//                .skipMemoryCache(true)//跳过内存缓存
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
                 .into(mGoodsImg);
 
 
@@ -823,8 +823,8 @@ public class GoodsInfoReeditActivity extends BaseActivity {
             byte[] bytes = baos.toByteArray();
             Glide.with(this).load(bytes)
                     .transform(new GlideCircleTransform(this))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
-                    .skipMemoryCache(true)//跳过内存缓存
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+//                    .skipMemoryCache(true)//跳过内存缓存
                     .into(mGoodsImg);
         }
     }
