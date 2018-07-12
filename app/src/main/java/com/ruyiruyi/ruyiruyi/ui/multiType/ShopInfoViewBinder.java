@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.ui.activity.RouteMapActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
@@ -48,9 +50,9 @@ public class ShopInfoViewBinder extends ItemViewProvider<ShopInfo, ShopInfoViewB
         holder.storeTypeText.setText(shopInfo.getStoreTypeName());
         int typeColor = Color.parseColor(shopInfo.getStoreTypeColor());
         GradientDrawable drawable = (GradientDrawable) holder.storeTypeText.getBackground();
-        drawable.setStroke(2,typeColor);
-        drawable.setColor(typeColor );
-        holder.storeAddressText.setText("地址："  + shopInfo.getStoreAddress());
+        drawable.setStroke(2, typeColor);
+        drawable.setColor(typeColor);
+        holder.storeAddressText.setText("地址：" + shopInfo.getStoreAddress());
         holder.storeContentText.setText(shopInfo.getStoreDescribe());
         holder.storePhoneText.setText("联系方式: " + shopInfo.getStorePhone());
         holder.storeDistence.setText(shopInfo.getStoreDistence() + "m");
@@ -61,12 +63,22 @@ public class ShopInfoViewBinder extends ItemViewProvider<ShopInfo, ShopInfoViewB
             public void call(Void aVoid) {
                 Intent intent = new Intent(context, RouteMapActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("storeName",shopInfo.getStoreName());
-                bundle.putString("store_latitude",shopInfo.getStore_latitude());
-                bundle.putString("store_longitude",shopInfo.getStore_longitude());
-                bundle.putString("user_latitude",shopInfo.getUser_latitude());
-                bundle.putString("user_longitude",shopInfo.getUser_longitude());
+                bundle.putString("storeName", shopInfo.getStoreName());
+                bundle.putString("store_latitude", shopInfo.getStore_latitude());
+                bundle.putString("store_longitude", shopInfo.getStore_longitude());
+                bundle.putString("user_latitude", shopInfo.getUser_latitude());
+                bundle.putString("user_longitude", shopInfo.getUser_longitude());
                 intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
+        //打电话
+        RxViewAction.clickNoDouble(holder.shop_call).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                Uri data = Uri.parse("tel:" + shopInfo.getStorePhone());
+                intent.setData(data);
                 context.startActivity(intent);
             }
         });
@@ -76,15 +88,18 @@ public class ShopInfoViewBinder extends ItemViewProvider<ShopInfo, ShopInfoViewB
             @Override
             public View createView(Context context, int position) {
                 ImageView imageView = new ImageView(context);
-             //   imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                //   imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                 return imageView;
             }
 
             @Override
             public void updateUI(Context context, View view, int position, String entity) {
-                Glide.with(context).load(entity).into((ImageView) view);
+                Glide.with(context).load(entity)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+                        .skipMemoryCache(true)//跳过内存缓存
+                        .into((ImageView) view);
             }
-        },shopInfo.getImageList())
+        }, shopInfo.getImageList())
                 .startTurning(5000);
 
 
@@ -97,7 +112,7 @@ public class ShopInfoViewBinder extends ItemViewProvider<ShopInfo, ShopInfoViewB
                 tv.setTextColor(parseColor);
                 tv.setText(serviceType.getServiceName());
                 GradientDrawable drawable = (GradientDrawable) tv.getBackground();
-                drawable.setStroke(2,parseColor);
+                drawable.setStroke(2, parseColor);
 
                 return tv;
             }
@@ -113,6 +128,7 @@ public class ShopInfoViewBinder extends ItemViewProvider<ShopInfo, ShopInfoViewB
         private final TextView storePhoneText;
         private final TextView storeContentText;
         private final TextView storeDistence;
+        private final ImageView shop_call;
         private final LinearLayout ll_routemap;
 
         ViewHolder(View itemView) {
@@ -125,6 +141,7 @@ public class ShopInfoViewBinder extends ItemViewProvider<ShopInfo, ShopInfoViewB
             storePhoneText = (TextView) itemView.findViewById(R.id.store_phone_text);
             storeContentText = (TextView) itemView.findViewById(R.id.store_content_text);
             storeDistence = (TextView) itemView.findViewById(R.id.store_distence_text);
+            shop_call = (ImageView) itemView.findViewById(R.id.shop_call);
             ll_routemap = (LinearLayout) itemView.findViewById(R.id.ll_routemap);
         }
     }

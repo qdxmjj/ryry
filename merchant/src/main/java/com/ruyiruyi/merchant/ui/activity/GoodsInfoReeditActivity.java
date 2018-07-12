@@ -54,6 +54,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.zelory.compressor.Compressor;
 import rx.functions.Action1;
 
 public class GoodsInfoReeditActivity extends BaseActivity {
@@ -500,7 +501,12 @@ public class GoodsInfoReeditActivity extends BaseActivity {
                 String replace = object.toString().replace("\\", "");
                 params.addBodyParameter("reqJson", replace);
                 if (!isOldPic) {
-                    params.addBodyParameter("stock_img", new File(img_Path));
+                    File file_s = null;
+                    try {
+                        file_s = new Compressor(getApplicationContext()).compressToFile(new File(img_Path));
+                    } catch (IOException e) {
+                    }
+                    params.addBodyParameter("stock_img", file_s);
                     Log.e(TAG, "onClick: 012 img_Path " + img_Path);
                 }
 
