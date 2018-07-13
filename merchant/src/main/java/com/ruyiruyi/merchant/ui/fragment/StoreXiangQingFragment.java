@@ -65,6 +65,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.zelory.compressor.Compressor;
 import rx.functions.Action1;
 
 
@@ -708,13 +709,28 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("serviceTypeList", serviceTypeListString);
                 if (isNewPicA) {
-                    params.addBodyParameter("location_img", new File(mdpicaPath));
+                    File file_s = null;
+                    try {
+                        file_s = new Compressor(getContext()).compressToFile(new File(mdpicaPath));
+                    } catch (IOException e) {
+                    }
+                    params.addBodyParameter("location_img", file_s);
                 }
                 if (isNewPicB) {
-                    params.addBodyParameter("indoor_img", new File(mdpicbPath));
+                    File file_s = null;
+                    try {
+                        file_s = new Compressor(getContext()).compressToFile(new File(mdpicbPath));
+                    } catch (IOException e) {
+                    }
+                    params.addBodyParameter("indoor_img", file_s);
                 }
                 if (isNewPicC) {
-                    params.addBodyParameter("factory_img", new File(mdpiccPath));
+                    File file_s = null;
+                    try {
+                        file_s = new Compressor(getContext()).compressToFile(new File(mdpiccPath));
+                    } catch (IOException e) {
+                    }
+                    params.addBodyParameter("factory_img", file_s);
                 }
                 Log.e(TAG, "onClick:110 serviceTypeListString = " + serviceTypeListString);
                 x.http().post(params, new Callback.CommonCallback<String>() {

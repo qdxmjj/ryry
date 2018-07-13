@@ -66,30 +66,14 @@ public class PublicOneaddPicProvider extends ItemViewProvider<PublicOneaddPic, P
         RxViewAction.clickNoDouble(holder.right_pic).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-//                //再判断用户是否给与电话权限
-//                if (judgeIsPower()) {
-                    //用户已给权限拨打电话
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    Uri data = Uri.parse("tel:" + bean.getContent());
-                    intent.setData(data);
-                    context.startActivity(intent);
-//                }
+                //拨打电话
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                Uri data = Uri.parse("tel:" + bean.getContent());
+                intent.setData(data);
+                context.startActivity(intent);
+
             }
         });
-    }
-
-    private boolean judgeIsPower() {
-        Boolean isPOW;
-        if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(context, "请授权电话权限", Toast.LENGTH_SHORT).show();
-            isPOW = false;
-        } else {
-            isPOW = true;
-        }
-
-        return isPOW;
     }
 
 

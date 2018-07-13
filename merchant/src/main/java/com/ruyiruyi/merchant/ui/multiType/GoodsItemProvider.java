@@ -23,6 +23,7 @@ import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.GoodsItemBean;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.GoodsInfoReeditActivity;
+import com.ruyiruyi.merchant.utils.CircleImageView;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
@@ -184,7 +185,7 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
         private final TextView tv_kucun;
         private final TextView tv_yishou;
         private final TextView tv_price;
-        private final ImageView img_goods;
+        private final CircleImageView img_goods;
         private final TextView tv_delete_goods;
         private final TextView tv_reedit;
 
@@ -194,7 +195,7 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
             tv_kucun = ((TextView) itemView.findViewById(R.id.tv_goodskucun));
             tv_yishou = ((TextView) itemView.findViewById(R.id.tv_goodsyishou));
             tv_price = ((TextView) itemView.findViewById(R.id.tv_goodsprice));
-            img_goods = ((ImageView) itemView.findViewById(R.id.img_goods));
+            img_goods = ((CircleImageView) itemView.findViewById(R.id.img_goods));
             tv_delete_goods = itemView.findViewById(R.id.tv_delete_goods);
             tv_reedit = itemView.findViewById(R.id.tv_reedit);
         }

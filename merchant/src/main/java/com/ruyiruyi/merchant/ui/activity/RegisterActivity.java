@@ -71,6 +71,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import id.zelory.compressor.Compressor;
 import rx.functions.Action1;
 
 public class RegisterActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
@@ -1504,11 +1505,24 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 RequestParams pa = new RequestParams(UtilsURL.REQUEST_URL + "registerStore");
                 pa.addBodyParameter("reqJson", obj.toString());
                 pa.addBodyParameter("serviceTypeList", serviceTypeListString);//serviceTypeList
-                pa.addBodyParameter("business_license_img", new File(yyzzPath));
-                pa.addBodyParameter("location_img", new File(mdpicaPath));
-                pa.addBodyParameter("indoor_img", new File(mdpicbPath));
-                pa.addBodyParameter("factory_img", new File(mdpiccPath));
-                pa.addBodyParameter("id_img", new File(shouPath));
+                File file_yyzz = null;
+                File file_mdpica = null;
+                File file_mdpicb = null;
+                File file_mdpicc = null;
+                File file_shou = null;
+                try {
+                    file_yyzz = new Compressor(getApplicationContext()).compressToFile(new File(yyzzPath));
+                    file_mdpica = new Compressor(getApplicationContext()).compressToFile(new File(mdpicaPath));
+                    file_mdpicb = new Compressor(getApplicationContext()).compressToFile(new File(mdpicbPath));
+                    file_mdpicc = new Compressor(getApplicationContext()).compressToFile(new File(mdpiccPath));
+                    file_shou = new Compressor(getApplicationContext()).compressToFile(new File(shouPath));
+                } catch (IOException e) {
+                }
+                pa.addBodyParameter("business_license_img", file_yyzz);
+                pa.addBodyParameter("location_img", file_mdpica);
+                pa.addBodyParameter("indoor_img", file_mdpicb);
+                pa.addBodyParameter("factory_img", file_mdpicc);
+                pa.addBodyParameter("id_img", file_shou);
                 x.http().post(pa, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {

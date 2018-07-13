@@ -66,6 +66,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.zelory.compressor.Compressor;
 import me.drakeet.multitype.MultiTypeAdapter;
 import rx.functions.Action1;
 
@@ -479,7 +480,12 @@ public class StoreFragment extends BaseFragment {
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "updateStoreHeadImgByStoreId");
         params.addBodyParameter("reqJson", object.toString());
         params.addBodyParameter("token", new DbConfig(getActivity()).getToken());
-        params.addBodyParameter("store_head_img", new File(img_Path));
+        File file_s = null;
+        try {
+            file_s = new Compressor(getContext()).compressToFile(new File(img_Path));
+        } catch (IOException e) {
+        }
+        params.addBodyParameter("store_head_img", file_s);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

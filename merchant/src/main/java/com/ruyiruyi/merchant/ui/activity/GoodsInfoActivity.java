@@ -54,6 +54,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.zelory.compressor.Compressor;
 import rx.functions.Action1;
 
 public class GoodsInfoActivity extends BaseActivity {
@@ -438,7 +439,12 @@ public class GoodsInfoActivity extends BaseActivity {
                 }
                 RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "addStock");
                 params.addBodyParameter("reqJson", object.toString());
-                params.addBodyParameter("stock_img", new File(img_Path));
+                File file_s = null;
+                try {
+                    file_s = new Compressor(getApplicationContext()).compressToFile(new File(img_Path));
+                } catch (IOException e) {
+                }
+                params.addBodyParameter("stock_img", file_s);
                 Log.e(TAG, "onClick: 012 img_Path = add " + img_Path);
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override

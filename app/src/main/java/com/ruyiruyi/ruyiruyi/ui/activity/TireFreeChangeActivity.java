@@ -229,7 +229,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
             tireImageLayout2.setVisibility(View.GONE);
             tireImageLayout3.setVisibility(View.GONE);
             tireImageLayout4.setVisibility(View.GONE);
-        }else if(currentFontCount + currentRearCount == 2) {
+        } else if (currentFontCount + currentRearCount == 2) {
             hasTire3 = false;
             hasCode3 = false;
             hasTire4 = false;
@@ -243,7 +243,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
             tireImageLayout2.setVisibility(View.VISIBLE);
             tireImageLayout3.setVisibility(View.GONE);
             tireImageLayout4.setVisibility(View.GONE);
-        }else if (currentFontCount + currentRearCount == 3) {
+        } else if (currentFontCount + currentRearCount == 3) {
             hasTire4 = false;
             hasCode4 = false;
             initTire4Layou();
@@ -254,7 +254,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
             tireImageLayout2.setVisibility(View.VISIBLE);
             tireImageLayout3.setVisibility(View.VISIBLE);
             tireImageLayout4.setVisibility(View.GONE);
-        }else if (currentFontCount + currentRearCount == 4) {
+        } else if (currentFontCount + currentRearCount == 4) {
 
             tireImageLayoutView.setVisibility(View.VISIBLE);
             imageTopLayout.setVisibility(View.VISIBLE);
@@ -345,26 +345,26 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                             Toast.makeText(TireFreeChangeActivity.this, "请选择轮胎数量", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        if (currentRearCount+currentFontCount == 0){
+                        if (currentRearCount + currentFontCount == 0) {
                             Toast.makeText(TireFreeChangeActivity.this, "请选择更换轮胎数", Toast.LENGTH_SHORT).show();
                             return;
-                        }else if (currentRearCount+currentFontCount == 1){
-                            if (!hasTire1 || !hasCode1){
+                        } else if (currentRearCount + currentFontCount == 1) {
+                            if (!hasTire1 || !hasCode1) {
                                 Toast.makeText(TireFreeChangeActivity.this, "请上传图片", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                        }else if (currentRearCount+currentFontCount == 2){
-                            if (!hasTire1 || !hasCode1 || !hasCode2 || !hasTire2){
+                        } else if (currentRearCount + currentFontCount == 2) {
+                            if (!hasTire1 || !hasCode1 || !hasCode2 || !hasTire2) {
                                 Toast.makeText(TireFreeChangeActivity.this, "请上传图片", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                        }else if (currentRearCount+currentFontCount == 3){
-                            if (!hasTire1 || !hasCode1 || !hasCode2 || !hasTire2 || !hasCode3 ||!hasTire3 ){
+                        } else if (currentRearCount + currentFontCount == 3) {
+                            if (!hasTire1 || !hasCode1 || !hasCode2 || !hasTire2 || !hasCode3 || !hasTire3) {
                                 Toast.makeText(TireFreeChangeActivity.this, "请上传图片", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                        }else if (currentRearCount+currentFontCount == 4){
-                            if (!hasTire1 || !hasCode1 || !hasCode2 || !hasTire2 || !hasCode3 ||!hasTire3 || !hasCode4 || !hasTire4){
+                        } else if (currentRearCount + currentFontCount == 4) {
+                            if (!hasTire1 || !hasCode1 || !hasCode2 || !hasTire2 || !hasCode3 || !hasTire3 || !hasCode4 || !hasTire4) {
                                 Toast.makeText(TireFreeChangeActivity.this, "请上传图片", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -569,7 +569,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
     }
 
     private void freeChangeOrder() {
-        showDialogProgress(progressDialog,"免费再换订单提交中...");
+        showDialogProgress(progressDialog, "免费再换订单提交中...");
 
 
         User user = new DbConfig(this).getUser();
@@ -644,13 +644,13 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:---- " + result );
+                Log.e(TAG, "onSuccess:---- " + result);
                 JSONObject jsonObject1 = null;
                 try {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
                         intent.putExtra(OrderFragment.ORDER_TYPE, "DFH");
                         intent.putExtra(OrderActivity.ORDER_FROM, 1);

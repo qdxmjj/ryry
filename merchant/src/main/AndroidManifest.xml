@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:Android="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ruyiruyi.merchant">
 
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -22,7 +23,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
 
@@ -68,15 +68,29 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-<!--        <receiver android:name=".ui.activity.LaunchActivity$MyReceiver">
+        <provider
+            android:name=".utils.BuglyFileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="name,authorities,exported,grantUriPermissions">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"
+                tools:replace="name,resource"/>
+        </provider>
+        <!--        <receiver android:name=".ui.activity.LaunchActivity$MyReceiver">
 
-            <intent-filter>
-                <action android:name="com.ruyiruyi.merchant.ui.service.LuncherDownlodeService" />
-            </intent-filter>
+                    <intent-filter>
+                        <action android:name="com.ruyiruyi.merchant.ui.service.LuncherDownlodeService" />
+                    </intent-filter>
 
-        </receiver>-->
+                </receiver>-->
 
-
+        <activity
+            android:name="com.tencent.bugly.beta.ui.BetaActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|locale"
+            android:theme="@android:style/Theme.Translucent" />
         <activity android:name=".ui.activity.RegisterMapActivity" />
         <activity android:name=".ui.activity.LaunchActivity">
             <intent-filter>
