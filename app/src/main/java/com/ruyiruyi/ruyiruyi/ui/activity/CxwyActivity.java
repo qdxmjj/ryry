@@ -83,7 +83,16 @@ public class CxwyActivity extends RyBaseActivity {
         RxViewAction.clickNoDouble(save_car).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                startActivity(new Intent(getApplicationContext(), BuyCxwyActivity.class));
+                User user = new DbConfig(getApplicationContext()).getUser();
+                if (user!=null){
+                    int carId = user.getCarId();
+                    if (carId == 0){
+                        Toast.makeText(CxwyActivity.this, "您还没有添加默认车辆，快去添加车辆吧", Toast.LENGTH_SHORT).show();
+                    }else {
+                        startActivity(new Intent(getApplicationContext(), BuyCxwyActivity.class));
+                    }
+                }
+
             }
         });
     }

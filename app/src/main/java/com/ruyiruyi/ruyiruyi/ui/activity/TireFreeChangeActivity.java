@@ -57,6 +57,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.zelory.compressor.Compressor;
 import rx.functions.Action1;
 
 public class TireFreeChangeActivity extends RyBaseActivity {
@@ -594,37 +595,49 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserFreeChangeOrder");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        if (hasCode1){
-            String code1 = ImageUtils.savePhoto(codeBitmap1, this.getObbDir().getAbsolutePath(), "code1");
-            params.addBodyParameter("shoe1BarCodeImg" ,new File(code1) );
-        }
-        if (hasTire1){
-            String tire1 = ImageUtils.savePhoto(tireBitmap1, this.getObbDir().getAbsolutePath(), "tire1");
-            params.addBodyParameter("shoe1Img" ,new File(tire1) );
-        }
-        if (hasCode2){
-            String code2 = ImageUtils.savePhoto(codeBitmap2, this.getObbDir().getAbsolutePath(), "code2");
-            params.addBodyParameter("shoe2BarCodeImg" ,new File(code2) );
-        }
-        if (hasTire2){
-            String tire2 = ImageUtils.savePhoto(tireBitmap2, this.getObbDir().getAbsolutePath(), "tire2");
-            params.addBodyParameter("shoe2Img" ,new File(tire2) );
-        }
-        if (hasCode3){
-            String code3 = ImageUtils.savePhoto(codeBitmap3, this.getObbDir().getAbsolutePath(), "code3");
-            params.addBodyParameter("shoe3BarCodeImg" ,new File(code3) );
-        }
-        if (hasTire3){
-            String tire3 = ImageUtils.savePhoto(tireBitmap3, this.getObbDir().getAbsolutePath(), "tire3");
-            params.addBodyParameter("shoe3Img" ,new File(tire3) );
-        }
-        if (hasCode4){
-            String code4 = ImageUtils.savePhoto(codeBitmap4, this.getObbDir().getAbsolutePath(), "code4");
-            params.addBodyParameter("shoe4BarCodeImg" ,new File(code4) );
-        }
-        if (hasTire4){
-            String tire4 = ImageUtils.savePhoto(tireBitmap4, this.getObbDir().getAbsolutePath(), "tire4");
-            params.addBodyParameter("shoe4Img" ,new File(tire4) );
+        try {
+            if (hasCode1){
+                String code1 = ImageUtils.savePhoto(codeBitmap1, this.getObbDir().getAbsolutePath(), "code1");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(code1));
+                params.addBodyParameter("shoe1BarCodeImg" ,file);
+            }
+            if (hasTire1){
+                String tire1 = ImageUtils.savePhoto(tireBitmap1, this.getObbDir().getAbsolutePath(), "tire1");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(tire1));
+                params.addBodyParameter("shoe1Img" ,file);
+            }
+            if (hasCode2){
+                String code2 = ImageUtils.savePhoto(codeBitmap2, this.getObbDir().getAbsolutePath(), "code2");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(code2));
+                params.addBodyParameter("shoe2BarCodeImg" ,file );
+            }
+            if (hasTire2){
+                String tire2 = ImageUtils.savePhoto(tireBitmap2, this.getObbDir().getAbsolutePath(), "tire2");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(tire2));
+                params.addBodyParameter("shoe2Img" ,file );
+            }
+            if (hasCode3){
+                String code3 = ImageUtils.savePhoto(codeBitmap3, this.getObbDir().getAbsolutePath(), "code3");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(code3));
+                params.addBodyParameter("shoe3BarCodeImg" ,file );
+            }
+            if (hasTire3){
+                String tire3 = ImageUtils.savePhoto(tireBitmap3, this.getObbDir().getAbsolutePath(), "tire3");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(tire3));
+                params.addBodyParameter("shoe3Img" ,file );
+            }
+            if (hasCode4){
+                String code4 = ImageUtils.savePhoto(codeBitmap4, this.getObbDir().getAbsolutePath(), "code4");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(code4));
+                params.addBodyParameter("shoe4BarCodeImg" ,file );
+            }
+            if (hasTire4){
+                String tire4 = ImageUtils.savePhoto(tireBitmap4, this.getObbDir().getAbsolutePath(), "tire4");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(tire4));
+                params.addBodyParameter("shoe4Img" ,file );
+            }
+        } catch (IOException e) {
+
         }
         String token = new DbConfig(this).getToken();
         params.addParameter("token", token);

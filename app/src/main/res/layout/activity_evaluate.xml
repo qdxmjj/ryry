@@ -57,7 +57,7 @@
                             app:starEmpty="@drawable/ic_huistar"
                             app:starFill="@drawable/ic_star"
                             app:starImageSize="24dp"
-                            app:starStep="1"
+                            app:starStep="5"
                             app:stepSize="Full"/>
 
                     </LinearLayout>

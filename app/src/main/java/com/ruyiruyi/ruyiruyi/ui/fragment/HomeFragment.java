@@ -444,6 +444,10 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             if (!judgeIsLogin()) {
                 return;
             }
+            if (carId == 0){
+                Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
+                return;
+            }
             startActivity(new Intent(getContext(), CxwyActivity.class));
         } else if (tag.equals("qcby")) {//（汽车保养）//3  //门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
             //判断是否登录（未登录提示登录）

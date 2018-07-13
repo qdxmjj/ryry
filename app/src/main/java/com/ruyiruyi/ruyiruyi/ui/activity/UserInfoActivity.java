@@ -505,6 +505,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                // File file = new File(img_path2);
+                //图片压缩
                 File file1 = null;
                 try {
                     file1 = new Compressor(getApplicationContext()).compressToFile(new File(img_Path));

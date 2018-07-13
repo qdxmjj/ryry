@@ -286,7 +286,7 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
                         startActivity(intent);
                         finish();
                     }else if (status.equals("2")){    //微信未注册   调到填写信息界面
-                        Toast.makeText(WXEntryActivity.this, "chenggong", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(WXEntryActivity.this, "chenggong", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), WxPhoneActivity.class);
                         intent.putExtra(LoginActivity.HEADURL,headUrl);
                         intent.putExtra(LoginActivity.NICKNAME,nickName);
