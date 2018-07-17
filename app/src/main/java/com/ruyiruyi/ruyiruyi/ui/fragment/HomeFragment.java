@@ -383,6 +383,11 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     }
 
     @Override
+    public void onLunboClikcListener(int position) {
+        Log.e(TAG, "onLunboClikcListener: " + position);
+    }
+
+    @Override
     public void onFunctionClickListener(int type) {
         if (type == 0) {//轮胎购买
             //判断是否登录（未登录提示登录）
