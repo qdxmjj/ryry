@@ -672,8 +672,17 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             if (orderState.equals("14")) {
                 stateButton.setText("已取消");
             }
+            if (orderState.equals("15")) {
+                stateButton.setText("用户已取消");
+            }
             if (orderState.equals("5")) {
                 stateButton.setText("待发货");
+            }
+            if (orderState.equals("9")) {
+                stateButton.setText("退款中");
+            }
+            if (orderState.equals("10")) {
+                stateButton.setText("已退款");
             }
             if (orderState.equals("6")) {
                 stateButton.setText("待车主确认服务");
@@ -683,6 +692,9 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             }
             if (orderState.equals("1")) {
                 stateButton.setText("已完成");
+            }
+            if (orderState.equals("4")) {
+                stateButton.setText("作废异常订单");
             }
         }
         if (orderType.equals("1")) {//商品订单
