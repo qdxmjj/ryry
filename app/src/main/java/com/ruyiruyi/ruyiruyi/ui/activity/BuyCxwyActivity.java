@@ -214,7 +214,7 @@ public class BuyCxwyActivity extends RyBaseActivity implements PublicCheckNumVie
         items.add(new InfoOne("联系电话", user.getPhone(), true));
         items.add(new InfoOne("车牌号", carNumber, true));
       //  items.add(new InfoOne("畅行无忧价格", finalCxwyPrice, true));
-        items.add(new PublicCheckNum("购买数量", 999, buyNum, "1"));
+        items.add(new PublicCheckNum("购买数量", 7, buyNum, "1"));
 
         //更新适配器
         assertAllRegistered(multiTypeAdapter, items);

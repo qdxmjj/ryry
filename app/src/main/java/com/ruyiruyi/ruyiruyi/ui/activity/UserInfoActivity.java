@@ -507,15 +507,17 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
                 params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
                // File file = new File(img_path2);
                 //图片压缩
-                File file1 = null;
-                try {
-                    file1 = new Compressor(getApplicationContext()).compressToFile(new File(img_Path));
-                } catch (IOException e) {
 
-                }
-                long length = file1.length();
-                Log.e(TAG, "setImageToViewFromPhone: file2---" + length );
+
                 if (isNewPic) {
+                    File file1 = null;
+                    try {
+                        file1 = new Compressor(getApplicationContext()).compressToFile(new File(img_Path));
+                    } catch (IOException e) {
+
+                    }
+
+                    long length = file1.length();
                     params.addBodyParameter("user_head_img", file1);
                 }
                 x.http().post(params, new Callback.CommonCallback<String>() {

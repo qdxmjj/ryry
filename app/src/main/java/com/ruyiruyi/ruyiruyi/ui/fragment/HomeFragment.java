@@ -32,6 +32,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.TireChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireFreeChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TirePlaceActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireRepairActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Function;
 import com.ruyiruyi.ruyiruyi.ui.multiType.FunctionViewBinder;
@@ -308,7 +309,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
 
         items.add(new Function());
         items.add(new ThreeEvent());
-        items.add(new OneEvent());
+      //  items.add(new OneEvent());
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
@@ -417,7 +418,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             intent.putExtra(TireChangeActivity.CHANGE_TIRE, 1);
             startActivity(intent);
         } else if (type == 2) {//轮胎修补
-            //判断是否登录（未登录提示登录）
+            //判断是否登录（未登录提示登录）   `
             if (!judgeIsLogin()) {
                 return;
             }
@@ -426,8 +427,15 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 return;
             }
             startActivity(new Intent(getContext(), TireRepairActivity.class));
-        } else if (type == 3) {
-            listener.onShopClassClickListener();
+        } else if (type == 3) { //待更换轮胎
+           // listener.onShopClassClickListener();
+            //判断是否登录（未登录提示登录）
+            if (!judgeIsLogin()) {
+                return;
+            }
+            Intent intent = new Intent(getContext(), TireWaitChangeActivity.class);
+            intent.putExtra(MyFragment.FROM_FRAGMENT, "MYFRAGMENT");
+            startActivity(intent);
         }
     }
 

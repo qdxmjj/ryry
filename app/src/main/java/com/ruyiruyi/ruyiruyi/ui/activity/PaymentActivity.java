@@ -779,7 +779,7 @@ public class PaymentActivity extends RyBaseActivity {
         if(orderType == 3){
             super.onBackPressed();
         }else {
-            showDialog("您确认要离开支付订单界面，离开订单会变为代付款订单，可在待付款订单中查看");
+            showDialog("确定要离开吗？离开后可在待付款订单中找到这笔未完成订单");
 
         }
 

@@ -75,14 +75,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="包安装"
+                            android:text="免费换新"
                             android:textSize="17sp"
                             android:textColor="@color/c7"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingLeft="5dp"
-                            android:text="从如驿如意购买轮胎，可到如驿如意指定合作门店进行免费安装调试"
+                            android:text="轮胎磨损至损耗标线或安装之日起满5年均可免费更换新轮胎"
                             android:textSize="14sp"
                             android:textColor="@color/c5"/>
                     </LinearLayout>
@@ -108,14 +108,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="免费轮胎服务"
+                            android:text="免费安装"
                             android:textSize="16sp"
                             android:textColor="@color/c7"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingRight="5dp"
-                            android:text="一次购买四条轮胎可免费享受四轮定位、动平衡、轮胎换位服务"
+                            android:text="可到任意合作门店进行免费安装调试"
                             android:textSize="14sp"
                             android:textColor="@color/c5"/>
                     </LinearLayout>
@@ -141,7 +141,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="一次购买用到车辆报废"
+                            android:text="免费服务"
                             android:gravity="center"
                             android:textSize="17sp"
                             android:layout_marginLeft="5dp"
@@ -149,7 +149,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="凡是购买如驿予以轮胎，最高可享受15年免费质保服务，免费更换到车辆报废"
+                            android:text="整车换胎，可到任意合作门店免费享受四轮定位，动平衡轮胎换位服务"
                             android:textSize="14sp"
                             android:paddingLeft="5dp"
                             android:textColor="@color/c5"/>

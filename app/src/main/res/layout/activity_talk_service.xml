@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/acbar"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_m_kefu" />
+        android:src="@drawable/ic_kefu" />
 
     <ImageView
         android:id="@+id/call"

@@ -92,7 +92,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="商品分类"
+                android:text="待更换轮胎"
                 android:textSize="14sp"
                 android:textColor="@color/c6"
                 android:layout_marginTop="5dp"

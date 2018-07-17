@@ -51,7 +51,7 @@ public class ContactServiceActivity extends RyBaseActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         isOpen = false;
-        ObjectAnimator animator = ObjectAnimator.ofFloat(call, View.TRANSLATION_X, (call.getWidth() * 0.75f));
+        ObjectAnimator animator = ObjectAnimator.ofFloat(call, View.TRANSLATION_X, (call.getWidth() * 0.50f));
         animator.start();
     }
 
@@ -74,7 +74,7 @@ public class ContactServiceActivity extends RyBaseActivity {
             public void call(Void aVoid) {
                 if (isOpen) {
                     isOpen = false;
-                    ObjectAnimator animator = ObjectAnimator.ofFloat(call, View.TRANSLATION_X, (call.getWidth() * 0.75f));
+                    ObjectAnimator animator = ObjectAnimator.ofFloat(call, View.TRANSLATION_X, (call.getWidth() * 0.50f));
                     animator.start();
                 } else {
                     return;
