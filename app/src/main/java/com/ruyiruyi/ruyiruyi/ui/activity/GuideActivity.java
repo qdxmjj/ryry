@@ -106,6 +106,7 @@ public class GuideActivity extends RyBaseActivity {
     protected void onDestroy() {
         //结束服务
         stopService(new Intent(GuideActivity.this, LuncherDownlodeService.class));
+        unregisterReceiver(receiver);
         super.onDestroy();
     }
 
