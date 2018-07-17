@@ -57,6 +57,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.zelory.compressor.Compressor;
 import rx.functions.Action1;
 
 public class TireFreeChangeActivity extends RyBaseActivity {
@@ -124,6 +125,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
     private ImageView tireImage4;
     private ImageView tireImageDelete4;
     private LinearLayout addTireImage4;
+
 
 
     private Bitmap imgBitmap;
@@ -593,37 +595,49 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserFreeChangeOrder");
         Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
         params.addBodyParameter("reqJson", jsonObject.toString());
-        if (hasCode1) {
-            String code1 = ImageUtils.savePhoto(codeBitmap1, this.getObbDir().getAbsolutePath(), "code1");
-            params.addBodyParameter("shoe1BarCodeImg", new File(code1));
-        }
-        if (hasTire1) {
-            String tire1 = ImageUtils.savePhoto(tireBitmap1, this.getObbDir().getAbsolutePath(), "tire1");
-            params.addBodyParameter("shoe1Img", new File(tire1));
-        }
-        if (hasCode2) {
-            String code2 = ImageUtils.savePhoto(codeBitmap2, this.getObbDir().getAbsolutePath(), "code2");
-            params.addBodyParameter("shoe2BarCodeImg", new File(code2));
-        }
-        if (hasTire2) {
-            String tire2 = ImageUtils.savePhoto(tireBitmap2, this.getObbDir().getAbsolutePath(), "tire2");
-            params.addBodyParameter("shoe2Img", new File(tire2));
-        }
-        if (hasCode3) {
-            String code3 = ImageUtils.savePhoto(codeBitmap3, this.getObbDir().getAbsolutePath(), "code3");
-            params.addBodyParameter("shoe3BarCodeImg", new File(code3));
-        }
-        if (hasTire3) {
-            String tire3 = ImageUtils.savePhoto(tireBitmap3, this.getObbDir().getAbsolutePath(), "tire3");
-            params.addBodyParameter("shoe3Img", new File(tire3));
-        }
-        if (hasCode4) {
-            String code4 = ImageUtils.savePhoto(codeBitmap4, this.getObbDir().getAbsolutePath(), "code4");
-            params.addBodyParameter("shoe4BarCodeImg", new File(code4));
-        }
-        if (hasTire4) {
-            String tire4 = ImageUtils.savePhoto(tireBitmap4, this.getObbDir().getAbsolutePath(), "tire4");
-            params.addBodyParameter("shoe4Img", new File(tire4));
+        try {
+            if (hasCode1){
+                String code1 = ImageUtils.savePhoto(codeBitmap1, this.getObbDir().getAbsolutePath(), "code1");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(code1));
+                params.addBodyParameter("shoe1BarCodeImg" ,file);
+            }
+            if (hasTire1){
+                String tire1 = ImageUtils.savePhoto(tireBitmap1, this.getObbDir().getAbsolutePath(), "tire1");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(tire1));
+                params.addBodyParameter("shoe1Img" ,file);
+            }
+            if (hasCode2){
+                String code2 = ImageUtils.savePhoto(codeBitmap2, this.getObbDir().getAbsolutePath(), "code2");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(code2));
+                params.addBodyParameter("shoe2BarCodeImg" ,file );
+            }
+            if (hasTire2){
+                String tire2 = ImageUtils.savePhoto(tireBitmap2, this.getObbDir().getAbsolutePath(), "tire2");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(tire2));
+                params.addBodyParameter("shoe2Img" ,file );
+            }
+            if (hasCode3){
+                String code3 = ImageUtils.savePhoto(codeBitmap3, this.getObbDir().getAbsolutePath(), "code3");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(code3));
+                params.addBodyParameter("shoe3BarCodeImg" ,file );
+            }
+            if (hasTire3){
+                String tire3 = ImageUtils.savePhoto(tireBitmap3, this.getObbDir().getAbsolutePath(), "tire3");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(tire3));
+                params.addBodyParameter("shoe3Img" ,file );
+            }
+            if (hasCode4){
+                String code4 = ImageUtils.savePhoto(codeBitmap4, this.getObbDir().getAbsolutePath(), "code4");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(code4));
+                params.addBodyParameter("shoe4BarCodeImg" ,file );
+            }
+            if (hasTire4){
+                String tire4 = ImageUtils.savePhoto(tireBitmap4, this.getObbDir().getAbsolutePath(), "tire4");
+                File file = new Compressor(getApplicationContext()).compressToFile(new File(tire4));
+                params.addBodyParameter("shoe4Img" ,file );
+            }
+        } catch (IOException e) {
+
         }
         String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
@@ -642,7 +656,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                         intent.putExtra(OrderActivity.ORDER_FROM, 1);
                         startActivity(intent);
                         finish();
-                    } else {
+                    }else {
                         Toast.makeText(TireFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
@@ -669,50 +683,50 @@ public class TireFreeChangeActivity extends RyBaseActivity {
 
     private void initTire4Layou() {
         tireImage4.setVisibility(hasTire4 ? View.VISIBLE : View.GONE);
-        addTireImage4.setVisibility(hasTire4 ? View.GONE : View.VISIBLE);
-        tireImageDelete4.setVisibility(hasTire4 ? View.VISIBLE : View.GONE);
+        addTireImage4.setVisibility(hasTire4 ? View.GONE :View.VISIBLE);
+        tireImageDelete4.setVisibility(hasTire4?View.VISIBLE : View.GONE);
     }
 
     private void initCode4Layout() {
         codeImage4.setVisibility(hasCode4 ? View.VISIBLE : View.GONE);
-        addCodeImage4.setVisibility(hasCode4 ? View.GONE : View.VISIBLE);
-        codeImageDelete4.setVisibility(hasCode4 ? View.VISIBLE : View.GONE);
+        addCodeImage4.setVisibility(hasCode4 ? View.GONE :View.VISIBLE);
+        codeImageDelete4.setVisibility(hasCode4 ?View.VISIBLE : View.GONE);
     }
 
     private void initTire3Layou() {
         tireImage3.setVisibility(hasTire3 ? View.VISIBLE : View.GONE);
-        addTireImage3.setVisibility(hasTire3 ? View.GONE : View.VISIBLE);
-        tireImageDelete3.setVisibility(hasTire3 ? View.VISIBLE : View.GONE);
+        addTireImage3.setVisibility(hasTire3 ? View.GONE :View.VISIBLE);
+        tireImageDelete3.setVisibility(hasTire3?View.VISIBLE : View.GONE);
     }
 
     private void initCode3Layout() {
         codeImage3.setVisibility(hasCode3 ? View.VISIBLE : View.GONE);
-        addCodeImage3.setVisibility(hasCode3 ? View.GONE : View.VISIBLE);
-        codeImageDelete3.setVisibility(hasCode3 ? View.VISIBLE : View.GONE);
+        addCodeImage3.setVisibility(hasCode3 ? View.GONE :View.VISIBLE);
+        codeImageDelete3.setVisibility(hasCode3?View.VISIBLE : View.GONE);
     }
 
     private void initTire2Layou() {
         tireImage2.setVisibility(hasTire2 ? View.VISIBLE : View.GONE);
-        addTireImage2.setVisibility(hasTire2 ? View.GONE : View.VISIBLE);
-        tireImageDelete2.setVisibility(hasTire2 ? View.VISIBLE : View.GONE);
+        addTireImage2.setVisibility(hasTire2 ? View.GONE :View.VISIBLE);
+        tireImageDelete2.setVisibility(hasTire2?View.VISIBLE : View.GONE);
     }
 
     private void initCode2Layout() {
         codeImage2.setVisibility(hasCode2 ? View.VISIBLE : View.GONE);
-        addCodeImage2.setVisibility(hasCode2 ? View.GONE : View.VISIBLE);
-        codeImageDelete2.setVisibility(hasCode2 ? View.VISIBLE : View.GONE);
+        addCodeImage2.setVisibility(hasCode2 ? View.GONE :View.VISIBLE);
+        codeImageDelete2.setVisibility(hasCode2?View.VISIBLE : View.GONE);
     }
 
     private void initTire1Layou() {
         tireImage1.setVisibility(hasTire1 ? View.VISIBLE : View.GONE);
-        addTireImage1.setVisibility(hasTire1 ? View.GONE : View.VISIBLE);
-        tireImageDelete1.setVisibility(hasTire1 ? View.VISIBLE : View.GONE);
+        addTireImage1.setVisibility(hasTire1 ? View.GONE :View.VISIBLE);
+        tireImageDelete1.setVisibility(hasTire1?View.VISIBLE : View.GONE);
     }
 
     private void initCode1Layout() {
         codeImage1.setVisibility(hasCode1 ? View.VISIBLE : View.GONE);
-        addCodeImage1.setVisibility(hasCode1 ? View.GONE : View.VISIBLE);
-        codeImageDelete1.setVisibility(hasCode1 ? View.VISIBLE : View.GONE);
+        addCodeImage1.setVisibility(hasCode1 ? View.GONE :View.VISIBLE);
+        codeImageDelete1.setVisibility(hasCode1?View.VISIBLE : View.GONE);
     }
 
     private void showChoosePicDialog() {
@@ -753,21 +767,21 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         Intent openCameraIntent = new Intent(
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
-        if (currentImage == 10) {
+        if (currentImage == 10){
             file = new File(this.getObbDir().getAbsolutePath(), "codeimage1.jpg");
-        } else if (currentImage == 11) {
+        }else if (currentImage == 11){
             file = new File(this.getObbDir().getAbsolutePath(), "tireimage1.jpg");
-        } else if (currentImage == 20) {
+        }else if (currentImage == 20){
             file = new File(this.getObbDir().getAbsolutePath(), "codeimage2.jpg");
-        } else if (currentImage == 21) {
+        }else if (currentImage == 21){
             file = new File(this.getObbDir().getAbsolutePath(), "tireimage2.jpg");
-        } else if (currentImage == 30) {
+        }else if (currentImage == 30){
             file = new File(this.getObbDir().getAbsolutePath(), "codeimage3.jpg");
-        } else if (currentImage == 31) {
+        }else if (currentImage == 31){
             file = new File(this.getObbDir().getAbsolutePath(), "tireimage3.jpg");
-        } else if (currentImage == 40) {
+        }else if (currentImage == 40){
             file = new File(this.getObbDir().getAbsolutePath(), "codeimage4.jpg");
-        } else if (currentImage == 41) {
+        }else if (currentImage == 41){
             file = new File(this.getObbDir().getAbsolutePath(), "tireimage4.jpg");
         }
 
@@ -794,18 +808,18 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         if (resultCode == RESULT_OK) { // 如果返回码是可以用的
             switch (requestCode) {
                 case TAKE_PICTURE:
-                    setImageToViewFromPhone(tempUri, 0);
+                    setImageToViewFromPhone(tempUri,0);
                     //  startPhotoZoom(tempUri); // 开始对图片进行裁剪处理
                     break;
                 case CHOOSE_PICTURE:        //从相册选择
                     Uri uri = data.getData();
                     Log.e(TAG, "onActivityResult:+++++++++++++ " + uri);
-                    setImageToViewFromPhone(uri, 1);
+                    setImageToViewFromPhone(uri,1);
                     //startPhotoZoom(data.getData()); // 开始对图片进行裁剪处理
                     break;
 
             }
-        } else if (resultCode == TireChangeActivity.CHOOSE_SHOP) {
+        }else if (resultCode == TireChangeActivity.CHOOSE_SHOP) {
             Bundle bundle = data.getExtras();
             shop = ((Shop) bundle.getSerializable("shop"));
             shopChooseView.setValue(shop.getStoreName(), shop.getStoreImage(), shop.getStoreAddress(), shop.getStoreDistence(), shop.getServiceTypeList(), mInflater);
@@ -815,17 +829,15 @@ public class TireFreeChangeActivity extends RyBaseActivity {
 
     /**
      * 未裁剪之后的图片数据
-     * setImageToViewFromPhone
-     *
+     *setImageToViewFromPhone
      * @param
      */
-    protected void setImageToViewFromPhone(Uri uri, int type) { //0是拍  1是选
+    protected void setImageToViewFromPhone(Uri uri,int type) { //0是拍  1是选
         int degree = 0;
-        if (type == 0) { //拍照
+        if (type == 0){ //拍照
             degree = ImageUtils.readPictureDegree(path);
-        } else {     //从相册选择
-            degree = ImageUtils.getOrientation(getApplicationContext(), uri);
-//            degree = ImageUtils.readPictureDegree(uri.toString());
+        }else {     //从相册选择
+            degree = ImageUtils.readPictureDegree(uri.toString());
             Log.w(TAG, "setImageToViewFromPhone: " + degree);
         }
 
@@ -833,48 +845,48 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         if (uri != null) {
             Bitmap photo = null;
             try {
-                photo = ImageUtils.getBitmapFormUri(getApplicationContext(), uri);
+                photo = ImageUtils.getBitmapFormUri(getApplicationContext(),uri);
             } catch (IOException e) {
 
             }
-            Log.d(TAG, "setImageToView:" + photo);
-            if (currentImage == 10) {
+            Log.d(TAG,"setImageToView:"+photo);
+            if (currentImage == 10 ){
                 codeBitmap1 = rotaingImageView(degree, photo);
                 hasCode1 = true;
                 initCode1Layout();
                 codeImage1.setImageBitmap(codeBitmap1);
-            } else if (currentImage == 11) {
-                tireBitmap1 = rotaingImageView(degree, photo);
+            }else if (currentImage == 11){
+                tireBitmap1 = rotaingImageView(degree,photo);
                 hasTire1 = true;
                 initTire1Layou();
                 tireImage1.setImageBitmap(tireBitmap1);
-            } else if (currentImage == 20) {
+            }else if (currentImage == 20){
                 codeBitmap2 = rotaingImageView(degree, photo);
                 hasCode2 = true;
                 initCode2Layout();
                 codeImage2.setImageBitmap(codeBitmap2);
-            } else if (currentImage == 21) {
-                tireBitmap2 = rotaingImageView(degree, photo);
+            }else if (currentImage == 21){
+                tireBitmap2 = rotaingImageView(degree,photo);
                 hasTire2 = true;
                 initTire2Layou();
                 tireImage2.setImageBitmap(tireBitmap2);
-            } else if (currentImage == 30) {
+            }else if (currentImage == 30){
                 codeBitmap3 = rotaingImageView(degree, photo);
                 hasCode3 = true;
                 initCode3Layout();
                 codeImage3.setImageBitmap(codeBitmap3);
-            } else if (currentImage == 31) {
-                tireBitmap3 = rotaingImageView(degree, photo);
+            }else if (currentImage == 31){
+                tireBitmap3 = rotaingImageView(degree,photo);
                 hasTire3 = true;
                 initTire3Layou();
                 tireImage3.setImageBitmap(tireBitmap3);
-            } else if (currentImage == 40) {
+            }else if (currentImage == 40){
                 codeBitmap4 = rotaingImageView(degree, photo);
                 hasCode4 = true;
                 initCode4Layout();
                 codeImage4.setImageBitmap(codeBitmap4);
-            } else if (currentImage == 41) {
-                tireBitmap4 = rotaingImageView(degree, photo);
+            }else if (currentImage == 41){
+                tireBitmap4 = rotaingImageView(degree,photo);
                 hasTire4 = true;
                 initTire4Layou();
                 tireImage4.setImageBitmap(tireBitmap4);
@@ -882,6 +894,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
             //uploadPic(photo);
         }
     }
+
 
 
     public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
@@ -922,7 +935,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: --" + result);
+                Log.e(TAG, "onSuccess: --" +  result);
                 JSONObject jsonObject1 = null;
                 JSONObject data = null;
                 try {
@@ -935,23 +948,24 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                         rearFreeAmount = data.getInt("rearAmount");
                         fontRearFlag = data.getInt("fontRearFlag");
                         isReach5Years = data.getInt("isReach5Years");
-                        if (fontRearFlag == 0) {
+                        if (fontRearFlag == 0){
                             tireCountLayout.setVisibility(View.VISIBLE);
                             fontTireCountLayout.setVisibility(View.GONE);
                             rearTireCountLayout.setVisibility(View.GONE);
-                            tireCountText.setText(fontFreeAmount + "");
-                        } else if (fontRearFlag == 1) {
+                            tireCountText.setText(fontFreeAmount+"");
+                        }else if(fontRearFlag == 1){
                             tireCountLayout.setVisibility(View.GONE);
                             fontTireCountLayout.setVisibility(View.VISIBLE);
                             rearTireCountLayout.setVisibility(View.VISIBLE);
-                            catFontText.setText(fontFreeAmount + "");
-                            carRearText.setText(rearFreeAmount + "");
-                        } else {
+                            catFontText.setText(fontFreeAmount +"");
+                            carRearText.setText(rearFreeAmount +"");
+                        }else {
                             tireCountLayout.setVisibility(View.VISIBLE);
                             fontTireCountLayout.setVisibility(View.GONE);
                             rearTireCountLayout.setVisibility(View.GONE);
-                            tireCountText.setText(0 + "");
+                            tireCountText.setText(0+"");
                         }
+
 
 
                         if (fontFreeAmount == 0 && rearFreeAmount == 0) {
@@ -964,32 +978,32 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                         Toast.makeText(TireFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
-                    if (data == null) {
+                    if (data == null){
                         Toast.makeText(TireFreeChangeActivity.this, "您未有可免费更换得轮胎，快去购买换胎吧", Toast.LENGTH_SHORT).show();
                         fontRearFlag = 0;
                         fontFreeAmount = 0;
                         rearFreeAmount = 0;
-                        if (fontRearFlag == 0) {
+                        if (fontRearFlag == 0){
                             tireCountLayout.setVisibility(View.VISIBLE);
                             fontTireCountLayout.setVisibility(View.GONE);
                             rearTireCountLayout.setVisibility(View.GONE);
-                            tireCountText.setText(fontFreeAmount + "");
-                        } else if (fontRearFlag == 1) {
+                            tireCountText.setText(fontFreeAmount+"");
+                        }else if(fontRearFlag == 1){
                             tireCountLayout.setVisibility(View.GONE);
                             fontTireCountLayout.setVisibility(View.VISIBLE);
                             rearTireCountLayout.setVisibility(View.VISIBLE);
-                            catFontText.setText(fontFreeAmount + "");
-                            carRearText.setText(rearFreeAmount + "");
-                        } else {
+                            catFontText.setText(fontFreeAmount +"");
+                            carRearText.setText(rearFreeAmount +"");
+                        }else {
                             tireCountLayout.setVisibility(View.VISIBLE);
                             fontTireCountLayout.setVisibility(View.GONE);
                             rearTireCountLayout.setVisibility(View.GONE);
-                            tireCountText.setText(0 + "");
+                            tireCountText.setText(0+"");
                         }
                     }
                 }
 
-            }
+                }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
@@ -1009,7 +1023,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
     }
 
     private void initAmountView() {
-        //免费再换
+      //免费再换
         if (fontRearFlag == 0) { //前后轮一致
             fontMaxCount = 2;
             rearMaxCount = 2;
@@ -1147,7 +1161,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")) {
+                    if (status.equals("1")){
                         JSONObject data = jsonObject1.getJSONObject("data");
                         carNumber = data.getString("platNumber");
                         carNumberText.setText(carNumber);

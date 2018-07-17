@@ -505,7 +505,8 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
                 RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "updateUser");
                 params.addBodyParameter("reqJson", object.toString());
                 params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
-                // File file = new File(img_path2);
+               // File file = new File(img_path2);
+                //图片压缩
                 File file1 = null;
                 try {
                     file1 = new Compressor(getApplicationContext()).compressToFile(new File(img_Path));
@@ -513,7 +514,7 @@ public class UserInfoActivity extends RyBaseActivity implements DatePicker.OnDat
 
                 }
                 long length = file1.length();
-                Log.e(TAG, "setImageToViewFromPhone: file2---" + length);
+                Log.e(TAG, "setImageToViewFromPhone: file2---" + length );
                 if (isNewPic) {
                     params.addBodyParameter("user_head_img", file1);
                 }

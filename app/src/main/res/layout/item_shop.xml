@@ -63,12 +63,15 @@
                     android:textSize="14sp"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:layout_marginRight="50dp"/>
+                    android:layout_marginRight="60dp"/>
                 <TextView
                     android:id="@+id/shop_distence_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="18km"
+                    android:gravity="right"
+                    android:singleLine="true"
+                    android:enabled="true"
                     android:layout_gravity="right|center_vertical"/>
             </FrameLayout>
 

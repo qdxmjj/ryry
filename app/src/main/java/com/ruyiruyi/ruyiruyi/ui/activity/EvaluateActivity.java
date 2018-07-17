@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.ielse.view.imagewatcher.ImageWatcher;
+import id.zelory.compressor.Compressor;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import me.drakeet.multitype.MultiTypeAdapter;
@@ -221,30 +222,35 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCommitComment");
         params.addBodyParameter("reqJson",jsonObject.toString());
         params.setConnectTimeout(10000);
-        if (evaluateOne!=null){
-            String evaluateOne = ImageUtils.savePhoto(this.evaluateOne, this.getObbDir().getAbsolutePath()
-                    , "evaluateOne");
-            params.addBodyParameter("img1" ,new File(evaluateOne) );
-        }
-        if (evaluateTwo!=null){
-            String evaluateTwo = ImageUtils.savePhoto(this.evaluateTwo, this.getObbDir().getAbsolutePath()
-                    , "evaluateTwo");
-            params.addBodyParameter("img2" ,new File(evaluateTwo) );
-        }
-        if (evaluateThree!=null){
-            String evaluateThree = ImageUtils.savePhoto(this.evaluateThree, this.getObbDir().getAbsolutePath()
-                    , "evaluateThree");
-            params.addBodyParameter("img3" ,new File(evaluateThree) );
-        }
-        if (evaluateFour!=null){
-            String evaluateFour = ImageUtils.savePhoto(this.evaluateFour, this.getObbDir().getAbsolutePath()
-                    , "evaluateFour");
-            params.addBodyParameter("img4" ,new File(evaluateFour) );
-        }
-        if (evaluateFive!=null){
-            String evaluateFive = ImageUtils.savePhoto(this.evaluateFive, this.getObbDir().getAbsolutePath()
-                    , "evaluateFive");
-            params.addBodyParameter("img5" ,new File(evaluateFive) );
+        try {
+            if (evaluateOne!=null){
+                String evaluateOne = ImageUtils.savePhoto(this.evaluateOne, this.getObbDir().getAbsolutePath()
+                        , "evaluateOne");
+
+                params.addBodyParameter("img1" ,new Compressor(getApplicationContext()).compressToFile(new File(evaluateOne)));
+            }
+            if (evaluateTwo!=null){
+                String evaluateTwo = ImageUtils.savePhoto(this.evaluateTwo, this.getObbDir().getAbsolutePath()
+                        , "evaluateTwo");
+                params.addBodyParameter("img2" ,new Compressor(getApplicationContext()).compressToFile(new File(evaluateTwo)) );
+            }
+            if (evaluateThree!=null){
+                String evaluateThree = ImageUtils.savePhoto(this.evaluateThree, this.getObbDir().getAbsolutePath()
+                        , "evaluateThree");
+                params.addBodyParameter("img3" ,new Compressor(getApplicationContext()).compressToFile(new File(evaluateThree)) );
+            }
+            if (evaluateFour!=null){
+                String evaluateFour = ImageUtils.savePhoto(this.evaluateFour, this.getObbDir().getAbsolutePath()
+                        , "evaluateFour");
+                params.addBodyParameter("img4" ,new Compressor(getApplicationContext()).compressToFile(new File(evaluateFour)) );
+            }
+            if (evaluateFive!=null){
+                String evaluateFive = ImageUtils.savePhoto(this.evaluateFive, this.getObbDir().getAbsolutePath()
+                        , "evaluateFive");
+                params.addBodyParameter("img5" ,new Compressor(getApplicationContext()).compressToFile(new File(evaluateFive)) );
+            }
+        } catch (IOException e) {
+
         }
         String token = new DbConfig(this).getToken();
         params.addParameter("token",token);

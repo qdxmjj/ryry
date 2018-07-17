@@ -108,7 +108,7 @@ public class TireChangeActivity extends RyBaseActivity {
             actionBar.setTitle("首次更换");
             ;
         } else if (currentChangeType == 1) {
-            actionBar.setTitle("免费再换");
+            actionBar.setTitle("免费更换");
             ;
         }
 
