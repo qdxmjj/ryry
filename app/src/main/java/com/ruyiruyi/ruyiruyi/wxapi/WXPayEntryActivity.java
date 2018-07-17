@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.ui.activity.PaySuccessActivity;
@@ -63,7 +64,11 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
                 intent.putExtra("ORDERTYPE",98);
                 startActivity(intent);
                 finish();
+            }else if (resp.errCode == -2){
+                Toast.makeText(WXPayEntryActivity.this, "取消支付", Toast.LENGTH_SHORT).show();
+                finish();
             }
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.app_tip);
             builder.setMessage(getString(R.string.pay_result_callback_msg, String.valueOf(resp.errCode)));

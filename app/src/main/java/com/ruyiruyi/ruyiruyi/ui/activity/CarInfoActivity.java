@@ -1201,7 +1201,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
 
         }
 
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCar/updateUserCarInfo ");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCar/updateUserCarInfo");
         params.addBodyParameter("reqJson",jsonObject.toString());
        // params.setConnectTimeout(20000);
         //  params.addBodyParameter("jiashizhengzhuye" ,new File(zhuyePath) );

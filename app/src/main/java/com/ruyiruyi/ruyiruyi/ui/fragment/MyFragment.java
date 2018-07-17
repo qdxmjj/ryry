@@ -18,6 +18,7 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.ContactServiceActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CouponActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CreditLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
@@ -80,6 +81,7 @@ public class MyFragment extends RyBaseFragment {
     private ImageView noLoginImage;
     private ImageView messageView;
     private ImageView testImage;
+    private LinearLayout kefuLayout;
 
     @Nullable
     @Override
@@ -171,6 +173,22 @@ public class MyFragment extends RyBaseFragment {
         Glide.with(getContext()).load(R.drawable.ic_notlogged).into(noLoginImage);
         messageView = (ImageView) getView().findViewById(R.id.message_view);
         testImage = (ImageView) getView().findViewById(R.id.test_image);
+        kefuLayout = (LinearLayout) getView().findViewById(R.id.kefu_layout);
+
+        /**
+         * 联系客服
+         */
+        RxViewAction.clickNoDouble(kefuLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
+                        startActivity(new Intent(getContext(), ContactServiceActivity.class));
+                    }
+                });
 
         //消息列表显示
         RxViewAction.clickNoDouble(messageView)

@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:text="亲,您还没有成功邀请的好友呢~ \n 赶快发送邀请码给朋友们一起来省钱吧!"
+        android:text="您还未成功邀请到好友，赶快分享给朋友们一期来省钱吧！"
         android:textColor="@color/c7"
         android:textSize="13sp" />
 

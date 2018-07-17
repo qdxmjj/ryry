@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="温馨提示：如驿如意平台致力于您的爱车提供终身个性化轮胎服务，需要了解您爱车的详细信息，请您仔细填写！"
+        android:text="温馨提示：如驿如意为您的爱车提供个性化服务，需要了解车辆得详细信息，请如实填写"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="5dp"
