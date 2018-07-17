@@ -41,24 +41,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
+                    android:ellipsize="end"
                     android:gravity="bottom|right"
+                    android:maxLines="1"
                     android:text="+800.00"
                     android:textColor="@color/c7"
                     android:textSize="15sp" />
+
                 <TextView
                     android:id="@+id/tv_quan"
                     android:layout_width="wrap_content"
-                    android:text="券"
-                    android:visibility="gone"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
                     android:layout_marginBottom="1dp"
                     android:layout_marginLeft="1dp"
-                    android:layout_gravity="bottom|right"
-                    android:textSize="12sp"
-                    android:textColor="@color/theme_primary"
                     android:background="@drawable/register_theam_button"
-                    android:layout_height="wrap_content" />
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:text="券"
+                    android:textColor="@color/theme_primary"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <TextView
