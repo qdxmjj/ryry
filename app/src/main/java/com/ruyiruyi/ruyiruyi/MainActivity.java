@@ -156,13 +156,18 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
             }
         });
+
         if (fromFragment == null) {
             viewPager.setCurrentItem(0);
             tabsCell.setSelected(0);
         } else if (fromFragment.equals("MYFRAGMENT")) {
             viewPager.setCurrentItem(3);
             tabsCell.setSelected(3);
+        } else if (fromFragment.equals("HOMEFRAGMENT")) {
+            viewPager.setCurrentItem(0);
+            tabsCell.setSelected(0);
         }
+
 
 
         //获取车辆品牌数据

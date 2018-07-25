@@ -65,6 +65,14 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
                 //设置自动翻页
                 .startTurning(5000);
 
+        holder.mBanner.setOnPageClickListener(new CustomBanner.OnPageClickListener<String>() {
+
+            @Override
+            public void onPageClick(int position, String s) {
+                listener.onLunboClikcListener(position);
+            }
+        });
+
         holder.carTitle.setText(hometop.carTitle);
         holder.carContent.setText(hometop.carContent);
         holder.cityText.setText(hometop.getCityName());
@@ -118,5 +126,6 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
     public interface OnHomeTopItemClickListener{
         void onCityLayoutClickListener();
         void onCarItemClickListener(int state);
+        void onLunboClikcListener(int position);
     }
 }

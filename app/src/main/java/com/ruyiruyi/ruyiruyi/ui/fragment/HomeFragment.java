@@ -27,6 +27,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CityChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.LoginActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.LunboContentActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireFreeChangeActivity;
@@ -88,6 +89,9 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     private int fromFragment;
     private int ischoos;
     public OnIconClikc listener;
+    private String service_year;
+    private String service_end_date;
+
 
     public void setListener(OnIconClikc listener) {
         this.listener = listener;
@@ -192,6 +196,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                                 rearSize = carObject.getString("rear");
                                 tireSame = carObject.getBoolean("same");
                                 carId = carObject.getInt("car_id");
+                                service_end_date = carObject.getString("service_end_date");
+                                service_year = carObject.getString("service_year");
                                 int uesrCarId = carObject.getInt("user_car_id");
                                 User user = new DbConfig(getContext()).getUser();
                                 user.setCarId(uesrCarId);
@@ -383,6 +389,55 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     }
 
     @Override
+    public void onLunboClikcListener(int position) {
+        Log.e(TAG, "onLunboClikcListener: " + position);
+
+        if (position == 2){ //跳转到轮胎购买界面
+            //判断是否登录（未登录提示登录）
+            if (!judgeIsLogin()) {
+                return;
+            }
+            if (carId == 0){
+                Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (tireSame) {  //前后轮一样
+                Intent intent = new Intent(getContext(), CarFigureActivity.class);
+                intent.putExtra("TIRESIZE", fontSize);
+                intent.putExtra("FONTREARFLAG", "0");
+                startActivity(intent);
+            } else {         //前后轮不一样
+                Intent intent = new Intent(getContext(), TirePlaceActivity.class);
+                intent.putExtra("FONTSIZE", fontSize);
+                intent.putExtra("REARSIZE", rearSize);
+                startActivity(intent);
+            }
+        }else {
+            //判断是否登录（未登录提示登录）
+            if (!judgeIsLogin()) {
+                return;
+            }
+            if (carId == 0){
+                Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(getContext(), LunboContentActivity.class);
+            if (tireSame){
+                intent.putExtra("FONTREARFLAG",0);
+            }else {
+                intent.putExtra("FONTREARFLAG", 1);
+            }
+            intent.putExtra("FONTSIZE", fontSize);
+            intent.putExtra("REARSIZE", rearSize);
+            intent.putExtra(LunboContentActivity.LUNBO_POSITION, position);
+            startActivity(intent);
+        }
+
+
+
+    }
+
+    @Override
     public void onFunctionClickListener(int type) {
         if (type == 0) {//轮胎购买
             //判断是否登录（未登录提示登录）
@@ -434,7 +489,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 return;
             }
             Intent intent = new Intent(getContext(), TireWaitChangeActivity.class);
-            intent.putExtra(MyFragment.FROM_FRAGMENT, "MYFRAGMENT");
+            intent.putExtra(MyFragment.FROM_FRAGMENT, "HOMEFRAGMENT");
             startActivity(intent);
         }
     }
