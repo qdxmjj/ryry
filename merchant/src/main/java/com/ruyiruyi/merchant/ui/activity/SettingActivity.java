@@ -21,6 +21,7 @@ import com.ruyiruyi.rylibrary.cell.ActionBar;
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 
+import cn.jpush.android.api.JPushInterface;
 import rx.functions.Action1;
 
 public class SettingActivity extends BaseActivity {
@@ -144,6 +145,10 @@ public class SettingActivity extends BaseActivity {
                     }
                     Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
                     startActivity(intent);
+
+                    //极光推送删除别名绑定
+                    JPushInterface.deleteAlias(getApplicationContext(), 1);
+
                     //发送广播退出所有
                     Intent intent2 = new Intent("qd.xmjj.baseActivity");
                     intent2.putExtra("closeAll", 1);

@@ -28,6 +28,8 @@ import com.ruyiruyi.rylibrary.base.BaseActivity;
 
 import org.xutils.ex.DbException;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class LaunchActivity extends Activity {
     private final String TAG = LaunchActivity.class.getSimpleName();
     private TextView tv_num;
@@ -117,6 +119,9 @@ public class LaunchActivity extends Activity {
 
         //权限获取
         requestPower();
+
+        //极光推送绑定别名 初始化0 -->  999
+        JPushInterface.setAlias(getApplicationContext(), 0, "999");
 
     }
 
