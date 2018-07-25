@@ -127,9 +127,9 @@ android {
     }
 
 
-    task clean(type: Delete) {
+    /*task clean(type: Delete) {
         delete rootProject.buildDir
-    }
+    }*/
     sourceSets{
         main{
             jniLibs.srcDir 'libs'
