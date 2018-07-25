@@ -22,8 +22,11 @@ import android.widget.Toast;
 import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.db.model.User;
 import com.ruyiruyi.merchant.ui.service.LuncherDownlodeService;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
+
+import org.xutils.ex.DbException;
 
 public class LaunchActivity extends Activity {
     private final String TAG = LaunchActivity.class.getSimpleName();
@@ -87,10 +90,12 @@ public class LaunchActivity extends Activity {
 
         //跳转
         if (isLogin == 0) {
+            //跳转登录页面
             Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
             startActivity(intent);
             LaunchActivity.this.finish();
         } else {
+            //跳转主页
             Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("page", "my");
@@ -138,6 +143,12 @@ public class LaunchActivity extends Activity {
             Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
             finish();
         }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "请授权录音权限", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
     }
 
@@ -175,6 +186,9 @@ public class LaunchActivity extends Activity {
                         != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this,
                         Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.RECORD_AUDIO)
                         != PackageManager.PERMISSION_GRANTED) {
             //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true。
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -183,7 +197,8 @@ public class LaunchActivity extends Activity {
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                 Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.CAMERA,
-                                Manifest.permission.ACCESS_FINE_LOCATION
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.RECORD_AUDIO
                         }, 1);
             } else {
                 //申请权限，字符串数组内是一个或多个要申请的权限，1是申请权限结果的返回参数，在onRequestPermissionsResult可以得知申请结果
@@ -191,7 +206,8 @@ public class LaunchActivity extends Activity {
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                 Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.CAMERA,
-                                Manifest.permission.ACCESS_FINE_LOCATION
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.RECORD_AUDIO
                         }, 1);
             }
         } else {

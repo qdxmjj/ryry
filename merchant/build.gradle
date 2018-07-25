@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 apply from: 'tinker-support.gradle'
 
 def VERSION_CODE = 1
-def VERSION_NAME = "3.1.7"
+def VERSION_NAME = "3.1.8"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''
@@ -61,8 +61,13 @@ android {
         versionName VERSION_NAME
         ndk {
             //设置支持的SO库架构
-            abiFilters 'armeabi' , 'x86', 'armeabi-v7a', 'mips'//, 'x86_64', 'arm64-v8a'
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'mips', 'arm64-v8a'//'x86_64'
         }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "58b63697b0ef833709106bac", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
         multiDexEnabled true
 
     }
@@ -164,4 +169,7 @@ dependencies {
     compile 'com.tencent.tinker:tinker-android-lib:1.9.6'
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
     //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
+
+    compile 'cn.jiguang.sdk:jpush:3.1.5'  // 此处以JPush 3.1.5 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.2.1'  // 此处以JCore 1.2.2 版本为例。
 }

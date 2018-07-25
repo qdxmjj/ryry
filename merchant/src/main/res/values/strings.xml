@@ -2,7 +2,7 @@
     <string name="app_name">如驿如意商家版</string>
     <string name="wx_share_title">如驿如意</string><!--微信分享标题-->
     <string name="wx_share_description">分享下载app，注册并添加车辆即赠送两张精致洗车券，购买轮胎，更有精美大礼赠送！</string><!--微信分享文本-->
-    <string name="app_version">如驿如意V3.1.7商家版</string>
+    <string name="app_version">如驿如意V3.1.8商家版</string>
     <string name="service_type_a">汽车保养</string>
     <string name="service_type_b">美容清洗</string>
     <string name="service_type_c">安装改装</string>

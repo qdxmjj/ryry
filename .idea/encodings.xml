@@ -1,45 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/app/src/main/res/anim" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_actbtn_text.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_btn_text.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_choice_text_color.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_hyper_text.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_list_textcolor_one.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_list_textcolor_time.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_list_textcolor_two.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_pref_summary.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_pref_title.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_style_one_btn_text.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_style_two_btn_text.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/color/mm_title_btn_text.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_alert_dialog_background.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_alert_dialog_button_normal.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_alert_dialog_button_pressed.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_alert_dialog_cancel_normal.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_alert_dialog_special_normal.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_alert_dialog_special_pressed.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_one_disabled.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_one_focused.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_one_normal.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_one_pressed.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_dialog_alert.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/mm_trans.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/send_img.jpg" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/send_music_thumb.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/btn_style_alert_dialog_button.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/btn_style_alert_dialog_cancel.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/btn_style_alert_dialog_special.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/btn_style_one.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/alert_dialog_menu_layout.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/alert_dialog_menu_list_layout.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/alert_dialog_menu_list_layout_cancel.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/alert_dialog_menu_list_layout_special.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/alert_dialog_menu_list_layout_title.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/get_from_wx.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/debug.keystore" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/merchant/src/main/res/anim" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

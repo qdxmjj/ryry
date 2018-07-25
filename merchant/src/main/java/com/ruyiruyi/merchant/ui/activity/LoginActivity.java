@@ -218,6 +218,7 @@ public class LoginActivity extends BaseActivityb {
             user.setToken(data.getString("token"));
             user.setUpdateTime(data.getString("updateTime"));
             user.setPhone(data.getString("phone"));
+            user.setIsVoice("1");//语音播报 初始化默认为1开启语音播报
             user.setIsLogin("1");
             DbConfig dbConfig = new DbConfig(getApplicationContext());
             DbManager db = dbConfig.getDbManager();

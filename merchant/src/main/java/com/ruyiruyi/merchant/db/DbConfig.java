@@ -29,7 +29,7 @@ public class DbConfig {
                 .setDbName("merchant.db")
                 .setAllowTransaction(true)
                 .setDbDir(context.getFilesDir())
-                .setDbVersion(10);
+                .setDbVersion(11);
         return daoConfig;
     }
 
