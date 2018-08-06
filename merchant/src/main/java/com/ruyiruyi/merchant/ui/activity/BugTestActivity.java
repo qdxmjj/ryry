@@ -8,6 +8,11 @@ import android.view.View;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
 
+/**
+ * @作者 倾春
+ * eml.dongbinjava@163.com
+ * @创建日期 2018/7/30 9:41
+ */
 public class BugTestActivity extends BaseActivity {
 
     @Override
