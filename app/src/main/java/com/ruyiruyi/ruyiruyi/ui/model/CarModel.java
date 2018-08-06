@@ -6,11 +6,13 @@ public class CarModel implements IndexableEntity {
     public int carId;
     public String carName;
     public String carIcon;
+    public String icon;
 
-    public CarModel(int carId, String carName, String carIcon) {
+    public CarModel(int carId, String carName, String carIcon,String icon) {
         this.carId = carId;
         this.carName = carName;
         this.carIcon = carIcon;
+        this.icon = icon;
     }
 
     public int getCarId() {
@@ -37,9 +39,10 @@ public class CarModel implements IndexableEntity {
         this.carIcon = carIcon;
     }
 
+    //根据排序项
     @Override
     public String getFieldIndexBy() {
-        return carName;
+        return icon;
     }
 
     @Override
@@ -50,5 +53,13 @@ public class CarModel implements IndexableEntity {
     @Override
     public void setFieldPinyinIndexBy(String pinyin) {
 
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

@@ -253,7 +253,7 @@ public class PromotionActivity extends RyBaseActivity implements PromotionViewBi
     private void shareToWexin() {
         int id = new DbConfig(this).getId();
         WXWebpageObject webpage = new WXWebpageObject();
-        webpage.webpageUrl = "http://ruyiruyi.s1.natapp.cc/xmjj-webservice/preferentialInfo/shareIndex?userId=" + id;
+        webpage.webpageUrl = url;
         WXMediaMessage msg = new WXMediaMessage(webpage);
         msg.title = "如驿如意";
         msg.description = "分享下载app，注册并添加车辆即赠送两张精致洗车券，购买轮胎，更有精美大礼赠送！";

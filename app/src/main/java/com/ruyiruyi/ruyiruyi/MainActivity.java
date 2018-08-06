@@ -72,7 +72,6 @@ import org.xutils.x;
 
 public class MainActivity extends RyBaseFragmentActivity implements HomeFragment.OnIconClikc {
 
-
     private static final String TAG = MainActivity.class.getSimpleName();
     public static int HOMEFRAGMENT_RESULT = 0;
     public static int MYFRAGMENT_RESULT = 1;

@@ -32,7 +32,7 @@ public class UtilsRY {
     }
 
     public static boolean isMobile(String number) {
-        String num = "[1][34578]\\d{9}";
+        String num = "[1][345789]\\d{9}";
         if (TextUtils.isEmpty(number)) {
             return false;
         } else {

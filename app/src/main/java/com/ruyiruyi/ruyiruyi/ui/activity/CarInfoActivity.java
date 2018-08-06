@@ -996,7 +996,8 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
             jsonObject.put("rear",carRearText.getText().toString());
             jsonObject.put("driving_license_date",xszRegisterTimeText.getText().toString());
 
-            jsonObject.put("serviceYearLength",serviceYear);
+          //  jsonObject.put("serviceYearLength",serviceYear);
+            jsonObject.put("serviceYearLength",1);
           //  jsonObject.put("service_end_date","2025-6-27");
           //  ArrayList<Integer> jingchang = new ArrayList<>();
             StringBuffer jingchang = new StringBuffer();
@@ -1769,7 +1770,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                     xszEndTimeText.setText(endDate.append(String.valueOf(year + 15)).append("-").append(String.valueOf(month +1)).append("-").append(day));
                 }*/
                 dialog.dismiss();
-                chooseServiceTime();
+              //  chooseServiceTime();
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {

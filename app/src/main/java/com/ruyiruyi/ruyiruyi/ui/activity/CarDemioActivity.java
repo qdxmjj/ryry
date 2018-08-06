@@ -80,6 +80,7 @@ public class CarDemioActivity extends RyBaseActivity implements CarVersionViewBi
             for (int i = 0; i < verhicleList.size(); i++) {
                 CarVerhicle carVerhicle = verhicleList.get(i);
                 carVersionData.add(new CarVersion(carVerhicle.getId(),carVerhicle.getCarBrandId(),carVerhicle.getFactoryId(),carVerhicle.getCarVersion(),carVerhicle.getVerhicle()));
+                //carVersionData.add(new CarVersion(carVerhicle.getId(),carVerhicle.getCarBrandId(),carVerhicle.getFactoryId(),carVerhicle.getVerhicle(),carVerhicle.getVerhicle()));
             }
 
             items.clear();

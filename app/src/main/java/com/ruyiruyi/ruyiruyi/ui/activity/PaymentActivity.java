@@ -272,7 +272,12 @@ public class PaymentActivity extends RyBaseActivity {
                                 Toast.makeText(PaymentActivity.this, "不支持信用值支付，请选择其他支付方式", Toast.LENGTH_SHORT).show();
                                 //  postTireOrder();
                             } else if (orderType == 1) {  //商品订单
-                                showDialogYuE("使用信用额度快捷支付，在下次轮胎服务之前记得清还呦");
+                                if (allprice == 0.0){
+                                    postGoodsOrder();
+                                }else {
+                                    showDialogYuE("使用信用额度快捷支付，在下次轮胎服务之前记得清还呦");
+                                }
+
 
                             } else if (orderType == 99) {  //畅行无忧
                                 //  postTireOrder();
@@ -281,6 +286,10 @@ public class PaymentActivity extends RyBaseActivity {
 
 
                         } else if (currentType == 1) {//微信支付
+                            if(allprice == 0.0){
+                                Toast.makeText(PaymentActivity.this, "请使用信用额度支付", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             weixinPay();
                           /*  //初始化一个WXTextObject对象
                             WXTextObject textObject = new WXTextObject();
@@ -330,6 +339,10 @@ public class PaymentActivity extends RyBaseActivity {
                             api.sendReq(req);*/
 
                         } else if (currentType == 2) { //支付宝支付
+                            if(allprice == 0.0){
+                                Toast.makeText(PaymentActivity.this, "请使用信用额度支付", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             //获取签名后的orderInfo
                             getSign();
                         }
@@ -692,6 +705,7 @@ public class PaymentActivity extends RyBaseActivity {
                 jsonObject.put("orderName", "商品购买");
             }
             jsonObject.put("orderPrice",allprice);
+           // jsonObject.put("orderPrice",0.01);
             jsonObject.put("userId", userId);
         } catch (JSONException e) {
         }

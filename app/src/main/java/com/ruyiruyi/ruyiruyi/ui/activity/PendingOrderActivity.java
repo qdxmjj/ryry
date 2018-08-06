@@ -69,6 +69,8 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
     public List<String> oldCodeList;
     public List<TireInfo> buchaTireList;
     private int userCarId;
+    private String saleName;
+    private String orderActuallyPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,6 +250,8 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
         String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
+
+
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess:---- " + result);
@@ -261,6 +265,8 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                             JSONObject data = jsonObject1.getJSONObject("data");
                             orderImg = data.getString("orderImg");
                             orderTotalPrice = data.getString("orderTotalPrice");
+                            orderActuallyPrice = data.getString("orderActuallyPrice");
+                            saleName = data.getString("saleName");
                             carNumber = data.getString("platNumber");
                             userName = data.getString("userName");
                             userPhone = data.getString("userPhone");
@@ -305,6 +311,8 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                             JSONObject data = jsonObject1.getJSONObject("data");
                             orderImg = data.getString("orderImg");
                             orderTotalPrice = data.getString("orderTotalPrice");
+                            orderActuallyPrice = data.getString("orderActuallyPrice");
+                            saleName = data.getString("saleName");
                             carNumber = data.getString("platNumber");
                             storeId = data.getString("storeId");
                             storeName = data.getString("storeName");
@@ -457,7 +465,11 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
             items.add(new InfoOne("联系人", userName, false));
             items.add(new InfoOne("联系电话", userPhone, false));
             items.add(new InfoOne("车牌号", carNumber, false));
+            if (!saleName.equals("")){
+                items.add(new InfoOne("优惠券", saleName, false));
+            }
             items.add(new InfoOne("订单总价", "￥" + orderTotalPrice, true));
+
             if (tireInfo.getTireCount() > 0){
                 items.add(tireInfo);
             }
@@ -467,7 +479,10 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
         } else if (orderType == 1) { //商品
             items.add(new InfoOne("联系人", userName, false));
             items.add(new InfoOne("联系电话", userPhone, false));
-            items.add(new InfoOne("订单总价", "￥" + orderTotalPrice, false));
+            if (!saleName.equals("")){
+                items.add(new InfoOne("优惠券", saleName, false));
+            }
+            items.add(new InfoOne("订单总价", "￥" + orderActuallyPrice, false));
             items.add(new InfoOne("店铺名称", storeName, true, true));
             for (int i = 0; i < goodsInfoList.size(); i++) {
                 items.add(goodsInfoList.get(i));
@@ -523,7 +538,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
-                        intent.putExtra(PaymentActivity.ALL_PRICE, Double.parseDouble(orderTotalPrice));
+                        intent.putExtra(PaymentActivity.ALL_PRICE, Double.parseDouble(orderActuallyPrice));
                         intent.putExtra(PaymentActivity.ORDERNO, orderno);
                         intent.putExtra(PaymentActivity.ORDER_TYPE, orderType);
                         startActivity(intent);

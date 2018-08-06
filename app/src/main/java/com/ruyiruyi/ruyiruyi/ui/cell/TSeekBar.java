@@ -37,8 +37,8 @@ public class TSeekBar extends SeekBar {
 
     private float numTextWidth;
     //测量seekbar的规格
-    private Rect rect_seek;
-    private Paint.FontMetrics fm;
+    public Rect rect_seek;
+    public Paint.FontMetrics fm;
 
     public static final int TEXT_ALIGN_LEFT = 0x00000001;
     public static final int TEXT_ALIGN_RIGHT = 0x00000010;
@@ -49,15 +49,15 @@ public class TSeekBar extends SeekBar {
     /**
      * 文本中轴线X坐标
      */
-    private float textCenterX;
+    public float textCenterX;
     /**
      * 文本baseline线Y坐标
      */
-    private float textBaselineY;
+    public float textBaselineY;
     /**
      * 文字的方位
      */
-    private int textAlign;
+    public int textAlign;
 
     public TSeekBar(Context context) {
         this(context, null);
@@ -137,6 +137,14 @@ public class TSeekBar extends SeekBar {
         invalidate();//监听手势滑动，不断重绘文字和背景图的显示位置
         return super.onTouchEvent(event);
     }
+    public int currentYear(){
+        return  getProgress() +1;
+    }
+
+    public void serYear(int year){
+        mTitleText = year  + "年";
+        numTextWidth = paint.measureText(mTitleText);
+    }
 
     /**
      * 定位文本绘制的位置
@@ -145,7 +153,7 @@ public class TSeekBar extends SeekBar {
 
         fm = paint.getFontMetrics();
         //文本的宽度
-        mTitleText = getProgress()  + "年";
+        mTitleText = getProgress()+1  + "年";
 
         numTextWidth = paint.measureText(mTitleText);
 

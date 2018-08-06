@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
-def VERSION_CODE = 3
-def VERSION_NAME = "3.1.6"
+def VERSION_CODE = 6
+def VERSION_NAME = "3.2.0"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''
@@ -17,7 +17,7 @@ keystoreFilepath = properties.getProperty("keystore.path")
 if (keystoreFilepath) {
     keystorePSW = properties.getProperty("keystore.password")
     keystoreAlias = properties.getProperty("keystore.alias")
-    keystoreAliasPSW = properties.getProperty("keystore.alias_password")
+    keystoreAliasPSW = properties.getProperty("ke ystore.alias_password")
     keyfile = file(keystoreFilepath)
 }
 
@@ -122,6 +122,9 @@ android {
             }
             yingyongbao {
                 manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yingyongbao"]
+            }
+            anzhi {
+                manifestPlaceholders = [UMENG_CHANNEL_VALUE: "anzhi"]
             }
         }
     }

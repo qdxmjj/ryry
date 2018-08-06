@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnFigureItemInterface;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
@@ -83,11 +84,14 @@ public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInt
 
     private void getDataFromService() {
         tireFigureList.clear();
-        int uesrId = new DbConfig(this).getId();
+        User user = new DbConfig(getApplicationContext()).getUser();
+        int uesrId = user.getId();
+        int userCarId = user.getCarId();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("shoeSize", tiresize);
             jsonObject.put("userId", uesrId);
+            jsonObject.put("userCarId", userCarId);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getShoeBySize");

@@ -23,6 +23,10 @@ public class LunboContentActivity extends RyBaseActivity {
     private int fontrearflag;
     private String fontsize;
     private String rearsize;
+    private int carid;
+    private int usercarid;
+    private int serviceyear;
+    private String service_end_year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,10 @@ public class LunboContentActivity extends RyBaseActivity {
             fontsize = intent.getStringExtra("FONTSIZE");
             rearsize = intent.getStringExtra("REARSIZE");
         }
+        carid = intent.getIntExtra("CARID",0);
+        usercarid = intent.getIntExtra("USERCARID",0);
+        serviceyear = Integer.parseInt(intent.getStringExtra("SERVICEYEAR"));
+        service_end_year = intent.getStringExtra("SERVICE_END_YEAR");
 
         intiView();
     }
@@ -76,27 +84,63 @@ public class LunboContentActivity extends RyBaseActivity {
                     public void call(Void aVoid) {
                         if (lunboPosition == 0){    //购买轮胎
                             if (fontrearflag == 0) {  //前后轮一样
-                                Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
-                                intent.putExtra("TIRESIZE", fontsize);
-                                intent.putExtra("FONTREARFLAG", "0");
-                                startActivity(intent);
+                                if (service_end_year.equals("")){
+                                    Intent intent = new Intent(getApplicationContext(), YearChooseActivity.class);
+                                    intent.putExtra("TIRESIZE", fontsize);
+                                    intent.putExtra("FONTREARFLAG", "0");
+                                    intent.putExtra("SERVICEYEAR", serviceyear+"");
+                                    intent.putExtra("CARID", carid);
+                                    intent.putExtra("USERCARID",usercarid);
+                                    startActivity(intent);
+                                }else {
+                                    Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
+                                    intent.putExtra("TIRESIZE", fontsize);
+                                    intent.putExtra("FONTREARFLAG", "0");
+                                    intent.putExtra("SERVICEYEAR", serviceyear+"");
+                                    intent.putExtra("CARID", carid);
+                                    intent.putExtra("USERCARID",usercarid);
+                                    startActivity(intent);
+                                }
                             } else {         //前后轮不一样
                                 Intent intent = new Intent(getApplicationContext(), TirePlaceActivity.class);
                                 intent.putExtra("FONTSIZE", fontsize);
                                 intent.putExtra("REARSIZE", rearsize);
+                                intent.putExtra("SERVICEYEAR",serviceyear+"");
+                                intent.putExtra("SERVICE_END_YEAR", service_end_year);
+                                intent.putExtra("CARID", carid);
+                                intent.putExtra("USERCARID",usercarid);
                                 startActivity(intent);
+
                             }
                         }else if (lunboPosition == 1){  //购买轮胎
                             if (fontrearflag == 0) {  //前后轮一样
-                                Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
-                                intent.putExtra("TIRESIZE", fontsize);
-                                intent.putExtra("FONTREARFLAG", "0");
-                                startActivity(intent);
+                                if (service_end_year.equals("")){
+                                    Intent intent = new Intent(getApplicationContext(), YearChooseActivity.class);
+                                    intent.putExtra("TIRESIZE", fontsize);
+                                    intent.putExtra("FONTREARFLAG", "0");
+                                    intent.putExtra("SERVICEYEAR", serviceyear+"");
+                                    intent.putExtra("CARID", carid);
+                                    intent.putExtra("USERCARID",usercarid);
+                                    startActivity(intent);
+                                }else {
+                                    Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
+                                    intent.putExtra("TIRESIZE", fontsize);
+                                    intent.putExtra("FONTREARFLAG", "0");
+                                    intent.putExtra("SERVICEYEAR", serviceyear+"");
+                                    intent.putExtra("CARID", carid);
+                                    intent.putExtra("USERCARID",usercarid);
+                                    startActivity(intent);
+                                }
                             } else {         //前后轮不一样
                                 Intent intent = new Intent(getApplicationContext(), TirePlaceActivity.class);
                                 intent.putExtra("FONTSIZE", fontsize);
                                 intent.putExtra("REARSIZE", rearsize);
+                                intent.putExtra("SERVICEYEAR",serviceyear+"");
+                                intent.putExtra("SERVICE_END_YEAR", service_end_year);
+                                intent.putExtra("CARID", carid);
+                                intent.putExtra("USERCARID",usercarid);
                                 startActivity(intent);
+
                             }
                         }else if (lunboPosition == 3){  //免费洗车
                             Intent intent = new Intent(getApplicationContext(),GoodsShopActivity.class);

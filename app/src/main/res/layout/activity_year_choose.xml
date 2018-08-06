@@ -4,24 +4,78 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:orientation="vertical"
+    android:background="@color/c0"
     tools:context="com.ruyiruyi.ruyiruyi.ui.activity.YearChooseActivity">
 
-    <com.ruyiruyi.ruyiruyi.ui.cell.TSeekBar
-        android:id="@+id/seekBar"
-        android:layout_marginTop="200dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/my_action"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="15"
-        android:maxHeight="10dp"
-        android:progress="0"
-        android:indeterminateOnly="false"
-        android:progressDrawable="@drawable/seekbar_style"
-        android:splitTrack="false"
-        android:thumb="@drawable/ic_xiaoyuan"
-        app:img="@drawable/ic_qipao"
-        app:textcolor="#fff"
-        app:textsize="14dp"/>
+        android:layout_height="wrap_content"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/c0">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_xuanze_fuwu"
+                android:layout_marginTop="10dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/ic_xuanze_zhou">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="服务年限"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"/>
+                <com.ruyiruyi.ruyiruyi.ui.cell.TSeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="15"
+                    android:maxHeight="10dp"
+                    android:progress="0"
+                    android:indeterminateOnly="false"
+                    android:progressDrawable="@drawable/seekbar_style"
+                    android:splitTrack="false"
+                    android:thumb="@drawable/ic_xiaoyuan"
+                    app:img="@drawable/ic_qipao"
+                    app:textcolor="#fff"
+                    app:textsize="14dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/choose_year_view"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_button"
+            android:gravity="center"
+            android:text="下一步"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+    </FrameLayout>
+
+
 </LinearLayout>

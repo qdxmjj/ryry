@@ -1,5 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -60,6 +61,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
     private String couponName = "选择优惠券";
     private int couponId = 0;
     private int carId;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                 }
             }
         });
+        progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         goodslist = ((List<GoodsNew>) bundle.getSerializable("GOODSLIST"));
@@ -119,6 +122,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                 }
             }
         }
+        showDialogProgress(progressDialog,"订单提交中...");
 
         OrderGoods orderGoods = null;
         if (couponchoose == 0) {    //weixuan
@@ -178,7 +182,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(progressDialog);
             }
         });
 

@@ -1,5 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,6 +55,7 @@ public class OrderAffirmActivity extends RyBaseActivity {
     private TextView carNumberText;
     private ImageView tireImageView;
     private int shoeid;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,7 @@ public class OrderAffirmActivity extends RyBaseActivity {
         Log.e(TAG, "onCreate: 4-" + tirepname);
         Log.e(TAG, "onCreate: 5-" + cxwycount);
         Log.e(TAG, "onCreate: 6-" + cxwyprice);
+        progressDialog = new ProgressDialog(this);
 
         initView();
     }
@@ -148,6 +151,7 @@ public class OrderAffirmActivity extends RyBaseActivity {
     }
 
     private void postOrder() {
+        showDialogProgress(progressDialog,"订单提交中");
         int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -209,7 +213,7 @@ public class OrderAffirmActivity extends RyBaseActivity {
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(progressDialog);
             }
         });
     }

@@ -20,6 +20,10 @@ public class TirePlaceActivity extends RyBaseActivity {
     private FrameLayout fontLayout;
     private TextView rearText;
     private FrameLayout rearLayout;
+    private int carid;
+    private int usercarid;
+    private int serviceyear;
+    private String service_end_year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,10 @@ public class TirePlaceActivity extends RyBaseActivity {
         Intent intent = getIntent();
         fontsize = intent.getStringExtra("FONTSIZE");
         rearsize = intent.getStringExtra("REARSIZE");
+        carid = intent.getIntExtra("CARID",0);
+        usercarid = intent.getIntExtra("USERCARID",0);
+        serviceyear = Integer.parseInt(intent.getStringExtra("SERVICEYEAR"));
+        service_end_year = intent.getStringExtra("SERVICE_END_YEAR");
 
         initView();
     }
@@ -58,20 +66,42 @@ public class TirePlaceActivity extends RyBaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
-                        intent.putExtra("TIRESIZE",fontsize);
-                        intent.putExtra("FONTREARFLAG","1");
-                        startActivity(intent);
+                        if (service_end_year.equals("")){
+                            Intent intent = new Intent(getApplicationContext(), YearChooseActivity.class);
+                            intent.putExtra("TIRESIZE", fontsize);
+                            intent.putExtra("FONTREARFLAG", "0");
+                            intent.putExtra("SERVICEYEAR", serviceyear+"");
+                            intent.putExtra("CARID", carid);
+                            intent.putExtra("USERCARID",usercarid);
+                            startActivity(intent);
+                        }else {
+                            Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
+                            intent.putExtra("TIRESIZE",fontsize);
+                            intent.putExtra("FONTREARFLAG","1");
+                            startActivity(intent);
+                        }
+
                     }
                 });
         RxViewAction.clickNoDouble(rearLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
-                        intent.putExtra("TIRESIZE",rearsize);
-                        intent.putExtra("FONTREARFLAG","2");
-                        startActivity(intent);
+                        if (service_end_year.equals("")){
+                            Intent intent = new Intent(getApplicationContext(), YearChooseActivity.class);
+                            intent.putExtra("TIRESIZE", rearsize);
+                            intent.putExtra("FONTREARFLAG", "0");
+                            intent.putExtra("SERVICEYEAR", serviceyear+"");
+                            intent.putExtra("CARID", carid);
+                            intent.putExtra("USERCARID",usercarid);
+                            startActivity(intent);
+                        }else {
+                            Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
+                            intent.putExtra("TIRESIZE",rearsize);
+                            intent.putExtra("FONTREARFLAG","2");
+                            startActivity(intent);
+                        }
+
                     }
                 });
     }

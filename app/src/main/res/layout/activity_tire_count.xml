@@ -43,7 +43,7 @@
                     android:textSize="17sp"
                     android:textColor="@color/c7"
                     android:layout_marginTop="10dp"
-                    android:text="东风轮胎 195/55R15 适用于别克凯越大众奇瑞A65轿车 舒适静音型 省油环保"/>
+                    android:text=""/>
 
                 <TextView
                     android:layout_width="match_parent"

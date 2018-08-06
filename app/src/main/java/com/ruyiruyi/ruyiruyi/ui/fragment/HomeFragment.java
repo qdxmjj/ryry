@@ -34,6 +34,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.TireFreeChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TirePlaceActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireRepairActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.YearChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Function;
 import com.ruyiruyi.ruyiruyi.ui.multiType.FunctionViewBinder;
@@ -91,6 +92,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     public OnIconClikc listener;
     private String service_year;
     private String service_end_date;
+
+    private int uesrCarId;
 
 
     public void setListener(OnIconClikc listener) {
@@ -166,6 +169,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         params.addParameter("token", token);
         Log.e(TAG, "initdataFromService: -----------------" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
+
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: --------------" + result);
@@ -198,7 +202,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                                 carId = carObject.getInt("car_id");
                                 service_end_date = carObject.getString("service_end_date");
                                 service_year = carObject.getString("service_year");
-                                int uesrCarId = carObject.getInt("user_car_id");
+                                uesrCarId = carObject.getInt("user_car_id");
                                 User user = new DbConfig(getContext()).getUser();
                                 user.setCarId(uesrCarId);
                                 saveUserIntoDb(user);
@@ -402,14 +406,33 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 return;
             }
             if (tireSame) {  //前后轮一样
-                Intent intent = new Intent(getContext(), CarFigureActivity.class);
-                intent.putExtra("TIRESIZE", fontSize);
-                intent.putExtra("FONTREARFLAG", "0");
-                startActivity(intent);
+                if (service_end_date.equals("")){
+                    Intent intent = new Intent(getContext(), YearChooseActivity.class);
+                    intent.putExtra("TIRESIZE", fontSize);
+                    intent.putExtra("FONTREARFLAG", "0");
+                    intent.putExtra("SERVICEYEAR", service_year);
+                    intent.putExtra("CARID", carId);
+                    intent.putExtra("USERCARID",uesrCarId);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(getContext(), CarFigureActivity.class);
+                    intent.putExtra("TIRESIZE", fontSize);
+                    intent.putExtra("FONTREARFLAG", "0");
+                    intent.putExtra("SERVICEYEAR", service_year);
+                    intent.putExtra("CARID", carId);
+                    intent.putExtra("USERCARID",uesrCarId);
+                    startActivity(intent);
+                }
+
+
             } else {         //前后轮不一样
                 Intent intent = new Intent(getContext(), TirePlaceActivity.class);
                 intent.putExtra("FONTSIZE", fontSize);
                 intent.putExtra("REARSIZE", rearSize);
+                intent.putExtra("SERVICEYEAR",service_year);
+                intent.putExtra("SERVICE_END_YEAR", service_end_date);
+                intent.putExtra("CARID", carId);
+                intent.putExtra("USERCARID",uesrCarId);
                 startActivity(intent);
             }
         }else {
@@ -429,6 +452,11 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             }
             intent.putExtra("FONTSIZE", fontSize);
             intent.putExtra("REARSIZE", rearSize);
+
+            intent.putExtra("SERVICEYEAR",service_year);
+            intent.putExtra("SERVICE_END_YEAR", service_end_date);
+            intent.putExtra("CARID", carId);
+            intent.putExtra("USERCARID",uesrCarId);
             intent.putExtra(LunboContentActivity.LUNBO_POSITION, position);
             startActivity(intent);
         }
@@ -449,14 +477,31 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 return;
             }
             if (tireSame) {  //前后轮一样
-                Intent intent = new Intent(getContext(), CarFigureActivity.class);
-                intent.putExtra("TIRESIZE", fontSize);
-                intent.putExtra("FONTREARFLAG", "0");
-                startActivity(intent);
+                if (service_end_date.equals("")){
+                    Intent intent = new Intent(getContext(), YearChooseActivity.class);
+                    intent.putExtra("TIRESIZE", fontSize);
+                    intent.putExtra("FONTREARFLAG", "0");
+                    intent.putExtra("SERVICEYEAR", service_year);
+                    intent.putExtra("CARID", carId);
+                    intent.putExtra("USERCARID",uesrCarId);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(getContext(), CarFigureActivity.class);
+                    intent.putExtra("TIRESIZE", fontSize);
+                    intent.putExtra("FONTREARFLAG", "0");
+                    intent.putExtra("SERVICEYEAR", service_year);
+                    intent.putExtra("CARID", carId);
+                    intent.putExtra("USERCARID",uesrCarId);
+                    startActivity(intent);
+                }
             } else {         //前后轮不一样
                 Intent intent = new Intent(getContext(), TirePlaceActivity.class);
                 intent.putExtra("FONTSIZE", fontSize);
                 intent.putExtra("REARSIZE", rearSize);
+                intent.putExtra("SERVICEYEAR",service_year);
+                intent.putExtra("SERVICE_END_YEAR", service_end_date);
+                intent.putExtra("CARID", carId);
+                intent.putExtra("USERCARID",uesrCarId);
                 startActivity(intent);
             }
 

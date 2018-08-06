@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.github.promeg.pinyinhelper.Pinyin;
+import com.github.promeg.tinypinyin.lexicons.android.cncity.CnCityDict;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarBrand;
@@ -81,6 +83,7 @@ public class CarBrandActivity extends RyBaseActivity {
         indexableLayout.setCompareMode(IndexableLayout.MODE_FAST);
         List<String> bannerList = new ArrayList<>();
         bannerList.add("");
+    //    Pinyin.init(Pinyin.newConfig().with(CnCityDict.getInstance(this)));
 
     }
 
@@ -98,7 +101,7 @@ public class CarBrandActivity extends RyBaseActivity {
             List<CarBrand> brandList = db.selector(CarBrand.class).findAll();
             for (int i = 0; i < brandList.size(); i++) {
                 CarBrand carBrand = brandList.get(i);
-                list.add(new CarModel(carBrand.getId(),carBrand.getName(),carBrand.getImageUrl()));
+                list.add(new CarModel(carBrand.getId(),carBrand.getName(),carBrand.getImageUrl(),carBrand.getIcon()));
             }
 
         } catch (DbException e) {

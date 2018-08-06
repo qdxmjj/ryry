@@ -13,7 +13,7 @@
          android:id="@+id/tire_rank_text"
          android:layout_width="250dp"
          android:layout_height="wrap_content"
-         android:text="(载重1000公斤)/200K/￥200"
+         android:text=""
          android:textSize="16sp"
          android:background="@drawable/bg_price_no_click"
          android:gravity="center"
