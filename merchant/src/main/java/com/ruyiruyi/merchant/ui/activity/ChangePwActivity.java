@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
+import cn.jpush.android.api.JPushInterface;
 import rx.functions.Action1;
 
 public class ChangePwActivity extends BaseActivity {
@@ -194,6 +195,10 @@ public class ChangePwActivity extends BaseActivity {
                                     dbManager.saveOrUpdate(user);
                                 } catch (DbException e) {
                                 }
+
+                                //极光推送删除别名绑定
+                                JPushInterface.deleteAlias(getApplicationContext(), 1);
+
                                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                 startActivity(intent);
                             }

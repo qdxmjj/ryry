@@ -21,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -28,6 +29,7 @@ import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseFragmentActivity;
 import com.ruyiruyi.merchant.ui.adapter.MyPagerAdapter;
 import com.ruyiruyi.merchant.ui.fragment.StoreFragment;
@@ -53,7 +55,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 public class MainActivity extends MerchantBaseFragmentActivity implements StoreFragment.ForRefreshStore, MyFragment.ForRefreshMy {
 
@@ -81,6 +88,7 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
     private CommonProgressDialog mBar;
     private Uri tempUri;
     public boolean isGengxin = false;
+    private String user_phone_jpush;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +107,10 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         isGengxin = false;
         //版本更新
         getVersion();
+
+        //极光推送绑定别名
+        user_phone_jpush = new DbConfig(getApplicationContext()).getPhone();
+        JPushInterface.setAlias(getApplicationContext(), 1 , user_phone_jpush);
 
         viewPager = new ViewPager(this);
         viewPager.setId("MAINACTIVITYS".hashCode());
@@ -615,5 +627,7 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
 
     }
+
+
 
 }

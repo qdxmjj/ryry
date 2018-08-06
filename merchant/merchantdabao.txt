@@ -1,7 +1,7 @@
 W /*  左下角打开Terminal，输入命令行
         如果我们想打包wandoujia渠道的release版本，执行如下命令就好了：
         gradlew assembleWandoujiaRelease
-        gradlew assembleBaiduReleasegradlew assembleBaiduRelease    <勿忘修改string文件版中的本号>
+        gradlew assembleBaiduRelease     <勿忘修改string文件版中的本号>
         gradlew assembleQh360Release
         gradlew assembleXiaomiRelease
         gradlew assembleKuanRelease

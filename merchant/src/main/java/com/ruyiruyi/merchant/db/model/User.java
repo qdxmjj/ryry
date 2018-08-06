@@ -97,7 +97,18 @@ public class User {
     @Column(name = "islogin")
     private String isLogin; //0未登陆  1已登陆
 
+    @Column(name = "isVoice")
+    private String isVoice; //关闭语音播报  1开启语音播报
+
     public User() {
+    }
+
+    public void setIsVoice(String isVoice) {
+        this.isVoice = isVoice;
+    }
+
+    public String getIsVoice() {
+        return isVoice;
     }
 
     public void setStoreImgUrl(String storeImgUrl) {
