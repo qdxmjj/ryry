@@ -269,6 +269,8 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
                         intent.putExtra("USERID",userId);
                         startActivity(intent);
                         finish();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     }
                 } catch (JSONException e) {
 

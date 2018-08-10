@@ -568,6 +568,8 @@ public class TireChangeActivity extends RyBaseActivity {
                         intent.putExtra(OrderFragment.ORDER_TYPE, "ALL");
                         startActivity(intent);
                         finish();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
                         Toast.makeText(TireChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
@@ -601,7 +603,7 @@ public class TireChangeActivity extends RyBaseActivity {
             Toast.makeText(TireChangeActivity.this, "请选择轮胎数量", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (shop == null){
+        if (shop == null) {
             Toast.makeText(TireChangeActivity.this, "请选择门店", Toast.LENGTH_SHORT).show();
             return;
         }

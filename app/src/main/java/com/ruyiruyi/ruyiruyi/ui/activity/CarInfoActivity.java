@@ -1084,6 +1084,8 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                             jumpAndupdatauser();
                         }
 
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
                         Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }

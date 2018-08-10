@@ -262,6 +262,8 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                             }
                         });
                       //  initShopInfoView();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     }
                 } catch (JSONException e) {
 
@@ -326,6 +328,8 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                         initClassData();
                         //initGoodsData();
 
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     }
                 } catch (JSONException e) {
 
@@ -526,6 +530,8 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                         }
                         initGoodsDataFromService();
                        // initClassData();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     }
                 } catch (JSONException e) {
 

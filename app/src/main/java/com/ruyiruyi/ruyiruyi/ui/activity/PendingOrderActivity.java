@@ -355,6 +355,8 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                             getFreeTireOrderCode(data);
                             getFreeTireOrderOldCode(data);
                             initData();*/
+                        } else if (status.equals("-999")) {
+                            showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                         }
 
 

@@ -93,7 +93,7 @@ public class LoginActivity extends RyBaseActivity {
         String ANDROID_ID = Settings.System.getString(this.getContentResolver(), Settings.System.ANDROID_ID);
         codeDialog = new ProgressDialog(this);
 
-        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
+        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID, true);
         api.registerApp(Constants.APP_ID);
         initView();
 
@@ -116,7 +116,7 @@ public class LoginActivity extends RyBaseActivity {
 
 
         SpannableString msp = new SpannableString("未注册如驿如意账号的手机号，登录时将自动完成注册，且代表您已阅读并同意《如驿如意用户协议》");
-        msp.setSpan(new ForegroundColorSpan(Color.BLUE), 35,45, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);  //设置前景色为洋红色
+        msp.setSpan(new ForegroundColorSpan(Color.BLUE), 35, 45, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);  //设置前景色为洋红色
         agreementText.setText(msp);
 
 
@@ -125,12 +125,12 @@ public class LoginActivity extends RyBaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), AgreementActivity.class);
-                        intent.putExtra("AGREEMENTTYPE",1);
+                        intent.putExtra("AGREEMENTTYPE", 1);
                         startActivity(intent);
                     }
                 });
 
-        mTime = new TimeCount(60000,1000);
+        mTime = new TimeCount(60000, 1000);
 
         //微信登陆
         RxViewAction.clickNoDouble(weixinLoginLayout)
@@ -142,17 +142,16 @@ public class LoginActivity extends RyBaseActivity {
                 });
 
 
-
         changeLoginView();
         //更改登陆方式
         RxViewAction.clickNoDouble(loginType)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (isCode){
+                        if (isCode) {
                             isCode = false;
                             changeLoginView();
-                        }else {
+                        } else {
                             isCode = true;
                             changeLoginView();
                         }
@@ -164,20 +163,20 @@ public class LoginActivity extends RyBaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         String phoneNumber = phoneEdit.getText().toString();
-                        if (phoneNumber.isEmpty()){
+                        if (phoneNumber.isEmpty()) {
                             showDialog("手机号不能为空");
-                        }else if (!UtilsRY.isMobile(phoneNumber)){
+                        } else if (!UtilsRY.isMobile(phoneNumber)) {
                             showDialog("手机号格式错误");
-                        }else {
-                            if (isCode){    //验证码登陆
+                        } else {
+                            if (isCode) {    //验证码登陆
                                 String code = codeEdit.getText().toString();
-                                logdinByCode(phoneNumber,code);
-                            }else {         //密码登陆
+                                logdinByCode(phoneNumber, code);
+                            } else {         //密码登陆
                                 String passwordStr = passwordEdit.getText().toString();
                                 try {
                                     byte[] md5 = TripleDESUtil.MD5(passwordStr);
                                     String password = TripleDESUtil.bytes2HexString(md5);
-                                    loginByPassword(phoneNumber,password);
+                                    loginByPassword(phoneNumber, password);
                                 } catch (NoSuchAlgorithmException e) {
 
                                 } catch (UnsupportedEncodingException e) {
@@ -196,11 +195,11 @@ public class LoginActivity extends RyBaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         String phone = phoneEdit.getText().toString();
-                        if (phone.isEmpty()){
+                        if (phone.isEmpty()) {
                             showDialog("手机号不能为空");
-                        }else if(!UtilsRY.isMobile(phone)) {
+                        } else if (!UtilsRY.isMobile(phone)) {
                             showDialog("手机号格式错误");
-                        }else {
+                        } else {
                             getCode(phone);
                         }
                     }
@@ -211,7 +210,7 @@ public class LoginActivity extends RyBaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getApplicationContext(),ForgetPasswordActivity.class));
+                        startActivity(new Intent(getApplicationContext(), ForgetPasswordActivity.class));
                     }
                 });
     }
@@ -228,24 +227,25 @@ public class LoginActivity extends RyBaseActivity {
 
     /**
      * 验证码登陆
+     *
      * @param code
      */
     private void logdinByCode(final String phoneNumber, String code) {
 
-        showDialogProgress(codeDialog,"验证码登陆中...");
+        showDialogProgress(codeDialog, "验证码登陆中...");
         /*codeDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         codeDialog.setCanceledOnTouchOutside(false);
         codeDialog.setMessage("验证码登陆中...");
         codeDialog.show();*/
         final JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("phone",phoneNumber);
-            jsonObject.put("code",code);
+            jsonObject.put("phone", phoneNumber);
+            jsonObject.put("code", code);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "verificationCode");
         params.setConnectTimeout(10000);
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -255,18 +255,20 @@ public class LoginActivity extends RyBaseActivity {
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     Log.e(TAG, "onSuccess: " + status);
-                    if (status.equals("1")){//用户信息不存在  跳转到注册界面
+                    if (status.equals("1")) {//用户信息不存在  跳转到注册界面
                         Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                        intent.putExtra("PHONE",phoneEdit.getText().toString());
-                        intent.putExtra(LoginActivity.HEADURL,"");
-                        intent.putExtra(LoginActivity.NICKNAME,"");
-                        intent.putExtra(LoginActivity.OPENID,"");
+                        intent.putExtra("PHONE", phoneEdit.getText().toString());
+                        intent.putExtra(LoginActivity.HEADURL, "");
+                        intent.putExtra(LoginActivity.NICKNAME, "");
+                        intent.putExtra(LoginActivity.OPENID, "");
                         startActivity(intent);
-                    }else if (status.equals("111111")){ //用户信息存在返回用户信息
+                    } else if (status.equals("111111")) { //用户信息存在返回用户信息
                         JSONObject data = jsonObject1.getJSONObject("data");
                         saveUserToDb(data);//保存用户信息到数据库
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    }else {
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
                         Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -277,22 +279,22 @@ public class LoginActivity extends RyBaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-              //  codeDialog.dismiss();
-             //   hideDialogProgress(codeDialog);
-                Log.e(TAG, "onError: " );
+                //  codeDialog.dismiss();
+                //   hideDialogProgress(codeDialog);
+                Log.e(TAG, "onError: ");
                 Toast.makeText(LoginActivity.this, "登陆失败，请检查网络链接", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
-             //   codeDialog.dismiss();
-               //hideDialogProgress(codeDialog);
+                //   codeDialog.dismiss();
+                //hideDialogProgress(codeDialog);
                 Log.e(TAG, "onCancelled: ");
             }
 
             @Override
             public void onFinished() {
-               // codeDialog.dismiss();
+                // codeDialog.dismiss();
                 hideDialogProgress(codeDialog);
                 Log.e(TAG, "onFinished: ");
             }
@@ -301,6 +303,7 @@ public class LoginActivity extends RyBaseActivity {
 
     /**
      * 将用户保存到数据库
+     *
      * @param data
      */
     private void saveUserToDb(JSONObject data) {
@@ -308,7 +311,7 @@ public class LoginActivity extends RyBaseActivity {
         try {
             user.setId(data.getInt("id"));
             user.setNick(data.getString("nick"));
-           // user.setPassword(data.getString("password"));
+            // user.setPassword(data.getString("password"));
             user.setPhone(data.getString("phone"));
             user.setAge(data.getString("age"));
             long birthday = data.getLong("birthday");
@@ -335,7 +338,7 @@ public class LoginActivity extends RyBaseActivity {
     /**
      * 保存用户到数据库
      */
-    private void savaUserDb(String phone ,String token) {
+    private void savaUserDb(String phone, String token) {
         DbConfig dbConfig = new DbConfig(this);
         DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
         DbManager db = x.getDb(daoConfig);
@@ -359,32 +362,34 @@ public class LoginActivity extends RyBaseActivity {
         mTime.start();
         final JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("phone",phoneNumber);
+            jsonObject.put("phone", phoneNumber);
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "sendMsg");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         params.setConnectTimeout(10000);
         params.setMethod(HttpMethod.POST);
-        params.addParameter("token","f1b47d968e3a4197afb8297476b02556");
+        params.addParameter("token", "f1b47d968e3a4197afb8297476b02556");
         x.http().post(params, new Callback.CommonCallback<String>() {
             private String msg;
             private String status;
 
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: " + result );
+                Log.e(TAG, "onSuccess: " + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     status = jsonObject1.getString("status");
                     msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         Toast.makeText(LoginActivity.this, "发送成功", Toast.LENGTH_SHORT).show();
-                       // mTime.start();
+                        // mTime.start();
                         //startCountDown();
-                    }else {
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
                         mTime.onFinish();
-                        Toast.makeText(LoginActivity.this, msg , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                         getCodeButton.setText("重新发送");
 
                     }
@@ -398,7 +403,7 @@ public class LoginActivity extends RyBaseActivity {
                 mTime.onFinish();
                 mTime.cancel();
                 Toast.makeText(LoginActivity.this, "登陆失败，请检查网络链接", Toast.LENGTH_SHORT).show();
-               // getCodeButton.setText("重新发送");
+                // getCodeButton.setText("重新发送");
 
             }
 
@@ -419,31 +424,31 @@ public class LoginActivity extends RyBaseActivity {
     /**
      * 密码登陆方法
      */
-    private void loginByPassword(String phoneNumber,String password) {
-        showDialogProgress(codeDialog,"密码登陆中...");
+    private void loginByPassword(String phoneNumber, String password) {
+        showDialogProgress(codeDialog, "密码登陆中...");
         Log.e(TAG, "login: " + phoneNumber);
         Log.e(TAG, "login: " + password);
         final JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("phone",phoneNumber);
-            jsonObject.put("password",password);
+            jsonObject.put("phone", phoneNumber);
+            jsonObject.put("password", password);
 
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "pwdLogin");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         params.setConnectTimeout(10000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: " + result );
+                Log.e(TAG, "onSuccess: " + result);
 
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String status = jsonObject.getString("status");
                     String msg = jsonObject.getString("msg");
                     Log.e(TAG, "onSuccess: " + status);
-                    if(status.equals("111111")){
+                    if (status.equals("111111")) {
                         Log.e(TAG, "onSuccess: ---------------------------------------------");
                         JSONObject data = jsonObject.getJSONObject("data");
                         saveUserToDb(data);
@@ -451,7 +456,9 @@ public class LoginActivity extends RyBaseActivity {
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                         finish();
-                    }else {
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
                         Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
@@ -479,7 +486,7 @@ public class LoginActivity extends RyBaseActivity {
 
     }
 
-    private void showDialog(String error){
+    private void showDialog(String error) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
@@ -490,29 +497,29 @@ public class LoginActivity extends RyBaseActivity {
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               dialog.dismiss();
+                dialog.dismiss();
             }
         });
         dialog.show();
     }
 
     private void changeLoginView() {
-        passwordLayout.setVisibility(isCode ? View.GONE:View.VISIBLE);
-        codeLayout.setVisibility(isCode ? View.VISIBLE:View.GONE);
+        passwordLayout.setVisibility(isCode ? View.GONE : View.VISIBLE);
+        codeLayout.setVisibility(isCode ? View.VISIBLE : View.GONE);
         loginType.setText(isCode ? "密码登陆>" : "验证码登陆>");
     }
 
-    private void initTimeText(int minutes,int seconds){
+    private void initTimeText(int minutes, int seconds) {
         time = 60000;
         lastCurrentTime = System.currentTimeMillis();
-        getCodeButton.setText(String.format("%1$d:%2$02d",minutes,seconds));
+        getCodeButton.setText(String.format("%1$d:%2$02d", minutes, seconds));
         getCodeButton.setClickable(false);
         getCodeButton.setBackgroundResource(R.drawable.btn_primary_enable);
     }
 
-    public void startCountDown(){
+    public void startCountDown() {
         destoryTimer();
-        initTimeText(1,0);
+        initTimeText(1, 0);
         createTimer();
     }
 
@@ -528,19 +535,19 @@ public class LoginActivity extends RyBaseActivity {
                 double diff = currentTime - lastCurrentTime;
                 time -= diff;
                 lastCurrentTime = currentTime;
-                 AndroidUtilities.runOnUIThread(new Runnable() {
-                     @Override
-                     public void run() {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                     }
-                 },0L);
+                    }
+                }, 0L);
             }
         }, 0, 1000);
     }
 
     private void destoryTimer() {
-        synchronized (timerSync){
-            if(timeTimer!=null){
+        synchronized (timerSync) {
+            if (timeTimer != null) {
                 timeTimer.cancel();
                 timeTimer = null;
             }
@@ -559,7 +566,7 @@ public class LoginActivity extends RyBaseActivity {
         newest.setId(1);
         newest.setTitle("2222");
         data.add(newest);
-        for (Newest newest1 : data){
+        for (Newest newest1 : data) {
             try {
                 db.saveOrUpdate(data);
             } catch (DbException e) {
@@ -570,7 +577,7 @@ public class LoginActivity extends RyBaseActivity {
 
     }
 
-    class TimeCount extends CountDownTimer{
+    class TimeCount extends CountDownTimer {
 
         /**
          * @param millisInFuture    The number of millis in the future from the call
@@ -587,7 +594,7 @@ public class LoginActivity extends RyBaseActivity {
         public void onTick(long millisUntilFinished) {
             getCodeButton.setBackgroundResource(R.drawable.btn_primary_enable);
             getCodeButton.setClickable(false);
-            getCodeButton.setText("("+millisUntilFinished / 1000 + "后重发)");
+            getCodeButton.setText("(" + millisUntilFinished / 1000 + "后重发)");
         }
 
         @Override
@@ -600,14 +607,14 @@ public class LoginActivity extends RyBaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this,MainActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Toast.makeText(LoginActivity.this, requestCode, Toast.LENGTH_SHORT).show();
         Toast.makeText(LoginActivity.this, resultCode, Toast.LENGTH_SHORT).show();
-        if(resultCode == 0){
+        if (resultCode == 0) {
             headUrl = data.getStringExtra(HEADURL);
             nickName = data.getStringExtra(NICKNAME);
             openId = data.getStringExtra(OPENID);
@@ -617,33 +624,35 @@ public class LoginActivity extends RyBaseActivity {
     }
 
     private void wxLoigin() {
-        showDialogProgress(codeDialog,"微信登陆中...");
+        showDialogProgress(codeDialog, "微信登陆中...");
         final JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("wxInfoId",openId);
+            jsonObject.put("wxInfoId", openId);
 
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "checkWXInfoId  ");
-        params.addBodyParameter("reqJson",jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
         params.setConnectTimeout(10000);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: " + result );
+                Log.e(TAG, "onSuccess: " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String status = jsonObject.getString("status");
                     String msg = jsonObject.getString("msg");
                     Log.e(TAG, "onSuccess: " + status);
-                    if(status.equals("1")){
-                     //   Toast.makeText(LoginActivity.this, "chenggong", Toast.LENGTH_SHORT).show();
+                    if (status.equals("1")) {
+                        //   Toast.makeText(LoginActivity.this, "chenggong", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), WxPhoneActivity.class);
-                        intent.putExtra(HEADURL,headUrl);
-                        intent.putExtra(NICKNAME,nickName);
-                        intent.putExtra(OPENID,openId);
+                        intent.putExtra(HEADURL, headUrl);
+                        intent.putExtra(NICKNAME, nickName);
+                        intent.putExtra(OPENID, openId);
                         startActivity(intent);
-                    }else {
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
                         Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
 
