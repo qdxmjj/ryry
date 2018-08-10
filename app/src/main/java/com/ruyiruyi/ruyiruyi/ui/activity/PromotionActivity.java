@@ -143,7 +143,18 @@ public class PromotionActivity extends RyBaseActivity implements PromotionViewBi
                         for (int i = 0; i < shareRelationList.length(); i++) {
                             JSONObject bean = (JSONObject) shareRelationList.get(i);
                             PromotionHasperson hasperson = new PromotionHasperson();
-                            hasperson.setUserState("已邀请");
+                            int promostatus = bean.getInt("status");
+                            switch (promostatus) {
+                                case 1:
+                                    hasperson.setUserState("已邀请");
+                                    break;
+                                case 2:
+                                    hasperson.setUserState("已注册App");
+                                    break;
+                                case 3:
+                                    hasperson.setUserState("已注册车辆信息");
+                                    break;
+                            }
                             long createdTime = bean.getLong("createdTime");
                             String s = new UtilsRY().getTimestampToString(createdTime);
                             hasperson.setUserTime(s);
