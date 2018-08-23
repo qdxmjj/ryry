@@ -363,10 +363,10 @@ public class GoodsInfoActivity extends BaseActivity {
             return;
         }
 
-        if (mGoodsPrice.getText().toString().equals("0")) {
+        /*if (mGoodsPrice.getText().toString().equals("0")) {
             Toast.makeText(GoodsInfoActivity.this, "商品单价不能为0", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
         if (leftTypeId == null || leftTypeId.equals("") || rightTypeId == null || rightTypeId.equals("")) {
             Toast.makeText(GoodsInfoActivity.this, "请选择商品分类", Toast.LENGTH_SHORT).show();
             return;

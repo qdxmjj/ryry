@@ -433,10 +433,10 @@ public class GoodsInfoReeditActivity extends BaseActivity {
             Toast.makeText(GoodsInfoReeditActivity.this, "请输入商品单价", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (mGoodsPrice.getText().toString().equals("0")) {
+       /* if (mGoodsPrice.getText().toString().equals("0")) {
             Toast.makeText(GoodsInfoReeditActivity.this, "商品单价不能为0", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
         if (leftTypeId == null || leftTypeId.equals("") || rightTypeId == null || rightTypeId.equals("")) {
             leftTypeId = serviceTypeId;
             rightTypeId = serviceId;
