@@ -280,7 +280,8 @@
         <activity android:name=".ui.activity.TireFreeChangeActivity" />
         <activity android:name=".ui.activity.YearChooseActivity" />
         <activity android:name=".ui.activity.LunboContentActivity" />
-        <activity android:name=".ui.activity.ChooseYearActivity"></activity>
+        <activity android:name=".ui.activity.ChooseYearActivity" />
+        <activity android:name=".ui.activity.BottomEventActivity"></activity>
     </application>
 
 </manifest>
