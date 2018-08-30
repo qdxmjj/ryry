@@ -1,14 +1,15 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
-import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsPromptResult;
@@ -20,13 +21,15 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
+import android.widget.EditText;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.User;
+import com.ruyiruyi.rylibrary.base.BaseWebActivity;
 import com.ruyiruyi.rylibrary.utils.RyLoadingDialog;
 
-public class BottomEventActivity extends RyBaseActivity {
+public class BottomEventActivity extends BaseWebActivity {
     private WebView activity_web;
     private String webUrl;
     private RyLoadingDialog dialog;
@@ -36,6 +39,21 @@ public class BottomEventActivity extends RyBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_event);
+
+
+        //设置是否显示标题栏
+        showTitleBar(true);
+        //是否显示左侧文字
+        showBackwardView(R.string.web_title, true);
+        //设置标题栏背景色
+        setTitleBgColor(R.color.web_top);
+        //设置状态栏颜色
+        setStatus(R.color.web_top);
+        //添加左侧图标，
+        setLeftIcon(R.drawable.ic_cha);
+        //文字颜色
+        setTitleColor(R.color.c7);
+
 
         Intent intent = getIntent();
         webUrl = intent.getStringExtra("webUrl");
@@ -47,8 +65,15 @@ public class BottomEventActivity extends RyBaseActivity {
         setData();
     }
 
+    @Override
+    public void onForward(View forwardView) {
+    }
+
     private void setData() {
-        activity_web.loadUrl( webUrl);
+        User user = new DbConfig(this).getUser();
+        int id = user.getId();
+        int carId = user.getCarId();
+        activity_web.loadUrl(webUrl + "?userId=" + id + "&userCarId=" + carId);
         activity_web.addJavascriptInterface(this, "android");
         activity_web.setWebViewClient(new SafeWebViewClient());
         activity_web.setWebChromeClient(new SafeWebChromeClient());
@@ -227,8 +252,25 @@ public class BottomEventActivity extends RyBaseActivity {
          * @return
          */
         @Override
-        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-            return super.onJsAlert(view, url, message, result);
+        public boolean onJsAlert(WebView view, String url, final String message, JsResult result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialog.Builder(BottomEventActivity.this)
+                            .setMessage(message)
+                            .setPositiveButton("确定", null)
+                            .setOnKeyListener(new DialogInterface.OnKeyListener() {// 屏蔽keycode等于84之类的按键
+                                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                    return true;
+                                }
+                            })
+                            .setCancelable(false)
+                            .show();
+                }
+            });
+            // 因为没有绑定事件，需要强行confirm,否则页面会变黑显示不了内容。
+            result.confirm();
+            return true;
         }
 
         /**
@@ -241,8 +283,41 @@ public class BottomEventActivity extends RyBaseActivity {
          * @return
          */
         @Override
-        public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
-            return super.onJsConfirm(view, url, message, result);
+        public boolean onJsConfirm(WebView view, String url, final String message, final JsResult result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialog.Builder(BottomEventActivity.this)
+                            .setMessage(message)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    result.confirm();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    result.cancel();
+                                }
+                            })
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialogInterface) {
+                                    result.cancel();
+                                }
+                            })
+                            .setOnKeyListener(new DialogInterface.OnKeyListener() {// 屏蔽keycode等于84之类的按键
+                                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                    return true;
+                                }
+                            })
+                            .setCancelable(false)
+                            .show();
+                }
+            });
+
+            return true;
         }
 
         /**
@@ -256,8 +331,40 @@ public class BottomEventActivity extends RyBaseActivity {
          * @return
          */
         @Override
-        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-            return super.onJsPrompt(view, url, message, defaultValue, result);
+        public boolean onJsPrompt(final WebView view, String url, final String message, final String defaultValue, final JsPromptResult result) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    final EditText et = new EditText(view.getContext());
+                    et.setSingleLine();
+                    et.setText(defaultValue);
+                    new AlertDialog.Builder(BottomEventActivity.this)
+                            .setMessage(message)
+                            .setView(et)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    result.confirm(et.getText().toString());
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    result.cancel();
+                                }
+                            })
+                            .setOnKeyListener(new DialogInterface.OnKeyListener() {// 屏蔽keycode等于84之类的按键
+                                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                    return true;
+                                }
+                            })
+                            .setCancelable(false)
+                            .show();
+
+                }
+            });
+
+            return true;
         }
 
         /**

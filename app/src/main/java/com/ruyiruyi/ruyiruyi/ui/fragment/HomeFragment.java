@@ -598,6 +598,9 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     @Override
     public void onOneEventClickListener(String webUrl) {
         //跳转活动页面
+        if (!judgeIsLogin()) {
+            return;
+        }
         Intent intent = new Intent(getContext(), BottomEventActivity.class);
         intent.putExtra("webUrl", webUrl);
         startActivity(intent);
