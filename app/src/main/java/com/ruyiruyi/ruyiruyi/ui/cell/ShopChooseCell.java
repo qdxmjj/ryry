@@ -110,6 +110,7 @@ public class ShopChooseCell extends LinearLayout{
         distenceView.setTextSize(14);
         distenceView.setTextColor(getResources().getColor(R.color.c5));
         locationLayout.addView(distenceView,LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT,LayoutHelper.WRAP_CONTENT,Gravity.CENTER_VERTICAL|Gravity.RIGHT));
+
     }
 
     public void setValue(String shopNameStr, String shopImageStr, String shopAddress, String shopDistence, List<ServiceType> typeList, final LayoutInflater mInflater){

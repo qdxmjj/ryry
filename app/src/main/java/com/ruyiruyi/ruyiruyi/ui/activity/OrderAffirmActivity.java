@@ -56,6 +56,7 @@ public class OrderAffirmActivity extends RyBaseActivity {
     private ImageView tireImageView;
     private int shoeid;
     private ProgressDialog progressDialog;
+    private String serviceYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,17 +83,19 @@ public class OrderAffirmActivity extends RyBaseActivity {
         tirepname = intent.getStringExtra("TIREPNAME");
         cxwycount = intent.getIntExtra("CXWYCOUNT", 0);
         cxwyprice = intent.getStringExtra("CXWYPRICE");
-        username = intent.getStringExtra("USERNAME");
-        userphone = intent.getStringExtra("USERPHONE");
+            username = intent.getStringExtra("USERNAME");
+            userphone = intent.getStringExtra("USERPHONE");
         carnumber = intent.getStringExtra("CARNUMBER");
         tireimage = intent.getStringExtra("TIREIMAGE");
         shoeid = intent.getIntExtra("SHOEID", 0);
+        serviceYear = intent.getStringExtra("SERVICE_YEAR");
         Log.e(TAG, "onCreate:1- " + fontrearflag);
         Log.e(TAG, "onCreate: 2-" + tirecount);
         Log.e(TAG, "onCreate: 3-" + tireprice);
         Log.e(TAG, "onCreate: 4-" + tirepname);
         Log.e(TAG, "onCreate: 5-" + cxwycount);
         Log.e(TAG, "onCreate: 6-" + cxwyprice);
+        Log.e(TAG, "onCreate: 7-" + serviceYear);
         progressDialog = new ProgressDialog(this);
 
         initView();
@@ -125,7 +128,11 @@ public class OrderAffirmActivity extends RyBaseActivity {
 
 
         double tirePriceDouble = Double.parseDouble(tireprice);
-        double cxwyPriceDouble = Double.parseDouble(cxwyprice);
+        double cxwyPriceDouble = 0.0;
+        if (cxwyprice!=null){
+            cxwyPriceDouble = Double.parseDouble(cxwyprice);
+        }
+
 
 
         tirePriceAll = Double.parseDouble(new DecimalFormat("0.00").format(tirePriceDouble * tirecount));
@@ -157,17 +164,18 @@ public class OrderAffirmActivity extends RyBaseActivity {
         try {
             jsonObject.put("shoeId", shoeid);
             jsonObject.put("userId", userId);
-            jsonObject.put("fontRearFlag", fontrearflag);
-            jsonObject.put("amount", tirecount);
-            jsonObject.put("shoeName", tirepname);
-            jsonObject.put("shoeTotalPrice", tirePriceAll + "");
-            jsonObject.put("shoePrice", tireprice);
-            jsonObject.put("cxwyAmount", cxwycount);
-            jsonObject.put("cxwyPrice", cxwyprice);
-            jsonObject.put("cxwyTotalPrice", cxwyPriceAll + "");
-            jsonObject.put("totalPrice", allPrice);
+            jsonObject.put("fontRearFlag", fontrearflag);   //前后轮标识
+            jsonObject.put("amount", tirecount);        //轮胎数量
+            jsonObject.put("shoeName", tirepname);      //轮胎名称
+            jsonObject.put("shoeTotalPrice", tirePriceAll + "");  //轮胎总价
+            jsonObject.put("shoePrice", tireprice);             //轮胎单价
+            jsonObject.put("cxwyAmount", cxwycount);            //畅行无忧数量
+            jsonObject.put("cxwyPrice", cxwyprice);             //畅行无忧单价
+            jsonObject.put("cxwyTotalPrice", cxwyPriceAll + "");    //畅行无忧总价
+            jsonObject.put("totalPrice", allPrice);             //订单总价
             Log.e(TAG, "postOrder: ------------------------------" + tireimage);
-            jsonObject.put("orderImg", tireimage);
+            jsonObject.put("orderImg", tireimage);          //订单图片
+            jsonObject.put("remainYear", serviceYear);      //服务年限
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "addUserShoeOrder");

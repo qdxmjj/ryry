@@ -10,13 +10,16 @@
         android:id="@+id/my_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="60dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -27,12 +30,11 @@
                     android:id="@+id/car_count_banner"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
-                    app:indicatorStyle="ORDINARY"
                     app:indicatorGravity="CENTER"
-                    app:indicatorSelectRes="@drawable/shape_point_select"
-                    app:indicatorUnSelectRes="@drawable/shape_point_unselect"
                     app:indicatorInterval="5dp"
-                    />
+                    app:indicatorSelectRes="@drawable/shape_point_select"
+                    app:indicatorStyle="ORDINARY"
+                    app:indicatorUnSelectRes="@drawable/shape_point_unselect" />
 
                 <TextView
                     android:id="@+id/tire_name_text"
@@ -40,62 +42,65 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:textSize="17sp"
-                    android:textColor="@color/c7"
                     android:layout_marginTop="10dp"
-                    android:text=""/>
+                    android:text=""
+                    android:textColor="@color/c7"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="官方授权 正品保障 免费安装"
+                    android:textColor="@color/c20"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/c20"
                     android:layout_marginTop="5dp"
-                    android:text="官方授权 正品保障 免费安装"/>
+                    android:text=" "
+                    android:textColor="@color/c20"
+                    android:textSize="15sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/c20"
-                    android:layout_marginTop="5dp"
-                    android:text=" "/>
                 <TextView
                     android:id="@+id/tire_price_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥600"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:textSize="27sp"
-                    android:textColor="@color/c20"
                     android:layout_marginTop="15dp"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"/>
+                    android:focusableInTouchMode="true"
+                    android:text="￥600"
+                    android:textColor="@color/c20"
+                    android:textSize="27sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:background="@color/c2"
-                    android:layout_marginTop="15dp"/>
+                    android:layout_marginTop="15dp"
+                    android:background="@color/c2" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="20dp">
+
                     <TextView
                         android:id="@+id/tire_location_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="前轮数量"
-                        android:textSize="17sp"
-                        android:textColor="@color/c6"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"/>
+                        android:layout_marginLeft="10dp"
+                        android:text="前轮数量"
+                        android:textColor="@color/c6"
+                        android:textSize="17sp" />
 
                     <com.ruyiruyi.rylibrary.cell.AmountView
                         android:id="@+id/amount_view"
@@ -105,29 +110,32 @@
                         android:layout_marginRight="10dp"
                         app:btnTextSize="14sp"
                         app:btnWidth="36dp"
-                        app:tvWidth="50dp"/>
+                        app:tvWidth="50dp" />
                 </FrameLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:background="@color/c2" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:padding="20dp">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_plus"/>
+                        android:src="@drawable/ic_plus" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="意外保障服务"
                         android:layout_gravity="center_vertical"
-                        android:textSize="17sp"
-                        android:layout_marginLeft="10dp"/>
+                        android:layout_marginLeft="10dp"
+                        android:text="意外保障服务"
+                        android:textSize="17sp" />
                 </LinearLayout>
 
                 <FrameLayout
@@ -135,31 +143,35 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp">
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
                             android:text="畅行无忧"
-                            android:textSize="17sp"
                             android:textColor="@color/c6"
-                            android:layout_marginLeft="10dp"/>
+                            android:textSize="17sp" />
+
                         <View
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
-                            android:background="@color/c2"
-                            android:layout_marginLeft="10dp"/>
+                            android:layout_marginLeft="10dp"
+                            android:background="@color/c2" />
+
                         <TextView
                             android:id="@+id/cxwy_price_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
                             android:text=""
-                            android:textSize="17sp"
                             android:textColor="@color/c6"
-                            android:layout_marginLeft="10dp"/>
+                            android:textSize="17sp" />
                     </LinearLayout>
 
 
@@ -171,40 +183,37 @@
                         android:layout_marginRight="10dp"
                         app:btnTextSize="14sp"
                         app:btnWidth="36dp"
-                        app:tvWidth="50dp"/>
+                        app:tvWidth="50dp" />
                 </FrameLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:text="无论何种原因导致的如驿如意轮胎损坏经修补后无法正常使用，只要轮胎还能识别出是如驿如意的轮胎，即可免费更换新轮胎。"
                     android:layout_marginTop="5dp"
-                    android:textSize="15sp"
-                    />
+                    android:text="无论何种原因导致的如驿如意轮胎损坏经修补后无法正常使用，只要轮胎还能识别出是如驿如意的轮胎，即可免费更换新轮胎。"
+                    android:textSize="15sp" />
 
             </LinearLayout>
         </ScrollView>
+
         <TextView
             android:id="@+id/tire_count_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bg_button"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:text="下一步"
             android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:layout_gravity="bottom"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_button"/>
+            android:textSize="16sp" />
     </FrameLayout>
-
-
-
-
 
 
 </LinearLayout>

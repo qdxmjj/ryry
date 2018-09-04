@@ -122,7 +122,7 @@ public class PaymentActivity extends RyBaseActivity {
     private ImageView yuEImage;
     private ImageView weixinImage;
     private ImageView zhifubaoImage;
-    public double lineCredit = 1000.00;
+    public double lineCredit = 0.0;
     private TextView otherPayLayout;
     private int orderStage;
     private TextView limitText;

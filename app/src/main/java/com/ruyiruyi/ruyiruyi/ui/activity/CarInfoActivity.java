@@ -1091,9 +1091,6 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                         } catch (DbException e) {
 
                         }
-
-
-
                     }else {
                         Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }

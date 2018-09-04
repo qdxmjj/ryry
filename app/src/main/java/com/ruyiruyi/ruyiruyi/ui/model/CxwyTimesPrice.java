@@ -2,8 +2,8 @@ package com.ruyiruyi.ruyiruyi.ui.model;
 
 public class CxwyTimesPrice {
     public int id;
-    public String rate;
-    public int times;
+    public String rate;     //基准率
+    public int times;   //使用次数
 
     public CxwyTimesPrice(int id, String rate, int times) {
         this.id = id;

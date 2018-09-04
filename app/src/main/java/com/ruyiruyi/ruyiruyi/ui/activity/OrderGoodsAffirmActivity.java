@@ -30,6 +30,7 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +50,8 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
     private String phone;
     private List<GoodsNew> goodslist;
     private List<GoodsInfo> goodsInfoList;
-    private double allprice = 0.00;
-    private double currentPrice = 0.00;
+    private double allprice = 0.0;
+    private double currentPrice = 0.0;
     private TextView allPriceText;
     private TextView goodsBuyButton;
     private int userId;
@@ -62,6 +63,8 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
     private int couponId = 0;
     private int carId;
     private ProgressDialog progressDialog;
+    private String goodsName;
+    private int couponType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +125,12 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                 }
             }
         }
+        if (allprice == 0.0 && carId == 0){
+            Toast.makeText(this, "特殊商品，需要绑定车辆购买", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         showDialogProgress(progressDialog,"订单提交中...");
 
         OrderGoods orderGoods = null;
@@ -130,6 +139,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
         }else {
             orderGoods = new OrderGoods(userId, storeid, storename, allprice + "", goodsInfoList,couponId,currentPrice+"");
         }
+        Log.e(TAG, "sendDataToService: " + allprice );
 
         Gson gson = new Gson();
         String json = gson.toJson(orderGoods);
@@ -138,6 +148,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
         params.addBodyParameter("reqJson", json);
         String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
+
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -240,8 +251,16 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
     public void onInfoItemClickListener(String name) {
 
         if (name.equals("优惠券")){
+            Intent intent = new Intent(getApplicationContext(), CouponActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("GOODSLIST", (Serializable) goodslist);
+            bundle.putInt("FROM_TYPE", 1);
+            bundle.putInt("CAR_ID", carId);
+            bundle.putInt("STORE_ID",storeid);
+            intent.putExtras(bundle);
+            startActivityForResult(intent,COUPON_REQUEST);
 
-            boolean isXiche = false;
+    /*        boolean isXiche = false;
             boolean isDingwei = false;
             for (int i = 0; i < goodslist.size(); i++) {
                 if (goodslist.get(i).getGoodsName().equals("精致洗车")) {
@@ -277,7 +296,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                 intent.putExtra(CouponActivity.CAR_ID,carId);
                 startActivityForResult(intent,COUPON_REQUEST);
             }
-
+*/
 
 
         }
@@ -285,11 +304,15 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e(TAG, "onActivityResult: requestCode-" + requestCode);
+        Log.e(TAG, "onActivityResult: resultCode-" + resultCode);
         if (resultCode == COUPON_REQUEST){
             couponchoose = data.getIntExtra("COUPONCHOOSE",0);  //是未选优惠券  1是选择优惠券
             if (couponchoose == 1){
                 couponName = data.getStringExtra("COUPONNAME");
                 couponId = data.getIntExtra("COUPONID", 0);
+                goodsName = data.getStringExtra("GOODS_NAME");
+                couponType = data.getIntExtra("COUPON_TYPE",0);
                 initCouponView();
             }else {
                 couponName = "请选择优惠券";
@@ -304,7 +327,28 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
      * 初始化优惠券
      */
     private void initCouponView() {
-        if (couponName.equals("精致洗车券")){
+        if (couponType == 2){       //现金券
+            Double couponPrice = Double.parseDouble(goodsName);
+            currentPrice = allprice - couponPrice;
+            if (currentPrice < 0.00){
+                currentPrice = 0.00;
+            }
+        }else {     //服务券
+            double price = 0.00;
+            for (int i = 0; i < goodslist.size(); i++) {
+                if (goodslist.get(i).getGoodsName().equals(goodsName)){
+                    price = Double.parseDouble(goodslist.get(i).getGoodsPrice());
+                }
+            }
+            currentPrice = allprice - price;
+            if (currentPrice < 0.00){
+                currentPrice = 0.00;
+            }
+        }
+        initData();
+        allPriceText.setText(currentPrice+"");
+
+    /*    if (couponName.equals("精致洗车券")){
             double price = 0.00;
             for (int i = 0; i < goodslist.size(); i++) {
                 if (goodslist.get(i).getGoodsName().equals("精致洗车")) {
@@ -333,6 +377,6 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
             }
         }
         initData();
-        allPriceText.setText(currentPrice+"");
+        allPriceText.setText(currentPrice+"");*/
     }
 }

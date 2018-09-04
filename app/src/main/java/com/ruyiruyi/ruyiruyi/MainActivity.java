@@ -128,6 +128,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         }
         Log.e(TAG, "onCreate: -----------" + fromFragment);
         viewPager = new NoCanSlideViewPager(this);
+
         content.addView(viewPager, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP, 0, 0, 0, AndroidUtilities.dp(HomeTabsCell.CELL_HEIGHT)));
 
         tabsCell = new HomeTabsCell(this);
@@ -147,6 +148,10 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
             @Override
             public void onPageSelected(int position) {
+                Log.e(TAG, "onPageSelected: " + position );
+               /* if (position == 0){
+                    pagerAdapter.notifyDataSetChanged();
+                }*/
 
             }
 

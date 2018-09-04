@@ -24,6 +24,8 @@ public class TirePlaceActivity extends RyBaseActivity {
     private int usercarid;
     private int serviceyear;
     private String service_end_year;
+    private String serviceYear;
+    private String serviceYearMax;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,8 @@ public class TirePlaceActivity extends RyBaseActivity {
         usercarid = intent.getIntExtra("USERCARID",0);
         serviceyear = Integer.parseInt(intent.getStringExtra("SERVICEYEAR"));
         service_end_year = intent.getStringExtra("SERVICE_END_YEAR");
+        serviceYear = intent.getStringExtra("SERVICE_YEAR");
+        serviceYearMax = intent.getStringExtra("SERVICE_YEAR_MAX");
 
         initView();
     }
@@ -67,19 +71,24 @@ public class TirePlaceActivity extends RyBaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         if (service_end_year.equals("")){
-                            Intent intent = new Intent(getApplicationContext(), YearChooseActivity.class);
-                            intent.putExtra("TIRESIZE", fontsize);
-                            intent.putExtra("FONTREARFLAG", "0");
-                            intent.putExtra("SERVICEYEAR", serviceyear+"");
-                            intent.putExtra("CARID", carid);
-                            intent.putExtra("USERCARID",usercarid);
-                            startActivity(intent);
-                        }else {
-                            Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), TireBuyNewActivity.class);
                             intent.putExtra("TIRESIZE",fontsize);
                             intent.putExtra("FONTREARFLAG","1");
+                            intent.putExtra("SERVICE_YEAR_MAX", serviceYearMax);
+                            intent.putExtra("SERVICE_YEAR", serviceyear);
+                            intent.putExtra("CHOOSE_SERVICE_YEAR", false);
+                            startActivity(intent);
+                        }else {
+                            Intent intent = new Intent(getApplicationContext(), TireBuyNewActivity.class);
+                            intent.putExtra("TIRESIZE",fontsize);
+                            intent.putExtra("FONTREARFLAG","1");
+                            intent.putExtra("SERVICE_YEAR_MAX", serviceYearMax);
+                            intent.putExtra("SERVICE_YEAR", serviceyear);
+                            intent.putExtra("CHOOSE_SERVICE_YEAR", true);
                             startActivity(intent);
                         }
+
+
 
                     }
                 });
@@ -87,18 +96,22 @@ public class TirePlaceActivity extends RyBaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+
                         if (service_end_year.equals("")){
-                            Intent intent = new Intent(getApplicationContext(), YearChooseActivity.class);
-                            intent.putExtra("TIRESIZE", rearsize);
-                            intent.putExtra("FONTREARFLAG", "0");
-                            intent.putExtra("SERVICEYEAR", serviceyear+"");
-                            intent.putExtra("CARID", carid);
-                            intent.putExtra("USERCARID",usercarid);
+                            Intent intent = new Intent(getApplicationContext(), TireBuyNewActivity.class);
+                            intent.putExtra("TIRESIZE",rearsize);
+                            intent.putExtra("FONTREARFLAG","1");
+                            intent.putExtra("SERVICE_YEAR_MAX", serviceYearMax);
+                            intent.putExtra("SERVICE_YEAR", serviceyear);
+                            intent.putExtra("CHOOSE_SERVICE_YEAR", false);
                             startActivity(intent);
                         }else {
-                            Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), TireBuyNewActivity.class);
                             intent.putExtra("TIRESIZE",rearsize);
-                            intent.putExtra("FONTREARFLAG","2");
+                            intent.putExtra("FONTREARFLAG","1");
+                            intent.putExtra("SERVICE_YEAR_MAX", serviceYearMax);
+                            intent.putExtra("SERVICE_YEAR", serviceyear);
+                            intent.putExtra("CHOOSE_SERVICE_YEAR", true);
                             startActivity(intent);
                         }
 

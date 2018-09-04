@@ -182,10 +182,11 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "selectStoreByCondition");
-        Log.e(TAG, "initDataFromService:---------- " + jsonObject.toString() );
+
         params.addBodyParameter("reqJson",jsonObject.toString());
         String token = new DbConfig(getContext()).getToken();
         params.addParameter("token",token);
+        Log.e(TAG, "initDataFromService:---------- " + params );
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

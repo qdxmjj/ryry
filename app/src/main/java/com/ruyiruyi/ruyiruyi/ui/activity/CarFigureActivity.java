@@ -122,7 +122,7 @@ public class CarFigureActivity extends RyBaseActivity implements OnFigureItemInt
                                 String price = shoeSpeedLoadResultList.getJSONObject(j).getString("price");
                                 String shoeId = shoeSpeedLoadResultList.getJSONObject(j).getString("shoeId");
                                 int shoeIdInt = Integer.parseInt(shoeId);
-                                String speedLoadStr = shoeSpeedLoadResultList.getJSONObject(j).getString("speedLoadStr");
+                                String speedLoadStr = shoeSpeedLoadResultList.getJSONObject(j).getString("SpeedLoadStr");
                                 tireRankList.add(new TireRank(shoeIdInt, speedLoadStr, shoeFlgureName, false, price));
                             }
                             tireFigureList.add(new TireFigure(false, 0, shoeFlgureName, imgLeftUrl, imgMiddleUrl, imgRightUrl, description, tireRankList));

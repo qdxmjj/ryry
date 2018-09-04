@@ -18,7 +18,7 @@ import org.xutils.x;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyApplication extends Application {
+public class  MyApplication extends Application {
     private List<Activity> oList;
     public LocationService locationService;
     public Vibrator mVibrator;

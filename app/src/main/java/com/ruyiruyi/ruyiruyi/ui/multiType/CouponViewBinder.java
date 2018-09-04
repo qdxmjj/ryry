@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
+import java.util.List;
+
 import me.drakeet.multitype.ItemViewProvider;
 import rx.functions.Action1;
 
@@ -37,8 +39,19 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
 
         holder.couponNameView.setText(coupon.getCouponName());
         holder.couponBigNameView.setText(coupon.getCouponName());
-        holder.couponStartTimeView.setText("开始时间： " + coupon.getStartTime());
-        holder.couponEndTimwView.setText("结束时间： " + coupon.getEndTime());
+        holder.couponStartTimeView.setText("使用时间： " + coupon.getStartTime() + " ~ " + coupon.getEndTime());
+        List<String> storeNameList = coupon.getStoreNameList();
+        if (storeNameList == null){
+            holder.couponStoreView.setVisibility(View.GONE);
+        }else {
+            holder.couponStoreView.setVisibility(View.VISIBLE);
+            String storeName = "";
+            for (int i = 0; i < storeNameList.size(); i++) {
+                storeName = storeName + storeNameList.get(i) + ",";
+            }
+            String storeNameStr = storeName.substring(0, storeName.length() - 1);
+            holder.couponStoreView.setText("仅限" + storeNameStr +"使用");
+        }
 
 
         if (coupon.getCouponStates() == 1){     //已使用
@@ -86,7 +99,7 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
                     @Override
                     public void call(Void aVoid) {
                         if (coupon.isCanUse){
-                            listener.onCouponClcikListener(coupon.getCouponId(),coupon.getCouponName());
+                            listener.onCouponClcikListener(coupon.getCouponId(),coupon.getCouponName(),coupon.getGoodsName(),coupon.couponType);
                         }
 
                     }
@@ -103,7 +116,7 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
         private final TextView couponBigNameView;
         private final TextView couponCarText;
         private final TextView couponStartTimeView;
-        private final TextView couponEndTimwView;
+        private final TextView couponStoreView;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -114,13 +127,13 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
             couponBigNameView = ((TextView) itemView.findViewById(R.id.coupon_big_name_view));
             couponCarText = ((TextView) itemView.findViewById(R.id.coupon_car_number_view));
             couponStartTimeView = ((TextView) itemView.findViewById(R.id.coupon_start_time_view));
-            couponEndTimwView = ((TextView) itemView.findViewById(R.id.coupon_end_time_view));
+            couponStoreView = ((TextView) itemView.findViewById(R.id.coupon_store_view));
 
 
         }
     }
 
     public interface OnCouponClick{
-        void onCouponClcikListener(int couponId,String couponName);
+        void onCouponClcikListener(int couponId,String couponName,String goodsName,int couponType);
     }
 }
