@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <!--订单编号 + 订单时间-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#ffffff">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="订单编号:"
+                android:textColor="@color/c6"
+                android:textSize="@dimen/ordershipmentbinder_leftsize"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/ordernumber"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="000000000"
+                android:textColor="@color/c6"
+                android:textSize="@dimen/ordershipmentbinder_rightsize"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/ordertime"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"
+            android:text="2018-09-03 08:12"
+            android:textSize="@dimen/ordershipmentbinder_smilesize"/>
+    </FrameLayout>
+
+    <!--前轮轮胎详情-->
+    <FrameLayout
+        android:id="@+id/fl_front"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/c">
+
+        <ImageView
+            android:id="@+id/shoeimg_front"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_launcher"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/shoetitle_front"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品"
+                android:textColor="@color/c6"
+                android:textSize="@dimen/ordershipmentbinder_titlesize"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/shoeprice_front"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="¥ 888.00"
+                android:textColor="@color/c6"
+                android:textSize="@dimen/ordershipmentbinder_pricesize"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/shipment_front"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="12dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/register_theam_bold_button"
+            android:paddingBottom="4dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="4dp"
+            android:text="发货"
+            android:textColor="@color/theme_primary"
+            android:textSize="14sp"/>
+    </FrameLayout>
+    <!--白线-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ffffff"/>
+
+    <!--后轮轮胎详情-->
+    <FrameLayout
+        android:id="@+id/fl_rear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/c"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/shoeimg_rear"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_launcher"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/shoetitle_rear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品"
+                android:textColor="@color/c6"
+                android:textSize="@dimen/ordershipmentbinder_titlesize"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/shoeprice_rear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="¥ 888.00"
+                android:textColor="@color/c6"
+                android:textSize="@dimen/ordershipmentbinder_pricesize"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/shipment_rear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="12dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/register_theam_bold_button"
+            android:paddingBottom="4dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="4dp"
+            android:text="发货"
+            android:textColor="@color/theme_primary"
+            android:textSize="14sp"/>
+    </FrameLayout>
+
+    <!--车牌号-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="车牌号:"
+            android:textColor="@color/c6"
+            android:textSize="@dimen/ordershipmentbinder_leftsize"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/carnum"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="鲁B99999"
+            android:textColor="@color/c6"
+            android:textSize="@dimen/ordershipmentbinder_rightsize"/>
+
+    </LinearLayout>
+    <!--线-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/c1"/>
+    </LinearLayout>
+
+    <!--电话号码-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="5dp"
+        android:background="#ffffff">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="电话号码:"
+                android:textColor="@color/c6"
+                android:textSize="@dimen/ordershipmentbinder_leftsize"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/userphone"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="18866666666"
+                android:textColor="@color/c6"
+                android:textSize="@dimen/ordershipmentbinder_rightsize"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="16dp"
+            android:padding="6dp"
+            android:src="@drawable/ic_call"/>
+    </FrameLayout>
+
+
+</LinearLayout>
