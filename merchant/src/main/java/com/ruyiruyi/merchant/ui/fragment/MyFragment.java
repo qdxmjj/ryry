@@ -35,6 +35,7 @@ import com.ruyiruyi.merchant.ui.activity.BugTestActivity;
 import com.ruyiruyi.merchant.ui.activity.MyGoodsActivity;
 import com.ruyiruyi.merchant.ui.activity.MyOrderActivity;
 import com.ruyiruyi.merchant.ui.activity.MyServiceActivity;
+import com.ruyiruyi.merchant.ui.activity.OrdersForShipmentActivity;
 import com.ruyiruyi.merchant.ui.activity.PromotionActivity;
 import com.ruyiruyi.merchant.ui.activity.SettingActivity;
 import com.ruyiruyi.merchant.ui.activity.StoreManageActivity;
@@ -66,12 +67,13 @@ public class MyFragment extends BaseFragment {
     private TextView tv_username;
     private TextView tv_mid_wddd;
     private TextView tv_mid_gldp;
-    private RelativeLayout rl_wdfw;
-    private RelativeLayout rl_wdsp;
-    private RelativeLayout rl_tgjl;
-    private RelativeLayout rl_wyzd;
-    private RelativeLayout rl_dzyhs;
-    private RelativeLayout rl_shezhi;
+    private RelativeLayout rl_wdfw; //我的服务
+    private RelativeLayout rl_wdsp; //我的商品
+    private RelativeLayout rl_tgjl; //推广奖励
+    private RelativeLayout rl_wyzd; //我要置顶
+    private RelativeLayout rl_dzyhs; //店主有话说
+    private RelativeLayout rl_shezhi; //设置
+    private RelativeLayout rl_ddfh; //订单发货
     private ImageView img_user_top;
     private RequestManager glideReq;
     private Boolean isLogin;
@@ -118,13 +120,23 @@ public class MyFragment extends BaseFragment {
     }
 
     private void bindView() {
+        //订单发货
+        RxViewAction.clickNoDouble(rl_ddfh).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent();
+                intent.setClass(mContext, OrdersForShipmentActivity.class);
+                startActivity(intent);
+            }
+        });
         //我要置顶
         RxViewAction.clickNoDouble(rl_wyzd).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
                 Toast.makeText(getActivity(), "敬请期待...", Toast.LENGTH_SHORT).show();
             }
-        });   //店主有话说
+        });
+        //店主有话说
         RxViewAction.clickNoDouble(rl_dzyhs).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -220,6 +232,7 @@ public class MyFragment extends BaseFragment {
         rl_wyzd = (RelativeLayout) getView().findViewById(R.id.rl_wyzd);
         rl_dzyhs = (RelativeLayout) getView().findViewById(R.id.rl_dzyhs);
         rl_shezhi = (RelativeLayout) getView().findViewById(R.id.rl_shezhi);
+        rl_ddfh = (RelativeLayout) getView().findViewById(R.id.rl_ddfh);
         img_user_top = (ImageView) getView().findViewById(R.id.img_user_top);
 
     }

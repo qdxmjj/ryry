@@ -130,7 +130,6 @@ public class LaunchActivity extends RyBaseActivity {
     private void judgePower() {
 
 
-
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -345,6 +344,8 @@ public class LaunchActivity extends RyBaseActivity {
                             carBrandArrayList.add(new CarBrand(id, name, imgUrl, icon, timestampToStringAll));
                         }
                         saveCarBrandIntoDb(carBrandArrayList);
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
                         Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
@@ -432,6 +433,8 @@ public class LaunchActivity extends RyBaseActivity {
                             carVerhicleArrayList.add(new CarVerhicle(id, verhicle, carBrandId, factoryId, carVersion, verify, timestampToStringAll));
                         }
                         savaCarVerhicleIntoDb(carVerhicleArrayList);
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
                         Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
@@ -612,6 +615,8 @@ public class LaunchActivity extends RyBaseActivity {
                         }
 
                         saveTireTypeIntoDb(tireTypeArrayList);
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
                         Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
@@ -698,6 +703,8 @@ public class LaunchActivity extends RyBaseActivity {
                         }
 
                         saveProvinceIntoDb(provinceArrayList);
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
                         Toast.makeText(LaunchActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }

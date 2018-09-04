@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="vertical"
-    tools:context="com.ruyiruyi.merchant.MainActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#ffffff"
+              android:orientation="vertical"
+              tools:context="com.ruyiruyi.merchant.MainActivity">
 
 
     <FrameLayout
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_ground" />
+            android:src="@drawable/ic_ground"/>
 
         <ImageView
             android:id="@+id/img_user_top"
@@ -35,7 +35,7 @@
             android:layout_marginTop="130dp"
             android:text="用户名"
             android:textColor="#ffffff"
-            android:textSize="15sp" />
+            android:textSize="15sp"/>
 
         <LinearLayout
             android:id="@+id/ll_mid"
@@ -58,7 +58,7 @@
                 android:paddingTop="15dp"
                 android:text="我的订单"
                 android:textColor="@color/c7"
-                android:textSize="15sp" />
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/tv_mid_gldp"
@@ -70,7 +70,7 @@
                 android:paddingTop="15dp"
                 android:text="管理店铺"
                 android:textColor="@color/c7"
-                android:textSize="15sp" />
+                android:textSize="15sp"/>
 
         </LinearLayout>
 
@@ -80,7 +80,7 @@
             android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="180dp"
-            android:background="@color/c2" />
+            android:background="@color/c2"/>
     </FrameLayout>
 
     <ScrollView
@@ -106,7 +106,7 @@
                     android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_service" />
+                    android:src="@drawable/ic_service"/>
 
                 <TextView
                     android:id="@+id/tv_wdfw"
@@ -117,7 +117,7 @@
                     android:layout_toRightOf="@+id/img_wdfw"
                     android:text="我的服务"
                     android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_jiantou" />
+                    android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
@@ -133,7 +133,7 @@
                 android:layout_height="1dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@color/c2" />
+                android:background="@color/c2"/>
 
             <RelativeLayout
                 android:id="@+id/rl_wdsp"
@@ -148,7 +148,7 @@
                     android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_thing" />
+                    android:src="@drawable/ic_thing"/>
 
                 <TextView
                     android:id="@+id/tv_wdsp"
@@ -159,7 +159,7 @@
                     android:layout_toRightOf="@+id/img_wdsp"
                     android:text="我的商品"
                     android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -167,7 +167,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_jiantou" />
+                    android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
@@ -175,7 +175,7 @@
                 android:layout_height="1dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@color/c2" />
+                android:background="@color/c2"/>
 
             <RelativeLayout
                 android:id="@+id/rl_tgjl"
@@ -190,7 +190,7 @@
                     android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_gift" />
+                    android:src="@drawable/ic_gift"/>
 
                 <TextView
                     android:id="@+id/tv_tgjl"
@@ -201,7 +201,7 @@
                     android:layout_toRightOf="@+id/img_tgjl"
                     android:text="推广奖励"
                     android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -209,7 +209,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_jiantou" />
+                    android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
@@ -217,7 +217,49 @@
                 android:layout_height="1dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@color/c2" />
+                android:background="@color/c2"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_ddfh"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <ImageView
+                    android:id="@+id/img_ddfh"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/ic_gift"/>
+
+                <TextView
+                    android:id="@+id/tv_ddfh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/img_ddfh"
+                    android:text="订单发货"
+                    android:textColor="@color/c6"
+                    android:textSize="15sp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_jiantou"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/c2"/>
 
             <RelativeLayout
                 android:id="@+id/rl_wyzd"
@@ -232,7 +274,7 @@
                     android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_zhiding" />
+                    android:src="@drawable/ic_zhiding"/>
 
                 <TextView
                     android:id="@+id/tv_wyzd"
@@ -243,7 +285,7 @@
                     android:layout_toRightOf="@+id/img_wyzd"
                     android:text="我要置顶"
                     android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -251,7 +293,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_jiantou" />
+                    android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
@@ -259,7 +301,7 @@
                 android:layout_height="1dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@color/c2" />
+                android:background="@color/c2"/>
 
             <RelativeLayout
                 android:id="@+id/rl_dzyhs"
@@ -274,7 +316,7 @@
                     android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_word" />
+                    android:src="@drawable/ic_word"/>
 
                 <TextView
                     android:id="@+id/tv_dzyhs"
@@ -285,7 +327,7 @@
                     android:layout_toRightOf="@+id/img_dzyhs"
                     android:text="店主有话说"
                     android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -293,7 +335,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_jiantou" />
+                    android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
@@ -301,7 +343,7 @@
                 android:layout_height="1dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@color/c2" />
+                android:background="@color/c2"/>
 
             <RelativeLayout
                 android:id="@+id/rl_shezhi"
@@ -316,7 +358,7 @@
                     android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_m_shezhi" />
+                    android:src="@drawable/ic_m_shezhi"/>
 
                 <TextView
                     android:id="@+id/tv_shezhi"
@@ -327,7 +369,7 @@
                     android:layout_toRightOf="@+id/img_shezhi"
                     android:text="设置"
                     android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -335,7 +377,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_jiantou" />
+                    android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
@@ -343,7 +385,7 @@
                 android:layout_height="1dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@color/c2" />
+                android:background="@color/c2"/>
 
             <TextView
                 android:id="@+id/main_test"
@@ -351,7 +393,7 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:text="测试"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
         </LinearLayout>
     </ScrollView>
 

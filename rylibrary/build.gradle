@@ -23,7 +23,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
     def system_dependencies = rootProject.ext.system_dependencies
     compile system_dependencies.appcompat_v7
     compile system_dependencies.support_v4
@@ -38,13 +37,15 @@ dependencies {
     compile system_dependencies.gson
     compile system_dependencies.fresco
     compile system_dependencies.indexablere
-    compile 'com.zhy:okhttputils:2.6.2'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'id.zelory:compressor:2.1.0'
-    compile 'com.baoyz.swipemenulistview:library:1.3.0'
     compile('me.drakeet.multitype:multitype:2.2.2', {
         exclude group: 'com.android.support'
     })
 
 
+    compile 'com.zhy:okhttputils:2.6.2'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'id.zelory:compressor:2.1.0'
+    compile 'com.baoyz.swipemenulistview:library:1.3.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0'
+    testCompile 'junit:junit:4.12'
 }

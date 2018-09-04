@@ -39,6 +39,7 @@ import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChoose;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.RyTransparentDialog;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
@@ -65,7 +66,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class CarInfoActivity extends RyBaseActivity implements View.OnClickListener, DatePicker.OnDateChangedListener{
+public class CarInfoActivity extends RyBaseActivity implements View.OnClickListener, DatePicker.OnDateChangedListener {
 
     public static final int TIRE_SIZE = 5; //前后轮选择
     private ActionBar actionBar;
@@ -89,7 +90,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     public static boolean hasLcb = false;
     private ImageView zhuyeImage;
     private ImageView zhuyeImageDelete;
-    private int currentImage = 0 ; //.=0 是主页  1是副业 2是里程表照片
+    private int currentImage = 0; //.=0 是主页  1是副业 2是里程表照片
     private LinearLayout addFuyeLayout;
     private ImageView fuyeImage;
     private ImageView fuyeImageDelete;
@@ -105,7 +106,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private TextView carFontText;
     private TextView carRearText;
     private Switch isEnergySwich;
-    public  boolean isEnergy = false; //是否是新能源
+    public boolean isEnergy = false; //是否是新能源
     private TextView xszRegisterTimeText;
     private FrameLayout xszRegidterTimeLayout;
     private StringBuffer date;
@@ -121,8 +122,8 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private LinearLayout lichengbiaoDataLayout;
     private FrameLayout roadConditionLayout;
     private TextView roadConditionText;
-    private List<RoadChoose> jingchangList  ;
-    private List<RoadChoose> ouerList ;
+    private List<RoadChoose> jingchangList;
+    private List<RoadChoose> ouerList;
     private List<RoadChoose> bujingchangList;
     public StringBuffer roatStr;
     private LinearLayout addLichengbiaoLayout;
@@ -143,19 +144,19 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private List<String> shengList;
     private List<String> shiList;
     private List<String> xianList;
-    public  String currentSheng = "北京市";
-    public  String currentShi = "";
-    public  String currentXian = "";
-    public  int currentShengPosition = 0;
-    public  int currentShiPosition = 0;
-    public  int currentXianPosition = 0;
+    public String currentSheng = "北京市";
+    public String currentShi = "";
+    public String currentXian = "";
+    public int currentShengPosition = 0;
+    public int currentShiPosition = 0;
+    public int currentXianPosition = 0;
     private WheelView shengWv;
     private WheelView shiWv;
     private WheelView xianWv;
-    private  int areaId = 0;
+    private int areaId = 0;
     private int userCarId;
 
-    private  int canClick = 0;
+    private int canClick = 0;
 
     private WheelView whv_lTime, whv_rTime;
     private String endYear;
@@ -167,24 +168,24 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private String font;
     private String rear;
     private String brand;
-    private String serviceYear = 1+"";
+    private String serviceYear = 1 + "";
     private String xszEndTime = "";
     private int id;
     public int currentType = 0; //0是添加车辆  1是修改车辆
     public String roadTxt;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_car_info,R.id.my_action);
+        setContentView(R.layout.activity_car_info, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("我的宝驹");;
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick(){
+        actionBar.setTitle("我的宝驹");
+        ;
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
-                switch ((var1)){
+                switch ((var1)) {
                     case -1:
                         onBackPressed();
                         break;
@@ -196,7 +197,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
 
         Intent intent = getIntent();
         canClick = intent.getIntExtra("CANCLICK", 0);
-        Log.e(TAG, "onCreate: " +canClick);
+        Log.e(TAG, "onCreate: " + canClick);
         initView();
 
         int from = intent.getIntExtra("FROM",0); // 0是车型选择返回  1是carManagetActivity返回
@@ -1078,20 +1079,16 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                         /*Intent intent = new Intent();
                         setResult(CarManagerActivity.CARMANAMGER_RESULT,intent);
                         finish();*/
-                        startActivity(new Intent(getApplicationContext(),CarManagerActivity.class));
-                        User user = new DbConfig(getApplicationContext()).getUser();
-                        user.setFirstAddCar(1);
 
-                        DbConfig dbConfig = new DbConfig(getApplicationContext());
-                        DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
-                        DbManager db = x.getDb(daoConfig);
-
-                        try {
-                            db.saveOrUpdate(user);
-                        } catch (DbException e) {
-
+                        if (firstAddCar == 0) {
+                            showGetDiscountDialog();
+                        } else {
+                            jumpAndupdatauser();
                         }
-                    }else {
+
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
                         Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
@@ -1118,8 +1115,53 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
 
     }
 
-    public void updateCar(){
-        showDialogProgress(codeDialog,"车辆修改中...");
+    /*
+    * 提交后跳转页面并且修改本地用户数据
+    * */
+    private void jumpAndupdatauser() {
+        startActivity(new Intent(getApplicationContext(), CarManagerActivity.class));
+        User user = new DbConfig(getApplicationContext()).getUser();
+        user.setFirstAddCar(1);
+
+        DbConfig dbConfig = new DbConfig(getApplicationContext());
+        DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
+        DbManager db = x.getDb(daoConfig);
+
+        try {
+            db.saveOrUpdate(user);
+        } catch (DbException e) {
+
+        }
+    }
+
+    /*
+    * 首次添加车辆获得优惠券提示
+    * */
+    private void showGetDiscountDialog() {
+
+        RyTransparentDialog ryTransparentDialog = new RyTransparentDialog(this);
+        View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_getdiscount, null);
+        ImageView iv_right = view.findViewById(R.id.iv_right);
+
+        RxViewAction.clickNoDouble(iv_right).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                jumpAndupdatauser();
+            }
+        });
+
+        ryTransparentDialog.setContentView(view);
+        ryTransparentDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                jumpAndupdatauser();
+            }
+        });
+        ryTransparentDialog.show();
+    }
+
+    public void updateCar() {
+        showDialogProgress(codeDialog, "车辆修改中...");
         int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {

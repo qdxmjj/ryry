@@ -110,7 +110,7 @@ public class PaymentActivity extends RyBaseActivity {
     private ProgressDialog progressDialog;
 
     //微信
-  // private static final String APP_ID = "wx407c59de8b10c601";
+    // private static final String APP_ID = "wx407c59de8b10c601";
     private static final int THUMB_SIZE = 150;
     private IWXAPI api;
     private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
@@ -153,13 +153,13 @@ public class PaymentActivity extends RyBaseActivity {
         Log.e(TAG, "onCreate: +---" + allprice);
         orderno = intent.getStringExtra(ORDERNO);
         orderType = intent.getIntExtra(ORDER_TYPE, 0);
-        if (orderType == 3){
-            orderStage = intent.getIntExtra(ORDER_STAGE,0);
+        if (orderType == 3) {
+            orderStage = intent.getIntExtra(ORDER_STAGE, 0);
         }
 
-        if (orderType == 1){
+        if (orderType == 1) {
             currentType = 0;
-        }else {
+        } else {
             currentType = 1;
         }
 
@@ -191,7 +191,9 @@ public class PaymentActivity extends RyBaseActivity {
                         JSONArray data = jsonObject.getJSONArray("data");
                         JSONObject objBean = (JSONObject) data.get(0);
                         lineCredit = objBean.getDouble("remain"); // 剩余额度
-                        limitText.setText("余额:" +lineCredit );
+                        limitText.setText("余额:" + lineCredit);
+                    } else if (status == -999) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     }
 
                 } catch (JSONException e) {
@@ -272,9 +274,9 @@ public class PaymentActivity extends RyBaseActivity {
                                 Toast.makeText(PaymentActivity.this, "不支持信用值支付，请选择其他支付方式", Toast.LENGTH_SHORT).show();
                                 //  postTireOrder();
                             } else if (orderType == 1) {  //商品订单
-                                if (allprice == 0.0){
+                                if (allprice == 0.0) {
                                     postGoodsOrder();
-                                }else {
+                                } else {
                                     showDialogYuE("使用信用额度快捷支付，在下次轮胎服务之前记得清还呦");
                                 }
 
@@ -286,7 +288,7 @@ public class PaymentActivity extends RyBaseActivity {
 
 
                         } else if (currentType == 1) {//微信支付
-                            if(allprice == 0.0){
+                            if (allprice == 0.0) {
                                 Toast.makeText(PaymentActivity.this, "请使用信用额度支付", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -339,7 +341,7 @@ public class PaymentActivity extends RyBaseActivity {
                             api.sendReq(req);*/
 
                         } else if (currentType == 2) { //支付宝支付
-                            if(allprice == 0.0){
+                            if (allprice == 0.0) {
                                 Toast.makeText(PaymentActivity.this, "请使用信用额度支付", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -399,24 +401,24 @@ public class PaymentActivity extends RyBaseActivity {
         Log.e(TAG, "getSign: orderno-" + orderno);
         try {
             jsonObject.put("orderNo", orderno);
-            if (orderType == 99){
+            if (orderType == 99) {
                 jsonObject.put("orderType", 0);
-            }else {
+            } else {
                 jsonObject.put("orderType", orderType);
             }
 
             if (orderType == 0) {    //轮胎订单
                 jsonObject.put("orderName", "轮胎购买");
-            }else if (orderType == 99){
+            } else if (orderType == 99) {
                 jsonObject.put("orderName", "畅行无忧购买");
-            }else if (orderType == 3){
-                if (orderStage == 4){
+            } else if (orderType == 3) {
+                if (orderStage == 4) {
                     jsonObject.put("orderName", "轮胎补差");
-                }else {
+                } else {
                     jsonObject.put("orderName", "补邮费");
                 }
 
-            }else {     //商品订单
+            } else {     //商品订单
                 jsonObject.put("orderName", "商品购买");
             }
             jsonObject.put("orderPrice", allprice);
@@ -452,10 +454,11 @@ public class PaymentActivity extends RyBaseActivity {
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: --------" + result);
                 try {
-                    JSONObject jsonObject1 = new JSONObject(result);;
+                    JSONObject jsonObject1 = new JSONObject(result);
+                    ;
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("200")){
+                    if (status.equals("200")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         PayReq req = new PayReq();
                         req.appId = data.getString("appid");
@@ -656,10 +659,10 @@ public class PaymentActivity extends RyBaseActivity {
 
 
     private void initZhifuLayout() {
-        if (orderType == 1){
+        if (orderType == 1) {
             yuELayout.setVisibility(View.VISIBLE);
             otherPayLayout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             yuELayout.setVisibility(View.GONE);
             otherPayLayout.setVisibility(View.GONE);
         }
@@ -684,28 +687,28 @@ public class PaymentActivity extends RyBaseActivity {
         Log.e(TAG, "getSign: orderno-" + orderno);
         try {
             jsonObject.put("orderNo", orderno);
-            if (orderType == 99){
+            if (orderType == 99) {
                 jsonObject.put("orderType", 0);
-            }else {
+            } else {
                 jsonObject.put("orderType", orderType);
             }
 
             if (orderType == 0) {    //轮胎订单
                 jsonObject.put("orderName", "轮胎购买");
-            }else if (orderType == 99){
+            } else if (orderType == 99) {
                 jsonObject.put("orderName", "畅行无忧购买");
-            }else if (orderType == 3){
-                if (orderStage == 4){
+            } else if (orderType == 3) {
+                if (orderStage == 4) {
                     jsonObject.put("orderName", "轮胎补差");
-                }else {
+                } else {
                     jsonObject.put("orderName", "补邮费");
                 }
 
-            }else {     //商品订单
+            } else {     //商品订单
                 jsonObject.put("orderName", "商品购买");
             }
-            jsonObject.put("orderPrice",allprice);
-           // jsonObject.put("orderPrice",0.01);
+            jsonObject.put("orderPrice", allprice);
+            // jsonObject.put("orderPrice",0.01);
             jsonObject.put("userId", userId);
         } catch (JSONException e) {
         }
@@ -790,9 +793,9 @@ public class PaymentActivity extends RyBaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(orderType == 3){
+        if (orderType == 3) {
             super.onBackPressed();
-        }else {
+        } else {
             showDialog("确定要离开吗？离开后可在待付款订单中找到这笔未完成订单");
 
         }

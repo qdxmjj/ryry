@@ -72,6 +72,7 @@
     <color name="zw_qz_address_text">#1dabc1</color>
 
 
+    <color name="c">#f4f3f3</color>
     <color name="c0">#f1f0f0</color>
     <color name="c1">#f1f1f1</color>
     <color name="c2">#dedede</color>
@@ -100,7 +101,10 @@
     <color name="c25">#585B6A</color>
     <color name="c26">#424455</color>
     <color name="c27">#15B3ED</color>
-    <color name="c28"> #0F8AC3</color>
+    <color name="c28">#0F8AC3</color>
+    <color name="web_top">#F2F2F2</color>
 
     <color name="divider">#ffd2d2d2</color>
+    <!--透明色-->
+    <color name="transparent">#00ffffff</color>
 </resources>

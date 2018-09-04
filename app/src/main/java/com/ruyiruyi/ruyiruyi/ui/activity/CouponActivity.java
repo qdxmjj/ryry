@@ -321,6 +321,8 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
                         }
 
                         initData();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     }
                 } catch (JSONException e) {
 

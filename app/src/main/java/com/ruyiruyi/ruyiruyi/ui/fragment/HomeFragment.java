@@ -21,6 +21,7 @@ import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.Lunbo;
 import com.ruyiruyi.ruyiruyi.db.model.User;
+import com.ruyiruyi.ruyiruyi.ui.activity.BottomEventActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarFigureActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
@@ -67,7 +68,7 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class HomeFragment extends RyBaseFragment implements HometopViewBinder.OnHomeTopItemClickListener, FunctionViewBinder.OnFunctionItemClick
-        , ThreeEventViewBinder.OnEventItemClickListener {
+        , ThreeEventViewBinder.OnEventItemClickListener, OneEventViewBinder.OnEventClick {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
     private CustomBanner<String> mBanner;
@@ -94,6 +95,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     private String service_year;            //最大服务年限
     private String service_year_length;     //当前服务年限
     private String service_end_date;
+    private List<OneEvent> activitys;
 
     private int uesrCarId;
 
@@ -127,6 +129,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         listView.setAdapter(adapter);
         assertHasTheSameAdapter(listView, adapter);
         lunbos = new ArrayList<>();
+        activitys = new ArrayList<>();
         refreshLayout = ((SwipeRefreshLayout) getView().findViewById(R.id.home_refresh));
         refreshLayout.setProgressViewEndTarget(true, 200);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -183,6 +186,16 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
+                        //获取底部活动列表
+                        JSONArray jsActivityList = data.getJSONArray("activityList");
+                        for (int i = 0; i < jsActivityList.length(); i++) {
+                            JSONObject objBean = (JSONObject) jsActivityList.get(i);
+                            String imageUrl = objBean.getString("imageUrl");
+                            String webUrl = objBean.getString("webUrl");
+                            OneEvent bean = new OneEvent(imageUrl, webUrl);
+                            activitys.add(bean);
+                        }
+
                         //获取轮播数据
                         JSONArray lunboList = data.getJSONArray("lunbo_infos");
                         for (int i = 0; i < lunboList.length(); i++) {
@@ -211,7 +224,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                                 User user = new DbConfig(getContext()).getUser();
                                 user.setCarId(uesrCarId);
                                 saveUserIntoDb(user);
-                            }else {
+                            } else {
                                 int uesrCarId = 0;
                                 User user = new DbConfig(getContext()).getUser();
                                 user.setCarId(uesrCarId);
@@ -228,6 +241,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                         saveLunboInToDb();
 
                         initdata();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     }
 
 
@@ -287,14 +302,16 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         ThreeEventViewBinder threeEventViewBinder = new ThreeEventViewBinder();
         threeEventViewBinder.setListener(this);
         adapter.register(ThreeEvent.class, threeEventViewBinder);
-        adapter.register(OneEvent.class, new OneEventViewBinder());
+        OneEventViewBinder oneEventViewBinder = new OneEventViewBinder(getContext());
+        oneEventViewBinder.setListener(this);
+        adapter.register(OneEvent.class, oneEventViewBinder);
     }
 
     private void initdata() {
         DbConfig dbConfig = new DbConfig(getContext());
         User user = new User();
         user = dbConfig.getUser();
-        if (user!=null){
+        if (user != null) {
             int carId = user.getCarId();
         }
 
@@ -324,7 +341,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
 
         items.add(new Function());
         items.add(new ThreeEvent());
-      //  items.add(new OneEvent());
+        items.add(activitys.get(0));//TODO 活动列表暂1条数据
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
@@ -401,12 +418,12 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     public void onLunboClikcListener(int position) {
         Log.e(TAG, "onLunboClikcListener: " + position);
 
-        if (position == 2){ //跳转到轮胎购买界面
+        if (position == 2) { //跳转到轮胎购买界面
             //判断是否登录（未登录提示登录）
             if (!judgeIsLogin()) {
                 return;
             }
-            if (carId == 0){
+            if (carId == 0) {
                 Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -432,6 +449,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     intent.putExtra("USERCARID",uesrCarId);
                     startActivity(intent);
                 }
+
 
             } else {         //前后轮不一样
                 Intent intent = new Intent(getContext(), TirePlaceActivity.class);
@@ -592,7 +610,21 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         }
     }
 
-    public interface OnIconClikc{
+    /*
+    * 底部活动点击事件回调
+    * */
+    @Override
+    public void onOneEventClickListener(String webUrl) {
+        //跳转活动页面
+        if (!judgeIsLogin()) {
+            return;
+        }
+        Intent intent = new Intent(getContext(), BottomEventActivity.class);
+        intent.putExtra("webUrl", webUrl);
+        startActivity(intent);
+    }
+
+    public interface OnIconClikc {
         void onShopClassClickListener();
     }
 

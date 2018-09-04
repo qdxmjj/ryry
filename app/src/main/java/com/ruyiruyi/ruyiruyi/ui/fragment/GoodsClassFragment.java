@@ -120,6 +120,8 @@ public class GoodsClassFragment extends RyBaseFragment implements LeftViewBinder
                             goodsClassList.add(new GoodsClass(classId,className,classImage));
                         }
                         initClass();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     }
                 } catch (JSONException e) {
 
