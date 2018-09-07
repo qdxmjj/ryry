@@ -57,30 +57,36 @@ public class OrderForShipmentViewBinder extends ItemViewProvider<OrderForShipmen
             Glide.with(mContext).load(orderForShipment.getOrderImg_rear()).into(holder.shoeimg_rear);
             holder.shoetitle_rear.setText(orderForShipment.getShoeTitle_rear());
             holder.shoeprice_rear.setText("¥ " + orderForShipment.getShoePrice_rear());
-        } else {//不需要全部展示的情况 分三种
-            holder.fl_rear.setVisibility(View.GONE);
+        } else //不需要全部展示的情况 分三种
+//            holder.fl_rear.setVisibility(View.GONE);//00
             //1.前后轮一致
             if (orderForShipment.isShoeConsistent()) {
+                holder.fl_rear.setVisibility(View.GONE);//00
                 holder.fl_front.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(orderForShipment.getOrderImg_front()).into(holder.shoeimg_front);
                 holder.shoetitle_front.setText(orderForShipment.getShoeTitle_front());
                 holder.shoeprice_front.setText("¥ " + orderForShipment.getShoePrice_front());
             }
             //2.不一致 且只有前轮
-            if ((!orderForShipment.isShoeConsistent()) && (orderForShipment.getShoeNum_rear() == 0) && (orderForShipment.getShoeNum_front() > 0)) {
+            else if ((!orderForShipment.isShoeConsistent()) && (orderForShipment.getShoeNum_rear() == 0) && (orderForShipment.getShoeNum_front() > 0)) {
+                holder.fl_rear.setVisibility(View.GONE);//00
                 holder.fl_front.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(orderForShipment.getOrderImg_front()).into(holder.shoeimg_front);
                 holder.shoetitle_front.setText(orderForShipment.getShoeTitle_front());
                 holder.shoeprice_front.setText("¥ " + orderForShipment.getShoePrice_front());
             }
             //3.不一致 且只有后轮
-            if ((!orderForShipment.isShoeConsistent()) && (orderForShipment.getShoeNum_rear() > 0) && (orderForShipment.getShoeNum_front() == 0)) {
+            else if ((!orderForShipment.isShoeConsistent()) && (orderForShipment.getShoeNum_rear() > 0) && (orderForShipment.getShoeNum_front() == 0)) {
+                holder.fl_front.setVisibility(View.GONE);
                 holder.fl_rear.setVisibility(View.VISIBLE);
-                Glide.with(mContext).load(orderForShipment.getOrderImg_rear()).into(holder.shoeimg_front);
+                Glide.with(mContext).load(orderForShipment.getOrderImg_rear()).into(holder.shoeimg_rear);
                 holder.shoetitle_rear.setText(orderForShipment.getShoeTitle_rear());
                 holder.shoeprice_rear.setText("¥ " + orderForShipment.getShoePrice_rear());
+            } else { //不存在的情况 防错乱
+                holder.fl_front.setVisibility(View.GONE);//00
+                holder.fl_rear.setVisibility(View.GONE);
             }
-        }
+
 
         RxViewAction.clickNoDouble(holder.shipment_front).subscribe(new Action1<Void>() {
             @Override

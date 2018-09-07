@@ -45,12 +45,12 @@ public class OrdersForShipmentActivity extends BaseActivity {
     private SwipeRefreshLayout refLayout;
     private RecyclerView mRlv;
     private int total_all_page;
-    private int mRows = 10;  // 设置默认一页加载10条数据
+    private int mRows = 5;  // 设置默认一页加载10条数据
     private int current_page;
     private MultiTypeAdapter multiTypeAdapter;
     private List<Object> items = new ArrayList<>();
     private String TAG = OrdersForShipmentActivity.class.getSimpleName();
-    private List<OrderForShipment> itemBeanList; //TODO
+    private List<OrderForShipment> itemBeanList;
     private boolean isLoadMore = false;
     private boolean isLoadOver = false;
     private boolean isLoadMoreSingle = false;//上拉单次标志位
@@ -135,6 +135,7 @@ public class OrdersForShipmentActivity extends BaseActivity {
 
             @Override
             public void onLoadMore() {
+                Log.e(TAG, "onLoadMore0: " );
                 if (isLoadMoreSingle) {
                     return;
                 }
@@ -204,7 +205,7 @@ public class OrdersForShipmentActivity extends BaseActivity {
     //公用下载
     private void initDataByLoadMoreType() {
         //数据加载完成前显示加载动画
-        startDialog = new ProgressDialog(getContext());
+//        startDialog = new ProgressDialog(getContext());
 //        showDialogProgress(startDialog, "商品信息加载中...");
 
         isLoadOver = false;
@@ -227,12 +228,12 @@ public class OrdersForShipmentActivity extends BaseActivity {
                 Log.e(TAG, "onSuccess:orderforshipment result =  " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
+                    Log.e(TAG, "onSuccess onLoadMore : total = " + jsonObject.getInt("total") );
                     total_all_page = (jsonObject.getInt("total")) / mRows;//处理页数
                     if (jsonObject.getInt("total") % mRows > 0) {
                         total_all_page++;
                     }
                     JSONArray rows = jsonObject.getJSONArray("rows");
-                    Log.e(TAG, "onSuccess: 000");
                     for (int i = 0; i < rows.length(); i++) {
                         Log.e(TAG, "onSuccess: " + i);
                         JSONObject one = (JSONObject) rows.get(i);
@@ -246,9 +247,7 @@ public class OrdersForShipmentActivity extends BaseActivity {
                         itemBean.setUserPhone(one.getString("phone"));
                         /*轮胎信息*/
                         JSONArray shoeOrderDTOList = one.getJSONArray("shoeOrderDTOList");
-                        Log.e(TAG, "onSuccess: 111");
                         if (shoeOrderDTOList != null) {
-                            Log.e(TAG, "onSuccess: 222");
 
                             int cNun_front = 0;
                             int cNun_rear = 0;
@@ -291,45 +290,6 @@ public class OrdersForShipmentActivity extends BaseActivity {
                                     itemBean.setShoeTitle_rear(objbean.getString("tyreName"));
 
                                 }
-
-
-                                /*if (fontRearFlag == 0) {//前后轮一致则只有一组数据
-                                    itemBean.setShoeTitle_front(objbean.getString("tyreName"));
-                                    itemBean.setShoePicUrl_front(objbean.getString("orderImg"));00
-                                    itemBean.setShoePrice_front(objbean.getDouble("tyrePrice"));00
-
-                                    itemBean.setTyreId_front(objbean.getInt("tyreId"));00
-                                    itemBean.setOrderImg_front(objbean.getString("orderImg"));00
-                                    itemBean.setFontRearFlag_front(fontRearFlag);00
-
-                                    itemBean.setShoeConsistent(true);00
-                                    itemBean.setShoeNum_front(objbean.getInt("tyreNum"));00
-
-                                } else if (fontRearFlag == 1) {//前轮 1-2组数据
-                                    itemBean.setShoeTitle_front(objbean.getString("tyreName"));
-                                    itemBean.setShoePicUrl_front(objbean.getString("orderImg"));
-                                    itemBean.setShoePrice_front(objbean.getDouble("tyrePrice"));
-
-                                    itemBean.setTyreId_front(objbean.getInt("tyreId"));
-                                    itemBean.setOrderImg_front(objbean.getString("orderImg"));
-                                    itemBean.setFontRearFlag_front(fontRearFlag);
-
-                                    itemBean.setShoeConsistent(false);
-                                    itemBean.setShoeNum_front(objbean.getInt("tyreNum"));
-
-                                } else {//后轮 1-2组数据
-                                    itemBean.setShoeTitle_rear(objbean.getString("tyreName"));
-                                    itemBean.setShoePicUrl_rear(objbean.getString("orderImg"));
-                                    itemBean.setShoePrice_rear(objbean.getDouble("tyrePrice"));
-
-                                    itemBean.setTyreId_rear(objbean.getInt("tyreId"));
-                                    itemBean.setOrderImg_rear(objbean.getString("orderImg"));
-                                    itemBean.setFontRearFlag_rear(fontRearFlag);
-
-                                    itemBean.setShoeConsistent(false);
-                                    itemBean.setShoeNum_rear(objbean.getInt("tyreNum"));
-
-                                }*/
                             }
                         }
 

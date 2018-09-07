@@ -124,9 +124,57 @@ public class MyFragment extends BaseFragment {
         RxViewAction.clickNoDouble(rl_ddfh).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Intent intent = new Intent();
-                intent.setClass(mContext, OrdersForShipmentActivity.class);
-                startActivity(intent);
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("storeId", new DbConfig(getContext()).getId());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "checkStoreAuth");
+                params.addBodyParameter("reqJson", object.toString());
+                x.http().post(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        try {
+                            Log.e(TAG, "onSuccess: checkStoreAuth result = " + result);
+                            JSONObject jsonObject = new JSONObject(result);
+                            int status = jsonObject.getInt("status");
+                            String msg = jsonObject.getString("msg");
+                            if (status == 1) {
+                                boolean data = jsonObject.getBoolean("data");
+                                if (data) {
+                                    Intent intent = new Intent();
+                                    intent.setClass(mContext, OrdersForShipmentActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(mContext, "您还没有发货权限，如有需求请联系客服", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                });
+
             }
         });
         //我要置顶
