@@ -79,4 +79,29 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <!--ShipmentInfoActivity-->
+    <style name="shipmentinfo_leftstyle">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/c7</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="shipmentinfo_rightstyle">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/c6</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="shipmentinfo_picstyle">
+        <item name="android:background">@drawable/tv_dashline</item>
+        <item name="android:layout_width">130dp</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_height">80dp</item>
+    </style>
+
 </resources>

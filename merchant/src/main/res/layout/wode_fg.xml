@@ -232,7 +232,7 @@
                     android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_gift"/>
+                    android:src="@drawable/ic_m_fahuo"/>
 
                 <TextView
                     android:id="@+id/tv_ddfh"
