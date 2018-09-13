@@ -1,26 +1,18 @@
 package com.ruyiruyi.merchant.ui.multiType;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
+import com.ruyiruyi.merchant.utils.CircleImageView;
 
 import me.drakeet.multitype.ItemViewProvider;
-import rx.functions.Action1;
 
 public class PublicGoodsInfoProvider extends ItemViewProvider<PublicGoodsInfo, PublicGoodsInfoProvider.ViewHolder> {
     private Context context;
@@ -63,7 +55,7 @@ public class PublicGoodsInfoProvider extends ItemViewProvider<PublicGoodsInfo, P
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ImageView goods_img;
+        private final CircleImageView goods_img;
         private final TextView goods_name;
         private final TextView goods_price;
         private final TextView goods_amount;
@@ -72,7 +64,7 @@ public class PublicGoodsInfoProvider extends ItemViewProvider<PublicGoodsInfo, P
 
         ViewHolder(View itemView) {
             super(itemView);
-            goods_img = (ImageView) itemView.findViewById(R.id.goods_img);
+            goods_img = (CircleImageView) itemView.findViewById(R.id.goods_img);
             goods_name = ((TextView) itemView.findViewById(R.id.goods_name));
             goods_price = ((TextView) itemView.findViewById(R.id.goods_price));
             goods_amount = ((TextView) itemView.findViewById(R.id.goods_amount));

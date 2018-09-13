@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
 
     <View
         android:id="@+id/top_line"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="@color/c1" />
+        android:background="@color/c1"/>
 
     <LinearLayout
         android:id="@+id/ll_shoe"
@@ -22,11 +22,8 @@
 
         <ImageView
             android:id="@+id/shoe_img"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="5dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_order_luntai" />
+            style="@style/public_oneitem_image"
+            android:src="@drawable/ic_order_luntai"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,14 +33,8 @@
 
             <TextView
                 android:id="@+id/shoe_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:text="ROADCRUZA/运动操控/255/45R17/102W/W"
-                android:textColor="@color/c7"
-                android:textSize="18sp" />
+                style="@style/public_oneitem_title"
+                android:text="ROADCRUZA/运动操控/255/45R17/102W/W"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -51,22 +42,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="服务项目:"
-                    android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    style="@style/public_oneitem_content"
+                    android:text="服务项目:"/>
 
                 <TextView
                     android:id="@+id/shoe_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/public_oneitem_content"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="3dp"
-                    android:text="首次更换"
-                    android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:text="首次更换"/>
             </LinearLayout>
 
 
@@ -76,22 +59,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="更换位置:"
-                    android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    style="@style/public_oneitem_content"
+                    android:text="更换位置:"/>
 
                 <TextView
                     android:id="@+id/shoe_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/public_oneitem_content"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="3dp"
-                    android:text="前胎"
-                    android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:text="前胎"/>
             </LinearLayout>
 
             <LinearLayout
@@ -101,22 +76,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="更换数量:"
-                    android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    style="@style/public_oneitem_content"
+                    android:text="更换数量:"/>
 
                 <TextView
                     android:id="@+id/shoe_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/public_oneitem_content"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="3dp"
-                    android:text="2"
-                    android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:text="2"/>
             </LinearLayout>
 
 
@@ -127,5 +94,5 @@
         android:id="@+id/bottom_line"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="@color/c1" />
+        android:background="@color/c1"/>
 </LinearLayout>

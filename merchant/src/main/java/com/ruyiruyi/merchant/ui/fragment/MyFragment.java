@@ -2,7 +2,6 @@ package com.ruyiruyi.merchant.ui.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -87,14 +86,14 @@ public class MyFragment extends BaseFragment {
     private ForRefreshMy listener;
     private String path_takepic;
     private boolean isCamera = false;
-    private Context mContext;
+    /*private Context mContext;
 
     public MyFragment() {
     }
 
     public MyFragment(Context mContext) {
         this.mContext = mContext;
-    }
+    }*/
 
     public void setListener(ForRefreshMy listener) {
         this.listener = listener;
@@ -144,13 +143,13 @@ public class MyFragment extends BaseFragment {
                                 boolean data = jsonObject.getBoolean("data");
                                 if (data) {
                                     Intent intent = new Intent();
-                                    intent.setClass(mContext, OrdersForShipmentActivity.class);
+                                    intent.setClass(getContext(), OrdersForShipmentActivity.class);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(mContext, "您还没有发货权限，如有需求请联系客服", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "您还没有发货权限，如有需求请联系客服", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                             }
 
 
@@ -196,7 +195,7 @@ public class MyFragment extends BaseFragment {
             @Override
             public void call(Void aVoid) {
                 Intent intent = new Intent();
-                intent.setClass(mContext, PromotionActivity.class);
+                intent.setClass(getContext(), PromotionActivity.class);
                 startActivity(intent);
             }
         });
@@ -205,7 +204,7 @@ public class MyFragment extends BaseFragment {
             @Override
             public void call(Void aVoid) {
                 Intent intent = new Intent();
-                intent.setClass(mContext, MyGoodsActivity.class);
+                intent.setClass(getContext(), MyGoodsActivity.class);
                 startActivity(intent);
             }
         });
@@ -214,7 +213,7 @@ public class MyFragment extends BaseFragment {
             @Override
             public void call(Void aVoid) {
                 Intent intent = new Intent();
-                intent.setClass(mContext, MyServiceActivity.class);
+                intent.setClass(getContext(), MyServiceActivity.class);
                 startActivity(intent);
             }
         });
@@ -223,7 +222,7 @@ public class MyFragment extends BaseFragment {
             @Override
             public void call(Void aVoid) {
                 Intent intent = new Intent();
-                intent.setClass(mContext, StoreManageActivity.class);
+                intent.setClass(getContext(), StoreManageActivity.class);
                 startActivity(intent);
             }
         });
@@ -234,7 +233,7 @@ public class MyFragment extends BaseFragment {
                 Intent intent = new Intent();
                 intent.putExtra("page", "0");
                 intent.putExtra("typestate", "all");
-                intent.setClass(mContext, MyOrderActivity.class);
+                intent.setClass(getContext(), MyOrderActivity.class);
                 startActivity(intent);
             }
         });
@@ -242,7 +241,7 @@ public class MyFragment extends BaseFragment {
         RxViewAction.clickNoDouble(rl_shezhi).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Intent intent = new Intent(mContext, SettingActivity.class);
+                Intent intent = new Intent(getContext(), SettingActivity.class);
                 startActivity(intent);
             }
         });
@@ -264,7 +263,7 @@ public class MyFragment extends BaseFragment {
         RxViewAction.clickNoDouble(main_test).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                Intent intent = new Intent(mContext, BugTestActivity.class);
+                Intent intent = new Intent(getContext(), BugTestActivity.class);
                 startActivity(intent);
             }
         });   // 测试栏 --->
@@ -287,7 +286,7 @@ public class MyFragment extends BaseFragment {
 
 
     private void showPicInputDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("修改头像");
         String[] items = {"选择本地照片", "拍照"};
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -321,7 +320,7 @@ public class MyFragment extends BaseFragment {
         String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (Build.VERSION.SDK_INT >= 23) {
             // 需要申请动态权限
-            int check = ContextCompat.checkSelfPermission(mContext, permissions[0]);
+            int check = ContextCompat.checkSelfPermission(getContext(), permissions[0]);
             // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
             if (check != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -336,7 +335,7 @@ public class MyFragment extends BaseFragment {
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= 24) {
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            tempUri = FileProvider.getUriForFile(mContext, "com.ruyiruyi.merchant.fileProvider", file);
+            tempUri = FileProvider.getUriForFile(getContext(), "com.ruyiruyi.merchant.fileProvider", file);
         } else {
             tempUri = Uri.fromFile(new File(getActivity().getObbDir().getAbsolutePath(), "newwodetopimg.jpg"));
         }
@@ -451,13 +450,7 @@ public class MyFragment extends BaseFragment {
                         String storeImgUrl = new DbConfig(getActivity()).getUser().getStoreImgUrl();
                         Log.e(TAG, "onSuccess: get2=" + storeImgUrl);
 
-//                        Intent intent = new Intent(getContext(), MainActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("page", "my");
-//                        intent.putExtras(bundle);
-//                        startActivity(intent);
-
-                        listener.forRefreshMyListener();//通知MainActivity刷新数据
+                        /*listener.forRefreshMyListener();//通知MainActivity刷新数据*/
                         if (isCamera) {
                             UtilsRY.deleteUri(getContext(), uri);//删除照片
                         }
@@ -471,7 +464,7 @@ public class MyFragment extends BaseFragment {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Log.e(TAG, "onError: xmjj my");
-//                Toast.makeText(mContext, "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override

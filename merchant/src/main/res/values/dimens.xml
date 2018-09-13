@@ -12,5 +12,9 @@
     <dimen name="shipmentinfo_lineheight">50dp</dimen>
     <dimen name="shipmentinfo_paddingleft">15dp</dimen>
     <dimen name="shipmentinfo_paddingright">15dp</dimen>
+    <!--三种订单-->
+    <dimen name="public_pictextsize">10sp</dimen>
+    <dimen name="public_contenttextsize">14sp</dimen>
+    <dimen name="public_lineheight">50dp</dimen>
 
 </resources>

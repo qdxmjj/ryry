@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.activity.LaunchActivity">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+             tools:context=".ui.activity.LaunchActivity">
 
     <ScrollView
         android:id="@+id/scview"
@@ -37,7 +38,7 @@
                     android:text="门店名称"
                     android:textColor="@color/c6"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -47,7 +48,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="门店名称"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -64,7 +65,7 @@
                     android:paddingLeft="100dp"
                     android:text="您的门店类别"
                     android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -74,7 +75,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="门店类别"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -93,7 +94,7 @@
                     android:text="您店里的电话"
                     android:textColor="@color/c6"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -103,7 +104,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="联系电话"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -122,7 +123,7 @@
                     android:text=""
                     android:textColor="@color/c6"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -132,7 +133,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="是否营业"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <Switch
                     android:id="@+id/swch_isopen"
@@ -140,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp" />
+                    android:layout_marginRight="20dp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -157,7 +158,7 @@
                     android:paddingLeft="100dp"
                     android:text="营业时间"
                     android:textColor="@color/c5"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -167,7 +168,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="营业时间"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -184,7 +185,7 @@
                     android:paddingLeft="100dp"
                     android:text="xx省xx市xx区"
                     android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -194,7 +195,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="所在城市"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -213,7 +214,7 @@
                     android:text="您的详细地址 街道、门牌号"
                     android:textColor="@color/c6"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -223,7 +224,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="门店位置"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
 
@@ -231,7 +232,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/c1" />
+                android:background="@color/c1"/>
 
             <LinearLayout
                 android:id="@+id/ll_xiangmus"
@@ -247,14 +248,14 @@
                     android:layout_marginTop="10dp"
                     android:text="希望合作项目"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/c1" />
+                android:background="@color/c1"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -268,7 +269,7 @@
                     android:layout_marginTop="10dp"
                     android:text="上传门店照片"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -279,7 +280,7 @@
                     android:layout_marginTop="10dp"
                     android:maxHeight="30pt"
                     android:maxWidth="30pt"
-                    android:src="@drawable/ic_picture" />
+                    android:src="@drawable/ic_picture"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -297,12 +298,14 @@
                         android:layout_margin="3dp"
                         android:layout_weight="1">
 
-                        <ImageView
+                        <com.ruyiruyi.merchant.utils.CircleImageView
                             android:id="@+id/img_mdpic_a"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/img_bg_dark" />
+                            android:src="@drawable/img_bg_dark"
+                            app:roundHeight="3dp"
+                            app:roundWidth="3dp"/>
 
                         <ImageView
                             android:id="@+id/img_mdpic_a_delete"
@@ -311,7 +314,7 @@
                             android:layout_gravity="right|top"
                             android:clickable="true"
                             android:onClick="registerPicClick"
-                            android:src="@drawable/ic_delete" />
+                            android:src="@drawable/ic_delete"/>
 
                         <LinearLayout
                             android:id="@+id/ll_store_head"
@@ -326,7 +329,7 @@
                                 android:id="@+id/img_mdpic_a_center"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_add" />
+                                android:src="@drawable/ic_add"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -334,7 +337,7 @@
                                 android:layout_marginTop="3dp"
                                 android:text="门头照片"
                                 android:textColor="@color/c6"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"/>
                         </LinearLayout>
                     </FrameLayout>
 
@@ -344,12 +347,14 @@
                         android:layout_margin="3dp"
                         android:layout_weight="1">
 
-                        <ImageView
+                        <com.ruyiruyi.merchant.utils.CircleImageView
                             android:id="@+id/img_mdpic_b"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/img_bg_dark" />
+                            android:src="@drawable/img_bg_dark"
+                            app:roundHeight="3dp"
+                            app:roundWidth="3dp"/>
 
                         <ImageView
                             android:id="@+id/img_mdpic_b_delete"
@@ -358,7 +363,7 @@
                             android:layout_gravity="right|top"
                             android:clickable="true"
                             android:onClick="registerPicClick"
-                            android:src="@drawable/ic_delete" />
+                            android:src="@drawable/ic_delete"/>
 
                         <LinearLayout
                             android:id="@+id/ll_store_in"
@@ -373,7 +378,7 @@
                                 android:id="@+id/img_mdpic_b_center"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_add" />
+                                android:src="@drawable/ic_add"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -381,7 +386,7 @@
                                 android:layout_marginTop="3dp"
                                 android:text="店内照片"
                                 android:textColor="@color/c6"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"/>
                         </LinearLayout>
                     </FrameLayout>
 
@@ -391,12 +396,14 @@
                         android:layout_margin="3dp"
                         android:layout_weight="1">
 
-                        <ImageView
+                        <com.ruyiruyi.merchant.utils.CircleImageView
+                            app:roundHeight="3dp"
+                            app:roundWidth="3dp"
                             android:id="@+id/img_mdpic_c"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/img_bg_dark" />
+                            android:src="@drawable/img_bg_dark"/>
 
                         <ImageView
                             android:id="@+id/img_mdpic_c_delete"
@@ -405,7 +412,7 @@
                             android:layout_gravity="right|top"
                             android:clickable="true"
                             android:onClick="registerPicClick"
-                            android:src="@drawable/ic_delete" />
+                            android:src="@drawable/ic_delete"/>
 
                         <LinearLayout
                             android:id="@+id/ll_store_workspace"
@@ -420,7 +427,7 @@
                                 android:id="@+id/img_mdpic_c_center"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_add" />
+                                android:src="@drawable/ic_add"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -428,7 +435,7 @@
                                 android:layout_marginTop="3dp"
                                 android:text="车间照片"
                                 android:textColor="@color/c6"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"/>
                         </LinearLayout>
                     </FrameLayout>
 
@@ -440,7 +447,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/c1" />
+                android:background="@color/c1"/>
 
         </LinearLayout>
     </ScrollView>
@@ -463,6 +470,6 @@
             android:gravity="center"
             android:text="保存"
             android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
     </LinearLayout>
 </FrameLayout>

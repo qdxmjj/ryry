@@ -465,30 +465,25 @@ public class ShipmentInfoActivity extends BaseActivity {
         Intent openCameraIntent = new Intent(
                 MediaStore.ACTION_IMAGE_CAPTURE);
         File file = null;
-        if (currentImage == 0) {
+        if (currentImage == 1) {
             file = new File(
                     this.getObbDir().getAbsolutePath()
-                    , "mdpicaaa.jpg");
-            path_ = file.getPath();
-        } else if (currentImage == 1) {
-            file = new File(
-                    this.getObbDir().getAbsolutePath()
-                    , "mdpicbbb.jpg");
+                    , "tyre1.jpg");
             path_ = file.getPath();
         } else if (currentImage == 2) {
             file = new File(
                     this.getObbDir().getAbsolutePath()
-                    , "mdpicccc.jpg");
+                    , "tyre2.jpg");
             path_ = file.getPath();
         } else if (currentImage == 3) {
             file = new File(
                     this.getObbDir().getAbsolutePath()
-                    , "yyzz.jpg");
+                    , "tyre3.jpg");
             path_ = file.getPath();
         } else if (currentImage == 4) {
             file = new File(
                     this.getObbDir().getAbsolutePath()
-                    , "shou.jpg");
+                    , "tyre4.jpg");
             path_ = file.getPath();
         }
 

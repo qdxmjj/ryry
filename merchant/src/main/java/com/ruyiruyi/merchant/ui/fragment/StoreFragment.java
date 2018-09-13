@@ -2,7 +2,6 @@ package com.ruyiruyi.merchant.ui.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -30,8 +28,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.facebook.common.file.FileUtils;
-import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.ItemBottomBean;
 import com.ruyiruyi.merchant.bean.ItemNullBean;
@@ -41,9 +37,7 @@ import com.ruyiruyi.merchant.ui.multiType.DianpuItemViewProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemBottomProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemNullProvider;
 import com.ruyiruyi.merchant.ui.multiType.listener.OnLoadMoreListener;
-import com.ruyiruyi.merchant.ui.multiType.listener.OnMyItemTouchListener;
 import com.ruyiruyi.merchant.ui.multiType.modle.Dianpu;
-import com.ruyiruyi.merchant.ui.multiType.modle.Dingdan;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -60,7 +54,6 @@ import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -104,14 +97,14 @@ public class StoreFragment extends BaseFragment {
     private ForRefreshStore listener;
     private String path_takepic;
     private boolean isCamera = false;
-    private Context mContext;
+    /*private Context mContext;
 
     public StoreFragment() {
     }
 
     public StoreFragment(Context mContext) {
         this.mContext = mContext;
-    }
+    }*/
 
     public void setListener(ForRefreshStore listener) {
         this.listener = listener;
@@ -358,7 +351,7 @@ public class StoreFragment extends BaseFragment {
 
 
     private void showPicInputDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("修改头像");
         String[] items = {"选择本地照片", "拍照"};
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -392,7 +385,7 @@ public class StoreFragment extends BaseFragment {
         String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (Build.VERSION.SDK_INT >= 23) {
             // 需要申请动态权限
-            int check = ContextCompat.checkSelfPermission(mContext, permissions[0]);
+            int check = ContextCompat.checkSelfPermission(getContext(), permissions[0]);
             // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
             if (check != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -407,7 +400,7 @@ public class StoreFragment extends BaseFragment {
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= 24) {
             openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            tempUri = FileProvider.getUriForFile(mContext, "com.ruyiruyi.merchant.fileProvider", file);
+            tempUri = FileProvider.getUriForFile(getContext(), "com.ruyiruyi.merchant.fileProvider", file);
         } else {
             tempUri = Uri.fromFile(new File(getActivity().getObbDir().getAbsolutePath(), "newstoreheadimg.jpg"));
         }
@@ -515,13 +508,8 @@ public class StoreFragment extends BaseFragment {
 
                         } catch (DbException e) {
                         }
-//                        Intent intent = new Intent(getContext(), MainActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("page", "store");
-//                        intent.putExtras(bundle);
-//                        getActivity().finish();
-//                        startActivity(intent);
-                        listener.forRefreshStoreListener();//通知MainActivity刷新数据
+
+                        /*listener.forRefreshStoreListener();//通知MainActivity刷新数据*/
                         if (isCamera) {
                             UtilsRY.deleteUri(getContext(), uri);//删除照片
                         }
@@ -535,7 +523,7 @@ public class StoreFragment extends BaseFragment {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Log.e(TAG, "onError: xmjj store");
-//                Toast.makeText(mContext, "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "头像修改失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
