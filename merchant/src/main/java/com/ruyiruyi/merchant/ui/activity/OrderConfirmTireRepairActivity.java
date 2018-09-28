@@ -55,7 +55,8 @@ import rx.functions.Action1;
 
 
 public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
-    private final int TAKE_PICTURE = 0;
+    private final int CHOOSE_PICTURE = 0;
+    private final int TAKE_PICTURE = 1;
     //底部接单控件
     private TextView tv_bottom_a;
     private TextView tv_bottom_c;
@@ -809,11 +810,22 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
     private void showPicInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("上传照片");
-        String[] items = {"拍照"};
+        String[] items = {"选择本地照片", "拍照"};
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                takePicture();
+                 /* takePicture();*/
+
+                switch (which) {
+                    case CHOOSE_PICTURE://选择本地照片
+                        Intent openBendiPicIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                        openBendiPicIntent.setType("image/*");
+                        startActivityForResult(openBendiPicIntent, CHOOSE_PICTURE);
+                        break;
+                    case TAKE_PICTURE://拍照
+                        takePicture();
+                        break;
+                }
             }
         });
         final AlertDialog dialog = builder.create();
@@ -890,8 +902,16 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case TAKE_PICTURE:
+                /*case TAKE_PICTURE:
                     setImageToViewFromPhone(tempUri);
+                    break;*/
+
+                case CHOOSE_PICTURE:
+                    Uri uri = data.getData();
+                    setImageToViewFromPhone(uri, false);
+                    break;
+                case TAKE_PICTURE:
+                    setImageToViewFromPhone(tempUri, true);
                     break;
             }
         }
@@ -899,8 +919,16 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(path_);
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        /*int degree = ImageUtils.readPictureDegree(path_);*/
+
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_);
+        } else {
+            degree = ImageUtils.getOrientation(getApplicationContext(), uri);
+        }
+
         if (uri != null) {
             Bitmap photo = null;
             try {

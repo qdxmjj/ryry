@@ -177,4 +177,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     // MultiDex的依赖
     compile 'com.android.support:multidex:1.0.0'
+    compile 'com.yalantis:ucrop:1.5.0'
 }

@@ -114,7 +114,8 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
     private boolean hasPic_car = false;//已拍照拍不可点击标志位
     private int currentImage = 0; //区分拍照flag 1 行驶证照片 2 车辆照片 ；
     protected static Uri tempUri;//公共pic Uri
-    private final int TAKE_PICTURE = 0;
+    private final int CHOOSE_PICTURE = 0;
+    private final int TAKE_PICTURE = 1;
     private Bitmap licenseBitmap;
     private Bitmap carBitmap;
     private ProgressDialog progressDialog;
@@ -633,11 +634,22 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
     private void showPicInputDialog(final String code) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("上传照片");
-        String[] items = {"拍照"};
+        String[] items = {"选择本地照片", "拍照"};
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                takePicture(code);
+               /* takePicture(code);*/
+
+                switch (which) {
+                    case CHOOSE_PICTURE://选择本地照片
+                        Intent openBendiPicIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                        openBendiPicIntent.setType("image/*");
+                        startActivityForResult(openBendiPicIntent, CHOOSE_PICTURE);
+                        break;
+                    case TAKE_PICTURE://拍照
+                        takePicture(code);
+                        break;
+                }
             }
         });
         final AlertDialog dialog = builder.create();
@@ -691,16 +703,32 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case TAKE_PICTURE:
+                /*case TAKE_PICTURE:
                     setImageToViewFromPhone(tempUri);
+                    break;*/
+
+                case CHOOSE_PICTURE:
+                    Uri uri = data.getData();
+                    setImageToViewFromPhone(uri, false);
+                    break;
+                case TAKE_PICTURE:
+                    setImageToViewFromPhone(tempUri, true);
                     break;
             }
         }
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(path_);
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        /*int degree = ImageUtils.readPictureDegree(path_);*/
+
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_);
+        } else {
+            degree = ImageUtils.getOrientation(getApplicationContext(), uri);
+        }
+
         if (uri != null) {
             Bitmap photo = null;
             try {
