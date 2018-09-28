@@ -1046,6 +1046,9 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     items.add(new InfoOne("联系电话", userPhone, false));
                     items.add(new InfoOne("车牌号", carNumber, false));
                     items.add(new InfoOne("服务项目", "免费再换", false));
+                    if (usedCxwAmount != 0){
+                        items.add(new InfoOne("使用畅行无忧数量", usedCxwAmount+"", false));
+                    }
                     items.add(new InfoOne("店铺名称", storeName, true, true));
                     for (int i = 0; i < tireInfoList.size(); i++) {
                         items.add(tireInfoList.get(i));
@@ -1055,6 +1058,9 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     items.add(new InfoOne("联系电话", userPhone, false));
                     items.add(new InfoOne("车牌号", carNumber, false));
                     items.add(new InfoOne("服务项目", "免费再换", false));
+                    if (usedCxwAmount != 0){
+                        items.add(new InfoOne("使用畅行无忧数量", usedCxwAmount+"", false));
+                    }
                     items.add(new InfoOne("店铺名称", storeName, true, true));
                     for (int i = 0; i < tireInfoList.size(); i++) {
                         items.add(tireInfoList.get(i));
@@ -1068,6 +1074,9 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     items.add(new InfoOne("联系电话", userPhone, false));
                     items.add(new InfoOne("车牌号", carNumber, false));
                     items.add(new InfoOne("服务项目", "免费再换", false));
+                    if (usedCxwAmount != 0){
+                        items.add(new InfoOne("使用畅行无忧数量", usedCxwAmount+"", false));
+                    }
                     items.add(new InfoOne("店铺名称", storeName, true, true));
                     for (int i = 0; i < tireInfoList.size(); i++) {
                         items.add(tireInfoList.get(i));
@@ -1200,13 +1209,22 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (noBuchaTireList.size() > 0) {
-                            showServiceDialog();
-                        } else {
-                            Toast.makeText(OrderInfoActivity.this, "您没有达到可更换标准得轮胎，请使用畅行无忧或者补差后继续操作", Toast.LENGTH_SHORT).show();
+                        int allTireCount = 0;
+                        for (int i = 0; i < tireInfoList.size(); i++) {
+                            int tireCount = tireInfoList.get(i).getTireCount();
+                            allTireCount += tireCount;
                         }
+                        Log.e(TAG, "call:-------------------------------------------------- " + noBuchaTireList.size());
+                        Log.e(TAG, "call:---------------------------------+++-------------- " + buchaTireList.size());
+                        Log.e(TAG, "call:---------------------------------***-------------- " + allTireCount);
 
+                        //如果选中的轮胎全部不符合规格
+                        if (allTireCount +  currentCxwyCount - buchaTireList.size() > 0){
+                            showServiceDialog();
+                        }else { //有符合规格 有不符合规格的轮胎
+                            Toast.makeText(OrderInfoActivity.this, "您没有达到可更换标准得轮胎，请使用畅行无忧或者补差后继续操作", Toast.LENGTH_SHORT).show();
 
+                        }
                         //buchaOrder();
                     }
                 });
@@ -1312,7 +1330,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_error, null);
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         if ((buchaTireList.size() - currentCxwyCount) > 0) {
-            error_text.setText("您还有审核未通过得轮胎，是否免费安装可更换轮胎");
+            error_text.setText("您还有审核未通过得轮胎，是否免费安装已通过轮胎");
         } else {
             error_text.setText("请确认前往更换");
         }

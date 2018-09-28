@@ -165,7 +165,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
 
         actionBar = (ActionBar) findViewById(R.id.my_action);
         actionBar.setTitle("免费再换");
-        ;
+
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
@@ -571,7 +571,6 @@ public class TireFreeChangeActivity extends RyBaseActivity {
     private void freeChangeOrder() {
         showDialogProgress(progressDialog, "免费再换订单提交中...");
 
-
         User user = new DbConfig(this).getUser();
         int userId = user.getId();
         int userCarId = user.getCarId();
@@ -953,7 +952,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                             fontTireCountLayout.setVisibility(View.GONE);
                             rearTireCountLayout.setVisibility(View.GONE);
                             tireCountText.setText(fontFreeAmount+"");
-                        }else if(fontRearFlag == 1){
+                        }else if(fontRearFlag == 1 || fontRearFlag == 2){
                             tireCountLayout.setVisibility(View.GONE);
                             fontTireCountLayout.setVisibility(View.VISIBLE);
                             rearTireCountLayout.setVisibility(View.VISIBLE);
@@ -988,7 +987,7 @@ public class TireFreeChangeActivity extends RyBaseActivity {
                             fontTireCountLayout.setVisibility(View.GONE);
                             rearTireCountLayout.setVisibility(View.GONE);
                             tireCountText.setText(fontFreeAmount+"");
-                        }else if(fontRearFlag == 1){
+                        }else if(fontRearFlag == 1 || fontRearFlag == 2){
                             tireCountLayout.setVisibility(View.GONE);
                             fontTireCountLayout.setVisibility(View.VISIBLE);
                             rearTireCountLayout.setVisibility(View.VISIBLE);

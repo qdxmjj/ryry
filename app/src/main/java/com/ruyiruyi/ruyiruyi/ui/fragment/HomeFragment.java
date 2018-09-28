@@ -434,6 +434,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     intent.putExtra("FONTREARFLAG", "0");
                     intent.putExtra("SERVICE_YEAR_MAX", service_year);
                     intent.putExtra("SERVICE_YEAR", service_year_length);
+                    intent.putExtra("SERVICE_END_YEAR", service_end_date);
                     intent.putExtra("CHOOSE_SERVICE_YEAR", false);
                     intent.putExtra("CARID", carId);
                     intent.putExtra("USERCARID",uesrCarId);
@@ -444,6 +445,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     intent.putExtra("FONTREARFLAG", "0");
                     intent.putExtra("SERVICE_YEAR_MAX", service_year);
                     intent.putExtra("SERVICE_YEAR", service_year_length);
+                    intent.putExtra("SERVICE_END_YEAR", service_end_date);
                     intent.putExtra("CHOOSE_SERVICE_YEAR", true);
                     intent.putExtra("CARID", carId);
                     intent.putExtra("USERCARID",uesrCarId);
@@ -455,7 +457,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 Intent intent = new Intent(getContext(), TirePlaceActivity.class);
                 intent.putExtra("FONTSIZE", fontSize);
                 intent.putExtra("REARSIZE", rearSize);
-                intent.putExtra("SERVICEYEAR",service_year);
+                intent.putExtra("SERVICE_YEAR_MAX", service_year);
+                intent.putExtra("SERVICE_YEAR", service_year_length);
                 intent.putExtra("SERVICE_END_YEAR", service_end_date);
                 intent.putExtra("CARID", carId);
                 intent.putExtra("USERCARID",uesrCarId);
@@ -478,8 +481,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             }
             intent.putExtra("FONTSIZE", fontSize);
             intent.putExtra("REARSIZE", rearSize);
-
-            intent.putExtra("SERVICEYEAR",service_year);
+            intent.putExtra("SERVICE_YEAR_MAX", service_year);      //最大服务年限
+            intent.putExtra("SERVICE_YEAR", service_year_length);   //当前服务年限
             intent.putExtra("SERVICE_END_YEAR", service_end_date);
             intent.putExtra("CARID", carId);
             intent.putExtra("USERCARID",uesrCarId);
@@ -530,7 +533,6 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 Intent intent = new Intent(getContext(), TirePlaceActivity.class);
                 intent.putExtra("FONTSIZE", fontSize);
                 intent.putExtra("REARSIZE", rearSize);
-                intent.putExtra("SERVICEYEAR",service_year);
                 intent.putExtra("SERVICE_YEAR_MAX", service_year);
                 intent.putExtra("SERVICE_YEAR", service_year_length);
                 intent.putExtra("SERVICE_END_YEAR", service_end_date);

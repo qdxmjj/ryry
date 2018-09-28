@@ -24,6 +24,7 @@ public class TireInfo {
     public List<TireRank> tireRankList;     //速度级别的价格列表
     public String tirePriceOld; //已经买过轮胎的价格
     public String platNumber;   //车牌号
+    //public List<CxwyYear> cxwyYearList;
 
     public TireInfo(String description, String imgLeftUrl, String imgMiddleUrl, String imgRightUrl, String shoeDownImg, String shoeLeftImg, String shoeMiddleImg, String shoeRightImg, String shoeUpImg, String detailStr, String figure, String shoeBasePrice, String shoeFlgureName, List<CxwyTimesPrice> cxwyTimesPriceList, List<TireRank> tireRankList) {
         this.description = description;
@@ -61,6 +62,56 @@ public class TireInfo {
         this.tireRankList = tireRankList;
         this.platNumber = platNumber;
     }
+/*    public TireInfo(String description, String imgLeftUrl, String imgMiddleUrl, String imgRightUrl, String shoeDownImg, String shoeLeftImg, String shoeMiddleImg, String shoeRightImg, String shoeUpImg, String detailStr, String figure, String shoeBasePrice, String shoeFlgureName, List<CxwyTimesPrice> cxwyTimesPriceList, List<TireRank> tireRankList, String platNumber, List<CxwyYear> cxwyYearList) {
+        this.description = description;
+        this.imgLeftUrl = imgLeftUrl;
+        this.imgMiddleUrl = imgMiddleUrl;
+        this.imgRightUrl = imgRightUrl;
+        this.shoeDownImg = shoeDownImg;
+        this.shoeLeftImg = shoeLeftImg;
+        this.shoeMiddleImg = shoeMiddleImg;
+        this.shoeRightImg = shoeRightImg;
+        this.shoeUpImg = shoeUpImg;
+        this.detailStr = detailStr;
+        this.figure = figure;
+        this.shoeBasePrice = shoeBasePrice;
+        this.shoeFlgureName = shoeFlgureName;
+        this.cxwyTimesPriceList = cxwyTimesPriceList;
+        this.tireRankList = tireRankList;
+        this.platNumber = platNumber;
+        this.cxwyYearList = cxwyYearList;
+    }*/
+
+/*    public TireInfo(String description, String imgLeftUrl, String imgMiddleUrl, String imgRightUrl, String shoeDownImg, String shoeLeftImg, String shoeMiddleImg, String shoeRightImg, String shoeUpImg, String detailStr, String figure, String shoeBasePrice, String shoeFlgureName, List<CxwyTimesPrice> cxwyTimesPriceList, List<TireRank> tireRankList, String tirePriceOld, String platNumber, List<CxwyYear> cxwyYearList) {
+        this.description = description;
+        this.imgLeftUrl = imgLeftUrl;
+        this.imgMiddleUrl = imgMiddleUrl;
+        this.imgRightUrl = imgRightUrl;
+        this.shoeDownImg = shoeDownImg;
+        this.shoeLeftImg = shoeLeftImg;
+        this.shoeMiddleImg = shoeMiddleImg;
+        this.shoeRightImg = shoeRightImg;
+        this.shoeUpImg = shoeUpImg;
+        this.detailStr = detailStr;
+        this.figure = figure;
+        this.shoeBasePrice = shoeBasePrice;
+        this.shoeFlgureName = shoeFlgureName;
+        this.cxwyTimesPriceList = cxwyTimesPriceList;
+        this.tireRankList = tireRankList;
+        this.tirePriceOld = tirePriceOld;
+        this.platNumber = platNumber;
+        this.cxwyYearList = cxwyYearList;
+    }*/
+
+/*
+    public List<CxwyYear> getCxwyYearList() {
+        return cxwyYearList;
+    }
+
+    public void setCxwyYearList(List<CxwyYear> cxwyYearList) {
+        this.cxwyYearList = cxwyYearList;
+    }
+*/
 
     public String getTirePriceOld() {
         return tirePriceOld;

@@ -26,6 +26,8 @@ import com.ruyiruyi.rylibrary.cell.flowlayout.TagAdapter;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagFlowLayout;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
 
+import java.text.DecimalFormat;
+
 import me.drakeet.multitype.ItemViewProvider;
 import rx.functions.Action1;
 
@@ -55,7 +57,20 @@ public class ShopInfoViewBinder extends ItemViewProvider<ShopInfo, ShopInfoViewB
         holder.storeAddressText.setText("地址：" + shopInfo.getStoreAddress());
         holder.storeContentText.setText(shopInfo.getStoreDescribe());
         holder.storePhoneText.setText("联系方式: " + shopInfo.getStorePhone());
-        holder.storeDistence.setText(shopInfo.getStoreDistence() + "m");
+     //   holder.storeDistence.setText(shopInfo.getStoreDistence() + "m");
+        if (shopInfo.getStoreDistence().equals("")){
+            holder.storeDistence.setText(shopInfo.getStoreDistence());
+        }else {
+            double distenceDouble = Double.parseDouble(shopInfo.getStoreDistence());
+            if (distenceDouble > 500){
+                double v = distenceDouble / 100 / 10;
+                DecimalFormat df = new DecimalFormat("#.0");
+                String distenceStr = df.format(v);
+                holder.storeDistence.setText(distenceStr + "公里");
+            }else {
+                holder.storeDistence.setText(shopInfo.getStoreDistence() + "m");
+            }
+        }
 
         //RouteMap 路线 Activity
         RxViewAction.clickNoDouble(holder.ll_routemap).subscribe(new Action1<Void>() {

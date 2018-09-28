@@ -9,7 +9,6 @@
         android:id="@+id/launch_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/launch_image"
         android:scaleType="fitXY"/>
 
 </LinearLayout>

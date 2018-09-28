@@ -29,7 +29,9 @@ import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.TSeekBar;
+import com.ruyiruyi.ruyiruyi.ui.model.CxwyPrice;
 import com.ruyiruyi.ruyiruyi.ui.model.CxwyTimesPrice;
+import com.ruyiruyi.ruyiruyi.ui.model.CxwyYear;
 import com.ruyiruyi.ruyiruyi.ui.model.FlowModel;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.model.TireInfo;
@@ -410,6 +412,22 @@ public class TireBuyNewActivity extends RyBaseActivity {
                             String shoeRightImg = shoeDetailResult.getString("shoeRightImg");
                             String shoeUpImg = shoeDetailResult.getString("shoeUpImg");
                             String platNumber = shoeDetailResult.getString("platNumber");
+
+                         /*   //获取畅行无忧价格  随着年限改变
+                            List<CxwyYear> cxwyYearList = new ArrayList<CxwyYear>();
+
+                            JSONObject cxwyPriceMap = shoeDetailResult.getJSONObject("cxwyPriceMap");
+                            for (int j = 1; j < 16; j++) {
+                                JSONObject cxwyYearObject = cxwyPriceMap.getJSONObject(j + "");
+                                List<CxwyPrice> cxwyPriceList = new ArrayList<CxwyPrice>();
+                                Log.e(TAG, "onSuccess:cxwyYear--------------- " + j);
+                                for (int k = 1; k < 8; k++) {
+                                    String cxwyTimesPrice = cxwyYearObject.getString(k + "");
+                                    Log.e(TAG, "onSuccess: cxwyTimesPrice ---" + cxwyTimesPrice );
+                                    cxwyPriceList.add(new CxwyPrice(k,cxwyTimesPrice));
+                                }
+                                cxwyYearList.add(new CxwyYear(j,cxwyPriceList));
+                            }*/
                             //畅行无忧
                             JSONArray cxwyPriceParamList = shoeDetailResult.getJSONArray("cxwyPriceParamList");
                             List<CxwyTimesPrice> cxwyTimesPriceList = new ArrayList<CxwyTimesPrice>();
@@ -435,7 +453,23 @@ public class TireBuyNewActivity extends RyBaseActivity {
                                     TirePrice tirePrice = new TirePrice(k, Integer.parseInt(price));
                                     tirePriceList.add(tirePrice);
                                 }
-                                tireRankList.add(new TireRank(shoeId,rankName,tirePriceList));
+
+                                //获取畅行无忧价格  随着年限改变
+                                List<CxwyYear> cxwyYearList = new ArrayList<CxwyYear>();
+
+                                JSONObject cxwyPriceMap = object.getJSONObject("cxwyPriceMap");
+                                for (int f = 1; f < 16; f++) {
+                                    JSONObject cxwyYearObject = cxwyPriceMap.getJSONObject(f + "");
+                                    List<CxwyPrice> cxwyPriceList = new ArrayList<CxwyPrice>();
+                                    Log.e(TAG, "onSuccess:cxwyYear--------------- " + f);
+                                    for (int g = 1; g < 8; g++) {
+                                        String cxwyTimesPrice = cxwyYearObject.getString(g + "");
+                                        Log.e(TAG, "onSuccess: cxwyTimesPrice ---" + cxwyTimesPrice );
+                                        cxwyPriceList.add(new CxwyPrice(g,cxwyTimesPrice));
+                                    }
+                                    cxwyYearList.add(new CxwyYear(f,cxwyPriceList));
+                                }
+                                tireRankList.add(new TireRank(shoeId,rankName,tirePriceList,cxwyYearList));
                             }
                             tireInfoList.add(new TireInfo(description,imgLeftUrl,imgMiddleUrl,imgRightUrl,shoeDownImg,shoeLeftImg,shoeMiddleImg,shoeRightImg,shoeUpImg,detailStr,
                                     figure,shoeBasePrice,shoeFlgureName,cxwyTimesPriceList,tireRankList,platNumber));
@@ -677,6 +711,9 @@ public class TireBuyNewActivity extends RyBaseActivity {
             }
         });
 
+        /**
+         * 速度级别选择
+         */
         tireRankFlow.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
             @Override
             public void onSelected(Set<Integer> selectPosSet) {
@@ -685,6 +722,8 @@ public class TireBuyNewActivity extends RyBaseActivity {
                     isChooseRank = true;
                     Log.e(TAG, "onSelected: currentRankChangePostition" + currentRankChangePostition);
                     initDialogRank();
+
+                    initCxwyPrice();
                 }
             }
         });
@@ -718,6 +757,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 currentServiceYearChange = yearChooseSeekBar.currentYear();
                 initDialogTirePrice();
+                initCxwyPrice();
             }
         });
 
@@ -738,6 +778,47 @@ public class TireBuyNewActivity extends RyBaseActivity {
             @Override
             public void onAmountChange(View view, int amount) {
                 TireInfo tireInfo = tireInfoList.get(currentTireChangePostition);
+                List<CxwyYear> cxwyYearList = tireInfo.getTireRankList().get(currentRankPostition).getCxwyYearList();
+             //   List<CxwyYear> cxwyYearList = tireInfo.getCxwyYearList();
+
+                for (int i = 0; i < cxwyYearList.size(); i++) {
+                    int serviceYear = cxwyYearList.get(i).getServiceYear();
+                    Log.e(TAG, "onAmountChange:+++++++++ " + serviceYear);
+                    List<CxwyPrice> cxwyPriceList = cxwyYearList.get(i).getCxwyPriceList();
+                    for (int j = 0; j < cxwyPriceList.size(); j++) {
+
+                        Log.e(TAG, "onAmountChange: +++" + cxwyPriceList.get(j).getCxwyPrice() );
+                    }
+                }
+                List<CxwyPrice> cxwyPriceList = new ArrayList<CxwyPrice>();
+                Log.e(TAG, "onAmountChange:currentServiceYearChange ---" + currentServiceYearChange);
+                Log.e(TAG, "onAmountChange:currentServiceYear--- " + currentServiceYear);
+                cxwyPriceList.clear();
+                for (int i = 0; i < cxwyYearList.size(); i++) {
+                    if (cxwyYearList.get(i).getServiceYear() == currentServiceYearChange) {
+                        cxwyPriceList = cxwyYearList.get(i).getCxwyPriceList();
+                    }
+                }
+
+                if (amount == maxCount) {
+                    Toast.makeText(TireBuyNewActivity.this, "畅行无忧已达到购买上限", Toast.LENGTH_SHORT).show();
+                }
+                cxwwyCount = amount;
+                if (amount == 0){
+                    cxwyAllPrice = 0 + "";
+                }else {
+                    for (int i = 0; i < cxwyPriceList.size(); i++) {
+                        Log.e(TAG, "onAmountChange:--- " + cxwyPriceList.get(i).getCxwyPrice() );
+                        if (cxwyPriceList.get(i).getTimes() == cxwwyCount) {
+                            String cxwyPrice = cxwyPriceList.get(i).getCxwyPrice();
+                            cxwyAllPrice = cxwyPrice;
+                        }
+                    }
+                }
+                cxwyPriceDIalogText.setText("￥" + cxwyAllPrice);
+
+                //老畅行无忧计算方法
+                /*TireInfo tireInfo = tireInfoList.get(currentTireChangePostition);
                 String shoeBasePrice = tireInfo.getShoeBasePrice();
                 List<CxwyTimesPrice> cxwyList = tireInfo.getCxwyTimesPriceList();
                 if (amount == maxCount) {
@@ -757,7 +838,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
                     }
                 }
 
-                cxwyPriceDIalogText.setText("￥" + cxwyAllPrice);
+                cxwyPriceDIalogText.setText("￥" + cxwyAllPrice);*/
 
             }
         });
@@ -783,11 +864,55 @@ public class TireBuyNewActivity extends RyBaseActivity {
                         currentRankPostition = currentRankChangePostition;
                         currentServiceYear = currentServiceYearChange;
                         Log.e(TAG, "call: ------------" + currentServiceYear);
+
                         shopDialog.dismiss();
                         isChoose = true;
                         initData();
                     }
                 });
 
+    }
+
+    /**
+     *  选择完年限  速度级别时更改畅行无忧价格
+     */
+    private void initCxwyPrice() {
+        TireInfo tireInfo = tireInfoList.get(currentTireChangePostition);
+       // List<CxwyYear> cxwyYearList = tireInfo.getCxwyYearList();
+        List<CxwyYear> cxwyYearList = tireInfo.getTireRankList().get(currentRankPostition).getCxwyYearList();
+
+        for (int i = 0; i < cxwyYearList.size(); i++) {
+            int serviceYear = cxwyYearList.get(i).getServiceYear();
+            Log.e(TAG, "onAmountChange:+++++++++ " + serviceYear);
+            List<CxwyPrice> cxwyPriceList = cxwyYearList.get(i).getCxwyPriceList();
+            for (int j = 0; j < cxwyPriceList.size(); j++) {
+
+                Log.e(TAG, "onAmountChange: +++" + cxwyPriceList.get(j).getCxwyPrice() );
+            }
+        }
+        List<CxwyPrice> cxwyPriceList = new ArrayList<CxwyPrice>();
+        Log.e(TAG, "onAmountChange:currentServiceYearChange ---" + currentServiceYearChange);
+        Log.e(TAG, "onAmountChange:currentServiceYear--- " + currentServiceYear);
+        cxwyPriceList.clear();
+        for (int i = 0; i < cxwyYearList.size(); i++) {
+            if (cxwyYearList.get(i).getServiceYear() == currentServiceYearChange) {
+                cxwyPriceList = cxwyYearList.get(i).getCxwyPriceList();
+            }
+        }
+
+        if (cxwwyCount == 0) {
+            cxwyAllPrice = "0";
+        }else {
+            for (int i = 0; i < cxwyPriceList.size(); i++) {
+                Log.e(TAG, "onAmountChange:--- " + cxwyPriceList.get(i).getCxwyPrice() );
+                if (cxwyPriceList.get(i).getTimes() == cxwwyCount) {
+                    String cxwyPrice = cxwyPriceList.get(i).getCxwyPrice();
+                    cxwyAllPrice = cxwyPrice;
+                }
+            }
+        }
+
+
+        cxwyPriceDIalogText.setText("￥" + cxwyAllPrice);
     }
 }

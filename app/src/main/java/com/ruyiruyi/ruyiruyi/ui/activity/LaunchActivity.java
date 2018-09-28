@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.MyApplication;
 import com.ruyiruyi.ruyiruyi.R;
@@ -43,7 +45,9 @@ import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class LaunchActivity extends RyBaseActivity {
@@ -83,6 +87,7 @@ public class LaunchActivity extends RyBaseActivity {
 
         }
     };
+    private ImageView launchView;
 
     private void goNext() {
 
@@ -174,6 +179,15 @@ public class LaunchActivity extends RyBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
+        launchView = (ImageView) findViewById(R.id.launch_image);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
+        String str = formatter.format(curDate);
+
+        Glide.with(this).load("http://180.76.243.205:8111/BootPage/BootPage.png")
+                .error(R.drawable.launch_image)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(launchView);
         //权限获取
         requestPower();
         //  handler.sendEmptyMessageDelayed(0, 3000);

@@ -540,7 +540,7 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
-                        intent.putExtra(PaymentActivity.ALL_PRICE, Double.parseDouble(orderActuallyPrice));
+                        intent.putExtra(PaymentActivity.ALL_PRICE, Double.parseDouble(orderTotalPrice));
                         intent.putExtra(PaymentActivity.ORDERNO, orderno);
                         intent.putExtra(PaymentActivity.ORDER_TYPE, orderType);
                         startActivity(intent);
