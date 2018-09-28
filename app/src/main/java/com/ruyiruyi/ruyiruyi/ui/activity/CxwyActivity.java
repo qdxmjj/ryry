@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class CxwyActivity extends RyBaseActivity {
+public class CxwyActivity extends RyBaseActivity implements CxwyViewBinder.OnChooseClickListener{
     private static final String TAG = CxwyActivity.class.getSimpleName();
     private ActionBar actionBar;
     private RecyclerView listView;
@@ -46,6 +47,11 @@ public class CxwyActivity extends RyBaseActivity {
     private List<Object> items = new ArrayList<>();
     private MultiTypeAdapter adapter;
     public List<Cxwy> cxwyList;
+
+    private int isReach5Years;   //`0不满 1是满五年
+    private int rearFreeAmount = 0;
+    private int fontFreeAmount = 0;
+    private int fontRearFlag;       //fontRearFlag：0：前后轮一致   非0:前后轮不一致
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,16 +80,124 @@ public class CxwyActivity extends RyBaseActivity {
 
         }*/
         initView();
-        initDataFromService();
+        initFreeTireFromService();
+
         bindView();
+
         //initData();
+    }
+
+    /**
+     * 获取轮胎数
+     */
+    private void initFreeTireFromService() {
+        User user = new DbConfig(this).getUser();
+        int carId = user.getCarId();
+
+        int userId = user.getId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", userId);
+            jsonObject.put("userCarId", carId);
+        } catch (JSONException e) {
+
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getUserChangedShoeNumAnd5Year");
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: --" +  result);
+                JSONObject jsonObject1 = null;
+                JSONObject data = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")) {
+                        data = jsonObject1.getJSONObject("data");
+                        fontFreeAmount = data.getInt("fontAmount");
+                        rearFreeAmount = data.getInt("rearAmount");
+                        fontRearFlag = data.getInt("fontRearFlag");
+                        isReach5Years = data.getInt("isReach5Years");
+                        if (fontFreeAmount == 0 && rearFreeAmount == 0) {
+                            Toast.makeText(CxwyActivity.this, "暂无可更换轮胎", Toast.LENGTH_SHORT).show();
+                        }
+                        initDataFromService();
+
+                        // initAmountView();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(CxwyActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    if (data == null){
+                        Toast.makeText(CxwyActivity.this, "您未有可免费更换得轮胎，快去购买换胎吧", Toast.LENGTH_SHORT).show();
+                        fontRearFlag = 0;
+                        fontFreeAmount = 0;
+                        rearFreeAmount = 0;
+                    }
+                    initDataFromService();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void bindView() {
         RxViewAction.clickNoDouble(save_car).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                User user = new DbConfig(getApplicationContext()).getUser();
+                String chooseStr = "";
+                for (int i = 0; i < cxwyList.size(); i++) {
+                    if (cxwyList.get(i).isChoose) {
+                        chooseStr = chooseStr + cxwyList.get(i).getCxwyId() + ";";
+                    }
+                }
+                int currentChoose = 0;
+                for (int i = 0; i < cxwyList.size(); i++) {
+                    if (cxwyList.get(i).isChoose) {
+                        currentChoose += 1;
+                    }
+                }
+
+
+                if (fontFreeAmount + rearFreeAmount < currentChoose){
+                    int countTire = fontFreeAmount + rearFreeAmount;
+                    Toast.makeText(CxwyActivity.this, "您当前车辆轮胎数为" + countTire +"个，请合理选择", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (chooseStr.equals("")){
+                    Toast.makeText(CxwyActivity.this, "请选择畅行无忧", Toast.LENGTH_SHORT).show();
+                }else {
+                    Intent intent = new Intent(getApplicationContext(), CxwyFreeChangeActivity.class);
+                    intent.putExtra("FONT_FREE_AMOUNT",fontFreeAmount);
+                    intent.putExtra("REAR_FREE_AMOUNT",rearFreeAmount);
+                    intent.putExtra("FONT_REAR_FLAG",fontRearFlag);
+                    intent.putExtra("CHOOSE_CXWY_ID",chooseStr);
+                    intent.putExtra("CHOOSE_COUNT",currentChoose);
+                    startActivity(intent);
+                   // Toast.makeText(CxwyActivity.this, chooseStr, Toast.LENGTH_SHORT).show();
+                }
+              /*  User user = new DbConfig(getApplicationContext()).getUser();
                 if (user!=null){
                     int carId = user.getCarId();
                     if (carId == 0){
@@ -91,12 +205,15 @@ public class CxwyActivity extends RyBaseActivity {
                     }else {
                         startActivity(new Intent(getApplicationContext(), BuyCxwyActivity.class));
                     }
-                }
+                }*/
 
             }
         });
     }
 
+    /**
+     * 获取畅行无忧数据
+     */
     private void initDataFromService() {
         User user = new DbConfig(this).getUser();
         int userId = user.getId();
@@ -203,7 +320,30 @@ public class CxwyActivity extends RyBaseActivity {
     }
 
     private void register() {
-        adapter.register(Cxwy.class, new CxwyViewBinder());
+        CxwyViewBinder cxwyViewBinder = new CxwyViewBinder();
+        cxwyViewBinder.setListener(this);
+        adapter.register(Cxwy.class, cxwyViewBinder);
         adapter.register(EmptyBig.class,new EmptyBigViewBinder());
+    }
+
+    /**
+     * 畅行无忧选择回调
+     * @param cxwyId
+     */
+    @Override
+    public void onChooseItemClick(int cxwyId) {
+
+
+
+        for (int i = 0; i < cxwyList.size(); i++) {
+            if (cxwyList.get(i).getCxwyId() == cxwyId) {
+                if (cxwyList.get(i).isChoose){
+                    cxwyList.get(i).setChoose(false);
+                }else {
+                    cxwyList.get(i).setChoose(true);
+                }
+            }
+        }
+        initData();
     }
 }

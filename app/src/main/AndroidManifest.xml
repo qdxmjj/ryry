@@ -281,8 +281,9 @@
         <activity android:name=".ui.activity.YearChooseActivity" />
         <activity android:name=".ui.activity.LunboContentActivity" />
         <activity android:name=".ui.activity.ChooseYearActivity" />
-        <activity android:name=".ui.activity.TireBuyNewActivity"></activity>
-         <activity android:name=".ui.activity.BottomEventActivity"></activity>
+        <activity android:name=".ui.activity.TireBuyNewActivity" />
+        <activity android:name=".ui.activity.BottomEventActivity" />
+        <activity android:name=".ui.activity.CxwyFreeChangeActivity"></activity>
     </application>
 
 </manifest>

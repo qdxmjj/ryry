@@ -123,6 +123,8 @@ public class RegisterActivity extends RyBaseActivity implements DatePicker.OnDat
         phoneText.setText(phone);
         if (nickName != null || !nickName.equals("")) {
             userNameEdit.setText(nickName);
+        }else {
+            userNameEdit.setText("用户名:" + phone);
         }
 
 

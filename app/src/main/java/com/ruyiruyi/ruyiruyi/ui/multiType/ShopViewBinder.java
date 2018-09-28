@@ -25,6 +25,7 @@ import com.ruyiruyi.rylibrary.cell.flowlayout.TagFlowLayout;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 import com.ruyiruyi.rylibrary.utils.glide.GlideRoundTransform;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import me.drakeet.multitype.ItemViewProvider;
@@ -62,7 +63,15 @@ public class ShopViewBinder extends ItemViewProvider<Shop, ShopViewBinder.ViewHo
         if (shop.getStoreDistence().equals("")){
             holder.distenceText.setText(shop.getStoreDistence());
         }else {
-            holder.distenceText.setText(shop.getStoreDistence() + "m");
+            double distenceDouble = Double.parseDouble(shop.getStoreDistence());
+            if (distenceDouble > 500){
+                double v = distenceDouble / 100 / 10;
+                DecimalFormat df = new DecimalFormat("#.0");
+                String distenceStr = df.format(v);
+                holder.distenceText.setText(distenceStr + "公里");
+            }else {
+                holder.distenceText.setText(shop.getStoreDistence() + "m");
+            }
         }
 
         holder.shopTypeText.setText(shop.getStoreTypeName());

@@ -18,14 +18,15 @@ public class LunboContentActivity extends RyBaseActivity {
     private ImageView lunboImageView;
     private TextView lunboButton;
 
-    public static String LUNBO_POSITION = "LUNBO_POSITION";
+    public static String LUNBO_POSITION = "LUNBO_POSITION";  // 0畅行无忧  1 任何轮胎损坏  2是99一条  3清凉一夏
     private int lunboPosition;
     private int fontrearflag;
     private String fontsize;
     private String rearsize;
     private int carid;
     private int usercarid;
-    private int serviceyear;
+    private String service_year_max;    //最大服务年限
+    private String service_year;       //当前服务年限
     private String service_end_year;
 
     @Override
@@ -56,7 +57,8 @@ public class LunboContentActivity extends RyBaseActivity {
         }
         carid = intent.getIntExtra("CARID",0);
         usercarid = intent.getIntExtra("USERCARID",0);
-        serviceyear = Integer.parseInt(intent.getStringExtra("SERVICEYEAR"));
+        service_year = intent.getStringExtra("SERVICE_YEAR");
+        service_year_max = intent.getStringExtra("SERVICE_YEAR_MAX");
         service_end_year = intent.getStringExtra("SERVICE_END_YEAR");
 
         intiView();
@@ -71,11 +73,11 @@ public class LunboContentActivity extends RyBaseActivity {
             lunboImageView.setImageResource(R.drawable.ic_huoodng_3);
             lunboButton.setBackgroundResource(R.drawable.ic_hd_button3);
         }else if (lunboPosition == 1){
-            lunboImageView.setImageResource(R.drawable.ic_huoodng_1);
-            lunboButton.setBackgroundResource(R.drawable.ic_hd_button1);
+            lunboImageView.setImageResource(R.drawable.ic_huoodng_4);
+            lunboButton.setBackgroundResource(R.drawable.ic_hd_button4);
         }else if (lunboPosition == 3){
-            lunboImageView.setImageResource(R.drawable.ic_huoodng_2);
-            lunboButton.setBackgroundResource(R.drawable.ic_hd_button2);
+            lunboImageView.setImageResource(R.drawable.ic_huoodng_5);
+            lunboButton.setBackgroundResource(R.drawable.ic_hd_button5);
         }
 
         RxViewAction.clickNoDouble(lunboButton)
@@ -85,18 +87,22 @@ public class LunboContentActivity extends RyBaseActivity {
                         if (lunboPosition == 0){    //购买轮胎
                             if (fontrearflag == 0) {  //前后轮一样
                                 if (service_end_year.equals("")){
-                                    Intent intent = new Intent(getApplicationContext(), YearChooseActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), TireBuyNewActivity.class);
                                     intent.putExtra("TIRESIZE", fontsize);
                                     intent.putExtra("FONTREARFLAG", "0");
-                                    intent.putExtra("SERVICEYEAR", serviceyear+"");
+                                    intent.putExtra("SERVICE_YEAR_MAX", service_year_max);
+                                    intent.putExtra("SERVICE_YEAR", service_year);
+                                    intent.putExtra("CHOOSE_SERVICE_YEAR", false);
                                     intent.putExtra("CARID", carid);
                                     intent.putExtra("USERCARID",usercarid);
                                     startActivity(intent);
                                 }else {
-                                    Intent intent = new Intent(getApplicationContext(), CarFigureActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), TireBuyNewActivity.class);
                                     intent.putExtra("TIRESIZE", fontsize);
                                     intent.putExtra("FONTREARFLAG", "0");
-                                    intent.putExtra("SERVICEYEAR", serviceyear+"");
+                                    intent.putExtra("SERVICE_YEAR_MAX", service_year_max);
+                                    intent.putExtra("SERVICE_YEAR", service_year);
+                                    intent.putExtra("CHOOSE_SERVICE_YEAR", true);
                                     intent.putExtra("CARID", carid);
                                     intent.putExtra("USERCARID",usercarid);
                                     startActivity(intent);
@@ -105,14 +111,52 @@ public class LunboContentActivity extends RyBaseActivity {
                                 Intent intent = new Intent(getApplicationContext(), TirePlaceActivity.class);
                                 intent.putExtra("FONTSIZE", fontsize);
                                 intent.putExtra("REARSIZE", rearsize);
-                                intent.putExtra("SERVICEYEAR",serviceyear+"");
-                                intent.putExtra("SERVICE_END_YEAR", service_end_year);
+                                intent.putExtra("SERVICE_YEAR_MAX", service_year_max);
+                                intent.putExtra("SERVICE_YEAR", service_year);
+                                intent.putExtra("SERVICE_END_YEAR", service_end_year+"");
                                 intent.putExtra("CARID", carid);
                                 intent.putExtra("USERCARID",usercarid);
                                 startActivity(intent);
 
                             }
                         }else if (lunboPosition == 1){  //购买轮胎
+                            if (fontrearflag == 0) {  //前后轮一样
+                                if (service_end_year.equals("")){
+                                    Intent intent = new Intent(getApplicationContext(), TireBuyNewActivity.class);
+                                    intent.putExtra("TIRESIZE", fontsize);
+                                    intent.putExtra("FONTREARFLAG", "0");
+                                    intent.putExtra("SERVICE_YEAR_MAX", service_year_max);
+                                    intent.putExtra("SERVICE_YEAR", service_year);
+                                    intent.putExtra("CHOOSE_SERVICE_YEAR", false);
+                                    intent.putExtra("CARID", carid);
+                                    intent.putExtra("USERCARID",usercarid);
+                                    startActivity(intent);
+                                }else {
+                                    Intent intent = new Intent(getApplicationContext(), TireBuyNewActivity.class);
+                                    intent.putExtra("TIRESIZE", fontsize);
+                                    intent.putExtra("FONTREARFLAG", "0");
+                                    intent.putExtra("SERVICE_YEAR_MAX", service_year_max);
+                                    intent.putExtra("SERVICE_YEAR", service_year);
+                                    intent.putExtra("CHOOSE_SERVICE_YEAR", true);
+                                    intent.putExtra("CARID", carid);
+                                    intent.putExtra("USERCARID",usercarid);
+                                    startActivity(intent);
+                                }
+                            } else {         //前后轮不一样
+                                Intent intent = new Intent(getApplicationContext(), TirePlaceActivity.class);
+                                intent.putExtra("FONTSIZE", fontsize);
+                                intent.putExtra("REARSIZE", rearsize);
+                                intent.putExtra("SERVICE_YEAR_MAX", service_year_max);
+                                intent.putExtra("SERVICE_YEAR", service_year);
+                                intent.putExtra("SERVICE_END_YEAR", service_end_year+"");
+                                intent.putExtra("CARID", carid);
+                                intent.putExtra("USERCARID",usercarid);
+                                startActivity(intent);
+
+                            }
+                        }
+                    }
+                       /* else if (lunboPosition == 3){  //免费洗车
                             if (fontrearflag == 0) {  //前后轮一样
                                 if (service_end_year.equals("")){
                                     Intent intent = new Intent(getApplicationContext(), YearChooseActivity.class);
@@ -141,15 +185,14 @@ public class LunboContentActivity extends RyBaseActivity {
                                 intent.putExtra("USERCARID",usercarid);
                                 startActivity(intent);
 
-                            }
-                        }else if (lunboPosition == 3){  //免费洗车
-                            Intent intent = new Intent(getApplicationContext(),GoodsShopActivity.class);
+                            }*/
+                          /*  Intent intent = new Intent(getApplicationContext(),GoodsShopActivity.class);
                             intent.putExtra("SEARCH_STR","精致洗车");
                             intent.putExtra(GoodsShopActivity.FROMTYPE,1);
-                            startActivity(intent);
-                        }
+                            startActivity(intent);*/
+                    /*    }
 
-                    }
+                    }*/
                 });
     }
 }

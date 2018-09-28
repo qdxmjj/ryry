@@ -45,6 +45,7 @@
             android:layout_marginTop="260dp"
             android:src="@drawable/ic_tu_jin" />
 
+
         <TextView
             android:id="@+id/go_see_view"
             android:layout_width="match_parent"

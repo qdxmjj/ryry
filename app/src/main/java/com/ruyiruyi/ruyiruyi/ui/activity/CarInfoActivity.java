@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
@@ -37,6 +39,8 @@ import com.ruyiruyi.ruyiruyi.db.model.CarTireInfo;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.multiType.CarCoupon;
+import com.ruyiruyi.ruyiruyi.ui.multiType.CarCouponViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChoose;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.RyTransparentDialog;
@@ -47,6 +51,7 @@ import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
 import com.ruyiruyi.rylibrary.utils.A2bigA;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.DbManager;
@@ -64,7 +69,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import me.drakeet.multitype.MultiTypeAdapter;
 import rx.functions.Action1;
+
+import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
+import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class CarInfoActivity extends RyBaseActivity implements View.OnClickListener, DatePicker.OnDateChangedListener {
 
@@ -173,6 +182,11 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private int id;
     public int currentType = 0; //0是添加车辆  1是修改车辆
     public String roadTxt;
+    private RecyclerView listView;
+    private List<Object> items = new ArrayList<>();
+    private MultiTypeAdapter adapter;
+
+    public List<CarCoupon> carCouponList;
 
 
     @Override
@@ -232,6 +246,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         shengList  = new ArrayList<>();
         shiList  = new ArrayList<>();
         xianList  = new ArrayList<>();
+        carCouponList  = new ArrayList<>();
 
         //initData();
         initDateTime();
@@ -1075,16 +1090,30 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
+                        carCouponList.clear();
+                        JSONArray data = jsonObject1.getJSONArray("data");
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject object = data.getJSONObject(i);
+                            String salaName = object.getString("saleName");
+                            String saleNumber = object.getString("saleNumber");
+                            carCouponList.add(new CarCoupon(salaName,saleNumber));
+                        }
+
                         Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
                         /*Intent intent = new Intent();
                         setResult(CarManagerActivity.CARMANAMGER_RESULT,intent);
                         finish();*/
+                        if (carCouponList.size()>0){
+                            showGetDiscountDialog();
+                        }else {
+                            jumpAndupdatauser();
+                        }
 
-                        if (firstAddCar == 0) {
+                       /* if (firstAddCar == 0) {
                             showGetDiscountDialog();
                         } else {
                             jumpAndupdatauser();
-                        }
+                        }*/
 
                     } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
@@ -1142,6 +1171,21 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
         RyTransparentDialog ryTransparentDialog = new RyTransparentDialog(this);
         View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_getdiscount, null);
         ImageView iv_right = view.findViewById(R.id.iv_right);
+        listView = ((RecyclerView) view.findViewById(R.id.add_car_coupon_list));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        listView.setLayoutManager(linearLayoutManager);
+        adapter = new MultiTypeAdapter(items);
+        register();
+        listView.setAdapter(adapter);
+        assertHasTheSameAdapter(listView, adapter);
+        initCouponData();
+        ryTransparentDialog.show();
+      /*  ImageView topview = (ImageView) view.findViewById(R.id.iv_top);
+        if (firstAddCar == 0) {
+            topview.setImageResource(R.drawable.ic_xcqtanchuang);
+        } else {
+            topview.setImageResource(R.drawable.ic_cxwytanchuang);
+        }*/
 
         RxViewAction.clickNoDouble(iv_right).subscribe(new Action1<Void>() {
             @Override
@@ -1157,8 +1201,23 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                 jumpAndupdatauser();
             }
         });
-        ryTransparentDialog.show();
+
     }
+
+    private void register() {
+        adapter.register(CarCoupon.class,new CarCouponViewBinder());
+    }
+
+    public void initCouponData(){
+        items.clear();
+
+        for (int i = 0; i < carCouponList.size(); i++) {
+            items.add(carCouponList.get(i));
+        }
+        assertAllRegistered(adapter, items);
+        adapter.notifyDataSetChanged();
+    }
+
 
     public void updateCar() {
         showDialogProgress(codeDialog, "车辆修改中...");

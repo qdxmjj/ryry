@@ -2,9 +2,12 @@ package com.ruyiruyi.ruyiruyi.wxapi;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
@@ -23,6 +26,7 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
     private static final String TAG = "MicroMsg.SDKSample.WXPayEntryActivity";
 
     private IWXAPI api;
+    private int order_type;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,9 +61,12 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
 
        // Log.d(TAG, "onPayFinish, errCode = " + resp.errCode);
 
-
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             if (resp.errCode ==0) {
+                if (order_type == 0){
+                    Toast.makeText(this, "获取到0了", Toast.LENGTH_SHORT).show();
+                }
+                Toast.makeText(this, resp.transaction, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), PaySuccessActivity.class);
                 intent.putExtra("ORDERTYPE",98);
                 startActivity(intent);
@@ -75,4 +82,6 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
             builder.show();
         }
     }
+
+
 }

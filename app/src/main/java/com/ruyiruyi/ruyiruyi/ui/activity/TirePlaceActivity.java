@@ -49,7 +49,6 @@ public class TirePlaceActivity extends RyBaseActivity {
         rearsize = intent.getStringExtra("REARSIZE");
         carid = intent.getIntExtra("CARID",0);
         usercarid = intent.getIntExtra("USERCARID",0);
-        serviceyear = Integer.parseInt(intent.getStringExtra("SERVICEYEAR"));
         service_end_year = intent.getStringExtra("SERVICE_END_YEAR");
         serviceYear = intent.getStringExtra("SERVICE_YEAR");
         serviceYearMax = intent.getStringExtra("SERVICE_YEAR_MAX");
@@ -75,7 +74,7 @@ public class TirePlaceActivity extends RyBaseActivity {
                             intent.putExtra("TIRESIZE",fontsize);
                             intent.putExtra("FONTREARFLAG","1");
                             intent.putExtra("SERVICE_YEAR_MAX", serviceYearMax);
-                            intent.putExtra("SERVICE_YEAR", serviceyear+"");
+                            intent.putExtra("SERVICE_YEAR", serviceYear+"");
                             intent.putExtra("CHOOSE_SERVICE_YEAR", false);
                             startActivity(intent);
                         }else {
@@ -83,7 +82,7 @@ public class TirePlaceActivity extends RyBaseActivity {
                             intent.putExtra("TIRESIZE",fontsize);
                             intent.putExtra("FONTREARFLAG","1");
                             intent.putExtra("SERVICE_YEAR_MAX", serviceYearMax);
-                            intent.putExtra("SERVICE_YEAR", serviceyear+"");
+                            intent.putExtra("SERVICE_YEAR", serviceYear+"");
                             intent.putExtra("CHOOSE_SERVICE_YEAR", true);
                             startActivity(intent);
                         }
@@ -102,7 +101,7 @@ public class TirePlaceActivity extends RyBaseActivity {
                             intent.putExtra("TIRESIZE",rearsize);
                             intent.putExtra("FONTREARFLAG","2");
                             intent.putExtra("SERVICE_YEAR_MAX", serviceYearMax);
-                            intent.putExtra("SERVICE_YEAR", serviceyear+"");
+                            intent.putExtra("SERVICE_YEAR", serviceYear+"");
                             intent.putExtra("CHOOSE_SERVICE_YEAR", false);
                             startActivity(intent);
                         }else {
@@ -110,7 +109,7 @@ public class TirePlaceActivity extends RyBaseActivity {
                             intent.putExtra("TIRESIZE",rearsize);
                             intent.putExtra("FONTREARFLAG","2");
                             intent.putExtra("SERVICE_YEAR_MAX", serviceYearMax);
-                            intent.putExtra("SERVICE_YEAR", serviceyear+"");
+                            intent.putExtra("SERVICE_YEAR", serviceYear+"");
                             intent.putExtra("CHOOSE_SERVICE_YEAR", true);
                             startActivity(intent);
                         }

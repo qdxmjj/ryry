@@ -6,10 +6,18 @@ import android.widget.TextView;
 
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.Order;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+
+import org.xutils.DbManager;
+import org.xutils.ex.DbException;
+import org.xutils.x;
+
+import java.util.List;
 
 import rx.functions.Action1;
 
@@ -20,6 +28,8 @@ public class PaySuccessActivity extends RyBaseActivity {
     private TextView goSeeView;
     private TextView goMainView;
     private int orderStage;
+    private DbConfig dbConfig;
+    private int tireOrderType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +53,16 @@ public class PaySuccessActivity extends RyBaseActivity {
         ordertype = intent.getIntExtra("ORDERTYPE",0);  //0轮胎订单  1商品订单;
         orderStage = intent.getIntExtra(PaymentActivity.ORDER_STAGE,0);
 
+        dbConfig = new DbConfig(getApplicationContext());
+        DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
+        DbManager db = x.getDb(daoConfig);
+        try {
+            List<Order> orders = db.selector(Order.class).findAll();
+            tireOrderType = orders.get(0).getOrderType();
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+
 
         initView();
     }
@@ -51,7 +71,25 @@ public class PaySuccessActivity extends RyBaseActivity {
         goSeeView = (TextView) findViewById(R.id.go_see_view);
         goMainView = (TextView) findViewById(R.id.go_main_view);
 
-        if (ordertype == 0){
+        if (tireOrderType == 0){
+            goSeeView.setText("直接更换轮胎");
+        }else {
+            if (ordertype == 1){
+                goSeeView.setText("去服务");
+            }else if (ordertype == 99){
+                goSeeView.setText("查看畅行无忧");
+            }else if (ordertype == 3){
+                if (orderStage == 4){
+                    goSeeView.setText("查看订单");
+                }else {
+                    goSeeView.setText("去服务");
+                }
+            }else if (ordertype == 98){
+                goSeeView.setText("查看所有订单详情");
+            }
+        }
+
+      /*  if (ordertype == 0){
             goSeeView.setText("去换胎");
         }else if (ordertype == 1){
             goSeeView.setText("去服务");
@@ -65,39 +103,44 @@ public class PaySuccessActivity extends RyBaseActivity {
             }
         }else if (ordertype == 98){
             goSeeView.setText("查看所有订单详情");
-        }
+        }*/
 
         RxViewAction.clickNoDouble(goSeeView)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (ordertype == 1){    //商品订单
-                            Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
-                            intent.putExtra(OrderFragment.ORDER_TYPE, "DFW");
-                            intent.putExtra(OrderActivity.ORDER_FROM,1);
+                        if (tireOrderType == 0){
+                            Intent intent = new Intent(getApplicationContext(), TireChangeActivity.class);
+                            intent.putExtra(TireChangeActivity.CHANGE_TIRE, 0);
                             startActivity(intent);
-                            finish();
-                        }else if (ordertype == 0){  //轮胎订单
-                            startActivity(new Intent(getApplicationContext(),TireWaitChangeActivity.class));
-                        }else if (ordertype == 99){
-                            Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
-                            intent.putExtra(OrderFragment.ORDER_TYPE, "YWC");
-                            intent.putExtra(OrderActivity.ORDER_FROM,1);
-                            startActivity(intent);
-                            finish();
-                        }else if (ordertype==3){
-                            Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
-                            intent.putExtra(OrderFragment.ORDER_TYPE, "DFW");
-                            intent.putExtra(OrderActivity.ORDER_FROM,1);
-                            startActivity(intent);
-                            finish();
-                        }else if (ordertype==98){
-                            Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
-                            intent.putExtra(OrderFragment.ORDER_TYPE, "ALL");
-                            intent.putExtra(OrderActivity.ORDER_FROM,1);
-                            startActivity(intent);
-                            finish();
+                        }else {
+                            if (ordertype == 1){    //商品订单
+                                Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                                intent.putExtra(OrderFragment.ORDER_TYPE, "DFW");
+                                intent.putExtra(OrderActivity.ORDER_FROM,1);
+                                startActivity(intent);
+                                finish();
+                            } else if (ordertype == 99){
+                                Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                                intent.putExtra(OrderFragment.ORDER_TYPE, "YWC");
+                                intent.putExtra(OrderActivity.ORDER_FROM,1);
+                                startActivity(intent);
+                                finish();
+                            }else if (ordertype==3){
+                                Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                                intent.putExtra(OrderFragment.ORDER_TYPE, "DFW");
+                                intent.putExtra(OrderActivity.ORDER_FROM,1);
+                                startActivity(intent);
+                                finish();
+                            }else if (ordertype==98){
+                                Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                                intent.putExtra(OrderFragment.ORDER_TYPE, "ALL");
+                                intent.putExtra(OrderActivity.ORDER_FROM,1);
+                                startActivity(intent);
+                                finish();
+                            }
                         }
+
                     }
                 });
 

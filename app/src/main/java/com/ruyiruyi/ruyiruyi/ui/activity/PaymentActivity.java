@@ -3,6 +3,7 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -19,11 +20,14 @@ import android.widget.Toast;
 import com.alipay.sdk.app.PayTask;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.Order;
+import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.model.PayResult;
 import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.XMJJUtils;
+import com.ruyiruyi.ruyiruyi.wxapi.WXPayEntryActivity;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
@@ -34,13 +38,17 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.DbManager;
 import org.xutils.common.Callback;
+import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.crypto.BadPaddingException;
@@ -126,6 +134,7 @@ public class PaymentActivity extends RyBaseActivity {
     private TextView otherPayLayout;
     private int orderStage;
     private TextView limitText;
+    private Order order;
 
 
     @Override
@@ -145,6 +154,8 @@ public class PaymentActivity extends RyBaseActivity {
                 }
             }
         });
+
+
         api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
         api.registerApp(Constants.APP_ID);
         progressDialog = new ProgressDialog(this);
@@ -161,6 +172,16 @@ public class PaymentActivity extends RyBaseActivity {
             currentType = 0;
         } else {
             currentType = 1;
+        }
+        //保存是否是轮胎订单信息到数据库
+        order = new Order(1,orderType);
+        DbConfig dbConfig = new DbConfig(this);
+        DbManager.DaoConfig daoConfig = dbConfig.getDaoConfig();
+        DbManager db = x.getDb(daoConfig);
+        try {
+            db.saveOrUpdate(order);
+        } catch (DbException e) {
+            e.printStackTrace();
         }
 
 
@@ -420,6 +441,7 @@ public class PaymentActivity extends RyBaseActivity {
 
             } else {     //商品订单
                 jsonObject.put("orderName", "商品购买");
+
             }
             jsonObject.put("orderPrice", allprice);
             jsonObject.put("userId", userId);
@@ -459,6 +481,8 @@ public class PaymentActivity extends RyBaseActivity {
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("200")) {
+
+
                         JSONObject data = jsonObject1.getJSONObject("data");
                         PayReq req = new PayReq();
                         req.appId = data.getString("appid");
@@ -854,4 +878,6 @@ public class PaymentActivity extends RyBaseActivity {
         });
         dialog.show();
     }
+
+
 }
