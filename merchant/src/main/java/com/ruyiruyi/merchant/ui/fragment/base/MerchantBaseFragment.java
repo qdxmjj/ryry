@@ -1,5 +1,7 @@
 package com.ruyiruyi.merchant.ui.fragment.base;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -7,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ruyiruyi.merchant.MyApplication;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.User;
@@ -17,6 +20,8 @@ import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 
 public class MerchantBaseFragment extends BaseFragment {
+
+    private Activity mActivity;
 
 
     /*
@@ -101,4 +106,22 @@ public class MerchantBaseFragment extends BaseFragment {
         }
         return new DbConfig(getActivity()).getIsLogin();
     }
+
+
+
+
+    public Context getmContext() {
+        if (mActivity == null) {
+            return MyApplication.getInstance();
+        }
+        return mActivity;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = getActivity();
+    }
+
+
 }

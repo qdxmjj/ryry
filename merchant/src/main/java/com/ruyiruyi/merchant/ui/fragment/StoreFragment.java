@@ -33,6 +33,7 @@ import com.ruyiruyi.merchant.bean.ItemBottomBean;
 import com.ruyiruyi.merchant.bean.ItemNullBean;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.User;
+import com.ruyiruyi.merchant.ui.fragment.base.MerchantBaseFragment;
 import com.ruyiruyi.merchant.ui.multiType.DianpuItemViewProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemBottomProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemNullProvider;
@@ -41,7 +42,6 @@ import com.ruyiruyi.merchant.ui.multiType.modle.Dianpu;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseFragment;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 
@@ -67,7 +67,8 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 
-public class StoreFragment extends BaseFragment {
+public class StoreFragment extends MerchantBaseFragment {
+
     private RecyclerView mRecyclerView;
     private ImageView storeImage;
     private TextView storeName;
@@ -221,7 +222,7 @@ public class StoreFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(getContext(), "信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getmContext(), "信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -567,6 +568,5 @@ public class StoreFragment extends BaseFragment {
         void forRefreshStoreListener();//头像修改完毕 通知MainActivity刷新所有数据
 
     }
-
 
 }

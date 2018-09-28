@@ -2,6 +2,7 @@ package com.ruyiruyi.merchant;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.baidu.mapapi.SDKInitializer;
 
@@ -21,6 +22,9 @@ public class MyApplication extends Application {
         x.Ext.setDebug(true);
         SDKInitializer.initialize(getApplicationContext());
         mInstance = this;
+
+        // 将MultiDex注入到项目中
+        MultiDex.install(this);
     }
 
     /**
