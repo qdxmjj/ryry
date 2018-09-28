@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
 
     <View
         android:id="@+id/top_line"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="@color/c1" />
+        android:background="@color/c1"/>
 
     <LinearLayout
         android:id="@+id/ll_goods"
@@ -20,13 +21,12 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
-        <ImageView
+        <com.ruyiruyi.merchant.utils.CircleImageView
             android:id="@+id/goods_img"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="5dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_order_luntai" />
+            style="@style/public_oneitem_image"
+            android:src="@drawable/ic_order_luntai"
+            app:roundHeight="3dp"
+            app:roundWidth="3dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,19 +36,13 @@
 
             <TextView
                 android:id="@+id/goods_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:text="ROADCRUZA/运动操控/255/45R17/102W/W"
-                android:textColor="@color/c7"
-                android:textSize="18sp" />
+                style="@style/public_oneitem_title"
+                android:text="ROADCRUZA/运动操控/255/45R17/102W/W"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -57,8 +51,8 @@
                     android:layout_marginBottom="5dp"
                     android:text="¥"
                     android:textColor="@color/c7"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/goods_price"
@@ -67,7 +61,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="000.00"
                     android:textColor="@color/c7"
-                    android:textSize="18sp" />
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:id="@+id/goods_amount"
@@ -78,7 +72,7 @@
                     android:gravity="right"
                     android:text="x000"
                     android:textColor="@color/c7"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -88,5 +82,5 @@
         android:id="@+id/bottom_line"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="@color/c1" />
+        android:background="@color/c1"/>
 </LinearLayout>

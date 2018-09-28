@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:scrollbars="none">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:scrollbars="none">
 
     <com.ruyiruyi.rylibrary.cell.ActionBar
         android:id="@+id/acbar_rigister"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
 
     <ScrollView
@@ -43,7 +44,7 @@
                     android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -53,7 +54,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="申请人"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -73,7 +74,7 @@
                     android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -83,7 +84,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="手机号"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tv_getcode"
@@ -96,7 +97,7 @@
                     android:paddingRight="10dp"
                     android:text="获取验证码"
                     android:textColor="#ffffff"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -116,7 +117,7 @@
                     android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -126,7 +127,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="验证码"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:id="@+id/img_code_right"
@@ -136,7 +137,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="60dp"
                     android:src="@drawable/ic_wrong"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -156,7 +157,7 @@
                     android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -166,7 +167,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="登录密码"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -186,7 +187,7 @@
                     android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -196,14 +197,14 @@
                     android:layout_marginLeft="5dp"
                     android:text="确认密码"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/c1" />
+                android:background="@color/c1"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -221,7 +222,7 @@
                     android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -231,7 +232,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="门店名称"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -250,7 +251,7 @@
                     android:paddingLeft="100dp"
                     android:text="请选择您的门店类别"
                     android:textColor="@color/c5"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -260,7 +261,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="门店类别"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -280,7 +281,7 @@
                     android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -290,7 +291,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="联系电话"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -309,7 +310,7 @@
                     android:paddingLeft="100dp"
                     android:text="请选择您的营业时间"
                     android:textColor="@color/c5"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -319,7 +320,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="营业时间"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -338,7 +339,7 @@
                     android:paddingLeft="100dp"
                     android:text="     省     市     区"
                     android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -348,7 +349,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="所在城市"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -366,7 +367,7 @@
                     android:singleLine="true"
                     android:textColorHint="@color/c5"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -376,7 +377,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="门店位置"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -396,7 +397,7 @@
                     android:paddingLeft="130dp"
                     android:text="点击自动定位"
                     android:textColor="@color/c5"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -404,7 +405,7 @@
                     android:layout_alignLeft="@+id/tv_shoppoint"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="100dp"
-                    android:src="@drawable/ic_position" />
+                    android:src="@drawable/ic_position"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -414,14 +415,14 @@
                     android:layout_marginLeft="5dp"
                     android:text="门店定位"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/c1" />
+                android:background="@color/c1"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -435,7 +436,7 @@
                     android:layout_marginTop="10dp"
                     android:text="上传营业执照"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -446,7 +447,7 @@
                     android:layout_marginTop="10dp"
                     android:maxHeight="30pt"
                     android:maxWidth="30pt"
-                    android:src="@drawable/ic_picture" />
+                    android:src="@drawable/ic_picture"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -462,14 +463,16 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <ImageView
+                        <com.ruyiruyi.merchant.utils.CircleImageView
                             android:id="@+id/img_yyzz"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
                             android:onClick="registerPicClick"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/img_bg_dark" />
+                            android:src="@drawable/img_bg_dark"
+                            app:roundHeight="3dp"
+                            app:roundWidth="3dp"/>
 
                         <ImageView
                             android:id="@+id/img_yyzz_delete"
@@ -479,14 +482,14 @@
                             android:clickable="true"
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/img_yyzz_center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_add" />
+                            android:src="@drawable/ic_add"/>
                     </FrameLayout>
 
 
@@ -494,13 +497,13 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
 
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
                 </LinearLayout>
 
             </RelativeLayout>
@@ -509,7 +512,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/c1" />
+                android:background="@color/c1"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -523,7 +526,7 @@
                     android:layout_marginTop="10dp"
                     android:text="上传门店照片"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -534,7 +537,7 @@
                     android:layout_marginTop="10dp"
                     android:maxHeight="30pt"
                     android:maxWidth="30pt"
-                    android:src="@drawable/ic_picture" />
+                    android:src="@drawable/ic_picture"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -550,14 +553,16 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <ImageView
+                        <com.ruyiruyi.merchant.utils.CircleImageView
                             android:id="@+id/img_mdpic_a"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
                             android:onClick="registerPicClick"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/img_bg_dark" />
+                            android:src="@drawable/img_bg_dark"
+                            app:roundHeight="3dp"
+                            app:roundWidth="3dp"/>
 
                         <ImageView
                             android:id="@+id/img_mdpic_a_delete"
@@ -567,7 +572,7 @@
                             android:clickable="true"
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <LinearLayout
                             android:id="@+id/ll_store_head"
@@ -581,7 +586,7 @@
                                 android:id="@+id/img_mdpic_a_center"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_add" />
+                                android:src="@drawable/ic_add"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -589,7 +594,7 @@
                                 android:layout_marginTop="3dp"
                                 android:text="门头照片"
                                 android:textColor="@color/c6"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/public_pictextsize"/>
                         </LinearLayout>
 
 
@@ -601,14 +606,16 @@
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1">
 
-                        <ImageView
+                        <com.ruyiruyi.merchant.utils.CircleImageView
                             android:id="@+id/img_mdpic_b"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
                             android:onClick="registerPicClick"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/img_bg_dark" />
+                            android:src="@drawable/img_bg_dark"
+                            app:roundHeight="3dp"
+                            app:roundWidth="3dp"/>
 
                         <ImageView
                             android:id="@+id/img_mdpic_b_delete"
@@ -618,7 +625,7 @@
                             android:clickable="true"
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <LinearLayout
                             android:id="@+id/ll_store_in"
@@ -632,7 +639,7 @@
                                 android:id="@+id/img_mdpic_b_center"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_add" />
+                                android:src="@drawable/ic_add"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -640,7 +647,7 @@
                                 android:layout_marginTop="3dp"
                                 android:text="店内照片"
                                 android:textColor="@color/c6"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/public_pictextsize"/>
                         </LinearLayout>
                     </FrameLayout>
 
@@ -650,14 +657,16 @@
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1">
 
-                        <ImageView
+                        <com.ruyiruyi.merchant.utils.CircleImageView
                             android:id="@+id/img_mdpic_c"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
                             android:onClick="registerPicClick"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/img_bg_dark" />
+                            android:src="@drawable/img_bg_dark"
+                            app:roundHeight="3dp"
+                            app:roundWidth="3dp"/>
 
                         <ImageView
                             android:id="@+id/img_mdpic_c_delete"
@@ -667,7 +676,7 @@
                             android:clickable="true"
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <LinearLayout
                             android:id="@+id/ll_store_workspace"
@@ -682,7 +691,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:src="@drawable/ic_add" />
+                                android:src="@drawable/ic_add"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -690,7 +699,7 @@
                                 android:layout_marginTop="3dp"
                                 android:text="车间照片"
                                 android:textColor="@color/c6"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/public_pictextsize"/>
                         </LinearLayout>
                     </FrameLayout>
                 </LinearLayout>
@@ -700,7 +709,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/c1" />
+                android:background="@color/c1"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -714,7 +723,7 @@
                     android:layout_marginTop="10dp"
                     android:text="手持身份证照片"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -725,7 +734,7 @@
                     android:layout_marginTop="10dp"
                     android:maxHeight="30pt"
                     android:maxWidth="30pt"
-                    android:src="@drawable/ic_picture" />
+                    android:src="@drawable/ic_picture"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -741,14 +750,16 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <ImageView
+                        <com.ruyiruyi.merchant.utils.CircleImageView
                             android:id="@+id/img_shou_a"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
                             android:onClick="registerPicClick"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/img_bg_dark" />
+                            android:src="@drawable/img_bg_dark"
+                            app:roundHeight="3dp"
+                            app:roundWidth="3dp"/>
 
                         <ImageView
                             android:id="@+id/img_shou_a_delete"
@@ -758,14 +769,14 @@
                             android:clickable="true"
                             android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
-                            android:visibility="gone" />
+                            android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/img_shou_a_center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_add" />
+                            android:src="@drawable/ic_add"/>
                     </FrameLayout>
 
                     <ImageView
@@ -773,14 +784,14 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
 
                     <ImageView
                         android:id="@+id/img_shou_c"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"/>
                 </LinearLayout>
 
             </RelativeLayout>
@@ -789,7 +800,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/c1" />
+                android:background="@color/c1"/>
 
             <LinearLayout
                 android:id="@+id/ll_xiangmus"
@@ -805,14 +816,14 @@
                     android:layout_marginTop="10dp"
                     android:text="希望合作项目"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/c1" />
+                android:background="@color/c1"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -826,7 +837,7 @@
                     android:layout_marginTop="10dp"
                     android:text="手机APP操作"
                     android:textColor="@color/c7"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <LinearLayout
                     android:id="@+id/ll_sjapp"
@@ -848,7 +859,7 @@
                         android:gravity="center"
                         android:text="熟练"
                         android:textColor="@drawable/selecter_txtcolor_ckbox"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"/>
 
                     <CheckBox
                         android:id="@+id/checkbox_bsl"
@@ -861,7 +872,7 @@
                         android:gravity="center"
                         android:text="不熟练"
                         android:textColor="@drawable/selecter_txtcolor_ckbox"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"/>
                 </LinearLayout>
             </RelativeLayout>
 
@@ -881,7 +892,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
                     android:button="@drawable/xieyi_checkbox_selector"
-                    android:gravity="center_vertical" />
+                    android:gravity="center_vertical"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -891,7 +902,7 @@
                     android:gravity="center_vertical"
                     android:text="提交即表示同意"
                     android:textColor="@color/c6"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <TextView
                     android:id="@+id/tv_xieyi"
@@ -902,7 +913,7 @@
                     android:gravity="center_vertical"
                     android:text="《小马驾驾用户协议》"
                     android:textColor="@color/c27"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
             </LinearLayout>
 
@@ -922,6 +933,6 @@
         android:gravity="center"
         android:text="保存"
         android:textColor="#ffffff"
-        android:textSize="20sp" />
+        android:textSize="20sp"/>
 
 </RelativeLayout>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -16,14 +16,8 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:layout_marginLeft="10dp"
-            android:gravity="center_vertical"
-            android:text="联系电话"
-            android:textColor="@color/c7"
-            android:textSize="16sp" />
+            style="@style/public_oneitem_left"
+            android:text="联系电话"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -34,21 +28,17 @@
 
             <TextView
                 android:id="@+id/content"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="18254455789"
-                android:textColor="@color/c6"
-                android:textSize="16sp" />
+                style="@style/public_oneitem_right"
+                android:text="18254455789"/>
 
             <ImageView
                 android:id="@+id/right_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="6dp"
                 android:padding="3dp"
-                android:src="@drawable/ic_call" />
+                android:src="@drawable/ic_call"/>
         </LinearLayout>
 
         <View
@@ -56,6 +46,6 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="bottom"
-            android:background="@color/c1" />
+            android:background="@color/c1"/>
     </FrameLayout>
 </LinearLayout>

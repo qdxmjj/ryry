@@ -79,4 +79,99 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <!--ShipmentInfoActivity-->
+    <style name="shipmentinfo_leftstyle">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/c7</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="shipmentinfo_rightstyle">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/c6</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="shipmentinfo_picstyle">
+        <item name="android:background">@drawable/tv_dashline</item>
+        <item name="android:layout_width">130dp</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_height">80dp</item>
+    </style>
+
+    <!--首次更换&&public OneAddPic-->
+    <style name="public_oneitem_left">
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/c7</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="public_oneitem_right">
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/c6</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="public_oneitem_title">
+        <item name="android:textColor">@color/c7</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="public_oneitem_content">
+        <item name="android:textColor">@color/c6</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="public_oneitem_image">
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">100dp</item>
+    </style>
+
+    <style name="public_oneitem_code">
+        <item name="android:textColor">@color/c6</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_gravity">left</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="public_oneitem_change">
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/register_w_button</item>
+        <item name="android:textColor">@color/c6</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+
 </resources>

@@ -9,12 +9,11 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +28,10 @@ import com.bumptech.glide.Glide;
 import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.FreeChangeNewShoeBean;
-import com.ruyiruyi.merchant.bean.FreeChangeOldShoeBean;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
 import com.ruyiruyi.merchant.ui.multiType.PublicShoeFlag;
+import com.ruyiruyi.merchant.utils.CircleImageView;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -50,8 +49,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.security.auth.login.LoginException;
 
 import rx.functions.Action1;
 
@@ -94,10 +91,10 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
     private TextView shoe_name_rear;
     private TextView shoe_amount_rear;
     //行驶证照片和车辆照片
-    private ImageView pic_xingshizheng;
+    private CircleImageView pic_xingshizheng;
     private ImageView pic_xingshizheng_delete;
     private LinearLayout pic_xingshizheng_center;
-    private ImageView pic_car;
+    private CircleImageView pic_car;
     private ImageView pic_car_delete;
     private LinearLayout pic_car_center;
     //条形码

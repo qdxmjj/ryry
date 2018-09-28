@@ -34,6 +34,7 @@ import com.ruyiruyi.merchant.bean.OldNewBarCode;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
 import com.ruyiruyi.merchant.ui.multiType.PublicShoeFlag;
+import com.ruyiruyi.merchant.utils.CircleImageView;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -175,11 +176,11 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private ImageView pic_d_right_delete;
     private LinearLayout pic_d_right_center;
     //行驶证照片和车辆照片
-    private ImageView pic_xingshizheng;
+    private CircleImageView pic_xingshizheng;
     private ImageView pic_xingshizheng_delete;
     private LinearLayout pic_xingshizheng_center;
 
-    private ImageView pic_car;
+    private CircleImageView pic_car;
     private ImageView pic_car_delete;
     private LinearLayout pic_car_center;
 

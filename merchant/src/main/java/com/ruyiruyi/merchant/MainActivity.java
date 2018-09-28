@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -16,12 +17,9 @@ import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -32,9 +30,9 @@ import android.widget.Toast;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseFragmentActivity;
 import com.ruyiruyi.merchant.ui.adapter.MyPagerAdapter;
-import com.ruyiruyi.merchant.ui.fragment.StoreFragment;
-import com.ruyiruyi.merchant.ui.fragment.OrderFragment;
 import com.ruyiruyi.merchant.ui.fragment.MyFragment;
+import com.ruyiruyi.merchant.ui.fragment.OrderFragment;
+import com.ruyiruyi.merchant.ui.fragment.StoreFragment;
 import com.ruyiruyi.merchant.utils.NoPreloadHomeTabsCell;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.cell.HomeTabsCell;
@@ -55,12 +53,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
 
 public class MainActivity extends MerchantBaseFragmentActivity implements StoreFragment.ForRefreshStore, MyFragment.ForRefreshMy {
 
@@ -110,7 +105,7 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
 
         //极光推送绑定别名
         user_phone_jpush = new DbConfig(getApplicationContext()).getPhone();
-        JPushInterface.setAlias(getApplicationContext(), 1 , user_phone_jpush);
+        JPushInterface.setAlias(getApplicationContext(), 1, user_phone_jpush);
 
         viewPager = new ViewPager(this);
         viewPager.setId("MAINACTIVITYS".hashCode());
@@ -142,15 +137,15 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         });
 
         switch (page) {
-            case "order":
+            case "order"://平台订单
                 viewPager.setCurrentItem(0);
                 tabsCell.setSelected(0);
                 break;
-            case "store":
+            case "store"://店铺订单
                 viewPager.setCurrentItem(1);
                 tabsCell.setSelected(1);
                 break;
-            case "my":
+            case "my"://我的
                 viewPager.setCurrentItem(2);
                 tabsCell.setSelected(2);
                 break;
@@ -372,17 +367,6 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         }
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-      /*  //刷新适配器数据  (未用 暂用接口回调)
-        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());*/
-        if (isGengxin) {
-            update();
-        }
-    }
-
     private void update() {
         isGengxin = false;
         //安装应用
@@ -513,10 +497,10 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         List<Fragment> fragments = new ArrayList<>();
         OrderFragment orderFragment = new OrderFragment();
         fragments.add(orderFragment);
-        StoreFragment storeFragment = new StoreFragment(this);
+        StoreFragment storeFragment = new StoreFragment();
         storeFragment.setListener(this);
         fragments.add(storeFragment);
-        MyFragment myFragment = new MyFragment(this);
+        MyFragment myFragment = new MyFragment();
         myFragment.setListener(this);
         fragments.add(myFragment);
 
@@ -610,24 +594,38 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
 
     /*
     * 接口回调 StoreFragment修改头像成功后通知刷新activity数据方法
-    * */
+    * */  //(未用 暂用onWindowsFocusChanges)
     @Override
     public void forRefreshStoreListener() {
         //刷新适配器数据
-        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
+//        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
     }
 
 
     /*
     * 接口回调 MyFragment修改头像成功后通知刷新activity数据方法
-    * */
+    * */  //(未用 暂用onWindowsFocusChanges)
     @Override
     public void forRefreshMyListener() {
         //刷新适配器数据
-        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
+//        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
 
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isGengxin) {
+            update();
+        }
+    }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            //刷新适配器数据
+            pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
+        }
+    }
 }

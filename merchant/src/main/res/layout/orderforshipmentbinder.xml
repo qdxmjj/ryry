@@ -23,9 +23,8 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="订单编号:"
-                android:textColor="@color/c6"
-                android:textSize="@dimen/ordershipmentbinder_leftsize"
-                android:textStyle="bold"/>
+                android:textColor="@color/c7"
+                android:textSize="@dimen/ordershipmentbinder_leftsize"/>
 
             <TextView
                 android:id="@+id/ordernumber"
@@ -53,19 +52,10 @@
     <!--前轮轮胎详情-->
     <FrameLayout
         android:id="@+id/fl_front"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/c">
-
-        <ImageView
-            android:id="@+id/shoeimg_front"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_launcher"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,9 +72,8 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品"
-                android:textColor="@color/c6"
-                android:textSize="@dimen/ordershipmentbinder_titlesize"
-                android:textStyle="bold"/>
+                android:textColor="@color/c7"
+                android:textSize="@dimen/ordershipmentbinder_titlesize"/>
 
             <TextView
                 android:id="@+id/shoeprice_front"
@@ -92,9 +81,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:text="¥ 888.00"
-                android:textColor="@color/c6"
-                android:textSize="@dimen/ordershipmentbinder_pricesize"
-                android:textStyle="bold"/>
+                android:textColor="@color/c7"
+                android:textSize="@dimen/ordershipmentbinder_pricesize"/>
 
         </LinearLayout>
 
@@ -113,6 +101,16 @@
             android:text="发货"
             android:textColor="@color/theme_primary"
             android:textSize="14sp"/>
+
+        <ImageView
+            android:id="@+id/shoeimg_front"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_launcher"/>
     </FrameLayout>
     <!--白线-->
     <View
@@ -153,9 +151,8 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品商品"
-                android:textColor="@color/c6"
-                android:textSize="@dimen/ordershipmentbinder_titlesize"
-                android:textStyle="bold"/>
+                android:textColor="@color/c7"
+                android:textSize="@dimen/ordershipmentbinder_titlesize"/>
 
             <TextView
                 android:id="@+id/shoeprice_rear"
@@ -163,9 +160,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:text="¥ 888.00"
-                android:textColor="@color/c6"
-                android:textSize="@dimen/ordershipmentbinder_pricesize"
-                android:textStyle="bold"/>
+                android:textColor="@color/c7"
+                android:textSize="@dimen/ordershipmentbinder_pricesize"/>
 
         </LinearLayout>
 
@@ -199,9 +195,8 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="车牌号:"
-            android:textColor="@color/c6"
-            android:textSize="@dimen/ordershipmentbinder_leftsize"
-            android:textStyle="bold"/>
+            android:textColor="@color/c7"
+            android:textSize="@dimen/ordershipmentbinder_leftsize"/>
 
         <TextView
             android:id="@+id/carnum"
@@ -247,9 +242,8 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="电话号码:"
-                android:textColor="@color/c6"
-                android:textSize="@dimen/ordershipmentbinder_leftsize"
-                android:textStyle="bold"/>
+                android:textColor="@color/c7"
+                android:textSize="@dimen/ordershipmentbinder_leftsize"/>
 
             <TextView
                 android:id="@+id/userphone"

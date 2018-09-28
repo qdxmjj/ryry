@@ -11,8 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="@color/c2"
+        android:background="@color/c0"
         android:gravity="center"
+        android:paddingBottom="3dp"
         android:text="加载更多？？"
         android:textColor="@color/c6"
         android:textSize="14sp" />
