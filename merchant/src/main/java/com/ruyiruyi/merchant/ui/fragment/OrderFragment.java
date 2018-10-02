@@ -1,10 +1,8 @@
 package com.ruyiruyi.merchant.ui.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -231,6 +229,9 @@ public class OrderFragment extends BaseFragment {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Toast.makeText(getContext(), "信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
+
+                //网络异常
+                updataNetError();
             }
 
             @Override
@@ -260,6 +261,14 @@ public class OrderFragment extends BaseFragment {
         }
         assertAllRegistered(multiTypeAdapter, items);
         multiTypeAdapter.notifyDataSetChanged();
+    }
+
+    private void updataNetError() {
+        items.clear();
+        items.add(new ItemNullBean(R.drawable.ic_net_error));
+        assertAllRegistered(multiTypeAdapter, items);
+        multiTypeAdapter.notifyDataSetChanged();
+
     }
 
     private void bindView() {

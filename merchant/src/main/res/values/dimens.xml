@@ -16,5 +16,8 @@
     <dimen name="public_pictextsize">10sp</dimen>
     <dimen name="public_contenttextsize">14sp</dimen>
     <dimen name="public_lineheight">50dp</dimen>
+    <!--收益-->
+    <dimen name="income_textsize">14sp</dimen>
+    <dimen name="income_titlesize">24sp</dimen>
 
 </resources>

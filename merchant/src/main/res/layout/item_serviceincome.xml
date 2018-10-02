@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:id="@+id/fl_main"
+             android:layout_marginTop="1dp"
+             android:background="@color/c12"
+             tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
+
+    <!--订单编号-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="订单编号:"
+            android:textColor="@color/c6"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/tv_orderno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:text="123456789"
+            android:textColor="@color/c6"
+            android:textSize="12sp"/>
+    </LinearLayout>
+    <!--订单价格-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="35dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:textColor="@color/theme_primary"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/tv_orderprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="888"
+            android:textColor="@color/theme_primary"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+
+        <com.ruyiruyi.merchant.utils.CircleImageView
+            android:id="@+id/civ_orderimg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_launcher"
+            app:roundHeight="30dp"
+            app:roundWidth="30dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_ordertype"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="默认首次更换"
+                android:textColor="@color/c7"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_ordertime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="2018-09-29 15:22"
+                android:textColor="@color/c6"
+                android:textSize="12sp"/>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

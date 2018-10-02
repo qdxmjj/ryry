@@ -3,8 +3,8 @@ apply plugin: 'com.android.application'
 // 依赖插件脚本bugly
 //apply from: 'tinker-support.gradle'
 
-def VERSION_CODE = 2
-def VERSION_NAME = "3.2.0"
+def VERSION_CODE = 3
+def VERSION_NAME = "3.2.1"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''

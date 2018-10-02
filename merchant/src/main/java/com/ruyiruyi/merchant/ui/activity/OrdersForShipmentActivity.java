@@ -310,6 +310,9 @@ public class OrdersForShipmentActivity extends BaseActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Toast.makeText(getContext(), "请检查网络", Toast.LENGTH_SHORT).show();
+
+                //网络异常
+                updataNetError();
             }
 
             @Override
@@ -323,6 +326,14 @@ public class OrdersForShipmentActivity extends BaseActivity {
 //                hideDialogProgress(startDialog);
             }
         });
+    }
+
+    private void updataNetError() {
+        items.clear();
+        items.add(new ItemNullBean(R.drawable.ic_net_error));
+        assertAllRegistered(multiTypeAdapter, items);
+        multiTypeAdapter.notifyDataSetChanged();
+
     }
 
     //下拉刷新

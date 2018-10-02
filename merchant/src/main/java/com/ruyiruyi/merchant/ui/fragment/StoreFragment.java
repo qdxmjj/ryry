@@ -222,7 +222,9 @@ public class StoreFragment extends MerchantBaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(getmContext(), "信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
+
+                //网络异常
+                updataNetError();
             }
 
             @Override
@@ -310,6 +312,14 @@ public class StoreFragment extends MerchantBaseFragment {
         }
         assertAllRegistered(multiTypeAdapter, items);
         multiTypeAdapter.notifyDataSetChanged();
+    }
+
+    private void updataNetError() {
+        items.clear();
+        items.add(new ItemNullBean(R.drawable.ic_net_error));
+        assertAllRegistered(multiTypeAdapter, items);
+        multiTypeAdapter.notifyDataSetChanged();
+
     }
 
     private void bindView() {
@@ -510,7 +520,7 @@ public class StoreFragment extends MerchantBaseFragment {
                         } catch (DbException e) {
                         }
 
-                        /*listener.forRefreshStoreListener();//通知MainActivity刷新数据*/
+                        listener.forRefreshStoreListener();//通知MainActivity刷新数据
                         if (isCamera) {
                             UtilsRY.deleteUri(getContext(), uri);//删除照片
                         }

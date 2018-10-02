@@ -160,7 +160,7 @@ public class MyFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
+                        Toast.makeText(getContext(), "网络异常,请检查网络", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -450,7 +450,7 @@ public class MyFragment extends BaseFragment {
                         String storeImgUrl = new DbConfig(getActivity()).getUser().getStoreImgUrl();
                         Log.e(TAG, "onSuccess: get2=" + storeImgUrl);
 
-                        /*listener.forRefreshMyListener();//通知MainActivity刷新数据*/
+                        listener.forRefreshMyListener();//通知MainActivity刷新数据
                         if (isCamera) {
                             UtilsRY.deleteUri(getContext(), uri);//删除照片
                         }
