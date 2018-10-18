@@ -31,7 +31,7 @@ import com.ruyiruyi.merchant.bean.ShoeRepair;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
 import com.ruyiruyi.merchant.ui.multiType.PublicShoeFlag;
-import com.ruyiruyi.merchant.utils.CircleImageView;
+import com.ruyiruyi.merchant.cell.CircleImageView;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;

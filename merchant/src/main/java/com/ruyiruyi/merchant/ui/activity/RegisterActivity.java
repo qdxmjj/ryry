@@ -43,7 +43,7 @@ import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.Category;
 import com.ruyiruyi.merchant.db.model.Province;
 import com.ruyiruyi.merchant.db.model.ServiceType;
-import com.ruyiruyi.merchant.utils.CircleImageView;
+import com.ruyiruyi.merchant.cell.CircleImageView;
 import com.ruyiruyi.merchant.utils.CropImgUtil;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;

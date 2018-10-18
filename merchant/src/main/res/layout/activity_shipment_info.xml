@@ -222,7 +222,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="10dp">
 
-                    <com.ruyiruyi.merchant.utils.CircleImageView
+                    <com.ruyiruyi.merchant.cell.CircleImageView
                         android:id="@+id/shoepic_front1"
                         style="@style/shipmentinfo_picstyle"
                         app:roundHeight="3dp"
@@ -295,7 +295,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="10dp">
 
-                    <com.ruyiruyi.merchant.utils.CircleImageView
+                    <com.ruyiruyi.merchant.cell.CircleImageView
                         android:id="@+id/shoepic_front2"
                         style="@style/shipmentinfo_picstyle"
                         app:roundHeight="3dp"
@@ -440,7 +440,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="10dp">
 
-                    <com.ruyiruyi.merchant.utils.CircleImageView
+                    <com.ruyiruyi.merchant.cell.CircleImageView
                         android:id="@+id/shoepic_rear1"
                         style="@style/shipmentinfo_picstyle"
                         app:roundHeight="3dp"
@@ -513,7 +513,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="10dp">
 
-                    <com.ruyiruyi.merchant.utils.CircleImageView
+                    <com.ruyiruyi.merchant.cell.CircleImageView
                         android:id="@+id/shoepic_rear2"
                         style="@style/shipmentinfo_picstyle"
                         app:roundHeight="3dp"

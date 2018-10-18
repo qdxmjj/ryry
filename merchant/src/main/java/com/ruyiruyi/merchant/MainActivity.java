@@ -34,7 +34,7 @@ import com.ruyiruyi.merchant.ui.fragment.IncomeFragment;
 import com.ruyiruyi.merchant.ui.fragment.MyFragment;
 import com.ruyiruyi.merchant.ui.fragment.OrderFragment;
 import com.ruyiruyi.merchant.ui.fragment.StoreFragment;
-import com.ruyiruyi.merchant.utils.NoPreloadHomeTabsCell;
+import com.ruyiruyi.merchant.cell.NoPreloadHomeTabsCell;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.cell.HomeTabsCell;
 import com.ruyiruyi.rylibrary.cell.downcell.CommonProgressDialog;

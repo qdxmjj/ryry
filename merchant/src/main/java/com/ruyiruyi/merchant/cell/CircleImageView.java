@@ -1,4 +1,4 @@
-package com.ruyiruyi.merchant.utils;
+package com.ruyiruyi.merchant.cell;
 
 
 import android.content.Context;

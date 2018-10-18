@@ -8,7 +8,7 @@
              android:background="@color/c12"
              tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
     <!--订单图片-->
-    <com.ruyiruyi.merchant.utils.CircleImageView
+    <com.ruyiruyi.merchant.cell.CircleImageView
         android:id="@+id/civ_orderimg"
         android:layout_width="60dp"
         android:layout_height="60dp"

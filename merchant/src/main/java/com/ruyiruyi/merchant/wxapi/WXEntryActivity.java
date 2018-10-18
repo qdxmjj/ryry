@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.ruyiruyi.merchant.MyApplication;
 import com.ruyiruyi.merchant.R;
+import com.ruyiruyi.merchant.eventbus.WxLoginEvent;
 import com.ruyiruyi.merchant.utils.Constants;
+import com.ruyiruyi.merchant.utils.OkHttpUtils;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -20,7 +22,9 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
-import org.xutils.common.util.LogUtil;
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 
@@ -28,6 +32,10 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
     private IWXAPI api;
     private String TAG = WXEntryActivity.class.getSimpleName();
+    private static final int RETURN_MSG_TYPE_LOGIN = 1; //登录
+    private static final int RETURN_MSG_TYPE_SHARE = 2; //分享
+    private String openid;
+    private String unionid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +63,34 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     @Override
     public void onResp(BaseResp baseResp) {
         String result = "";
+        int type = baseResp.getType(); //类型：分享还是登录
         switch (baseResp.errCode) {
+            case BaseResp.ErrCode.ERR_AUTH_DENIED:
+                //用户拒绝授权
+                result = "拒绝授权微信登录";
+            case BaseResp.ErrCode.ERR_USER_CANCEL:
+                //用户取消
+                if (type == RETURN_MSG_TYPE_LOGIN) {
+                    result = "取消了微信登录";
+                } else if (type == RETURN_MSG_TYPE_SHARE) {
+                    result = "取消了微信分享";
+                }
+                break;
             case BaseResp.ErrCode.ERR_OK:
-                result = "发送成功";//发送成功
-                break;
-            case BaseResp.ErrCode.ERR_USER_CANCEL://发送取消
-                result = "发送取消";
-//                finish();
-                break;
-            case BaseResp.ErrCode.ERR_AUTH_DENIED://发送被拒绝
-                result = "发送被拒绝";
+                //用户同意
+                if (type == RETURN_MSG_TYPE_LOGIN) {
+                    //用户换取access_token的code，仅在ErrCode为0时有效
+                    String code = ((SendAuth.Resp) baseResp).code;
+                    Log.i(TAG, "code:------>" + code);
+
+                    //这里拿到了这个code，去做2次网络请求获取access_token和用户个人信息
+                    Log.e(TAG, "code:------>" + code);
+                    getAccessToken(code);
+
+
+                } else if (type == RETURN_MSG_TYPE_SHARE) {
+                    result = "微信分享成功";
+                }
                 break;
             case BaseResp.ErrCode.ERR_UNSUPPORT:
                 result = "不支持错误";//不支持错误
@@ -74,8 +100,91 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 break;
         }
         Log.e(TAG, "onResp: result = " + result);
-        Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+        if (result != null && result.length() != 0) {
+            Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+        }
         finish();
+    }
+
+    private void getAccessToken(String code) {
+        //获取授权
+        StringBuffer loginUrl = new StringBuffer();
+        loginUrl.append("https://api.weixin.qq.com/sns/oauth2/access_token")
+                .append("?appid=")
+                .append(MyApplication.WEIXIN_APP_ID)
+                .append("&secret=")
+                .append(MyApplication.WEIXIN_APP_SECRET)
+                .append("&code=")
+                .append(code)
+                .append("&grant_type=authorization_code");
+        OkHttpUtils.ResultCallback<String> resultCallback = new OkHttpUtils.ResultCallback<String>() {
+            @Override
+            public void onSuccess(final String response) {
+                String access = null;
+                String openId = null;
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    access = jsonObject.getString("access_token");
+                    openId = jsonObject.getString("openid");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //获取个人信息
+                String getUserInfo = "https://api.weixin.qq.com/sns/userinfo?access_token=" + access + "&openid=" + openId;
+                OkHttpUtils.ResultCallback<String> reCallback = new OkHttpUtils.ResultCallback<String>() {
+                    @Override
+                    public void onSuccess(String responses) {
+
+                        String nickName = null;
+                        String sex = null;
+                        String city = null;
+                        String province = null;
+                        String country = null;
+                        String headimgurl = null;
+                        try {
+                            JSONObject jsonObject = new JSONObject(responses);
+                            Log.e(TAG, "onSuccess: response = " + response);
+
+                            openid = jsonObject.getString("openid");
+                            nickName = jsonObject.getString("nickname");
+                            sex = jsonObject.getString("sex");
+                            city = jsonObject.getString("city");
+                            province = jsonObject.getString("province");
+                            country = jsonObject.getString("country");
+                            headimgurl = jsonObject.getString("headimgurl");
+                            unionid = jsonObject.getString("unionid");
+
+                            /*Toast.makeText(WXEntryActivity.this, "登录成功", Toast.LENGTH_SHORT).show();*/
+
+                            //发送事件通知登录成功
+                            WxLoginEvent wxLoginEvent = new WxLoginEvent();
+                            wxLoginEvent.setLoginSuccess((openid != null && nickName != null) ? true : false);
+                            wxLoginEvent.setNickname(nickName);
+                            wxLoginEvent.setOpenid(openid);
+                            wxLoginEvent.setHeadimgurl(headimgurl);
+                            EventBus.getDefault().post(wxLoginEvent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        Toast.makeText(WXEntryActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                };
+                OkHttpUtils.get(getUserInfo, reCallback);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(WXEntryActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        };
+        OkHttpUtils.get(loginUrl.toString(), resultCallback);
     }
 
 

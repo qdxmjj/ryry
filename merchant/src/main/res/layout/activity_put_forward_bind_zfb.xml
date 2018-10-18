@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
+              android:orientation="vertical">
+
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/acbars"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/c12">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+            <!--姓名-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/putforward_marginTop"
+                android:text="姓名"
+                android:textColor="@color/c7"
+                android:textSize="@dimen/putforward_textsize"/>
+
+            <EditText
+                android:id="@+id/et_bindname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/putforward_marginMid"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="请输入姓名"
+                android:maxLength="5"
+                android:maxLines="1"
+                android:textColor="@color/c6"
+                android:textColorHint="@color/c4"
+                android:textSize="@dimen/putforward_smalltextsize"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/putforward_marginBottom"
+                android:background="@color/c1"/>
+
+            <!--身份证号-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/putforward_marginTop"
+                android:text="身份证号"
+                android:textColor="@color/c7"
+                android:textSize="@dimen/putforward_textsize"/>
+
+            <EditText
+                android:id="@+id/et_bindcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/putforward_marginMid"
+                android:background="@null"
+                android:digits="1234567890X"
+                android:gravity="center_vertical"
+                android:hint="请输入身份证号码"
+                android:maxLength="18"
+                android:maxLines="1"
+                android:textColor="@color/c6"
+                android:textColorHint="@color/c4"
+                android:textSize="@dimen/putforward_smalltextsize"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/putforward_marginBottom"
+                android:background="@color/c1"/>
+
+            <!--支付宝账号-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/putforward_marginTop"
+                android:text="支付宝账号"
+                android:textColor="@color/c7"
+                android:textSize="@dimen/putforward_textsize"/>
+
+            <EditText
+                android:id="@+id/et_bindzhifubao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/putforward_marginMid"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="请输入支付宝账号"
+                android:maxLines="1"
+                android:textColor="@color/c6"
+                android:textColorHint="@color/c4"
+                android:textSize="@dimen/putforward_smalltextsize"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/putforward_marginBottom"
+                android:background="@color/c1"/>
+
+            <!--提示信息-->
+            <TextView
+                android:id="@+id/tv_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/putforward_marginTop"
+                android:text="请填写本人姓名与身份证号，实名信息绑定后无法修改。"
+                android:textColor="@color/c6"
+                android:textSize="@dimen/putforward_smalltextsize"/>
+
+            <!--绑定-->
+            <TextView
+                android:id="@+id/tv_bind"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/login_button"
+                android:gravity="center"
+                android:text="立即绑定"
+                android:textColor="@color/c12"
+                android:textSize="@dimen/putforward_textsize"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

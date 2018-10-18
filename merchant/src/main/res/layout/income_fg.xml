@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -106,13 +107,31 @@
                 android:textSize="@dimen/income_titlesize"
                 android:textStyle="bold"/>
         </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/putforward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提现"
+                android:padding="3dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/c12"
+                android:textSize="12sp"/>
+        </FrameLayout>
     </LinearLayout>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/income_tab"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@color/c12"/>
+        android:background="@color/c12"
+        app:tabBackground="@null"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/income_pager"

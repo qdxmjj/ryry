@@ -41,7 +41,7 @@
             android:visibility="gone"
             android:weightSum="2">
 
-            <com.ruyiruyi.merchant.utils.CircleImageView
+            <com.ruyiruyi.merchant.cell.CircleImageView
                 android:id="@+id/circle_pic_left"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -52,7 +52,7 @@
                 attr:roundHeight="5dp"
                 attr:roundWidth="5dp" />
 
-            <com.ruyiruyi.merchant.utils.CircleImageView
+            <com.ruyiruyi.merchant.cell.CircleImageView
                 android:id="@+id/circle_pic_right"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

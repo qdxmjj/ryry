@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
+              android:orientation="vertical">
+
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/acbars"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/c12">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <!--红包余额-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="可用余额(元)"
+                android:textColor="@color/c6"
+                android:textSize="@dimen/putforward_textsize"/>
+
+            <TextView
+                android:id="@+id/tv_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="0.0"
+                android:textColor="@color/c7"
+                android:textSize="@dimen/putforward_titlesize"
+                android:textStyle="bold"/>
+
+
+            <!--提现金额-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="提现金额"
+                android:textColor="@color/c6"
+                android:textSize="@dimen/putforward_textsize"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="2dp"
+                    android:text="¥"
+                    android:textColor="@color/c7"
+                    android:textSize="@dimen/putforward_titlesize"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/et_putforward"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@null"
+                    android:digits="1234567890."
+                    android:gravity="center_vertical"
+                    android:hint="输入提现金额"
+                    android:maxLines="1"
+                    android:textColor="@color/c7"
+                    android:textColorHint="@color/c5"
+                    android:textSize="@dimen/putforward_titlesize"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tv_allputforward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="10dp"
+                    android:text="全部提现"
+                    android:textColor="@color/c16"
+                    android:textSize="@dimen/putforward_textsize"/>
+
+            </FrameLayout>
+            <!--线-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="6dp"
+                android:background="@color/c1"/>
+
+            <!--提现方式-->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp">
+
+                <FrameLayout
+                    android:id="@+id/fl_zhifubao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <CheckBox
+                        android:id="@+id/ck_zhifubao"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="2dp"
+                        android:button="@drawable/checkbox_selector"
+                        />
+
+                    <com.ruyiruyi.merchant.cell.CircleImageView
+                        android:id="@+id/civ_zhifubao"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="30dp"
+                        android:background="@drawable/ic_pay"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="80dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="支付宝"
+                            android:textColor="@color/c7"
+                            android:textSize="@dimen/putforward_textsize"/>
+
+                        <TextView
+                            android:id="@+id/tv_zhifubao_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/c5"
+                            android:textSize="10sp"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_bind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:padding="3dp"
+                    android:text="未绑定 >"
+                    android:textColor="@color/c6"
+                    android:textSize="12sp"/>
+
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <FrameLayout
+                    android:id="@+id/fl_weixin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <CheckBox
+                        android:id="@+id/ck_weixin"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="2dp"
+                        android:button="@drawable/checkbox_selector"
+                        />
+
+                    <com.ruyiruyi.merchant.cell.CircleImageView
+                        android:id="@+id/civ_weixin"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="30dp"
+                        android:background="@drawable/ic_wechat"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="80dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="微信"
+                            android:textColor="@color/c7"
+                            android:textSize="@dimen/putforward_textsize"/>
+
+                        <TextView
+                            android:id="@+id/tv_weixin_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/c5"
+                            android:textSize="10sp"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:padding="3dp"
+                    android:text="未登录 >"
+                    android:textColor="@color/c6"
+                    android:textSize="12sp"/>
+
+
+            </FrameLayout>
+
+            <!--提现-->
+            <TextView
+                android:id="@+id/tv_submit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/login_button"
+                android:gravity="center"
+                android:text="提现"
+                android:textColor="@color/c12"
+                android:textSize="@dimen/putforward_textsize"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

@@ -4,6 +4,8 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:focusable="true"
+             android:focusableInTouchMode="true"
              android:orientation="vertical"
              tools:context=".ui.activity.LaunchActivity">
 
@@ -17,8 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:orientation="vertical"
             tools:context="com.ruyiruyi.merchant.ui.activity.RegisterActivity">
 
@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
-                <TextView
+                <EditText
                     android:id="@+id/tv_shopname"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -34,7 +34,7 @@
                     android:background="@drawable/edit_background_noline"
                     android:gravity="center_vertical"
                     android:paddingLeft="100dp"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:text="门店名称"
                     android:textColor="@color/c6"
                     android:textCursorDrawable="@drawable/edit_cursor_color"
@@ -298,7 +298,7 @@
                         android:layout_margin="3dp"
                         android:layout_weight="1">
 
-                        <com.ruyiruyi.merchant.utils.CircleImageView
+                        <com.ruyiruyi.merchant.cell.CircleImageView
                             android:id="@+id/img_mdpic_a"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -347,7 +347,7 @@
                         android:layout_margin="3dp"
                         android:layout_weight="1">
 
-                        <com.ruyiruyi.merchant.utils.CircleImageView
+                        <com.ruyiruyi.merchant.cell.CircleImageView
                             android:id="@+id/img_mdpic_b"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -396,7 +396,7 @@
                         android:layout_margin="3dp"
                         android:layout_weight="1">
 
-                        <com.ruyiruyi.merchant.utils.CircleImageView
+                        <com.ruyiruyi.merchant.cell.CircleImageView
                             app:roundHeight="3dp"
                             app:roundWidth="3dp"
                             android:id="@+id/img_mdpic_c"

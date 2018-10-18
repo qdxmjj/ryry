@@ -19,5 +19,12 @@
     <!--收益-->
     <dimen name="income_textsize">14sp</dimen>
     <dimen name="income_titlesize">24sp</dimen>
+    <!--提现-->
+    <dimen name="putforward_textsize">14sp</dimen>
+    <dimen name="putforward_titlesize">24sp</dimen>
+    <dimen name="putforward_smalltextsize">12sp</dimen>
+    <dimen name="putforward_marginTop">15sp</dimen>
+    <dimen name="putforward_marginMid">10sp</dimen>
+    <dimen name="putforward_marginBottom">10sp</dimen>
 
 </resources>

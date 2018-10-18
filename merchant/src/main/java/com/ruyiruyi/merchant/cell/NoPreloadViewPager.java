@@ -1,4 +1,4 @@
-package com.ruyiruyi.merchant.utils;
+package com.ruyiruyi.merchant.cell;
 
 /*
  * Copyright (C) 2011 The Android Open Source Project

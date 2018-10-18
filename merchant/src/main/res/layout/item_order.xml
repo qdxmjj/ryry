@@ -23,7 +23,7 @@
         android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
-        <com.ruyiruyi.merchant.utils.CircleImageView
+        <com.ruyiruyi.merchant.cell.CircleImageView
             android:id="@+id/img_order"
             android:layout_width="120dp"
             android:layout_height="120dp"

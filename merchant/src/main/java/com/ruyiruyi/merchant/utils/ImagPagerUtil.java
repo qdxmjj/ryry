@@ -21,6 +21,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.ruyiruyi.merchant.R;
+import com.ruyiruyi.merchant.cell.LazyViewPager;
 import com.ruyiruyi.merchant.ui.cell.ZoomImageView;
 
 import java.util.ArrayList;

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.utils.CircleImageView;
+import com.ruyiruyi.merchant.cell.CircleImageView;
 
 import me.drakeet.multitype.ItemViewProvider;
 

@@ -786,7 +786,7 @@
                         android:layout_marginLeft="30dp"
                         android:layout_weight="2">
 
-                        <com.ruyiruyi.merchant.utils.CircleImageView
+                        <com.ruyiruyi.merchant.cell.CircleImageView
                             android:id="@+id/pic_a_left"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
@@ -835,7 +835,7 @@
                         android:layout_marginLeft="50dp"
                         android:layout_weight="2">
 
-                        <com.ruyiruyi.merchant.utils.CircleImageView
+                        <com.ruyiruyi.merchant.cell.CircleImageView
                             android:id="@+id/pic_a_right"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
@@ -910,7 +910,7 @@
                         android:layout_marginLeft="30dp"
                         android:layout_weight="2">
 
-                        <com.ruyiruyi.merchant.utils.CircleImageView
+                        <com.ruyiruyi.merchant.cell.CircleImageView
                             android:id="@+id/pic_b_left"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
@@ -959,7 +959,7 @@
                         android:layout_marginLeft="50dp"
                         android:layout_weight="2">
 
-                        <com.ruyiruyi.merchant.utils.CircleImageView
+                        <com.ruyiruyi.merchant.cell.CircleImageView
                             android:id="@+id/pic_b_right"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
@@ -1034,7 +1034,7 @@
                         android:layout_marginLeft="30dp"
                         android:layout_weight="2">
 
-                        <com.ruyiruyi.merchant.utils.CircleImageView
+                        <com.ruyiruyi.merchant.cell.CircleImageView
                             android:id="@+id/pic_c_left"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
@@ -1083,7 +1083,7 @@
                         android:layout_marginLeft="50dp"
                         android:layout_weight="2">
 
-                        <com.ruyiruyi.merchant.utils.CircleImageView
+                        <com.ruyiruyi.merchant.cell.CircleImageView
                             android:id="@+id/pic_c_right"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
@@ -1158,7 +1158,7 @@
                         android:layout_marginLeft="30dp"
                         android:layout_weight="2">
 
-                        <com.ruyiruyi.merchant.utils.CircleImageView
+                        <com.ruyiruyi.merchant.cell.CircleImageView
                             android:id="@+id/pic_d_left"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
@@ -1207,7 +1207,7 @@
                         android:layout_marginLeft="50dp"
                         android:layout_weight="2">
 
-                        <com.ruyiruyi.merchant.utils.CircleImageView
+                        <com.ruyiruyi.merchant.cell.CircleImageView
                             android:id="@+id/pic_d_right"
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
@@ -1302,7 +1302,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1">
 
-                    <com.ruyiruyi.merchant.utils.CircleImageView
+                    <com.ruyiruyi.merchant.cell.CircleImageView
                         android:id="@+id/pic_xingshizheng"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
@@ -1394,7 +1394,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1">
 
-                    <com.ruyiruyi.merchant.utils.CircleImageView
+                    <com.ruyiruyi.merchant.cell.CircleImageView
                         android:id="@+id/pic_car"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"

@@ -1,6 +1,7 @@
 package com.ruyiruyi.merchant.ui.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -16,10 +17,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ruyiruyi.merchant.R;
+import com.ruyiruyi.merchant.cell.DatePickerDialog;
 import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.ui.activity.PutForwardActivity;
 import com.ruyiruyi.merchant.ui.adapter.IncomeFragmentPagerAdapter;
 import com.ruyiruyi.merchant.ui.fragment.base.MerchantBaseFragment;
-import com.ruyiruyi.merchant.utils.DatePickerDialog;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -31,6 +33,7 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,6 +52,7 @@ public class IncomeFragment extends MerchantBaseFragment implements ServiceIncom
     private TextView month;
     private LinearLayout ll_time;
     private TextView all_income;
+    private TextView putforward;
 
     private IncomeFragmentPagerAdapter mMainFgPagerAdapter;
     private List<Fragment> fragmentList;
@@ -93,6 +97,14 @@ public class IncomeFragment extends MerchantBaseFragment implements ServiceIncom
     }
 
     private void bindView() {
+        //提现
+        RxViewAction.clickNoDouble(putforward).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getContext(), PutForwardActivity.class);
+                startActivity(intent);
+            }
+        });
         //选择时间
         RxViewAction.clickNoDouble(ll_time).subscribe(new Action1<Void>() {
             Calendar c = Calendar.getInstance();
@@ -162,6 +174,8 @@ public class IncomeFragment extends MerchantBaseFragment implements ServiceIncom
                     saleIncome = data.getDouble("store_sale_earnings");
                     extraIncome = data.getDouble("store_app_install_earnings");
                     allIncome = serviceIncome + goodsIncome + saleIncome + extraIncome;
+                    BigDecimal bd = new BigDecimal(allIncome);//double相加设置精度
+                    allIncome = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
                     //绑定数据
                     bindData();
@@ -180,6 +194,8 @@ public class IncomeFragment extends MerchantBaseFragment implements ServiceIncom
                 saleIncome = 0;
                 extraIncome = 0;
                 allIncome = serviceIncome + goodsIncome + saleIncome + extraIncome;
+                BigDecimal bd = new BigDecimal(allIncome);//double相加设置精度
+                allIncome = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 //绑定数据
                 bindData();
             }
@@ -209,6 +225,7 @@ public class IncomeFragment extends MerchantBaseFragment implements ServiceIncom
         incomelist.add(saleIncome + "");
         incomelist.add(extraIncome + "");
 
+        Log.e(TAG, "bindData:  allIncome = " + allIncome);
         all_income.setText(allIncome + "");
 
         year.setText(currentYear + "");
@@ -293,6 +310,7 @@ public class IncomeFragment extends MerchantBaseFragment implements ServiceIncom
         month = getView().findViewById(R.id.month);
         ll_time = getView().findViewById(R.id.ll_time);
         all_income = getView().findViewById(R.id.all_income);
+        putforward = getView().findViewById(R.id.putforward);
 
         fragmentList = new ArrayList<>();
     }

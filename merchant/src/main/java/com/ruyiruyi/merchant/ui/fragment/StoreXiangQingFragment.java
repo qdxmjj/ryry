@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -32,11 +33,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.XiangmusBean;
 import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.db.model.User;
 import com.ruyiruyi.merchant.ui.activity.MyPicDialogActivity;
-import com.ruyiruyi.merchant.utils.CircleImageView;
+import com.ruyiruyi.merchant.cell.CircleImageView;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -48,7 +51,9 @@ import com.ruyiruyi.rylibrary.utils.glide.GlideRoundTransform;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.DbManager;
 import org.xutils.common.Callback;
+import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
@@ -71,7 +76,7 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
     private LinearLayout ll_xiangmus;
     private TextView tv_save;
 
-    private TextView tv_shopname;
+    private EditText tv_shopname;
     private TextView tv_shopcategory;
     private TextView tv_shopphone;
     private TextView tv_shopcity;
@@ -428,7 +433,11 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
         /* isOpen
         shoptimeL    shoptimeR
         storeServiceList_old_String --> serviceTypeListString */
-                if (tv_shoptime.getText() == null || tv_shoptime.length() == 0) {
+                if (tv_shopname.getText() == null || tv_shopname.getText().length() == 0) {
+                    Toast.makeText(getActivity(), "请填写店铺名称", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (tv_shoptime.getText() == null || tv_shoptime.getText().length() == 0) {
                     Toast.makeText(getActivity(), "请选择营业时间", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -690,9 +699,9 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
                 JSONObject object = new JSONObject();
                 try {
                     object.put("id", storeId);
+                    object.put("storeName", tv_shopname.getText().toString());
                     object.put("status", isOpen + "");
                     object.put("phone", new DbConfig(getActivity()).getUser().getPhone());
-                    Log.e(TAG, "showd:10010 isOpen = " + isOpen);
                     object.put("startTime", "2000-01-01T" + shopTimeL + ".000+0800");
                     object.put("endTime", "2000-01-01T" + shopTimeR + ".000+0800");
 
@@ -734,6 +743,21 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
                             int status = object1.getInt("status");
                             if (status == 1) {
                                 Toast.makeText(getActivity(), "更新店铺成功", Toast.LENGTH_SHORT).show();
+                                //更新店铺数据
+                                User user = new DbConfig(getContext()).getUser();
+                                user.setStoreName(tv_shopname.getText().toString());
+                                DbConfig dbConfig = new DbConfig(getContext());
+                                DbManager db = dbConfig.getDbManager();
+                                try {
+                                    db.saveOrUpdate(user);
+                                } catch (DbException e) {
+                                    e.printStackTrace();
+                                }
+                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("page", "my");
+                                intent.putExtras(bundle);
+                                startActivity(intent);
                                 getActivity().finish();
                             } else {
                                 Toast.makeText(getActivity(), "更新店铺失败", Toast.LENGTH_SHORT).show();
@@ -774,8 +798,8 @@ public class StoreXiangQingFragment extends BaseFragment implements CompoundButt
         tv_shoptime = (TextView) getView().findViewById(R.id.tv_shoptime);
         tv_save = (TextView) getView().findViewById(R.id.tv_save);
         ll_xiangmus = (LinearLayout) getView().findViewById(R.id.ll_xiangmus);
+        tv_shopname = (EditText) getView().findViewById(R.id.tv_shopname);
         //不可修改的控件
-        tv_shopname = (TextView) getView().findViewById(R.id.tv_shopname);
         tv_shopcategory = (TextView) getView().findViewById(R.id.tv_shopcategory);
         tv_shopphone = (TextView) getView().findViewById(R.id.tv_shopphone);
         tv_shopcity = (TextView) getView().findViewById(R.id.tv_shopcity);

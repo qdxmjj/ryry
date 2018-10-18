@@ -9,7 +9,7 @@
         android:scaleType="fitCenter"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />-->
-    <com.ruyiruyi.merchant.utils.LazyViewPager
+    <com.ruyiruyi.merchant.cell.LazyViewPager
         android:id="@+id/view_pager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />

@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.ui.activity.PublicOrderInfoActivity;
-import com.ruyiruyi.merchant.utils.CircleImageView;
+import com.ruyiruyi.merchant.cell.CircleImageView;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 

@@ -66,7 +66,7 @@
         android:layout_marginTop="30dp"
         android:orientation="horizontal">
 
-        <com.ruyiruyi.merchant.utils.CircleImageView
+        <com.ruyiruyi.merchant.cell.CircleImageView
             android:id="@+id/civ_orderimg"
             android:layout_width="60dp"
             android:layout_height="60dp"
