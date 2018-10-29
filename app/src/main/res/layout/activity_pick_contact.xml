@@ -29,6 +29,56 @@
             />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="vertical">
+        <FrameLayout
+            android:id="@+id/qu_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="切换县区"
+                android:layout_gravity="right"/>
+
+            <TextView
+                android:id="@+id/qu_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="请选择市"
+                android:textColor="@color/c7"
+                android:textSize="16sp" />
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/choose_qu_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <com.ruyiruyi.rylibrary.ui.cell.QGridView
+                android:id="@+id/qu_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:columnWidth="60dp"
+                android:verticalSpacing="10dp"
+                android:horizontalSpacing="15dp"/>
+        </FrameLayout>
+
+    </LinearLayout>
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -47,13 +97,13 @@
         android:layout_marginLeft="15dp"
         android:background="@drawable/sylayout_shop"
         android:text="定位中..."/>
-    <View
+ <!--   <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/gray2"
         android:layout_margin="15dp"
-        />
-    <TextView
+        />-->
+    <!--<TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:textSize="18sp"
@@ -61,7 +111,7 @@
         android:layout_marginLeft="15dp"
         android:gravity="center_vertical"
         android:text="所有城市"/>
-
+-->
     <me.yokeyword.indexablerv.IndexableLayout
         android:id="@+id/indexableLayout"
         android:layout_width="match_parent"
@@ -71,6 +121,7 @@
         app:indexBar_textColor="@color/gray1"
         app:indexBar_layout_width="40dp"
         app:indexBar_textSize="14sp"
-        app:indexBar_textSpace="5dp" />
+        app:indexBar_textSpace="5dp"
+        android:layout_marginTop="5dp"/>
 
 </LinearLayout>

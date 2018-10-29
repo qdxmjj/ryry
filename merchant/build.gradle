@@ -37,9 +37,9 @@ android {
     }
     signingConfigs {
         config {
+            storeFile file('keystore.jks')
             keyAlias 'xiaomajiajiamerchant'
             keyPassword 'qdxmjj'
-            storeFile file('keystore.jks')
             storePassword 'qdxmjj'
             println("====== signingConfigs.config ======")
         }
@@ -176,5 +176,5 @@ dependencies {
     compile 'cn.jiguang.sdk:jcore:1.2.1'
   //  compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0'
-   // testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12'
 }

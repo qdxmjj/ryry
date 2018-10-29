@@ -64,7 +64,7 @@ public class WXPayEntryActivity extends AppCompatActivity implements IWXAPIEvent
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             if (resp.errCode ==0) {
                 if (order_type == 0){
-                    Toast.makeText(this, "获取到0了", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(this, "获取到0了", Toast.LENGTH_SHORT).show();
                 }
                 Toast.makeText(this, resp.transaction, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), PaySuccessActivity.class);

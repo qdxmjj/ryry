@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class UserEvaluateViewBinder extends ItemViewProvider<UserEvaluate, UserEvaluateViewBinder.ViewHolder> {
+    private static final String TAG = UserEvaluateViewBinder.class.getSimpleName();
     public Context context;
     private List<Object> items = new ArrayList<>();
     private MultiTypeAdapter adapter;
@@ -153,6 +155,7 @@ public class UserEvaluateViewBinder extends ItemViewProvider<UserEvaluate, UserE
                 });
 
         holder.ratingBar.setClickable(false);
+        Log.e(TAG, "onBindViewHolder:--+- " + userEvaluate.getStarNo() );
         holder.ratingBar.setStar(userEvaluate.getStarNo());
 
   /*      GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);

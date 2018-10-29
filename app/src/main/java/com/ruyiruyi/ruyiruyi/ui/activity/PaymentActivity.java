@@ -417,6 +417,7 @@ public class PaymentActivity extends RyBaseActivity {
         });*/
 
 
+      showDialogProgress(progressDialog,"正在提交中...");
         int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "getSign: orderno-" + orderno);
@@ -477,12 +478,9 @@ public class PaymentActivity extends RyBaseActivity {
                 Log.e(TAG, "onSuccess: --------" + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
-                    ;
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("200")) {
-
-
                         JSONObject data = jsonObject1.getJSONObject("data");
                         PayReq req = new PayReq();
                         req.appId = data.getString("appid");
@@ -512,7 +510,7 @@ public class PaymentActivity extends RyBaseActivity {
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(progressDialog);
             }
         });
 
@@ -523,6 +521,7 @@ public class PaymentActivity extends RyBaseActivity {
      * 提交商品订单
      */
     private void postGoodsOrder() {
+        showDialogProgress(progressDialog,"正在提交中...");
         int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -592,7 +591,7 @@ public class PaymentActivity extends RyBaseActivity {
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(progressDialog);
             }
         });
     }
@@ -705,7 +704,11 @@ public class PaymentActivity extends RyBaseActivity {
         }
     }
 
+    /**
+     * 获取支付宝签名
+     */
     private void getSign() {
+        showDialogProgress(progressDialog,"提交中...");
         int userId = new DbConfig(this).getId();
         JSONObject jsonObject = new JSONObject();
         Log.e(TAG, "getSign: orderno-" + orderno);
@@ -780,7 +783,7 @@ public class PaymentActivity extends RyBaseActivity {
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(progressDialog);
             }
         });
     }

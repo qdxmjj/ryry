@@ -72,7 +72,7 @@ public class PaySuccessActivity extends RyBaseActivity {
         goMainView = (TextView) findViewById(R.id.go_main_view);
 
         if (tireOrderType == 0){
-            goSeeView.setText("直接更换轮胎");
+            goSeeView.setText("请选择更换轮胎的门店");
         }else {
             if (ordertype == 1){
                 goSeeView.setText("去服务");

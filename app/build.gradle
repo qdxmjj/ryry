@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
-def VERSION_CODE = 5
-def VERSION_NAME = "3.3.0"
+def VERSION_CODE = 16
+def VERSION_NAME = "3.3.3"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''
@@ -173,6 +173,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     compile 'com.zhy:okhttputils:2.6.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 }

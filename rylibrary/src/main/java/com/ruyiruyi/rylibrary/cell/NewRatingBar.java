@@ -55,7 +55,7 @@ public class NewRatingBar extends LinearLayout {
 
     public NewRatingBar(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.setOrientation(0);
+        this.setOrientation(HORIZONTAL);
         TypedArray mTypedArray = context.obtainStyledAttributes(attrs, R.styleable.NewRatingBar);
         this.starImageSize = mTypedArray.getDimension(0, 20.0F);
         this.starPadding = mTypedArray.getDimension(1, 10.0F);

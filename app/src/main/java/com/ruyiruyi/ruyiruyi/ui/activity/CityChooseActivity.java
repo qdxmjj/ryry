@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,15 +27,23 @@ import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.model.HotCity;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.ui.adapter.CYBChangeCityGridViewAdapter;
 import com.ruyiruyi.rylibrary.ui.adapter.ContactAdapter;
 import com.ruyiruyi.rylibrary.ui.bean.UserEntity;
 import com.ruyiruyi.rylibrary.ui.cell.QGridView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.DbManager;
+import org.xutils.common.Callback;
 import org.xutils.ex.DbException;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +57,11 @@ public class CityChooseActivity extends RyBaseActivity {
     private static final String TAG = CityChooseActivity.class.getSimpleName();
     private ContactAdapter mAdapter;
     private BannerHeaderAdapter mBannerHeaderAdapter;
-    private String[] city = {"东莞","深圳","广州","温州","郑州","金华","佛山","上海","苏州","杭州","长沙","中山"};
+    private String[] city = {"青岛市","临沂市","潍坊市"};
     private IndexableLayout indexableLayout;
     private CYBChangeCityGridViewAdapter cybChangeCityGridViewAdapter;
     private ArrayList<String> list;
+    private ArrayList<String> quList;
     private ImageView pic_contact_back;
     private Intent intent;
     private LocationService locationService;
@@ -59,6 +69,17 @@ public class CityChooseActivity extends RyBaseActivity {
     public String currentCity="";
     private double weidu;
     private double jingdu;
+    private FrameLayout quLayout;
+    private FrameLayout chooseQuLayout;
+    public boolean isChooseQu = false;
+    public List<HotCity> hotCityList ;
+    private String currentCityName = "";
+    private TextView quNameText;
+    private QGridView quListView;
+    private CYBChangeCityGridViewAdapter quGridViewAdapter;
+    private int currentDefinition;
+    private int currentFid;
+    private int currentId;
 
 
     @Override
@@ -66,15 +87,154 @@ public class CityChooseActivity extends RyBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_contact);
 
+        initview();
+
 //        SDKInitializer.initialize(getApplicationContext());
         locationService = ((MyApplication) getApplication()).locationService;
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
         locationService.registerListener(mListener);
         locationService.setLocationOption(locationService.getDefaultLocationClientOption());
         locationService.start();// 定位SDK
-        initview();
+        hotCityList = new ArrayList<>();
+        quList = new ArrayList<>();
+        Intent intent = getIntent();
+       // currentCityName = intent.getStringExtra("CITY_NAME");
+
         initAdapter();
         onlisten();
+        //获取热门地区
+        initHotDataFromService();
+
+        //获取位置
+        Location location = new DbConfig(getApplicationContext()).getLocation();
+        if (location!=null){
+            currentCityName = location.getCity();
+            jingdu = location.getJingdu();
+            weidu = location.getWeidu();
+        }
+        //初始化区信息
+        if (!currentCityName.equals("")){
+            initQuData();
+        }
+
+    }
+
+    private void initQuData() {
+        quNameText.setText("您正在看：" + currentCityName);
+        DbManager db = new DbConfig(this).getDbManager();
+        List<Province> provinceList = new ArrayList<>();
+        try {
+            provinceList = db.selector(Province.class)
+                    .where("definition", "=", "2")
+                    .or("definition", "=", "3")
+                    .findAll();
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+        if (provinceList.size()>0){
+            for (int i = 0; i < provinceList.size(); i++) {
+                if (provinceList.get(i).getName().equals(currentCityName)) {  //获取当前选择的地区的信息
+                    currentDefinition = provinceList.get(i).getDefinition();
+                    currentFid = provinceList.get(i).getFid();
+                    currentId = provinceList.get(i).getId();
+                }
+            }
+        }
+
+        Log.e(TAG, "initQuData:currentDefinition--- " + currentDefinition);
+        Log.e(TAG, "initQuData:currentFid--- " + currentFid);
+        Log.e(TAG, "initQuData:currentId---" + currentId);
+        List<Province> quAllList = new ArrayList<>();
+        if (currentDefinition == 2){   // 2是市
+            try {
+                quAllList = db.selector(Province.class)
+                        .where("fid","=",currentId)
+                        .findAll();
+
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
+
+        }else if (currentDefinition == 3){      //3是区  反像查市
+            try {
+                quAllList = db.selector(Province.class)
+                        .where("fid","=",currentFid)
+                        .findAll();
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
+        }
+        quList.clear();
+        if (quAllList.size()>0){
+            for (int i = 0; i < quAllList.size(); i++) {
+                quList.add(quAllList.get(i).getName());
+            }
+        }
+        quGridViewAdapter = new CYBChangeCityGridViewAdapter(CityChooseActivity.this, quList);
+        quListView.setAdapter(quGridViewAdapter);
+    }
+
+    /**
+     * 获取热门地区
+     */
+    private void initHotDataFromService() {
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getHotPosition");
+        x.http().get(params, new Callback.CacheCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: -----" + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONArray data = jsonObject1.getJSONArray("data");
+                        hotCityList.clear();
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject object = data.getJSONObject(i);
+                            int definition = object.getInt("definition");
+                            int fid = object.getInt("fid");
+                            int id = object.getInt("id");
+                            String icon = object.getString("icon");
+                            String name = object.getString("name");
+                            String time = object.getString("time");
+                            hotCityList.add(new HotCity(definition,fid,id,icon,name,time));
+
+                        }
+                        indexableLayout.addHeaderAdapter(mBannerHeaderAdapter);
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable throwable, boolean b) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException e) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+
+            @Override
+            public boolean onCache(String s) {
+                return false;
+            }
+        });
+    }
+
+    private void initHotData() {
+
     }
 
 
@@ -105,8 +265,8 @@ public class CityChooseActivity extends RyBaseActivity {
         // 这里BannerView只有一个Item, 添加一个长度为1的任意List作为第三个参数
         List<String> bannerList = new ArrayList<>();
         bannerList.add("");
-    //    mBannerHeaderAdapter = new BannerHeaderAdapter("↑", null, bannerList);
-      //  indexableLayout.addHeaderAdapter(mBannerHeaderAdapter);
+        mBannerHeaderAdapter = new BannerHeaderAdapter("↑", null, bannerList);
+
     }
 
     public void initview(){
@@ -115,10 +275,61 @@ public class CityChooseActivity extends RyBaseActivity {
         indexableLayout = (IndexableLayout) findViewById(R.id.indexableLayout);
         indexableLayout.setLayoutManager(new LinearLayoutManager(this));
         dingweiText = (TextView) findViewById(R.id.dingwei_city_text);
+        quLayout = (FrameLayout) findViewById(R.id.qu_layout);
+        chooseQuLayout = (FrameLayout) findViewById(R.id.choose_qu_layout);
+        quNameText = (TextView) findViewById(R.id.qu_name_text);
+        quListView = (QGridView) findViewById(R.id.qu_list_view);
+
+        quListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //  intent.putExtra("city", list.get(position));
+
+                Location location1 = new Location(1, quList.get(position),jingdu, weidu);
+                DbManager db = new DbConfig(getApplicationContext()).getDbManager();
+                try {
+                    db.saveOrUpdate(location1);
+                } catch (DbException e) {
+
+                }
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+//                    System.out.println("aaaaaayyyyyyyyy"+list.get(position));
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+            }
+        });
+
+
+
+        RxViewAction.clickNoDouble(quLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        if (currentCityName.equals("")){
+                            return;
+                        }
+                        if (isChooseQu){
+                            chooseQuLayout.setVisibility(View.GONE);
+                            isChooseQu = false;
+                        }else {
+                            chooseQuLayout.setVisibility(View.VISIBLE);
+                            isChooseQu = true;
+                        }
+                    }
+                });
+
+        /**
+         * 定位点击
+         */
         RxViewAction.clickNoDouble(dingweiText)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (currentCity.equals("")){
+                            Toast.makeText(CityChooseActivity.this, "请选择区县", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         Location location1 = new Location(1, currentCity, jingdu, weidu);
                         DbManager db = new DbConfig(getApplicationContext()).getDbManager();
                         try {
@@ -150,15 +361,20 @@ public class CityChooseActivity extends RyBaseActivity {
             @Override
             public void onItemClick(View v, int originalPosition, int currentPosition, UserEntity entity) {
                 if (originalPosition >= 0) {
-                    Location location1 = new Location(1, entity.getNick(),jingdu, weidu);
+                   /* Location location1 = new Location(1, entity.getNick(),jingdu, weidu);
                     DbManager db = new DbConfig(getApplicationContext()).getDbManager();
                     try {
                         db.saveOrUpdate(location1);
                     } catch (DbException e) {
 
-                    }
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
+                    }*/
+                    currentCityName = entity.getNick();
+                    initQuData();
+                    chooseQuLayout.setVisibility(View.VISIBLE);
+                    Toast.makeText(CityChooseActivity.this, "请选择县区", Toast.LENGTH_SHORT).show();
+                    
+                  /*  Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);*/
                   /*  intent.putExtra("CITY", entity.getNick());
                     setResult(HomeFragment.CITY_CHOOSE, intent);
                     finish();*/
@@ -170,7 +386,14 @@ public class CityChooseActivity extends RyBaseActivity {
         });
     }
 
-
+  /*  @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK){
+            String city = data.getStringExtra("city");
+            Log.e(TAG, "onActivityResult: ----------+---"+city);
+        }
+    }*/
 
     /**
      * 自定义的Banner Header
@@ -199,8 +422,12 @@ public class CityChooseActivity extends RyBaseActivity {
             // 数据源为null时, 该方法不用实现
             final VH vh = (VH) holder;
             list=new ArrayList<>();
-            for(int i = 0; i<city.length; i++){
+           /* for(int i = 0; i<city.length; i++){
                 list.add(city[i]);
+            }*/
+
+            for (int i = 0; i < hotCityList.size(); i++) {
+                list.add(hotCityList.get(i).getName());
             }
             System.out.println("------------city"+list);
             cybChangeCityGridViewAdapter=new CYBChangeCityGridViewAdapter(CityChooseActivity.this, list);
@@ -208,10 +435,26 @@ public class CityChooseActivity extends RyBaseActivity {
             vh.head_home_change_city_gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    intent.putExtra("city", list.get(position));
-                    System.out.println("aaaaaayyyyyyyyy"+list.get(position));
-                    setResult(RESULT_OK, intent);
-                    finish();
+                 //  intent.putExtra("city", list.get(position));
+                    Log.e(TAG, "onItemClick: --------" + list.get(position));
+                    /*Location location1 = new Location(1, list.get(position),jingdu, weidu);
+                    DbManager db = new DbConfig(getApplicationContext()).getDbManager();
+                    try {
+                        db.saveOrUpdate(location1);
+                    } catch (DbException e) {
+
+                    }*/
+                    /*Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);*/
+                    currentCityName =  list.get(position);
+                    initQuData();
+                    chooseQuLayout.setVisibility(View.VISIBLE);
+                    Toast.makeText(CityChooseActivity.this, "请选择县区", Toast.LENGTH_SHORT).show();
+
+
+//                    System.out.println("aaaaaayyyyyyyyy"+list.get(position));
+//                    setResult(RESULT_OK, intent);
+//                    finish();
                 }
             });
             /*//此处有问题
@@ -223,15 +466,15 @@ public class CityChooseActivity extends RyBaseActivity {
                     finish();
                 }
             });*/
-            RxViewAction.clickNoDouble(vh.item_header_city_dw)
+        /*    RxViewAction.clickNoDouble(vh.item_header_city_dw)
                     .subscribe(new Action1<Void>() {
                         @Override
                         public void call(Void aVoid) {
-                            /*intent.putExtra("city", vh.item_header_city_dw.getText().toString());
+                            *//*intent.putExtra("city", vh.item_header_city_dw.getText().toString());
                             setResult(RESULT_OK, intent);
-                            finish();*/
+                            finish();*//*
                         }
-                    });
+                    });*/
 
         }
 
@@ -241,7 +484,7 @@ public class CityChooseActivity extends RyBaseActivity {
             public VH(View itemView) {
                 super(itemView);
                 head_home_change_city_gridview =(QGridView)itemView.findViewById(R.id.item_header_city_gridview);
-                item_header_city_dw = (TextView) itemView.findViewById(R.id.item_header_city_text);
+            //   item_header_city_dw = (TextView) itemView.findViewById(R.id.item_header_city_text);
             }
         }
     }
@@ -369,10 +612,10 @@ public class CityChooseActivity extends RyBaseActivity {
                 Log.e(TAG, "onReceiveLocation: " + sb.toString());
                 locationService.unregisterListener(mListener); //注销掉监听
                 locationService.stop(); //停止定位服务
-                currentCity = location.getCity();
+                currentCity = location.getDistrict();
                 jingdu = location.getLongitude();
                 weidu = location.getLatitude();
-                dingweiText.setText(location.getCity());
+                dingweiText.setText(location.getDistrict());
             }
         }
 
