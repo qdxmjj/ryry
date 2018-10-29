@@ -3,10 +3,7 @@ package com.ruyiruyi.merchant.ui.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,14 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.bean.GoodsItemBean;
 import com.ruyiruyi.merchant.bean.ItemBottomBean;
 import com.ruyiruyi.merchant.bean.ItemNullBean;
 import com.ruyiruyi.merchant.bean.OrderItemBean;
 import com.ruyiruyi.merchant.db.DbConfig;
-import com.ruyiruyi.merchant.ui.multiType.GoodsItemProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemBottomProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemNullProvider;
 import com.ruyiruyi.merchant.ui.multiType.OrderItemProvider;
@@ -191,6 +185,9 @@ public class MyOrderFragment extends BaseFragment implements OrderItemProvider.F
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Toast.makeText(getContext(), "订单信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
+
+                //网络异常
+                updataNetError();
             }
 
             @Override
@@ -263,6 +260,9 @@ public class MyOrderFragment extends BaseFragment implements OrderItemProvider.F
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Toast.makeText(getContext(), "订单信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
+
+                //网络异常
+                updataNetError();
             }
 
             @Override
@@ -292,6 +292,14 @@ public class MyOrderFragment extends BaseFragment implements OrderItemProvider.F
             assertAllRegistered(multiTypeAdapter, items);
             multiTypeAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void updataNetError() {
+        items.clear();
+        items.add(new ItemNullBean(R.drawable.ic_net_error));
+        assertAllRegistered(multiTypeAdapter, items);
+        multiTypeAdapter.notifyDataSetChanged();
+
     }
 
 

@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,8 +65,8 @@ public class MyFragment extends BaseFragment {
 
     private static final String TAG = MyFragment.class.getSimpleName();
     private TextView tv_username;
-    private TextView tv_mid_wddd;
-    private TextView tv_mid_gldp;
+    private LinearLayout tv_mid_wddd;
+    private LinearLayout tv_mid_gldp;
     private RelativeLayout rl_wdfw; //我的服务
     private RelativeLayout rl_wdsp; //我的商品
     private RelativeLayout rl_tgjl; //推广奖励
@@ -160,7 +161,7 @@ public class MyFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
+                        Toast.makeText(getContext(), "网络异常,请检查网络", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -271,8 +272,8 @@ public class MyFragment extends BaseFragment {
 
     private void initView() {
         tv_username = (TextView) getView().findViewById(R.id.tv_username);
-        tv_mid_wddd = (TextView) getView().findViewById(R.id.tv_mid_wddd);
-        tv_mid_gldp = (TextView) getView().findViewById(R.id.tv_mid_gldp);
+        tv_mid_wddd = (LinearLayout) getView().findViewById(R.id.tv_mid_wddd);
+        tv_mid_gldp = (LinearLayout) getView().findViewById(R.id.tv_mid_gldp);
         rl_wdfw = (RelativeLayout) getView().findViewById(R.id.rl_wdfw);
         rl_wdsp = (RelativeLayout) getView().findViewById(R.id.rl_wdsp);
         rl_tgjl = (RelativeLayout) getView().findViewById(R.id.rl_tgjl);
@@ -450,7 +451,7 @@ public class MyFragment extends BaseFragment {
                         String storeImgUrl = new DbConfig(getActivity()).getUser().getStoreImgUrl();
                         Log.e(TAG, "onSuccess: get2=" + storeImgUrl);
 
-                        /*listener.forRefreshMyListener();//通知MainActivity刷新数据*/
+                        listener.forRefreshMyListener();//通知MainActivity刷新数据
                         if (isCamera) {
                             UtilsRY.deleteUri(getContext(), uri);//删除照片
                         }

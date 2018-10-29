@@ -4,17 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.ui.fragment.MyGoodsFragment;
 import com.ruyiruyi.merchant.ui.fragment.MyOrderFragment;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
+import com.ruyiruyi.rylibrary.base.BaseFragmentActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import java.util.ArrayList;
@@ -26,7 +23,7 @@ import java.util.List;
 * intent.putExtra("typestate", "pingtai");  typestate : 查询订单列表的种类  （  all= 5种所有订单类型   pingtai= 2种平台订单类型 ）
 *
 * */
-public class MyOrderActivity extends FragmentActivity {
+public class MyOrderActivity extends BaseFragmentActivity {
     private ActionBar mActionBar;
     private TabLayout mTab;
     private ViewPager mVPager;

@@ -10,12 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.ruyiruyi.merchant.R;
+import com.ruyiruyi.merchant.bean.ItemNullBean;
 import com.ruyiruyi.merchant.bean.ServicesBean;
 import com.ruyiruyi.merchant.db.DbConfig;
-import com.ruyiruyi.merchant.ui.activity.MyServiceActivity;
+import com.ruyiruyi.merchant.ui.multiType.ItemNullProvider;
 import com.ruyiruyi.merchant.ui.multiType.ServiceItemProvider;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 
@@ -150,6 +150,8 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
+                //网络异常
+                updataNetError();
             }
 
             @Override
@@ -173,6 +175,14 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
         multiTypeAdapter.notifyDataSetChanged();
     }
 
+    private void updataNetError() {
+        items.clear();
+        items.add(new ItemNullBean(R.drawable.ic_net_error));
+        assertAllRegistered(multiTypeAdapter, items);
+        multiTypeAdapter.notifyDataSetChanged();
+
+    }
+
     private void initView() {
         mRlv = (RecyclerView) getView().findViewById(R.id.myservice_rlv);
 
@@ -182,6 +192,7 @@ public class MyServiceFragment extends Fragment implements ServiceItemProvider.O
         ServiceItemProvider serviceItemProvider = new ServiceItemProvider();
         serviceItemProvider.setListener(this);// 绑定adapter-->fragment接口
         multiTypeAdapter.register(ServicesBean.class, serviceItemProvider);
+        multiTypeAdapter.register(ItemNullBean.class, new ItemNullProvider());
         mRlv.setAdapter(multiTypeAdapter);
         assertHasTheSameAdapter(mRlv, multiTypeAdapter);
     }

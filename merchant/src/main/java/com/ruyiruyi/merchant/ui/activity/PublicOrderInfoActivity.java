@@ -3,16 +3,14 @@ package com.ruyiruyi.merchant.ui.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -814,6 +812,9 @@ public class PublicOrderInfoActivity extends BaseActivity implements PublicBarCo
             Log.e(TAG, "onBackPressed: MainOrderTop");
             intent.putExtra("page", select);//帅气
             intent.putExtra("typestate", "pingtai");
+        }else {
+            finish();
+            return;
         }
 
 

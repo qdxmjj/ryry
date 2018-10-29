@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +33,7 @@ import com.ruyiruyi.merchant.bean.OldNewBarCode;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
 import com.ruyiruyi.merchant.ui.multiType.PublicShoeFlag;
-import com.ruyiruyi.merchant.utils.CircleImageView;
+import com.ruyiruyi.merchant.cell.CircleImageView;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -57,7 +56,8 @@ import java.util.List;
 import rx.functions.Action1;
 
 public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
-    private final int TAKE_PICTURE = 0;
+    private final int CHOOSE_PICTURE = 0;
+    private final int TAKE_PICTURE = 1;
     //底部接单控件
     private TextView tv_bottom_a;
     private TextView tv_bottom_b;
@@ -1300,11 +1300,21 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private void showPicInputDialog(final String code) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("上传照片");
-        String[] items = {"拍照"};
+        String[] items = {"选择本地照片", "拍照"};
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                takePicture(code);
+               /* takePicture(code);*/
+                switch (which) {
+                    case CHOOSE_PICTURE://选择本地照片
+                        Intent openBendiPicIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                        openBendiPicIntent.setType("image/*");
+                        startActivityForResult(openBendiPicIntent, CHOOSE_PICTURE);
+                        break;
+                    case TAKE_PICTURE://拍照
+                        takePicture(code);
+                        break;
+                }
             }
         });
         final AlertDialog dialog = builder.create();
@@ -1381,8 +1391,16 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case TAKE_PICTURE:
+                   /*case TAKE_PICTURE:
                     setImageToViewFromPhone(tempUri);
+                    break;*/
+
+                case CHOOSE_PICTURE:
+                    Uri uri = data.getData();
+                    setImageToViewFromPhone(uri, false);
+                    break;
+                case TAKE_PICTURE:
+                    setImageToViewFromPhone(tempUri, true);
                     break;
             }
         }
@@ -1390,8 +1408,16 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     }
 
     //未剪辑照片
-    private void setImageToViewFromPhone(Uri uri) {
-        int degree = ImageUtils.readPictureDegree(path_);
+    private void setImageToViewFromPhone(Uri uri, boolean isCamera) {
+        /*int degree = ImageUtils.readPictureDegree(path_);*/
+
+        int degree = 0;
+        if (isCamera) {
+            degree = ImageUtils.readPictureDegree(path_);
+        } else {
+            degree = ImageUtils.getOrientation(getApplicationContext(), uri);
+        }
+
         if (uri != null) {
             Bitmap photo = null;
             try {

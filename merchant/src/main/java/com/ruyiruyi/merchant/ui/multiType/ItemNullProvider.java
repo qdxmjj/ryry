@@ -1,37 +1,16 @@
 package com.ruyiruyi.merchant.ui.multiType;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.bean.GoodsItemBean;
 import com.ruyiruyi.merchant.bean.ItemNullBean;
-import com.ruyiruyi.merchant.ui.activity.GoodsInfoReeditActivity;
-import com.ruyiruyi.merchant.utils.UtilsURL;
-import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import me.drakeet.multitype.ItemViewProvider;
-import rx.functions.Action1;
 
 public class ItemNullProvider extends ItemViewProvider<ItemNullBean, ItemNullProvider.ViewHolder> {
     private String TAG = ItemNullProvider.class.getSimpleName();
@@ -46,7 +25,9 @@ public class ItemNullProvider extends ItemViewProvider<ItemNullBean, ItemNullPro
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final ItemNullBean itemNullBean) {
-//        holder.img_null.setImageResource(R.drawable.ic_dakongbai);
+        if (itemNullBean.getResPicId() != 100100) {
+            holder.img_null.setImageResource(itemNullBean.getResPicId());
+        }
 
     }
 

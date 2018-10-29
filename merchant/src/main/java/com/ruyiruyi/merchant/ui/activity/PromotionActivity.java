@@ -17,13 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ruyiruyi.merchant.R;
+import com.ruyiruyi.merchant.bean.ItemNullBean;
 import com.ruyiruyi.merchant.db.DbConfig;
-import com.ruyiruyi.merchant.ui.multiType.modle.Promotion;
-import com.ruyiruyi.merchant.ui.multiType.modle.PromotionHasperson;
+import com.ruyiruyi.merchant.ui.multiType.ItemNullProvider;
 import com.ruyiruyi.merchant.ui.multiType.PromotionHaspersonViewBinder;
-import com.ruyiruyi.merchant.ui.multiType.modle.PromotionNoperson;
 import com.ruyiruyi.merchant.ui.multiType.PromotionNopersonViewBinder;
 import com.ruyiruyi.merchant.ui.multiType.PromotionViewBinder;
+import com.ruyiruyi.merchant.ui.multiType.modle.Promotion;
+import com.ruyiruyi.merchant.ui.multiType.modle.PromotionHasperson;
+import com.ruyiruyi.merchant.ui.multiType.modle.PromotionNoperson;
 import com.ruyiruyi.merchant.utils.Constants;
 import com.ruyiruyi.merchant.utils.Util;
 import com.ruyiruyi.merchant.utils.UtilsRY;
@@ -175,7 +177,9 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(PromotionActivity.this, "推广信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
+                //网络异常
+                updataNetError();
             }
 
             @Override
@@ -205,6 +209,14 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
         multiTypeAdapter.notifyDataSetChanged();
     }
 
+    private void updataNetError() {
+        items.clear();
+        items.add(new ItemNullBean(R.drawable.ic_net_error));
+        assertAllRegistered(multiTypeAdapter, items);
+        multiTypeAdapter.notifyDataSetChanged();
+
+    }
+
     private void onQrCodePressed() {
         Intent intent = new Intent(getApplicationContext(), QRCodeActivity.class);
         intent.putExtra("url", url);
@@ -222,6 +234,7 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
         multiTypeAdapter.register(Promotion.class, provider);
         multiTypeAdapter.register(PromotionHasperson.class, new PromotionHaspersonViewBinder());
         multiTypeAdapter.register(PromotionNoperson.class, new PromotionNopersonViewBinder());
+        multiTypeAdapter.register(ItemNullBean.class, new ItemNullProvider());
         mRlv.setAdapter(multiTypeAdapter);
         assertHasTheSameAdapter(mRlv, multiTypeAdapter);
 

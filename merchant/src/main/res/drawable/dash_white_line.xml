@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item
+        android:bottom="0dp"
+        android:left="0dp"
+        android:right="0dp"
+        android:top="0dp">
+        <shape
+            android:shape="rectangle">
+            <!--边框宽度 颜色-->
+            <stroke
+                android:width="0.5dp"
+                android:color="@color/c12"
+                android:dashGap="3dp"
+                android:dashWidth="3dp"/>
+            <!-- 设置按钮的四个角为弧形 -->
+            <!-- android:radius 弧形的半径 -->
+            <corners android:radius="6dip"/>
+
+        </shape>
+    </item>
+    <item
+        android:right="0.5dp"
+       android:drawable="@color/theme_primary">
+
+    </item>
+
+</layer-list>

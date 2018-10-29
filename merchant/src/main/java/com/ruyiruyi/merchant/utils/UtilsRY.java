@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -28,8 +27,72 @@ public class UtilsRY {
         return number;
     }
 
+    /**
+     * Double
+     *
+     * @param number
+     * @return
+     */
     public static boolean isMobile(String number) {
         String num = "[1][345789]\\d{9}";
+        if (TextUtils.isEmpty(number)) {
+            return false;
+        } else {
+            return number.matches(num);
+        }
+    }
+
+    /**
+     * 身份证号码简单校验
+     *
+     * @param number
+     * @return
+     */
+    public static boolean isIdNumber(String number) {
+        String num = "^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$";
+        return number.matches(num);
+    }
+
+    /**
+     * 正浮点数
+     *
+     * @param number
+     * @return
+     */
+    public static boolean isFloat(String number) {
+        String num = "^[1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*";
+        if (TextUtils.isEmpty(number)) {
+            return false;
+        } else {
+            return number.matches(num);
+        }
+    }
+
+    /**
+     * 正整数
+     *
+     * @param number
+     * @return
+     */
+    public static boolean isInt(String number) {
+        String num = "^[1-9]\\d*";
+        if (TextUtils.isEmpty(number)) {
+            return false;
+        } else {
+            return number.matches(num);
+        }
+    }
+
+    /**
+     * 1、除了个位，十位以上不能以0开头
+     * 2、小数部分可有可元
+     * 3、小数点后可以一位或者二位
+     *
+     * @param number
+     * @return
+     */
+    public static boolean isRighrNumber(String number) {
+        String num = "";
         if (TextUtils.isEmpty(number)) {
             return false;
         } else {
@@ -177,6 +240,5 @@ public class UtilsRY {
             Log.e("UtilsRY ", "DeleteImage: 图片删除失败");
         }
     }
-
 
 }

@@ -37,7 +37,7 @@
                 android:gravity="bottom|left"
                 android:text="免费更换订单"
                 android:textColor="@color/c7"
-                android:textSize="15sp" />
+                android:textSize="@dimen/main_fg_my_itemTextSize" />
 
             <TextView
                 android:id="@+id/dingdan_tv_time"
@@ -60,7 +60,7 @@
             android:layout_toRightOf="@+id/ll_c"
             android:text="鲁 B 12345"
             android:textColor="@color/c6"
-            android:textSize="15sp" />
+            android:textSize="@dimen/main_fg_my_itemTextSize" />
 
         <ImageView
             android:id="@+id/dingdan_img_jiantou"

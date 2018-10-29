@@ -3,29 +3,20 @@ package com.ruyiruyi.merchant.ui.activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.WindowManager;
 
 import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.ui.fragment.MyGoodsFragment;
 import com.ruyiruyi.merchant.ui.fragment.StorePingJiaFragment;
 import com.ruyiruyi.merchant.ui.fragment.StoreXiangQingFragment;
-import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
+import com.ruyiruyi.rylibrary.base.BaseFragmentActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.functions.Action1;
-
-public class StoreManageActivity extends FragmentActivity {
+public class StoreManageActivity extends BaseFragmentActivity {
     private ActionBar mActionBar;
     private TabLayout mTab;
     private ViewPager mVPager;
@@ -35,6 +26,7 @@ public class StoreManageActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_store_manage);
         mActionBar = (ActionBar) findViewById(R.id.mygoods_acbar);
         mActionBar.setTitle("店铺信息");

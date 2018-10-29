@@ -35,13 +35,16 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.XiangmusBean;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.db.model.Category;
 import com.ruyiruyi.merchant.db.model.Province;
 import com.ruyiruyi.merchant.db.model.ServiceType;
-import com.ruyiruyi.merchant.utils.CircleImageView;
+import com.ruyiruyi.merchant.cell.CircleImageView;
+import com.ruyiruyi.merchant.utils.CropImgUtil;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -50,6 +53,7 @@ import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
 import com.ruyiruyi.rylibrary.utils.TripleDESUtil;
+import com.yalantis.ucrop.UCrop;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -535,21 +539,27 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     return;
                 }
                 currentImage = 0;
-                showPicInputDialog();
+                /*showPicInputDialog();*/
+                //选择裁剪
+                CropImgUtil.choicePhoto(this);
                 break;
             case R.id.img_mdpic_b:
                 if (hasPic_mdPic_b) {
                     return;
                 }
                 currentImage = 1;
-                showPicInputDialog();
+                /*showPicInputDialog();*/
+                //选择裁剪
+                CropImgUtil.choicePhoto(this);
                 break;
             case R.id.img_mdpic_c:
                 if (hasPic_mdPic_c) {
                     return;
                 }
                 currentImage = 2;
-                showPicInputDialog();
+                /*showPicInputDialog();*/
+                //选择裁剪
+                CropImgUtil.choicePhoto(this);
                 break;
             case R.id.img_yyzz:
                 if (hasPic_yyzz) {
@@ -563,7 +573,7 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     return;
                 }
                 currentImage = 4;
-                showPicInputDialogShou();
+                showPicInputDialog();
                 break;
 
 
@@ -727,7 +737,76 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 case TAKE_PICTURE:
                     setImageToViewFromPhone(tempUri, true);
                     break;
+                case CropImgUtil.TAKE_PHOTO://相机返回
+                    //相机返回图片，调用裁剪的方法
+                    CropImgUtil.startUCrop(RegisterActivity.this, CropImgUtil.imageUri, 16, 9);
+                    break;
+                case CropImgUtil.CHOOSE_PHOTO://相册返回
+                    try {
+                        if (data != null) {
+                            Uri uri2 = data.getData();
+                            //相册返回图片，调用裁剪的方法
+                            CropImgUtil.startUCrop(RegisterActivity.this, uri2, 16, 9);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "图片选择失败", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case UCrop.REQUEST_CROP://剪切返回
+                    Uri resultUri = null;
+                    resultUri = UCrop.getOutput(data);
+                    //剪切返回，显示剪切的图片到布局
+                    if (currentImage == 0) {
+                        Glide.with(RegisterActivity.this)
+                                .load(resultUri)
+                                .placeholder(R.drawable.login_code_button)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+                                .skipMemoryCache(true)//跳过内存缓存
+                                .into(img_mdpic_a);
+                        try {
+                            mdPicaBitmap = ImageUtils.getBitmapFormUri(getApplicationContext(), resultUri);
+                            img_mdpic_a_delete.setVisibility(View.VISIBLE);
+                            ll_store_head.setVisibility(View.GONE);
+                            hasPic_mdPic_a = true;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (currentImage == 1) {
+                        Glide.with(RegisterActivity.this)
+                                .load(resultUri)
+                                .placeholder(R.drawable.login_code_button)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+                                .skipMemoryCache(true)//跳过内存缓存
+                                .into(img_mdpic_b);
+                        try {
+                            mdPicbBitmap = ImageUtils.getBitmapFormUri(getApplicationContext(), resultUri);
+                            img_mdpic_b_delete.setVisibility(View.VISIBLE);
+                            ll_store_in.setVisibility(View.GONE);
+                            hasPic_mdPic_b = true;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (currentImage == 2) {
+                        Glide.with(RegisterActivity.this)
+                                .load(resultUri)
+                                .placeholder(R.drawable.login_code_button)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+                                .skipMemoryCache(true)//跳过内存缓存
+                                .into(img_mdpic_c);
+                        try {
+                            mdPiccBitmap = ImageUtils.getBitmapFormUri(getApplicationContext(), resultUri);
+                            img_mdpic_c_delete.setVisibility(View.VISIBLE);
+                            ll_store_workspace.setVisibility(View.GONE);
+                            hasPic_mdPic_c = true;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
+                    break;
             }
         }
     }

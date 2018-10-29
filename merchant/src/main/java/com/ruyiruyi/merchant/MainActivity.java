@@ -30,10 +30,11 @@ import android.widget.Toast;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseFragmentActivity;
 import com.ruyiruyi.merchant.ui.adapter.MyPagerAdapter;
+import com.ruyiruyi.merchant.ui.fragment.IncomeFragment;
 import com.ruyiruyi.merchant.ui.fragment.MyFragment;
 import com.ruyiruyi.merchant.ui.fragment.OrderFragment;
 import com.ruyiruyi.merchant.ui.fragment.StoreFragment;
-import com.ruyiruyi.merchant.utils.NoPreloadHomeTabsCell;
+import com.ruyiruyi.merchant.cell.NoPreloadHomeTabsCell;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.cell.HomeTabsCell;
 import com.ruyiruyi.rylibrary.cell.downcell.CommonProgressDialog;
@@ -119,6 +120,7 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
 //        pagerAdapter = new HomePagerAdapeter(getSupportFragmentManager(), initPagerTitle(), initFragment());
         pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), initPagerTitle(), initFragment());
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(4);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -145,9 +147,13 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
                 viewPager.setCurrentItem(1);
                 tabsCell.setSelected(1);
                 break;
-            case "my"://我的
+            case "income"://收益
                 viewPager.setCurrentItem(2);
                 tabsCell.setSelected(2);
+                break;
+            case "my"://我的
+                viewPager.setCurrentItem(3);
+                tabsCell.setSelected(3);
                 break;
         }
 
@@ -500,6 +506,8 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         StoreFragment storeFragment = new StoreFragment();
         storeFragment.setListener(this);
         fragments.add(storeFragment);
+        IncomeFragment incomeFragment = new IncomeFragment();
+        fragments.add(incomeFragment);
         MyFragment myFragment = new MyFragment();
         myFragment.setListener(this);
         fragments.add(myFragment);
@@ -511,6 +519,7 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         titles = new ArrayList<>();
         titles.add("平台订单");
         titles.add("店铺订单");
+        titles.add("收益");
         titles.add("我的");
         return titles;
     }
@@ -518,6 +527,7 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
     private void initTitle() {
         tabsCell.addView(R.drawable.ic_tubiao1, R.drawable.ic_tubiao1_xuanzhong, "平台订单 ");
         tabsCell.addView(R.drawable.ic_shop_weixuan, R.drawable.ic_shop_xuanzhong, "店铺订单 ");
+        tabsCell.addView(R.drawable.ic_shouyi32, R.drawable.ic_shouyi31, "收益 ");
         tabsCell.addView(R.drawable.ic_wode_weixuan, R.drawable.ic_wode_xuanzhong, "我的 ");
     }
 
@@ -594,21 +604,21 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
 
     /*
     * 接口回调 StoreFragment修改头像成功后通知刷新activity数据方法
-    * */  //(未用 暂用onWindowsFocusChanges)
+    * */  //(启用 由于收益页面不能刷新的问题)
     @Override
     public void forRefreshStoreListener() {
         //刷新适配器数据
-//        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
+        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
     }
 
 
     /*
     * 接口回调 MyFragment修改头像成功后通知刷新activity数据方法
-    * */  //(未用 暂用onWindowsFocusChanges)
+    * */  //(启用 由于收益页面不能刷新的问题)
     @Override
     public void forRefreshMyListener() {
         //刷新适配器数据
-//        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
+        pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
 
     }
 
@@ -621,11 +631,12 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         }
     }
 
-    @Override
+    //未用 由于收益页面不能刷新的问题
+  /*  @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
             //刷新适配器数据
             pagerAdapter.UpdataNewData(initPagerTitle(), initFragment());
         }
-    }
+    }*/
 }

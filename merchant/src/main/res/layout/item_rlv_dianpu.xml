@@ -98,7 +98,7 @@
                 android:singleLine="true"
                 android:text="汽车保养"
                 android:textColor="@color/c7"
-                android:textSize="15sp" />
+                android:textSize="@dimen/main_fg_my_itemTextSize" />
 
             <TextView
                 android:id="@+id/dianpu_tv_time"

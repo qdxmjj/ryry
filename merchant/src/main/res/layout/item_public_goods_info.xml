@@ -21,7 +21,7 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
-        <com.ruyiruyi.merchant.utils.CircleImageView
+        <com.ruyiruyi.merchant.cell.CircleImageView
             android:id="@+id/goods_img"
             style="@style/public_oneitem_image"
             android:src="@drawable/ic_order_luntai"

@@ -29,6 +29,30 @@ public class MerchantBaseActivity extends BaseActivity {
     }
 
     /*
+     * 商家版错误提示dialog
+     * */
+    public void showMerchantErrorDialog(String error) {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
+        TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
+        error_text.setText(error);
+        dialog.setTitle("如意如驿商家版");
+        dialog.setIcon(R.drawable.ic_launcher);
+        dialog.setView(dialogView);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        //设置按钮颜色
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+    }
+
+
+    /*
      * 商家版Token错误跳转dialog
      * */
     public void showMerchantTokenDialog(String error) {

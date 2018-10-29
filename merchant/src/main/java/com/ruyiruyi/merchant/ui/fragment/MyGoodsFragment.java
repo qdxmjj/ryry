@@ -1,14 +1,11 @@
 package com.ruyiruyi.merchant.ui.fragment;
 
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,13 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.GoodsItemBean;
 import com.ruyiruyi.merchant.bean.ItemBottomBean;
 import com.ruyiruyi.merchant.bean.ItemNullBean;
 import com.ruyiruyi.merchant.db.DbConfig;
-import com.ruyiruyi.merchant.ui.activity.MyGoodsActivity;
 import com.ruyiruyi.merchant.ui.multiType.GoodsItemProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemBottomProvider;
 import com.ruyiruyi.merchant.ui.multiType.ItemNullProvider;
@@ -41,12 +36,8 @@ import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Function;
 import me.drakeet.multitype.MultiTypeAdapter;
-import rx.android.schedulers.AndroidSchedulers;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
@@ -248,6 +239,9 @@ public class MyGoodsFragment extends BaseFragment {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Toast.makeText(getContext(), "商品信息加载失败,请检查网络", Toast.LENGTH_SHORT).show();
+
+                //网络异常
+                updataNetError();
             }
 
             @Override
@@ -261,6 +255,14 @@ public class MyGoodsFragment extends BaseFragment {
 //                hideDialogProgress(startDialog);
             }
         });
+    }
+
+    private void updataNetError() {
+        items.clear();
+        items.add(new ItemNullBean(R.drawable.ic_net_error));
+        assertAllRegistered(multiTypeAdapter, items);
+        multiTypeAdapter.notifyDataSetChanged();
+
     }
 
     //下拉刷新

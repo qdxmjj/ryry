@@ -8,7 +8,7 @@
                 android:startColor="@color/c3" />
         </shape>
     </item>
-    <item android:bottom="1dp">
+    <item android:bottom="0.5dp">
         <shape android:shape="rectangle" >
             <gradient
                 android:endColor="@color/white"

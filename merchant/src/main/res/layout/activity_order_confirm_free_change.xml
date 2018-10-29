@@ -1455,7 +1455,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1">
 
-                    <com.ruyiruyi.merchant.utils.CircleImageView
+                    <com.ruyiruyi.merchant.cell.CircleImageView
                         android:id="@+id/pic_xingshizheng"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
@@ -1554,7 +1554,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1">
 
-                    <com.ruyiruyi.merchant.utils.CircleImageView
+                    <com.ruyiruyi.merchant.cell.CircleImageView
                         android:id="@+id/pic_car"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
