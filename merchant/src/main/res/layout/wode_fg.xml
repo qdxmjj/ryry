@@ -10,21 +10,21 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp">
+        android:layout_height="@dimen/main_fg_topflHeight">
 
         <ImageView
             android:id="@+id/img_top"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/main_fg_imgHeight"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_ground"/>
 
         <ImageView
             android:id="@+id/img_user_top"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/main_fg_iconHeight"
+            android:layout_height="@dimen/main_fg_iconHeight"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/main_fg_iconMarginTop"
             android:src="@drawable/ic_launcher"/>
 
         <TextView
@@ -32,54 +32,88 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="130dp"
+            android:layout_marginTop="@dimen/main_fg_icontextMarginTop"
             android:text="用户名"
             android:textColor="#ffffff"
-            android:textSize="15sp"/>
+            android:textSize="14sp"/>
 
         <LinearLayout
             android:id="@+id/ll_mid"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="@dimen/main_fg_tabllHeight"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="170dp"
+            android:layout_marginTop="@dimen/main_fg_tabMarginTop"
             android:background="@drawable/ic_box"
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <TextView
+            <LinearLayout
                 android:id="@+id/tv_mid_wddd"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_dingdan"
-                android:gravity="center"
-                android:paddingTop="15dp"
-                android:text="我的订单"
-                android:textColor="@color/c7"
-                android:textSize="15sp"/>
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <TextView
+                <ImageView
+                    android:id="@+id/img_mid_wddd"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:src="@drawable/ic_dingdan"
+                    android:textColor="@color/c7"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingTop="6dp"
+                    android:text="我的订单"
+                    android:textColor="@color/c7"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/tv_mid_gldp"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_shop"
-                android:gravity="center"
-                android:paddingTop="15dp"
-                android:text="管理店铺"
-                android:textColor="@color/c7"
-                android:textSize="15sp"/>
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_mid_gldp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:src="@drawable/ic_shop"
+                    android:textColor="@color/c7"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingTop="6dp"
+                    android:text="店铺管理"
+                    android:textColor="@color/c7"
+                    android:textSize="14sp"/>
+            </LinearLayout>
 
         </LinearLayout>
 
         <View
             android:id="@+id/v_mid_shu"
             android:layout_width="0.5dp"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/main_fg_tablineHeight"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="180dp"
+            android:layout_marginTop="@dimen/main_fg_tablineMarginTop"
             android:background="@color/c2"/>
     </FrameLayout>
 
@@ -102,10 +136,10 @@
 
                 <ImageView
                     android:id="@+id/img_wdfw"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/main_fg_my_itemimgHeight"
+                    android:layout_height="@dimen/main_fg_my_itemimgHeight"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_service"/>
 
                 <TextView
@@ -117,20 +151,20 @@
                     android:layout_toRightOf="@+id/img_wdfw"
                     android:text="我的服务"
                     android:textColor="@color/c6"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/main_fg_my_itemTextSize"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@color/c2"/>
@@ -144,10 +178,10 @@
 
                 <ImageView
                     android:id="@+id/img_wdsp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/main_fg_my_itemimgHeight"
+                    android:layout_height="@dimen/main_fg_my_itemimgHeight"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_thing"/>
 
                 <TextView
@@ -159,20 +193,20 @@
                     android:layout_toRightOf="@+id/img_wdsp"
                     android:text="我的商品"
                     android:textColor="@color/c6"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/main_fg_my_itemTextSize"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@color/c2"/>
@@ -186,10 +220,10 @@
 
                 <ImageView
                     android:id="@+id/img_tgjl"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/main_fg_my_itemimgHeight"
+                    android:layout_height="@dimen/main_fg_my_itemimgHeight"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_gift"/>
 
                 <TextView
@@ -201,20 +235,20 @@
                     android:layout_toRightOf="@+id/img_tgjl"
                     android:text="推广奖励"
                     android:textColor="@color/c6"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/main_fg_my_itemTextSize"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@color/c2"/>
@@ -228,10 +262,10 @@
 
                 <ImageView
                     android:id="@+id/img_ddfh"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/main_fg_my_itemimgHeight"
+                    android:layout_height="@dimen/main_fg_my_itemimgHeight"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_m_fahuo"/>
 
                 <TextView
@@ -243,20 +277,20 @@
                     android:layout_toRightOf="@+id/img_ddfh"
                     android:text="订单发货"
                     android:textColor="@color/c6"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/main_fg_my_itemTextSize"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@color/c2"/>
@@ -270,35 +304,37 @@
 
                 <ImageView
                     android:id="@+id/img_wyzd"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/main_fg_my_itemimgHeight"
+                    android:layout_height="@dimen/main_fg_my_itemimgHeight"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_zhiding"/>
 
                 <TextView
                     android:id="@+id/tv_wyzd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/img_wyzd"
+                    android:layout_marginLeft="11dp"
                     android:text="我要置顶"
                     android:textColor="@color/c6"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/main_fg_my_itemTextSize"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/img_wyzd"
+                    android:layout_toEndOf="@+id/img_wyzd"
+                    android:layout_marginStart="11dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@color/c2"/>
@@ -312,10 +348,10 @@
 
                 <ImageView
                     android:id="@+id/img_dzyhs"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/main_fg_my_itemimgHeight"
+                    android:layout_height="@dimen/main_fg_my_itemimgHeight"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_word"/>
 
                 <TextView
@@ -327,20 +363,20 @@
                     android:layout_toRightOf="@+id/img_dzyhs"
                     android:text="店主有话说"
                     android:textColor="@color/c6"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/main_fg_my_itemTextSize"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@color/c2"/>
@@ -354,10 +390,10 @@
 
                 <ImageView
                     android:id="@+id/img_shezhi"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/main_fg_my_itemimgHeight"
+                    android:layout_height="@dimen/main_fg_my_itemimgHeight"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_m_shezhi"/>
 
                 <TextView
@@ -369,20 +405,20 @@
                     android:layout_toRightOf="@+id/img_shezhi"
                     android:text="设置"
                     android:textColor="@color/c6"
-                    android:textSize="15sp"/>
+                    android:textSize="@dimen/main_fg_my_itemTextSize"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="10dp"
                     android:src="@drawable/ic_jiantou"/>
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@color/c2"/>

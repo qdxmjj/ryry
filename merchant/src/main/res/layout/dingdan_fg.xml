@@ -15,12 +15,12 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp">
+            android:layout_height="@dimen/main_fg_topflHeight">
 
             <ImageView
                 android:id="@+id/img_top"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/main_fg_imgHeight"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_ground" />
 
@@ -30,10 +30,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="66dp"
+                android:layout_marginTop="50dp"
                 android:text="0"
                 android:textColor="#ffffff"
-                android:textSize="30sp"
+                android:textSize="26sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -41,18 +41,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="120dp"
+                android:layout_marginTop="100dp"
                 android:text="总订单 (单)"
                 android:textColor="#ffffff"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:id="@+id/ll_mid"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="@dimen/main_fg_tabllHeight"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="170dp"
+                android:layout_marginTop="@dimen/main_fg_tabMarginTop"
                 android:background="@drawable/ic_box"
                 android:orientation="horizontal"
                 android:weightSum="2">
@@ -69,7 +69,7 @@
                         android:id="@+id/tv_wwcdd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="12dp"
                         android:text="未完成订单"
                         android:textColor="@color/c7"
                         android:textSize="14sp" />
@@ -77,8 +77,9 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="6dp"
                         android:gravity="center"
+                        android:layout_marginLeft="3dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -87,7 +88,7 @@
                             android:layout_height="wrap_content"
                             android:text="0"
                             android:textColor="@color/c8"
-                            android:textSize="18sp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/tv_wwcdd_dan"
@@ -112,15 +113,16 @@
                         android:id="@+id/tv_ywcdd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="12dp"
                         android:text="已完成订单"
                         android:textColor="@color/c7"
                         android:textSize="14sp" />
 
                     <LinearLayout
+                        android:layout_marginLeft="3dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="6dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -130,7 +132,7 @@
                             android:layout_height="wrap_content"
                             android:text="0"
                             android:textColor="@color/c8"
-                            android:textSize="18sp" />
+                            android:textSize="16sp"/>
 
                         <TextView
                             android:id="@+id/tv_ywcdd_dan"
@@ -148,9 +150,9 @@
             <View
                 android:id="@+id/v_mid_shu"
                 android:layout_width="0.5dp"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/main_fg_tablineHeight"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="180dp"
+                android:layout_marginTop="@dimen/main_fg_tablineMarginTop"
                 android:background="@color/c2" />
         </FrameLayout>
 

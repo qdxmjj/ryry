@@ -194,8 +194,6 @@ public class IncomeFragment extends MerchantBaseFragment implements ServiceIncom
                 saleIncome = 0;
                 extraIncome = 0;
                 allIncome = serviceIncome + goodsIncome + saleIncome + extraIncome;
-                BigDecimal bd = new BigDecimal(allIncome);//double相加设置精度
-                allIncome = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 //绑定数据
                 bindData();
             }
@@ -274,6 +272,7 @@ public class IncomeFragment extends MerchantBaseFragment implements ServiceIncom
             mMainFgPagerAdapter = null;
             mMainFgPagerAdapter = new IncomeFragmentPagerAdapter(getChildFragmentManager(), fragmentList);
             income_pager.setAdapter(mMainFgPagerAdapter);
+            income_pager.setOffscreenPageLimit(4);
             income_tab.setupWithViewPager(income_pager);
             income_pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override

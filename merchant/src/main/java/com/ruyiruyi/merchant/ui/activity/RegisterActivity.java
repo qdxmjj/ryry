@@ -739,14 +739,14 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                     break;
                 case CropImgUtil.TAKE_PHOTO://相机返回
                     //相机返回图片，调用裁剪的方法
-                    CropImgUtil.startUCrop(RegisterActivity.this, CropImgUtil.imageUri, 2, 1);
+                    CropImgUtil.startUCrop(RegisterActivity.this, CropImgUtil.imageUri, 16, 9);
                     break;
                 case CropImgUtil.CHOOSE_PHOTO://相册返回
                     try {
                         if (data != null) {
                             Uri uri2 = data.getData();
                             //相册返回图片，调用裁剪的方法
-                            CropImgUtil.startUCrop(RegisterActivity.this, uri2, 2, 1);
+                            CropImgUtil.startUCrop(RegisterActivity.this, uri2, 16, 9);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

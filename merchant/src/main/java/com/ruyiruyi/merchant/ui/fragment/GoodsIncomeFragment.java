@@ -241,11 +241,11 @@ public class GoodsIncomeFragment extends MerchantBaseFragment {
 
         GoodsIncomeViewBinder goodsIncomeViewBinder = new GoodsIncomeViewBinder(getActivity());
         multiTypeAdapter.register(GoodsIncome.class, goodsIncomeViewBinder);
-
-        mRlv.setAdapter(multiTypeAdapter);
-        assertHasTheSameAdapter(mRlv, multiTypeAdapter);
         multiTypeAdapter.register(ItemNullBean.class, new ItemNullProvider());
         multiTypeAdapter.register(ItemBottomBean.class, new ItemBottomProvider());
+        mRlv.setAdapter(multiTypeAdapter);
+        assertHasTheSameAdapter(mRlv, multiTypeAdapter);
+
 
         orderBeanList = new ArrayList<>();
 

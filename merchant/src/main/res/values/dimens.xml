@@ -26,5 +26,18 @@
     <dimen name="putforward_marginTop">15sp</dimen>
     <dimen name="putforward_marginMid">10sp</dimen>
     <dimen name="putforward_marginBottom">10sp</dimen>
+    <!--主页Fragmnet-->
+    <dimen name="main_fg_imgHeight">160dp</dimen>
+    <dimen name="main_fg_topflHeight">210dp</dimen>
+    <dimen name="main_fg_tabllHeight">70dp</dimen>
+    <dimen name="main_fg_tabMarginTop">140dp</dimen>
+    <dimen name="main_fg_tablineMarginTop">150dp</dimen>
+    <dimen name="main_fg_tablineHeight">50dp</dimen>
+    <dimen name="main_fg_iconHeight">70dp</dimen>
+    <dimen name="main_fg_iconMarginTop">25dp</dimen>
+    <dimen name="main_fg_icontextMarginTop">105dp</dimen>
+    <dimen name="main_fg_my_itemimgHeight">18dp</dimen>
+    <dimen name="main_fg_my_itemTextSize">14sp</dimen>
+    <dimen name="main_tablayout_Height">55dp</dimen>
 
 </resources>

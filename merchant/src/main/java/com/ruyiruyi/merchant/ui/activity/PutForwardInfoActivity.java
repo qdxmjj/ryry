@@ -163,10 +163,10 @@ public class PutForwardInfoActivity extends MerchantBaseActivity {
             if (i % 3 == 0) {
                 putForwardInfo.setPutForwardStatus(1);
                 putForwardInfo.setRemark("提现申请提交后预计7个工作日内到账，请耐心等待");
-            }else if (i % 3 == 1) {
+            } else if (i % 3 == 1) {
                 putForwardInfo.setPutForwardStatus(2);
                 putForwardInfo.setRemark("提现金额到账成功，请注意查收");
-            }else if (i % 3 == 2) {
+            } else if (i % 3 == 2) {
                 putForwardInfo.setPutForwardStatus(3);
                 putForwardInfo.setRemark("微信账号实名信息与提现申请姓名不一致");
             }

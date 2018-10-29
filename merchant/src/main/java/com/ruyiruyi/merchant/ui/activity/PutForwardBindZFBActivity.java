@@ -193,8 +193,8 @@ public class PutForwardBindZFBActivity extends MerchantBaseActivity {
                             try {
                                 JSONObject jsonObject = new JSONObject(result);
                                 int status = jsonObject.getInt("status");
-                                /*if (status == 1 || status == 111111) {*/
-                                if (true) {
+                                if (status == 1 || status == 111111) {
+                                /*if (true) {*/
                                     dialog.dismiss();
 
                                     RequestParams requestParams = new RequestParams(UtilsURL.REQUEST_URL_FAHUO + "incomeInfo/bindingStoreAccountInfo");

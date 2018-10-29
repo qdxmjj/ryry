@@ -1,20 +1,14 @@
 package com.ruyiruyi.merchant.ui.activity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +23,7 @@ import com.ruyiruyi.merchant.ui.adapter.MyPagerAdapter;
 import com.ruyiruyi.merchant.ui.fragment.MyGoodsFragment;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
+import com.ruyiruyi.rylibrary.base.BaseFragmentActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
 
@@ -44,7 +39,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
-public class MyGoodsActivity extends FragmentActivity {
+public class MyGoodsActivity extends BaseFragmentActivity {
     private ActionBar mActionBar;
     private TabLayout mTab;
     private ViewPager mVPager;

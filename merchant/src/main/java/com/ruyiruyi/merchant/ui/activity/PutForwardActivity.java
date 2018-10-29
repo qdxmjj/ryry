@@ -160,7 +160,8 @@ public class PutForwardActivity extends MerchantBaseActivity {
             @Override
             public void call(Void aVoid) {
                 if (isBindZFB) {
-                    if (canUnbindZFB) {//本月未绑定过支付宝账号
+                   /* if (canUnbindZFB) {//本月未绑定过支付宝账号*/
+                    if (true) {//本月未绑定过支付宝账号 // TODO
                         //验证码解绑
                         showUnbindDialog("每个月只能解绑一次支付宝账号，确认要解绑吗？");
                     } else {//本月绑定过支付宝账号现不可解绑
@@ -262,6 +263,10 @@ public class PutForwardActivity extends MerchantBaseActivity {
 
 
     private void judgeBeforePost() {
+        if (putforwardType == 2) { // TODO
+            Toast.makeText(this, "微信提现即将开放,敬请期待!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (et_putforward.getText() == null || et_putforward.getText().length() == 0) {
             showMerchantErrorDialog("提现金额不能为空!");
             return;
@@ -278,18 +283,18 @@ public class PutForwardActivity extends MerchantBaseActivity {
             return;
         }
         double parseDouble = Double.parseDouble(et_putforward.getText().toString());
-        if (parseDouble < 10.0) {
+        /*if (parseDouble < 10.0) {  //TODO
             showMerchantErrorDialog("单笔最少提现金额不能少于10元");
             return;
-        }
+        }*/
         if (parseDouble > balance) {
             showMerchantErrorDialog("可用余额不足");
             return;
         }
-        if (currentPutforward > 0) {//判断是否存在提现中的订单
+        /*if (currentPutforward > 0) {//判断是否存在提现中的订单 TODO
             showMerchantErrorDialog("您有提现中的订单，待提现完成后方可再次申请，请耐心等待");
             return;
-        }
+        }*/
         if (putforwardType == 0) {
             showMerchantErrorDialog("请选择一种提现方式");
             return;
@@ -486,8 +491,8 @@ public class PutForwardActivity extends MerchantBaseActivity {
                             try {
                                 jsonObject = new JSONObject(result);
                                 int status = jsonObject.getInt("status");
-                                /*if (status == 1 || status == 111111) {*/
-                                if (true) {
+                                if (status == 1 || status == 111111) {
+                                /*if (true) {*/
                                     dialog.dismiss();
 
                                     RequestParams requestParams = new RequestParams(UtilsURL.REQUEST_URL_FAHUO + "incomeInfo/clearStoreAccountInfo");
@@ -639,8 +644,8 @@ public class PutForwardActivity extends MerchantBaseActivity {
                             try {
                                 jsonObject = new JSONObject(result);
                                 int status = jsonObject.getInt("status");
-                               /* if (status == 1 || status == 111111) {*/
-                                if (true) {
+                                if (status == 1 || status == 111111) {
+                                /*if (true) {*/
                                     dialog.dismiss();
 
                                     RequestParams requestParams = new RequestParams(UtilsURL.REQUEST_URL_FAHUO + "withdrawInfo/applyWithdrawOrder");
