@@ -41,6 +41,7 @@ import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsClassFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.HomeFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
+import com.ruyiruyi.ruyiruyi.ui.model.HotActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.cell.HomeTabsCell;
@@ -104,6 +105,10 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
     private CommonProgressDialog mBar;
     private Uri tempUri;
     public boolean isGengxin = false;
+    public List<HotActivity> hotActivityList;
+
+    private int forceUpate = 0;  // 1强制更新 0不强制更新
+    private String updateContent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,6 +116,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         content = new FrameLayout(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(content, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        hotActivityList = new ArrayList<>();
 
         //判断权限
         judgePower();
@@ -118,6 +124,8 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         isGengxin = false;
         //版本更新
         getVersion();
+        //弹窗活动
+        getHotActivity();
 
         Intent intent = getIntent();
 
@@ -190,6 +198,55 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
     }
 
+    /**
+     * 热门活动
+     */
+    private void getHotActivity() {
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAppActivity");
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess:version-- " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONArray data = jsonObject1.getJSONArray("data");
+                        hotActivityList.clear();
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject object = data.getJSONObject(i);
+                            int id = object.getInt("id");
+                            String imageUrl = object.getString("imageUrl");
+                            String webUrl = object.getString("webUrl");
+                            HotActivity hotActivity = new HotActivity(id, imageUrl, webUrl);
+                            hotActivityList.add(hotActivity);
+                        }
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -210,6 +267,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         }
         JSONObject jsonObject = new JSONObject();
         try {
+         //   jsonObject.put("appVersion", "2.2.2");
             jsonObject.put("appVersion", versionCode);
             jsonObject.put("versionType", "user");
         } catch (JSONException e) {
@@ -218,6 +276,8 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAppNewestVersion");
         params.addBodyParameter("reqJson", jsonObject.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
+
+
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess:version-- " + result);
@@ -230,7 +290,9 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                         JSONObject data = jsonObject1.getJSONObject("data");
                         downloadUrl = data.getString("downloadUrl");
                         version = data.getString("version");
-                        ShowDialog(version,downloadUrl);;//安装应用的逻辑(写自己的就可以)
+                        updateContent = data.getString("content");
+                        forceUpate = data.getInt("forceUpdate"); //是否强制更新  1强制更新 0不强制更新
+                        ShowDialog(version,downloadUrl,updateContent,forceUpate);;//安装应用的逻辑(写自己的就可以)
                     }
                 } catch (JSONException e) {
 
@@ -261,7 +323,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         super.onRequestPermissionsResult(requestCode,permissions,grantResults);
         if (requestCode == 10086){
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                ShowDialog(version,downloadUrl);
+                ShowDialog(version,downloadUrl,updateContent,forceUpate);
             } else {
                 Intent localIntent = new Intent();
                 localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -290,36 +352,71 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
      * @param version
      * @param downloadUrl
      */
-    private void ShowDialog(String version, final String downloadUrl) {
-        new android.app.AlertDialog.Builder(this)
-                .setTitle("版本更新")
-                .setMessage("ruyiruyi_" + version)
-                .setPositiveButton("更新", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.dismiss();
-                        mBar = new CommonProgressDialog(MainActivity.this);
-                        mBar.setCanceledOnTouchOutside(false);
-                        mBar.setTitle("正在下载");
-                        mBar.setCustomTitle(LayoutInflater.from(
-                                MainActivity.this).inflate(
-                                R.layout.title_dialog, null));
-                        mBar.setMessage("正在下载");
-                        mBar.setIndeterminate(true);
-                        mBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                        mBar.setCancelable(true);
-                        // downFile(URLData.DOWNLOAD_URL);
-                        final DownloadTask downloadTask = new DownloadTask(
-                                MainActivity.this);
-                        downloadTask.execute(downloadUrl);
-                        mBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                downloadTask.cancel(true);
-                            }
-                        });
-                    }
-                }).show();
+    private void ShowDialog(String version, final String downloadUrl,final String updateContent,final int forceUpate) {
+        if (forceUpate == 0){ //不强制更新
+            new android.app.AlertDialog.Builder(this)
+                    .setTitle("版本更新")
+                    .setMessage(updateContent)
+                    .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+                            mBar = new CommonProgressDialog(MainActivity.this);
+                            mBar.setCanceledOnTouchOutside(false);
+                            mBar.setTitle("正在下载");
+                            mBar.setCustomTitle(LayoutInflater.from(
+                                    MainActivity.this).inflate(
+                                    R.layout.title_dialog, null));
+                            mBar.setMessage("正在下载");
+                            mBar.setIndeterminate(true);
+                            mBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                            mBar.setCancelable(true);
+                            // downFile(URLData.DOWNLOAD_URL);
+                            final DownloadTask downloadTask = new DownloadTask(
+                                    MainActivity.this);
+                            downloadTask.execute(downloadUrl);
+                            mBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    downloadTask.cancel(true);
+                                }
+                            });
+                        }
+                    }).show();
+        }else {
+            new android.app.AlertDialog.Builder(this)
+                    .setTitle("版本更新")
+                    .setMessage(updateContent)
+                    .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+                            mBar = new CommonProgressDialog(MainActivity.this);
+                            mBar.setCanceledOnTouchOutside(false);
+                            mBar.setTitle("正在下载");
+                            mBar.setCustomTitle(LayoutInflater.from(
+                                    MainActivity.this).inflate(
+                                    R.layout.title_dialog, null));
+                            mBar.setMessage("正在下载");
+                            mBar.setIndeterminate(true);
+                            mBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                            mBar.setCancelable(true);
+                            // downFile(URLData.DOWNLOAD_URL);
+                            final DownloadTask downloadTask = new DownloadTask(
+                                    MainActivity.this);
+                            downloadTask.execute(downloadUrl);
+                            mBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    downloadTask.cancel(true);
+                                }
+                            });
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
+        }
+
     }
 
 

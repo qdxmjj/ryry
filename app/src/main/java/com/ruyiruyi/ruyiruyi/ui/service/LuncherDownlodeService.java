@@ -684,7 +684,7 @@ public class LuncherDownlodeService extends Service {
 
                 locationService.unregisterListener(mListener); //注销掉监听
                 locationService.stop(); //停止定位服务
-                currentCity = location.getCity();
+                currentCity = location.getDistrict();
                 jingdu = location.getLongitude();
                 weidu = location.getLatitude();
                 Location location1 = new Location(1, currentCity, jingdu, weidu);

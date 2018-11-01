@@ -20,6 +20,7 @@ import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.ui.activity.CityChooseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.Line;
 import com.ruyiruyi.ruyiruyi.ui.activity.SearchActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopGoodsNewActivity;
 import com.ruyiruyi.ruyiruyi.ui.adapter.MenuListAdapter;
@@ -28,6 +29,10 @@ import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Empty;
 import com.ruyiruyi.ruyiruyi.ui.multiType.EmptyViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.HotShop;
+import com.ruyiruyi.ruyiruyi.ui.multiType.HotShopList;
+import com.ruyiruyi.ruyiruyi.ui.multiType.HotShopListViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.HotShopViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMore;
 import com.ruyiruyi.ruyiruyi.ui.multiType.LoadMoreViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Shop;
@@ -55,7 +60,7 @@ import rx.functions.Action1;
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.OnShopItemClick {
+public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.OnShopItemClick,HotShopViewBinder.OnHotShopItemClick {
 
     private static final int MERCHANT_CITY_CHOOSE = 5;
     private static final String TAG = MerchantFragment.class.getSimpleName();
@@ -105,6 +110,7 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
     public String currentStoreType = "";//门店类型0:全部门店  1:4S店   2:快修店  3:维修厂  4:美容店
     public String currentRankType = "0"; //0:默认排序  1：附近优先
     public String currentServiceType = "";//门店服务类型 2:汽车保养  3:美容清洗  4:改装  5:轮胎服务
+    public List<HotShop> hotShopList;
 
 
     public boolean isCleanData =  false;
@@ -140,6 +146,7 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
         initView();
         shopList = new ArrayList<>();
         typeList = new ArrayList<>();
+        hotShopList = new ArrayList<>();
 
 
        /* typeList = new ArrayList<>();
@@ -156,7 +163,97 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
 
         initDataFromService("");
 
+      //  initHotShopData();
 
+    }
+
+    /**
+     * 获取热门门店
+     */
+    private void initHotShopData() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("rankType","1");
+            jsonObject.put("cityName",currentCity);
+            jsonObject.put("longitude",jingdu + "");
+            jsonObject.put("latitude",weidu + "");
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getStoreByIndex");
+        Log.e(TAG, "onSuccess:---------11-----" + jsonObject.toString() );
+        params.addBodyParameter("reqJson",jsonObject.toString());
+        String token = new DbConfig(getContext()).getToken();
+        params.addParameter("token",token);
+        x.http().post(params, new Callback.CacheCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess:---------11-----" + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+
+                        hotShopList.clear();
+                        JSONArray storeQuaryResVos = data.getJSONArray("storeQuaryResVos");
+                        for (int i = 0; i < storeQuaryResVos.length(); i++) {
+                            JSONObject storeObjecct = storeQuaryResVos.getJSONObject(i);
+                            String distance = storeObjecct.getString("distance");
+                            String storeAddress = storeObjecct.getString("storeAddress");
+                            String storeId = storeObjecct.getString("storeId");
+                            int storeIdInt = Integer.parseInt(storeId);
+                            String storeImg = storeObjecct.getString("storeImg");
+                            String storeName = storeObjecct.getString("storeName");
+                            String storeType = storeObjecct.getString("storeType");
+                            String storeTypeColor = storeObjecct.getString("storeTypeColor");
+                            JSONArray serviceArray = storeObjecct.getJSONArray("storeServcieList");
+                            List<ServiceType> serviceTypeList = new ArrayList<ServiceType>();
+                            for (int j = 0; j < serviceArray.length(); j++) {
+                                JSONObject serviceObject = serviceArray.getJSONObject(j);
+                                JSONObject service = serviceObject.getJSONObject("service");
+                                String color = service.getString("color");
+                                String name = service.getString("name");
+                                serviceTypeList.add(new ServiceType(name,color));
+                            }
+                            HotShop hotShop = new HotShop(storeIdInt, storeType, storeTypeColor, storeName, storeImg, storeAddress, distance);
+                            hotShop.setServiceTypeList(serviceTypeList);
+                            hotShopList.add(hotShop);
+                        }
+                        initData();
+                    }else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    }else {
+                        hotShopList.clear();
+                        initData();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable throwable, boolean b) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException e) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+
+            @Override
+            public boolean onCache(String s) {
+                return false;
+            }
+        });
     }
 
     private void initDataFromService(String searchStr) {
@@ -233,12 +330,14 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
                             shopList.add(shop);
                           //  typeList.clear();
                         }
-                        initData();
+                        initHotShopData();
+                       // initData();
                     } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     }else {
                         shopList.clear();
-                        initData();
+                        initHotShopData();
+                      //  initData();
                     }
 
                 } catch (JSONException e) {
@@ -274,6 +373,13 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
             if (items.size() > 0 ){           //当item不是空 >0  移除最后的加载更多的item
                 items.remove(items.size()-1);
             }
+            //热门活动
+           if (currentPage == 1){
+               if (hotShopList.size() > 0){
+                   items.add(new HotShopList(hotShopList));
+               }
+            }
+
             for (int i = 0; i < shopList.size(); i++) {     //加载数据源
                 items.add(shopList.get(i));
             }
@@ -454,6 +560,7 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
                     @Override
                     public void call(Void aVoid) {
                         Intent intent = new Intent(getContext(), CityChooseActivity.class);
+                        intent.putExtra("CITY_NAME",currentCity);
                         startActivityForResult(intent,HomeFragment.CITY_CHOOSE);
                     }
                 });
@@ -479,6 +586,10 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
     }
 
     private void register() {
+        HotShopListViewBinder hotShopListViewBinder = new HotShopListViewBinder(getContext());
+        hotShopListViewBinder.setListener(this);
+        adapter.register(HotShopList.class, hotShopListViewBinder);
+
         ShopViewBinder shopViewBinder = new ShopViewBinder(getContext());
         shopViewBinder.setListener(this);
         adapter.register(Shop.class, shopViewBinder);
@@ -516,6 +627,30 @@ public class MerchantFragment extends RyBaseFragment implements ShopViewBinder.O
     public void onShopItemClickListener(int storeId, String storeMame, String storeImage, List<ServiceType> storeService, Shop shop) {
         if (shopType == 5){//轮胎服务  点击传值给Activity  做forResult返回
             listener.onShopItemClickListener(shop);
+        }else {
+           /* Intent intent = new Intent(getContext(), ShopHomeActivity.class);
+            intent.putExtra("STOREID",storeId);
+            startActivity(intent);*/
+            Intent intent = new Intent(getContext(), ShopGoodsNewActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt(ShopGoodsNewActivity.FROM_TYPE,0);
+            bundle.putInt(ShopGoodsNewActivity.STORE_ID,storeId);
+            bundle.putString(ShopGoodsNewActivity.STORE_IMAGE,storeImage);
+            bundle.putString(ShopGoodsNewActivity.STORE_NAME,storeMame);
+            bundle.putSerializable(ShopGoodsNewActivity.STORE_SERVICE, (Serializable) storeService);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * 热门门店的点击回调
+     */
+    @Override
+    public void onHotShopItemClickListener(int storeId, String storeMame, String storeImage, List<ServiceType> storeService, HotShop shop) {
+        Log.e(TAG, "onHotShopItemClickListener: +-+-+-");
+        if (shopType == 5){//轮胎服务  点击传值给Activity  做forResult返回
+            listener.onShopItemClickListener(new Shop(shop.storeId,shop.storeTypeName,shop.storeTypreColoe,shop.storeName,shop.storeImage,shop.storeAddress,shop.storeDistence,shop.serviceTypeList));
         }else {
            /* Intent intent = new Intent(getContext(), ShopHomeActivity.class);
             intent.putExtra("STOREID",storeId);

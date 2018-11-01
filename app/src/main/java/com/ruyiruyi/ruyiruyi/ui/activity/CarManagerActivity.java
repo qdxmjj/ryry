@@ -1,5 +1,7 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -214,7 +216,7 @@ public class CarManagerActivity extends RyBaseActivity {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 Car car = carList.get(position);
-                int userCarId = car.getUserCarId();
+                final int userCarId = car.getUserCarId();
                 switch (index) {
                     case 0:             //设为默认
                         Log.e(TAG, "onMenuItemClick: " + userCarId);
@@ -222,7 +224,26 @@ public class CarManagerActivity extends RyBaseActivity {
                         break;
                     case 1:         //clear
                         Log.e(TAG, "onMenuItemClick: " + userCarId);
-                        deleteCar(userCarId);
+                        final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getApplicationContext());
+                        deleteDialog.setIcon(R.mipmap.ic_logo);
+                        deleteDialog.setTitle("删除车辆");
+                        deleteDialog.setMessage("您确认要删除车辆么？");
+                        deleteDialog.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                deleteCar(userCarId);
+                            }
+                        });
+                        deleteDialog.setNegativeButton("关闭",
+                                new DialogInterface.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+                        deleteDialog.show();
+
                         break;
                 }
                 return false;

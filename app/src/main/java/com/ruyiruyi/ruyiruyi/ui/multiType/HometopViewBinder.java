@@ -89,7 +89,7 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        listener.onCityLayoutClickListener();
+                        listener.onCityLayoutClickListener(hometop.getCityName());
                     }
                 });
         RxViewAction.clickNoDouble(holder.carLayout)
@@ -124,7 +124,7 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
     }
 
     public interface OnHomeTopItemClickListener{
-        void onCityLayoutClickListener();
+        void onCityLayoutClickListener(String cityName);
         void onCarItemClickListener(int state);
         void onLunboClikcListener(int position);
     }

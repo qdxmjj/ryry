@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp">
+
         <ImageView
             android:id="@+id/shop_image"
             android:layout_width="100dp"
@@ -23,64 +24,70 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
             android:orientation="vertical">
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/shop_name_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="青岛市春阳路天安数码城一号门店"
-                    android:textSize="16dp"
-                    android:textColor="@color/c7"
-                    android:singleLine="true"
+                    android:layout_marginRight="70dp"
                     android:ellipsize="end"
-                    android:layout_marginRight="70dp"/>
+                    android:singleLine="true"
+                    android:text="青岛市春阳路天安数码城一号门店"
+                    android:textColor="@color/c7"
+                    android:textSize="16dp" />
+
                 <TextView
                     android:id="@+id/shop_type_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="快修店"
                     android:layout_gravity="right|center_vertical"
-                    android:textSize="16sp"
                     android:background="@drawable/tag_bg_lv"
-                    android:textColor="#ffffff"
-                    android:paddingTop="1dp"
                     android:paddingBottom="1dp"
                     android:paddingLeft="4dp"
-                    android:paddingRight="4dp"/>
+                    android:paddingRight="4dp"
+                    android:paddingTop="1dp"
+                    android:text="快修店"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
             </FrameLayout>
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp">
+
                 <TextView
                     android:id="@+id/shop_address_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="地址：青岛市城阳区春阳路天安数码城"
-                    android:textSize="13sp"
-                    android:singleLine="true"
+                    android:layout_marginRight="60dp"
                     android:ellipsize="end"
-                    android:layout_marginRight="60dp"/>
+                    android:singleLine="true"
+                    android:text="地址：青岛市城阳区春阳路天安数码城"
+                    android:textSize="13sp" />
+
                 <TextView
                     android:id="@+id/shop_distence_text"
                     android:layout_width="55dp"
                     android:layout_height="wrap_content"
-                    android:text="18km"
+                    android:layout_gravity="right|center_vertical"
+                    android:enabled="true"
                     android:gravity="right"
                     android:singleLine="true"
-                    android:enabled="true"
-                    android:textSize="12sp"
-                    android:layout_gravity="right|center_vertical"/>
+                    android:text="18km"
+                    android:textSize="12sp" />
             </FrameLayout>
 
             <com.ruyiruyi.rylibrary.cell.flowlayout.TagFlowLayout
                 android:id="@+id/shop_tag_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp" />
 
         </LinearLayout>
     </LinearLayout>

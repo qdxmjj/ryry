@@ -151,7 +151,14 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             Log.e(TAG, "onActivityCreated: --" + currentCity);
             Log.e(TAG, "onActivityCreated: --" + jingdu);
             Log.e(TAG, "onActivityCreated: --" + weidu);
+        }else {
+            startActivity(new Intent(getContext(),CityChooseActivity.class));
         }
+
+        if (currentCity.equals("选择城市")){
+            startActivity(new Intent(getContext(),CityChooseActivity.class));
+        }
+
 
         initdataFromService();
     }
@@ -164,6 +171,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId", id);
+            jsonObject.put("position", currentCity);
         } catch (JSONException e) {
         }
         lunbos.clear();
@@ -174,9 +182,6 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         params.addParameter("token", token);
         Log.e(TAG, "initdataFromService: -----------------" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
-
-
-
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: --------------" + result);
@@ -187,15 +192,22 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         //获取底部活动列表
-                        JSONArray jsActivityList = data.getJSONArray("activityList");
-                        for (int i = 0; i < jsActivityList.length(); i++) {
-                            JSONObject objBean = (JSONObject) jsActivityList.get(i);
-                            String imageUrl = objBean.getString("imageUrl");
-                            String webUrl = objBean.getString("webUrl");
-                            OneEvent bean = new OneEvent(imageUrl, webUrl);
-                            activitys.add(bean);
-                        }
+                        activitys.clear();
+                        try {
+                            JSONArray jsActivityList = data.getJSONArray("activityList");
+                            if (jsActivityList.length() > 0){
+                                for (int i = 0; i < jsActivityList.length(); i++) {
+                                    JSONObject objBean = (JSONObject) jsActivityList.get(i);
+                                    String imageUrl = objBean.getString("imageUrl");
+                                    String webUrl = objBean.getString("webUrl");
+                                    OneEvent bean = new OneEvent(imageUrl, webUrl);
+                                    activitys.add(bean);
+                                }
+                            }
 
+                        }catch (JSONException exception){
+
+                        }
                         //获取轮播数据
                         JSONArray lunboList = data.getJSONArray("lunbo_infos");
                         for (int i = 0; i < lunboList.length(); i++) {
@@ -341,7 +353,13 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
 
         items.add(new Function());
         items.add(new ThreeEvent());
-        items.add(activitys.get(0));//TODO 活动列表暂1条数据
+        if (activitys.size() > 0){
+            for (int i = 0; i < activitys.size(); i++) {
+                items.add( activitys.get(i));
+            }
+        }
+
+       // items.add(activitys.get(0));//TODO 活动列表暂1条数据
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
@@ -376,8 +394,9 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
      * 城市选择
      */
     @Override
-    public void onCityLayoutClickListener() {
+    public void onCityLayoutClickListener(String cityName) {
         Intent intent = new Intent(getContext(), CityChooseActivity.class);
+        intent.putExtra("CITY_NAME",cityName);
         startActivityForResult(intent, CITY_CHOOSE);
 
     }

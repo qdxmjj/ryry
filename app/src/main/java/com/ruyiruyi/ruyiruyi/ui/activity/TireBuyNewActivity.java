@@ -240,7 +240,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
             tireRankCountText.setText("已选 " + figure + "," + rankName + "," + tireCount + "条" );
             if (cxwwyCount > 0){
                 cxwyChooseLayout.setVisibility(View.VISIBLE);
-                cxwyCountText.setText("畅行无忧" + cxwwyCount + "次");
+              /*  cxwyCountText.setText("畅行无忧" + cxwwyCount + "次");
                 List<CxwyTimesPrice> cxwyTimesPriceList = tireInfo.getCxwyTimesPriceList();
                 String shoeBasePrice = tireInfo.getShoeBasePrice();
                 for (int i = 0; i < cxwyTimesPriceList.size(); i++) {
@@ -250,7 +250,8 @@ public class TireBuyNewActivity extends RyBaseActivity {
                         cxwyAllPrice = format + "";
                         cxwyPriceText.setText(" ￥" + cxwyAllPrice);
                     }
-                }
+                }*/
+                cxwyPriceText.setText(" ￥" + cxwyAllPrice);
             }else {
                 cxwyChooseLayout.setVisibility(View.GONE);
             }
