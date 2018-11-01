@@ -1,24 +1,21 @@
 package com.ruyiruyi.ruyiruyi;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.Service;
 import android.os.Vibrator;
-
+import android.support.multidex.MultiDexApplication;
 
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
-import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class  MyApplication extends Application {
+public class  MyApplication extends MultiDexApplication {
     private List<Activity> oList;
     public LocationService locationService;
     public Vibrator mVibrator;

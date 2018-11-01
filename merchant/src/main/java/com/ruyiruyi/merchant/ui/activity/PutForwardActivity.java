@@ -160,8 +160,8 @@ public class PutForwardActivity extends MerchantBaseActivity {
             @Override
             public void call(Void aVoid) {
                 if (isBindZFB) {
-                   /* if (canUnbindZFB) {//本月未绑定过支付宝账号*/
-                    if (true) {//本月未绑定过支付宝账号 // TODO
+                    if (canUnbindZFB) {//本月未绑定过支付宝账号
+                    /*if (true) {//本月未绑定过支付宝账号 // TODO*/
                         //验证码解绑
                         showUnbindDialog("每个月只能解绑一次支付宝账号，确认要解绑吗？");
                     } else {//本月绑定过支付宝账号现不可解绑
@@ -283,18 +283,18 @@ public class PutForwardActivity extends MerchantBaseActivity {
             return;
         }
         double parseDouble = Double.parseDouble(et_putforward.getText().toString());
-        /*if (parseDouble < 10.0) {  //TODO
+        if (parseDouble < 10.0) {  //TODO
             showMerchantErrorDialog("单笔最少提现金额不能少于10元");
             return;
-        }*/
+        }
         if (parseDouble > balance) {
             showMerchantErrorDialog("可用余额不足");
             return;
         }
-        /*if (currentPutforward > 0) {//判断是否存在提现中的订单 TODO
+        if (currentPutforward > 0) {//判断是否存在提现中的订单 TODO
             showMerchantErrorDialog("您有提现中的订单，待提现完成后方可再次申请，请耐心等待");
             return;
-        }*/
+        }
         if (putforwardType == 0) {
             showMerchantErrorDialog("请选择一种提现方式");
             return;
