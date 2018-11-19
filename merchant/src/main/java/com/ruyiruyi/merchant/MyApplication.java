@@ -1,8 +1,8 @@
 package com.ruyiruyi.merchant;
 
-import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -12,7 +12,7 @@ import org.xutils.x;
 
 import cn.jpush.android.api.JPushInterface;
 
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
     private static MyApplication mInstance;
     public static IWXAPI mWxApi;
     public static String WEIXIN_APP_ID = "wxe7d25890f6c97a1a";
