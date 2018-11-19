@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def VERSION_CODE = 16
-def VERSION_NAME = "3.3.3"
+def VERSION_NAME = "3.3.7"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''
@@ -165,6 +165,7 @@ dependencies {
     })
     /*微信*/
     compile project(':rylibrary')
+    compile project(':ocr_ui')
 
     compile 'com.alibaba:fastjson:1.1.56.android'
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'
@@ -174,4 +175,5 @@ dependencies {
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     compile 'com.zhy:okhttputils:2.6.2'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:multidex:1.0.0'
 }

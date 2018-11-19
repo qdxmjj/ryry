@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
 import android.os.Vibrator;
+import android.support.multidex.MultiDexApplication;
 
 
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
+import com.baidu.ocr.sdk.OCR;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -18,7 +20,7 @@ import org.xutils.x;
 import java.util.ArrayList;
 import java.util.List;
 
-public class  MyApplication extends Application {
+public class  MyApplication extends MultiDexApplication {
     private List<Activity> oList;
     public LocationService locationService;
     public Vibrator mVibrator;
@@ -44,6 +46,7 @@ public class  MyApplication extends Application {
 
      //   api = WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
      //   api.registerApp(Constants.APP_ID);
+
 
 
 

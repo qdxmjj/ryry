@@ -1,1 +1,1 @@
-include ':app', ':rylibrary', ':merchant'
+include ':app', ':rylibrary', ':merchant', ':warehouse', ':ocr_ui'

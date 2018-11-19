@@ -146,6 +146,7 @@ public class LuncherDownlodeService extends Service {
             } else {
                 String time = carList.get(carList.size() - 1).getTime();
                 jsonObject.put("time", time);
+                Log.e(TAG, "initCarDataIntoDb:9+----------------------------------------------- " + time);
             }
         } catch (JSONException e) {
         }
@@ -155,7 +156,7 @@ public class LuncherDownlodeService extends Service {
             @Override
             public void onSuccess(String result) {
                 try {
-                    Log.e(TAG, "onSuccess: " + result);
+                    Log.e(TAG, "onSuccess:-------------------------------------------- " + result);
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");

@@ -115,7 +115,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                             cancleFirstTire();
                         } else if (orderType == 4) {
                             cancleTireRepair();
-                        } else if (orderType == 3) {
+                        } else if (orderType == 3 ) {
                             cancleFreeTire();
                         }
 
@@ -283,7 +283,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 actionBar.setRightView("取消订单");
             }
         } else if (orderType == 3) {
-            if (orderState == 11) {
+            if (orderState == 11 || orderState == 5) {
                 actionBar.setRightView("取消订单");
             }
         }

@@ -58,14 +58,14 @@ public class NewRatingBar extends LinearLayout {
         this.setOrientation(HORIZONTAL);
         TypedArray mTypedArray = context.obtainStyledAttributes(attrs, R.styleable.NewRatingBar);
         this.starImageSize = mTypedArray.getDimension(0, 20.0F);
-        /*this.starPadding = mTypedArray.getDimension(1, 10.0F);
+        this.starPadding = mTypedArray.getDimension(1, 10.0F);
         this.starStep = mTypedArray.getFloat(7, 1.0F);
         this.stepSize = NewRatingBar.StepSize.fromStep(mTypedArray.getInt(8, 1));
         this.starCount = mTypedArray.getInteger(2, 5);
         this.starEmptyDrawable = mTypedArray.getDrawable(3);
         this.starFillDrawable = mTypedArray.getDrawable(4);
         this.starHalfDrawable = mTypedArray.getDrawable(5);
-        this.mClickable = mTypedArray.getBoolean(6, true);*/
+        this.mClickable = mTypedArray.getBoolean(6, true);
         mTypedArray.recycle();
 
         for(int i = 0; i < this.starCount; ++i) {
