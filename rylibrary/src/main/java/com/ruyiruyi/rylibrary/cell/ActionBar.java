@@ -140,6 +140,10 @@ public class ActionBar extends FrameLayout {
         rightView.setVisibility(VISIBLE);
     }
 
+    public void setColor(int color){
+        content.setBackgroundColor(color);
+    }
+
     public void setTitle(String title){
         titleView.setText(title);
     }

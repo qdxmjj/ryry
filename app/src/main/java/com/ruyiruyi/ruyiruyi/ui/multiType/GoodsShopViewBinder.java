@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
+import java.text.DecimalFormat;
+
 import me.drakeet.multitype.ItemViewProvider;
 import rx.functions.Action1;
 
@@ -42,7 +44,18 @@ public class GoodsShopViewBinder extends ItemViewProvider<GoodsShop, GoodsShopVi
         Glide.with(context).load(goodsShop.getGoodsImage()).into(holder.goodsImageView);
         holder.goodsNameText.setText(goodsShop.getGoodsName());
         holder.gooidsPriceText.setText("￥" + goodsShop.getGoodsPrice());
-        holder.goodsDistanceText.setText(goodsShop.getGoodsDistance() + "m");
+        //holder.goodsDistanceText.setText(goodsShop.getGoodsDistance() + "m");
+
+        double distenceDouble = Double.parseDouble(goodsShop.getGoodsDistance());
+        if (distenceDouble > 500){
+            double v = distenceDouble / 100 / 10;
+            DecimalFormat df = new DecimalFormat("#.0");
+            String distenceStr = df.format(v);
+            holder.goodsDistanceText.setText(distenceStr + "公里");
+        }else {
+            holder.goodsDistanceText.setText(goodsShop.getGoodsDistance() + "m");
+        }
+
         holder.goodsAddressText.setText(goodsShop.getStoreName());
 
         RxViewAction.clickNoDouble(holder.goodsShopLayout)

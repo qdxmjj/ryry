@@ -59,6 +59,8 @@ public class BottomEventActivity extends BaseWebActivity {
         webUrl = intent.getStringExtra("webUrl");
         Log.e(TAG, "onCreate: webUrl = " + webUrl);
 
+
+
         initView();
         bindView();
         initData();

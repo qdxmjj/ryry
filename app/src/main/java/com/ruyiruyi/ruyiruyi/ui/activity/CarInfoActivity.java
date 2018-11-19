@@ -32,6 +32,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.ocr.sdk.OCR;
+import com.baidu.ocr.sdk.OnResultListener;
+import com.baidu.ocr.sdk.exception.OCRError;
+import com.baidu.ocr.sdk.model.AccessToken;
+import com.baidu.ocr.ui.camera.CameraActivity;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
@@ -42,6 +47,8 @@ import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarCoupon;
 import com.ruyiruyi.ruyiruyi.ui.multiType.CarCouponViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.RoadChoose;
+import com.ruyiruyi.ruyiruyi.ui.service.RecognizeService;
+import com.ruyiruyi.ruyiruyi.utils.FileUtil;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.RyTransparentDialog;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
@@ -187,6 +194,8 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private MultiTypeAdapter adapter;
 
     public List<CarCoupon> carCouponList;
+    private static final int REQUEST_CODE_DRIVING_LICENSE = 121;  //驾驶证识别
+    private static final int REQUEST_CODE_VEHICLE_LICENSE = 120;  //行驶证证识别
 
 
     @Override
@@ -206,6 +215,34 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                 }
             }
         });
+
+        //初始化百度 文字识别OCR单例
+
+  /*      OCR.getInstance(this).initAccessTokenWithAkSk(new OnResultListener<AccessToken>() {
+            @Override
+            public void onResult(AccessToken result) {
+                // 调用成功，返回AccessToken对象
+                String token = result.getAccessToken();
+            }
+            @Override
+            public void onError(OCRError error) {
+                // 调用失败，返回OCRError子类SDKError对象
+            }
+        }, getApplicationContext(), "3ScyPTo44fdxDBeRngqxlLm8", "finbwQiT7jL0z9krsbBqKiQBYZh7TyIR");*/
+        OCR.getInstance(this).initAccessToken(new OnResultListener<AccessToken>() {
+            @Override
+            public void onResult(AccessToken result) {
+                // 调用成功，返回AccessToken对象
+                String token = result.getAccessToken();
+                Log.e(TAG, "onError: 成功了啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊");
+            }
+            @Override
+            public void onError(OCRError error) {
+                // 调用失败，返回OCRError子类SDKError对象
+                Log.e(TAG, "onError: 失败了啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊");
+            }
+        }, getApplicationContext());
+
 
         codeDialog = new ProgressDialog(this);
 
@@ -747,16 +784,27 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                     }
                 });
 
+        /**
+         * 拍行驶证
+         */
         RxViewAction.clickNoDouble(addZhuyeLayout)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                      /*
                         if (canClick == 1){
                             return;
                         }
                         Log.e(TAG, "call: 1");
                         currentImage = 0;
-                        showChoosePicDialog();
+                        showChoosePicDialog();*/
+                        Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
+                        // 设置临时存储
+                        intent.putExtra(CameraActivity.KEY_OUTPUT_FILE_PATH,
+                                FileUtil.getSaveFile(getApplication()).getAbsolutePath());
+                        intent.putExtra(CameraActivity.KEY_CONTENT_TYPE,
+                                CameraActivity.CONTENT_TYPE_GENERAL);
+                        startActivityForResult(intent, REQUEST_CODE_VEHICLE_LICENSE);
                     }
                 });
         RxViewAction.clickNoDouble(addLichengbiaoLayout)
@@ -1463,6 +1511,16 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                     if (data != null) {
                         setImageToView(data); // 让刚才选择裁剪得到的图片显示在界面上
                     }
+                    break;
+                case REQUEST_CODE_VEHICLE_LICENSE:
+
+                    RecognizeService.recVehicleLicense(this, FileUtil.getSaveFile(getApplicationContext()).getAbsolutePath(),
+                            new RecognizeService.ServiceListener() {
+                                @Override
+                                public void onResult(String result) {
+                                    Log.e(TAG, "onResult: --+6-+++++----------" +result);
+                                }
+                            });
                     break;
             }
         }else if (resultCode == ROAD_CONDITITION){ //路况选择的回掉

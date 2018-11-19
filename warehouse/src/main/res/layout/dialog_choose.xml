@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_background"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:id="@+id/dialog_title_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="请选择供应商"
+        android:textSize="18sp"
+        android:textColor="@color/c7"
+        android:gravity="center"
+        android:layout_marginTop="10dp"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/choose_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

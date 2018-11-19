@@ -171,7 +171,12 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId", id);
-            jsonObject.put("position", currentCity);
+            if (currentCity !=null && !currentCity.equals("")){
+                jsonObject.put("position", currentCity);
+            }else {
+                jsonObject.put("position", "");
+            }
+
         } catch (JSONException e) {
         }
         lunbos.clear();
@@ -209,6 +214,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
 
                         }
                         //获取轮播数据
+                        lunbos.clear();
                         JSONArray lunboList = data.getJSONArray("lunbo_infos");
                         for (int i = 0; i < lunboList.length(); i++) {
                             JSONObject object = lunboList.getJSONObject(i);
@@ -291,13 +297,13 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     }
 
     private void saveLunboInToDb() {
-        DbConfig dbConfig = new DbConfig(getContext());
+        /*DbConfig dbConfig = new DbConfig(getContext());
         DbManager db = dbConfig.getDbManager();
         try {
             db.saveOrUpdate(lunbos);
         } catch (DbException e) {
 
-        }
+        }*/
 
     }
 
@@ -327,15 +333,17 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             int carId = user.getCarId();
         }
 
+/*
 
         List<Lunbo> lunboList = new ArrayList<>();
         lunboList = dbConfig.getLunbo();
 
+*/
 
         items.clear();
         ArrayList<String> images = new ArrayList<>();
-        for (int i = 0; i < lunboList.size(); i++) {
-            images.add(lunboList.get(i).getContentImageUrl());
+        for (int i = 0; i < lunbos.size(); i++) {
+            images.add(lunbos.get(i).getContentImageUrl());
         }
         if (!(user == null)) {
             //int firstAddCar1 = user.getFirstAddCar();
@@ -433,6 +441,10 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         }
     }
 
+    /**
+     * 轮播图点击
+     * @param position
+     */
     @Override
     public void onLunboClikcListener(int position) {
         Log.e(TAG, "onLunboClikcListener: " + position);
