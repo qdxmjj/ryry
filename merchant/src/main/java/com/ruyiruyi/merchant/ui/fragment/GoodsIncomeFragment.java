@@ -136,7 +136,7 @@ public class GoodsIncomeFragment extends MerchantBaseFragment {
                         /*goodsIncome.setOrderImg(objbean.getString(""));*/
                         /*goodsIncome.setOrderType(objbean.getString("shoeName"));*/
                         goodsIncome.setOrderTime(objbean.getLong("time"));
-                        goodsIncome.setOrderPrice(objbean.getDouble("actuallyPrice"));
+                        goodsIncome.setOrderPrice(objbean.getDouble("earnings"));
 
                         goodsIncome.setOrderNo(objbean.getString("no"));
 

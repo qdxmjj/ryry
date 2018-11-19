@@ -165,7 +165,6 @@ dependencies {
     })
     /*微信*/
     compile project(':rylibrary')
-
     compile 'com.alibaba:fastjson:1.1.56.android'
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
@@ -174,4 +173,6 @@ dependencies {
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     compile 'com.zhy:okhttputils:2.6.2'
     testCompile 'junit:junit:4.12'
+    compile files('libs/eventbus-3.0.0.jar')
+    compile files('libs/eventbus-3.0.0-sources.jar')
 }

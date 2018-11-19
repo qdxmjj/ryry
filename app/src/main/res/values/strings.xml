@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">如驿如意</string>
 
-    <string name="errcode_success">发送成功</string>
+    <string name="errcode_success">登录成功</string>
+    <string name="share_success">分享成功</string>
     <string name="errcode_cancel">发送取消</string>
     <string name="errcode_deny">发送被拒绝</string>
     <string name="errcode_unsupported">不支持错误</string>

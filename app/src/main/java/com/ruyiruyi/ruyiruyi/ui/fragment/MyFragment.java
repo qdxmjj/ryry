@@ -1,7 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.fragment;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -22,17 +21,16 @@ import com.ruyiruyi.ruyiruyi.ui.activity.ContactServiceActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CouponActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CreditLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
-import com.ruyiruyi.ruyiruyi.ui.activity.Line;
 import com.ruyiruyi.ruyiruyi.ui.activity.MyLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PromotionActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.PutForwardActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.SettingActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopEvaluateActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.UserInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
-import com.ruyiruyi.ruyiruyi.ui.multiType.Coupon;
 import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.UIOpenHelper;
 import com.ruyiruyi.ruyiruyi.wxapi.WXEntryActivity;
@@ -82,6 +80,7 @@ public class MyFragment extends RyBaseFragment {
     private ImageView messageView;
     private ImageView testImage;
     private LinearLayout kefuLayout;
+    private LinearLayout mywallet_layout;
 
     @Nullable
     @Override
@@ -174,7 +173,22 @@ public class MyFragment extends RyBaseFragment {
         messageView = (ImageView) getView().findViewById(R.id.message_view);
         testImage = (ImageView) getView().findViewById(R.id.test_image);
         kefuLayout = (LinearLayout) getView().findViewById(R.id.kefu_layout);
+        mywallet_layout = (LinearLayout) getView().findViewById(R.id.mywallet_layout);
 
+        /**
+         * 我的钱包
+         */
+        RxViewAction.clickNoDouble(mywallet_layout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
+                        startActivity(new Intent(getContext(), PutForwardActivity.class));
+                    }
+                });
         /**
          * 联系客服
          */
@@ -195,7 +209,7 @@ public class MyFragment extends RyBaseFragment {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        
+
                     }
                 });
 

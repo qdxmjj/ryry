@@ -5,10 +5,10 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
-import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.MainActivity;
+import com.ruyiruyi.ruyiruyi.MyApplication;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.Newest;
@@ -34,8 +35,6 @@ import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.utils.AndroidUtilities;
 import com.ruyiruyi.rylibrary.utils.TripleDESUtil;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,7 +75,7 @@ public class LoginActivity extends RyBaseActivity {
     private TextView forgetPassword;
     private ProgressDialog codeDialog;
     private LinearLayout weixinLoginLayout;
-    private IWXAPI api;
+   /* private IWXAPI api;*/
 
     public static String HEADURL = "HEADURL";
     public static String NICKNAME = "NICKNAME";
@@ -93,8 +92,8 @@ public class LoginActivity extends RyBaseActivity {
         String ANDROID_ID = Settings.System.getString(this.getContentResolver(), Settings.System.ANDROID_ID);
         codeDialog = new ProgressDialog(this);
 
-        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID, true);
-        api.registerApp(Constants.APP_ID);
+        /*api = WXAPIFactory.createWXAPI(this, Constants.APP_ID, true);
+        api.registerApp(Constants.APP_ID);*/
         initView();
 
 
@@ -219,10 +218,11 @@ public class LoginActivity extends RyBaseActivity {
      * 微信登陆
      */
     private void weixinLogin() {
+        Constants.WX_TYPE = 1;
         SendAuth.Req req = new SendAuth.Req();
         req.scope = "snsapi_userinfo";
         req.state = "wechat_sdk_微信登录";
-        api.sendReq(req);
+        MyApplication.mWxApi.sendReq(req);
     }
 
     /**

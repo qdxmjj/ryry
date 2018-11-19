@@ -1,29 +1,36 @@
 package com.ruyiruyi.ruyiruyi;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.Service;
 import android.os.Vibrator;
-import android.support.multidex.MultiDexApplication;
 
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class  MyApplication extends MultiDexApplication {
+public class MyApplication extends Application {
     private List<Activity> oList;
     public LocationService locationService;
     public Vibrator mVibrator;
-    private IWXAPI api;
+
+    public static IWXAPI mWxApi;
+    /*public static String WEIXIN_APP_ID = Constants.APP_ID;
+    public static String WEIXIN_APP_SECRET = Constants.APP_SECRET_WX;*/
+    public static String WEIXIN_APP_ID = "wx407c59de8b10c601";
+    public static String WEIXIN_APP_SECRET = "62a20f41249091afa6075d3cfb7ea93f";
 
 
     @Override
     public void onCreate() {
+        super.onCreate();
         x.Ext.init(this);
         x.Ext.setDebug(true);
         oList = new ArrayList<Activity>();
@@ -31,7 +38,7 @@ public class  MyApplication extends MultiDexApplication {
          * 初始化定位sdk，建议在Application中创建
          */
         locationService = new LocationService(getApplicationContext());
-        mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
+        mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
 
         // 在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
         SDKInitializer.initialize(this);
@@ -39,13 +46,25 @@ public class  MyApplication extends MultiDexApplication {
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
 
-     //   api = WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
-     //   api.registerApp(Constants.APP_ID);
+        //   api = WXAPIFactory.createWXAPI(this, Constants.APP_ID,true);
+        //   api.registerApp(Constants.APP_ID);
 
+        /*
+        // 将MultiDex注入到项目中
+        MultiDex.install(this);*/
 
+        //注册微信
+        rgisterWX();
 
     }
 
+
+    private void rgisterWX() {
+        //第二个参数是指你应用在微信开放平台上的AppID
+        mWxApi = WXAPIFactory.createWXAPI(this, WEIXIN_APP_ID, false);
+        // 将该app注册到微信
+        mWxApi.registerApp(WEIXIN_APP_ID);
+    }
 
     /**
      * 添加Activity
@@ -56,6 +75,7 @@ public class  MyApplication extends MultiDexApplication {
             oList.add(activity);//把当前Activity添加到集合中
         }
     }
+
     /**
      * 销毁单个Activity
      */
@@ -66,6 +86,7 @@ public class  MyApplication extends MultiDexApplication {
             activity.finish();//销毁当前Activity
         }
     }
+
     /**
      * 销毁所有的Activity
      */

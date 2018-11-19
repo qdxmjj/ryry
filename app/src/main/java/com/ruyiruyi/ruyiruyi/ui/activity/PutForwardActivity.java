@@ -1,4 +1,4 @@
-package com.ruyiruyi.merchant.ui.activity;
+package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -17,14 +17,15 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ruyiruyi.merchant.MyApplication;
-import com.ruyiruyi.merchant.R;
-import com.ruyiruyi.merchant.cell.VerificationCodeView;
-import com.ruyiruyi.merchant.db.DbConfig;
-import com.ruyiruyi.merchant.eventbus.WxLoginEvent;
-import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
-import com.ruyiruyi.merchant.utils.UtilsRY;
-import com.ruyiruyi.merchant.utils.UtilsURL;
+import com.ruyiruyi.ruyiruyi.MyApplication;
+import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.eventbus.WxLoginEvent;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.cell.VerificationCodeView;
+import com.ruyiruyi.ruyiruyi.utils.Constants;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
@@ -43,7 +44,7 @@ import java.util.Calendar;
 import rx.functions.Action1;
 
 
-public class PutForwardActivity extends MerchantBaseActivity {
+public class PutForwardActivity extends RyBaseActivity {
 
     private ActionBar mActionBar;
     private TextView tv_balance;
@@ -91,16 +92,14 @@ public class PutForwardActivity extends MerchantBaseActivity {
     private String headimgurl;
     private boolean mLoginSuccess = false;
 
-    private ProgressDialog putDialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_put_forward);
         mActionBar = (ActionBar) findViewById(R.id.acbars);
-        mActionBar.setTitle("收益提现");
-        mActionBar.setRightView("记录");
+        mActionBar.setTitle("我的钱包");
+        mActionBar.setRightView("明细");
         mActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
@@ -149,6 +148,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
                 if (isLoginWX) {//注销
                     showExitDialog();
                 } else {//微信登录
+                    Constants.WX_TYPE = 0;
                     SendAuth.Req req = new SendAuth.Req();
                     req.scope = "snsapi_userinfo";
                     req.state = "wechat_sdk_微信登录";
@@ -163,7 +163,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
             public void call(Void aVoid) {
                 if (isBindZFB) {
                     if (canUnbindZFB) {//本月未绑定过支付宝账号
-                    /*if (true) {//本月未绑定过支付宝账号 测试 // TODO*/
+                    /*if (true) {//本月未绑定过支付宝账号 // TODO*/
                         //验证码解绑
                         showUnbindDialog("每个月只能解绑一次支付宝账号，确认要解绑吗？");
                     } else {//本月绑定过支付宝账号现不可解绑
@@ -186,6 +186,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
             @Override
             public void call(Void aVoid) {
 
+
                 if (!ck_zhifubao.isChecked()) {
                     initCheckbox();
                     ck_zhifubao.setChecked(true);
@@ -193,11 +194,14 @@ public class PutForwardActivity extends MerchantBaseActivity {
                 } else {
                     initCheckbox();
                 }
+
+                Log.e(TAG, "call: putforwardType = " + putforwardType);
             }
         });
         RxViewAction.clickNoDouble(fl_weixin).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
+
 
                 if (!ck_weixin.isChecked()) {
                     initCheckbox();
@@ -206,6 +210,8 @@ public class PutForwardActivity extends MerchantBaseActivity {
                 } else {
                     initCheckbox();
                 }
+
+                Log.e(TAG, "call: putforwardType = " + putforwardType);
             }
         });
         ck_zhifubao.setClickable(false);
@@ -221,8 +227,8 @@ public class PutForwardActivity extends MerchantBaseActivity {
 
     private void showExitDialog() {
         final AlertDialog dialog = new AlertDialog.Builder(this).create();
-        dialog.setTitle("如驿如意商家版");
-        dialog.setIcon(R.drawable.ic_launcher);
+        dialog.setTitle("如驿如意");
+        dialog.setIcon(R.mipmap.ic_logo);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText("确认退出该微信账号吗？");
@@ -281,12 +287,13 @@ public class PutForwardActivity extends MerchantBaseActivity {
             showMerchantErrorDialog("可用余额不足");
             return;
         }
-        if (currentPutforward > 0) {//判断是否存在提现中的订单 TODO
-            showMerchantErrorDialog("您有提现中的订单，待提现完成后方可再次申请，请耐心等待");
-            return;
-        }
+        Log.e(TAG, "call: putforwardType = " + putforwardType);
         if (putforwardType == 0) {
             showMerchantErrorDialog("请选择一种提现方式");
+            return;
+        }
+        if (currentPutforward > 0) {
+            showMerchantErrorDialog("您有提现中的订单，待提现完成后方可再次申请，请耐心等待");
             return;
         }
         if (putforwardType == 1 && !isBindZFB) {
@@ -318,8 +325,9 @@ public class PutForwardActivity extends MerchantBaseActivity {
 
     private void initData() {
         //post
-        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL_FAHUO + "incomeInfo/queryStoreAccountInfo");
-        params.addBodyParameter("storeId", new DbConfig(PutForwardActivity.this).getId() + "");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "incomeInfo/queryStoreAccountInfo");
+        params.addBodyParameter("storeId", "159");
+        /*params.addBodyParameter("storeId", new DbConfig(PutForwardActivity.this).getId() + "");*/  // TODO
         Log.e(TAG, "initData: params.toString() = " + params.toString());
         showDialogProgress(startdialog, "收益信息加载中...");
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -472,7 +480,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "verificationCode");
+                    RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "verificationCode");
                     params.addBodyParameter("reqJson", object.toString());
                     x.http().post(params, new Callback.CommonCallback<String>() {
                         @Override
@@ -485,8 +493,9 @@ public class PutForwardActivity extends MerchantBaseActivity {
                                 /*if (true) {*/
                                     dialog.dismiss();
 
-                                    RequestParams requestParams = new RequestParams(UtilsURL.REQUEST_URL_FAHUO + "incomeInfo/clearStoreAccountInfo");
-                                    requestParams.addBodyParameter("storeId", new DbConfig(PutForwardActivity.this).getId() + "");
+                                    RequestParams requestParams = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "incomeInfo/clearStoreAccountInfo");
+                                    requestParams.addBodyParameter("storeId", "159");
+                                   /* requestParams.addBodyParameter("storeId", new DbConfig(PutForwardActivity.this).getId() + "");*/ // TODO
                                     Log.e(TAG, "onSuccess: requestParams.toString() = " + requestParams.toString());
                                     x.http().post(requestParams, new CommonCallback<String>() {
                                         @Override
@@ -625,7 +634,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "verificationCode");
+                    RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "verificationCode");
                     params.addBodyParameter("reqJson", object.toString());
                     x.http().post(params, new Callback.CommonCallback<String>() {
                         @Override
@@ -635,14 +644,14 @@ public class PutForwardActivity extends MerchantBaseActivity {
                                 jsonObject = new JSONObject(result);
                                 int status = jsonObject.getInt("status");
                                 if (status == 1 || status == 111111) {
-                              /*  if (true) {*/
+                                /*if (true) {*/
                                     dialog.dismiss();
 
-                                    showDialogProgress(putDialog, "提现申请提交中...");
-                                    RequestParams requestParams = new RequestParams(UtilsURL.REQUEST_URL_FAHUO + "withdrawInfo/applyWithdrawOrder");
+                                    RequestParams requestParams = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "withdrawInfo/applyWithdrawOrder");
                                     requestParams.addBodyParameter("type", putforwardType + "");
-                                    requestParams.addBodyParameter("storeId", new DbConfig(PutForwardActivity.this).getId() + "");
-                                    requestParams.addBodyParameter("storeName", new DbConfig(PutForwardActivity.this).getUser().getStoreName() + "");
+                                    requestParams.addBodyParameter("storeId", "159");
+                                    /*requestParams.addBodyParameter("storeId", new DbConfig(PutForwardActivity.this).getId() + "");*/ // TODO
+                                    requestParams.addBodyParameter("storeName", new DbConfig(PutForwardActivity.this).getUser().getNick() + "");
                                     requestParams.addBodyParameter("availableMoney", balance + "");//可用余额
                                     requestParams.addBodyParameter("withdrawMoney", et_putforward.getText().toString());//提现金额
                                     if (putforwardType == 2) {
@@ -682,7 +691,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
 
                                         @Override
                                         public void onFinished() {
-                                            hideDialogProgress(putDialog);
+
                                         }
                                     });
 
@@ -824,7 +833,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "sendMsgWithoutLimit");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "sendMsgWithoutLimit");
         params.addBodyParameter("reqJson", jsonObject.toString());
         Log.e(TAG, "sendCode:  params.toString() = " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -887,7 +896,6 @@ public class PutForwardActivity extends MerchantBaseActivity {
         tv_weixin_phone = findViewById(R.id.tv_weixin_phone);
 
         startdialog = new ProgressDialog(PutForwardActivity.this);
-        putDialog = new ProgressDialog(PutForwardActivity.this);
     }
 
 

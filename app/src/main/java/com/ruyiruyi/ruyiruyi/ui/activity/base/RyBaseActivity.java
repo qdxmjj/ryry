@@ -2,18 +2,11 @@ package com.ruyiruyi.ruyiruyi.ui.activity.base;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.MyApplication;
 import com.ruyiruyi.ruyiruyi.R;
@@ -141,4 +134,28 @@ public class RyBaseActivity extends BaseActivity {
         }
         return new DbConfig(getApplicationContext()).getIsLogin();
     }
+
+    /*
+    * 错误提示dialog
+    * */
+    public void showMerchantErrorDialog(String error) {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
+        TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
+        error_text.setText(error);
+        dialog.setTitle("如意如驿");
+        dialog.setIcon(R.mipmap.ic_logo);
+        dialog.setView(dialogView);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        //设置按钮颜色
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
+    }
+
 }

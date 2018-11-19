@@ -284,6 +284,14 @@
         <activity android:name=".ui.activity.TireBuyNewActivity" />
         <activity android:name=".ui.activity.BottomEventActivity" />
         <activity android:name=".ui.activity.CxwyFreeChangeActivity"></activity>
+        <activity android:name=".ui.activity.PutForwardActivity">
+        </activity>
+        <activity android:name=".ui.activity.PutForwardInfoActivity">
+        </activity>
+        <activity android:name=".ui.activity.PutForwardBindZFBActivity">
+        </activity>
+        <activity android:name=".ui.activity.PutForwardLoginWXActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <!--提现方式-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+
+        <com.ruyiruyi.ruyiruyi.utils.CircleImageView
+            android:id="@+id/civ_type"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_zhifubao"
+            app:roundHeight="15dp"
+            app:roundWidth="15dp"/>
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:text="支付宝提现"
+            android:textColor="@color/c7"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+    <!--提现金额-->
+    <TextView
+        android:id="@+id/tv_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="-14.88"
+        android:textColor="@color/c7"
+        android:textSize="26sp"/>
+
+    <!--提现状态-->
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="6dp"
+        android:text="提现成功"
+        android:textColor="@color/c6"
+        android:textSize="12sp"/>
+
+    <!--提现回执-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="60dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="回执信息"
+            android:textColor="@color/c7"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/tv_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginLeft="65dp"
+            android:gravity="right"
+            android:text="回执信息回执信息"
+            android:textColor="@color/c6"
+            android:textSize="13sp"/>
+    </FrameLayout>
+
+
+    <!--创建时间-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="创建时间"
+            android:textColor="@color/c7"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginLeft="65dp"
+            android:gravity="right"
+            android:text="2018-09-20 18:00:00"
+            android:textColor="@color/c6"
+            android:textSize="12sp"/>
+    </FrameLayout>
+
+    <!--订单编号-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="订单编号"
+            android:textColor="@color/c7"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/tv_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginLeft="65dp"
+            android:gravity="right"
+            android:text="2018101610245350159"
+            android:textColor="@color/c6"
+            android:textSize="13sp"/>
+    </FrameLayout>
+
+
+</LinearLayout>
