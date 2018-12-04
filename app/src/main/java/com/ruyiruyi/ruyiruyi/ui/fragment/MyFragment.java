@@ -22,8 +22,8 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CouponActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CreditLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.MyLimitActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.NewPromotionActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
-import com.ruyiruyi.ruyiruyi.ui.activity.PromotionActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PutForwardActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.SettingActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopEvaluateActivity;
@@ -232,7 +232,7 @@ public class MyFragment extends RyBaseFragment {
                     }
                 });
 
-        //推广码
+        //推广有礼
         RxViewAction.clickNoDouble(ll_promotion)
                 .subscribe(new Action1<Void>() {
                     @Override
@@ -241,7 +241,8 @@ public class MyFragment extends RyBaseFragment {
                         if (!judgeIsLogin()) {
                             return;
                         }
-                        startActivity(new Intent(getContext(), PromotionActivity.class));
+                        /*startActivity(new Intent(getContext(), PromotionActivity.class));*/
+                        startActivity(new Intent(getContext(), NewPromotionActivity.class));
                     }
                 });
         //畅行无忧

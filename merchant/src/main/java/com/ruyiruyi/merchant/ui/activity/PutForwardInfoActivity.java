@@ -87,6 +87,8 @@ public class PutForwardInfoActivity extends MerchantBaseActivity {
 
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL_FAHUO + "withdrawInfo/selectWithdrawOrdersList");
         params.addBodyParameter("storeId", new DbConfig(PutForwardInfoActivity.this).getId() + "");
+        params.addBodyParameter("page", current_page + "");
+        params.addBodyParameter("rows", mRows + "");
         Log.e(TAG, "initData: params.toString() = " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

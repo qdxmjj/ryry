@@ -13,6 +13,15 @@ public class PutForwardInfo {
     private long putForwardTime;
     private String remark;//备注
     private String orderNo;//订单编号
+    private int bigType;//收支类型 1支出 2 收入
+
+    public int getBigType() {
+        return bigType;
+    }
+
+    public void setBigType(int bigType) {
+        this.bigType = bigType;
+    }
 
     public String getOrderNo() {
         return orderNo;

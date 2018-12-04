@@ -4,12 +4,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -18,7 +17,6 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.signature.StringSignature;
 import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.MyApplication;
 import com.ruyiruyi.ruyiruyi.R;
@@ -76,6 +74,13 @@ public class LaunchActivity extends RyBaseActivity {
                     //开启服务下载
                     StartDownlodeService();
                     handler.sendEmptyMessageDelayed(GO_END, 2000);
+
+                    //修改判断首次主页弹窗
+                    SharedPreferences sf = getSharedPreferences("data", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sf.edit();
+                    editor.putBoolean("isShow", true);//判断首次主页弹窗
+                    editor.commit();
+
                     break;
                 case GO_GUIDE:
                     goGuide();
@@ -101,8 +106,8 @@ public class LaunchActivity extends RyBaseActivity {
         boolean isFirstIn = sf.getBoolean("isFirstIn", true);
         SharedPreferences.Editor editor = sf.edit();
         if (isFirstIn) {     //若为true，则是第一次进入
-           /* editor.putBoolean("isFirstIn", false);  修改标志位移动到service下载完毕数据后*/
-            handler.sendEmptyMessage(GO_GUIDE);//将message设置为跳转到引导页SplashActivity，跳转在goGuide中实现
+           /* editor.putBoolean("isFirstIn", false);  修改标志位移动到service下载完毕数据后GuideActivity*/
+            handler.sendEmptyMessage(GO_GUIDE);//将message设置为跳转到引导页GuideActivity，跳转在goGuide中实现
         } else {
             handler.sendEmptyMessage(GO_MAIN);//将message设置文跳转到MainActivity，跳转功能在goMain中实现
         }

@@ -22,7 +22,6 @@ import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.Lunbo;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.BottomEventActivity;
-import com.ruyiruyi.ruyiruyi.ui.activity.CarFigureActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CityChooseActivity;
@@ -36,7 +35,6 @@ import com.ruyiruyi.ruyiruyi.ui.activity.TireFreeChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TirePlaceActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireRepairActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
-import com.ruyiruyi.ruyiruyi.ui.activity.YearChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Function;
 import com.ruyiruyi.ruyiruyi.ui.multiType.FunctionViewBinder;
@@ -151,12 +149,13 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             Log.e(TAG, "onActivityCreated: --" + currentCity);
             Log.e(TAG, "onActivityCreated: --" + jingdu);
             Log.e(TAG, "onActivityCreated: --" + weidu);
-        }else {
-            startActivity(new Intent(getContext(),CityChooseActivity.class));
+        } else {
+            startActivity(new Intent(getContext(), CityChooseActivity.class));
         }
 
-        if (currentCity.equals("选择城市")){
-            startActivity(new Intent(getContext(),CityChooseActivity.class));
+
+        if (currentCity == null || currentCity.length() == 0) {
+            startActivity(new Intent(getContext(), CityChooseActivity.class));
         }
 
 
@@ -171,9 +170,9 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userId", id);
-            if (currentCity !=null && !currentCity.equals("")){
+            if (currentCity != null && !currentCity.equals("")) {
                 jsonObject.put("position", currentCity);
-            }else {
+            } else {
                 jsonObject.put("position", "");
             }
 
@@ -200,7 +199,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                         activitys.clear();
                         try {
                             JSONArray jsActivityList = data.getJSONArray("activityList");
-                            if (jsActivityList.length() > 0){
+                            if (jsActivityList.length() > 0) {
                                 for (int i = 0; i < jsActivityList.length(); i++) {
                                     JSONObject objBean = (JSONObject) jsActivityList.get(i);
                                     String imageUrl = objBean.getString("imageUrl");
@@ -210,7 +209,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                                 }
                             }
 
-                        }catch (JSONException exception){
+                        } catch (JSONException exception) {
 
                         }
                         //获取轮播数据
@@ -361,13 +360,13 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
 
         items.add(new Function());
         items.add(new ThreeEvent());
-        if (activitys.size() > 0){
+        if (activitys.size() > 0) {
             for (int i = 0; i < activitys.size(); i++) {
-                items.add( activitys.get(i));
+                items.add(activitys.get(i));
             }
         }
 
-       // items.add(activitys.get(0));//TODO 活动列表暂1条数据
+        // items.add(activitys.get(0));//TODO 活动列表暂1条数据
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
     }
@@ -404,7 +403,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     @Override
     public void onCityLayoutClickListener(String cityName) {
         Intent intent = new Intent(getContext(), CityChooseActivity.class);
-        intent.putExtra("CITY_NAME",cityName);
+        intent.putExtra("CITY_NAME", cityName);
         startActivityForResult(intent, CITY_CHOOSE);
 
     }
@@ -443,6 +442,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
 
     /**
      * 轮播图点击
+     *
      * @param position
      */
     @Override
@@ -459,7 +459,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 return;
             }
             if (tireSame) {  //前后轮一样
-                if (service_end_date.equals("")){   //未选服务年限
+                if (service_end_date.equals("")) {   //未选服务年限
                     Intent intent = new Intent(getContext(), TireBuyNewActivity.class);
                     intent.putExtra("TIRESIZE", fontSize);
                     intent.putExtra("FONTREARFLAG", "0");
@@ -468,9 +468,9 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     intent.putExtra("SERVICE_END_YEAR", service_end_date);
                     intent.putExtra("CHOOSE_SERVICE_YEAR", false);
                     intent.putExtra("CARID", carId);
-                    intent.putExtra("USERCARID",uesrCarId);
+                    intent.putExtra("USERCARID", uesrCarId);
                     startActivity(intent);
-                }else {     //已选服务年限
+                } else {     //已选服务年限
                     Intent intent = new Intent(getContext(), TireBuyNewActivity.class);
                     intent.putExtra("TIRESIZE", fontSize);
                     intent.putExtra("FONTREARFLAG", "0");
@@ -479,7 +479,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     intent.putExtra("SERVICE_END_YEAR", service_end_date);
                     intent.putExtra("CHOOSE_SERVICE_YEAR", true);
                     intent.putExtra("CARID", carId);
-                    intent.putExtra("USERCARID",uesrCarId);
+                    intent.putExtra("USERCARID", uesrCarId);
                     startActivity(intent);
                 }
 
@@ -492,22 +492,22 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 intent.putExtra("SERVICE_YEAR", service_year_length);
                 intent.putExtra("SERVICE_END_YEAR", service_end_date);
                 intent.putExtra("CARID", carId);
-                intent.putExtra("USERCARID",uesrCarId);
+                intent.putExtra("USERCARID", uesrCarId);
                 startActivity(intent);
             }
-        }else {
+        } else {
             //判断是否登录（未登录提示登录）
             if (!judgeIsLogin()) {
                 return;
             }
-            if (carId == 0){
+            if (carId == 0) {
                 Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(getContext(), LunboContentActivity.class);
-            if (tireSame){
-                intent.putExtra("FONTREARFLAG",0);
-            }else {
+            if (tireSame) {
+                intent.putExtra("FONTREARFLAG", 0);
+            } else {
                 intent.putExtra("FONTREARFLAG", 1);
             }
             intent.putExtra("FONTSIZE", fontSize);
@@ -516,7 +516,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             intent.putExtra("SERVICE_YEAR", service_year_length);   //当前服务年限
             intent.putExtra("SERVICE_END_YEAR", service_end_date);
             intent.putExtra("CARID", carId);
-            intent.putExtra("USERCARID",uesrCarId);
+            intent.putExtra("USERCARID", uesrCarId);
             intent.putExtra(LunboContentActivity.LUNBO_POSITION, position);
             startActivity(intent);
         }
@@ -529,7 +529,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             if (!judgeIsLogin()) {
                 return;
             }
-            if (carId == 0){
+            if (carId == 0) {
                 //点击轮胎购买，没有添加车辆，先跳转到添加车辆界面
                 Intent intent = new Intent(getContext(), CarInfoActivity.class);
                 intent.putExtra("CANCLICK", 0);
@@ -539,7 +539,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 return;*/
             }
             if (tireSame) {  //前后轮一样
-                if (service_end_date.equals("")){   //未选服务年限
+                if (service_end_date.equals("")) {   //未选服务年限
                     Intent intent = new Intent(getContext(), TireBuyNewActivity.class);
                     intent.putExtra("TIRESIZE", fontSize);
                     intent.putExtra("FONTREARFLAG", "0");
@@ -547,9 +547,9 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     intent.putExtra("SERVICE_YEAR", service_year_length);
                     intent.putExtra("CHOOSE_SERVICE_YEAR", false);
                     intent.putExtra("CARID", carId);
-                    intent.putExtra("USERCARID",uesrCarId);
+                    intent.putExtra("USERCARID", uesrCarId);
                     startActivity(intent);
-                }else {     //已选服务年限
+                } else {     //已选服务年限
                     Intent intent = new Intent(getContext(), TireBuyNewActivity.class);
                     intent.putExtra("TIRESIZE", fontSize);
                     intent.putExtra("FONTREARFLAG", "0");
@@ -557,7 +557,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     intent.putExtra("SERVICE_YEAR", service_year_length);
                     intent.putExtra("CHOOSE_SERVICE_YEAR", true);
                     intent.putExtra("CARID", carId);
-                    intent.putExtra("USERCARID",uesrCarId);
+                    intent.putExtra("USERCARID", uesrCarId);
                     startActivity(intent);
                 }
             } else {         //前后轮不一样
@@ -568,7 +568,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 intent.putExtra("SERVICE_YEAR", service_year_length);
                 intent.putExtra("SERVICE_END_YEAR", service_end_date);
                 intent.putExtra("CARID", carId);
-                intent.putExtra("USERCARID",uesrCarId);
+                intent.putExtra("USERCARID", uesrCarId);
                 startActivity(intent);
             }
 
@@ -577,7 +577,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             if (!judgeIsLogin()) {
                 return;
             }
-            if (carId == 0){
+            if (carId == 0) {
                 Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -589,13 +589,13 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             if (!judgeIsLogin()) {
                 return;
             }
-            if (carId == 0){
+            if (carId == 0) {
                 Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
                 return;
             }
             startActivity(new Intent(getContext(), TireRepairActivity.class));
         } else if (type == 3) { //待更换轮胎
-           // listener.onShopClassClickListener();
+            // listener.onShopClassClickListener();
             //判断是否登录（未登录提示登录）
             if (!judgeIsLogin()) {
                 return;
@@ -619,7 +619,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             if (!judgeIsLogin()) {
                 return;
             }
-            if (carId == 0){
+            if (carId == 0) {
                 Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -654,6 +654,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         }
         Intent intent = new Intent(getContext(), BottomEventActivity.class);
         intent.putExtra("webUrl", webUrl);
+        intent.putExtra("isBottomEvent", true);
+
         startActivity(intent);
     }
 
@@ -664,25 +666,25 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     @Override
     public void onStart() {
         super.onStart();
-        Log.e(TAG, "onStart:onStart "  );
+        Log.e(TAG, "onStart:onStart ");
     }
 
     @Override
     public void onResume() {
         super.onResume();
         initdataFromService();
-        Log.e(TAG, "onStart:onResume "  );
+        Log.e(TAG, "onStart:onResume ");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.e(TAG, "onStart:onPause "  );
+        Log.e(TAG, "onStart:onPause ");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.e(TAG, "onStart:onStop "  );
+        Log.e(TAG, "onStart:onStop ");
     }
 }

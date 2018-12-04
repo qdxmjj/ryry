@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="76dp"
+        android:layout_marginLeft="80dp"
         android:text="1314.00"
         android:textColor="@color/c7"
         android:textSize="18sp"/>

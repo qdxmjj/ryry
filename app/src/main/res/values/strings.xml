@@ -33,4 +33,20 @@
 
     <string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
 
+    <!--邀请有礼-->
+    <!-- 一，购买轮胎1-3-->
+    <string name="buy_shoe_title1">点击按钮分享链接</string>
+    <string name="buy_shoe_rule1">点击下方分享按钮，将链接分享给微信好友</string>
+    <string name="buy_shoe_title2">好友注册并购买轮胎</string>
+    <string name="buy_shoe_rule2">好友经过您分享的链接成功注册并且在APP内购买轮胎</string>
+    <string name="buy_shoe_title3">您可得百元现金红包</string>
+    <string name="buy_shoe_rule3">多邀多得，上不封顶，现金红包可提现</string>
+    <!-- 二，邀请注册1-3-->
+    <string name="invite_register_title1">点击按钮分享链接</string>
+    <string name="invite_register_rule1">点击下方分享按钮，将链接分享给微信好友</string>
+    <string name="invite_register_title2">好友经过您分享的链接注册成功</string>
+    <string name="invite_register_rule2">每邀请3人注册您可得精致洗车券1张</string>
+    <string name="invite_register_title3">您的好友可得精致洗车券两张</string>
+    <string name="invite_register_rule3">精致洗车券仅限在如驿如意APP上绑定车辆后下单使用</string>
+
 </resources>

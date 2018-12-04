@@ -41,6 +41,7 @@ import java.util.List;
 
 import rx.functions.Action1;
 
+
 public class LoginActivity extends BaseActivityb {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -48,6 +49,7 @@ public class LoginActivity extends BaseActivityb {
     private EditText et_pass;
     private TextView tv_foget;
     private TextView tv_login;
+    private TextView tv_version;
     private TextView tv_register;
     private ProgressDialog dialog;
 
@@ -103,7 +105,17 @@ public class LoginActivity extends BaseActivityb {
         et_pass = (EditText) findViewById(R.id.et_pass);
         tv_foget = (TextView) findViewById(R.id.tv_foget);
         tv_login = (TextView) findViewById(R.id.tv_login);
+        tv_version = (TextView) findViewById(R.id.tv_version);
         tv_register = (TextView) findViewById(R.id.tv_register);
+
+        //设置版本
+        String versionName = null;
+        try {
+            versionName = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+            tv_version.setText("如驿如意V" + versionName + "商家版");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         RxViewAction.clickNoDouble(tv_login)
                 .subscribe(new Action1<Void>() {

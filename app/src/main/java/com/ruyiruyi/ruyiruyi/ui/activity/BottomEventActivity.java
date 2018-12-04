@@ -3,12 +3,15 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
@@ -22,24 +25,49 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
+import com.ruyiruyi.ruyiruyi.utils.Constants;
+import com.ruyiruyi.ruyiruyi.utils.Util;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.base.BaseWebActivity;
 import com.ruyiruyi.rylibrary.utils.RyLoadingDialog;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import rx.functions.Action1;
 
 public class BottomEventActivity extends BaseWebActivity {
     private WebView activity_web;
     private String webUrl;
+    private String shareDescription;
+    private boolean isBottomEvent;
+    private boolean canShare;
     private RyLoadingDialog dialog;
     private String TAG = BottomEventActivity.class.getSimpleName();
+
+    private IWXAPI api;
+    private static final int THUMB_SIZE = 150;
+    private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_event);
+        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
 
+        Intent intent = getIntent();
+        webUrl = intent.getStringExtra("webUrl");
+        shareDescription = intent.getStringExtra("shareDescription");
+        isBottomEvent = intent.getBooleanExtra("isBottomEvent", false);
+        canShare = intent.getBooleanExtra("canShare", false);
+        Log.e(TAG, "onCreate: webUrl = " + webUrl);
 
         //设置是否显示标题栏
         showTitleBar(true);
@@ -53,12 +81,24 @@ public class BottomEventActivity extends BaseWebActivity {
         setLeftIcon(R.drawable.ic_cha);
         //文字颜色
         setTitleColor(R.color.c7);
-
-
-        Intent intent = getIntent();
-        webUrl = intent.getStringExtra("webUrl");
-        Log.e(TAG, "onCreate: webUrl = " + webUrl);
-
+        //左侧返回按钮监听
+        setLeftIconlistener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        //判断添加右侧分享菜单
+        if (canShare) {
+            setRightIcon(R.drawable.share);
+            setRightIconlistener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //share
+                    showBottomShareMenu();
+                }
+            });
+        }
 
 
         initView();
@@ -67,15 +107,76 @@ public class BottomEventActivity extends BaseWebActivity {
         setData();
     }
 
+    /**
+     * 显示底部分享菜单栏
+     */
+    private void showBottomShareMenu() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(BottomEventActivity.this);
+        bottomSheetDialog.setCanceledOnTouchOutside(true);
+        View contentView = LayoutInflater.from(BottomEventActivity.this).inflate(R.layout.bottomsheet_share, null, false);
+        LinearLayout ll_share_weixin = contentView.findViewById(R.id.ll_share_weixin);
+        RxViewAction.clickNoDouble(ll_share_weixin).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                //微信分享给好友
+                mTargetScene = SendMessageToWX.Req.WXSceneSession;
+                shareToWexin();
+            }
+        });
+        LinearLayout ll_share_weixin_friend = contentView.findViewById(R.id.ll_share_weixin_friend);
+        RxViewAction.clickNoDouble(ll_share_weixin_friend).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                //微信分享至朋友圈
+                mTargetScene = SendMessageToWX.Req.WXSceneTimeline;
+                shareToWexin();
+            }
+        });
+        bottomSheetDialog.setContentView(contentView);
+        //设置底部白色背景为透明
+        bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet).setBackgroundColor(BottomEventActivity.this.getResources().getColor(R.color.transparent));
+        bottomSheetDialog.show();
+    }
+
+    /**
+     * 微信分享
+     */
+    private void shareToWexin() {
+        int id = new DbConfig(this).getId();
+        WXWebpageObject webpage = new WXWebpageObject();
+        webpage.webpageUrl = webUrl;
+        WXMediaMessage msg = new WXMediaMessage(webpage);
+        msg.title = "如驿如意";
+        msg.description = shareDescription;//分享活动介绍
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_logo);
+        Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+        bmp.recycle();
+        msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = buildTransaction("webpage");
+        req.message = msg;
+        req.scene = mTargetScene;
+        api.sendReq(req);
+    }
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
+
+
     @Override
     public void onForward(View forwardView) {
     }
 
     private void setData() {
-        User user = new DbConfig(this).getUser();
-        int id = user.getId();
-        int carId = user.getCarId();
-        activity_web.loadUrl(webUrl + "?userId=" + id + "&userCarId=" + carId);
+        if (isBottomEvent) {//从主页活动页面进入
+            User user = new DbConfig(this).getUser();
+            int id = user.getId();
+            int carId = user.getCarId();
+            activity_web.loadUrl(webUrl + "?userId=" + id + "&userCarId=" + carId);
+        } else {//其他入口进入
+            activity_web.loadUrl(webUrl);
+        }
         activity_web.addJavascriptInterface(this, "android");
         activity_web.setWebViewClient(new SafeWebViewClient());
         activity_web.setWebChromeClient(new SafeWebChromeClient());

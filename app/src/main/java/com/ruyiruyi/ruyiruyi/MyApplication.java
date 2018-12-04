@@ -4,13 +4,13 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.Service;
 import android.os.Vibrator;
-
+import android.util.DisplayMetrics;
 
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
-import com.baidu.ocr.sdk.OCR;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
-import com.ruyiruyi.ruyiruyi.utils.Constants;
+import com.ruyiruyi.rylibrary.popdblibrary.utils.DisplayUtil;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
@@ -34,6 +34,11 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        //初始化Fresco
+        initDisplayOpinion();
+
+        Fresco.initialize(this);
+        //初始化xUtils
         x.Ext.init(this);
         x.Ext.setDebug(true);
         oList = new ArrayList<Activity>();
@@ -101,4 +106,17 @@ public class MyApplication extends Application {
         }
     }
 
+
+
+
+
+    private void initDisplayOpinion() {
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        DisplayUtil.density = dm.density;
+        DisplayUtil.densityDPI = dm.densityDpi;
+        DisplayUtil.screenWidthPx = dm.widthPixels;
+        DisplayUtil.screenhightPx = dm.heightPixels;
+        DisplayUtil.screenWidthDip = DisplayUtil.px2dip(getApplicationContext(), dm.widthPixels);
+        DisplayUtil.screenHightDip = DisplayUtil.px2dip(getApplicationContext(), dm.heightPixels);
+    }
 }

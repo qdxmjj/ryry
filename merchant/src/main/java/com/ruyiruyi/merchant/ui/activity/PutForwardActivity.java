@@ -346,7 +346,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
                         //判断当月是否可以解绑（每个月只能解绑一次支付宝账号）
                         int bindyear = calendar.get(Calendar.YEAR);
                         int nowyear = calendarNow.get(Calendar.YEAR);
-                        int bindMonth = calendarNow.get(Calendar.MONTH);
+                        int bindMonth = calendar.get(Calendar.MONTH);
                         int nowMonth = calendarNow.get(Calendar.MONTH);
                         if (nowyear == bindyear && nowMonth == bindMonth) {//本月绑定过
                             canUnbindZFB = false;

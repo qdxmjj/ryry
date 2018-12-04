@@ -138,8 +138,8 @@ public class PutForwardBindZFBActivity extends RyBaseActivity {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
-        dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_launcher);
+        dialog.setTitle("如意如驿");
+        dialog.setIcon(R.mipmap.ic_logo);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
             @Override
@@ -197,12 +197,11 @@ public class PutForwardBindZFBActivity extends RyBaseActivity {
                                 /*if (true) {*/
                                     dialog.dismiss();
 
-                                    RequestParams requestParams = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "incomeInfo/bindingStoreAccountInfo");
+                                    RequestParams requestParams = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "bindingInfo/bindingUserAccountInfo");
                                     requestParams.addBodyParameter("realName", bindName);
                                     requestParams.addBodyParameter("iDNumber", bindCode);
                                     requestParams.addBodyParameter("aliAccount", zhifubaoId);
-                                    requestParams.addBodyParameter("storeId","159");
-                                    /*requestParams.addBodyParameter("storeId", new DbConfig(PutForwardBindZFBActivity.this).getId() + "");*/ // TODO
+                                    requestParams.addBodyParameter("userId", new DbConfig(PutForwardBindZFBActivity.this).getId() + "");
                                     Log.e(TAG, "onSuccess: requestParams.toString() = " + requestParams.toString());
                                     x.http().post(requestParams, new CommonCallback<String>() {
                                         @Override

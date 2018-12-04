@@ -38,4 +38,11 @@
 
     </declare-styleable>
 
+    <!--首页弹窗进度条-->
+    <declare-styleable name="ProgressLayout">
+        <attr name="progressLoadingStateBackgroundColor" format="color" />
+        <attr name="progressEmptyStateBackgroundColor" format="color" />
+        <attr name="progressErrorStateBackgroundColor" format="color" />
+    </declare-styleable>
+
 </resources>

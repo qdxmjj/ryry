@@ -325,9 +325,8 @@ public class PutForwardActivity extends RyBaseActivity {
 
     private void initData() {
         //post
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "incomeInfo/queryStoreAccountInfo");
-        params.addBodyParameter("storeId", "159");
-        /*params.addBodyParameter("storeId", new DbConfig(PutForwardActivity.this).getId() + "");*/  // TODO
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_GONGLIN_FAHUO_TEST + "bindingInfo/queryUserAccountInfo");
+        params.addBodyParameter("userId", new DbConfig(PutForwardActivity.this).getId() + "");
         Log.e(TAG, "initData: params.toString() = " + params.toString());
         showDialogProgress(startdialog, "收益信息加载中...");
         x.http().post(params, new Callback.CommonCallback<String>() {
@@ -354,7 +353,7 @@ public class PutForwardActivity extends RyBaseActivity {
                         //判断当月是否可以解绑（每个月只能解绑一次支付宝账号）
                         int bindyear = calendar.get(Calendar.YEAR);
                         int nowyear = calendarNow.get(Calendar.YEAR);
-                        int bindMonth = calendarNow.get(Calendar.MONTH);
+                        int bindMonth = calendar.get(Calendar.MONTH);
                         int nowMonth = calendarNow.get(Calendar.MONTH);
                         if (nowyear == bindyear && nowMonth == bindMonth) {//本月绑定过
                             canUnbindZFB = false;
@@ -434,8 +433,8 @@ public class PutForwardActivity extends RyBaseActivity {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
-        dialog.setTitle("如意如驿商家版");
-        dialog.setIcon(R.drawable.ic_launcher);
+        dialog.setTitle("如意如驿");
+        dialog.setIcon(R.mipmap.ic_logo);
         dialog.setView(dialogView);
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
             @Override
@@ -493,9 +492,8 @@ public class PutForwardActivity extends RyBaseActivity {
                                 /*if (true) {*/
                                     dialog.dismiss();
 
-                                    RequestParams requestParams = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "incomeInfo/clearStoreAccountInfo");
-                                    requestParams.addBodyParameter("storeId", "159");
-                                   /* requestParams.addBodyParameter("storeId", new DbConfig(PutForwardActivity.this).getId() + "");*/ // TODO
+                                    RequestParams requestParams = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "bindingInfo/updateUserAccountStatusInfo");
+                                    requestParams.addBodyParameter("userId", new DbConfig(PutForwardActivity.this).getId() + "");
                                     Log.e(TAG, "onSuccess: requestParams.toString() = " + requestParams.toString());
                                     x.http().post(requestParams, new CommonCallback<String>() {
                                         @Override
@@ -649,9 +647,8 @@ public class PutForwardActivity extends RyBaseActivity {
 
                                     RequestParams requestParams = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "withdrawInfo/applyWithdrawOrder");
                                     requestParams.addBodyParameter("type", putforwardType + "");
-                                    requestParams.addBodyParameter("storeId", "159");
-                                    /*requestParams.addBodyParameter("storeId", new DbConfig(PutForwardActivity.this).getId() + "");*/ // TODO
-                                    requestParams.addBodyParameter("storeName", new DbConfig(PutForwardActivity.this).getUser().getNick() + "");
+                                    requestParams.addBodyParameter("userId", new DbConfig(PutForwardActivity.this).getId() + "");
+                                    requestParams.addBodyParameter("userName", new DbConfig(PutForwardActivity.this).getUser().getNick() + "");
                                     requestParams.addBodyParameter("availableMoney", balance + "");//可用余额
                                     requestParams.addBodyParameter("withdrawMoney", et_putforward.getText().toString());//提现金额
                                     if (putforwardType == 2) {

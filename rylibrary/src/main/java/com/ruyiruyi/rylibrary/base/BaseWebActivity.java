@@ -78,7 +78,61 @@ public abstract class BaseWebActivity extends BaseActivity implements View.OnCli
      */
     private TextView tv_right_title;
 
-/*    */
+    /**
+     * 右侧菜单图片点击事件
+     */
+    private View.OnClickListener rightIconlistener = null;
+
+    /**
+     * 右侧菜单图片点击事件监听
+     *
+     * @param rightIconlistener
+     */
+    public void setRightIconlistener(View.OnClickListener rightIconlistener) {
+        this.rightIconlistener = rightIconlistener;
+    }
+
+    /**
+     * 左侧菜单图片点击事件
+     */
+    private View.OnClickListener leftIconlistener = null;
+
+    /**
+     * 左侧菜单图片点击事件监听
+     *
+     * @param leftIconlistener
+     */
+    public void setLeftIconlistener(View.OnClickListener leftIconlistener) {
+        this.leftIconlistener = leftIconlistener;
+    }
+
+    /**
+     * 左侧标题监听
+     */
+    private View.OnClickListener leftTitlelistener = null;
+
+    /**
+     * 左侧标题监听事件
+     *
+     * @param leftTitlelistener
+     */
+    public void setLeftTitlelistener(View.OnClickListener leftTitlelistener) {
+        this.leftTitlelistener = leftTitlelistener;
+    }
+
+    /**
+     * 右侧标题监听
+     */
+    private View.OnClickListener rightTitlelistener = null;
+
+    /**
+     * 右侧标题监听事件
+     *
+     * @param rightTitlelistener
+     */
+    public void setRightTitlelistener(View.OnClickListener rightTitlelistener) {
+        this.rightTitlelistener = rightTitlelistener;
+    }
 
     /**
      * 页面适配
@@ -278,19 +332,25 @@ public abstract class BaseWebActivity extends BaseActivity implements View.OnCli
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v) {//点击事件传递
         int i = v.getId();
         if (i == R.id.tv_left_icon) {
-            onBackward(v);
-
+            if (leftTitlelistener != null) {
+                leftTitlelistener.onClick(v);
+            }
         } else if (i == R.id.tv_right_title) {
-            onForward(v);
-
+            if (rightTitlelistener != null) {
+                rightTitlelistener.onClick(v);
+            }
         } else if (i == R.id.iv_right_icon) {
-            onForward(v);
+            if (rightIconlistener != null) {
+                rightIconlistener.onClick(v);//右侧菜单栏点击事件传递
+            }
 
         } else if (i == R.id.iv_title_left_icon) {
-            onBackward(v);
+            if (leftIconlistener != null) {
+                leftIconlistener.onClick(v);
+            }
 
         } else {
         }

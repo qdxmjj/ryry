@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ItemBottomProvider;
@@ -41,7 +42,7 @@ public class PutForwardInfoActivity extends RyBaseActivity {
     private SwipeRefreshLayout mSwipeLayout;
     private RecyclerView mRlv;
     private int total_all_page;
-    private int mRows = 16;  // 设置默认一页加载10条数据
+    private int mRows = 14;  // 设置默认一页加载10条数据
     private int current_page;
     private MultiTypeAdapter multiTypeAdapter;
     private List<Object> items = new ArrayList<>();
@@ -84,10 +85,11 @@ public class PutForwardInfoActivity extends RyBaseActivity {
             current_page = 1;
         }
 
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "withdrawInfo/selectWithdrawOrdersList");
-        params.addBodyParameter("storeId", "159");
-        /*params.addBodyParameter("storeId", new DbConfig(PutForwardInfoActivity.this).getId() + "");*/ // TODO
-        Log.e(TAG, "initData: params.toString() = " + params.toString());
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "incomeInfo/queryUserIncomeAndExpensesInfo");
+        params.addBodyParameter("userId", new DbConfig(PutForwardInfoActivity.this).getId() + "");
+        params.addBodyParameter("page", current_page + "");
+        params.addBodyParameter("rows", mRows + "");
+        Log.e(TAG, "initData: params.toString() info = " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -102,11 +104,12 @@ public class PutForwardInfoActivity extends RyBaseActivity {
                     for (int i = 0; i < rows.length(); i++) {
                         JSONObject obj = (JSONObject) rows.get(i);
                         PutForwardInfo putForwardInfo = new PutForwardInfo();
-                        putForwardInfo.setPutForwardType(obj.getInt("type"));
-                        putForwardInfo.setPutForwardMoney(obj.getDouble("withdrawMoney"));
-                        putForwardInfo.setPutForwardStatus(obj.getInt("status"));//1 提现中 2 成功 3 失败
-                        putForwardInfo.setPutForwardTime(obj.getLong("applyTime"));
+                        putForwardInfo.setPutForwardType(obj.getInt("expensesType"));//支出类型(1 支付宝 2 微信)
+                        putForwardInfo.setPutForwardMoney(obj.getDouble("money"));
+                        putForwardInfo.setPutForwardStatus(obj.getInt("status"));//提现状态（1 提现中 2 成功 3 失败）
+                        putForwardInfo.setPutForwardTime(obj.getLong("time"));
                         putForwardInfo.setRemark(obj.getString("remark"));
+                        putForwardInfo.setBigType(obj.getInt("type"));//收支类型 1 支出 2 收入
                         putForwardInfo.setOrderNo(obj.getString("orderNo"));
                         orderBeanList.add(putForwardInfo);
                     }
