@@ -91,6 +91,8 @@ public class PutForwardActivity extends MerchantBaseActivity {
     private String headimgurl;
     private boolean mLoginSuccess = false;
 
+    private ProgressDialog putDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,7 +151,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
                 } else {//微信登录
                     SendAuth.Req req = new SendAuth.Req();
                     req.scope = "snsapi_userinfo";
-                    req.state = "diandi_wx_login";
+                    req.state = "wechat_sdk_微信登录";
                     //像微信发送请求
                     MyApplication.mWxApi.sendReq(req);
                 }
@@ -161,7 +163,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
             public void call(Void aVoid) {
                 if (isBindZFB) {
                     if (canUnbindZFB) {//本月未绑定过支付宝账号
-                    /*if (true) {//本月未绑定过支付宝账号 // TODO*/
+                    /*if (true) {//本月未绑定过支付宝账号 测试 // TODO*/
                         //验证码解绑
                         showUnbindDialog("每个月只能解绑一次支付宝账号，确认要解绑吗？");
                     } else {//本月绑定过支付宝账号现不可解绑
@@ -184,13 +186,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
             @Override
             public void call(Void aVoid) {
 
-                if (ck_zhifubao.isChecked()) {
-                    ck_zhifubao.setChecked(false);
-                } else {
-                    ck_zhifubao.setChecked(true);
-                }
-
-                if (ck_zhifubao.isChecked()) {
+                if (!ck_zhifubao.isChecked()) {
                     initCheckbox();
                     ck_zhifubao.setChecked(true);
                     putforwardType = 1;
@@ -203,13 +199,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
             @Override
             public void call(Void aVoid) {
 
-                if (ck_weixin.isChecked()) {
-                    ck_weixin.setChecked(false);
-                } else {
-                    ck_weixin.setChecked(true);
-                }
-
-                if (ck_weixin.isChecked()) {
+                if (!ck_weixin.isChecked()) {
                     initCheckbox();
                     ck_weixin.setChecked(true);
                     putforwardType = 2;
@@ -356,7 +346,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
                         //判断当月是否可以解绑（每个月只能解绑一次支付宝账号）
                         int bindyear = calendar.get(Calendar.YEAR);
                         int nowyear = calendarNow.get(Calendar.YEAR);
-                        int bindMonth = calendarNow.get(Calendar.MONTH);
+                        int bindMonth = calendar.get(Calendar.MONTH);
                         int nowMonth = calendarNow.get(Calendar.MONTH);
                         if (nowyear == bindyear && nowMonth == bindMonth) {//本月绑定过
                             canUnbindZFB = false;
@@ -645,9 +635,10 @@ public class PutForwardActivity extends MerchantBaseActivity {
                                 jsonObject = new JSONObject(result);
                                 int status = jsonObject.getInt("status");
                                 if (status == 1 || status == 111111) {
-                                /*if (true) {*/
+                              /*  if (true) {*/
                                     dialog.dismiss();
 
+                                    showDialogProgress(putDialog, "提现申请提交中...");
                                     RequestParams requestParams = new RequestParams(UtilsURL.REQUEST_URL_FAHUO + "withdrawInfo/applyWithdrawOrder");
                                     requestParams.addBodyParameter("type", putforwardType + "");
                                     requestParams.addBodyParameter("storeId", new DbConfig(PutForwardActivity.this).getId() + "");
@@ -691,7 +682,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
 
                                         @Override
                                         public void onFinished() {
-
+                                            hideDialogProgress(putDialog);
                                         }
                                     });
 
@@ -896,6 +887,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
         tv_weixin_phone = findViewById(R.id.tv_weixin_phone);
 
         startdialog = new ProgressDialog(PutForwardActivity.this);
+        putDialog = new ProgressDialog(PutForwardActivity.this);
     }
 
 

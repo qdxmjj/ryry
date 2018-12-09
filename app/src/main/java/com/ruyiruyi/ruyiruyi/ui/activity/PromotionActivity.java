@@ -154,6 +154,9 @@ public class PromotionActivity extends RyBaseActivity implements PromotionViewBi
                                 case 3:
                                     hasperson.setUserState("已注册车辆信息");
                                     break;
+                                case 4:
+                                    hasperson.setUserState("已购买并安装轮胎");
+                                    break;
                             }
                             long createdTime = bean.getLong("createdTime");
                             String s = new UtilsRY().getTimestampToString(createdTime);
@@ -266,8 +269,8 @@ public class PromotionActivity extends RyBaseActivity implements PromotionViewBi
         WXWebpageObject webpage = new WXWebpageObject();
         webpage.webpageUrl = url;
         WXMediaMessage msg = new WXMediaMessage(webpage);
-        msg.title = "如驿如意";
-        msg.description = "分享下载app，注册并添加车辆即赠送两张精致洗车券，购买轮胎，更有精美大礼赠送！";
+        msg.title = getString(R.string.app_name);
+        msg.description = title;//分享活动介绍
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_logo);
         Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
         bmp.recycle();

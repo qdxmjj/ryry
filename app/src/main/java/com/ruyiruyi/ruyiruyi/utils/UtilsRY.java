@@ -1,13 +1,9 @@
 package com.ruyiruyi.ruyiruyi.utils;
 
 import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
@@ -19,6 +15,36 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class UtilsRY {
+
+    /**
+     * 正浮点数
+     *
+     * @param number
+     * @return
+     */
+    public static boolean isFloat(String number) {
+        String num = "^[1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*";
+        if (TextUtils.isEmpty(number)) {
+            return false;
+        } else {
+            return number.matches(num);
+        }
+    }
+
+    /**
+     * 正整数
+     *
+     * @param number
+     * @return
+     */
+    public static boolean isInt(String number) {
+        String num = "^[1-9]\\d*";
+        if (TextUtils.isEmpty(number)) {
+            return false;
+        } else {
+            return number.matches(num);
+        }
+    }
 
     public static String delZero(String number) {
         while (number.length() != 1) {

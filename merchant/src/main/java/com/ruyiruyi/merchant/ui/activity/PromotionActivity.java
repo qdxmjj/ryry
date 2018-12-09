@@ -149,6 +149,9 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
                                 case 3:
                                     hasperson.setUserState("已注册车辆信息");
                                     break;
+                                case 4:
+                                    hasperson.setUserState("已购买并安装轮胎");
+                                    break;
                             }
                             long createdTime = bean.getLong("createdTime");
                             String s = new UtilsRY().getTimestampToString(createdTime);
@@ -275,8 +278,8 @@ public class PromotionActivity extends BaseActivity implements PromotionViewBind
         WXWebpageObject webpage = new WXWebpageObject();
         webpage.webpageUrl = url;
         WXMediaMessage msg = new WXMediaMessage(webpage);
-        msg.title = PromotionActivity.this.getString(R.string.wx_share_title);
-        msg.description = PromotionActivity.this.getString(R.string.wx_share_description);
+        msg.title = getString(R.string.wx_share_title);
+        msg.description = title;//分享活动介绍
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
         Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
         bmp.recycle();

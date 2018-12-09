@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,17 +27,12 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.ruyiruyi.ruyiruyi.db.DbConfig;
-import com.ruyiruyi.ruyiruyi.db.model.CarBrand;
-import com.ruyiruyi.ruyiruyi.db.model.CarFactory;
-import com.ruyiruyi.ruyiruyi.db.model.CarTireInfo;
-import com.ruyiruyi.ruyiruyi.db.model.CarVerhicle;
-import com.ruyiruyi.ruyiruyi.db.model.Province;
-import com.ruyiruyi.ruyiruyi.db.model.TireType;
+import com.ruyiruyi.ruyiruyi.ui.activity.BottomEventActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseFragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsClassFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.HomeFragment;
@@ -43,10 +40,13 @@ import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.MyFragment;
 import com.ruyiruyi.ruyiruyi.ui.model.HotActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
-import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.cell.HomeTabsCell;
 import com.ruyiruyi.rylibrary.cell.NoCanSlideViewPager;
 import com.ruyiruyi.rylibrary.cell.downcell.CommonProgressDialog;
+import com.ruyiruyi.rylibrary.popdblibrary.AdConstant;
+import com.ruyiruyi.rylibrary.popdblibrary.AdManager;
+import com.ruyiruyi.rylibrary.popdblibrary.bean.AdInfo;
+import com.ruyiruyi.rylibrary.popdblibrary.transformer.ZoomOutPageTransformer;
 import com.ruyiruyi.rylibrary.ui.adapter.FragmentViewPagerAdapter;
 import com.ruyiruyi.rylibrary.utils.AndroidUtilities;
 import com.ruyiruyi.rylibrary.utils.LayoutHelper;
@@ -54,9 +54,7 @@ import com.ruyiruyi.rylibrary.utils.LayoutHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.DbManager;
 import org.xutils.common.Callback;
-import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -109,6 +107,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
     private int forceUpate = 0;  // 1强制更新 0不强制更新
     private String updateContent;
+    private List<AdInfo> advList;//首页弹窗广告
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,8 +121,12 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         judgePower();
 
         isGengxin = false;
-        //版本更新
-        getVersion();
+
+
+        /*//版本更新 (修改至首页弹窗后检测)
+        getVersion();*/
+
+
         //弹窗活动
         getHotActivity();
 
@@ -156,7 +159,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
             @Override
             public void onPageSelected(int position) {
-                Log.e(TAG, "onPageSelected: " + position );
+                Log.e(TAG, "onPageSelected: " + position);
                /* if (position == 0){
                     pagerAdapter.notifyDataSetChanged();
                 }*/
@@ -181,7 +184,6 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         }
 
 
-
         //获取车辆品牌数据
         // initCarDataIntoDb();
         //获取车辆图标数据
@@ -198,31 +200,105 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
     }
 
+    private void judgeShowPop() {
+        SharedPreferences sf = getSharedPreferences("data", MODE_PRIVATE);//判断是否首页弹窗
+        boolean isShow = sf.getBoolean("isShow", true);
+        SharedPreferences.Editor editor = sf.edit();
+        if (isShow) {     //若为true，则首页弹窗
+            //显示首页弹窗
+            showPop();
+
+            //修改判断首次主页弹窗
+            editor.putBoolean("isShow", false);//弹窗后修改弹窗标志位
+        } else {
+            //next
+            //版本更新
+            getVersion();
+        }
+        editor.commit();
+    }
+
     /**
-     * 热门活动
+     * 显示首页弹窗
+     */
+    private void showPop() {
+
+        //创建广告活动管理对象
+        AdManager adManager = new AdManager(MainActivity.this, advList);
+        adManager.setOverScreen(true)//设置弹窗背景全屏显示还是在内容区域显示
+                .setPageTransformer(new ZoomOutPageTransformer())//设置ViewPager的滑动动画
+                .setPadding(100)//设置弹窗距离屏幕两侧的距离（单位dp）
+                .setWidthPerHeight(0.50f)//设置弹窗的宽高比
+                .setBackViewColor(Color.parseColor("#AA333333"))//设置弹窗的背景色（当弹窗背景设置透明时，此设置失效）
+                .setAnimBackViewTransparent(false)//设置弹窗背景是否透明
+                .setDialogCloseable(true)//设置弹窗关闭图标是否可见
+                .setDialogOutCloseable(true)//设置点击边缘是否可关闭
+                .setBounciness(15)//设置弹窗弹性滑动弹性值
+                .setSpeed(5)//设置弹窗弹性滑动速度值
+                .setOnImageClickListener(new AdManager.OnImageClickListener() {//设定弹窗点击事件回调
+                    @Override
+                    public void onImageClick(View view, AdInfo advInfo) {
+                        if (advInfo.isCanClick()) {
+                            Intent intent = new Intent(MainActivity.this, BottomEventActivity.class);
+                            intent.putExtra("canShare", advInfo.isCanShare());
+                            intent.putExtra("webUrl", advInfo.getUrl());
+                            intent.putExtra("shareDescription", advInfo.getDescription());
+                            startActivity(intent);
+                        }
+                    }
+                })
+                .setOnCloseClickListener(new View.OnClickListener() {//设定关闭按钮点击事件回调
+                    @Override
+                    public void onClick(View view) {
+                        //版本更新
+                        getVersion();
+                    }
+                })
+                .setOnOutCloseClickListener(new View.OnClickListener() {//设定啊弹窗边缘点击事件监听
+                    @Override
+                    public void onClick(View view) {
+                        //版本更新
+                        getVersion();
+                    }
+                });
+        //开始执行弹窗的显示操作，可传值为0-360，0表示从右开始弹出，逆时针方向，也可以传入自定义的方向值
+        adManager.showAdDialog(AdConstant.ANIM_DOWN_TO_UP);
+    }
+
+    /**
+     * 获取首页弹窗数据
      */
     private void getHotActivity() {
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAppActivity");
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:version-- " + result);
+                Log.e(TAG, "onSuccess:getAppActivity-- " + result);
                 JSONObject jsonObject1 = null;
                 try {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
-                        hotActivityList.clear();
+                        //初始化数据
+                        advList = new ArrayList<>();
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject object = data.getJSONObject(i);
-                            int id = object.getInt("id");
-                            String imageUrl = object.getString("imageUrl");
-                            String webUrl = object.getString("webUrl");
-                            HotActivity hotActivity = new HotActivity(id, imageUrl, webUrl);
-                            hotActivityList.add(hotActivity);
+                            AdInfo adInfo = new AdInfo();
+                            adInfo.setActivityImg(object.getString("imageUrl")); //活动弹窗图片
+                            int canShare = object.getInt("shareable"); // 是否可分享 0 否 1 是
+                            adInfo.setCanShare(canShare == 1 ? true : false);
+                            int canClick = object.getInt("clickable");// 是否可点击  0 否 1 是
+                            adInfo.setCanClick(canClick == 1 ? true : false);
+                            adInfo.setUrl(object.getString("webUrl")); //分享url
+                            adInfo.setAdId(object.getInt("id") + ""); //活动id
+                            adInfo.setDescription(object.getString("text")); // 活动介绍
+                            advList.add(adInfo);
                         }
+
+                        //判断显示弹窗
+                        judgeShowPop();
                     }
                 } catch (JSONException e) {
 
@@ -232,7 +308,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(MainActivity.this, "应用初始化失败，请检查网络", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -250,9 +326,9 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
     @Override
     protected void onResume() {
         super.onResume();
-       if (isGengxin){
-           update();
-       }
+        if (isGengxin) {
+            update();
+        }
     }
 
     /**
@@ -260,14 +336,14 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
      */
     private void getVersion() {
         try {
-            versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(),0).versionName;
+            versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
             Log.e(TAG, "getVersion: versionCode -- " + versionCode);
         } catch (PackageManager.NameNotFoundException e) {
 
         }
         JSONObject jsonObject = new JSONObject();
         try {
-         //   jsonObject.put("appVersion", "2.2.2");
+            //   jsonObject.put("appVersion", "2.2.2");
             jsonObject.put("appVersion", versionCode);
             jsonObject.put("versionType", "user");
         } catch (JSONException e) {
@@ -286,13 +362,14 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         downloadUrl = data.getString("downloadUrl");
                         version = data.getString("version");
                         updateContent = data.getString("content");
                         forceUpate = data.getInt("forceUpdate"); //是否强制更新  1强制更新 0不强制更新
-                        ShowDialog(version,downloadUrl,updateContent,forceUpate);;//安装应用的逻辑(写自己的就可以)
+                        ShowDialog(version, downloadUrl, updateContent, forceUpate);
+                        ;//安装应用的逻辑(写自己的就可以)
                     }
                 } catch (JSONException e) {
 
@@ -315,15 +392,15 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
             }
         });
-     }
+    }
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
-        if (requestCode == 10086){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                ShowDialog(version,downloadUrl,updateContent,forceUpate);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 10086) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                ShowDialog(version, downloadUrl, updateContent, forceUpate);
             } else {
                 Intent localIntent = new Intent();
                 localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -349,11 +426,12 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
     /**
      * 弹出更新dialog
+     *
      * @param version
      * @param downloadUrl
      */
-    private void ShowDialog(String version, final String downloadUrl,final String updateContent,final int forceUpate) {
-        if (forceUpate == 0){ //不强制更新
+    private void ShowDialog(String version, final String downloadUrl, final String updateContent, final int forceUpate) {
+        if (forceUpate == 0) { //不强制更新
             new android.app.AlertDialog.Builder(this)
                     .setTitle("版本更新")
                     .setMessage(updateContent)
@@ -383,7 +461,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                             });
                         }
                     }).show();
-        }else {
+        } else {
             new android.app.AlertDialog.Builder(this)
                     .setTitle("版本更新")
                     .setMessage(updateContent)
@@ -458,7 +536,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                 if (Environment.getExternalStorageState().equals(
                         Environment.MEDIA_MOUNTED)) {
                     file = new File(MainActivity.this.getObbDir().getAbsolutePath(),
-                            DOWNLOAD_NAME + version +".apk");
+                            DOWNLOAD_NAME + version + ".apk");
 
                     if (!file.exists()) {
                         // 判断父文件夹是否存在
@@ -575,7 +653,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                         //   Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,Uri.fromParts("package:"+ getPackageName()));
                         //  startActivityForResult(intent, 10086);
 
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{ Manifest.permission.REQUEST_INSTALL_PACKAGES}, 10086);
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.REQUEST_INSTALL_PACKAGES}, 10086);
                     }
                 } else {
                     update();
@@ -589,7 +667,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
     private void update() {
         isGengxin = false;
         //安装应用
-      //  Intent intent = new Intent(Intent.ACTION_VIEW);
+        //  Intent intent = new Intent(Intent.ACTION_VIEW);
 
         String fileName = MainActivity.this.getObbDir().getAbsolutePath() + "/" + DOWNLOAD_NAME + version + ".apk";
       /*  File file = null;
@@ -606,7 +684,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                 "application/vnd.android.package-archive");
         startActivity(intent);*/
         if (Build.VERSION.SDK_INT >= 24) {
-            File file= new File(fileName);
+            File file = new File(fileName);
             tempUri = FileProvider.getUriForFile(MainActivity.this, "com.ruyiruyi.ruyiruyi.fileProvider", file);
             Intent install = new Intent(Intent.ACTION_VIEW);
             install.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -621,538 +699,6 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         }
 
 
-    }
-
-
-    private void initProvice() {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        List<Province> provinceList = null;
-        try {
-            provinceList = db.selector(Province.class)
-                    .orderBy("time")
-                    .findAll();
-        } catch (DbException e) {
-        }
-        JSONObject jsonObject = new JSONObject();
-        try {
-            if (provinceList == null) {
-                jsonObject.put("time", "2000-00-00 00:00:00");
-            } else {
-                String time = provinceList.get(provinceList.size() - 1).getTime();
-                jsonObject.put("time", time);
-            }
-        } catch (JSONException e) {
-
-        }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getAllPositon");
-        params.addBodyParameter("reqJson", jsonObject.toString());
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:getTireTypeData---" + result);
-                try {
-                    JSONObject jsonObject1 = new JSONObject(result);
-                    String status = jsonObject1.getString("status");
-                    String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")) {
-                        JSONArray data = jsonObject1.getJSONArray("data");
-                        List<Province> provinceArrayList = new ArrayList<Province>();
-                        for (int i = 0; i < data.length(); i++) {
-
-                            String name = data.getJSONObject(i).getString("name");
-                            int id = data.getJSONObject(i).getInt("id");
-                            int definition = data.getJSONObject(i).getInt("definition");
-                            int fid = data.getJSONObject(i).getInt("fid");
-
-                            long time = data.getJSONObject(i).getLong("time");
-                            String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-
-
-                            provinceArrayList.add(new Province(id, fid, definition, name, timestampToStringAll));
-                        }
-
-                        saveProvinceIntoDb(provinceArrayList);
-                    } else {
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (JSONException e) {
-
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
-
-    private void saveProvinceIntoDb(List<Province> provinceArrayList) {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        try {
-            Log.e(TAG, "provinceArrayList: 添加成功" + provinceArrayList.size());
-            db.saveOrUpdate(provinceArrayList);
-        } catch (DbException e) {
-
-        }
-
-    }
-
-    private void initTireType() {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        List<TireType> tireTypeList = null;
-        try {
-            tireTypeList = db.selector(TireType.class)
-                    .orderBy("time")
-                    .findAll();
-        } catch (DbException e) {
-        }
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            if (tireTypeList == null) {
-                jsonObject.put("time", "2000-00-00 00:00:00");
-            } else {
-                String time = tireTypeList.get(tireTypeList.size() - 1).getTime();
-                jsonObject.put("time", time);
-            }
-        } catch (JSONException e) {
-
-        }
-
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getTireType");
-        params.addBodyParameter("reqJson", jsonObject.toString());
-
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:getTireTypeData---" + result);
-                try {
-                    JSONObject jsonObject1 = new JSONObject(result);
-                    String status = jsonObject1.getString("status");
-                    String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")) {
-                        JSONArray data = jsonObject1.getJSONArray("data");
-                        List<TireType> tireTypeArrayList = new ArrayList<TireType>();
-                        for (int i = 0; i < data.length(); i++) {
-                            String tireDiameter = data.getJSONObject(i).getString("tireDiameter");
-                            String tireFlatWidth = data.getJSONObject(i).getString("tireFlatWidth");
-                            String tireFlatnessRatio = data.getJSONObject(i).getString("tireFlatnessRatio");
-                            int id = data.getJSONObject(i).getInt("tireTypeId");
-
-                            long time = data.getJSONObject(i).getLong("time");
-                            String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-
-
-                            tireTypeArrayList.add(new TireType(id, tireFlatWidth, tireFlatnessRatio, tireDiameter, timestampToStringAll));
-                        }
-
-                        saveTireTypeIntoDb(tireTypeArrayList);
-                    } else {
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (JSONException e) {
-
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-
-    }
-
-    private void saveTireTypeIntoDb(List<TireType> tireTypeArrayList) {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        try {
-            Log.e(TAG, "tireTypeArrayList: 添加成功" + tireTypeArrayList.size());
-            db.saveOrUpdate(tireTypeArrayList);
-        } catch (DbException e) {
-
-        }
-    }
-
-    private void initCarrTireInfo() {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        List<CarTireInfo> carTireInfoList = null;
-        try {
-            carTireInfoList = db.selector(CarTireInfo.class)
-                    .orderBy("time")
-                    .findAll();
-
-        } catch (DbException e) {
-
-        }
-
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            if (carTireInfoList == null) {
-                jsonObject.put("time", "2000-00-00 00:00:00");
-            } else {
-                String time = carTireInfoList.get(carTireInfoList.size() - 1).getTime();
-                Log.e(TAG, "initCarDataIntoDb: " + time);
-                jsonObject.put("time", time);
-            }
-        } catch (JSONException e) {
-        }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarTireInfoData");
-        params.addBodyParameter("reqJson", jsonObject.toString());
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:getCarTireInfoData---" + result);
-                try {
-                    JSONObject jsonObject1 = new JSONObject(result);
-                    String status = jsonObject1.getString("status");
-                    String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")) {
-                        JSONArray data = jsonObject1.getJSONArray("data");
-                        List<CarTireInfo> carTireInfoArrayList = new ArrayList<CarTireInfo>();
-                        for (int i = 0; i < data.length(); i++) {
-
-                            String brand = data.getJSONObject(i).getString("brand");
-                            String verhicle = data.getJSONObject(i).getString("verhicle");
-                            String font = data.getJSONObject(i).getString("font");
-                            String name = data.getJSONObject(i).getString("name");
-                            String pailiang = data.getJSONObject(i).getString("pailiang");
-                            String rear = data.getJSONObject(i).getString("rear");
-                            String year = data.getJSONObject(i).getString("year");
-                            int id = data.getJSONObject(i).getInt("id");
-                            int carBrandId = data.getJSONObject(i).getInt("carBrandId");
-                            int verhicleId = data.getJSONObject(i).getInt("verhicleId");
-
-                            long time = data.getJSONObject(i).getLong("time");
-                            String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-
-
-                            carTireInfoArrayList.add(new CarTireInfo(id, brand, carBrandId, verhicle, verhicleId, pailiang, year, name, font, rear, timestampToStringAll));
-                        }
-                        savaCarTireIntoDb(carTireInfoArrayList);
-                    } else {
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (JSONException e) {
-
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
-
-    private void savaCarTireIntoDb(List<CarTireInfo> carTireInfoArrayList) {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        try {
-            Log.e(TAG, "savaCarTireIntoDb: 添加成功");
-            db.saveOrUpdate(carTireInfoArrayList);
-        } catch (DbException e) {
-
-        }
-    }
-
-    private void initCarVerhicle() {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        List<CarVerhicle> carVerhicleList = null;
-        try {
-            carVerhicleList = db.selector(CarVerhicle.class)
-                    .orderBy("time")
-                    .findAll();
-
-        } catch (DbException e) {
-
-        }
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            if (carVerhicleList == null) {
-                jsonObject.put("time", "2000-00-00 00:00:00");
-            } else {
-                String time = carVerhicleList.get(carVerhicleList.size() - 1).getTime();
-                Log.e(TAG, "initCarDataIntoDb: " + time);
-                jsonObject.put("time", time);
-            }
-        } catch (JSONException e) {
-        }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarVerhicleData");
-        params.addBodyParameter("reqJson", jsonObject.toString());
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: " + result);
-                try {
-                    JSONObject jsonObject1 = new JSONObject(result);
-                    String status = jsonObject1.getString("status");
-                    String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")) {
-                        JSONArray data = jsonObject1.getJSONArray("data");
-                        List<CarVerhicle> carVerhicleArrayList = new ArrayList<CarVerhicle>();
-                        for (int i = 0; i < data.length(); i++) {
-                            String carVersion = data.getJSONObject(i).getString("carVersion");
-                            String verhicle = data.getJSONObject(i).getString("verhicle");
-                            int id = data.getJSONObject(i).getInt("id");
-                            int carBrandId = data.getJSONObject(i).getInt("carBrandId");
-                            int factoryId = data.getJSONObject(i).getInt("factoryId");
-                            int verify = data.getJSONObject(i).getInt("verify");
-
-
-                            long time = data.getJSONObject(i).getLong("time");
-                            String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-                            carVerhicleArrayList.add(new CarVerhicle(id, verhicle, carBrandId, factoryId, carVersion, verify, timestampToStringAll));
-                        }
-                        savaCarVerhicleIntoDb(carVerhicleArrayList);
-                    } else {
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (JSONException e) {
-
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
-
-    private void savaCarVerhicleIntoDb(List<CarVerhicle> verhiclesList) {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        try {
-            db.saveOrUpdate(verhiclesList);
-        } catch (DbException e) {
-
-        }
-    }
-
-    private void initCarBrand() {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        List<CarBrand> carBrandList = null;
-        try {
-            carBrandList = db.selector(CarBrand.class)
-                    .orderBy("time")
-                    .findAll();
-
-        } catch (DbException e) {
-
-        }
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            if (carBrandList == null) {
-                jsonObject.put("time", "2000-00-00 00:00:00");
-            } else {
-                String time = carBrandList.get(carBrandList.size() - 1).getTime();
-                jsonObject.put("time", time);
-            }
-        } catch (JSONException e) {
-        }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarBrandData");
-        params.addBodyParameter("reqJson", jsonObject.toString());
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                try {
-                    JSONObject jsonObject1 = new JSONObject(result);
-                    String status = jsonObject1.getString("status");
-                    String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")) {
-                        JSONArray data = jsonObject1.getJSONArray("data");
-                        List<CarBrand> carBrandArrayList = new ArrayList<CarBrand>();
-                        for (int i = 0; i < data.length(); i++) {
-
-
-                            String icon = data.getJSONObject(i).getString("icon");
-                            String imgUrl = data.getJSONObject(i).getString("imgUrl");
-                            String name = data.getJSONObject(i).getString("name");
-                            int id = data.getJSONObject(i).getInt("id");
-
-
-                            long time = data.getJSONObject(i).getLong("time");
-                            String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-
-
-                            carBrandArrayList.add(new CarBrand(id, name, imgUrl, icon, timestampToStringAll));
-                        }
-                        saveCarBrandIntoDb(carBrandArrayList);
-                    } else {
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (JSONException e) {
-
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
-
-    private void saveCarBrandIntoDb(List<CarBrand> brandList) {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        try {
-            db.saveOrUpdate(brandList);
-        } catch (DbException e) {
-
-        }
-    }
-
-
-    private void initCarDataIntoDb() {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        List<CarFactory> carList = null;
-        try {
-            carList = db.selector(CarFactory.class)
-                    .orderBy("time")
-                    .findAll();
-
-        } catch (DbException e) {
-
-        }
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            if (carList == null) {
-                jsonObject.put("time", "2000-00-00 00:00:00");
-            } else {
-                String time = carList.get(carList.size() - 1).getTime();
-                jsonObject.put("time", time);
-            }
-        } catch (JSONException e) {
-        }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getCarFactoryData");
-        params.addBodyParameter("reqJson", jsonObject.toString());
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                try {
-                    JSONObject jsonObject1 = new JSONObject(result);
-                    String status = jsonObject1.getString("status");
-                    String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")) {
-                        JSONArray data = jsonObject1.getJSONArray("data");
-                        List<CarFactory> factoryList = new ArrayList<CarFactory>();
-                        for (int i = 0; i < data.length(); i++) {
-                            String factory = data.getJSONObject(i).getString("factory");
-                            int id = data.getJSONObject(i).getInt("id");
-                            int carBrandId = data.getJSONObject(i).getInt("carBrandId");
-                            long time = data.getJSONObject(i).getLong("time");
-                            String timestampToStringAll = new UtilsRY().getTimestampToStringAll(time);
-                            factoryList.add(new CarFactory(id, carBrandId, factory, timestampToStringAll));
-                        }
-                        savaCarFactoryIntoDb(factoryList);
-                    } else {
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (JSONException e) {
-
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
-
-    /**
-     * 保存车辆工厂信息到数据库
-     *
-     * @param factoryList
-     */
-    private void savaCarFactoryIntoDb(List<CarFactory> factoryList) {
-        DbConfig dbConfig = new DbConfig(this);
-        DbManager db = dbConfig.getDbManager();
-        try {
-            db.saveOrUpdate(factoryList);
-        } catch (DbException e) {
-
-        }
     }
 
     private List<Fragment> initFragment() {
@@ -1253,25 +799,25 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-           // Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-          //  Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(this, "请授权读写手机存储权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-          //  Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(this, "请授权相机权限", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-          //  Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(this, "请授权定位权限", Toast.LENGTH_SHORT).show();
             finish();
         }
     }

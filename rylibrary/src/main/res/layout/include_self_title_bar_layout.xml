@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/rl_title_bar_layout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:background="@color/web_top">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/c3"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:background="@color/c3"/>
 
     <ImageView
         android:id="@+id/iv_title_left_icon"
@@ -30,7 +30,7 @@
         android:gravity="center"
         android:maxLines="1"
         android:textColor="@color/white"
-        android:textSize="18sp"/>
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/tv_left_icon"
@@ -40,7 +40,7 @@
         android:layout_toRightOf="@+id/iv_title_left_icon"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="16sp"
         />
 
     <TextView
@@ -52,15 +52,16 @@
         android:layout_toLeftOf="@+id/iv_right_icon"
         android:gravity="center"
         android:textColor="@color/white"
-        android:textSize="18sp"/>
+        android:textSize="16sp"/>
 
     <ImageView
         android:id="@+id/iv_right_icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
         android:scaleType="fitXY"/>
 
 </RelativeLayout>

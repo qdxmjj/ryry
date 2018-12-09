@@ -2,11 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/fl_main"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:layout_marginTop="1dp"
              android:background="@color/c12"
-             android:id="@+id/fl_main"
              tools:context="com.ruyiruyi.merchant.ui.activity.MyGoodsActivity">
 
     <com.ruyiruyi.merchant.cell.CircleImageView
@@ -20,11 +20,21 @@
         android:src="@drawable/ic_pay"/>
 
     <TextView
-        android:id="@+id/tv_putforwardinfo_money"
+        android:id="@+id/tv_addtype"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="70dp"
+        android:text="-"
+        android:textColor="@color/c7"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/tv_putforwardinfo_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="76dp"
         android:text="1314.00"
         android:textColor="@color/c7"
         android:textSize="18sp"/>

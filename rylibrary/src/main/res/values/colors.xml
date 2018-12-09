@@ -108,4 +108,6 @@
     <color name="divider">#ffd2d2d2</color>
     <!--透明色-->
     <color name="transparent">#00ffffff</color>
+    <!--首页弹窗-->
+    <color name="mc">#c8ccd1</color>
 </resources>

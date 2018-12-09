@@ -3,14 +3,13 @@ package com.ruyiruyi.merchant.ui.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +33,7 @@ import java.security.NoSuchAlgorithmException;
 
 import rx.functions.Action1;
 
+
 public class FogetActivity extends BaseActivity {
 
     private static final String TAG = FogetActivity.class.getSimpleName();
@@ -43,6 +43,7 @@ public class FogetActivity extends BaseActivity {
     private EditText et_passa;
     private EditText et_passb;
     private TextView tv_code;
+    private TextView tv_version;
     private TextView tv_save;
     private ActionBar mActionBar;
     private ProgressDialog dialog;
@@ -75,7 +76,17 @@ public class FogetActivity extends BaseActivity {
         et_passa = (EditText) findViewById(R.id.et_pass_a);
         et_passb = (EditText) findViewById(R.id.et_pass_b);
         tv_code = (TextView) findViewById(R.id.tv_getcode);
+        tv_version = (TextView) findViewById(R.id.tv_version);
         tv_save = (TextView) findViewById(R.id.tv_reset);
+
+        //设置版本
+        String versionName = null;
+        try {
+            versionName = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+            tv_version.setText("如驿如意V" + versionName + "商家版");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         mtimeC = new TimeCount(60000, 1000);
         //获取验证码
