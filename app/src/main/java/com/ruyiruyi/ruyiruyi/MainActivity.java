@@ -122,7 +122,8 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
         //信鸽推送绑定手机号
         DbConfig dbConfig = new DbConfig(this);
-        if (dbConfig.getIsLogin()) {
+        /*if (dbConfig.getIsLogin()) {*/ //TODO 信鸽暂时关闭
+        if (false) {
             //信鸽token注册 绑定手机号
             XGPushManager.registerPush(this, dbConfig.getPhone(), new XGIOperateCallback() {
                 @Override
