@@ -46,6 +46,7 @@ import rx.functions.Action1;
 public class BottomEventActivity extends BaseWebActivity {
     private WebView activity_web;
     private String webUrl;
+    private String shareUrl;
     private String shareDescription;
     private boolean isBottomEvent;
     private boolean canShare;
@@ -64,6 +65,7 @@ public class BottomEventActivity extends BaseWebActivity {
 
         Intent intent = getIntent();
         webUrl = intent.getStringExtra("webUrl");
+        shareUrl = intent.getStringExtra("sahreUrl");
         shareDescription = intent.getStringExtra("shareDescription");
         isBottomEvent = intent.getBooleanExtra("isBottomEvent", false);
         canShare = intent.getBooleanExtra("canShare", false);
@@ -144,7 +146,7 @@ public class BottomEventActivity extends BaseWebActivity {
     private void shareToWexin() {
         int id = new DbConfig(this).getId();
         WXWebpageObject webpage = new WXWebpageObject();
-        webpage.webpageUrl = webUrl;
+        webpage.webpageUrl = shareUrl;
         WXMediaMessage msg = new WXMediaMessage(webpage);
         msg.title = "如驿如意";
         msg.description = shareDescription;//分享活动介绍

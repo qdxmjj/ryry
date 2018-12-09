@@ -2,8 +2,8 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,6 +15,7 @@ import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+import com.tencent.android.tpush.XGPushManager;
 
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
@@ -130,6 +131,10 @@ public class SettingActivity extends RyBaseActivity {
                         db.saveOrUpdate(user);
                     } catch (DbException e) {
                     }
+                    
+                    //解绑信鸽手机号
+                    XGPushManager.delAccount(getApplicationContext(), new DbConfig(getApplicationContext()).getPhone());
+
                     finish();
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }

@@ -136,6 +136,8 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
                             String status = object1.getString("status");
                             if (status.equals("1")) {
                                 Toast.makeText(context, "更新商品成功", Toast.LENGTH_SHORT).show();
+                                //刷新商品列表
+
                             } else {
                                 Toast.makeText(context, "更新商品失败", Toast.LENGTH_SHORT).show();
                             }

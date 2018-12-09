@@ -32,6 +32,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.BottomEventActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseFragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsClassFragment;
@@ -50,6 +51,8 @@ import com.ruyiruyi.rylibrary.popdblibrary.transformer.ZoomOutPageTransformer;
 import com.ruyiruyi.rylibrary.ui.adapter.FragmentViewPagerAdapter;
 import com.ruyiruyi.rylibrary.utils.AndroidUtilities;
 import com.ruyiruyi.rylibrary.utils.LayoutHelper;
+import com.tencent.android.tpush.XGIOperateCallback;
+import com.tencent.android.tpush.XGPushManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -116,6 +119,24 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(content, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         hotActivityList = new ArrayList<>();
+
+        //信鸽推送绑定手机号
+        DbConfig dbConfig = new DbConfig(this);
+        if (dbConfig.getIsLogin()) {
+            //信鸽token注册 绑定手机号
+            XGPushManager.registerPush(this, dbConfig.getPhone(), new XGIOperateCallback() {
+                @Override
+                public void onSuccess(Object data, int flag) {
+                    //token在设备卸载重装的时候有可能会变
+                    Log.d("TPush", "注册成功，设备token为：" + data);
+                }
+
+                @Override
+                public void onFail(Object data, int errCode, String msg) {
+                    Log.d("TPush", "注册失败，错误码：" + errCode + ",错误信息：" + msg);
+                }
+            });
+        }
 
         //判断权限
         judgePower();
@@ -242,6 +263,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                             Intent intent = new Intent(MainActivity.this, BottomEventActivity.class);
                             intent.putExtra("canShare", advInfo.isCanShare());
                             intent.putExtra("webUrl", advInfo.getUrl());
+                            intent.putExtra("shareUrl", advInfo.getUrl());
                             intent.putExtra("shareDescription", advInfo.getDescription());
                             startActivity(intent);
                         }

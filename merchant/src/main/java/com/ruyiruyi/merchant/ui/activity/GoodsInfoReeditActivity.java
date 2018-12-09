@@ -10,8 +10,6 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -27,18 +25,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.Service;
 import com.ruyiruyi.merchant.bean.ServicesBean;
 import com.ruyiruyi.merchant.db.DbConfig;
+import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
+import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
-import com.ruyiruyi.rylibrary.utils.FormatDateUtil;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
 
 import org.json.JSONArray;
@@ -57,7 +54,7 @@ import java.util.List;
 import id.zelory.compressor.Compressor;
 import rx.functions.Action1;
 
-public class GoodsInfoReeditActivity extends BaseActivity {
+public class GoodsInfoReeditActivity extends MerchantBaseActivity {
     private final int CHOOSE_PICTURE = 0;
     private final int TAKE_PICTURE = 1;
 
@@ -85,10 +82,6 @@ public class GoodsInfoReeditActivity extends BaseActivity {
     private String currentSaleForIdString = "请选择";
     private String currentLeftString = "请选择";
     private String currentRightString = "请选择";
-    private List<ServicesBean> servicesBean2;
-    private List<ServicesBean> servicesBean3;
-    private List<ServicesBean> servicesBean4;
-    private List<ServicesBean> servicesBean5;
     private List<ServicesBean> servicesBean2a;
     private List<ServicesBean> servicesBean3a;
     private List<ServicesBean> servicesBean4a;
@@ -111,43 +104,6 @@ public class GoodsInfoReeditActivity extends BaseActivity {
     private String status = "1";//默认出售中
     private ProgressDialog progressDialog;
     private ProgressDialog mainDialog;
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    break;
-                case 2:
-                    myRequestPostForDataBy("3");
-                    break;
-                case 3:
-                    myRequestPostForDataBy("4");
-                    break;
-                case 4:
-                    myRequestPostForDataBy("5");
-                    break;
-                case 5:
-                    //以下操作
-                    if (servicesBean2a.size() != 0) {
-                        leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_a));
-                    }
-                    if (servicesBean3a.size() != 0) {
-                        leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_b));
-                    }
-                    if (servicesBean4a.size() != 0) {
-                        leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_c));
-                    }
-                    if (servicesBean5a.size() != 0) {
-                        leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_d));
-                    }
-
-
-                    initOldData();//设置商品修改前数据
-                    bindView();
-                    break;
-            }
-        }
-    };
     private String path_takepic;
     private ScrollView scrollView;
 
@@ -265,86 +221,72 @@ public class GoodsInfoReeditActivity extends BaseActivity {
     }
 
     private void initData() {
-        myRequestPostForDataBy("2");
-    }
-
-    private void myRequestPostForDataBy(final String s) {
-        final List<ServicesBean> servicesBean = new ArrayList<>();
         JSONObject jsonObject = new JSONObject();
         try {
             String storeId = new DbConfig(getApplicationContext()).getId() + "";
             jsonObject.put("storeId", storeId);
-            jsonObject.put("serviceTypeId", s);
         } catch (JSONException e) {
         }
-        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreServicesAndState");
+        RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreAddedServices");
         params.addBodyParameter("reqJson", jsonObject.toString());
-        Log.e(TAG, "myRequestPostForDataBy10086net: params.toString()==>" + "---" + s + "---" + params.toString());
+        Log.e(TAG, "testresult: params.toString()==>" + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 try {
+                    Log.e(TAG, "testresult = " + result);
                     JSONObject object = new JSONObject(result);
-                    JSONArray data = object.getJSONArray("data");
-                    String msg = object.getString("msg");
-                    int status = object.getInt("status");
-                    if (data != null && data.length() != 0) {
-                        for (int i = 0; i < data.length(); i++) {
+                    JSONObject data = object.getJSONObject("data");
+                    try {
+                        final JSONArray list_a = data.getJSONArray(GoodsInfoReeditActivity.this.getString(R.string.service_type_a));//汽车保养
+                        for (int i = 0; i < list_a.length(); i++) {//汽车保养
+                            JSONObject objbean = (JSONObject) list_a.get(i);
                             ServicesBean bean = new ServicesBean();
-                            JSONObject obj = (JSONObject) data.get(i);
-                            bean.setService_id(obj.getInt("id"));
-                            bean.setIsChecked(Integer.parseInt(obj.getString("selectState")));
-                            bean.setServiceInfo(obj.getString("name"));
-                            servicesBean.add(bean);
-                        }
-                    }
-                    switch (s) {
-                        case "2":
-                            for (int i = 0; i < servicesBean.size(); i++) {
-                                servicesBean2.add(servicesBean.get(i));
-                            }
-                            for (int i = 0; i < servicesBean2.size(); i++) {
-                                if (servicesBean2.get(i).getIsChecked() == 1) {
-                                    servicesBean2a.add(servicesBean2.get(i));
-                                }
-                            }
-                            break;
-                        case "3":
-                            for (int i = 0; i < servicesBean.size(); i++) {
-                                servicesBean3.add(servicesBean.get(i));
-                            }
-                            for (int i = 0; i < servicesBean3.size(); i++) {
-                                if (servicesBean3.get(i).getIsChecked() == 1) {
-                                    servicesBean3a.add(servicesBean3.get(i));
-                                }
-                            }
-                            break;
-                        case "4":
-                            for (int i = 0; i < servicesBean.size(); i++) {
-                                servicesBean4.add(servicesBean.get(i));
-                            }
-                            for (int i = 0; i < servicesBean4.size(); i++) {
-                                if (servicesBean4.get(i).getIsChecked() == 1) {
-                                    servicesBean4a.add(servicesBean4.get(i));
-                                }
-                            }
-                            break;
-                        case "5":
-                            for (int i = 0; i < servicesBean.size(); i++) {
-                                servicesBean5.add(servicesBean.get(i));
-                            }
-                            for (int i = 0; i < servicesBean5.size(); i++) {
-                                if (servicesBean5.get(i).getIsChecked() == 1) {
-                                    servicesBean5a.add(servicesBean5.get(i));
-                                }
-                            }
-                            break;
+                            bean.setService_id(objbean.getInt("serviceId"));
+                            bean.setServiceInfo(objbean.getString("serviceName"));
 
+                            servicesBean2a.add(bean);
+                        }
+                    } catch (Exception e) {
                     }
-                    Message message = new Message();
-                    message.what = Integer.parseInt(s);
-                    mHandler.sendMessage(message);
-                    Log.e(TAG, "onSuccess:10086net servicesBean.size()" + "---" + s + "---" + servicesBean.size());
+                    try {
+                        JSONArray list_b = data.getJSONArray(GoodsInfoReeditActivity.this.getString(R.string.service_type_b));//美容清洗
+                        for (int i = 0; i < list_b.length(); i++) {//美容清洗
+                            JSONObject objbean = (JSONObject) list_b.get(i);
+                            ServicesBean bean = new ServicesBean();
+                            bean.setService_id(objbean.getInt("serviceId"));
+                            bean.setServiceInfo(objbean.getString("serviceName"));
+
+                            servicesBean3a.add(bean);
+                        }
+                    } catch (Exception e) {
+                    }
+                    try {
+                        JSONArray list_c = data.getJSONArray(GoodsInfoReeditActivity.this.getString(R.string.service_type_c));//安装改装
+                        for (int i = 0; i < list_c.length(); i++) {//安装改装
+                            JSONObject objbean = (JSONObject) list_c.get(i);
+                            ServicesBean bean = new ServicesBean();
+                            bean.setService_id(objbean.getInt("serviceId"));
+                            bean.setServiceInfo(objbean.getString("serviceName"));
+
+                            servicesBean4a.add(bean);
+                        }
+                    } catch (Exception e) {
+                    }
+                    try {
+                        JSONArray list_d = data.getJSONArray(GoodsInfoReeditActivity.this.getString(R.string.service_type_d));//轮胎服务
+                        for (int i = 0; i < list_d.length(); i++) {//轮胎服务
+                            JSONObject objbean = (JSONObject) list_d.get(i);
+                            ServicesBean bean = new ServicesBean();
+                            bean.setService_id(objbean.getInt("serviceId"));
+                            bean.setServiceInfo(objbean.getString("serviceName"));
+
+                            servicesBean5a.add(bean);
+                        }
+                    } catch (Exception e) {
+                    }
+
+                    initLeftList();
                 } catch (JSONException e) {
                 }
             }
@@ -366,6 +308,29 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         });
 
     }
+
+    /**
+     * 初始化小类列表
+     */
+    private void initLeftList() {
+        //初始化小类列表
+        if (servicesBean2a.size() != 0) {
+            leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_a));
+        }
+        if (servicesBean3a.size() != 0) {
+            leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_b));
+        }
+        if (servicesBean4a.size() != 0) {
+            leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_c));
+        }
+        if (servicesBean5a.size() != 0) {
+            leftTypeList.add(GoodsInfoReeditActivity.this.getString(R.string.service_type_d));
+        }
+        //以下操作
+        initOldData();//设置商品修改前数据
+        bindView();
+    }
+
 
     private void bindView() {
         //头像选择
@@ -433,10 +398,17 @@ public class GoodsInfoReeditActivity extends BaseActivity {
             Toast.makeText(GoodsInfoReeditActivity.this, "请输入商品单价", Toast.LENGTH_SHORT).show();
             return;
         }
-      /*  if (mGoodsPrice.getText().toString().equals("0")) {
-            Toast.makeText(GoodsInfoReeditActivity.this, "商品单价不能为0", Toast.LENGTH_SHORT).show();
+        String putforwardStr = mGoodsPrice.getText().toString();
+        if (!UtilsRY.isFloat(putforwardStr) && !UtilsRY.isInt(putforwardStr)) {//正则判断输入是否规范(正浮点数和正整数)
+            showMerchantErrorDialog("请输入合理金额");
             return;
-        }*/
+        }
+        int indexOf = putforwardStr.indexOf(".");
+        Log.e("indexOf", "judgeBeforePost: " + indexOf + "+" + putforwardStr.length());
+        if (UtilsRY.isFloat(putforwardStr) && (putforwardStr.length() - indexOf - 1) > 2) {//判断小数点后两位
+            showMerchantErrorDialog("请输入合理金额");
+            return;
+        }
         if (leftTypeId == null || leftTypeId.equals("") || rightTypeId == null || rightTypeId.equals("")) {
             leftTypeId = serviceTypeId;
             rightTypeId = serviceId;
@@ -866,11 +838,6 @@ public class GoodsInfoReeditActivity extends BaseActivity {
         mGoodsStatus = (TextView) findViewById(R.id.tv_goods_status);
         tv_tijiaosp = (TextView) findViewById(R.id.tv_tijiaosp);
 
-        Log.e(TAG, "initView: 00000 imgurl = " + imgurl);
-        servicesBean2 = new ArrayList<>();
-        servicesBean3 = new ArrayList<>();
-        servicesBean4 = new ArrayList<>();
-        servicesBean5 = new ArrayList<>();
         servicesBean2a = new ArrayList<>();
         servicesBean3a = new ArrayList<>();
         servicesBean4a = new ArrayList<>();

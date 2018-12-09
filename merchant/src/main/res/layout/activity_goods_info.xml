@@ -101,7 +101,7 @@
                         android:layout_weight="5"
                         android:background="@null"
                         android:hint="请在此输入商品单价"
-                        android:inputType="number"
+                        android:digits="1234567890."
                         android:maxLength="9"
                         android:maxLines="1"
                         android:paddingLeft="5dp"

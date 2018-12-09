@@ -654,6 +654,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         }
         Intent intent = new Intent(getContext(), BottomEventActivity.class);
         intent.putExtra("webUrl", webUrl);
+        intent.putExtra("shareUrl", webUrl);
         intent.putExtra("isBottomEvent", true);
 
         startActivity(intent);
