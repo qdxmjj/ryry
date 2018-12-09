@@ -14,8 +14,17 @@ public class AdInfo implements Parcelable {
     private boolean canShare;//点击弹窗后内部页面是否可分享
     private boolean canClick;//弹窗是否可点击
     private String url = null;//点击弹窗对应链接
+    private String shareUrl = null;//分享链接
     private String activityImg = null;//弹窗轮播图url
     private int activityImgId = -1;//弹窗轮播图资源id
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
 
     public boolean isCanClick() {
         return canClick;

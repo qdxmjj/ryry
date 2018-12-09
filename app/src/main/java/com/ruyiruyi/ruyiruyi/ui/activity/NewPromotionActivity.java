@@ -2,12 +2,21 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import rx.functions.Action1;
 
@@ -17,6 +26,16 @@ public class NewPromotionActivity extends RyBaseActivity {
     private FrameLayout fl_invite_buyshoe;
     private FrameLayout fl_invite_person;
     private FrameLayout fl_invite_award;
+
+    private String INVITE_REGISTER_URL = "";
+    private String INVITE_BUYSHOE_URL = "";
+    private boolean INVITE_REGISTER_CANSHARE = false;
+    private boolean INVITE_BUYSHOE_CANSHARE = false;
+    private String SHARE_URL_REGISTER = "";
+    private String SHARE_DESCRIPTION_REGISTER = "";
+    private String SHARE_URL_BUYSHOE = "";
+    private String SHARE_DESCRIPTION_BUYSHOE = "";
+    private String TAG = NewPromotionActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +61,61 @@ public class NewPromotionActivity extends RyBaseActivity {
         });
 
         initView();
+        initData();
         bindView();
+    }
+
+    private void initData() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("a", "aa");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_ACTIVITY_RELEASE + "invite/Url");
+        params.addBodyParameter("reqJson", object.toString());
+        Log.e(TAG, "initData:  params.toString() = " + params.toString());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    Log.e(TAG, "onSuccess: result = " + result);
+                    JSONObject object = new JSONObject(result);
+                    JSONObject inviteRegister = object.getJSONObject("inviteRegister");
+                    JSONObject inviteBuy = object.getJSONObject("inviteBuy");
+
+                    INVITE_REGISTER_URL = inviteRegister.getString("url");
+                    INVITE_BUYSHOE_URL = inviteBuy.getString("url");
+                    int shareAble_register = Integer.parseInt(inviteRegister.getString("shareAble"));
+                    INVITE_REGISTER_CANSHARE = shareAble_register == 1 ? true : false;
+                    int shareAble_buy = Integer.parseInt(inviteBuy.getString("shareAble"));
+                    INVITE_BUYSHOE_CANSHARE = shareAble_buy == 1 ? true : false;
+                    SHARE_URL_REGISTER = inviteRegister.getString("shareUrl");
+                    SHARE_DESCRIPTION_REGISTER = inviteRegister.getString("shareTitle");
+                    SHARE_URL_BUYSHOE = inviteBuy.getString("shareUrl");
+                    SHARE_DESCRIPTION_BUYSHOE = inviteBuy.getString("shareTitle");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void bindView() {
@@ -50,14 +123,32 @@ public class NewPromotionActivity extends RyBaseActivity {
         RxViewAction.clickNoDouble(fl_invite_register).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                startActivity(new Intent(NewPromotionActivity.this, InviteRegisterActivity.class));
+                if (INVITE_REGISTER_URL.length() == 0) {
+                    Toast.makeText(NewPromotionActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(NewPromotionActivity.this, BottomEventActivity.class);
+                intent.putExtra("webUrl", INVITE_REGISTER_URL);
+                intent.putExtra("canShare", INVITE_REGISTER_CANSHARE);
+                intent.putExtra("shareUrl", SHARE_URL_REGISTER);
+                intent.putExtra("shareDescription", SHARE_DESCRIPTION_REGISTER);
+                startActivity(intent);
             }
         });
         //邀请车友购买轮胎
         RxViewAction.clickNoDouble(fl_invite_buyshoe).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                startActivity(new Intent(NewPromotionActivity.this, InviteBuyshoeActivity.class));
+                if (INVITE_BUYSHOE_URL.length() == 0) {
+                    Toast.makeText(NewPromotionActivity.this, "请检查网络", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(NewPromotionActivity.this, BottomEventActivity.class);
+                intent.putExtra("webUrl", INVITE_BUYSHOE_URL);
+                intent.putExtra("canShare", INVITE_BUYSHOE_CANSHARE);
+                intent.putExtra("shareUrl", SHARE_URL_BUYSHOE);
+                intent.putExtra("shareDescription", SHARE_DESCRIPTION_BUYSHOE);
+                startActivity(intent);
             }
         });
         //我推荐的人

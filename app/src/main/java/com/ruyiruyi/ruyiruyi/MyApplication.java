@@ -11,6 +11,8 @@ import com.baidu.mapapi.SDKInitializer;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.rylibrary.popdblibrary.utils.DisplayUtil;
+import com.tencent.android.tpush.XGPushConfig;
+import com.tencent.android.tpush.XGPushManager;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
@@ -34,6 +36,27 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+
+        //华为注册代码之前调用   防止otherPushType = huawei otherPushToken = null
+        XGPushConfig.setHuaweiDebug(true);
+        //信鸽开启debug日志数据
+        XGPushConfig.enableDebug(this, true);
+
+        //设置账号//注意在3.2.2 版本信鸽对账号绑定和解绑接口进行了升级具体详情请参考API文档。
+        XGPushManager.bindAccount(getApplicationContext(), "XINGE");
+        //设置标签
+        XGPushManager.setTag(this, "XINGE");
+        //设置小米APPID和AppKey
+        XGPushConfig.setMiPushAppId(getApplicationContext(), "2882303761517833664");
+        //设置魅族APPID和APPKEY
+        XGPushConfig.setMzPushAppId(this, "1003042");//APP_ID
+        XGPushConfig.setMzPushAppKey(this, "82f9df2a55f54682b5f0b8ef5f479b84");//APP_KEY
+        XGPushConfig.setMiPushAppKey(getApplicationContext(), "5211783390664");
+        //打开第三方推送
+        XGPushConfig.enableOtherPush(getApplicationContext(), true);
+
+
         //初始化Fresco
         initDisplayOpinion();
 
@@ -105,9 +128,6 @@ public class MyApplication extends Application {
             activity.finish();
         }
     }
-
-
-
 
 
     private void initDisplayOpinion() {

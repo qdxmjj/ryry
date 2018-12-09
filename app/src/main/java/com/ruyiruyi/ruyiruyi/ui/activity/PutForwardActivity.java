@@ -325,7 +325,7 @@ public class PutForwardActivity extends RyBaseActivity {
 
     private void initData() {
         //post
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_GONGLIN_FAHUO_TEST + "bindingInfo/queryUserAccountInfo");
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_FAHUO + "bindingInfo/queryUserAccountInfo");
         params.addBodyParameter("userId", new DbConfig(PutForwardActivity.this).getId() + "");
         Log.e(TAG, "initData: params.toString() = " + params.toString());
         showDialogProgress(startdialog, "收益信息加载中...");

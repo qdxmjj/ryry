@@ -14,6 +14,7 @@ import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.LoginActivity;
 import com.ruyiruyi.rylibrary.base.BaseActivity;
+import com.tencent.android.tpush.XGPushManager;
 
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
@@ -62,6 +63,9 @@ public class RyBaseActivity extends BaseActivity {
      * 用户版Token错误跳转dialog
      * */
     public void showUserTokenDialog(String error) {
+        //解绑信鸽手机号
+        XGPushManager.delAccount(getApplicationContext(),new DbConfig(getApplicationContext()).getPhone() );
+
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
         TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
