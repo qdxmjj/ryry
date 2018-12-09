@@ -96,6 +96,7 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
     private String orderNo;
     private String storeId;
     private ProgressDialog progressDialog;
+    private int orderType;
 
 
     @Override
@@ -130,6 +131,7 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
         Intent intent = getIntent();
         orderNo = intent.getStringExtra(PaymentActivity.ORDERNO);
         storeId = intent.getStringExtra(PaymentActivity.STOREID);
+        orderType = intent.getIntExtra(PaymentActivity.ORDER_TYPE,0);
 
         progressDialog = new ProgressDialog(this);
         //配置点击查看大图
@@ -264,9 +266,16 @@ public class EvaluateActivity extends RyBaseActivity implements EvaluateImageVie
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
-                        Intent intent = new Intent(getApplicationContext(), ShopEvaluateActivity.class);
+                     /*   Intent intent = new Intent(getApplicationContext(), ShopEvaluateActivity.class);
                         intent.putExtra(ShopEvaluateActivity.EVALUATE_TYPE,1);
                         intent.putExtra("USERID",userId);
+                        startActivity(intent);
+                        finish();*/
+                        Intent intent = new Intent(getApplicationContext(), OrderInfoActivity.class);
+                        intent.putExtra(PaymentActivity.ORDER_TYPE, orderType);
+                        intent.putExtra(PaymentActivity.ORDERNO, orderNo);
+                        intent.putExtra(PaymentActivity.ORDER_STATE, 1);
+                        intent.putExtra(PaymentActivity.ORDER_STAGE, 1);
                         startActivity(intent);
                         finish();
                     } else if (status.equals("-999")) {

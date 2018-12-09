@@ -224,25 +224,8 @@ public class CarManagerActivity extends RyBaseActivity {
                         break;
                     case 1:         //clear
                         Log.e(TAG, "onMenuItemClick: " + userCarId);
-                        final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getApplicationContext());
-                        deleteDialog.setIcon(R.mipmap.ic_logo);
-                        deleteDialog.setTitle("删除车辆");
-                        deleteDialog.setMessage("您确认要删除车辆么？");
-                        deleteDialog.setPositiveButton("删除", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                deleteCar(userCarId);
-                            }
-                        });
-                        deleteDialog.setNegativeButton("关闭",
-                                new DialogInterface.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                        showDelete(userCarId);
 
-                                    }
-                                });
-                        deleteDialog.show();
 
                         break;
                 }
@@ -261,6 +244,29 @@ public class CarManagerActivity extends RyBaseActivity {
                     }
                 });
     }
+
+    private void showDelete(final int userCarId) {
+        final AlertDialog.Builder deleteDialog = new AlertDialog.Builder(this);
+        deleteDialog.setIcon(R.mipmap.ic_logo);
+        deleteDialog.setTitle("删除车辆");
+        deleteDialog.setMessage("您确认要删除车辆么？");
+        deleteDialog.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteCar(userCarId);
+            }
+        });
+        deleteDialog.setNegativeButton("关闭",
+                new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        deleteDialog.show();
+    }
+
 
     private void deleteCar(int userCarId) {
         int userId = new DbConfig(this).getId();

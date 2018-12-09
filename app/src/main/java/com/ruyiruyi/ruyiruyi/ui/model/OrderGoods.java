@@ -13,6 +13,7 @@ public class OrderGoods {
     public int salesId;
     public String actuallyPrice;
 
+
     public OrderGoods(int userId, List<GoodsInfo> goodsInfoList) {
         this.userId = userId;
         this.goodsInfoList = goodsInfoList;

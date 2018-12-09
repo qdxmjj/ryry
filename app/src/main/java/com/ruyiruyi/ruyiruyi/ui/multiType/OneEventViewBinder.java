@@ -37,10 +37,10 @@ public class OneEventViewBinder extends ItemViewProvider<OneEvent, OneEventViewB
         holder.activity_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onOneEventClickListener( oneEvent.getWebUrl());
+                listener.onOneEventClickListener(oneEvent.getEvent().getSkip(),oneEvent.getEvent().getContent(),oneEvent.getEvent().getWebUrl(),oneEvent.getEvent().getStockId(),oneEvent.getEvent().getServiceId());
             }
         });
-        Glide.with(context).load(oneEvent.getImageUrl()).into(holder.activity_img);
+        Glide.with(context).load(oneEvent.getEvent().getImageUrl()).into(holder.activity_img);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -53,6 +53,6 @@ public class OneEventViewBinder extends ItemViewProvider<OneEvent, OneEventViewB
     }
 
     public interface OnEventClick {
-        void onOneEventClickListener( String webUrl);
+        void onOneEventClickListener(int skip,String content,String webUrl,int stockId,int serviceId);
     }
 }

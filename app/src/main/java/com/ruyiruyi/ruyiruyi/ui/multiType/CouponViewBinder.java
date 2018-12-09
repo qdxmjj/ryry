@@ -41,6 +41,13 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
         holder.couponBigNameView.setText(coupon.getCouponName());
         holder.couponStartTimeView.setText("使用时间： " + coupon.getStartTime() + " ~ " + coupon.getEndTime());
         List<String> storeNameList = coupon.getStoreNameList();
+        if (coupon.getCouponType() == 3){
+            holder.moneyOffView.setText("满" + coupon.getMoneyFull() + "减" + coupon.getMoneyMinus());
+            holder.moneyOffView.setVisibility(View.VISIBLE);
+        }else {
+            holder.moneyOffView.setVisibility(View.GONE);
+        }
+
         if (storeNameList == null){
             holder.couponStoreView.setVisibility(View.GONE);
         }else {
@@ -60,7 +67,20 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
         }else  if (coupon.getCouponStates() == 2){  //未使用
             holder.couponTypeView.setText("未使用");
             if (coupon.isCanUse){
-                if (coupon.couponViewTypeId == 2){      //精致洗车券
+                if (coupon.getCouponType() == 1){
+                    holder.couponColorLayout.setBackgroundResource(R.drawable.ic_blue);
+                }else if (coupon.getCouponType() == 2){
+                    holder.couponColorLayout.setBackgroundResource(R.drawable.ic_red);
+                }else if (coupon.getCouponType() == 3){
+                    holder.couponColorLayout.setBackgroundResource(R.drawable.ic_yellow);
+                }else if (coupon.getCouponType() == 4){
+                    holder.couponColorLayout.setBackgroundResource(R.drawable.ic_zise);
+                }else if (coupon.getCouponType() == 5){
+                    holder.couponColorLayout.setBackgroundResource(R.drawable.ic_pink);
+                }else {
+                    holder.couponColorLayout.setBackgroundResource(R.drawable.ic_green);
+                }
+             /*   if (coupon.couponViewTypeId == 2){      //精致洗车券
                     Log.e(TAG, "onBindViewHolder: ----------" );
                     holder.couponColorLayout.setBackgroundResource(R.drawable.ic_blue);
                 }else if (coupon.couponViewTypeId == 3){    //四轮定位券
@@ -69,29 +89,38 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
                     holder.couponColorLayout.setBackgroundResource(R.drawable.ic_yellow);
                 }else {
                     holder.couponColorLayout.setBackgroundResource(R.drawable.ic_blue);
-                }
+                }*/
             }else {
                 Log.e(TAG, "onBindViewHolder: -++++++++-" );
                 holder.couponColorLayout.setBackgroundResource(R.drawable.ic_huise);
             }
-        }/*else  if (coupon.getCouponStates() == 3){  //已过期
-            holder.couponTypeView.setText("已过期");
-            Log.e(TAG, "onBindViewHolder: -++-----++-" );
-            holder.couponColorLayout.setBackgroundResource(R.drawable.ic_huise);
-        }*/else {
+        }else {
             holder.couponTypeView.setText("已过期");  //coupon.getCouponStates() == 3){  //已过期`
             Log.e(TAG, "onBindViewHolder: -++-----++-" );
             holder.couponColorLayout.setBackgroundResource(R.drawable.ic_huise);
         }
 
-        if (coupon.getCouponType() == 1){       //服务券 绑定车辆
+        /**
+         * 先绑定车辆方法 服务券可不绑定车辆
+         */
+        if (!coupon.getCarNumber().isEmpty()){
+            holder.couponCarText.setVisibility(View.VISIBLE);
+            holder.couponCarText.setText("仅限" + coupon.getCarNumber() + "车辆使用");
+        }else {
+            holder.couponCarText.setVisibility(View.GONE);
+        }
+
+        /**
+         * 原绑定车辆方法
+         */
+       /* if (coupon.getCouponType() == 1){       //服务券 绑定车辆
             holder.couponCarText.setVisibility(View.VISIBLE);
             holder.couponCarText.setText("仅限" + coupon.getCarNumber() + "车辆使用");
         }else if (coupon.getCouponType() == 2){ //现金券
             holder.couponCarText.setVisibility(View.GONE);
         }else {
             holder.couponCarText.setVisibility(View.GONE);
-        }
+        }*/
 
 
         RxViewAction.clickNoDouble(holder.couponLayout)
@@ -99,7 +128,7 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
                     @Override
                     public void call(Void aVoid) {
                         if (coupon.isCanUse){
-                            listener.onCouponClcikListener(coupon.getCouponId(),coupon.getCouponName(),coupon.getGoodsName(),coupon.couponType);
+                            listener.onCouponClcikListener(coupon.getCouponId(),coupon.getCouponName(),coupon.getGoodsName(),coupon.couponType,coupon.getMoneyFull(),coupon.getMoneyMinus(),coupon.getNeedPay(),coupon.getDeduction());
                         }
 
                     }
@@ -117,6 +146,7 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
         private final TextView couponCarText;
         private final TextView couponStartTimeView;
         private final TextView couponStoreView;
+        private final TextView moneyOffView;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -128,12 +158,13 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
             couponCarText = ((TextView) itemView.findViewById(R.id.coupon_car_number_view));
             couponStartTimeView = ((TextView) itemView.findViewById(R.id.coupon_start_time_view));
             couponStoreView = ((TextView) itemView.findViewById(R.id.coupon_store_view));
+            moneyOffView = ((TextView) itemView.findViewById(R.id.money_off_view));
 
 
         }
     }
 
     public interface OnCouponClick{
-        void onCouponClcikListener(int couponId,String couponName,String goodsName,int couponType);
+        void onCouponClcikListener(int couponId,String couponName,String goodsName,int couponType,String moneyFull,String moneyMinus,String needPay,String deduction);
     }
 }

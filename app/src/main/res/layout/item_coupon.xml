@@ -84,6 +84,13 @@
                     android:layout_marginTop="3dp"
                     android:text="仅限某某门店，门店使用使用"
                     android:textSize="11sp" />
+                <TextView
+                    android:id="@+id/money_off_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="满100减50"
+                    android:textSize="11sp" />
 
                 <TextView
                     android:id="@+id/coupon_start_time_view"

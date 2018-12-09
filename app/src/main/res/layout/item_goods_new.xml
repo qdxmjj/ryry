@@ -39,7 +39,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13sp"
-                    android:text="库存：111"
+                    android:layout_marginTop="5dp"/>
+
+                <TextView
+                    android:id="@+id/goods_service_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
                     android:layout_marginTop="5dp"/>
                 <TextView
                     android:id="@+id/goods_price_text"

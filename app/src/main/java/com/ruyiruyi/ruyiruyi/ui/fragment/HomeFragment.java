@@ -1,5 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,9 +28,11 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CarInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CarManagerActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CityChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.GoodsShopActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.LoginActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.LunboContentActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopChooseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.ShopGoodsNewActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireBuyNewActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireFreeChangeActivity;
@@ -38,16 +41,23 @@ import com.ruyiruyi.ruyiruyi.ui.activity.TireRepairActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.YearChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.base.RyBaseFragment;
+import com.ruyiruyi.ruyiruyi.ui.model.Event;
+import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Function;
 import com.ruyiruyi.ruyiruyi.ui.multiType.FunctionViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.GoodsShop;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Hometop;
 import com.ruyiruyi.ruyiruyi.ui.multiType.HometopViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.OneEvent;
 import com.ruyiruyi.ruyiruyi.ui.multiType.OneEventViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ThreeEvent;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ThreeEventViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.TwoEvent;
+import com.ruyiruyi.ruyiruyi.ui.multiType.TwoEventViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.UserEvaluate;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
 
 import org.json.JSONArray;
@@ -68,7 +78,7 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class HomeFragment extends RyBaseFragment implements HometopViewBinder.OnHomeTopItemClickListener, FunctionViewBinder.OnFunctionItemClick
-        , ThreeEventViewBinder.OnEventItemClickListener, OneEventViewBinder.OnEventClick {
+         , OneEventViewBinder.OnEventClick {
 
     private static final String TAG = HomeFragment.class.getSimpleName();
     private CustomBanner<String> mBanner;
@@ -96,8 +106,11 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     private String service_year_length;     //当前服务年限
     private String service_end_date;
     private List<OneEvent> activitys;
+    public List<Event> eventList;
 
     private int uesrCarId;
+
+    private ProgressDialog progressDialog;
 
 
     public void setListener(OnIconClikc listener) {
@@ -115,6 +128,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        eventList = new ArrayList<>();
         listView = (RecyclerView) getView().findViewById(R.id.home_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         listView.setLayoutManager(linearLayoutManager);
@@ -122,6 +136,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         Bundle bundle = getArguments();
         currentCity = bundle.getString("city");
         ischoos = bundle.getInt("ischoos", 0); //1是选择返回
+
+        progressDialog = new ProgressDialog(getContext());
 
 
         register();
@@ -201,17 +217,27 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                         try {
                             JSONArray jsActivityList = data.getJSONArray("activityList");
                             if (jsActivityList.length() > 0){
+                                eventList.clear();
                                 for (int i = 0; i < jsActivityList.length(); i++) {
                                     JSONObject objBean = (JSONObject) jsActivityList.get(i);
+                                    int id1 = objBean.getInt("id");
+                                    int skip = objBean.getInt("skip");
+                                    int type = objBean.getInt("type");
+                                    String content = objBean.getString("content");
                                     String imageUrl = objBean.getString("imageUrl");
+                                    String positionIdList = objBean.getString("positionIdList");
+                                    String positionNameList = objBean.getString("positionNameList");
+                                    String storeIdList = objBean.getString("storeIdList");
                                     String webUrl = objBean.getString("webUrl");
-                                    OneEvent bean = new OneEvent(imageUrl, webUrl);
-                                    activitys.add(bean);
+                                    int stockId = objBean.getInt("stockId");
+                                    int serviceId = objBean.getInt("serviceId");
+                                    Event event = new Event(id1, content, imageUrl, positionIdList, positionNameList, skip, storeIdList, type, webUrl,stockId,serviceId);
+                                    eventList.add(event);
                                 }
                             }
 
                         }catch (JSONException exception){
-
+                            eventList.clear();
                         }
                         //获取轮播数据
                         lunbos.clear();
@@ -317,12 +343,17 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         functionViewBinder.setListener(this);
         adapter.register(Function.class, functionViewBinder);
 
-        ThreeEventViewBinder threeEventViewBinder = new ThreeEventViewBinder();
+        ThreeEventViewBinder threeEventViewBinder = new ThreeEventViewBinder(getContext());
         threeEventViewBinder.setListener(this);
         adapter.register(ThreeEvent.class, threeEventViewBinder);
+
         OneEventViewBinder oneEventViewBinder = new OneEventViewBinder(getContext());
         oneEventViewBinder.setListener(this);
         adapter.register(OneEvent.class, oneEventViewBinder);
+
+        TwoEventViewBinder twoEventViewBinder = new TwoEventViewBinder(getContext());
+        twoEventViewBinder.setListener(this);
+        adapter.register(TwoEvent.class, twoEventViewBinder);
     }
 
     private void initdata() {
@@ -360,12 +391,28 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
 
 
         items.add(new Function());
+
+        if (eventList.size()>0){
+            for (int i = 0; i < eventList.size(); i++) {
+                int type = eventList.get(i).getType();
+                if (type == 1){
+                    items.add(new OneEvent(eventList.get(i)));
+                }else if (type == 2){
+                    items.add(new TwoEvent(eventList.get(i),eventList.get(i+1)));
+                    i = i+1;
+                }else if (type == 3){
+                    items.add(new ThreeEvent(eventList.get(i),eventList.get(i+1),eventList.get(i+2)));
+                    i = i+2;
+                }
+            }
+        }
+       /*
         items.add(new ThreeEvent());
         if (activitys.size() > 0){
             for (int i = 0; i < activitys.size(); i++) {
                 items.add( activitys.get(i));
             }
-        }
+        }*/
 
        // items.add(activitys.get(0));//TODO 活动列表暂1条数据
         assertAllRegistered(adapter, items);
@@ -449,8 +496,10 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     public void onLunboClikcListener(int position) {
         Log.e(TAG, "onLunboClikcListener: " + position);
 
-        if (position == 2) { //跳转到轮胎购买界面
-            //判断是否登录（未登录提示登录）
+        if (position == -1) {
+
+/*      //跳转到轮胎购买界面
+        //判断是否登录（未登录提示登录）
             if (!judgeIsLogin()) {
                 return;
             }
@@ -494,7 +543,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 intent.putExtra("CARID", carId);
                 intent.putExtra("USERCARID",uesrCarId);
                 startActivity(intent);
-            }
+            }*/
         }else {
             //判断是否登录（未登录提示登录）
             if (!judgeIsLogin()) {
@@ -611,8 +660,191 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         super.onDestroy();
     }
 
-
     @Override
+    public void onOneEventClickListener(int skip, String content, String webUrl,int stockId,int serviceId) {
+        Log.e(TAG, "onOneEventClickListener: " + skip );
+        if (skip == 0){
+            //跳转活动页面
+            if (!judgeIsLogin()) {
+                return;
+            }
+            Intent intent = new Intent(getContext(), BottomEventActivity.class);
+            intent.putExtra("webUrl", webUrl);
+            startActivity(intent);
+        }else if (skip == 1){
+            //跳转活动页面
+            if (!judgeIsLogin()) {
+                return;
+            }
+            Intent intent = new Intent(getContext(), BottomEventActivity.class);
+            intent.putExtra("webUrl", webUrl);
+            startActivity(intent);
+        }else if (skip == 2){       //查看商品分类
+            if (!judgeIsLogin()) {
+                return;
+            }
+            Intent intent = new Intent(getContext(), GoodsShopActivity.class);
+            intent.putExtra(GoodsShopActivity.CLASS_ID,serviceId);
+            intent.putExtra(GoodsShopActivity.CLASS_NAME,"");
+            intent.putExtra(GoodsShopActivity.FROMTYPE,0);
+            startActivity(intent);
+
+        }else if (skip == 3){
+            if (!judgeIsLogin()) {
+                return;
+            }
+            getStockInfo(stockId);      //前往查看门店详情
+        }
+    }
+
+    /**
+     * 根据商品id获取商品详情
+     * @param stockId
+     */
+    private void getStockInfo(final int stockId) {
+       // showDialogProgress(progressDialog,"正在前往购买商品...");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("page", "1");
+            jsonObject.put("rows","5" );
+            jsonObject.put("stockId",stockId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getStockByCondition");
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        Log.e(TAG, "initDataFromService: --" + jsonObject.toString());
+        String token = new DbConfig(getContext()).getToken();
+        params.addParameter("token", token);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        JSONArray rows = data.getJSONArray("rows");
+                        JSONObject object = rows.getJSONObject(1);
+                        int storeId = object.getInt("storeId");
+                        int serviceId = object.getInt("serviceId");
+                        int serviceTypeId = object.getInt("serviceTypeId");
+
+                        getShopInfo(stockId,storeId,serviceId,serviceTypeId);
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    }
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 查店铺信息
+     * @param stockId
+     * @param storeId
+     * @param serviceId
+     * @param serviceTypeId
+     */
+    private void getShopInfo(int stockId, final int storeId, final int serviceId, final int serviceTypeId) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("storeId", storeId);
+            jsonObject.put("longitude", "");
+            jsonObject.put("latitude", "");
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "getStoreInfoByStoreId");
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig(getContext()).getToken();
+        params.addParameter("token", token);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")) {
+                        Log.e(TAG, "onSuccess: 1");
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        String storeName = data.getString("storeName");
+                        String storeImg = data.getString("storeImg");
+                        goShopHome(storeId,storeName,storeImg,serviceId,serviceTypeId);
+
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                    } else {
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 跳转到门店商品详情页
+     * @param storeId
+     * @param storeName
+     * @param storeImg
+     * @param serviceId
+     * @param serviceTypeId
+     */
+    private void goShopHome(int storeId, String storeName, String storeImg, int serviceId, int serviceTypeId) {
+      //  hideDialogProgress(progressDialog);
+        Intent intent = new Intent(getContext(), ShopGoodsNewActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt(ShopGoodsNewActivity.FROM_TYPE,1);
+        bundle.putInt(ShopGoodsNewActivity.STORE_ID,storeId);
+        bundle.putString(ShopGoodsNewActivity.STORE_NAME,storeName);
+        bundle.putString(ShopGoodsNewActivity.STORE_IMAGE,storeImg);
+        bundle.putInt(ShopGoodsNewActivity.GOODS_CLASS_ID,serviceId);
+        bundle.putInt(ShopGoodsNewActivity.GOODS_CLASS_TYPE_ID,serviceTypeId);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+
+/*    @Override
     public void onEventClickListener(String tag) {
         if (tag.equals("cxwy")) {//（畅行无忧）
             //判断是否登录（未登录提示登录）
@@ -643,9 +875,9 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         }
     }
 
-    /*
+    *//*
     * 底部活动点击事件回调
-    * */
+    * *//*
     @Override
     public void onOneEventClickListener(String webUrl) {
         //跳转活动页面
@@ -655,7 +887,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         Intent intent = new Intent(getContext(), BottomEventActivity.class);
         intent.putExtra("webUrl", webUrl);
         startActivity(intent);
-    }
+    }*/
 
     public interface OnIconClikc {
         void onShopClassClickListener();

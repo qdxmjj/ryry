@@ -3,12 +3,14 @@ package com.example.warehouse.db;
 import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
 
+import java.io.Serializable;
+
 /**
  * Created by Lenovo on 2018/11/15.
  */
 
 @Table(name = "tiretype")
-public class TireType {
+public class TireType implements Serializable {
 
     @Column(name = "id",isId = true,autoGen = false)
     private int id;
@@ -37,6 +39,12 @@ public class TireType {
     @Column(name = "time")
     private String time;
 
+    @Column(name = "isclick")
+    private boolean isclick;
+
+    @Column(name = "count")
+    private int count;
+
     public TireType(int id, String inchmm, String inch, String diameter, String size, String speed, String brand, String flgureName, String time) {
         this.id = id;
         this.inchmm = inchmm;
@@ -47,9 +55,27 @@ public class TireType {
         this.brand = brand;
         this.flgureName = flgureName;
         this.time = time;
+        this.isclick = false;
+        this.count = 0;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public TireType() {
+    }
+
+    public boolean isclick() {
+        return isclick;
+    }
+
+    public void setIsclick(boolean isclick) {
+        this.isclick = isclick;
     }
 
     public int getId() {

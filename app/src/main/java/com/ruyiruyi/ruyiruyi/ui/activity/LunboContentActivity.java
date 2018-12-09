@@ -3,6 +3,7 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -78,6 +79,9 @@ public class LunboContentActivity extends RyBaseActivity {
         }else if (lunboPosition == 3){
             lunboImageView.setImageResource(R.drawable.ic_huoodng_5);
             lunboButton.setBackgroundResource(R.drawable.ic_hd_button5);
+        }else if (lunboPosition == 2){
+            lunboImageView.setImageResource(R.drawable.ic_huodong_2);
+            lunboButton.setVisibility(View.GONE);
         }
 
         RxViewAction.clickNoDouble(lunboButton)

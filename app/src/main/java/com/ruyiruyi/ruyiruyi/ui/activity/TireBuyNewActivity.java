@@ -251,6 +251,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
                         cxwyPriceText.setText(" ￥" + cxwyAllPrice);
                     }
                 }*/
+                cxwyCountText.setText("畅行无忧" + cxwwyCount + "次");
                 cxwyPriceText.setText(" ￥" + cxwyAllPrice);
             }else {
                 cxwyChooseLayout.setVisibility(View.GONE);

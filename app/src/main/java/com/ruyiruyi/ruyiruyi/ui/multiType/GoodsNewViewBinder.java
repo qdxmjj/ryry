@@ -47,8 +47,14 @@ public class GoodsNewViewBinder extends ItemViewProvider<GoodsNew, GoodsNewViewB
         holder.goodsNameView.setText(goodsNew.getGoodsName());
         holder.goodsKucuiView.setText("库存:" + goodsNew.getGoodsAmount());
         holder.goodspPriceView.setText("￥" + goodsNew.getGoodsPrice());
-
-
+        if (goodsNew.getSystem() == 1){
+            holder.serviceDescView.setVisibility(View.VISIBLE);
+            holder.goodsKucuiView.setVisibility(View.GONE);
+            holder.serviceDescView.setText(goodsNew.getServiceDesc());
+        }else {
+            holder.serviceDescView.setVisibility(View.GONE);
+            holder.goodsKucuiView.setVisibility(View.VISIBLE);
+        }
         holder.goodspCountView.setText(goodsNew.getCurrentGoodsAmount()+"");
         if (goodsNew.getCurrentGoodsAmount() == 0){
             holder.goodspCountView.setVisibility(View.GONE);
@@ -90,6 +96,7 @@ public class GoodsNewViewBinder extends ItemViewProvider<GoodsNew, GoodsNewViewB
         private final ImageView addView;
         private final TextView goodsNameView;
         private final TextView goodsKucuiView;
+        private final TextView serviceDescView;
         private final TextView goodspPriceView;
         private final TextView goodspCountView;
 
@@ -100,6 +107,7 @@ public class GoodsNewViewBinder extends ItemViewProvider<GoodsNew, GoodsNewViewB
             addView = ((ImageView) itemView.findViewById(R.id.add_view));
             goodsNameView = ((TextView) itemView.findViewById(R.id.goods_name_text));
             goodsKucuiView = ((TextView) itemView.findViewById(R.id.goods_kucui_text));
+            serviceDescView = ((TextView) itemView.findViewById(R.id.goods_service_desc));
             goodspPriceView = ((TextView) itemView.findViewById(R.id.goods_price_text));
             goodspCountView = ((TextView) itemView.findViewById(R.id.count_view));
         }

@@ -1,8 +1,25 @@
 package com.ruyiruyi.ruyiruyi.ui.multiType;
 
+import com.ruyiruyi.ruyiruyi.ui.model.Event;
+
 import java.util.List;
 
 public class OneEvent {
+    public Event event;
+
+    public OneEvent(Event event) {
+        this.event = event;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+    /*
+
     private String content;
     private int id;
     private String imageUrl;
@@ -70,5 +87,5 @@ public class OneEvent {
 
     public String getWebUrl() {
         return webUrl;
-    }
+    }*/
 }

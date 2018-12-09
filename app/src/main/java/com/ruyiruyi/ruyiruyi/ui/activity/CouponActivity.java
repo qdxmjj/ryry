@@ -69,6 +69,7 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
     private int chooseType;
     private List<GoodsNew> goodslist;
     private int store_id = 0;
+    private double goodsPrices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,7 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
             carId = new DbConfig(this).getUser().getCarId();
             goodslist = ((List<GoodsNew>) bundle.getSerializable("GOODSLIST"));
             store_id = bundle.getInt("STORE_ID",0);
+            goodsPrices = bundle.getDouble("GOODS_PRICES",0.00);
             Log.e(TAG, "onCreate: " + store_id);
         }
 
@@ -152,6 +154,19 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
                             String startTime = object.getString("startTime");
                             String endTime = object.getString("endTime");
                             String platNumber = object.getString("platNumber");
+                            String moneyFull = "";
+                            String moneyMinus = "";
+                            String needPay = "";
+                            String deduction  = "";
+                            try {
+                                moneyFull = object.getString("moneyFull");
+                                moneyMinus = object.getString("noneyMinus");
+                                needPay = object.getString("needPay");
+                                deduction = object.getString("deduction");
+                            }catch (Exception e){
+
+                            }
+
 
                             List<String> storeNameList = new ArrayList<String>();
                             //获取限制的门店名称
@@ -165,8 +180,6 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
                             }catch (Exception e){
 
                             }
-
-
 
                             //获取限制的门店id
                             String storeIdList = object.getString("storeIdList");
@@ -205,93 +218,69 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
 
                             }else { //使用优惠券
 
-                                if (type == 2){
+                                if (type == 2){  //现金券
                                     Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true,goodsName);
                                     useCouponList.add(coupon);
                                 }else {
                                     if (storeIdList.equals("")) {  //优惠券为空不限制门店
-                                        //是否含有可用优惠券的商品
-                                        boolean ishasGoods = false;
-                                        for (int j = 0; j < goodslist.size(); j++) {
-                                            //选择的商品中包括可使用优惠券的商品
-                                            if (goodslist.get(j).getGoodsName().equals(goodsName)) {
-                                                ishasGoods = true;
-
+                                        if (type == 3){     //满减券
+                                            if (goodsPrices > Double.parseDouble(moneyFull)){       //符合满减规则
+                                                Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true,goodsName,moneyFull,moneyMinus,needPay,deduction);
+                                                useCouponList.add(coupon);
+                                            }else {             //不符合满减规则
+                                                Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false,goodsName,moneyFull,moneyMinus,needPay,deduction);
+                                                noUseCouponList.add(coupon);
                                             }
-                                        }
-                                        if (ishasGoods  && userCarId == carId ){
-                                            Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true,goodsName);
-                                            useCouponList.add(coupon);
-                                        }else {
-                                            Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false,goodsName);
-                                            noUseCouponList.add(coupon);
+                                        }else { //全额券  小额券 抵扣券
+                                            //是否含有可用优惠券的商品
+                                            boolean ishasGoods = false;
+                                            for (int j = 0; j < goodslist.size(); j++) {
+                                                //选择的商品中包括可使用优惠券的商品
+                                                if (goodslist.get(j).getGoodsName().equals(goodsName)) {
+                                                    ishasGoods = true;
+
+                                                }
+                                            }
+                                            if (ishasGoods  && userCarId == carId ){
+                                                Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true,goodsName);
+                                                useCouponList.add(coupon);
+                                            }else {
+                                                Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false,goodsName);
+                                                noUseCouponList.add(coupon);
+                                            }
                                         }
                                     }else {     //优惠券限制门店
-                                        boolean hasShop = false;
-                                        for (int j = 0; j < store.length; j++) {
-                                            String s = store[j];
-                                            if (Integer.parseInt(s) == store_id) {
-                                                hasShop = true;
+                                        if (type == 3){     //满减券
+                                            if (goodsPrices > Double.parseDouble(moneyFull)){       //符合满减规则
+                                                Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true,storeNameList,goodsName,moneyFull,moneyMinus,needPay,deduction);
+                                                useCouponList.add(coupon);
+                                            }else {             //不符合满减规则
+                                                Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false,storeNameList,goodsName,moneyFull,moneyMinus,needPay,deduction);
+                                                noUseCouponList.add(coupon);
                                             }
-                                            Log.e(TAG, "onSuccess: +++++++" + s);
+                                        }else {
+                                            boolean hasShop = false;
+                                            for (int j = 0; j < store.length; j++) {
+                                                String s = store[j];
+                                                if (Integer.parseInt(s) == store_id) {
+                                                    hasShop = true;
+                                                }
+                                                Log.e(TAG, "onSuccess: +++++++" + s);
+                                            }
+                                            if (hasShop){       //该门店可用优惠券
+                                                Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true,storeNameList,goodsName);
+                                                useCouponList.add(coupon);
+                                            }else { //该门店不可用优惠券
+                                                Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false,storeNameList,goodsName);
+                                                noUseCouponList.add(coupon);
+                                            }
                                         }
-                                        if (hasShop){       //该门店可用优惠券
-                                            Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true,storeNameList,goodsName);
-                                            useCouponList.add(coupon);
-                                        }else { //该门店不可用优惠券
-                                            Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false,storeNameList,goodsName);
-                                            noUseCouponList.add(coupon);
-                                        }
+
+
                                     }
 
                                 }
                             }
-
-
-
-
-
-/*
-                            if (chooseType ==1 ){   //0默认  1精致洗车 2四轮定位 3洗车定位
-                                if ((couponName.equals("精致洗车券") && userCarId == carId) || couponName.equals("10元现金券")){
-                                    Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true);
-                                    useCouponList.add(coupon);
-                                }else {
-                                    Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false);
-                                    noUseCouponList.add(coupon);
-                                }
-                            }else if (chooseType == 2){
-                                if ((couponName.equals("四轮定位券") && userCarId == carId)  ||couponName.equals("10元现金券") ){
-                                    Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true);
-                                    useCouponList.add(coupon);
-                                }else {
-                                    Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false);
-                                    noUseCouponList.add(coupon);
-                                }
-                            }else if (chooseType == 3){
-                                if (((couponName.equals("四轮定位券")&& userCarId == carId )|| (couponName.equals("精致洗车券"))&& userCarId == carId)  || couponName.equals("10元现金券")){
-                                    Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true);
-                                    useCouponList.add(coupon);
-                                }else {
-                                    Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false);
-                                    noUseCouponList.add(coupon);
-                                }
-                            }else if (chooseType == 5){
-                                if (couponName.equals("10元现金券")){
-                                    Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true);
-                                    useCouponList.add(coupon);
-                                }else {
-                                    Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false);
-                                    noUseCouponList.add(coupon);
-                                }
-                            }else {
-                                Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true);
-                                useCouponList.add(coupon);
-                            }*/
-
-
-                           /* Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber);
-                            couponList.add(coupon);*/
                         }
                         Log.e(TAG, "onSuccess: -1-" + useCouponList.size());
                         Log.e(TAG, "onSuccess: -2-" + noUseCouponList.size());
@@ -311,12 +300,24 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
                             String platNumber = object.getString("platNumber");
                             //获取适用的商品名称
                             String goodsName = object.getString("rule");
+                            String moneyFull = "";
+                            String moneyMinus = "";
+                            String needPay = "";
+                            String deduction  = "";
+                            try {
+                                moneyFull = object.getString("moneyFull");
+                                moneyMinus = object.getString("noneyMinus");
+                                needPay = object.getString("needPay");
+                                deduction = object.getString("deduction");
+                            }catch (Exception e){
+
+                            }
 
                          /*   JSONArray storesName = object.getJSONArray("storesName");
                             for (int j = 0; j < storesName.length(); j++) {
                                 String string = storesName.getString(j);
                             }*/
-                            Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false,goodsName);
+                            Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false,goodsName,moneyFull,moneyMinus,needPay,deduction);
                             oldCouponList.add(coupon);
                         }
 
@@ -491,13 +492,17 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
      * @param couponName
      */
     @Override
-    public void onCouponClcikListener(int couponId, String couponName,String goodsName,int couponType) {
+    public void onCouponClcikListener(int couponId, String couponName,String goodsName,int couponType,String moneyFull,String moneyMinus,String needPay,String deduction) {
         Intent intent = new Intent();
         intent.putExtra("COUPONCHOOSE",1);
         intent.putExtra("COUPONID",couponId);
         intent.putExtra("COUPONNAME",couponName);
         intent.putExtra("GOODS_NAME",goodsName);
         intent.putExtra("COUPON_TYPE",couponType);
+        intent.putExtra("MONEY_FULL",moneyFull);
+        intent.putExtra("MONEY_MINUS",moneyMinus);
+        intent.putExtra("NEED_PAY",needPay);
+        intent.putExtra("DEDUCTION",deduction);
         setResult(OrderGoodsAffirmActivity.COUPON_REQUEST,intent);
         finish();
     }

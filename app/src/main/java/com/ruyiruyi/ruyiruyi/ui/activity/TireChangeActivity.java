@@ -1,5 +1,6 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -82,6 +83,7 @@ public class TireChangeActivity extends RyBaseActivity {
     private int isReach5Years;   //`0不满 1是满五年
     private int rearFreeAmount;
     private int fontFreeAmount;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -90,6 +92,7 @@ public class TireChangeActivity extends RyBaseActivity {
         setContentView(R.layout.activity_tire_change, R.id.my_action);
         actionBar = (ActionBar) findViewById(R.id.my_action);
 
+        progressDialog = new ProgressDialog(this);
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
@@ -517,6 +520,7 @@ public class TireChangeActivity extends RyBaseActivity {
      * 免费再换
      */
     private void freeChangeOrder() {
+        showDialogProgress(progressDialog,"正在提交免费再换订单...");
         if (currentRearCount == 0 && currentFontCount == 0) {
             Toast.makeText(TireChangeActivity.this, "请选择轮胎数量", Toast.LENGTH_SHORT).show();
             return;
@@ -590,7 +594,8 @@ public class TireChangeActivity extends RyBaseActivity {
 
             @Override
             public void onFinished() {
-
+                hideDialogProgress(progressDialog
+                );
             }
         });
     }
@@ -599,6 +604,7 @@ public class TireChangeActivity extends RyBaseActivity {
      * 首次更换
      */
     private void postChangeOrder() {
+        showDialogProgress(progressDialog,"正在提交首次更换订单...");
         if (currentRearCount == 0 && currentFontCount == 0) {
             Toast.makeText(TireChangeActivity.this, "请选择轮胎数量", Toast.LENGTH_SHORT).show();
             return;
@@ -664,7 +670,7 @@ public class TireChangeActivity extends RyBaseActivity {
 
                 @Override
                 public void onFinished() {
-
+                    hideDialogProgress(progressDialog);
                 }
             });
         } else {

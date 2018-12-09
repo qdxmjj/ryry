@@ -11,6 +11,8 @@ public class GoodsNew implements Serializable {
     public int currentGoodsAmount;
     public int goodsClassId;
     public int serviceTypeId;
+    public int system;
+    public String serviceDesc;
 
     public GoodsNew(int goodsId, String goodsImage, String goodsName, String goodsPrice, int goodsAmount, int currentGoodsAmount, int goodsClassId, int serviceTypeId) {
         this.goodsId = goodsId;
@@ -21,6 +23,50 @@ public class GoodsNew implements Serializable {
         this.currentGoodsAmount = currentGoodsAmount;
         this.goodsClassId = goodsClassId;
         this.serviceTypeId = serviceTypeId;
+        this.system = 2;
+        this.serviceDesc = "";
+    }
+
+    public GoodsNew(int goodsId, String goodsImage, String goodsName, String goodsPrice, int goodsAmount, int currentGoodsAmount, int goodsClassId, int serviceTypeId, int system) {
+        this.goodsId = goodsId;
+        this.goodsImage = goodsImage;
+        this.goodsName = goodsName;
+        this.goodsPrice = goodsPrice;
+        this.goodsAmount = goodsAmount;
+        this.currentGoodsAmount = currentGoodsAmount;
+        this.goodsClassId = goodsClassId;
+        this.serviceTypeId = serviceTypeId;
+        this.system = system;
+        this.serviceDesc = "";
+    }
+
+    public GoodsNew(int goodsId, String goodsImage, String goodsName, String goodsPrice, int goodsAmount, int currentGoodsAmount, int goodsClassId, int serviceTypeId, int system, String serviceDesc) {
+        this.goodsId = goodsId;
+        this.goodsImage = goodsImage;
+        this.goodsName = goodsName;
+        this.goodsPrice = goodsPrice;
+        this.goodsAmount = goodsAmount;
+        this.currentGoodsAmount = currentGoodsAmount;
+        this.goodsClassId = goodsClassId;
+        this.serviceTypeId = serviceTypeId;
+        this.system = system;
+        this.serviceDesc = serviceDesc;
+    }
+
+    public int getSystem() {
+        return system;
+    }
+
+    public void setSystem(int system) {
+        this.system = system;
+    }
+
+    public String getServiceDesc() {
+        return serviceDesc;
+    }
+
+    public void setServiceDesc(String serviceDesc) {
+        this.serviceDesc = serviceDesc;
     }
 
     public int getGoodsId() {

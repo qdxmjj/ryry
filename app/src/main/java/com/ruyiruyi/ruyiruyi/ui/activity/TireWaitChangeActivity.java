@@ -199,7 +199,7 @@ public class TireWaitChangeActivity extends RyBaseActivity implements TireWaitVi
                             intent.putExtra(TireChangeActivity.CHANGE_TIRE, 0);
                             startActivity(intent);
                         }else {
-                            Toast.makeText(TireWaitChangeActivity.this, "您还未购买当前车俩的轮胎，快去购买换胎吧！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TireWaitChangeActivity.this, "您未购买当前车辆的轮胎，快去购买换胎吧！", Toast.LENGTH_SHORT).show();
                         }
 
                     }

@@ -171,8 +171,6 @@ public class ShopHomeActivity extends RyBaseActivity implements UserEvaluateView
         String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().post(params, new Callback.CommonCallback<String>() {
-
-
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: " + result);

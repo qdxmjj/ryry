@@ -1,14 +1,21 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,9 +37,16 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.InfoOne;
 import com.ruyiruyi.ruyiruyi.ui.multiType.InfoOneViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireInfo;
 import com.ruyiruyi.ruyiruyi.ui.multiType.TireInfoViewBinder;
+import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.Util;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +54,7 @@ import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
+import android.util.Base64;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +106,19 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
     private String postage;
     private String origin;
     public String saleName;
+    private ImageView hbImageView;
+    private Dialog dialog;
+    private View inflate;
+    private LinearLayout weixinShareLayout;
+    private LinearLayout pengyouquanLayout;
+    private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
+    private String redpacketUrl;
+    private String redpacketTitle;
+    private String redpacketBody;
+    private static final int THUMB_SIZE = 150;
+    private IWXAPI api;
+
+
 
 
     @Override
@@ -123,6 +151,9 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                 }
             }
         });
+
+        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
+
         tireInfoList = new ArrayList<>();
         goodsInfoList = new ArrayList<>();
         codeList = new ArrayList<>();
@@ -550,15 +581,25 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                         if (orderType == 2) {//首次更换订单
                             if (orderState == 5) {  //代发货
                                 getFirstTireOrderInfo(data);
-                            } else if (orderState == 3 || orderState == 2 || orderState == 6 || orderState == 1 || orderState == 15 || orderState == 14) { //待商家确认服务 || 待收货  ||待车主确认服务
+                            } else if (orderState == 3 || orderState == 2 || orderState == 6 ||  orderState == 15 || orderState == 14) { //待商家确认服务 || 待收货  ||待车主确认服务
                                 codeList.clear();
                                 getFirstTireOrderInfo(data);
                                 getFirstTireOrderCode(data);
+                            }else if (orderState == 1){ //交易完成分享红包
+                                codeList.clear();
+                                getFirstTireOrderInfo(data);
+                                getFirstTireOrderCode(data);
+
+                                initHongbaoData();
                             }
                         } else if (orderType == 1) { //商品订单
-                            if (orderState == 3 || orderState == 6 || orderState == 1 || orderState == 9 || orderState == 10 || orderState == 15) {//待商家确认服务 || 待车主确认服务
+                            if (orderState == 3 || orderState == 6 || orderState == 9 || orderState == 10 || orderState == 15) {//待商家确认服务 || 待车主确认服务
                                 getGoodsOrderInfo(data);
                                 initActionRight();
+                            }else if (orderState == 1){ //交易完成分享红包
+                                getGoodsOrderInfo(data);
+                                initActionRight();
+                                initGoodsHongbaoData();
                             }
                         } else if (orderType == 3) { //免费再换
                             if (orderState == 5 || orderState == 11) {  //代发货  //审核中
@@ -620,6 +661,108 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
 
             }
         });
+    }
+
+    /**
+     * 商品红包
+     */
+    private void initGoodsHongbaoData() {
+        JSONObject object = new JSONObject();
+        int userId = new DbConfig(getApplicationContext()).getId();
+        try {
+            object.put("userId", userId+"");
+            object.put("orderNo", orderNo);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams("http://192.168.0.137:8060/preferentialInfo/queryShareUrlHavingOrder");
+        params.addBodyParameter("reqJson",object.toString());
+        Log.e(TAG, "initGoodsHongbaoData: ---22---" + params);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    String status = jsonObject.getString("status");
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject.getJSONObject("data");
+                        redpacketUrl = data.getString("url");
+                        redpacketTitle = data.getString("title");
+                        redpacketBody = data.getString("title");
+                        hbImageView.setVisibility(View.VISIBLE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 轮胎红包i
+     */
+    private void initHongbaoData() {
+        JSONObject object = new JSONObject();
+        String orderNoBase64 = Base64.encodeToString(orderNo.getBytes(), Base64.DEFAULT);
+        try {
+            object.put("orderInfo", orderNoBase64);
+
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams("http://activity.qdxmjj.com:8888/wechat/appGetRedPacketInfo?orderInfo=MjAxODY2Ng==");
+        params.addBodyParameter("reqJson", object.toString());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+
+            @Override
+            public void onSuccess(String result) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    String status = jsonObject.getString("status");
+                    if (status.equals("1") || status.equals("-2") || status.equals("-3")){
+                        redpacketUrl = jsonObject.getString("redpacketUrl");
+                        redpacketTitle = jsonObject.getString("title");
+                        redpacketBody = jsonObject.getString("body");
+                        hbImageView.setVisibility(View.VISIBLE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+
     }
 
     private void getLimitInfo(JSONObject data) throws JSONException {
@@ -1178,7 +1321,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         buchaLayout = (LinearLayout) findViewById(R.id.jujue_bucha_layout);
         repairLayout = (LinearLayout) findViewById(R.id.tongyi_bucha_layout);
         orderBuchaLayout = (LinearLayout) findViewById(R.id.order_bucha_layout);
-        ;
+        hbImageView = (ImageView) findViewById(R.id.hb_imageview);
         listView = (RecyclerView) findViewById(R.id.order_info_activity);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         listView.setLayoutManager(linearLayoutManager);
@@ -1189,6 +1332,46 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
 
         orderButton = (TextView) findViewById(R.id.order_pay_button);
         initButton();
+
+
+        //分享
+        dialog = new Dialog(this, R.style.ActionSheetDialogStyle);
+        inflate = LayoutInflater.from(this).inflate(R.layout.dialog_share,null);
+        weixinShareLayout = ((LinearLayout) inflate.findViewById(R.id.weixin_share_layout));
+        pengyouquanLayout = ((LinearLayout) inflate.findViewById(R.id.pengyouquan_share_layout));
+        dialog.setContentView(inflate);
+        Window dialogWindow = dialog.getWindow();
+        dialogWindow.setGravity(Gravity.BOTTOM);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.y = 50;
+        dialogWindow.setAttributes(lp);
+
+        RxViewAction.clickNoDouble(hbImageView)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Log.e(TAG, "call: 111" );
+                        dialog.show();
+                    }
+                });
+        //分享到微信
+        RxViewAction.clickNoDouble(weixinShareLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        mTargetScene = SendMessageToWX.Req.WXSceneSession;
+                        shareToWexin();
+                    }
+                });
+        //分享到朋友圈
+        RxViewAction.clickNoDouble(pengyouquanLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        mTargetScene = SendMessageToWX.Req.WXSceneTimeline;
+                        shareToWexin();
+                    }
+                });
 
         //去补差
         RxViewAction.clickNoDouble(buchaLayout)
@@ -1248,6 +1431,31 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                         }
                     }
                 });
+    }
+
+    /**
+     * 分享到微信
+     */
+    private void shareToWexin() {
+        WXWebpageObject webpage = new WXWebpageObject();
+        webpage.webpageUrl = redpacketUrl;
+        WXMediaMessage msg = new WXMediaMessage(webpage);
+        msg.title = redpacketTitle;
+        msg.description = redpacketBody;
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_logo);
+        Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+        bmp.recycle();
+        msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = buildTransaction("webpage");
+        req.message = msg;
+        req.scene = mTargetScene;
+        api.sendReq(req);
+    }
+
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
 

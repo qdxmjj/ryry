@@ -12,6 +12,8 @@ public class GoodsInfo{
     public int goodsCount;
     public int goodsClassId;
     public int serviceTypeId;
+    public int discountFlag; // 1 是特殊商品  2普通商品
+
 
     public int getCurrentCount() {
         return currentCount;
@@ -19,6 +21,14 @@ public class GoodsInfo{
 
     public void setCurrentCount(int currentCount) {
         this.currentCount = currentCount;
+    }
+
+    public int getDiscountFlag() {
+        return discountFlag;
+    }
+
+    public void setDiscountFlag(int discountFlag) {
+        this.discountFlag = discountFlag;
     }
 
     public int getGoodsId() {

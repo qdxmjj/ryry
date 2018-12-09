@@ -37,11 +37,11 @@ public class XMJJUtils {
 
     public static String encodeJsonByToken(String json,String token) throws UnsupportedEncodingException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
         String password = token.substring(24,48);
-        Log.e(TAG, "encodeJsonByToken: --" + json);
+      /*  Log.e(TAG, "encodeJsonByToken: --" + json);
         Log.e(TAG, "encodeJsonByToken: ---" + password);
 
         Log.e(TAG, "encodeJsonByToken: --*---" +  Base64.encodeToString(json.getBytes(), Base64.DEFAULT));
-        Log.e(TAG, "encodeJsonByToken: --*---" +  Base64.encodeToString(json.getBytes(), Base64.DEFAULT).getBytes("UTF8"));
+        Log.e(TAG, "encodeJsonByToken: --*---" +  Base64.encodeToString(json.getBytes(), Base64.DEFAULT).getBytes("UTF8"));*/
         byte[] bytes = TripleDESUtil.encryptMode(password, Base64.encodeToString(json.getBytes(), Base64.DEFAULT).getBytes("UTF8"));
         Log.e(TAG, "encodeJsonByToken:----------*------- " + new String(bytes));
         byte[] encode = Base64.encodeToString(bytes, Base64.DEFAULT).getBytes("UTF8");

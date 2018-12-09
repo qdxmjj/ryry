@@ -320,7 +320,16 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                             String imgUrl = object.getString("imgUrl");
                             String name = object.getString("name");
                             String price = object.getString("price");
-                            GoodsNew goodsNew = new GoodsNew(id, imgUrl, name, price, amount, 0, serviceId, serviceTypeId);
+                            int system = 2;
+                            String serviceDesc = "";
+                            try {
+                                system = object.getInt("system");
+                                serviceDesc = object.getString("serviceDesc");
+                            }catch (Exception e){
+
+                            }
+
+                            GoodsNew goodsNew = new GoodsNew(id, imgUrl, name, price, amount, 0, serviceId, serviceTypeId,system,serviceDesc);
                             goodsNewList.add(goodsNew);
                         }
                         Log.e(TAG, "onSuccess: ----------------------");

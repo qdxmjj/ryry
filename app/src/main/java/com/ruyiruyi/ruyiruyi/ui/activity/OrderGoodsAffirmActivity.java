@@ -65,6 +65,10 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
     private ProgressDialog progressDialog;
     private String goodsName;
     private int couponType;
+    private String moneyFull;
+    private String moneyMinus;
+    private String needPay;
+    private String deduction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +106,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                 goodsInfo.setCurrentCount(goodslist.get(i).getCurrentGoodsAmount());
                 goodsInfo.setGoodsClassId(goodslist.get(i).getGoodsClassId());
                 goodsInfo.setServiceTypeId(goodslist.get(i).getServiceTypeId());
+                goodsInfo.setDiscountFlag(goodslist.get(i).getSystem());
                 goodsInfoList.add(goodsInfo);
             }
         }
@@ -117,6 +122,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
     }
 
     private void sendDataToService() {
+/*
         for (int i = 0; i < goodsInfoList.size(); i++) {
             if (goodsInfoList.get(i).getGoodsName().equals("精致洗车") || goodsInfoList.get(i).getGoodsName().equals("四轮定位")) {
                 if (carId ==0) {
@@ -129,6 +135,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
             Toast.makeText(this, "特殊商品，需要绑定车辆购买", Toast.LENGTH_SHORT).show();
             return;
         }
+*/
 
 
         showDialogProgress(progressDialog,"订单提交中...");
@@ -257,6 +264,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
             bundle.putInt("FROM_TYPE", 1);
             bundle.putInt("CAR_ID", carId);
             bundle.putInt("STORE_ID",storeid);
+            bundle.putDouble("GOODS_PRICES",allprice);
             intent.putExtras(bundle);
             startActivityForResult(intent,COUPON_REQUEST);
 
@@ -313,6 +321,10 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                 couponId = data.getIntExtra("COUPONID", 0);
                 goodsName = data.getStringExtra("GOODS_NAME");
                 couponType = data.getIntExtra("COUPON_TYPE",0);
+                moneyFull = data.getStringExtra("MONEY_FULL");
+                moneyMinus = data.getStringExtra("MONEY_MINUS");
+                needPay = data.getStringExtra("NEED_PAY");
+                deduction = data.getStringExtra("DEDUCTION");
                 initCouponView();
             }else {
                 couponName = "请选择优惠券";
@@ -333,7 +345,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
             if (currentPrice < 0.00){
                 currentPrice = 0.00;
             }
-        }else {     //服务券
+        }else if (couponType == 1){ //服务券 全额
             double price = 0.00;
             for (int i = 0; i < goodslist.size(); i++) {
                 if (goodslist.get(i).getGoodsName().equals(goodsName)){
@@ -344,7 +356,50 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
             if (currentPrice < 0.00){
                 currentPrice = 0.00;
             }
+        }else if (couponType == 3){     //满减券
+            currentPrice = allprice - Double.parseDouble(moneyMinus);
+            if (currentPrice < 0.00){
+                currentPrice = 0.00;
+            }
+        }else if (couponType == 4){    //小额券
+            double price = 0.00;
+            for (int i = 0; i < goodslist.size(); i++) {
+                if (goodslist.get(i).getGoodsName().equals(goodsName)){
+                    price = Double.parseDouble(goodslist.get(i).getGoodsPrice());
+                }
+            }
+            currentPrice = allprice - price + Double.parseDouble(needPay);
+            if (currentPrice < 0.00){
+                currentPrice = 0.00;
+            }
+        }else if (couponType == 5){
+            double price = 0.00;
+            for (int i = 0; i < goodslist.size(); i++) {
+                if (goodslist.get(i).getGoodsName().equals(goodsName)){
+                    price = Double.parseDouble(goodslist.get(i).getGoodsPrice());
+                    if (price > Double.parseDouble(deduction)){     //如果商品比优惠券价值大  抵扣优惠券的钱  否则抵商品的钱
+                        price = Double.parseDouble(deduction);
+                    }
+                }
+            }
+            currentPrice = allprice - price + Double.parseDouble(needPay);
+            if (currentPrice < 0.00){
+                currentPrice = 0.00;
+            }
         }
+
+    /*    else {     //服务券
+            double price = 0.00;
+            for (int i = 0; i < goodslist.size(); i++) {
+                if (goodslist.get(i).getGoodsName().equals(goodsName)){
+                    price = Double.parseDouble(goodslist.get(i).getGoodsPrice());
+                }
+            }
+            currentPrice = allprice - price;
+            if (currentPrice < 0.00){
+                currentPrice = 0.00;
+            }
+        }*/
         initData();
         allPriceText.setText(currentPrice+"");
 
