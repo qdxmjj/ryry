@@ -65,7 +65,7 @@ public class BottomEventActivity extends BaseWebActivity {
 
         Intent intent = getIntent();
         webUrl = intent.getStringExtra("webUrl");
-        shareUrl = intent.getStringExtra("sahreUrl");
+        shareUrl = intent.getStringExtra("shareUrl");
         shareDescription = intent.getStringExtra("shareDescription");
         isBottomEvent = intent.getBooleanExtra("isBottomEvent", false);
         canShare = intent.getBooleanExtra("canShare", false);

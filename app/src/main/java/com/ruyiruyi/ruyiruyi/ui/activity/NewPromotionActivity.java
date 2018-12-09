@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 
@@ -65,9 +66,15 @@ public class NewPromotionActivity extends RyBaseActivity {
     }
 
     private void initData() {
-//        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "invite/Url");
-//        RequestParams params = new RequestParams("http://180.76.243.205:10002/xmjj-webservice/invite/Url");
-        RequestParams params = new RequestParams("http://192.168.0.94:8888/invite/Url");
+        JSONObject object = new JSONObject();
+        try {
+            object.put("a", "aa");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_ACTIVITY_RELEASE + "invite/Url");
+        params.addBodyParameter("reqJson", object.toString());
         Log.e(TAG, "initData:  params.toString() = " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

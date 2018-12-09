@@ -264,7 +264,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                             Intent intent = new Intent(MainActivity.this, BottomEventActivity.class);
                             intent.putExtra("canShare", advInfo.isCanShare());
                             intent.putExtra("webUrl", advInfo.getUrl());
-                            intent.putExtra("shareUrl", advInfo.getUrl());
+                            intent.putExtra("shareUrl", advInfo.getShareUrl());
                             intent.putExtra("shareDescription", advInfo.getDescription());
                             startActivity(intent);
                         }
@@ -314,7 +314,8 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                             adInfo.setCanShare(canShare == 1 ? true : false);
                             int canClick = object.getInt("clickable");// 是否可点击  0 否 1 是
                             adInfo.setCanClick(canClick == 1 ? true : false);
-                            adInfo.setUrl(object.getString("webUrl")); //分享url
+                            adInfo.setUrl(object.getString("webUrl")); //页面url
+                            adInfo.setShareUrl(object.getString("shareUrl")); //分享url
                             adInfo.setAdId(object.getInt("id") + ""); //活动id
                             adInfo.setDescription(object.getString("text")); // 活动介绍
                             advList.add(adInfo);
