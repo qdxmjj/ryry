@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
+import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -91,9 +92,9 @@ public class NewPromotionActivity extends RyBaseActivity {
                     INVITE_REGISTER_CANSHARE = shareAble_register == 1 ? true : false;
                     int shareAble_buy = Integer.parseInt(inviteBuy.getString("shareAble"));
                     INVITE_BUYSHOE_CANSHARE = shareAble_buy == 1 ? true : false;
-                    SHARE_URL_REGISTER = inviteRegister.getString("shareUrl");
+                    SHARE_URL_REGISTER = inviteRegister.getString("shareUrl") + "?userId=" + new DbConfig(NewPromotionActivity.this).getId();
                     SHARE_DESCRIPTION_REGISTER = inviteRegister.getString("shareTitle");
-                    SHARE_URL_BUYSHOE = inviteBuy.getString("shareUrl");
+                    SHARE_URL_BUYSHOE = inviteBuy.getString("shareUrl") + "?userId=" + new DbConfig(NewPromotionActivity.this).getId();
                     SHARE_DESCRIPTION_BUYSHOE = inviteBuy.getString("shareTitle");
 
                 } catch (JSONException e) {

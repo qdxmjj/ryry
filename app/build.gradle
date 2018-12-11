@@ -42,6 +42,20 @@ android {
         versionCode VERSION_CODE
         versionName VERSION_NAME
         multiDexEnabled true
+
+        ndk {
+            //根据需要 自行选择添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+
+                XG_ACCESS_ID : "2100319362",//信鸽ACCESS ID
+                XG_ACCESS_KEY: "A2BYA2G819GB",//信鸽ACCESS KEY
+                PACKAGE_NAME : "com.ruyiruyi.ruyiruyi",//小米配置包名
+                HW_APPID     : "100336339"//华为的APPID
+        ]
     }
     dexOptions {
         jumboMode true
@@ -177,6 +191,36 @@ dependencies {
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     compile 'com.zhy:okhttputils:2.6.2'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0'
+    testCompile 'junit:junit:4.12'
+
+    //信鸽3.2.5之前版本无需单独依赖'com.tencent.jg:jg:1.1'，其它三个依赖必须有。
+    //信鸽3.2.6 版本
+    //完整的信鸽依赖四个都必须有，如果发生依赖冲突请根据对应的依赖版本号选择高版本的依赖。（使用jcenter自动接入请确认libs中没有信鸽的相关jar包）
+
+    //信鸽jar
+    compile 'com.tencent.xinge:xinge:3.2.7-Release'
+    //jg包
+    compile 'com.tencent.jg:jg:1.1'
+    //wup包
+    compile 'com.tencent.wup:wup:1.0.0.E-release'
+    //mid包
+    compile 'com.tencent.mid:mid:4.0.6-release'
+
+    /* 小米3.2.7-release版
+    * 注意：若小米通道使用此版本,则信鸽sdk版本也需要同时使用v3.2.7-Release
+    */
+    compile 'com.tencent.xinge:mipush:3.2.7-Release'
+
+    /* 华为 3.2.7-release版
+    * 注意：若华为通道使用此版本,则信鸽sdk版本也需要同时使用v3.2.7-Release
+    */
+    compile 'com.tencent.xinge:xghw:3.2.7-release'
+
+    /* 魅族 3.2.7-release版
+    * 注意：若魅族通道使用此版本,则信鸽sdk版本也需要同时使用v3.2.7-Release
+    */
+    compile 'com.tencent.xinge:xgmz:3.2.7-Release'
     compile 'com.android.support.constraint:constraint-layout:1.0.0'
     testCompile 'junit:junit:4.12'
 }
