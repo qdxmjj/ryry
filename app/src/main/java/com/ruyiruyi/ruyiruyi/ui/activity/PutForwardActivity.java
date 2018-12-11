@@ -279,10 +279,10 @@ public class PutForwardActivity extends RyBaseActivity {
             return;
         }
         double parseDouble = Double.parseDouble(et_putforward.getText().toString());
-        if (parseDouble < 10.0) {  //TODO
+/*        if (parseDouble < 10.0) {  //TODO
             showMerchantErrorDialog("单笔最少提现金额不能少于10元");
             return;
-        }
+        }*/
         if (parseDouble > balance) {
             showMerchantErrorDialog("可用余额不足");
             return;

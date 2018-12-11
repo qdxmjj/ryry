@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
-def VERSION_CODE = 16
-def VERSION_NAME = "3.3.5"
+def VERSION_CODE = 18
+def VERSION_NAME = "3.3.7"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''

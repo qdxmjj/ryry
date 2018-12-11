@@ -120,24 +120,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         setContentView(content, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         hotActivityList = new ArrayList<>();
 
-        //信鸽推送绑定手机号
-        DbConfig dbConfig = new DbConfig(this);
-        /*if (dbConfig.getIsLogin()) {*/ //TODO 信鸽暂时关闭
-        if (false) {
-            //信鸽token注册 绑定手机号
-            XGPushManager.registerPush(this, dbConfig.getPhone(), new XGIOperateCallback() {
-                @Override
-                public void onSuccess(Object data, int flag) {
-                    //token在设备卸载重装的时候有可能会变
-                    Log.d("TPush", "注册成功，设备token为：" + data);
-                }
-
-                @Override
-                public void onFail(Object data, int errCode, String msg) {
-                    Log.d("TPush", "注册失败，错误码：" + errCode + ",错误信息：" + msg);
-                }
-            });
-        }
+        //信鸽绑定解绑账号置于onResume中
 
         //判断权限
         judgePower();
@@ -315,7 +298,11 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                             int canClick = object.getInt("clickable");// 是否可点击  0 否 1 是
                             adInfo.setCanClick(canClick == 1 ? true : false);
                             adInfo.setUrl(object.getString("webUrl")); //页面url
-                            adInfo.setShareUrl(object.getString("shareUrl")); //分享url
+                            if (new DbConfig(MainActivity.this).getIsLogin()) {
+                                adInfo.setShareUrl(object.getString("shareUrl") + "?userId=" + new DbConfig(MainActivity.this).getId()); //分享url
+                            } else {
+                                adInfo.setShareUrl(object.getString("shareUrl")); //分享url
+                            }
                             adInfo.setAdId(object.getInt("id") + ""); //活动id
                             adInfo.setDescription(object.getString("text")); // 活动介绍
                             advList.add(adInfo);
@@ -352,6 +339,29 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         super.onResume();
         if (isGengxin) {
             update();
+        }
+
+        //信鸽推送绑定手机号
+        DbConfig dbConfig = new DbConfig(this);
+        if (dbConfig.getIsLogin()) {
+            //信鸽token注册 绑定手机号
+            XGPushManager.bindAccount(this, dbConfig.getPhone(), new XGIOperateCallback() {
+                @Override
+                public void onSuccess(Object data, int flag) {
+                    //token在设备卸载重装的时候有可能会变
+                    Log.d("TPush", "注册成功，设备token为：" + data);
+                }
+
+                @Override
+                public void onFail(Object data, int errCode, String msg) {
+                    Log.d("TPush", "注册失败，错误码：" + errCode + ",错误信息：" + msg);
+                }
+            });
+        } else {
+            //解绑信鸽手机号
+            XGPushManager.delAccount(getApplicationContext(), new DbConfig(getApplicationContext()).getPhone());
+            //反注册
+            XGPushManager.unregisterPush(this);
         }
     }
 

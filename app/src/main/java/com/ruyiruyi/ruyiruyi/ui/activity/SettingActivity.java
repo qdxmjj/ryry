@@ -134,6 +134,8 @@ public class SettingActivity extends RyBaseActivity {
                     
                     //解绑信鸽手机号
                     XGPushManager.delAccount(getApplicationContext(), new DbConfig(getApplicationContext()).getPhone());
+                    //反注册
+                    XGPushManager.unregisterPush(getApplicationContext());
 
                     finish();
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
