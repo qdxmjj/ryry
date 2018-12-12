@@ -33,6 +33,8 @@ public class RyBaseFragmentActivity extends BaseFragmentActivity {
     public void showUserTokenDialog(String error) {
         //解绑信鸽手机号
         XGPushManager.delAccount(getApplicationContext(),new DbConfig(getApplicationContext()).getPhone() );
+        //反注册
+        XGPushManager.unregisterPush(this);
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);

@@ -86,8 +86,8 @@ public class NewPromotionActivity extends RyBaseActivity {
                     JSONObject inviteRegister = object.getJSONObject("inviteRegister");
                     JSONObject inviteBuy = object.getJSONObject("inviteBuy");
 
-                    INVITE_REGISTER_URL = inviteRegister.getString("url");
-                    INVITE_BUYSHOE_URL = inviteBuy.getString("url");
+                    INVITE_REGISTER_URL = inviteRegister.getString("url") + "?userId=" + new DbConfig(NewPromotionActivity.this).getId();
+                    INVITE_BUYSHOE_URL = inviteBuy.getString("url") + "?userId=" + new DbConfig(NewPromotionActivity.this).getId();
                     int shareAble_register = Integer.parseInt(inviteRegister.getString("shareAble"));
                     INVITE_REGISTER_CANSHARE = shareAble_register == 1 ? true : false;
                     int shareAble_buy = Integer.parseInt(inviteBuy.getString("shareAble"));
