@@ -13,6 +13,7 @@ import com.ruyiruyi.rylibrary.R;
 
 import java.math.BigDecimal;
 
+@SuppressWarnings("ResourceType")
 public class NewRatingBar extends LinearLayout {
     private boolean mClickable;
     private int starCount;
