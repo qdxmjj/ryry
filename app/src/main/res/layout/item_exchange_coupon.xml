@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/zaishou">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="￥300"
+        android:textColor="@color/c19"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="20dp"
+        android:textSize="25sp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="精致洗车券"
+            android:textSize="17sp"
+            android:textColor="@color/c7"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30000积分"
+            android:textColor="@color/c21"
+            android:layout_marginTop="3dp"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="库存300件"
+            android:textColor="@color/c6"
+            android:textSize="16sp"
+            android:layout_marginTop="3dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="65dp"
+        android:layout_height="35dp"
+        android:text="兑换"
+        android:textSize="17sp"
+        android:textColor="#ffffff"
+        android:gravity="center"
+        android:background="@drawable/bg_button"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="20dp"/>
+
+</FrameLayout>

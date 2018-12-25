@@ -6,7 +6,28 @@
     android:background="#ffffff">
 
 
-
+    <FrameLayout
+        android:id="@+id/action_bar_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" >
+        <ImageView
+            android:id="@+id/back_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="积分商城"
+            android:textSize="16sp"
+            android:textColor="#ffffff"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            />
+    </FrameLayout>
 
     <com.ruyiruyi.rylibrary.cell.GradationScrollView
         android:id="@+id/scrollview"
@@ -124,7 +145,7 @@
                         android:src="@drawable/ic_duishangpin" />
 
                     <ImageView
-                        android:id="@+id/right_two_image"
+                        android:id="@+id/coupon_exchang_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -333,29 +354,6 @@
 
         </LinearLayout>
     </com.ruyiruyi.rylibrary.cell.GradationScrollView>
-
-    <FrameLayout
-        android:id="@+id/action_bar_view"
-        android:layout_width="match_parent"
-        android:layout_height="60dp" >
-        <ImageView
-            android:id="@+id/back_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="积分商城"
-            android:textSize="16sp"
-            android:textColor="#ffffff"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            />
-    </FrameLayout>
 
 
 </FrameLayout>

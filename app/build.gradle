@@ -192,21 +192,21 @@ dependencies {
     //jg包
     //wup包
     //mid包
-    
 
     /* 小米3.2.7-release版
     * 注意：若小米通道使用此版本,则信鸽sdk版本也需要同时使用v3.2.7-Release
     */
-    
+
     /* 华为 3.2.7-release版
     * 注意：若华为通道使用此版本,则信鸽sdk版本也需要同时使用v3.2.7-Release
     */
-    
+
     /* 魅族 3.2.7-release版
     * 注意：若魅族通道使用此版本,则信鸽sdk版本也需要同时使用v3.2.7-Release
     */
     compile 'com.android.support.constraint:constraint-layout:1.0.0'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0'
     compile 'com.alibaba:fastjson:1.1.56.android'
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.1@aar'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
@@ -215,7 +215,6 @@ dependencies {
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     compile 'com.zhy:okhttputils:2.6.2'
     compile 'com.android.support:multidex:1.0.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0'
     compile 'com.tencent.xinge:xinge:3.2.7-Release'
     compile 'com.tencent.jg:jg:1.1'
     compile 'com.tencent.wup:wup:1.0.0.E-release'

@@ -286,16 +286,16 @@
         <activity android:name=".ui.activity.TireBuyNewActivity" />
         <activity android:name=".ui.activity.BottomEventActivity" />
         <activity android:name=".ui.activity.CxwyFreeChangeActivity" />
-        <activity android:name=".ui.activity.PutForwardActivity"></activity>
-        <activity android:name=".ui.activity.PutForwardInfoActivity"></activity>
-        <activity android:name=".ui.activity.PutForwardBindZFBActivity"></activity>
-        <activity android:name=".ui.activity.PutForwardLoginWXActivity"></activity>
-        <activity android:name=".ui.activity.NewPromotionActivity"></activity>
-        <activity android:name=".ui.activity.MyInvitePersonActivity"></activity>
-        <activity android:name=".ui.activity.MyInviteAwardActivity"></activity>
-        <activity android:name=".ui.activity.NewQrCodeActivity"></activity>
-        <activity android:name=".ui.activity.InviteBuyshoeActivity"></activity>
-        <activity android:name=".ui.activity.InviteRegisterActivity"></activity>
+        <activity android:name=".ui.activity.PutForwardActivity" />
+        <activity android:name=".ui.activity.PutForwardInfoActivity" />
+        <activity android:name=".ui.activity.PutForwardBindZFBActivity" />
+        <activity android:name=".ui.activity.PutForwardLoginWXActivity" />
+        <activity android:name=".ui.activity.NewPromotionActivity" />
+        <activity android:name=".ui.activity.MyInvitePersonActivity" />
+        <activity android:name=".ui.activity.MyInviteAwardActivity" />
+        <activity android:name=".ui.activity.NewQrCodeActivity" />
+        <activity android:name=".ui.activity.InviteBuyshoeActivity" />
+        <activity android:name=".ui.activity.InviteRegisterActivity" />
 
         <!-- 信鸽 -->
         <receiver
@@ -326,7 +326,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.activity.IntegralShopActivity"></activity>
+        <activity android:name=".ui.activity.IntegralShopActivity" />
+        <activity android:name=".ui.activity.ExchangeCouponActivity" />
+        <activity android:name=".ui.activity.base.RyBase1Activity"></activity>
     </application>
 
 </manifest>

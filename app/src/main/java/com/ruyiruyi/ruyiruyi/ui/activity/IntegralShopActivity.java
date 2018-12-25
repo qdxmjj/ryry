@@ -2,6 +2,7 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBase1Activity;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -33,7 +35,7 @@ import org.xutils.x;
 
 import rx.functions.Action1;
 
-public class IntegralShopActivity extends RyBaseActivity implements GradationScrollView.ScrollViewListener{
+public class IntegralShopActivity extends RyBase1Activity implements GradationScrollView.ScrollViewListener{
 
     private static final String TAG = IntegralShopActivity.class.getSimpleName();
     private ImageView backView;
@@ -50,6 +52,7 @@ public class IntegralShopActivity extends RyBaseActivity implements GradationScr
     private TextView dengluRuleText;
     private TextView xiaofeiRuleText;
     private TextView yaoqingRuleText;
+    private ImageView exchangeCouponView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,7 @@ public class IntegralShopActivity extends RyBaseActivity implements GradationScr
         setContentView(R.layout.activity_integral_shop);
 
         //导航栏沉浸式
-        fullScreen(this);
+      //  fullScreen(this);
 
         initView();
         initListeners();
@@ -161,6 +164,16 @@ public class IntegralShopActivity extends RyBaseActivity implements GradationScr
         xiaofeiRuleText = (TextView) findViewById(R.id.xiaofei_rule_text);
         yaoqingRuleText = (TextView) findViewById(R.id.yaoqing_rule_text);
 
+        exchangeCouponView = (ImageView) findViewById(R.id.coupon_exchang_view);
+
+        RxViewAction.clickNoDouble(exchangeCouponView)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getApplicationContext(),ExchangeCouponActivity.class));
+                    }
+                });
+
 
         RxViewAction.clickNoDouble(backView)
                 .subscribe(new Action1<Void>() {
@@ -169,6 +182,9 @@ public class IntegralShopActivity extends RyBaseActivity implements GradationScr
                         onBackPressed();
                     }
                 });
+
+
+
     }
 
     private void fullScreen(Activity activity) {
