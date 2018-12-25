@@ -27,6 +27,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.PutForwardActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.SettingActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopEvaluateActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.ShoppingPointsInfoActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TestActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireWaitChangeActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.UserInfoActivity;
@@ -51,6 +52,7 @@ public class MyFragment extends RyBaseFragment {
     private LinearLayout userInfoLayout;
     private LinearLayout noLoginLayout;
     private Boolean isLogin;
+    private LinearLayout shoppingpointsLayout;
     private LinearLayout shezhiLayout;
     private RequestManager glideRequest;
     private LinearLayout myCarLayout;
@@ -151,6 +153,7 @@ public class MyFragment extends RyBaseFragment {
         userNameView = (TextView) getView().findViewById(R.id.my_username);
         userInfoLayout = ((LinearLayout) getView().findViewById(R.id.user_info_layout));
         noLoginLayout = ((LinearLayout) getView().findViewById(R.id.no_login_layout));
+        shoppingpointsLayout = (LinearLayout) getView().findViewById(R.id.shoppingpointsLayout);
         shezhiLayout = (LinearLayout) getView().findViewById(R.id.shezhi_layout);
         myCarLayout = ((LinearLayout) getView().findViewById(R.id.my_car_layout));
         tireWaitLayout = (LinearLayout) getView().findViewById(R.id.tire_wait_layout);
@@ -382,6 +385,18 @@ public class MyFragment extends RyBaseFragment {
                     @Override
                     public void call(Void aVoid) {
                         UIOpenHelper.openLogin(getContext());
+                    }
+                });
+        //积分
+        RxViewAction.clickNoDouble(shoppingpointsLayout)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        //判断是否登录（未登录提示登录）
+                        if (!judgeIsLogin()) {
+                            return;
+                        }
+                        startActivity(new Intent(getContext(), ShoppingPointsInfoActivity.class));
                     }
                 });
         //设置

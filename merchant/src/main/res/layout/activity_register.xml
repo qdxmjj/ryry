@@ -468,7 +468,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
-                            android:onClick="registerPicClick"
                             android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark"
                             app:roundHeight="3dp"
@@ -480,7 +479,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
                             android:clickable="true"
-                            android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone"/>
 
@@ -558,7 +556,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
-                            android:onClick="registerPicClick"
                             android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark"
                             app:roundHeight="3dp"
@@ -570,7 +567,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
                             android:clickable="true"
-                            android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone"/>
 
@@ -611,7 +607,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
-                            android:onClick="registerPicClick"
                             android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark"
                             app:roundHeight="3dp"
@@ -623,7 +618,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
                             android:clickable="true"
-                            android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone"/>
 
@@ -662,7 +656,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
-                            android:onClick="registerPicClick"
                             android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark"
                             app:roundHeight="3dp"
@@ -674,7 +667,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
                             android:clickable="true"
-                            android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone"/>
 
@@ -755,7 +747,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:clickable="true"
-                            android:onClick="registerPicClick"
                             android:scaleType="centerCrop"
                             android:src="@drawable/img_bg_dark"
                             app:roundHeight="3dp"
@@ -767,7 +758,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|top"
                             android:clickable="true"
-                            android:onClick="registerPicClick"
                             android:src="@drawable/ic_delete"
                             android:visibility="gone"/>
 

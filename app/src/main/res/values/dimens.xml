@@ -5,6 +5,8 @@
     <dimen name="grid_expected_size">120dp</dimen>
     <dimen name="text_16_sp">10sp</dimen>
 
+    <dimen name="TabHeight">48dp</dimen>
+
     <dimen name="LargeTextSize">16dp</dimen>
     <dimen name="BasicTextSize">15dp</dimen>
     <dimen name="TitleTextSize">18dp</dimen>

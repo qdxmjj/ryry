@@ -1066,7 +1066,6 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                         }
                         if (amount == maxRepairNum - oldCount_a_) {
                             Toast.makeText(getApplicationContext(), "此轮胎历史修补" + oldCount_a_ + "次，每条轮胎最多免费修补" + maxRepairNum + "次，店主请留意!", Toast.LENGTH_SHORT).show();
-                            return;
                         }
                         if (amount < 0) {
                             repair_num_a_.setAmount(amount + 1);
@@ -1114,7 +1113,6 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                         }
                         if (amount == maxRepairNum - oldCount_b_) {
                             Toast.makeText(getApplicationContext(), "此轮胎历史修补" + oldCount_b_ + "次，每条轮胎最多免费修补" + maxRepairNum + "次，店主请留意!", Toast.LENGTH_SHORT).show();
-                            return;
                         }
                         if (amount < 0) {
                             repair_num_b_.setAmount(amount + 1);
@@ -1161,7 +1159,6 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                         }
                         if (amount == maxRepairNum - oldCount_c_) {
                             Toast.makeText(getApplicationContext(), "此轮胎历史修补" + oldCount_c_ + "次，每条轮胎最多免费修补" + maxRepairNum + "次，店主请留意!", Toast.LENGTH_SHORT).show();
-                            return;
                         }
                         if (amount < 0) {
                             repair_num_c_.setAmount(amount + 1);
@@ -1208,7 +1205,6 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                         }
                         if (amount == maxRepairNum - oldCount_d_) {
                             Toast.makeText(getApplicationContext(), "此轮胎历史修补" + oldCount_d_ + "次，每条轮胎最多免费修补" + maxRepairNum + "次，店主请留意!", Toast.LENGTH_SHORT).show();
-                            return;
                         }
                         if (amount < 0) {
                             repair_num_d_.setAmount(amount + 1);
