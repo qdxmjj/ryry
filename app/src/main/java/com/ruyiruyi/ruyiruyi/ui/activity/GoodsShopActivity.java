@@ -224,7 +224,7 @@ public class  GoodsShopActivity extends RyBaseActivity implements GoodsShopViewB
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     }
                 } catch (JSONException e) {
-
+                    intiData();
                 }
 
 

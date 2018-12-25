@@ -295,7 +295,7 @@ public class MyFragment extends RyBaseFragment {
         });
 
         /**
-         *
+         *开发测试类
          */
         RxViewAction.clickNoDouble(testImage)
                 .subscribe(new Action1<Void>() {

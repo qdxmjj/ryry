@@ -51,6 +51,7 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.TwoEventViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,6 +104,10 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     private int uesrCarId;
 
     private ProgressDialog progressDialog;
+
+    private String redpacketUrl;
+    private String redpacketTitle;
+    private String redpacketBody;
 
 
     public void setListener(OnIconClikc listener) {
@@ -378,7 +383,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 items.add(carInfo);
             }
         } else {//未登陆
-            items.add(new Hometop(images, "新人注册享好礼", "注册享受价格1000元大礼包", 0, currentCity));
+            items.add(new Hometop(images, "新人注册享好礼", "购买轮胎即送畅行无忧", 0, currentCity));
         }
 
 
@@ -668,9 +673,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             if (!judgeIsLogin()) {
                 return;
             }
-            Intent intent = new Intent(getContext(), BottomEventActivity.class);
-            intent.putExtra("webUrl", webUrl);
-            startActivity(intent);
+            initHongbaoData(webUrl);
+
         }else if (skip == 2){       //查看商品分类
             if (!judgeIsLogin()) {
                 return;
@@ -687,6 +691,64 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             }
             getStockInfo(stockId);      //前往查看门店详情
         }
+    }
+
+    /**
+     * 获取分享链接
+     */
+    private void initHongbaoData(final String webUrl) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("a", "aa");
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_ACTIVITY_RELEASE + "invite/Url");
+        params.addBodyParameter("reqJson", object.toString());
+        Log.e(TAG, "initGoodsHongbaoData: ---22---" + params);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+
+
+            @Override
+            public void onSuccess(String result) {
+                JSONObject object = null;
+                try {
+                    object = new JSONObject(result);
+                    JSONObject inviteRegister = object.getJSONObject("inviteRegister");
+
+                  //  wenUrl = inviteRegister.getString("url");
+                    redpacketUrl = inviteRegister.getString("shareUrl") + "?userId=" + new DbConfig(getContext()).getId();
+                    redpacketTitle = inviteRegister.getString("shareTitle");
+                    redpacketBody = inviteRegister.getString("shareTitle");
+                    goH5(webUrl);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void goH5(String webUrl) {
+        Intent intent = new Intent(getContext(), BottomEventActivity.class);
+        intent.putExtra("webUrl", webUrl +"?userId=" + new DbConfig(getContext()).getId());
+        intent.putExtra("canShare", true);
+        intent.putExtra("shareUrl", redpacketUrl);
+        intent.putExtra("shareDescription", redpacketTitle);
+        startActivity(intent);
     }
 
     /**
