@@ -126,6 +126,12 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         judgePower();
 
         isGengxin = false;
+        int sum = 10;
+        for (int i = 0; i < 10; i++) {
+            sum = sum-- ;
+        }
+
+        Log.e(TAG, "onCreate: ---------------------------" + sum );
 
 
         /*//版本更新 (修改至首页弹窗后检测)
@@ -293,14 +299,15 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                             JSONObject object = data.getJSONObject(i);
                             AdInfo adInfo = new AdInfo();
                             adInfo.setActivityImg(object.getString("imageUrl")); //活动弹窗图片
-                            int canShare = object.getInt("shareable"); // 是否可分享 0 否 1 是
-                            adInfo.setCanShare(canShare == 1 ? true : false);
                             int canClick = object.getInt("clickable");// 是否可点击  0 否 1 是
                             adInfo.setCanClick(canClick == 1 ? true : false);
                             adInfo.setUrl(object.getString("webUrl")); //页面url
                             if (new DbConfig(MainActivity.this).getIsLogin()) {
+                                int canShare = object.getInt("shareable"); // 是否可分享 0 否 1 是
+                                adInfo.setCanShare(canShare == 1 ? true : false);
                                 adInfo.setShareUrl(object.getString("shareUrl") + "?userId=" + new DbConfig(MainActivity.this).getId()); //分享url
                             } else {
+                                adInfo.setCanShare(false);
                                 adInfo.setShareUrl(object.getString("shareUrl")); //分享url
                             }
                             adInfo.setAdId(object.getInt("id") + ""); //活动id
@@ -482,7 +489,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                             mBar.setMessage("正在下载");
                             mBar.setIndeterminate(true);
                             mBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                            mBar.setCancelable(true);
+                            mBar.setCancelable(false);
                             // downFile(URLData.DOWNLOAD_URL);
                             final DownloadTask downloadTask = new DownloadTask(
                                     MainActivity.this);
@@ -512,7 +519,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                             mBar.setMessage("正在下载");
                             mBar.setIndeterminate(true);
                             mBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                            mBar.setCancelable(true);
+                            mBar.setCancelable(false);
                             // downFile(URLData.DOWNLOAD_URL);
                             final DownloadTask downloadTask = new DownloadTask(
                                     MainActivity.this);
@@ -523,7 +530,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                                     downloadTask.cancel(true);
                                 }
                             });
-                        }
+                         }
                     })
                     .setCancelable(false)
                     .show();
@@ -703,6 +710,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         //安装应用
         //  Intent intent = new Intent(Intent.ACTION_VIEW);
 
+
         String fileName = MainActivity.this.getObbDir().getAbsolutePath() + "/" + DOWNLOAD_NAME + version + ".apk";
       /*  File file = null;
         file = new File(fileName);
@@ -768,6 +776,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         tabsCell.addView(R.drawable.ic_home, R.drawable.ic_home_pressed, "首页 ");
         tabsCell.addView(R.drawable.ic_merchant, R.drawable.ic_merchant_pressed, "附近门店 ");
         tabsCell.addView(R.drawable.ic_shangpin, R.drawable.ic_shangpin_2, "分类");
+
         tabsCell.addView(R.drawable.ic_my, R.drawable.ic_my_pressed, "我的 ");
 
     }

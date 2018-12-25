@@ -35,6 +35,7 @@ public class TestActivity extends RyBaseActivity {
     private Button dituButton;
     private Button evaluateButton;
     private Button yearButton;
+    private Button jifenButton;
 
 
     @Override
@@ -86,6 +87,17 @@ public class TestActivity extends RyBaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         startActivity(new Intent(getApplicationContext(),YearChooseActivity.class));
+                    }
+                });
+
+        jifenButton = new Button(this);
+        jifenButton.setText("积分商城");
+        content.addView(jifenButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT));
+        RxViewAction.clickNoDouble(jifenButton)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getApplicationContext(),IntegralShopActivity.class));
                     }
                 });
 

@@ -34,7 +34,7 @@ public class OneEventViewBinder extends ItemViewProvider<OneEvent, OneEventViewB
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final OneEvent oneEvent) {
-        holder.activity_img.setOnClickListener(new View.OnClickListener() {
+        holder.activity_img.setOnClickListener(  new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onOneEventClickListener(oneEvent.getEvent().getSkip(),oneEvent.getEvent().getContent(),oneEvent.getEvent().getWebUrl(),oneEvent.getEvent().getStockId(),oneEvent.getEvent().getServiceId());

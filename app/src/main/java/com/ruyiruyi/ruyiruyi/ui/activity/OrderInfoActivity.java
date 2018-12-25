@@ -675,8 +675,6 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
         params.addBodyParameter("reqJson", object.toString());
         Log.e(TAG, "initGoodsHongbaoData: ---22---" + params);
         x.http().get(params, new Callback.CommonCallback<String>() {
-
-
             @Override
             public void onSuccess(String result) {
                 JSONObject object = null;
@@ -717,13 +715,15 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
     private void initHongbaoData() {
         JSONObject object = new JSONObject();
         String orderNoBase64 = Base64.encodeToString(orderNo.getBytes(), Base64.DEFAULT);
-        try {
+        String orderStr = orderNoBase64.replaceAll("\r|\n", "");
+     /*   try {
             object.put("orderInfo", orderNoBase64);
 
         } catch (JSONException e) {
-        }
-        RequestParams params = new RequestParams("http://activity.qdxmjj.com:8888/wechat/appGetRedPacketInfo?orderInfo=MjAxODY2Ng==");
-        params.addBodyParameter("reqJson", object.toString());
+        }*/
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_ACTIVITY_RELEASE + "wechat/appGetRedPacketInfo?orderInfo=" + orderStr );
+   //     params.addBodyParameter("reqJson", object.toString());
+        Log.e(TAG, "initHongbaoData: " + params);
         x.http().get(params, new Callback.CommonCallback<String>() {
 
             @Override
@@ -1352,7 +1352,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
 
                         if (orderType == 1) {
                             Intent intent = new Intent(getApplicationContext(), BottomEventActivity.class);
-                            intent.putExtra("webUrl", wenUrl);
+                            intent.putExtra("webUrl", wenUrl +"?userId=" + new DbConfig(getApplicationContext()).getId());
                             intent.putExtra("canShare", true);
                             intent.putExtra("shareUrl", redpacketUrl);
                             intent.putExtra("shareDescription", redpacketTitle);

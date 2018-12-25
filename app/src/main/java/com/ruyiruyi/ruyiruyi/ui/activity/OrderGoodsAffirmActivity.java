@@ -136,6 +136,17 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
             return;
         }
 */
+        boolean isNomallGoods = false;
+        for (int i = 0; i < goodsInfoList.size(); i++) {
+            if (goodsInfoList.get(i).getDiscountFlag() ==1) {
+                isNomallGoods = true;
+            }
+        }
+
+        if (isNomallGoods && carId == 0){
+            Toast.makeText(this, "特殊商品，需要绑定车辆购买!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
 
         showDialogProgress(progressDialog,"订单提交中...");
