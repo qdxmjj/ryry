@@ -8,6 +8,9 @@ public class GoodsItemBean {
     private String imgUrl;
     private String name;
     private double price;
+    private double oldPrice;
+    private boolean isSpecialPrice;
+    private String goodsInfo;
     private int serviceId;
     private int serviceTypeId;
     private int soldNo;
@@ -22,6 +25,30 @@ public class GoodsItemBean {
     }
 
     public GoodsItemBean() {
+    }
+
+    public String getGoodsInfo() {
+        return goodsInfo;
+    }
+
+    public void setGoodsInfo(String goodsInfo) {
+        this.goodsInfo = goodsInfo;
+    }
+
+    public double getOldPrice() {
+        return oldPrice;
+    }
+
+    public void setOldPrice(double oldPrice) {
+        this.oldPrice = oldPrice;
+    }
+
+    public boolean isSpecialPrice() {
+        return isSpecialPrice;
+    }
+
+    public void setSpecialPrice(boolean specialPrice) {
+        isSpecialPrice = specialPrice;
     }
 
     public void setAmount(int amount) {

@@ -116,11 +116,11 @@ public class ExtraIncomeFragment extends MerchantBaseFragment {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreInstallAppEarnings");
         params.addBodyParameter("reqJson", object.toString());
-        Log.e(TAG, "initData:  params.toString() = " + params.toString());
+        Log.e(TAG, "initData: getStoreInstallAppEarnings params.toString() = " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: result = " + result);
+                Log.e(TAG, "onSuccess: getStoreInstallAppEarnings result = " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     JSONObject data = jsonObject.getJSONObject("data");

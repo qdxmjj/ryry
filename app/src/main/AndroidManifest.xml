@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.ruyiruyi.ruyiruyi">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.ruyiruyi.ruyiruyi">
 
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <!-- //读取设备硬件信息，统计数据 -->
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
 
     <!-- 这个权限用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <!-- //允许sd卡写权限，需写入地图数据，禁用后无法显示地图 -->
 
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="false"
         android:resizeable="true"
-        android:smallScreens="true" />
+        android:smallScreens="true"/>
 
     <!-- OpenGLES 2.0 -->
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true" />
+        android:required="true"/>
 
     <application
         android:name=".MyApplication"
@@ -54,13 +54,13 @@
         <!-- 百度地图 -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="b7kFFRry07570VIKQPcDpblFjNLhhecC" />
+            android:value="b7kFFRry07570VIKQPcDpblFjNLhhecC"/>
 
         <service
             android:name=".ui.service.LuncherDownlodeService"
             android:enabled="true"
             android:exported="true"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"/>
 
         <activity
             android:name=".MainActivity"
@@ -76,31 +76,31 @@
             </intent-filter>
             -->
         </activity>
-        <activity android:name=".ui.activity.PhotoSampleActivity" />
+        <activity android:name=".ui.activity.PhotoSampleActivity"/>
         <activity
             android:name=".ui.activity.TestActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".ui.service.CodeTimerService"
             android:enabled="true"
             android:exported="true"
-            android:process="system" />
+            android:process="system"/>
 
         <activity android:name=".ui.activity.LaunchActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.ActionBarActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.LoginActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
@@ -118,27 +118,27 @@
             android:name=".ui.activity.RegisterActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.ForgetPasswordActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.CityChooseActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.CarManagerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.CarInfoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -147,7 +147,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_paths"/>
         </provider>
         <!--
         <provider
@@ -165,137 +165,148 @@
             android:name=".ui.activity.CarBrandActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.CarDemioActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.CarTypeActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.RoadConditionActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.TireSizeActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.CarFigureActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.TirePlaceActivity" />
-        <activity android:name=".ui.activity.TireCountActivity" />
-        <activity android:name=".ui.activity.QcActivity" />
-        <activity android:name=".ui.activity.BuyFlowActivity" />
-        <activity android:name=".ui.activity.OrderAffirmActivity" />
-        <activity android:name=".ui.activity.PaymentActivity" />
-        <activity android:name=".ui.activity.PendingOrderActivity" />
-        <activity android:name=".ui.activity.PaySuccessActivity" />
-        <activity android:name=".ui.activity.TireWaitChangeActivity" />
-        <activity android:name=".ui.activity.FirstChangeActivity" />
-        <activity android:name=".ui.activity.ChangePwActivity" />
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.TirePlaceActivity"/>
+        <activity android:name=".ui.activity.TireCountActivity"/>
+        <activity android:name=".ui.activity.QcActivity"/>
+        <activity android:name=".ui.activity.BuyFlowActivity"/>
+        <activity android:name=".ui.activity.OrderAffirmActivity"/>
+        <activity android:name=".ui.activity.PaymentActivity"/>
+        <activity android:name=".ui.activity.PendingOrderActivity"/>
+        <activity android:name=".ui.activity.PaySuccessActivity"/>
+        <activity android:name=".ui.activity.TireWaitChangeActivity"/>
+        <activity android:name=".ui.activity.FirstChangeActivity"/>
+        <activity android:name=".ui.activity.ChangePwActivity"/>
         <activity
             android:name=".ui.activity.TireChangeActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".ui.activity.ServiceOrderAffirmActivity" />
-        <activity android:name=".ui.activity.TireLiuchengActivity" />
+            android:launchMode="singleTask"/>
+        <activity android:name=".ui.activity.ServiceOrderAffirmActivity"/>
+        <activity android:name=".ui.activity.TireLiuchengActivity"/>
 
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote" />
+            android:process=":remote"/>
 
         <activity
             android:name=".ui.activity.BaiduActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.TireRepairActivity" />
-        <activity android:name=".ui.activity.SearchActivity" />
-        <activity android:name=".ui.activity.ShopChooseActivity" />
-        <activity android:name=".ui.activity.ShopHomeActivity" />
-        <activity android:name=".ui.activity.ShopGoodActivity" />
-        <activity android:name=".ui.activity.OrderActivity" />
-        <activity android:name=".ui.activity.EvaluateActivity" />
-        <activity android:name=".ui.activity.ShopEvaluateActivity" />
-        <activity android:name=".ui.activity.GoodsActivity" />
-        <activity android:name=".ui.activity.OrderGoodsAffirmActivity" />
-        <activity android:name=".ui.activity.CreditLimitActivity" />
-        <activity android:name=".ui.activity.MyLimitActivity" />
-        <activity android:name=".ui.activity.CxwyActivity" />
-        <activity android:name=".ui.activity.OrderInfoActivity" />
-        <activity android:name=".ui.activity.RouteMapActivity" />
-        <activity android:name=".ui.activity.UserInfoActivity" />
-        <activity android:name=".ui.activity.PromotionActivity" />
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.TireRepairActivity"/>
+        <activity android:name=".ui.activity.SearchActivity"/>
+        <activity android:name=".ui.activity.ShopChooseActivity"/>
+        <activity android:name=".ui.activity.ShopHomeActivity"/>
+        <activity android:name=".ui.activity.ShopGoodActivity"/>
+        <activity android:name=".ui.activity.OrderActivity"/>
+        <activity android:name=".ui.activity.EvaluateActivity"/>
+        <activity android:name=".ui.activity.ShopEvaluateActivity"/>
+        <activity android:name=".ui.activity.GoodsActivity"/>
+        <activity android:name=".ui.activity.OrderGoodsAffirmActivity"/>
+        <activity android:name=".ui.activity.CreditLimitActivity"/>
+        <activity android:name=".ui.activity.MyLimitActivity"/>
+        <activity android:name=".ui.activity.CxwyActivity"/>
+        <activity android:name=".ui.activity.OrderInfoActivity"/>
+        <activity android:name=".ui.activity.RouteMapActivity"/>
+        <activity android:name=".ui.activity.UserInfoActivity"/>
+        <activity android:name=".ui.activity.PromotionActivity"/>
         <!-- 支付宝 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:launchMode="singleTask" />
-        <activity android:name=".ui.activity.SendToWXActivity" />
-        <activity android:name=".ui.activity.ShowFromWXActivity" />
-        <activity android:name=".ui.activity.WxPhoneActivity" />
+            android:launchMode="singleTask"/>
+        <activity android:name=".ui.activity.SendToWXActivity"/>
+        <activity android:name=".ui.activity.ShowFromWXActivity"/>
+        <activity android:name=".ui.activity.WxPhoneActivity"/>
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
 
-                <data android:scheme="wx407c59de8b10c601" />
+                <data android:scheme="wx407c59de8b10c601"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.GoodsShopActivity" />
-        <activity android:name=".ui.activity.QRCodeActivity" />
-        <activity android:name=".ui.activity.SettingActivity" />
-        <activity android:name=".ui.activity.BuyCxwyActivity" />
-        <activity android:name=".ui.activity.base.RyBaseActivity" />
-        <activity android:name=".ui.activity.ShopGoodsNewActivity" />
-        <activity android:name=".ui.activity.CouponActivity" />
-        <activity android:name=".ui.activity.UnderstandUsActivity" />
-        <activity android:name=".ui.activity.ContactServiceActivity" />
-        <activity android:name=".ui.activity.MessageActivity" />
-        <activity android:name=".ui.activity.AgreementActivity" />
-        <activity android:name=".ui.activity.GuideActivity" />
-        <activity android:name=".ui.activity.TireFreeChangeActivity" />
-        <activity android:name=".ui.activity.YearChooseActivity" />
-        <activity android:name=".ui.activity.LunboContentActivity" />
-        <activity android:name=".ui.activity.ChooseYearActivity" />
-        <activity android:name=".ui.activity.TireBuyNewActivity" />
-        <activity android:name=".ui.activity.BottomEventActivity" />
-        <activity android:name=".ui.activity.CxwyFreeChangeActivity" />
-        <activity android:name=".ui.activity.PutForwardActivity" />
-        <activity android:name=".ui.activity.PutForwardInfoActivity" />
-        <activity android:name=".ui.activity.PutForwardBindZFBActivity" />
-        <activity android:name=".ui.activity.PutForwardLoginWXActivity" />
-        <activity android:name=".ui.activity.NewPromotionActivity" />
-        <activity android:name=".ui.activity.MyInvitePersonActivity" />
-        <activity android:name=".ui.activity.MyInviteAwardActivity" />
-        <activity android:name=".ui.activity.NewQrCodeActivity" />
-        <activity android:name=".ui.activity.InviteBuyshoeActivity" />
-        <activity android:name=".ui.activity.InviteRegisterActivity" />
+        <activity android:name=".ui.activity.GoodsShopActivity"/>
+        <activity android:name=".ui.activity.QRCodeActivity"/>
+        <activity android:name=".ui.activity.SettingActivity"/>
+        <activity android:name=".ui.activity.BuyCxwyActivity"/>
+        <activity android:name=".ui.activity.base.RyBaseActivity"/>
+        <activity android:name=".ui.activity.ShopGoodsNewActivity"/>
+        <activity android:name=".ui.activity.CouponActivity"/>
+        <activity android:name=".ui.activity.UnderstandUsActivity"/>
+        <activity android:name=".ui.activity.ContactServiceActivity"/>
+        <activity android:name=".ui.activity.MessageActivity"/>
+        <activity android:name=".ui.activity.AgreementActivity"/>
+        <activity android:name=".ui.activity.GuideActivity"/>
+        <activity android:name=".ui.activity.TireFreeChangeActivity"/>
+        <activity android:name=".ui.activity.YearChooseActivity"/>
+        <activity android:name=".ui.activity.LunboContentActivity"/>
+        <activity android:name=".ui.activity.ChooseYearActivity"/>
+        <activity android:name=".ui.activity.TireBuyNewActivity"/>
+        <activity android:name=".ui.activity.BottomEventActivity"/>
+        <activity android:name=".ui.activity.CxwyFreeChangeActivity"/>
+        <activity android:name=".ui.activity.PutForwardActivity">
+        </activity>
+        <activity android:name=".ui.activity.PutForwardInfoActivity">
+        </activity>
+        <activity android:name=".ui.activity.PutForwardBindZFBActivity">
+        </activity>
+        <activity android:name=".ui.activity.PutForwardLoginWXActivity">
+        </activity>
+        <activity android:name=".ui.activity.NewPromotionActivity">
+        </activity>
+        <activity android:name=".ui.activity.MyInvitePersonActivity">
+        </activity>
+        <activity android:name=".ui.activity.MyInviteAwardActivity">
+        </activity>
+        <activity android:name=".ui.activity.NewQrCodeActivity">
+        </activity>
+        <activity android:name=".ui.activity.InviteBuyshoeActivity">
+        </activity>
+        <activity android:name=".ui.activity.InviteRegisterActivity">
+        </activity>
+        <activity android:name=".ui.activity.ShoppingPointsInfoActivity"/>
 
         <!-- 信鸽 -->
         <receiver
@@ -304,9 +315,9 @@
             <intent-filter>
 
                 <!-- 接收消息透传 -->
-                <action android:name="com.tencent.android.tpush.action.PUSH_MESSAGE" />
+                <action android:name="com.tencent.android.tpush.action.PUSH_MESSAGE"/>
                 <!-- 监听注册、反注册、设置/删除标签、通知被点击等处理结果 -->
-                <action android:name="com.tencent.android.tpush.action.FEEDBACK" />
+                <action android:name="com.tencent.android.tpush.action.FEEDBACK"/>
             </intent-filter>
         </receiver>
         <!-- 默认的自定义广播接收器，用于自定义处理魅族push消息广播，receiver的name为自定义的广播接收类 start -->
@@ -314,24 +325,38 @@
             <intent-filter>
 
                 <!-- 接收push消息 -->
-                <action android:name="com.meizu.flyme.push.intent.MESSAGE" />
+                <action android:name="com.meizu.flyme.push.intent.MESSAGE"/>
                 <!-- 接收register消息 -->
-                <action android:name="com.meizu.flyme.push.intent.REGISTER.FEEDBACK" />
+                <action android:name="com.meizu.flyme.push.intent.REGISTER.FEEDBACK"/>
                 <!-- 接收unregister消息 -->
-                <action android:name="com.meizu.flyme.push.intent.UNREGISTER.FEEDBACK" />
-                <action android:name="com.meizu.c2dm.intent.REGISTRATION" />
-                <action android:name="com.meizu.c2dm.intent.RECEIVE" />
+                <action android:name="com.meizu.flyme.push.intent.UNREGISTER.FEEDBACK"/>
+                <action android:name="com.meizu.c2dm.intent.REGISTRATION"/>
+                <action android:name="com.meizu.c2dm.intent.RECEIVE"/>
 
-                <category android:name="com.ruyiruyi.ruyiruyi" />
+                <category android:name="com.ruyiruyi.ruyiruyi"/>
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.activity.IntegralShopActivity"
-            android:launchMode="singleTask"/>
+
         <activity android:name=".ui.activity.ExchangeCouponActivity" />
         <activity android:name=".ui.activity.base.RyBase1Activity" />
         <activity android:name=".ui.activity.ChangeOrderActivity" />
         <activity android:name=".ui.activity.WuLiuActivity"></activity>
+        <activity
+            android:name=".ui.activity.IntegralShopActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".ui.activity.ExchangeCouponActivity"/>
+        <activity android:name=".ui.activity.base.RyBase1Activity"/>
+        <activity android:name=".ui.activity.PointsChangeActivity">
+        </activity>
+        <activity android:name=".ui.activity.PointsGoodsInfoActivity">
+        </activity>
+        <activity android:name=".ui.activity.PointsChangeOrderConfirmActivity">
+        </activity>
+        <activity android:name=".ui.activity.AddAddressActivity">
+        </activity>
+        <activity android:name=".ui.activity.MyAddressActivity">
+        </activity>
     </application>
 
 </manifest>

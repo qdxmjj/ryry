@@ -49,4 +49,6 @@
     <string name="invite_register_title3">您的好友可得精致洗车券两张</string>
     <string name="invite_register_rule3">精致洗车券仅限在如驿如意APP上绑定车辆后下单使用</string>
 
+    <string name="goods_points_info">·特别适合于各种中型和紧凑型SUV、四驱车型、中高端商务MPV、各类B型轿车和中高端A级家用轿车\n·特别推荐同于1.0t-0.8T涡轮增压发动机或者1.6L-2.4L自然吸气发动机\n·规格:4L\n·型号:5W-40W\n商品需要客户自行选择门店自提</string>
+
 </resources>

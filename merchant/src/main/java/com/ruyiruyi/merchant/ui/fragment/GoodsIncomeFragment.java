@@ -116,11 +116,11 @@ public class GoodsIncomeFragment extends MerchantBaseFragment {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreSaleGoodsEarnings");
         params.addBodyParameter("reqJson", object.toString());
-        Log.e(TAG, "initData:  params.toString() = " + params.toString());
+        Log.e(TAG, "initData: getStoreSaleGoodsEarnings params.toString() = " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: result = " + result);
+                Log.e(TAG, "onSuccess: getStoreSaleGoodsEarnings result = " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     JSONObject data = jsonObject.getJSONObject("data");
@@ -135,10 +135,10 @@ public class GoodsIncomeFragment extends MerchantBaseFragment {
                         GoodsIncome goodsIncome = new GoodsIncome();
                         /*goodsIncome.setOrderImg(objbean.getString(""));*/
                         /*goodsIncome.setOrderType(objbean.getString("shoeName"));*/
-                        goodsIncome.setOrderTime(objbean.getLong("time"));
+                        goodsIncome.setOrderTime(objbean.getLong("createdTime"));
                         goodsIncome.setOrderPrice(objbean.getDouble("earnings"));
 
-                        goodsIncome.setOrderNo(objbean.getString("no"));
+                        goodsIncome.setOrderNo(objbean.getString("orderNo"));
 
                         orderBeanList.add(goodsIncome);
                     }

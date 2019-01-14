@@ -3,6 +3,7 @@ package com.ruyiruyi.merchant.ui.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
@@ -90,6 +91,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
     private String mNickname;
     private String headimgurl;
     private boolean mLoginSuccess = false;
+    private String versionName = null;//版本号
 
     private ProgressDialog putDialog;
 
@@ -117,6 +119,13 @@ public class PutForwardActivity extends MerchantBaseActivity {
 
         EventBus.getDefault().register(this);
         storeregisterphone = new DbConfig(PutForwardActivity.this).getPhone();
+
+        //获取版本
+        try {
+            versionName = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         initView();
         bindView();
@@ -645,6 +654,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
                                     requestParams.addBodyParameter("storeName", new DbConfig(PutForwardActivity.this).getUser().getStoreName() + "");
                                     requestParams.addBodyParameter("availableMoney", balance + "");//可用余额
                                     requestParams.addBodyParameter("withdrawMoney", et_putforward.getText().toString());//提现金额
+                                    requestParams.addBodyParameter("appVersion", "AS" + versionName);//AU安卓用户版  AS安卓商家版  SU苹果用户版  SS苹果商家版
                                     if (putforwardType == 2) {
                                         requestParams.addBodyParameter("wxOpenId", openId);//微信openId
                                         requestParams.addBodyParameter("realName", weixinRealName);//微信输入的真实姓名
@@ -672,6 +682,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
 
                                         @Override
                                         public void onError(Throwable ex, boolean isOnCallback) {
+                                            Log.e(TAG, "onError putforword: ex.toString() = " + ex.toString());
                                             Toast.makeText(PutForwardActivity.this, "提现申请提交失败,请检查网络", Toast.LENGTH_SHORT).show();
                                         }
 

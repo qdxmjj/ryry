@@ -433,6 +433,109 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
     }
 
     private void bindView() {
+        //图片点击
+        RxViewAction.clickNoDouble(img_mdpic_a).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                if (hasPic_mdPic_a) {
+                    return;
+                }
+                currentImage = 0;
+                /*showPicInputDialog();*/
+                //选择裁剪
+                CropImgUtil.choicePhoto(RegisterActivity.this);
+            }
+        });
+        RxViewAction.clickNoDouble(img_mdpic_b).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                if (hasPic_mdPic_b) {
+                    return;
+                }
+                currentImage = 1;
+                /*showPicInputDialog();*/
+                //选择裁剪
+                CropImgUtil.choicePhoto(RegisterActivity.this);
+            }
+        });
+        RxViewAction.clickNoDouble(img_mdpic_c).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                if (hasPic_mdPic_c) {
+                    return;
+                }
+                currentImage = 2;
+                /*showPicInputDialog();*/
+                //选择裁剪
+                CropImgUtil.choicePhoto(RegisterActivity.this);
+            }
+        });
+        RxViewAction.clickNoDouble(img_yyzz).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                if ((hasPic_yyzz)) {
+                    return;
+                }
+                currentImage = 3;
+                showPicInputDialog();
+            }
+        });
+        RxViewAction.clickNoDouble(img_shou_a).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                if (((hasPic_shou_a))) {
+                    return;
+                }
+                currentImage = 4;
+                showPicInputDialog();
+            }
+        });
+        RxViewAction.clickNoDouble(img_mdpic_a_delete).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                img_mdpic_a_delete.setVisibility(View.GONE);
+                ll_store_head.setVisibility(View.VISIBLE);
+                img_mdpic_a.setImageResource(R.drawable.img_bg_dark);
+                hasPic_mdPic_a = false;
+            }
+        });
+        RxViewAction.clickNoDouble(img_mdpic_b_delete).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                img_mdpic_b_delete.setVisibility(View.GONE);
+                ll_store_in.setVisibility(View.VISIBLE);
+                img_mdpic_b.setImageResource(R.drawable.img_bg_dark);
+                hasPic_mdPic_b = false;
+            }
+        });
+        RxViewAction.clickNoDouble(img_mdpic_c_delete).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                img_mdpic_c_delete.setVisibility(View.GONE);
+                ll_store_workspace.setVisibility(View.VISIBLE);
+                img_mdpic_c.setImageResource(R.drawable.img_bg_dark);
+                hasPic_mdPic_c = false;
+            }
+        });
+        RxViewAction.clickNoDouble(img_yyzz_delete).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                img_yyzz_delete.setVisibility(View.GONE);
+                img_yyzz_center.setVisibility(View.VISIBLE);
+                img_yyzz.setImageResource(R.drawable.img_bg_dark);
+                hasPic_yyzz = false;
+            }
+        });
+        RxViewAction.clickNoDouble(img_shou_a_delete).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                img_shou_a_delete.setVisibility(View.GONE);
+                img_shou_a_center.setVisibility(View.VISIBLE);
+                img_shou_a.setImageResource(R.drawable.img_bg_dark);
+                hasPic_shou_a = false;
+            }
+        });
+        //协议
         RxViewAction.clickNoDouble(tv_xieyi).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
@@ -530,106 +633,6 @@ public class RegisterActivity extends BaseActivity implements CompoundButton.OnC
                 }
             }
         });
-    }
-
-    public void registerPicClick(View view) {
-        switch (view.getId()) {
-            case R.id.img_mdpic_a:
-                if (hasPic_mdPic_a) {
-                    return;
-                }
-                currentImage = 0;
-                /*showPicInputDialog();*/
-                //选择裁剪
-                CropImgUtil.choicePhoto(this);
-                break;
-            case R.id.img_mdpic_b:
-                if (hasPic_mdPic_b) {
-                    return;
-                }
-                currentImage = 1;
-                /*showPicInputDialog();*/
-                //选择裁剪
-                CropImgUtil.choicePhoto(this);
-                break;
-            case R.id.img_mdpic_c:
-                if (hasPic_mdPic_c) {
-                    return;
-                }
-                currentImage = 2;
-                /*showPicInputDialog();*/
-                //选择裁剪
-                CropImgUtil.choicePhoto(this);
-                break;
-            case R.id.img_yyzz:
-                if (hasPic_yyzz) {
-                    return;
-                }
-                currentImage = 3;
-                showPicInputDialog();
-                break;
-            case R.id.img_shou_a:
-                if (hasPic_shou_a) {
-                    return;
-                }
-                currentImage = 4;
-                showPicInputDialog();
-                break;
-
-
-            case R.id.img_mdpic_a_delete:
-                img_mdpic_a_delete.setVisibility(View.GONE);
-                ll_store_head.setVisibility(View.VISIBLE);
-                img_mdpic_a.setImageResource(R.drawable.img_bg_dark);
-                hasPic_mdPic_a = false;
-                break;
-            case R.id.img_mdpic_b_delete:
-                img_mdpic_b_delete.setVisibility(View.GONE);
-                ll_store_in.setVisibility(View.VISIBLE);
-                img_mdpic_b.setImageResource(R.drawable.img_bg_dark);
-                hasPic_mdPic_b = false;
-                break;
-            case R.id.img_mdpic_c_delete:
-                img_mdpic_c_delete.setVisibility(View.GONE);
-                ll_store_workspace.setVisibility(View.VISIBLE);
-                img_mdpic_c.setImageResource(R.drawable.img_bg_dark);
-                hasPic_mdPic_c = false;
-                break;
-            case R.id.img_yyzz_delete:
-                img_yyzz_delete.setVisibility(View.GONE);
-                img_yyzz_center.setVisibility(View.VISIBLE);
-                img_yyzz.setImageResource(R.drawable.img_bg_dark);
-                hasPic_yyzz = false;
-                break;
-            case R.id.img_shou_a_delete:
-                img_shou_a_delete.setVisibility(View.GONE);
-                img_shou_a_center.setVisibility(View.VISIBLE);
-                img_shou_a.setImageResource(R.drawable.img_bg_dark);
-                hasPic_shou_a = false;
-                break;
-        }
-    }
-
-    private void showPicInputDialogShou() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("上传照片");
-        String[] items = {"拍照"};
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                takePicture();
-            }
-        });
-        final AlertDialog dialog = builder.create();
-        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-        //设置按钮颜色
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.theme_primary));
     }
 
     private void showPicInputDialog() {

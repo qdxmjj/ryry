@@ -3,14 +3,12 @@ package com.ruyiruyi.rylibrary.cell;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.os.Build.VERSION;
 
 import com.ruyiruyi.rylibrary.R;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -99,7 +97,7 @@ public class ActionBar extends FrameLayout {
 
         titleView = new TextView(context);
         titleView.setTextSize(20);
-        titleView.setText("AA");
+        titleView.setText("");
         titleView.setTextColor(Color.WHITE);
         content.addView(titleView,LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT,LayoutHelper.WRAP_CONTENT,Gravity.CENTER));
 

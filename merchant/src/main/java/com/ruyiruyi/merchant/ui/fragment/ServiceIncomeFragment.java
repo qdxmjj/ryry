@@ -116,11 +116,11 @@ public class ServiceIncomeFragment extends MerchantBaseFragment {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreServiceEarnings");
         params.addBodyParameter("reqJson", object.toString());
-        Log.e(TAG, "initData:  params.toString() = " + params.toString());
+        Log.e(TAG, "initData: getStoreServiceEarnings params.toString() = " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: result = " + result);
+                Log.e(TAG, "onSuccess: getStoreServiceEarnings result = " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     JSONObject data = jsonObject.getJSONObject("data");
@@ -135,11 +135,11 @@ public class ServiceIncomeFragment extends MerchantBaseFragment {
                         ServiceIncome serviceIncome = new ServiceIncome();
                         /*serviceIncome.setOrderImg(objbean.getString(""));*/
                         /*serviceIncome.setOrderType(objbean.getString("shoeName"));*/
-                        serviceIncome.setOrderTime(objbean.getLong("time"));
-                        serviceIncome.setOrderPrice(objbean.getDouble("totalEarnings"));
-                        serviceIncome.setOrderTypeId(objbean.getInt("orderTypeId"));
+                        serviceIncome.setOrderTime(objbean.getLong("createdTime"));
+                        serviceIncome.setOrderPrice(objbean.getDouble("earnings"));
+                        serviceIncome.setOrderTypeId(objbean.getInt("orderType"));
 
-                        serviceIncome.setOrderNo(objbean.getString("no"));
+                        serviceIncome.setOrderNo(objbean.getString("orderNo"));
 
                         orderBeanList.add(serviceIncome);
                     }
