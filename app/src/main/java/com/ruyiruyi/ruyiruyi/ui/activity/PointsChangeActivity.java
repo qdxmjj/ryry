@@ -1,16 +1,21 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
-import com.ruyiruyi.ruyiruyi.ui.listener.OnLoadMoreListener;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ItemBottomProvider;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ItemNullProvider;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PointsChange;
@@ -20,6 +25,7 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.bean.ItemNullBean;
 import com.ruyiruyi.ruyiruyi.ui.multiType.divider.PointsGridDivider;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+import com.ruyiruyi.rylibrary.cell.GradationNoInterceptScrollView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +34,7 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,19 +46,31 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 public class PointsChangeActivity extends RyBaseActivity {
 
     private ActionBar actionBar;
+    private GradationNoInterceptScrollView mScrollView;
+    private ImageView iv_background;
     private static final String TAG = PointsChangeActivity.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private MultiTypeAdapter multiTypeAdapter;
     private List<Object> items = new ArrayList<>();
     private List<PointsChange> orderBeanList;
-    private int total_all_page;
-    private int mRows = 10;  // 设置默认一页加载10条数据
-    private int current_page;
-    private boolean isLoadMore = false;
-    private boolean isLoadOver = false;
-    private boolean isLoadMoreSingle = false;//上拉单次标志位
     private boolean isFirstLoad = true;
     private SwipeRefreshLayout mSwipeLayout;
+    private float height;
+    private float height2;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    //加载最新数据并更新adapter数据
+                    myDownRefreshByServer();
+                    mSwipeLayout.setRefreshing(false);
+                    break;
+            }
+        }
+    };
+    private int mPoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +91,77 @@ public class PointsChangeActivity extends RyBaseActivity {
             }
         });
 
+        Intent intent = getIntent();
+        mPoints = intent.getIntExtra("total_points", 0);
+        Log.e(TAG, "onCreate: omg" + mPoints);
+
+        mScrollView = findViewById(R.id.scrollView);
+        iv_background = findViewById(R.id.iv_background);
+
+        initHeight();
         initView();
 
-        initFackData();
+        initData();
         initSwipeLayout();
 
+    }
+
+    /**
+     * 获取图片高度为自定义ScrollView设置滑动监听
+     */
+    private void initHeight() {
+        ViewTreeObserver vto = iv_background.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                actionBar.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+                height = iv_background.getHeight();
+                Log.e(TAG, "onScrollChanged: height1 = " + height);
+            }
+        });
+        ViewTreeObserver vto2 = actionBar.getViewTreeObserver();
+        vto2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                actionBar.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+                height2 = actionBar.getHeight();
+                Log.e(TAG, "onScrollChanged: height2 = " + height2);
+            }
+        });
+        //为自定义ScrollView设置滑动距离监听
+        mScrollView.setScrollViewListener(new GradationNoInterceptScrollView.ScrollViewListener() {
+            @Override
+            public void onScrollChanged(GradationNoInterceptScrollView scrollView, int x, int y, int oldx, int oldy) {
+                Log.e(TAG, "onScrollChanged: x = " + x);
+                Log.e(TAG, "onScrollChanged: y = " + y);
+                Log.e(TAG, "onScrollChanged: oldx = " + oldx);
+                Log.e(TAG, "onScrollChanged: oldy = " + oldy);
+                if (y <= 0) {
+                    actionBar.setBackgroundColor(Color.argb((int) 0, 144, 151, 166));
+
+                    //下拉刷新 //TODO ScrollView滑动方向
+                    mSwipeLayout.setRefreshing(true);
+                    mHandler.sendEmptyMessageDelayed(0, 1000);
+                } else if (y >= (height - height2)) {
+                    mRecyclerView.setNestedScrollingEnabled(true);
+                    actionBar.setBackgroundColor(Color.argb((int) 255, 255, 102, 35));
+                } else {
+                    mRecyclerView.setNestedScrollingEnabled(false);
+
+                    NumberFormat format = NumberFormat.getInstance();
+                    format.setMaximumFractionDigits(2);//精确到小数点后两位
+                    String colorCount = format.format((float) y / (height - height2));
+                    int alpha = (int) (Float.parseFloat(colorCount) * 255);
+
+                    Log.e(TAG, "onScrollChanged: colorCount = " + colorCount);
+                    Log.e(TAG, "onScrollChanged: (height - height2) = " + (height - height2));
+                    Log.e(TAG, "onScrollChanged: alpha = " + alpha);
+                    actionBar.setBackgroundColor(Color.argb(alpha, 255, 102, 35));
+                }
+            }
+        });
     }
 
     private void initData() {
@@ -87,53 +172,37 @@ public class PointsChangeActivity extends RyBaseActivity {
         }
 
 
-        isLoadOver = false;
+        orderBeanList.clear();
 
-        if (!isLoadMore) {//只有加载更多(不清空原数据)
-            orderBeanList.clear();
-            current_page = 1;
-        }
-
-
-        JSONObject object = new JSONObject();
-        try {
-            object.put("userId", new DbConfig(getApplicationContext()).getId() + "");
-            object.put("page", current_page);
-            object.put("rows", mRows);
-        } catch (JSONException e) {
-        }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "preferentialInfo/getUserShareRelationList");
-        params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_JIFEN + "score/sku");
+        params.addBodyParameter("skuType", "0");//skuType[商品类型 (0:实物商品,1:优惠券)]
         params.setConnectTimeout(6000);
-        x.http().post(params, new Callback.CommonCallback<String>() {
+        x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: result656 = " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
-                    JSONObject data = jsonObject.getJSONObject("data");
-                    int totla = data.getInt("total");
-                    total_all_page = totla / mRows;//处理页数
-                    if (totla % mRows > 0) {
-                        total_all_page++;
-                    }
-                    JSONArray rows = data.getJSONArray("rows");
+                    JSONArray rows = jsonObject.getJSONArray("data");
+
                     for (int i = 0; i < rows.length(); i++) {
                         JSONObject order = (JSONObject) rows.get(i);
                         PointsChange bean = new PointsChange();
-                        bean.setGoodsPic(order.getString("goodsPic"));
-                        bean.setTitle(order.getString("title"));
-                        bean.setPoints(order.getInt("points"));
-                        bean.setGoodsId(order.getInt("goodsId"));
+                        bean.setGoodsPic(order.getString("imgUrl"));
+                        bean.setTitle(order.getString("name"));
+                        bean.setPoints(order.getInt("score"));
+                        bean.setGoodsId(order.getInt("id"));
                         bean.setPrice(order.getDouble("price"));
+                        bean.setSkuType(order.getInt("skuType"));//[商品类型 (0:实物商品,1:优惠券)]
+                        bean.setTotal_points(mPoints);
+                        bean.setGoodsAmount(order.getInt("amount"));
+                        bean.setGoodsInfo(order.getString("description"));
+                        bean.setChangeNum(order.getInt("soldNo"));
                         orderBeanList.add(bean);
                     }
 
                     //更新数据
                     updataData();
-
-                    isLoadMoreSingle = false;//重置加载更多单次标志位
 
 
                 } catch (JSONException e) {
@@ -143,7 +212,7 @@ public class PointsChangeActivity extends RyBaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(PointsChangeActivity.this, "网络异常，请检查网络", Toast.LENGTH_SHORT).show();
                 //网络异常
                 updataNetError();
             }
@@ -174,22 +243,19 @@ public class PointsChangeActivity extends RyBaseActivity {
 //            showDialogProgress(startDialog, "信息加载中...");
         }
 
+        orderBeanList.clear();
 
-        isLoadOver = false;
 
-        if (!isLoadMore) {//只有加载更多(不清空原数据)
-            orderBeanList.clear();
-            current_page = 1;
-        }
-
-        total_all_page = 10;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 30; i++) {
             PointsChange bean = new PointsChange();
             bean.setGoodsPic("http://180.76.243.205:8111/images/orderDefaultImg/ic_free.png");
-            bean.setTitle("品牌玻璃水" + i);
+            bean.setTitle("美孚 (Mobil) 金装美孚1号 全合成机油0W-40 SN级 4L" + i);
+            bean.setGoodsAmount(i);
+            bean.setGoodsInfo(getString(R.string.goods_points_info));
             bean.setPoints(i);
             bean.setGoodsId(i);
             bean.setPrice(i);
+            bean.setTotal_points(mPoints);
             bean.setChangeNum(i);
             orderBeanList.add(bean);
         }
@@ -197,8 +263,6 @@ public class PointsChangeActivity extends RyBaseActivity {
 
         //更新数据
         updataData();
-
-        isLoadMoreSingle = false;//重置加载更多单次标志位
 
 
         //加载完成 隐藏加载动画
@@ -245,56 +309,22 @@ public class PointsChangeActivity extends RyBaseActivity {
             public void onRefresh() {
                 //加载最新数据并更新adapter数据
 
-                isLoadMore = false;
                 myDownRefreshByServer();
 
                 mSwipeLayout.setRefreshing(false);
-            }
-        });
-        //加载更多
-        mRecyclerView.setOnScrollListener(new OnLoadMoreListener() {
-
-            @Override
-            public void onLoadMore() {
-                //根据上拉单次标志位判断是否执行加载更多（防止多次加载）
-                if (isLoadMoreSingle) {
-                    return;
-                }
-                isLoadMoreSingle = true;//上拉单次标志位
-
-                if (total_all_page > current_page) {
-                    current_page++;
-                    items.add(new ItemBottomBean("加载更多..."));
-
-                    isLoadMore = true;
-                    initFackData();
-                } else {
-                    if (!isLoadOver && (total_all_page > 1)) {//用于判断是否加  加载完成底部
-                        items.add(new ItemBottomBean("全部加载完毕!"));
-                        isLoadOver = true;
-                    }
-                }
-                assertAllRegistered(multiTypeAdapter, items);
-                multiTypeAdapter.notifyDataSetChanged();
             }
         });
     }
 
     //下拉刷新
     private void myDownRefreshByServer() {//下拉刷新
-        initFackData();
+        initData();
     }
 
     private void initView() {
         mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         mRecyclerView = (RecyclerView) findViewById(R.id.rlv);
         LinearLayoutManager manager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false) {
-            /*@Override
-            public boolean canScrollVertically() {
-                //解决ScrollView里存在多个RecyclerView时滑动卡顿的问题
-                return false;
-            }*/
-
             @Override
             public void onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state, int widthSpec, int heightSpec) {
                 super.onMeasure(recycler, state, widthSpec, heightSpec);
@@ -305,13 +335,6 @@ public class PointsChangeActivity extends RyBaseActivity {
         mRecyclerView.setHasFixedSize(true);
         //解决数据加载完成后, 没有停留在顶部的问题
         mRecyclerView.setFocusable(false);
-
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                mRecyclerView.setNestedScrollingEnabled(true);
-            }
-        });
 
         mRecyclerView.setLayoutManager(manager);
 

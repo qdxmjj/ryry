@@ -9,10 +9,19 @@ package com.ruyiruyi.ruyiruyi.ui.multiType;
 public class ShoppingPointsInfo {
     private String title;
     private long time;
+    private String timeStr;
     private int points;
     private int incomeType; // 0 支出  1 收入
 
     public ShoppingPointsInfo() {
+    }
+
+    public String getTimeStr() {
+        return timeStr;
+    }
+
+    public void setTimeStr(String timeStr) {
+        this.timeStr = timeStr;
     }
 
     public int getIncomeType() {

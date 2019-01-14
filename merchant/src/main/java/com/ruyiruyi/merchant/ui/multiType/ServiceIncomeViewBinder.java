@@ -44,13 +44,19 @@ public class ServiceIncomeViewBinder extends ItemViewProvider<ServiceIncome, Ser
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final ServiceIncome serviceIncome) {
         holder.tv_orderno.setText(serviceIncome.getOrderNo());
         holder.tv_orderprice.setText(serviceIncome.getOrderPrice() + "");
+        if (serviceIncome.getOrderTypeId() == 1) {
+            holder.tv_ordertype.setText("普通商品订单");
+        }
         if (serviceIncome.getOrderTypeId() == 2) {
             holder.tv_ordertype.setText("首次更换订单");
         }
         if (serviceIncome.getOrderTypeId() == 3) {
-            holder.tv_ordertype.setText("免费再换订单");
+            holder.tv_ordertype.setText("轮胎订单");
         }
         if (serviceIncome.getOrderTypeId() == 4) {
+            holder.tv_ordertype.setText("免费再换订单");
+        }
+        if (serviceIncome.getOrderTypeId() == 5) {
             holder.tv_ordertype.setText("轮胎修补订单");
         }
         String timestampToStringAll = new UtilsRY().getTimestampToStringAll(serviceIncome.getOrderTime());
@@ -63,11 +69,11 @@ public class ServiceIncomeViewBinder extends ItemViewProvider<ServiceIncome, Ser
             public void call(Void aVoid) {
                 Intent intent = new Intent(mContext, PublicOrderInfoActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("orderNo",serviceIncome.getOrderNo());
-                bundle.putString("orderType",serviceIncome.getOrderTypeId()+"");
-                bundle.putString("orderState","1");
-                bundle.putString("whereIn","income");
-                bundle.putString("select","0");
+                bundle.putString("orderNo", serviceIncome.getOrderNo());
+                bundle.putString("orderType", serviceIncome.getOrderTypeId() + "");
+                bundle.putString("orderState", "1");
+                bundle.putString("whereIn", "income");
+                bundle.putString("select", "0");
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }

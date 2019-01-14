@@ -16,8 +16,8 @@
         android:layout_marginTop="5dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_banner"
-        app:roundHeight="3dp"
-        app:roundWidth="3dp"/>
+        app:roundHeight="5dp"
+        app:roundWidth="5dp"/>
 
     <TextView
         android:id="@+id/tv_title"

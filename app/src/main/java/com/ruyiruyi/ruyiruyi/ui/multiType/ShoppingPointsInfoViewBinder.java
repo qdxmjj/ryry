@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 
 import me.drakeet.multitype.ItemViewProvider;
 
@@ -30,8 +29,8 @@ public class ShoppingPointsInfoViewBinder extends ItemViewProvider<ShoppingPoint
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ShoppingPointsInfo shoppingPointsInfo) {
         holder.tv_title.setText(shoppingPointsInfo.getTitle());
-        int type = shoppingPointsInfo.getIncomeType();//0 支出 1 收入
-        if (type == 0) {
+        int type = shoppingPointsInfo.getIncomeType();//(0:收入,1:支出)
+        if (type == 1) {
             holder.tv_type.setText("-");
             holder.tv_type.setTextColor(mContext.getResources().getColor(R.color.c6));
             holder.tv_count.setTextColor(mContext.getResources().getColor(R.color.c6));
@@ -42,8 +41,7 @@ public class ShoppingPointsInfoViewBinder extends ItemViewProvider<ShoppingPoint
         }
         int points = shoppingPointsInfo.getPoints();
         holder.tv_count.setText(points + "");
-        String times = new UtilsRY().getTimestampToStringAll(shoppingPointsInfo.getTime());
-        holder.tv_time.setText(times);
+        holder.tv_time.setText(shoppingPointsInfo.getTimeStr());
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

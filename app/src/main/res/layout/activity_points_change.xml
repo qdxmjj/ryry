@@ -4,9 +4,11 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <ScrollView
+    <com.ruyiruyi.rylibrary.cell.GradationNoInterceptScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
         android:scrollbars="none">
 
         <LinearLayout
@@ -21,7 +23,7 @@
                 <ImageView
                     android:id="@+id/iv_background"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="150dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_ground"/>
 
@@ -31,7 +33,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="8000"
+                    android:layout_marginTop="10dp"
+                    android:text="0"
                     android:textColor="@color/c12"
                     android:textSize="36sp"
                     android:textStyle="bold"/>
@@ -40,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="40dp"
                     android:text="可用积分"
                     android:textColor="@color/c12"
                     android:textSize="14sp"/>
@@ -63,7 +66,7 @@
                     android:background="@color/c0"/>
             </android.support.v4.widget.SwipeRefreshLayout>
         </LinearLayout>
-    </ScrollView>
+    </com.ruyiruyi.rylibrary.cell.GradationNoInterceptScrollView>
 
     <com.ruyiruyi.rylibrary.cell.ActionBar
         android:id="@+id/acbar"

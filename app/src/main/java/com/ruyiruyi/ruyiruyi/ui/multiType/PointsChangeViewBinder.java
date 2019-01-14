@@ -47,9 +47,12 @@ public class PointsChangeViewBinder extends ItemViewProvider<PointsChange, Point
                 intent.putExtra("goodsId", pointsChange.getGoodsId());
                 intent.putExtra("goodsPic", pointsChange.getGoodsPic());
                 intent.putExtra("title", pointsChange.getTitle());
-                intent.putExtra("points", pointsChange.getPoints());
+                intent.putExtra("goodsPoints", pointsChange.getPoints());
+                intent.putExtra("totalPoints", pointsChange.getTotal_points());
                 intent.putExtra("price", pointsChange.getPrice());
                 intent.putExtra("changeNum", pointsChange.getChangeNum());
+                intent.putExtra("goodsAmount", pointsChange.getGoodsAmount());
+                intent.putExtra("goodsInfo", pointsChange.getGoodsInfo());
                 mContext.startActivity(intent);
             }
         });

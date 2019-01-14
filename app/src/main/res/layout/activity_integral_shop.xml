@@ -70,6 +70,7 @@
                         android:textSize="40sp" />
 
                     <TextView
+                        android:id="@+id/tv_mypoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"

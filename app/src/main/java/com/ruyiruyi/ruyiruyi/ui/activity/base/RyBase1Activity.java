@@ -3,16 +3,12 @@ package com.ruyiruyi.ruyiruyi.ui.activity.base;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.rylibrary.base.BaseActivity;
-
-public class RyBase1Activity extends BaseActivity {
+public class RyBase1Activity extends RyBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

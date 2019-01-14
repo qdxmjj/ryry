@@ -1,12 +1,9 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +18,6 @@ import android.widget.Toast;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBase1Activity;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.GradationScrollView;
@@ -35,7 +31,7 @@ import org.xutils.x;
 
 import rx.functions.Action1;
 
-public class IntegralShopActivity extends RyBase1Activity implements GradationScrollView.ScrollViewListener{
+public class IntegralShopActivity extends RyBase1Activity implements GradationScrollView.ScrollViewListener {
 
     private static final String TAG = IntegralShopActivity.class.getSimpleName();
     private ImageView backView;
@@ -47,12 +43,15 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
     private String yaoqingRule;
     private String xiaofeiRule;
     private String loginRule;
-    private String totalScore;
+    private String totalScore = "0";
     private TextView scoreTextView;
     private TextView dengluRuleText;
     private TextView xiaofeiRuleText;
     private TextView yaoqingRuleText;
     private ImageView exchangeCouponView;
+    private ImageView right_one_image;
+
+    private TextView tv_mypoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +59,7 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
         setContentView(R.layout.activity_integral_shop);
 
         //导航栏沉浸式
-      //  fullScreen(this);
+        //  fullScreen(this);
 
         initView();
         initListeners();
@@ -72,15 +71,15 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
         int userId = new DbConfig(getApplicationContext()).getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId",userId);
+            jsonObject.put("userId", userId);
 
         } catch (JSONException e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_JIFEN + "score/info");
-        params.addBodyParameter("userId",userId + "");
+        params.addBodyParameter("userId", userId + "");
 
         String token = new DbConfig(this).getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -91,7 +90,7 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
 
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         totalScore = data.getString("totalScore");
                         JSONArray ruleList = data.getJSONArray("ruleList");
@@ -100,8 +99,9 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                         xiaofeiRule = ruleList.get(1).toString();
                         yaoqingRule = ruleList.get(2).toString();
 
-                        initData();
-                    }else {
+                        bindData();
+                        bindView();
+                    } else {
                         Toast.makeText(IntegralShopActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
@@ -127,7 +127,39 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
         });
     }
 
-    private void initData() {
+    private void bindView() {
+        //积分商品兑换
+        RxViewAction.clickNoDouble(right_one_image).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                //判断是否登录（未登录提示登录）
+                if (!judgeIsLogin()) {
+                    return;
+                }
+                Intent intent = new Intent(IntegralShopActivity.this, PointsChangeActivity.class);
+                intent.putExtra("total_points", Integer.parseInt(totalScore));
+                Log.e(TAG, "call omg: totalScore = " + totalScore);
+                Log.e(TAG, "call omg: Integer.parseInt(totalScore) = " + Integer.parseInt(totalScore));
+                startActivity(intent);
+            }
+        });
+
+        //我的积分
+        RxViewAction.clickNoDouble(tv_mypoints).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                //判断是否登录（未登录提示登录）
+                if (!judgeIsLogin()) {
+                    return;
+                }
+                Intent intent = new Intent(IntegralShopActivity.this, ShoppingPointsInfoActivity.class);
+                intent.putExtra("total_points", Integer.parseInt(totalScore));
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void bindData() {
         scoreTextView.setText(totalScore);
         dengluRuleText.setText(loginRule);
         xiaofeiRuleText.setText(xiaofeiRule);
@@ -163,14 +195,16 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
         dengluRuleText = (TextView) findViewById(R.id.denglu_rule_text);
         xiaofeiRuleText = (TextView) findViewById(R.id.xiaofei_rule_text);
         yaoqingRuleText = (TextView) findViewById(R.id.yaoqing_rule_text);
+        tv_mypoints = (TextView) findViewById(R.id.tv_mypoints);
 
         exchangeCouponView = (ImageView) findViewById(R.id.coupon_exchang_view);
+        right_one_image = (ImageView) findViewById(R.id.right_one_image);
 
         RxViewAction.clickNoDouble(exchangeCouponView)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getApplicationContext(),ExchangeCouponActivity.class));
+                        startActivity(new Intent(getApplicationContext(), ExchangeCouponActivity.class));
                     }
                 });
 
@@ -182,7 +216,6 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                         onBackPressed();
                     }
                 });
-
 
 
     }
@@ -215,6 +248,7 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
 
     /**
      * 滑动监听
+     *
      * @param scrollView
      * @param x
      * @param y
@@ -226,16 +260,21 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                                 int oldx, int oldy) {
         // TODO Auto-generated method stub
         if (y <= 0) {   //设置标题的背景颜色
-            actionBarView.setBackgroundColor(Color.argb((int) 0, 144,151,166));
+            actionBarView.setBackgroundColor(Color.argb((int) 0, 144, 151, 166));
         } else if (y > 0 && y <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
             float scale = (float) y / height;
             float alpha = (255 * scale);
-        //    actionBarView.setTextColor(Color.argb((int) alpha, 255,255,255));
-            actionBarView.setBackgroundColor(Color.argb((int) alpha, 255,102,35));
+            //    actionBarView.setTextColor(Color.argb((int) alpha, 255,255,255));
+            actionBarView.setBackgroundColor(Color.argb((int) alpha, 255, 102, 35));
         } else {    //滑动到banner下面设置普通颜色
-            actionBarView.setBackgroundColor(Color.argb((int) 255, 255,102,35));
+            actionBarView.setBackgroundColor(Color.argb((int) 255, 255, 102, 35));
         }
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //刷新页面数据
+        initDataFromService();
+    }
 }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
@@ -39,7 +40,7 @@ import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
 public class ShoppingPointsInfoFragment extends RyBaseFragment {
     private static final String TAG = ShoppingPointsInfoFragment.class.getSimpleName();
-    private int status;//status 0 支出  1 收入
+    private int status;//status (0:收入,1:支出)
     private RecyclerView mRecyclerView;
     private MultiTypeAdapter multiTypeAdapter;
     private List<Object> items = new ArrayList<>();
@@ -71,7 +72,7 @@ public class ShoppingPointsInfoFragment extends RyBaseFragment {
 
         initView();
 
-        initFackData();
+        initData();
         initSwipeLayout();
 
     }
@@ -92,37 +93,43 @@ public class ShoppingPointsInfoFragment extends RyBaseFragment {
         }
 
 
-        JSONObject object = new JSONObject();
-        try {
-            object.put("userId", new DbConfig(getContext()).getId() + "");
-            object.put("page", current_page);
-            object.put("rows", mRows);
-            object.put("state", status);
-        } catch (JSONException e) {
-        }
-        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "preferentialInfo/getUserShareRelationList");
-        params.addBodyParameter("reqJson", object.toString());
-        params.addBodyParameter("token", new DbConfig(getActivity()).getToken());
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_JIFEN + "score/record");
+        params.addBodyParameter("type", status + "");
+        params.addBodyParameter("userId", new DbConfig(getContext()).getId() + "");
+        params.addBodyParameter("page", current_page + "");
+        params.addBodyParameter("rows", mRows + "");
         params.setConnectTimeout(6000);
-        x.http().post(params, new Callback.CommonCallback<String>() {
+        Log.e(TAG, "initData: params.toString() ShoppingPoints = " + params.toString());
+        x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: result656 = " + result);
+                Log.e(TAG, "onSuccess: result ShoppingPoints = " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
+                    int status_ = jsonObject.getInt("status");
+                    String msg = jsonObject.getString("msg");
+                    Log.e(TAG, "onSuccess: ShoppingPoints" + status_ + msg);
+                    if (status_ != 1) {
+                        //更新数据
+                        updataData();
+
+                        isLoadMoreSingle = false;//重置加载更多单次标志位
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     JSONObject data = jsonObject.getJSONObject("data");
                     int totla = data.getInt("total");
                     total_all_page = totla / mRows;//处理页数
                     if (totla % mRows > 0) {
                         total_all_page++;
                     }
-                    JSONArray rows = data.getJSONArray("rows");
-                    for (int i = 0; i < rows.length(); i++) {
+                    JSONArray items = data.getJSONArray("items");
+                    for (int i = 0; i < items.length(); i++) {
                         ShoppingPointsInfo bean = new ShoppingPointsInfo();
-                        JSONObject order = (JSONObject) rows.get(i);
+                        JSONObject order = (JSONObject) items.get(i);
                         bean.setTitle(order.getString("title"));
-                        bean.setPoints(order.getInt("points"));
-                        bean.setTime(order.getLong("createdTime"));
+                        bean.setPoints(order.getInt("score"));
+                        bean.setTimeStr(order.getString("time"));
                         bean.setIncomeType(order.getInt("type"));
                         orderBeanList.add(bean);
                     }
@@ -140,7 +147,7 @@ public class ShoppingPointsInfoFragment extends RyBaseFragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Log.e(TAG, "onError:  ex.toString() ShoppingPoints = " + ex.toString());
                 //网络异常
                 updataNetError();
             }
@@ -265,7 +272,7 @@ public class ShoppingPointsInfoFragment extends RyBaseFragment {
                     items.add(new ItemBottomBean("加载更多..."));
 
                     isLoadMore = true;
-                    initFackData();
+                    initData();
                 } else {
                     if (!isLoadOver && (total_all_page > 1)) {//用于判断是否加  加载完成底部
                         items.add(new ItemBottomBean("全部加载完毕!"));
@@ -280,7 +287,7 @@ public class ShoppingPointsInfoFragment extends RyBaseFragment {
 
     //下拉刷新
     private void myDownRefreshByServer() {//下拉刷新
-        initFackData();
+        initData();
     }
 
     private void initView() {

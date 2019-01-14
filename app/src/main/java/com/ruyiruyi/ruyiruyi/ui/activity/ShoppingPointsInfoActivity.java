@@ -7,7 +7,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,9 +22,10 @@ import com.ruyiruyi.rylibrary.cell.ActionBar;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ShoppingPointsInfoActivity extends RyBaseFragmentActivity {
     private ActionBar actionBar;
-    private ActionBar actionBar_mid;
+    private ImageView iv_background;
     private TabLayout mTab;
     private ViewPager mVPager;
     private List<Fragment> fragments;
@@ -32,6 +35,8 @@ public class ShoppingPointsInfoActivity extends RyBaseFragmentActivity {
     private ProgressDialog mDialog;
     private TextView points;
     private int total_points = 0;
+    private String TAG = ShoppingPointsInfoActivity.class.getSimpleName();
+    private int height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,7 @@ public class ShoppingPointsInfoActivity extends RyBaseFragmentActivity {
         actionBar = (ActionBar) findViewById(R.id.acbar);
         actionBar.setTitle("积分明细");
         actionBar.setBackground(0);
-        actionBar.setRightView("积分兑换");
+        /*actionBar.setRightView("积分兑换");*/
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
@@ -49,16 +54,72 @@ public class ShoppingPointsInfoActivity extends RyBaseFragmentActivity {
                     case -1:
                         onBackPressed();
                         break;
-                    case -3:
+                    /*case -3:
                         startActivity(new Intent(ShoppingPointsInfoActivity.this, PointsChangeActivity.class));
-                        break;
+                        break;*/
                 }
             }
         });
-
         main = findViewById(R.id.main);
+        iv_background = findViewById(R.id.iv_background);
+        Intent intent = getIntent();
+        total_points = intent.getIntExtra("total_points", 0);
+
+
+        initHeight();
         initView();
         initData();
+    }
+
+    /**
+     * 获取图片高度为自定义CoordinatorLayout设置滑动监听
+     */
+    private void initHeight() {
+        ViewTreeObserver vto = iv_background.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mTab.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+                height = iv_background.getHeight();
+                Log.e(TAG, "onScrollChanged: height = " + height);
+            }
+        });
+        //为自定义CoordinatorLayout设置滑动距离监听
+       /* main.setScrollViewListener(new GradationNoInterceptCoordinatorLayout.ScrollViewListener() {
+            @Override
+            public void onScrollChanged(GradationNoInterceptCoordinatorLayout scrollView, int x, int y, int oldx, int oldy) {
+                Log.e(TAG, "onScrollChanged: x = " + x);
+                Log.e(TAG, "onScrollChanged: y = " + y);
+                Log.e(TAG, "onScrollChanged: oldx = " + oldx);
+                Log.e(TAG, "onScrollChanged: oldy = " + oldy);
+                if (y <= 0) {
+                    mTab.setBackgroundColor(Color.argb((int) 0, 144, 151, 166));
+                } else if (oldy > height && y > height) {
+                    mTab.setBackgroundColor(Color.argb((int) 255, 255, 102, 35));
+                } else {
+                    float colorCount = (y + 100) / height;
+                    mTab.setBackgroundColor(Color.argb((int) colorCount * 255, 255, 102, 35));
+                }
+            }
+        });*/
+        /*main.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int x, int y, int oldx, int oldy) {
+                Log.e(TAG, "onScrollChanged: x = " + x);
+                Log.e(TAG, "onScrollChanged: y = " + y);
+                Log.e(TAG, "onScrollChanged: oldx = " + oldx);
+                Log.e(TAG, "onScrollChanged: oldy = " + oldy);
+                if (y <= 0) {
+                    mTab.setBackgroundColor(Color.argb((int) 0, 144, 151, 166));
+                } else if (oldy > height && y > height) {
+                    mTab.setBackgroundColor(Color.argb((int) 255, 255, 102, 35));
+                } else {
+                    float colorCount = (y + 100) / height;
+                    mTab.setBackgroundColor(Color.argb((int) colorCount * 255, 255, 102, 35));
+                }
+            }
+        });*/
     }
 
     private void initData() {
@@ -66,9 +127,6 @@ public class ShoppingPointsInfoActivity extends RyBaseFragmentActivity {
         mDialog = new ProgressDialog(this);
         showDialogProgress(mDialog, "数据加载中...");
 
-        /*x.http().post()*/
-
-        total_points = 9000;
         points.setText(total_points + "");
         hideDialogProgress(mDialog);
         main.setVisibility(View.VISIBLE);
@@ -97,8 +155,8 @@ public class ShoppingPointsInfoActivity extends RyBaseFragmentActivity {
 
     private List<String> getTitles() {
         title_list = new ArrayList();
-        title_list.add("积分支出");
         title_list.add("积分收入");
+        title_list.add("积分支出");
         return title_list;
     }
 
@@ -113,13 +171,13 @@ public class ShoppingPointsInfoActivity extends RyBaseFragmentActivity {
         fragments = new ArrayList();
         ShoppingPointsInfoFragment noFragment = new ShoppingPointsInfoFragment();
         Bundle nobundle = new Bundle();
-        nobundle.putInt("status", 0);//status 0 积分支出  1 积分收入
+        nobundle.putInt("status", 0);//status (0:收入,1:支出)
         noFragment.setArguments(nobundle);
         fragments.add(noFragment);
 
         ShoppingPointsInfoFragment yesFragment = new ShoppingPointsInfoFragment();
         Bundle yesbundle = new Bundle();
-        yesbundle.putInt("status", 1);//status 0 积分支出  1 积分收入
+        yesbundle.putInt("status", 1);//status (0:收入,1:支出)
         yesFragment.setArguments(yesbundle);
         fragments.add(yesFragment);
 

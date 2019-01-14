@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,17 +19,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.Service;
 import com.ruyiruyi.merchant.bean.ServicesBean;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
+import com.ruyiruyi.merchant.utils.CropImgUtil;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -36,6 +42,7 @@ import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
 import com.ruyiruyi.rylibrary.utils.glide.GlideCircleTransform;
+import com.yalantis.ucrop.UCrop;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,6 +72,9 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
     private EditText mGoodsKucun;
     private TextView tv_tijiaosp;
     private TextView tv_jixuadd;
+
+    private TextView tv_line;
+
     private TextView mGoodsStatus;
     private Bitmap imgBitmap;
     private WheelView leftWheel;
@@ -91,6 +101,13 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
     private String img_Path;
     private ProgressDialog progressDialog;
     private String path_;
+
+    private LinearLayout ll_oldprice;
+    private Switch switch_spc;
+    private EditText et_goods_oldprice;
+    private EditText et_goods_info;
+
+    private boolean isSpecialPrice = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,11 +245,29 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
     }
 
     private void bindView() {
+        //特价选项switch监听
+        switch_spc.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    //选中
+                    ll_oldprice.setVisibility(View.VISIBLE);
+                    isSpecialPrice = true;
+                } else {
+                    //取消
+                    ll_oldprice.setVisibility(View.GONE);
+                    isSpecialPrice = false;
+                }
+            }
+        });
+
         //头像选择
         RxViewAction.clickNoDouble(mGoodsImg).subscribe(new Action1<Void>() {
             @Override
             public void call(Void aVoid) {
-                showPicInputDialog();
+                /*showPicInputDialog();*/
+                //选择裁剪
+                CropImgUtil.choicePhoto(GoodsInfoActivity.this);
             }
         });
         RxViewAction.clickNoDouble(mGoodsType).subscribe(new Action1<Void>() {
@@ -329,15 +364,36 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
         }
         String putforwardStr = mGoodsPrice.getText().toString();
         if (!UtilsRY.isFloat(putforwardStr) && !UtilsRY.isInt(putforwardStr)) {//正则判断输入是否规范(正浮点数和正整数)
-            showMerchantErrorDialog("请输入合理金额");
+            Toast.makeText(GoodsInfoActivity.this, "请输入合理单价", Toast.LENGTH_SHORT).show();
             return;
         }
         int indexOf = putforwardStr.indexOf(".");
         Log.e("indexOf", "judgeBeforePost: " + indexOf + "+" + putforwardStr.length());
         if (UtilsRY.isFloat(putforwardStr) && (putforwardStr.length() - indexOf - 1) > 2) {//判断小数点后两位
-            showMerchantErrorDialog("请输入合理金额");
+            Toast.makeText(GoodsInfoActivity.this, "请输入合理单价", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (isSpecialPrice && (et_goods_oldprice.getText() == null || et_goods_oldprice.getText().length() == 0)) {
+            Toast.makeText(GoodsInfoActivity.this, "请输入商品原价", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String oldpriceStr = et_goods_oldprice.getText().toString();
+        if (isSpecialPrice && !UtilsRY.isFloat(oldpriceStr) && !UtilsRY.isInt(oldpriceStr)) {//正则判断输入是否规范(正浮点数和正整数)
+            Toast.makeText(GoodsInfoActivity.this, "请输入合理原价", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int oldpriceStrIndexOf = oldpriceStr.indexOf(".");
+        Log.e("indexOf", "judgeBeforePost: " + oldpriceStrIndexOf + "+" + oldpriceStr.length());
+        if (isSpecialPrice && UtilsRY.isFloat(oldpriceStr) && (oldpriceStr.length() - oldpriceStrIndexOf - 1) > 2) {//判断小数点后两位
+            Toast.makeText(GoodsInfoActivity.this, "请输入合理原价", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (isSpecialPrice && (Double.parseDouble(oldpriceStr) <= Double.parseDouble(putforwardStr))) {
+            Log.e(TAG, "commitData: " + Double.parseDouble(oldpriceStr) + " " + Double.parseDouble(putforwardStr));
+            Toast.makeText(this, "商品优惠价格不能大于原价", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (leftTypeId == null || leftTypeId.equals("") || rightTypeId == null || rightTypeId.equals("")) {
             Toast.makeText(GoodsInfoActivity.this, "请选择商品分类", Toast.LENGTH_SHORT).show();
             return;
@@ -354,6 +410,10 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
             Toast.makeText(GoodsInfoActivity.this, "请选择商品状态", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (et_goods_info.getText() == null || et_goods_info.getText().length() == 0) {
+            Toast.makeText(this, "请补充商品描述", Toast.LENGTH_SHORT).show();
+            return;
+        }
         showSaveDialog(type);
     }
 
@@ -367,6 +427,13 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
         mGoodsKucun.setText("");
         mGoodsStatus.setText("请选择商品状态");
         currentSale = 1;//原始值
+
+        switch_spc.setChecked(false);
+        ll_oldprice.setVisibility(View.GONE);
+        isSpecialPrice = false;
+        et_goods_oldprice.setText("请在此输入商品原价");
+        et_goods_info.setText("请在此输入商品描述");
+
 
     }
 
@@ -405,6 +472,9 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
                     object.put("serviceId", rightTypeId);
                     object.put("amount", mGoodsKucun.getText());
                     object.put("price", mGoodsPrice.getText());
+                    /*object.put("oldPrice", et_goods_oldprice.getText());//TODO 特价
+                    object.put("isSpecialPrice", isSpecialPrice);//TODO 特价
+                    object.put("goodsInfo", et_goods_info.getText());//TODO 商品描述*///TODO 特价
                     object.put("status", currentSale);//2 下架  1 在售
                 } catch (JSONException e) {
                 }
@@ -676,12 +746,47 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case CHOOSE_PICTURE:
+                case CHOOSE_PICTURE://暂未用
                     Uri uri = data.getData();
                     setImageToViewFromPhone(uri, false);
                     break;
-                case TAKE_PICTURE:
+                case TAKE_PICTURE://暂未用
                     setImageToViewFromPhone(tempUri, true);
+                    break;
+
+                case CropImgUtil.TAKE_PHOTO://相机返回
+                    //相机返回图片，调用裁剪的方法
+                    CropImgUtil.startUCrop(GoodsInfoActivity.this, CropImgUtil.imageUri, 1, 1);
+                    break;
+                case CropImgUtil.CHOOSE_PHOTO://相册返回
+                    try {
+                        if (data != null) {
+                            Uri uri2 = data.getData();
+                            //相册返回图片，调用裁剪的方法
+                            CropImgUtil.startUCrop(GoodsInfoActivity.this, uri2, 1, 1);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "图片选择失败", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case UCrop.REQUEST_CROP://剪切返回
+                    Uri resultUri = null;
+                    resultUri = UCrop.getOutput(data);
+                    //剪切返回，显示剪切的图片到布局
+                    Glide.with(GoodsInfoActivity.this)
+                            .load(resultUri)
+                            .placeholder(R.drawable.login_code_button)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+                            .skipMemoryCache(true)//跳过内存缓存
+                            .transform(new GlideCircleTransform(this))
+                            .into(mGoodsImg);
+                    try {
+                        imgBitmap = ImageUtils.getBitmapFormUri(getApplicationContext(), resultUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     break;
 
             }
@@ -745,6 +850,15 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
         mGoodsStatus = (TextView) findViewById(R.id.tv_goods_status);
         tv_tijiaosp = (TextView) findViewById(R.id.tv_tijiaosp);
         tv_jixuadd = (TextView) findViewById(R.id.tv_jixuadd);
+
+        tv_line = (TextView) findViewById(R.id.tv_line);
+        tv_line.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);//加横线
+
+        ll_oldprice = findViewById(R.id.ll_oldprice);
+        switch_spc = findViewById(R.id.switch_spc);
+        et_goods_oldprice = findViewById(R.id.et_goods_oldprice);
+        et_goods_info = findViewById(R.id.et_goods_info);
+
         servicesBean2a = new ArrayList<>();
         servicesBean3a = new ArrayList<>();
         servicesBean4a = new ArrayList<>();

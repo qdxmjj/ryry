@@ -115,11 +115,11 @@ public class SaleIncomeFragment extends MerchantBaseFragment {
         }
         RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "getStoreSaleShoeEarnings");
         params.addBodyParameter("reqJson", object.toString());
-        Log.e(TAG, "initData:  params.toString() = " + params.toString());
+        Log.e(TAG, "initData: getStoreSaleShoeEarnings params.toString() = " + params.toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: result = " + result);
+                Log.e(TAG, "onSuccess: getStoreSaleShoeEarnings result = " + result);
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     JSONObject data = jsonObject.getJSONObject("data");
@@ -129,14 +129,12 @@ public class SaleIncomeFragment extends MerchantBaseFragment {
                         total_all_page++;
                     }
                     JSONArray rows = data.getJSONArray("rows");
-                    Log.e(TAG, "onSuccess: 001");
                     for (int i = 0; i < rows.length(); i++) {
                         JSONObject objbean = (JSONObject) rows.get(i);
                         SaleIncome saleIncome = new SaleIncome();
-//                        saleIncome.setOrderImg(objbean.getString(""));
                         saleIncome.setShoeTitle(objbean.getString("shoeName"));
                         saleIncome.setShoeNum(objbean.getInt("totalShoeNo"));
-                        saleIncome.setOrderTime(objbean.getLong("time"));
+                        saleIncome.setOrderTime(objbean.getLong("createdTime"));
                         saleIncome.setOrderPrice(objbean.getDouble("earnings"));
 
                         saleIncome.setOrderNo(objbean.getString("orderNo"));
