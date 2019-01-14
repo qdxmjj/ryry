@@ -104,4 +104,42 @@ public class RyBase1Activity extends BaseActivity {
         dialog.show();
     }
 
+
+    /*
+    * 判断是否登录 （未登录提示登录跳转）
+    * 用法：
+            //判断是否登录（未登录提示登录）
+            if (!judgeIsLogin()) {
+                return;
+            }
+    *
+    *
+    * */
+    public boolean judgeIsLogin() {
+        if (!new DbConfig(getApplicationContext()).getIsLogin()) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_error, null);
+            TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
+            error_text.setText("您还没有登录");
+            dialog.setTitle("如意如驿");
+            dialog.setIcon(R.drawable.ic_logo_login);
+            dialog.setView(dialogView);
+            dialog.setNegativeButton("暂不登录", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.setPositiveButton("前往登录", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                }
+            });
+            dialog.show();
+        }
+        return new DbConfig(getApplicationContext()).getIsLogin();
+    }
+
 }
