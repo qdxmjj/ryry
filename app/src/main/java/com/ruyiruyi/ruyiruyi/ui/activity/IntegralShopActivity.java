@@ -53,6 +53,7 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
     private TextView xiaofeiRuleText;
     private TextView yaoqingRuleText;
     private ImageView exchangeCouponView;
+    private TextView duihuanJiluView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +71,7 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
 
     private void initDataFromService() {
         int userId = new DbConfig(getApplicationContext()).getId();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("userId",userId);
 
-        } catch (JSONException e) {
-        }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_JIFEN + "score/info");
         params.addBodyParameter("userId",userId + "");
 
@@ -154,6 +150,7 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
 
 
     private void initView() {
+        duihuanJiluView = (TextView) findViewById(R.id.duihuan_jilu_view);
         backView = (ImageView) findViewById(R.id.back_image_view);
         dengluButton = (TextView) findViewById(R.id.denglu_button);
         actionBarView = (FrameLayout) findViewById(R.id.action_bar_view);
@@ -166,11 +163,25 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
 
         exchangeCouponView = (ImageView) findViewById(R.id.coupon_exchang_view);
 
+        //兑换记录
+        RxViewAction.clickNoDouble(duihuanJiluView)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getApplicationContext(),ChangeOrderActivity.class));
+                    }
+                });
+
+        /**
+         * 优惠券兑换
+         */
         RxViewAction.clickNoDouble(exchangeCouponView)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getApplicationContext(),ExchangeCouponActivity.class));
+                        Intent intent = new Intent(getApplicationContext(), ExchangeCouponActivity.class);
+                        intent.putExtra("TOTAL_SCORE",totalScore);
+                        startActivity(intent);
                     }
                 });
 
@@ -182,9 +193,6 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                         onBackPressed();
                     }
                 });
-
-
-
     }
 
     private void fullScreen(Activity activity) {

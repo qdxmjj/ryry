@@ -2,20 +2,21 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="#ffffff">
+    android:layout_height="match_parent"
+    android:background="@color/c1">
 
 
     <com.ruyiruyi.rylibrary.cell.GradationScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/c1"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff"
+            android:background="@color/c1"
             android:orientation="vertical">
 
             <FrameLayout
@@ -61,11 +62,16 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/c1"
                 android:descendantFocusability="blocksDescendants">
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/jifen_listview"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/c1"
+                    android:layout_alignParentStart="true" />
 
             </RelativeLayout>
 

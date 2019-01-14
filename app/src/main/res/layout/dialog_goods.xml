@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:zhy="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_background"
+    android:layout_height="wrap_content">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#9e9e9e"
+        android:visibility="invisible"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/goods_image_dialog"
+                    android:layout_width="match_parent"
+                    android:layout_height="380dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_launcher"/>
+
+                <TextView
+                    android:id="@+id/goods_name_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="8dp"
+                    android:text="商品名"
+                    android:textColor="@color/c7"
+                    android:textSize="18sp" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="3dp"
+                    android:layout_gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/goods_kucun_dialog"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="库存：100"
+                        android:textSize="13sp"
+                        android:textColor="@color/c7"
+                        android:layout_marginLeft="10dp"/>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom|right"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp">
+                        <ImageView
+                            android:id="@+id/cut_dialog"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
+                            android:src="@drawable/ic_cut"
+                            android:layout_marginRight="5dp"
+                            />
+                        <TextView
+                            android:id="@+id/count_dialog"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:text="10"/>
+                        <ImageView
+                            android:id="@+id/add_dialog"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
+                            android:src="@drawable/ic_add1"
+                            />
+                    </LinearLayout>
+                </FrameLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="bottom">
+                    <TextView
+                        android:id="@+id/goods_price_dialog"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="￥100.0"
+                        android:textSize="18sp"
+                        android:textColor="@color/theme_primary"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"/>
+                    <com.ruyiruyi.rylibrary.cell.DrawLineTextView
+                        android:id="@+id/goods_original_dialog"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="￥20.0"
+                        android:textColor="@color/c5"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="13dp"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="商品描述："
+                    android:textSize="18sp"
+                    android:textColor="@color/c7"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginLeft="10dp"/>
+
+                <TextView
+                    android:id="@+id/goods_desc_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="商品描述："
+                    android:textSize="14sp"
+                    android:textColor="@color/c6"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"/>
+
+
+
+            </LinearLayout>
+        </ScrollView>
+
+
+
+    </FrameLayout>
+
+
+</LinearLayout>

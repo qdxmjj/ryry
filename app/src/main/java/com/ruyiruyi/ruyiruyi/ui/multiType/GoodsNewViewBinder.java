@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
+import com.ruyiruyi.rylibrary.cell.DrawLineTextView;
 
 import me.drakeet.multitype.ItemViewProvider;
 import rx.functions.Action1;
@@ -42,6 +43,12 @@ public class GoodsNewViewBinder extends ItemViewProvider<GoodsNew, GoodsNewViewB
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final GoodsNew goodsNew) {
+        if (goodsNew.getDiscountFlag() == 0) {      //不折扣
+            holder.originalPriceText.setVisibility(View.GONE);
+        }else {
+            holder.originalPriceText.setText("￥" + goodsNew.getOriginalPrice());
+            holder.originalPriceText.setVisibility(View.VISIBLE);
+        }
 
         Glide.with(context).load(goodsNew.getGoodsImage()).into(holder.goodsImageView);
         holder.goodsNameView.setText(goodsNew.getGoodsName());
@@ -63,6 +70,15 @@ public class GoodsNewViewBinder extends ItemViewProvider<GoodsNew, GoodsNewViewB
             holder.goodspCountView.setVisibility(View.VISIBLE);
             holder.cutView.setVisibility(View.VISIBLE);
         }
+
+        //点击查看商品详情
+        RxViewAction.clickNoDouble(holder.goodsImageView)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        listener.onGoodsImageClickListener(goodsNew.getGoodsId());
+                    }
+                });
 
         RxViewAction.clickNoDouble(holder.addView)
                 .subscribe(new Action1<Void>() {
@@ -99,6 +115,7 @@ public class GoodsNewViewBinder extends ItemViewProvider<GoodsNew, GoodsNewViewB
         private final TextView serviceDescView;
         private final TextView goodspPriceView;
         private final TextView goodspCountView;
+        private final DrawLineTextView originalPriceText;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -110,10 +127,12 @@ public class GoodsNewViewBinder extends ItemViewProvider<GoodsNew, GoodsNewViewB
             serviceDescView = ((TextView) itemView.findViewById(R.id.goods_service_desc));
             goodspPriceView = ((TextView) itemView.findViewById(R.id.goods_price_text));
             goodspCountView = ((TextView) itemView.findViewById(R.id.count_view));
+            originalPriceText = ((DrawLineTextView) itemView.findViewById(R.id.original_price_text));
         }
     }
 
     public interface OnGoodsChangeClick{
         void onGoodsChangeClickListener(int goodsId,int currentGoodsAmount,int classId);
+        void onGoodsImageClickListener(int goodsId );
     }
 }

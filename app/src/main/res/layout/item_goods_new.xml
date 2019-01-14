@@ -14,6 +14,7 @@
             android:id="@+id/goods_images"
             android:layout_width="90dp"
             android:layout_height="90dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher"/>
         <FrameLayout
             android:layout_width="match_parent"
@@ -32,28 +33,36 @@
                     android:singleLine="true"
                     android:enabled="true"
                     android:textColor="@color/c7"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="此处是商品名此处是商品名此处是商品名此处是商品名此处是商品名"/>
                 <TextView
                     android:id="@+id/goods_kucui_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13sp"
-                    android:layout_marginTop="5dp"/>
+                    android:layout_marginTop="3dp"/>
 
                 <TextView
                     android:id="@+id/goods_service_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13sp"
-                    android:layout_marginTop="5dp"/>
+                    android:layout_marginTop="3dp"/>
+                <com.ruyiruyi.rylibrary.cell.DrawLineTextView
+                    android:id="@+id/original_price_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/c5"
+                    android:layout_marginTop="3dp"
+                    />
                 <TextView
                     android:id="@+id/goods_price_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="￥1000"
                     android:textSize="15sp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="3dp"
                     android:textColor="@color/c19"/>
             </LinearLayout>
 

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <TextView
+            android:id="@+id/order_no_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="订单编号：123456789" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/c1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp">
+        <ImageView
+            android:id="@+id/goods_image_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_launcher"/>
+
+        <LinearLayout
+            android:layout_width="105dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="right"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="10dp">
+            <com.ruyiruyi.rylibrary.cell.DrawLineTextView
+                android:id="@+id/goods_price_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥130"
+                android:layout_gravity="right"
+                android:textColor="@color/c6"
+                android:textSize="13sp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_integral_icon"/>
+                <TextView
+                    android:id="@+id/goods_integral_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="500000"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/theme_primary"
+                    android:textSize="15sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="积分"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/c6"
+                    android:textSize="15sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="140dp"
+            android:layout_marginRight="125dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/goods_name_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="品牌机油"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColor="@color/c7"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/goods_desc_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="如驿如意指定合作门店使用"
+                android:textSize="13sp"
+                android:textColor="@color/c6"
+                android:layout_marginTop="5dp"
+                />
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/c1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_time" />
+
+            <TextView
+                android:id="@+id/order_time_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="2018-09-12 18:33"
+                android:textSize="14sp" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/order_type_view"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="已完成"
+            android:textSize="15sp"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/theme_primary"
+            android:background="@drawable/bg_text" />
+
+        <TextView
+            android:id="@+id/get_wuliu_view"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="查看物流"
+            android:textSize="15sp"
+            android:layout_gravity="right"
+            android:layout_marginRight="100dp"
+            android:textColor="@color/c6"
+            android:background="@drawable/bg_text_hui" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/c1"/>
+
+</LinearLayout>

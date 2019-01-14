@@ -6,28 +6,7 @@
     android:background="#ffffff">
 
 
-    <FrameLayout
-        android:id="@+id/action_bar_view"
-        android:layout_width="match_parent"
-        android:layout_height="60dp" >
-        <ImageView
-            android:id="@+id/back_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="积分商城"
-            android:textSize="16sp"
-            android:textColor="#ffffff"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            />
-    </FrameLayout>
+
 
     <com.ruyiruyi.rylibrary.cell.GradationScrollView
         android:id="@+id/scrollview"
@@ -212,6 +191,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp"
                         android:text="已登录"
+                        android:visibility="gone"
                         android:textColor="@color/theme_primary" />
 
                     <LinearLayout
@@ -266,6 +246,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp"
                         android:text="去消费"
+                        android:visibility="gone"
                         android:textColor="@color/theme_primary" />
 
                     <LinearLayout
@@ -308,20 +289,6 @@
                         android:layout_height="30dp"
                         android:src="@drawable/ic_yaoqing" />
 
-                    <TextView
-                        android:id="@+id/yaoqing_button"
-                        android:layout_width="65dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:background="@drawable/tag_button_cheng"
-                        android:gravity="center"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="5dp"
-                        android:text="去邀请"
-                        android:textColor="@color/theme_primary" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -347,6 +314,21 @@
                             android:textSize="13sp" />
                     </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/yaoqing_button"
+                        android:layout_width="65dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:background="@drawable/tag_button_cheng"
+                        android:gravity="center"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:text="去邀请"
+                        android:visibility="gone"
+                        android:textColor="@color/theme_primary" />
+
 
                 </FrameLayout>
 
@@ -354,6 +336,43 @@
 
         </LinearLayout>
     </com.ruyiruyi.rylibrary.cell.GradationScrollView>
+
+    <FrameLayout
+        android:id="@+id/action_bar_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" >
+        <ImageView
+            android:id="@+id/back_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="积分商城"
+            android:textSize="16sp"
+            android:textColor="#ffffff"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/duihuan_jilu_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="兑换记录"
+            android:textSize="14sp"
+            android:textColor="#ffffff"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center|right"
+            android:layout_marginRight="10dp"
+            />
+
+
+    </FrameLayout>
 
 
 </FrameLayout>

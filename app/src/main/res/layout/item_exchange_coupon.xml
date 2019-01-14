@@ -8,34 +8,30 @@
     android:layout_marginTop="10dp"
     android:background="@drawable/zaishou">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="￥300"
-        android:textColor="@color/c19"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="20dp"
-        android:textSize="25sp"/>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center">
         <TextView
+            android:id="@+id/coupon_name_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="精致洗车券"
             android:textSize="17sp"
             android:textColor="@color/c7"/>
+
         <TextView
+            android:id="@+id/coupon_jifen_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:text="30000积分"
             android:textColor="@color/c21"
-            android:layout_marginTop="3dp"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
+
         <TextView
+            android:id="@+id/coupon_kucun_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="库存300件"
@@ -45,6 +41,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/duihuan_coupnt_view"
         android:layout_width="65dp"
         android:layout_height="35dp"
         android:text="兑换"
@@ -54,5 +51,15 @@
         android:background="@drawable/bg_button"
         android:layout_gravity="right|center_vertical"
         android:layout_marginRight="20dp"/>
+
+    <TextView
+        android:id="@+id/coupon_price_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:text="￥300"
+        android:textColor="@color/c19"
+        android:textSize="22sp" />
 
 </FrameLayout>
