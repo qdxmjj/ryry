@@ -91,7 +91,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         goodslist = ((List<GoodsNew>) bundle.getSerializable("GOODSLIST"));
-        allprice = bundle.getDouble("ALLPRICE");
+        allprice =  (double)Math.round(bundle.getDouble("ALLPRICE")*100)/100;
         storeid = bundle.getInt("STOREID");
         storename = bundle.getString("STORENAME");
         goodsInfoList = new ArrayList<>();
@@ -352,7 +352,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
     private void initCouponView() {
         if (couponType == 2){       //现金券
             Double couponPrice = Double.parseDouble(goodsName);
-            currentPrice = allprice - couponPrice;
+            currentPrice = (double)Math.round((allprice - couponPrice)*100)/100;
             if (currentPrice < 0.00){
                 currentPrice = 0.00;
             }
@@ -363,12 +363,13 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                     price = Double.parseDouble(goodslist.get(i).getGoodsPrice());
                 }
             }
-            currentPrice = allprice - price;
+            currentPrice = (double)Math.round((allprice - price )*100)/100;
             if (currentPrice < 0.00){
                 currentPrice = 0.00;
             }
         }else if (couponType == 3){     //满减券
-            currentPrice = allprice - Double.parseDouble(moneyMinus);
+           //(double)Math.round(( )*100)/100;
+            currentPrice = (double)Math.round((allprice - Double.parseDouble(moneyMinus))*100)/100;
             if (currentPrice < 0.00){
                 currentPrice = 0.00;
             }
@@ -379,7 +380,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                     price = Double.parseDouble(goodslist.get(i).getGoodsPrice());
                 }
             }
-            currentPrice = allprice - price + Double.parseDouble(needPay);
+            currentPrice =(double)Math.round((allprice - price + Double.parseDouble(needPay))*100)/100;
             if (currentPrice < 0.00){
                 currentPrice = 0.00;
             }
@@ -393,7 +394,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                     }
                 }
             }
-            currentPrice = allprice - price + Double.parseDouble(needPay);
+            currentPrice = (double)Math.round((allprice - price + Double.parseDouble(needPay))*100)/100;
             if (currentPrice < 0.00){
                 currentPrice = 0.00;
             }

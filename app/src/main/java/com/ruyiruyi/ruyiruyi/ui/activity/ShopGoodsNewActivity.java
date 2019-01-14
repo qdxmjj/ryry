@@ -1,6 +1,8 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -8,8 +10,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +40,7 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.LeftViewBinder;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
+import com.ruyiruyi.rylibrary.cell.DrawLineTextView;
 import com.ruyiruyi.rylibrary.cell.flowlayout.FlowLayout;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagAdapter;
 import com.ruyiruyi.rylibrary.cell.flowlayout.TagFlowLayout;
@@ -130,6 +136,18 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
     private double jingdu;
     private double weidu;
     public String currentCity = "选择城市";
+    private View goodsInflate;
+    private Dialog goodsDialog;
+    private ImageView goodsImageDialog;
+    private TextView goodsNameDialog;
+    private TextView goodsPriceDialog;
+    private DrawLineTextView goodsOriginalDialog;
+    private TextView goodsDescDialog;
+    private ImageView cutDialog;
+    private TextView countDialog;
+    private ImageView addDialog;
+    private int currentDialogGoodsId;
+    private int currentDialogGoodsClassId;
 
 
     @Override
@@ -320,6 +338,9 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                             String imgUrl = object.getString("imgUrl");
                             String name = object.getString("name");
                             String price = object.getString("price");
+                            int discountFlag = object.getInt("discountFlag");
+                            String originalPrice = object.getString("originalPrice");
+                            String stockDesc = object.getString("stockDesc");
                             int system = 2;
                             String serviceDesc = "";
                             try {
@@ -328,8 +349,7 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                             }catch (Exception e){
 
                             }
-
-                            GoodsNew goodsNew = new GoodsNew(id, imgUrl, name, price, amount, 0, serviceId, serviceTypeId,system,serviceDesc);
+                            GoodsNew goodsNew = new GoodsNew(id, imgUrl, name, price, amount, 0, serviceId, serviceTypeId,system,serviceDesc,discountFlag,originalPrice,stockDesc);
                             goodsNewList.add(goodsNew);
                         }
                         Log.e(TAG, "onSuccess: ----------------------");
@@ -638,6 +658,7 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
         azgzCountText = (TextView) findViewById(R.id.azgz_count_text);
         ltfwCountText = (TextView) findViewById(R.id.ltfw_count_text);
         goodsBuyButton = (TextView) findViewById(R.id.goods_buy_button);
+
         shopLayout = (LinearLayout) findViewById(R.id.shop_item_layout);
         initBottomView();
 
@@ -661,14 +682,81 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
 
         //购物车的listView
         goodsCarListView = (RecyclerView) findViewById(R.id.goods_car_listview);
-        LinearLayoutManager goodsCarlinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        final LinearLayoutManager goodsCarlinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         goodsCarListView.setLayoutManager(goodsCarlinearLayoutManager);
         goodsCarAdapter = new MultiTypeAdapter(goodsCarItems);
         goodsCarRegister();
         goodsCarListView.setAdapter(goodsCarAdapter);
         assertHasTheSameAdapter(goodsCarListView, goodsCarAdapter);
 
+        //查看商品详情dialog
+        goodsDialog = new Dialog(this, R.style.ActionSheetDialogStyle);
+        goodsInflate = LayoutInflater.from(this).inflate(R.layout.dialog_goods,null);
+        goodsInflate.setMinimumWidth(10000);
+        goodsImageDialog = ((ImageView) goodsInflate.findViewById(R.id.goods_image_dialog));
+        goodsNameDialog = ((TextView) goodsInflate.findViewById(R.id.goods_name_dialog));
+        goodsPriceDialog = ((TextView) goodsInflate.findViewById(R.id.goods_price_dialog));
+        goodsOriginalDialog = ((DrawLineTextView) goodsInflate.findViewById(R.id.goods_original_dialog));
+        goodsDescDialog = ((TextView) goodsInflate.findViewById(R.id.goods_desc_dialog));
+        cutDialog = ((ImageView) goodsInflate.findViewById(R.id.cut_dialog));
+        countDialog = ((TextView) goodsInflate.findViewById(R.id.count_dialog));
+        addDialog = ((ImageView) goodsInflate.findViewById(R.id.add_dialog));
+        goodsDialog.setContentView(goodsInflate);
+        Window goodsWindow = goodsDialog.getWindow();
+        goodsWindow.setGravity(Gravity.BOTTOM);
+        WindowManager.LayoutParams goodsLp = goodsWindow.getAttributes();
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        int height = wm.getDefaultDisplay().getHeight();
+        goodsLp.height = (int) (height * 0.8);
+        goodsWindow.setAttributes(goodsLp);
+        goodsDialog.setCanceledOnTouchOutside(true);
+        //商品数量减操作
+        RxViewAction.clickNoDouble(cutDialog)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        int currentGoodsCount = 0;
+                        int goodsClassId = 0;
+                        for (int i = 0; i < goodsNewList.size(); i++) {
+                            if (goodsNewList.get(i).getGoodsId() == currentDialogGoodsId) {
+                                currentGoodsCount = goodsNewList.get(i).getCurrentGoodsAmount();
+                                goodsClassId = goodsNewList.get(i).getGoodsClassId();
+                            }
+                        }
+                        currentGoodsCount = currentGoodsCount - 1;
+                        if (currentGoodsCount == 0){
+                            cutDialog.setVisibility(View.GONE);
+                            countDialog.setVisibility(View.GONE);
+                        }else {
+                            cutDialog.setVisibility(View.VISIBLE);
+                            countDialog.setVisibility(View.VISIBLE);
+                            countDialog.setText(currentGoodsCount+"");
+                        }
 
+                        initGoodsCountChange(currentDialogGoodsId,currentGoodsCount,goodsClassId);
+                    }
+                });
+
+        //商品数量加操作
+        RxViewAction.clickNoDouble(addDialog)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        int currentGoodsCount = 0;
+                        int goodsClassId = 0;
+                        for (int i = 0; i < goodsNewList.size(); i++) {
+                            if (goodsNewList.get(i).getGoodsId() == currentDialogGoodsId) {
+                                currentGoodsCount = goodsNewList.get(i).getCurrentGoodsAmount();
+                                goodsClassId = goodsNewList.get(i).getGoodsClassId();
+                            }
+                        }
+                        currentGoodsCount = currentGoodsCount + 1;
+                        cutDialog.setVisibility(View.VISIBLE);
+                        countDialog.setVisibility(View.VISIBLE);
+                        countDialog.setText(currentGoodsCount+"");
+                        initGoodsCountChange(currentDialogGoodsId,currentGoodsCount,goodsClassId);
+                    }
+                });
 
 
         //店铺点击
@@ -1013,6 +1101,7 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
                     mrqxClassList.get(i).setCheck(true);
                 }else {
                     mrqxClassList.get(i).setCheck(false);
+
                 }
             }
         }else if(currentBigType == 4){
@@ -1046,6 +1135,17 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
     public void onGoodsChangeClickListener(int goodsId, int currentGoodsAmount,int goodsClassId) {
         Log.e(TAG, "onGoodsChangeClickListener: " + currentGoodsAmount);
         Log.e(TAG, "onGoodsChangeClickListener: " + goodsId);
+        initGoodsCountChange(goodsId,currentGoodsAmount,goodsClassId);
+
+    }
+
+    /**
+     * 商品数量改变方法
+     * @param goodsId
+     * @param currentGoodsAmount
+     * @param goodsClassId
+     */
+    private void initGoodsCountChange(int goodsId, int currentGoodsAmount, int goodsClassId) {
         for (int i = 0; i < goodsNewList.size(); i++) {
             if (goodsNewList.get(i).getGoodsId() == goodsId) {
                 Log.e(TAG, "onGoodsChangeClickListener: ***");
@@ -1103,11 +1203,51 @@ public class ShopGoodsNewActivity extends RyBaseActivity implements LeftViewBind
         }
         initClassData();
 
-       // initClassCount(goodsClassId);
+        // initClassCount(goodsClassId);
         //initClassData();
         initBottomView();
         initBigClassCount();
     }
+
+    /**
+     * 商品详情点击监听
+     * @param goodsId
+     */
+    @Override
+    public void onGoodsImageClickListener(int goodsId ) {
+        currentDialogGoodsId = goodsId;
+        GoodsNew goodsNew = null;
+        for (int i = 0; i < goodsNewList.size(); i++) {
+            if (goodsNewList.get(i).getGoodsId() == currentDialogGoodsId) {
+                 goodsNew = goodsNewList.get(i);
+            }
+        }
+        Glide.with(this).load(goodsNew.getGoodsImage()).into(goodsImageDialog);
+        goodsNameDialog.setText(goodsNew.getGoodsName());
+        goodsPriceDialog.setText("￥" + goodsNew.getGoodsPrice());
+        if (goodsNew.getDiscountFlag() == 0) {      //不折扣
+            goodsOriginalDialog.setVisibility(View.GONE);
+        }else {
+            goodsOriginalDialog.setVisibility(View.VISIBLE);
+            goodsOriginalDialog.setText("￥" + goodsNew.getOriginalPrice());
+        }
+        if (goodsNew.getStockDesc().isEmpty()) {
+            goodsDescDialog.setText("暂无商品描述");
+        }else {
+            goodsDescDialog.setText(goodsNew.getStockDesc());
+        }
+        if (goodsNew.getCurrentGoodsAmount() == 0) {
+            cutDialog.setVisibility(View.GONE);
+            countDialog.setVisibility(View.GONE);
+        }else {
+            cutDialog.setVisibility(View.VISIBLE);
+            countDialog.setVisibility(View.VISIBLE);
+            countDialog.setText(goodsNew.getCurrentGoodsAmount()+"");
+        }
+        goodsDialog.show();
+    }
+
+
 
 
     /**

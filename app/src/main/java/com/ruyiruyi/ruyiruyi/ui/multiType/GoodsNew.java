@@ -13,6 +13,9 @@ public class GoodsNew implements Serializable {
     public int serviceTypeId;
     public int system;
     public String serviceDesc;
+    public int discountFlag;    //(是否折扣商品 0 不是 1 是)
+    public String originalPrice;    //(原价)
+    public String stockDesc;    //(商品描述)
 
     public GoodsNew(int goodsId, String goodsImage, String goodsName, String goodsPrice, int goodsAmount, int currentGoodsAmount, int goodsClassId, int serviceTypeId) {
         this.goodsId = goodsId;
@@ -25,6 +28,22 @@ public class GoodsNew implements Serializable {
         this.serviceTypeId = serviceTypeId;
         this.system = 2;
         this.serviceDesc = "";
+    }
+
+    public GoodsNew(int goodsId, String goodsImage, String goodsName, String goodsPrice, int goodsAmount, int currentGoodsAmount, int goodsClassId, int serviceTypeId, int system, String serviceDesc, int discountFlag, String originalPrice, String stockDesc) {
+        this.goodsId = goodsId;
+        this.goodsImage = goodsImage;
+        this.goodsName = goodsName;
+        this.goodsPrice = goodsPrice;
+        this.goodsAmount = goodsAmount;
+        this.currentGoodsAmount = currentGoodsAmount;
+        this.goodsClassId = goodsClassId;
+        this.serviceTypeId = serviceTypeId;
+        this.system = system;
+        this.serviceDesc = serviceDesc;
+        this.discountFlag = discountFlag;
+        this.originalPrice = originalPrice;
+        this.stockDesc = stockDesc;
     }
 
     public GoodsNew(int goodsId, String goodsImage, String goodsName, String goodsPrice, int goodsAmount, int currentGoodsAmount, int goodsClassId, int serviceTypeId, int system) {
@@ -51,6 +70,30 @@ public class GoodsNew implements Serializable {
         this.serviceTypeId = serviceTypeId;
         this.system = system;
         this.serviceDesc = serviceDesc;
+    }
+
+    public int getDiscountFlag() {
+        return discountFlag;
+    }
+
+    public void setDiscountFlag(int discountFlag) {
+        this.discountFlag = discountFlag;
+    }
+
+    public String getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(String originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+
+    public String getStockDesc() {
+        return stockDesc;
+    }
+
+    public void setStockDesc(String stockDesc) {
+        this.stockDesc = stockDesc;
     }
 
     public int getSystem() {

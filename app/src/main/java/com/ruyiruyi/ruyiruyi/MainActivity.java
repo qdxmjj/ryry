@@ -33,7 +33,9 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.BottomEventActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.IntegralShopActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseFragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsClassFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.HomeFragment;
@@ -111,6 +113,8 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
     private int forceUpate = 0;  // 1强制更新 0不强制更新
     private String updateContent;
     private List<AdInfo> advList;//首页弹窗广告
+    public List<String> quanList;
+    private int userId = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,6 +123,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(content, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         hotActivityList = new ArrayList<>();
+        quanList = new ArrayList<>();
 
         //信鸽绑定解绑账号置于onResume中
 
@@ -136,6 +141,9 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
 
         /*//版本更新 (修改至首页弹窗后检测)
         getVersion();*/
+
+        //签到功能
+        initSignData();
 
 
         //弹窗活动
@@ -209,6 +217,152 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         // initProvice();
 
 
+    }
+
+    /**
+     * 判断是否签到
+     */
+    private void getSignInfo() {
+        SharedPreferences sf = getSharedPreferences("data", MODE_PRIVATE);//判断是否首页弹窗
+        boolean isShow = sf.getBoolean("isShow", true);
+        SharedPreferences.Editor editor = sf.edit();
+        if (isShow){
+            initSignData();
+        }
+    }
+
+    /**
+     * 获取签到信息
+     */
+    private void initSignData() {
+        User user = new DbConfig(this).getUser();
+
+        if (user!=null){
+            userId= user.getId();
+        }else {
+            return;
+        }
+
+/*        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId",userId);
+
+        } catch (JSONException e) {
+        }*/
+
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_JIFEN + "score/info");
+        params.addBodyParameter("userId",userId + "");
+
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token",token);
+        Log.e(TAG, "initSignData:---jifen-- " + params);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: ---" + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+
+
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        String signState = data.getString("signState");
+
+                        if (signState.equals("0")){
+                            goSign();
+                        }
+
+
+                    }else {
+                        String msg = jsonObject1.getString("msg");
+                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+
+    /**
+     * 去签到
+     */
+    private void goSign() {
+
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_JIFEN + "score/sign");
+        params.addBodyParameter("userId",userId + "");
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token",token);
+        Log.e(TAG, "goSign: ---jifen---" + params);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            private String addedScore;
+            private String continuousMonth;
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess:---jifen--- " +result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+
+                    if (status.equals("1")){
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        continuousMonth = data.getString("continuousMonth");
+                        addedScore = data.getString("addedScore");
+                        JSONArray couponList = data.getJSONArray("couponList");
+                        quanList.clear();
+                        if (couponList.length()>0){
+                            String couponName = couponList.getJSONObject(0).getString("couponName");
+
+                            Toast.makeText(MainActivity.this, "已连续签到" + continuousMonth + "次，本次签到获取" + addedScore +"积分，" + couponName, Toast.LENGTH_LONG).show();
+                        }else {
+                            Toast.makeText(MainActivity.this, "已连续签到" + continuousMonth + "次，本次签到获取" + addedScore +"积分", Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }else {
+                        String msg = jsonObject1.getString("msg");
+                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void judgeShowPop() {
