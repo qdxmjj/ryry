@@ -89,10 +89,9 @@ public class GoodsItemProvider extends ItemViewProvider<GoodsItemBean, GoodsItem
                 bundle.putString("amount", goodsItemBean.getAmount() + "");
                 bundle.putString("soldno", goodsItemBean.getSoldNo() + "");
                 bundle.putString("price", goodsItemBean.getPrice() + "");
-                /*bundle.putString("oldPrice", goodsItemBean.getOldPrice() + "");//TODO 特价
+                bundle.putString("oldPrice", goodsItemBean.getOldPrice() + "");//TODO 特价
                 bundle.putBoolean("isSpecialPrice", goodsItemBean.isSpecialPrice());//TODO 特价
                 bundle.putString("goodsInfo", goodsItemBean.getGoodsInfo());//TODO 商品描述
-                */
                 bundle.putString("imgurl", goodsItemBean.getImgUrl() + "");
                 Intent intent = new Intent(context, GoodsInfoReeditActivity.class);
                 intent.putExtras(bundle);

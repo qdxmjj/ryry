@@ -12,6 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <TextView
+        android:id="@+id/tv_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="3dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/c11"
+        android:textColor="@color/c7"
+        android:textSize="12sp"
+        android:paddingTop="3dp"
+        android:text="@string/putforward_waring"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

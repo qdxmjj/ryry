@@ -131,7 +131,7 @@
                         android:layout_marginTop="5dp"
                         android:background="@color/c12"
                         android:scaleType="fitXY"
-                        android:src="@drawable/ic_duiquan" />
+                        android:src="@drawable/ic_duiquan"/>
                 </LinearLayout>
             </LinearLayout>
 

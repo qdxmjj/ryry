@@ -3,19 +3,19 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBase1Activity;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ItemBottomProvider;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ItemNullProvider;
 import com.ruyiruyi.ruyiruyi.ui.multiType.PointsChange;
@@ -24,8 +24,8 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.bean.ItemBottomBean;
 import com.ruyiruyi.ruyiruyi.ui.multiType.bean.ItemNullBean;
 import com.ruyiruyi.ruyiruyi.ui.multiType.divider.PointsGridDivider;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
-import com.ruyiruyi.rylibrary.cell.ActionBar;
-import com.ruyiruyi.rylibrary.cell.GradationNoInterceptScrollView;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
+import com.ruyiruyi.rylibrary.cell.GradationScrollView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,19 +34,21 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import me.drakeet.multitype.MultiTypeAdapter;
+import rx.functions.Action1;
 
 import static me.drakeet.multitype.MultiTypeAsserts.assertAllRegistered;
 import static me.drakeet.multitype.MultiTypeAsserts.assertHasTheSameAdapter;
 
-public class PointsChangeActivity extends RyBaseActivity {
+public class PointsChangeActivity extends RyBase1Activity {
 
-    private ActionBar actionBar;
-    private GradationNoInterceptScrollView mScrollView;
+    private FrameLayout action_bar_view;
+    private TextView act_title;
+    private ImageView back_image_view;
+    private GradationScrollView mScrollView;
     private ImageView iv_background;
     private static final String TAG = PointsChangeActivity.class.getSimpleName();
     private RecyclerView mRecyclerView;
@@ -58,45 +60,35 @@ public class PointsChangeActivity extends RyBaseActivity {
     private float height;
     private float height2;
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0:
-                    //加载最新数据并更新adapter数据
-                    myDownRefreshByServer();
-                    mSwipeLayout.setRefreshing(false);
-                    break;
-            }
-        }
-    };
     private int mPoints;
+
+    private LinearLayoutManager manager;
+    private LinearLayoutManager errorManager;
+
+    private TextView points;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_points_change);
 
-        actionBar = (ActionBar) findViewById(R.id.acbar);
-        actionBar.setTitle("积分兑换");
-        actionBar.setBackground(0);
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+        action_bar_view = findViewById(R.id.action_bar_view);
+        act_title = findViewById(R.id.act_title);
+        back_image_view = findViewById(R.id.back_image_view);
+        act_title.setText("积分兑换");
+        RxViewAction.clickNoDouble(back_image_view).subscribe(new Action1<Void>() {
             @Override
-            public void onItemClick(int var1) {
-                switch ((var1)) {
-                    case -1:
-                        onBackPressed();
-                        break;
-                }
+            public void call(Void aVoid) {
+                finish();
             }
         });
 
         Intent intent = getIntent();
         mPoints = intent.getIntExtra("total_points", 0);
-        Log.e(TAG, "onCreate: omg" + mPoints);
 
         mScrollView = findViewById(R.id.scrollView);
         iv_background = findViewById(R.id.iv_background);
+
 
         initHeight();
         initView();
@@ -114,51 +106,33 @@ public class PointsChangeActivity extends RyBaseActivity {
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                actionBar.getViewTreeObserver().removeGlobalOnLayoutListener(
+                action_bar_view.getViewTreeObserver().removeGlobalOnLayoutListener(
                         this);
                 height = iv_background.getHeight();
-                Log.e(TAG, "onScrollChanged: height1 = " + height);
             }
         });
-        ViewTreeObserver vto2 = actionBar.getViewTreeObserver();
+        ViewTreeObserver vto2 = action_bar_view.getViewTreeObserver();
         vto2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                actionBar.getViewTreeObserver().removeGlobalOnLayoutListener(
+                action_bar_view.getViewTreeObserver().removeGlobalOnLayoutListener(
                         this);
-                height2 = actionBar.getHeight();
-                Log.e(TAG, "onScrollChanged: height2 = " + height2);
+                height2 = action_bar_view.getHeight();
             }
         });
         //为自定义ScrollView设置滑动距离监听
-        mScrollView.setScrollViewListener(new GradationNoInterceptScrollView.ScrollViewListener() {
+        mScrollView.setScrollViewListener(new GradationScrollView.ScrollViewListener() {
             @Override
-            public void onScrollChanged(GradationNoInterceptScrollView scrollView, int x, int y, int oldx, int oldy) {
-                Log.e(TAG, "onScrollChanged: x = " + x);
-                Log.e(TAG, "onScrollChanged: y = " + y);
-                Log.e(TAG, "onScrollChanged: oldx = " + oldx);
-                Log.e(TAG, "onScrollChanged: oldy = " + oldy);
+            public void onScrollChanged(GradationScrollView scrollView, int x, int y, int oldx, int oldy) {
                 if (y <= 0) {
-                    actionBar.setBackgroundColor(Color.argb((int) 0, 144, 151, 166));
-
-                    //下拉刷新 //TODO ScrollView滑动方向
-                    mSwipeLayout.setRefreshing(true);
-                    mHandler.sendEmptyMessageDelayed(0, 1000);
+                    action_bar_view.setBackgroundColor(Color.argb((int) 0, 144, 151, 166));
                 } else if (y >= (height - height2)) {
-                    mRecyclerView.setNestedScrollingEnabled(true);
-                    actionBar.setBackgroundColor(Color.argb((int) 255, 255, 102, 35));
+                    action_bar_view.setBackgroundColor(Color.argb((int) 255, 255, 102, 35));
                 } else {
-                    mRecyclerView.setNestedScrollingEnabled(false);
 
-                    NumberFormat format = NumberFormat.getInstance();
-                    format.setMaximumFractionDigits(2);//精确到小数点后两位
-                    String colorCount = format.format((float) y / (height - height2));
-                    int alpha = (int) (Float.parseFloat(colorCount) * 255);
-
-                    Log.e(TAG, "onScrollChanged: colorCount = " + colorCount);
-                    Log.e(TAG, "onScrollChanged: (height - height2) = " + (height - height2));
-                    Log.e(TAG, "onScrollChanged: alpha = " + alpha);
-                    actionBar.setBackgroundColor(Color.argb(alpha, 255, 102, 35));
+                    float scale = (float) y / (height - height2);
+                    float alpha = (255 * scale);
+                    action_bar_view.setBackgroundColor(Color.argb((int) alpha, 255, 102, 35));
                 }
             }
         });
@@ -229,6 +203,8 @@ public class PointsChangeActivity extends RyBaseActivity {
 //                    hideDialogProgress(startDialog);
                     isFirstLoad = false;
                 }
+
+                mSwipeLayout.setRefreshing(false);
             }
         });
     }
@@ -277,8 +253,10 @@ public class PointsChangeActivity extends RyBaseActivity {
     private void updataData() {
         items.clear();
         if (orderBeanList == null || orderBeanList.size() == 0) {
+            mRecyclerView.setLayoutManager(errorManager);
             items.add(new ItemNullBean("暂无数据"));
         } else {
+            mRecyclerView.setLayoutManager(manager);
             for (int i = 0; i < orderBeanList.size(); i++) {
                 items.add(orderBeanList.get(i));
             }
@@ -290,6 +268,7 @@ public class PointsChangeActivity extends RyBaseActivity {
 
     private void updataNetError() {
         items.clear();
+        mRecyclerView.setLayoutManager(errorManager);
         items.add(new ItemNullBean(R.drawable.ic_net_error));
         assertAllRegistered(multiTypeAdapter, items);
         multiTypeAdapter.notifyDataSetChanged();
@@ -311,7 +290,7 @@ public class PointsChangeActivity extends RyBaseActivity {
 
                 myDownRefreshByServer();
 
-                mSwipeLayout.setRefreshing(false);
+
             }
         });
     }
@@ -324,17 +303,13 @@ public class PointsChangeActivity extends RyBaseActivity {
     private void initView() {
         mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         mRecyclerView = (RecyclerView) findViewById(R.id.rlv);
-        LinearLayoutManager manager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false) {
+        manager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false) {
             @Override
             public void onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state, int widthSpec, int heightSpec) {
                 super.onMeasure(recycler, state, widthSpec, heightSpec);
             }
         };
-        //解决数据加载不完的问题
-        mRecyclerView.setNestedScrollingEnabled(false);
-        mRecyclerView.setHasFixedSize(true);
-        //解决数据加载完成后, 没有停留在顶部的问题
-        mRecyclerView.setFocusable(false);
+        errorManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
 
         mRecyclerView.setLayoutManager(manager);
 
@@ -350,5 +325,8 @@ public class PointsChangeActivity extends RyBaseActivity {
         assertHasTheSameAdapter(mRecyclerView, multiTypeAdapter);
 
         orderBeanList = new ArrayList<>();
+        //设置总积分
+        points = findViewById(R.id.points);
+        points.setText(mPoints + "");
     }
 }

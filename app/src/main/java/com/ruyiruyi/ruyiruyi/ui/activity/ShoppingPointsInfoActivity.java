@@ -2,29 +2,37 @@ package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ruyiruyi.ruyiruyi.R;
-import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseFragmentActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBase1FragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.adapter.MainFragmentPagerAdapter;
 import com.ruyiruyi.ruyiruyi.ui.fragment.ShoppingPointsInfoFragment;
-import com.ruyiruyi.rylibrary.cell.ActionBar;
+import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.functions.Action1;
 
-public class ShoppingPointsInfoActivity extends RyBaseFragmentActivity {
-    private ActionBar actionBar;
+
+public class ShoppingPointsInfoActivity extends RyBase1FragmentActivity {
+    private FrameLayout action_bar_view;
+    private TextView act_title;
+    private ImageView back_image_view;
     private ImageView iv_background;
     private TabLayout mTab;
     private ViewPager mVPager;
@@ -37,31 +45,51 @@ public class ShoppingPointsInfoActivity extends RyBaseFragmentActivity {
     private int total_points = 0;
     private String TAG = ShoppingPointsInfoActivity.class.getSimpleName();
     private int height;
+    private int height2;
+
+    private Toolbar toolbar;
+    private AppBarLayout appbar;
+
+    private AppBarLayout.OnOffsetChangedListener mOnOffsetChangedListener = new AppBarLayout.OnOffsetChangedListener() {
+        @Override
+        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            Log.e(TAG, "onOffsetChanged: verticalOffset = " + verticalOffset);
+            int abs = Math.abs(verticalOffset);
+            float cal = (float) abs / (height - height2);
+            float alpha = cal * 255;
+            if (abs <= height - height2) {
+                action_bar_view.setBackgroundColor(Color.argb((int) alpha, 255, 102, 35));
+                toolbar.setVisibility(View.GONE);
+            } else {
+                action_bar_view.setBackgroundColor(Color.argb(255, 255, 102, 35));
+                toolbar.setVisibility(View.VISIBLE);//占位作用
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_points_info);
 
-        actionBar = (ActionBar) findViewById(R.id.acbar);
-        actionBar.setTitle("积分明细");
-        actionBar.setBackground(0);
-        /*actionBar.setRightView("积分兑换");*/
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+        action_bar_view = findViewById(R.id.action_bar_view);
+        act_title = findViewById(R.id.act_title);
+        back_image_view = findViewById(R.id.back_image_view);
+        act_title.setText("积分明细");
+        RxViewAction.clickNoDouble(back_image_view).subscribe(new Action1<Void>() {
             @Override
-            public void onItemClick(int var1) {
-                switch ((var1)) {
-                    case -1:
-                        onBackPressed();
-                        break;
-                    /*case -3:
-                        startActivity(new Intent(ShoppingPointsInfoActivity.this, PointsChangeActivity.class));
-                        break;*/
-                }
+            public void call(Void aVoid) {
+                finish();
             }
         });
+
         main = findViewById(R.id.main);
+        toolbar = findViewById(R.id.toolbar);
+        appbar = findViewById(R.id.appbar);
+        appbar.addOnOffsetChangedListener(mOnOffsetChangedListener);
         iv_background = findViewById(R.id.iv_background);
+
         Intent intent = getIntent();
         total_points = intent.getIntExtra("total_points", 0);
 
@@ -85,41 +113,17 @@ public class ShoppingPointsInfoActivity extends RyBaseFragmentActivity {
                 Log.e(TAG, "onScrollChanged: height = " + height);
             }
         });
-        //为自定义CoordinatorLayout设置滑动距离监听
-       /* main.setScrollViewListener(new GradationNoInterceptCoordinatorLayout.ScrollViewListener() {
+        ViewTreeObserver vto2 = action_bar_view.getViewTreeObserver();
+        vto2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onScrollChanged(GradationNoInterceptCoordinatorLayout scrollView, int x, int y, int oldx, int oldy) {
-                Log.e(TAG, "onScrollChanged: x = " + x);
-                Log.e(TAG, "onScrollChanged: y = " + y);
-                Log.e(TAG, "onScrollChanged: oldx = " + oldx);
-                Log.e(TAG, "onScrollChanged: oldy = " + oldy);
-                if (y <= 0) {
-                    mTab.setBackgroundColor(Color.argb((int) 0, 144, 151, 166));
-                } else if (oldy > height && y > height) {
-                    mTab.setBackgroundColor(Color.argb((int) 255, 255, 102, 35));
-                } else {
-                    float colorCount = (y + 100) / height;
-                    mTab.setBackgroundColor(Color.argb((int) colorCount * 255, 255, 102, 35));
-                }
+            public void onGlobalLayout() {
+                mTab.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+                height2 = action_bar_view.getHeight();
+                Log.e(TAG, "onScrollChanged: height2 = " + height2);
             }
-        });*/
-        /*main.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View view, int x, int y, int oldx, int oldy) {
-                Log.e(TAG, "onScrollChanged: x = " + x);
-                Log.e(TAG, "onScrollChanged: y = " + y);
-                Log.e(TAG, "onScrollChanged: oldx = " + oldx);
-                Log.e(TAG, "onScrollChanged: oldy = " + oldy);
-                if (y <= 0) {
-                    mTab.setBackgroundColor(Color.argb((int) 0, 144, 151, 166));
-                } else if (oldy > height && y > height) {
-                    mTab.setBackgroundColor(Color.argb((int) 255, 255, 102, 35));
-                } else {
-                    float colorCount = (y + 100) / height;
-                    mTab.setBackgroundColor(Color.argb((int) colorCount * 255, 255, 102, 35));
-                }
-            }
-        });*/
+        });
+
     }
 
     private void initData() {
@@ -162,8 +166,8 @@ public class ShoppingPointsInfoActivity extends RyBaseFragmentActivity {
 
     private List<Integer> getTabRes() {
         tabRes_list = new ArrayList<>();
-        tabRes_list.add(R.drawable.ic_no);
-        tabRes_list.add(R.drawable.ic_yes);
+        tabRes_list.add(R.drawable.ic_shouru);
+        tabRes_list.add(R.drawable.ic_zhichu);
         return tabRes_list;
     }
 

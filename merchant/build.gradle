@@ -34,9 +34,9 @@ android {
     }
     signingConfigs {
         config {
+            storeFile file('keystore.jks')
             keyAlias 'xiaomajiajiamerchant'
             keyPassword 'qdxmjj'
-            storeFile file('keystore.jks')
             storePassword 'qdxmjj'
             println("====== signingConfigs.config ======")
         }
@@ -61,9 +61,9 @@ android {
             abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'mips', 'arm64-v8a'//'x86_64'
         }
         manifestPlaceholders = [
-                JPUSH_PKGNAME : applicationId,
+                JPUSH_PKGNAME: applicationId,
                 JPUSH_APPKEY : "58b63697b0ef833709106bac", //JPush上注册的包名对应的appkey.
-                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
         ]
         multiDexEnabled true
 

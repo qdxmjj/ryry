@@ -340,6 +340,7 @@
 
         <activity android:name=".ui.activity.ExchangeCouponActivity" />
         <activity android:name=".ui.activity.base.RyBase1Activity" />
+        <activity android:name=".ui.activity.base.RyBase1FragmentActivity"/>
         <activity android:name=".ui.activity.ChangeOrderActivity" />
         <activity android:name=".ui.activity.WuLiuActivity"></activity>
         <activity

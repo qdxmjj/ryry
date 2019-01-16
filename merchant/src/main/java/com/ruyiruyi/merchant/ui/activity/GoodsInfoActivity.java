@@ -472,9 +472,13 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
                     object.put("serviceId", rightTypeId);
                     object.put("amount", mGoodsKucun.getText());
                     object.put("price", mGoodsPrice.getText());
-                    /*object.put("oldPrice", et_goods_oldprice.getText());//TODO 特价
-                    object.put("isSpecialPrice", isSpecialPrice);//TODO 特价
-                    object.put("goodsInfo", et_goods_info.getText());//TODO 商品描述*///TODO 特价
+                    if (isSpecialPrice) {
+                        object.put("originalPrice", et_goods_oldprice.getText());//TODO 特价
+                        object.put("discountFlag", "1");//  0 不是折扣商品 1 是折扣商品
+                    } else {
+                        object.put("discountFlag", "0");//  0 不是折扣商品 1 是折扣商品
+                    }
+                    object.put("stockDesc", et_goods_info.getText());//TODO 商品描述
                     object.put("status", currentSale);//2 下架  1 在售
                 } catch (JSONException e) {
                 }

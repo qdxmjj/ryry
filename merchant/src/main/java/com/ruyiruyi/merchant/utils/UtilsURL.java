@@ -9,6 +9,6 @@ public class UtilsURL {
     public static String REQUEST_URL_GONGLIN_FAHUO_TEST = "http://192.168.0.122:8030/";//龚林 测试 发货
     public static String REQUEST_URL_FAHUO_RELEASE = "http://180.76.243.205:10004/";// 发货正式
     public static String REQUEST_URL_FAHUO = REQUEST_URL_FAHUO_RELEASE;
-    public static final String REQUEST_URL = LOGIN_PASS_REQUEST_URL_WEB_SERVER_RELEASE;
+    public static final String REQUEST_URL = LOGIN_PASS_REQUEST_URL_BIRD_SERVER;
 
 }

@@ -7,4 +7,5 @@
     <string name="service_type_c">安装改装</string>
     <string name="service_type_d">轮胎服务</string>
     <string name="input_num_point">123456789.0</string>
+    <string name="putforward_waring">温馨提示:每月1号和15号下午4点之前审核提现，请大家注意提现时间，感谢您对如驿如意的信任以及配合!</string>
 </resources>

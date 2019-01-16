@@ -134,8 +134,6 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                 }
                 Intent intent = new Intent(IntegralShopActivity.this, PointsChangeActivity.class);
                 intent.putExtra("total_points", Integer.parseInt(totalScore));
-                Log.e(TAG, "call omg: totalScore = " + totalScore);
-                Log.e(TAG, "call omg: Integer.parseInt(totalScore) = " + Integer.parseInt(totalScore));
                 startActivity(intent);
             }
         });
@@ -213,7 +211,6 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getApplicationContext(), ExchangeCouponActivity.class));
                         Intent intent = new Intent(getApplicationContext(), ExchangeCouponActivity.class);
                         intent.putExtra("TOTAL_SCORE",totalScore);
                         startActivity(intent);

@@ -236,9 +236,9 @@ public class GoodsInfoReeditActivity extends MerchantBaseActivity {
         amount = bundle.getString("amount");
         soldno = bundle.getString("soldno");
         price = bundle.getString("price");
-        /*oldPrice = bundle.getString("oldPrice");//TODO 特价
+        oldPrice = bundle.getString("oldPrice");//TODO 特价
         isSpecialPrice = bundle.getBoolean("isSpecialPrice", false);//TODO 特价
-        goodsInfo = bundle.getString("goodsInfo");//TODO 商品描述*/
+        goodsInfo = bundle.getString("goodsInfo");//TODO 商品描述
         imgurl = bundle.getString("imgurl");
         Log.e(TAG, "onCreate:  imgurl = " + imgurl);
         storeId = new DbConfig(getApplicationContext()).getId() + "";
@@ -536,9 +536,13 @@ public class GoodsInfoReeditActivity extends MerchantBaseActivity {
                     object.put("serviceId", rightTypeId);
                     object.put("amount", mGoodsKucun.getText());
                     object.put("price", mGoodsPrice.getText());
-                    /*object.put("oldPrice", et_goods_oldprice.getText());//TODO 特价
-                    object.put("isSpecialPrice", isSpecialPrice);//TODO 特价
-                    object.put("goodsInfo", et_goods_info.getText());//TODO 商品描述*/
+                    if (isSpecialPrice) {
+                        object.put("originalPrice", et_goods_oldprice.getText());//TODO 特价
+                        object.put("discountFlag", "1");//  0 不是折扣商品 1 是折扣商品
+                    } else {
+                        object.put("discountFlag", "0");//  0 不是折扣商品 1 是折扣商品
+                    }
+                    object.put("stockDesc", et_goods_info.getText());//TODO 商品描述
                     object.put("status", currentSale);//2 下架  1 在售
                 } catch (JSONException e) {
                 }

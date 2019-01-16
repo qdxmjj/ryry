@@ -222,6 +222,9 @@ public class MyGoodsFragment extends BaseFragment {
                         itemBean.setStockTypeId(one.getInt("stockTypeId"));
                         itemBean.setStoreId(one.getInt("storeId"));
                         itemBean.setTime(one.getLong("time"));
+                        itemBean.setSpecialPrice(one.getInt("discountFlag") == 1 ? true : false);
+                        itemBean.setOldPrice(one.getDouble("originalPrice"));
+                        itemBean.setGoodsInfo(one.getString("stockDesc"));
 
                         itemBeanList.add(itemBean);
                     }
