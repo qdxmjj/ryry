@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,7 +72,6 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
     private TextView tv_tijiaosp;
     private TextView tv_jixuadd;
 
-    private TextView tv_line;
 
     private TextView mGoodsStatus;
     private Bitmap imgBitmap;
@@ -268,12 +266,6 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
                 /*showPicInputDialog();*/
                 //选择裁剪
                 CropImgUtil.choicePhoto(GoodsInfoActivity.this);
-            }
-        });
-        RxViewAction.clickNoDouble(mGoodsType).subscribe(new Action1<Void>() {
-            @Override
-            public void call(Void aVoid) {
-
             }
         });
 
@@ -854,9 +846,6 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
         mGoodsStatus = (TextView) findViewById(R.id.tv_goods_status);
         tv_tijiaosp = (TextView) findViewById(R.id.tv_tijiaosp);
         tv_jixuadd = (TextView) findViewById(R.id.tv_jixuadd);
-
-        tv_line = (TextView) findViewById(R.id.tv_line);
-        tv_line.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);//加横线
 
         ll_oldprice = findViewById(R.id.ll_oldprice);
         switch_spc = findViewById(R.id.switch_spc);

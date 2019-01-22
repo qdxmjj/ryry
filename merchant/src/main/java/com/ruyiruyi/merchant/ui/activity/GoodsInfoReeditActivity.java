@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,7 +71,6 @@ public class GoodsInfoReeditActivity extends MerchantBaseActivity {
     private TextView mGoodsType;
     private EditText mGoodsKucun;
     private TextView tv_tijiaosp;
-    private TextView tv_line;
     private TextView tv_jixuadd;
     private TextView mGoodsStatus;
     private Bitmap imgBitmap;
@@ -948,9 +946,6 @@ public class GoodsInfoReeditActivity extends MerchantBaseActivity {
         mGoodsKucun = (EditText) findViewById(R.id.et_goods_kucun);
         mGoodsStatus = (TextView) findViewById(R.id.tv_goods_status);
         tv_tijiaosp = (TextView) findViewById(R.id.tv_tijiaosp);
-
-        tv_line = (TextView) findViewById(R.id.tv_line);
-        tv_line.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);//加横线
 
         ll_oldprice = findViewById(R.id.ll_oldprice);
         switch_spc = findViewById(R.id.switch_spc);
