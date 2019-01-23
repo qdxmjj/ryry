@@ -50,6 +50,7 @@ public class MyAddressActivity extends RyBaseActivity implements MyAddressViewBi
     private List<Object> items = new ArrayList<>();
     private List<MyAddress> orderBeanList;
     private boolean canChoose;
+    private int addressId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class MyAddressActivity extends RyBaseActivity implements MyAddressViewBi
 
         Intent intent = getIntent();
         canChoose = intent.getBooleanExtra("canChoose", false);
+        addressId = intent.getIntExtra("addressId", -1);
 
         initView();
         initData();
@@ -204,11 +206,21 @@ public class MyAddressActivity extends RyBaseActivity implements MyAddressViewBi
 
     @Override
     public void gotoRefresh(int id) {
-        showDeleteDialog(id);
+        if (id == addressId) {
+            Toast.makeText(this, "您不可删除当前订单所选地址!", Toast.LENGTH_SHORT).show();
+        } else {
+            showDeleteDialog(id);
+        }
     }
 
+    /*
+    * 条目选择
+    * */
     @Override
     public void gotoChoose(MyAddress myAddress) {
+        if (!canChoose) {//不可选择时返回
+            return;
+        }
         Intent data = new Intent();
         data.putExtra("id", myAddress.getId());
         data.putExtra("name", myAddress.getName());

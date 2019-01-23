@@ -210,6 +210,7 @@ public class PointsChangeOrderConfirmActivity extends RyBaseActivity {
             public void call(Void aVoid) {
                 Intent intent = new Intent(PointsChangeOrderConfirmActivity.this, MyAddressActivity.class);
                 intent.putExtra("canChoose", true);
+                intent.putExtra("addressId", addressId);
                 startActivityForResult(intent, CHOOSE_ADDRESS_REQUEST_CODE);
             }
         });
