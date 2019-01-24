@@ -4,74 +4,111 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <com.ruyiruyi.rylibrary.cell.GradationNoInterceptScrollView
-        android:id="@+id/scrollView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.ruyiruyi.rylibrary.cell.GradationScrollView
+            android:id="@+id/scrollView"
+            android:background="@color/c0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:overScrollMode="never"
+            android:scrollbars="none">
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/iv_background"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_ground"/>
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_background"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_ground"/>
 
 
-                <TextView
-                    android:id="@+id/points"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:text="0"
-                    android:textColor="@color/c12"
-                    android:textSize="36sp"
-                    android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/points"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="0"
+                        android:textColor="@color/c12"
+                        android:textSize="36sp"
+                        android:textStyle="bold"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="40dp"
-                    android:text="可用积分"
-                    android:textColor="@color/c12"
-                    android:textSize="14sp"/>
-            </FrameLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="40dp"
+                        android:text="可用积分"
+                        android:textColor="@color/c12"
+                        android:textSize="14sp"/>
+                </FrameLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:background="@color/c0"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/c0"/>
 
-            <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/swipe"
-                android:layout_width="match_parent"
-                android:layout_height="800dp">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rlv"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/c0"/>
-            </android.support.v4.widget.SwipeRefreshLayout>
-        </LinearLayout>
-    </com.ruyiruyi.rylibrary.cell.GradationNoInterceptScrollView>
+                    android:background="@color/c0"
+                    android:descendantFocusability="blocksDescendants">
 
-    <com.ruyiruyi.rylibrary.cell.ActionBar
-        android:id="@+id/acbar"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rlv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:paddingLeft="5dp"
+                        android:layout_alignParentTop="true"
+                        android:background="@color/c0"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+        </com.ruyiruyi.rylibrary.cell.GradationScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <FrameLayout
+        android:id="@+id/action_bar_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/back_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@drawable/ic_back"/>
+
+        <TextView
+            android:id="@+id/act_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="xxx"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            />
+
+    </FrameLayout>
 
 
 </FrameLayout>

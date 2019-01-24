@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/ic_logo"/>
+            android:src="@drawable/ic_tianjia2"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -132,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_yes"/>
+                android:src="@drawable/ic_weizhi2"/>
 
             <TextView
                 android:id="@+id/tv_address"
@@ -197,12 +197,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_yes"/>
+                    android:src="@drawable/ic_integral_icon"/>
 
                 <TextView
                     android:id="@+id/tv_points"

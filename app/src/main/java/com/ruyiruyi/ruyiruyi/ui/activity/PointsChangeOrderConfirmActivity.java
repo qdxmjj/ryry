@@ -210,6 +210,7 @@ public class PointsChangeOrderConfirmActivity extends RyBaseActivity {
             public void call(Void aVoid) {
                 Intent intent = new Intent(PointsChangeOrderConfirmActivity.this, MyAddressActivity.class);
                 intent.putExtra("canChoose", true);
+                intent.putExtra("addressId", addressId);
                 startActivityForResult(intent, CHOOSE_ADDRESS_REQUEST_CODE);
             }
         });
@@ -275,8 +276,11 @@ public class PointsChangeOrderConfirmActivity extends RyBaseActivity {
                                 //跳转积分首页
                                 PointsChangeOrderConfirmActivity.this.startActivity(new Intent(PointsChangeOrderConfirmActivity.this, IntegralShopActivity.class));
                                 finish();
+                            } else if (status == -999) {
+                                showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                            } else {
+                                Toast.makeText(PointsChangeOrderConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(PointsChangeOrderConfirmActivity.this, msg, Toast.LENGTH_SHORT).show();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

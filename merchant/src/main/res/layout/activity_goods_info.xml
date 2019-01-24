@@ -101,9 +101,10 @@
                         android:layout_marginLeft="2dp"
                         android:layout_weight="5"
                         android:background="@null"
+                        android:inputType="number"
                         android:digits="1234567890."
                         android:hint="请在此输入商品单价"
-                        android:maxLength="9"
+                        android:maxLength="7"
                         android:maxLines="1"
                         android:paddingLeft="5dp"
                         android:textColor="@color/c6"
@@ -129,15 +130,16 @@
                         android:layout_gravity="center_vertical"
                         android:layout_weight="2">
 
-                        <TextView
+                        <com.ruyiruyi.rylibrary.cell.DrawLineTextView
                             android:id="@+id/tv_line"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical|left"
                             android:text="原价"
-                            android:textColor="@color/c6"
-                            android:textSize="14sp"/>
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/c7"
+                            android:textSize="12sp"/>
                     </LinearLayout>
 
 
@@ -149,9 +151,10 @@
                         android:layout_marginLeft="2dp"
                         android:layout_weight="5"
                         android:background="@null"
+                        android:inputType="number"
                         android:digits="1234567890."
                         android:hint="请在此输入商品原价"
-                        android:maxLength="9"
+                        android:maxLength="7"
                         android:maxLines="1"
                         android:paddingLeft="5dp"
                         android:textColor="@color/c6"

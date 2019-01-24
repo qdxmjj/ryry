@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,7 +72,6 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
     private TextView tv_tijiaosp;
     private TextView tv_jixuadd;
 
-    private TextView tv_line;
 
     private TextView mGoodsStatus;
     private Bitmap imgBitmap;
@@ -268,12 +266,6 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
                 /*showPicInputDialog();*/
                 //选择裁剪
                 CropImgUtil.choicePhoto(GoodsInfoActivity.this);
-            }
-        });
-        RxViewAction.clickNoDouble(mGoodsType).subscribe(new Action1<Void>() {
-            @Override
-            public void call(Void aVoid) {
-
             }
         });
 
@@ -472,9 +464,13 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
                     object.put("serviceId", rightTypeId);
                     object.put("amount", mGoodsKucun.getText());
                     object.put("price", mGoodsPrice.getText());
-                    /*object.put("oldPrice", et_goods_oldprice.getText());//TODO 特价
-                    object.put("isSpecialPrice", isSpecialPrice);//TODO 特价
-                    object.put("goodsInfo", et_goods_info.getText());//TODO 商品描述*///TODO 特价
+                    if (isSpecialPrice) {
+                        object.put("originalPrice", et_goods_oldprice.getText());//TODO 特价
+                        object.put("discountFlag", "1");//  0 不是折扣商品 1 是折扣商品
+                    } else {
+                        object.put("discountFlag", "0");//  0 不是折扣商品 1 是折扣商品
+                    }
+                    object.put("stockDesc", et_goods_info.getText());//TODO 商品描述
                     object.put("status", currentSale);//2 下架  1 在售
                 } catch (JSONException e) {
                 }
@@ -850,9 +846,6 @@ public class GoodsInfoActivity extends MerchantBaseActivity {
         mGoodsStatus = (TextView) findViewById(R.id.tv_goods_status);
         tv_tijiaosp = (TextView) findViewById(R.id.tv_tijiaosp);
         tv_jixuadd = (TextView) findViewById(R.id.tv_jixuadd);
-
-        tv_line = (TextView) findViewById(R.id.tv_line);
-        tv_line.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);//加横线
 
         ll_oldprice = findViewById(R.id.ll_oldprice);
         switch_spc = findViewById(R.id.switch_spc);

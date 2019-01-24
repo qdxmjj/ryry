@@ -25,6 +25,7 @@ public class GoodsItemBean {
     }
 
     public GoodsItemBean() {
+        oldPrice = -1;
     }
 
     public String getGoodsInfo() {

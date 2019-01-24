@@ -3,15 +3,15 @@
                                                  xmlns:app="http://schemas.android.com/apk/res-auto"
                                                  android:id="@+id/main"
                                                  android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 android:fitsSystemWindows="true">
+                                                 android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content">
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/coll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -24,18 +24,17 @@
                 <ImageView
                     android:id="@+id/iv_background"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:scaleType="centerCrop"
+                    android:layout_height="150dp"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_ground"/>
-
-
 
                 <TextView
                     android:id="@+id/points"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="8000"
+                    android:layout_marginTop="10dp"
+                    android:text="xxxx"
                     android:textColor="@color/c12"
                     android:textSize="36sp"
                     android:textStyle="bold"/>
@@ -44,16 +43,47 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="50dp"
                     android:text="可用积分"
                     android:textColor="@color/c12"
                     android:textSize="14sp"/>
             </FrameLayout>
-            <com.ruyiruyi.rylibrary.cell.ActionBar
-                android:id="@+id/acbar"
+            <!--Actionbar-->
+            <FrameLayout
+                android:id="@+id/action_bar_view"
                 android:layout_width="match_parent"
-                app:layout_collapseMode="pin"
-                android:layout_height="wrap_content"/>
+                android:layout_height="60dp"
+                app:layout_collapseMode="pin">
+
+                <ImageView
+                    android:id="@+id/back_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:src="@drawable/ic_back"/>
+
+                <TextView
+                    android:id="@+id/act_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="xxx"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp"
+                    />
+
+            </FrameLayout>
+            <!--占位ToolBar-->
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:visibility="gone"/>
+
         </android.support.design.widget.CollapsingToolbarLayout>
 
         <android.support.design.widget.TabLayout
@@ -73,8 +103,8 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/mpager"
-        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 </android.support.design.widget.CoordinatorLayout>

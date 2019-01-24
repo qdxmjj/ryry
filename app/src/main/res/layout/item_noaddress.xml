@@ -15,7 +15,7 @@
         <com.ruyiruyi.ruyiruyi.utils.CircleImageView
             android:layout_width="140dp"
             android:layout_height="140dp"
-            android:src="@mipmap/ic_logo"
+            android:src="@drawable/ic_wudizhi"
             attr:roundHeight="70dp"
             attr:roundWidth="70dp"/>
 
