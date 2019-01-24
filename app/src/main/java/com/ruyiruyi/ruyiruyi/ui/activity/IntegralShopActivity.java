@@ -35,6 +35,7 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
 
     private static final String TAG = IntegralShopActivity.class.getSimpleName();
     private ImageView backView;
+    private ImageView left_image;
     private TextView dengluButton;
     private FrameLayout actionBarView;
     private GradationScrollView scrollView;
@@ -97,6 +98,8 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
 
                         bindData();
                         bindView();
+                    } else if (status.equals("-999")) {
+                        showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
                         Toast.makeText(IntegralShopActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
@@ -182,6 +185,7 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
     private void initView() {
         duihuanJiluView = (TextView) findViewById(R.id.duihuan_jilu_view);
         backView = (ImageView) findViewById(R.id.back_image_view);
+        left_image = (ImageView) findViewById(R.id.left_image);
         dengluButton = (TextView) findViewById(R.id.denglu_button);
         actionBarView = (FrameLayout) findViewById(R.id.action_bar_view);
         scrollView = (GradationScrollView) findViewById(R.id.scrollview);
@@ -195,12 +199,31 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
         exchangeCouponView = (ImageView) findViewById(R.id.coupon_exchang_view);
         right_one_image = (ImageView) findViewById(R.id.right_one_image);
 
+
+        //大转盘
+        RxViewAction.clickNoDouble(left_image).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                if (!judgeIsLogin()){
+                    return;
+                }
+                Intent intent = new Intent(IntegralShopActivity.this, BottomEventActivity.class);
+                intent.putExtra("webUrl", "http://score.qdxmjj.com/luckyWheel.html?token=" + new DbConfig(IntegralShopActivity.this).getToken());
+                intent.putExtra("isBottomEvent", false);
+                intent.putExtra("canShare", false);
+                startActivity(intent);
+            }
+        });
+
         //兑换记录
         RxViewAction.clickNoDouble(duihuanJiluView)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getApplicationContext(),ChangeOrderActivity.class));
+                        if (!judgeIsLogin()){
+                            return;
+                        }
+                        startActivity(new Intent(getApplicationContext(), ChangeOrderActivity.class));
                     }
                 });
 
@@ -211,8 +234,11 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (!judgeIsLogin()){
+                            return;
+                        }
                         Intent intent = new Intent(getApplicationContext(), ExchangeCouponActivity.class);
-                        intent.putExtra("TOTAL_SCORE",totalScore);
+                        intent.putExtra("TOTAL_SCORE", totalScore);
                         startActivity(intent);
                     }
                 });
