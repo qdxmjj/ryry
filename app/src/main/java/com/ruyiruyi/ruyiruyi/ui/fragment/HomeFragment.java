@@ -42,6 +42,8 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.Function;
 import com.ruyiruyi.ruyiruyi.ui.multiType.FunctionViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Hometop;
 import com.ruyiruyi.ruyiruyi.ui.multiType.HometopViewBinder;
+import com.ruyiruyi.ruyiruyi.ui.multiType.NameEvent;
+import com.ruyiruyi.ruyiruyi.ui.multiType.NameEventViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.OneEvent;
 import com.ruyiruyi.ruyiruyi.ui.multiType.OneEventViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.multiType.ThreeEvent;
@@ -199,6 +201,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         String token = new DbConfig(getContext()).getToken();
         params.addParameter("token", token);
         Log.e(TAG, "initdataFromService: -----------------" + params.toString());
+
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -351,6 +354,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         TwoEventViewBinder twoEventViewBinder = new TwoEventViewBinder(getContext());
         twoEventViewBinder.setListener(this);
         adapter.register(TwoEvent.class, twoEventViewBinder);
+
+        adapter.register(NameEvent.class,new NameEventViewBinder(getContext()));
     }
 
     private void initdata() {
@@ -392,7 +397,9 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         if (eventList.size()>0){
             for (int i = 0; i < eventList.size(); i++) {
                 int type = eventList.get(i).getType();
-                if (type == 1){
+                if (type == 0){
+                    items.add(new NameEvent(eventList.get(i)));
+                }else if (type == 1){
                     items.add(new OneEvent(eventList.get(i)));
                 }else if (type == 2){
                     items.add(new TwoEvent(eventList.get(i),eventList.get(i+1)));

@@ -2,9 +2,9 @@ package com.ruyiruyi.ruyiruyi.utils;
 
 public class RequestUtils {
     public static String REQUEST_URL_SERVICE = "http://192.168.0.167:8082/xmjj-webservice/";
-    public static String REQUEST_URL_TEST = "http://192.168.0.60:8060/";
-    public static String REQUEST_URL_NIAO_TEST = "http://192.168.0.60:10008/";
-    public static String REQUEST_URL__GONGLIN_TEST = "http://192.168.0.92:8060/";
+    public static String REQUEST_URL_TEST = "http://192.168.0.96:8060/";            //主页测试 鸟
+    public static String REQUEST_URL_NIAO_TEST = "http://192.168.0.96:10008/";      //积分测试 鸟
+    public static String REQUEST_URL__GONGLIN_TEST = "http://192.168.0.92:8060/";   //注册也是 龚
     public static String REQUEST_URL_RELEASE = "http://180.76.243.205:10002/xmjj-webservice/";
 
 

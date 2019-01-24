@@ -21,6 +21,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.ContactServiceActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CouponActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CreditLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.CxwyActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.IntegralShopActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.MyLimitActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.NewPromotionActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.OrderActivity;
@@ -81,6 +82,7 @@ public class MyFragment extends RyBaseFragment {
     private ImageView testImage;
     private LinearLayout kefuLayout;
     private LinearLayout mywallet_layout;
+    private LinearLayout jifenShopView;
 
     @Nullable
     @Override
@@ -174,6 +176,18 @@ public class MyFragment extends RyBaseFragment {
         testImage = (ImageView) getView().findViewById(R.id.test_image);
         kefuLayout = (LinearLayout) getView().findViewById(R.id.kefu_layout);
         mywallet_layout = (LinearLayout) getView().findViewById(R.id.mywallet_layout);
+        jifenShopView = ((LinearLayout) getView().findViewById(R.id.jifen_shop_view));
+
+        /**
+         * 积分商城
+         */
+        RxViewAction.clickNoDouble(jifenShopView)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(getContext(),IntegralShopActivity.class));
+                    }
+                });
 
         /**
          * 我的钱包

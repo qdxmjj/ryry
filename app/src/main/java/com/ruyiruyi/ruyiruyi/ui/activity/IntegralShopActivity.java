@@ -124,35 +124,7 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
     }
 
     private void bindView() {
-        //积分商品兑换
-        RxViewAction.clickNoDouble(right_one_image).subscribe(new Action1<Void>() {
-            @Override
-            public void call(Void aVoid) {
-                //判断是否登录（未登录提示登录）
-                if (!judgeIsLogin()) {
-                    return;
-                }
-                Intent intent = new Intent(IntegralShopActivity.this, PointsChangeActivity.class);
-                intent.putExtra("total_points", Integer.parseInt(totalScore));
-                Log.e(TAG, "call omg: totalScore = " + totalScore);
-                Log.e(TAG, "call omg: Integer.parseInt(totalScore) = " + Integer.parseInt(totalScore));
-                startActivity(intent);
-            }
-        });
 
-        //我的积分
-        RxViewAction.clickNoDouble(tv_mypoints).subscribe(new Action1<Void>() {
-            @Override
-            public void call(Void aVoid) {
-                //判断是否登录（未登录提示登录）
-                if (!judgeIsLogin()) {
-                    return;
-                }
-                Intent intent = new Intent(IntegralShopActivity.this, ShoppingPointsInfoActivity.class);
-                intent.putExtra("total_points", Integer.parseInt(totalScore));
-                startActivity(intent);
-            }
-        });
     }
 
     private void bindData() {
@@ -213,7 +185,8 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startActivity(new Intent(getApplicationContext(), ExchangeCouponActivity.class));
+
+
                         Intent intent = new Intent(getApplicationContext(), ExchangeCouponActivity.class);
                         intent.putExtra("TOTAL_SCORE",totalScore);
                         startActivity(intent);
@@ -228,6 +201,36 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                         onBackPressed();
                     }
                 });
+
+        //积分商品兑换
+        RxViewAction.clickNoDouble(right_one_image).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                //判断是否登录（未登录提示登录）
+                if (!judgeIsLogin()) {
+                    return;
+                }
+                Intent intent = new Intent(IntegralShopActivity.this, PointsChangeActivity.class);
+                intent.putExtra("total_points", Integer.parseInt(totalScore));
+                Log.e(TAG, "call omg: totalScore = " + totalScore);
+                Log.e(TAG, "call omg: Integer.parseInt(totalScore) = " + Integer.parseInt(totalScore));
+                startActivity(intent);
+            }
+        });
+
+        //我的积分
+        RxViewAction.clickNoDouble(tv_mypoints).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                //判断是否登录（未登录提示登录）
+                if (!judgeIsLogin()) {
+                    return;
+                }
+                Intent intent = new Intent(IntegralShopActivity.this, ShoppingPointsInfoActivity.class);
+                intent.putExtra("total_points", Integer.parseInt(totalScore));
+                startActivity(intent);
+            }
+        });
 
 
     }
