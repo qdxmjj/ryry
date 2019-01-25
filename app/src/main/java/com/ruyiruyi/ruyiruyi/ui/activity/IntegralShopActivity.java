@@ -54,6 +54,12 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
     private ImageView right_one_image;
 
     private TextView tv_mypoints;
+    private String yaoqingTitle;
+    private String xiaofeiTitlee;
+    private String loginTitle;
+    private TextView dengluTitleView;
+    private TextView xiaofeitTileView;
+    private TextView yaoqingTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +84,8 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
         String token = new DbConfig(this).getToken();
         params.addParameter("token", token);
         x.http().get(params, new Callback.CommonCallback<String>() {
+
+
             @Override
             public void onSuccess(String result) {
                 Log.e(TAG, "onSuccess: ---" + result);
@@ -91,10 +99,13 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                         JSONObject data = jsonObject1.getJSONObject("data");
                         totalScore = data.getString("totalScore");
                         JSONArray ruleList = data.getJSONArray("ruleList");
+                        loginRule = ruleList.getJSONObject(0).getString("description");
+                        xiaofeiRule = ruleList.getJSONObject(1).getString("description");
+                        yaoqingRule = ruleList.getJSONObject(2).getString("description");
 
-                        loginRule = ruleList.get(0).toString();
-                        xiaofeiRule = ruleList.get(1).toString();
-                        yaoqingRule = ruleList.get(2).toString();
+                        loginTitle = ruleList.getJSONObject(0).getString("title");
+                        xiaofeiTitlee = ruleList.getJSONObject(1).getString("title");
+                        yaoqingTitle = ruleList.getJSONObject(2).getString("title");
 
                         bindData();
                         bindView();
@@ -161,6 +172,10 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
         dengluRuleText.setText(loginRule);
         xiaofeiRuleText.setText(xiaofeiRule);
         yaoqingRuleText.setText(yaoqingRule);
+
+        xiaofeitTileView.setText(xiaofeiTitlee);
+        yaoqingTitleView.setText(yaoqingTitle);
+        dengluTitleView.setText(loginTitle);
     }
 
     /**
@@ -183,6 +198,9 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
 
 
     private void initView() {
+        dengluTitleView = (TextView) findViewById(R.id.denglu_jifen_view);
+        xiaofeitTileView = (TextView) findViewById(R.id.xiaofei_jifen_view);
+        yaoqingTitleView = (TextView) findViewById(R.id.yaoqing_jifen_view);
         duihuanJiluView = (TextView) findViewById(R.id.duihuan_jilu_view);
         backView = (ImageView) findViewById(R.id.back_image_view);
         left_image = (ImageView) findViewById(R.id.left_image);

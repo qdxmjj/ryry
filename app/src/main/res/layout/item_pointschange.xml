@@ -14,7 +14,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_banner"
         app:roundHeight="5dp"
         app:roundWidth="5dp"/>

@@ -71,16 +71,13 @@ public class LunboContentActivity extends RyBaseActivity {
 
 
         if (lunboPosition == 0){
-            lunboImageView.setImageResource(R.drawable.ic_huoodng_3);
-            lunboButton.setBackgroundResource(R.drawable.ic_hd_button3);
+            lunboImageView.setImageResource(R.drawable.ic_huodong0);
+            lunboButton.setBackgroundResource(R.drawable.ic_hd_button0);
         }else if (lunboPosition == 1){
-            lunboImageView.setImageResource(R.drawable.ic_huoodng_4);
-            lunboButton.setBackgroundResource(R.drawable.ic_hd_button4);
-        }else if (lunboPosition == 3){
-            lunboImageView.setImageResource(R.drawable.ic_huoodng_5);
-            lunboButton.setBackgroundResource(R.drawable.ic_hd_button5);
-        }else if (lunboPosition == 2){
-            lunboImageView.setImageResource(R.drawable.ic_huodong_2);
+            lunboImageView.setImageResource(R.drawable.ic_huodong1);
+            lunboButton.setVisibility(View.GONE);
+        } else if (lunboPosition == 2){
+            lunboImageView.setImageResource(R.drawable.ic_huodong2);
             lunboButton.setVisibility(View.GONE);
         }
 
