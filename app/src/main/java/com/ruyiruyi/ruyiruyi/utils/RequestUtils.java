@@ -16,7 +16,7 @@ public class RequestUtils {
 
 
     //http://192.168.0.105:8060/
-    public static String REQUEST_URL = REQUEST_URL_TEST ;
+    public static String REQUEST_URL = REQUEST_URL_RELEASE ;
 
     public static String REQUEST_URL_JIFEN = REQUEST_URL_NIAO_TEST;     //积分
 
