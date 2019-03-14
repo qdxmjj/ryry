@@ -13,8 +13,9 @@ public class ExchangeGoodsOrder {
     public String goodsIntegral;
     public String orderType;   // 1:兑换普通商品订单 2:兑换优惠券订单
     public String orderState;   //1 交易完成  5 待发货 2 待收货
+    public String orderReceivingAddressId;  //收货地址ID
 
-    public ExchangeGoodsOrder(int id, String orderTime, String orderNo, String goodsImage, String goodsName, String goodsPrice, String goodsIntegral, String orderType, String orderState) {
+    public ExchangeGoodsOrder(int id, String orderTime, String orderNo, String goodsImage, String goodsName, String goodsPrice, String goodsIntegral, String orderType, String orderState, String orderReceivingAddressId) {
         this.id = id;
         this.orderTime = orderTime;
         this.orderNo = orderNo;
@@ -24,9 +25,18 @@ public class ExchangeGoodsOrder {
         this.goodsIntegral = goodsIntegral;
         this.orderType = orderType;
         this.orderState = orderState;
+        this.orderReceivingAddressId = orderReceivingAddressId;
     }
 
     public ExchangeGoodsOrder() {
+    }
+
+    public String getOrderReceivingAddressId() {
+        return orderReceivingAddressId;
+    }
+
+    public void setOrderReceivingAddressId(String orderReceivingAddressId) {
+        this.orderReceivingAddressId = orderReceivingAddressId;
     }
 
     public int getId() {

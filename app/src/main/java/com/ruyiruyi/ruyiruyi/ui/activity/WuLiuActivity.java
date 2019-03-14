@@ -54,13 +54,15 @@ public class WuLiuActivity extends RyBaseActivity {
     private List<Object> items = new ArrayList<>();
     private MultiTypeAdapter adapter;
     public List<WuliuItem> wuliuList;
+    private String addressId;
+    private String address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wu_liu);
         actionBar = (ActionBar) findViewById(R.id.my_action);
-        actionBar.setTitle("订单列表");
+        actionBar.setTitle("物流信息");
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int var1) {
@@ -77,6 +79,7 @@ public class WuLiuActivity extends RyBaseActivity {
         goodsName = intent.getStringExtra("GOODS_NAME");
         goodsImage = intent.getStringExtra("GOODS_IMAGE");
         orderNo = intent.getStringExtra("ORDER_NO");
+        addressId = intent.getStringExtra("ADDRESS_ID");
 
         initView();
         initDataFromService();
@@ -121,7 +124,53 @@ public class WuLiuActivity extends RyBaseActivity {
 
                         }
 
+                        initAddresFromService();
 
+                    }
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 获取收货地址
+     */
+    private void initAddresFromService() {
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_JIFEN + "score/address/" + addressId);
+        int userId = new DbConfig(this).getId();
+        String token = new DbConfig(this).getToken();
+        params.addParameter("userId", userId);
+        Log.e(TAG, "initAddresFromService: -- " + params);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess:---- " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");        //-1单号或代码错误  0 暂无轨迹 1快递收件 2在途中 3签收 4问题件
+                    Log.e(TAG, "onSuccess: -" + status);
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1") ) {
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        address = data.getString("address");
                         initdata();
                     }
                 } catch (JSONException e) {
@@ -150,7 +199,7 @@ public class WuLiuActivity extends RyBaseActivity {
   /*      wuliuNoView.setText(wuliuName+"  " + wuliuNo);
         wuliuPhoneView.setText("官方电话:" +  wuliuPhone);*/
 
-        items.add(new WuLiuTop(goodsImage,goodsName,wuliuName,wuliuNo,wuliuPhone));
+        items.add(new WuLiuTop(goodsImage,goodsName,wuliuName,wuliuNo,wuliuPhone,address));
 
         for (int i = 0; i < wuliuList.size(); i++) {
             items.add(wuliuList.get(i));

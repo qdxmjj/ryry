@@ -9,6 +9,7 @@ public class WuLiuTop {
     public String wuliuName;
     public String wuliuNo;
     public String wuliuPhone;
+    public String addredd;
 
     public WuLiuTop(String goodsImage, String goodsName, String wuliuName, String wuliuNo, String wuliuPhone) {
         this.goodsImage = goodsImage;
@@ -16,6 +17,23 @@ public class WuLiuTop {
         this.wuliuName = wuliuName;
         this.wuliuNo = wuliuNo;
         this.wuliuPhone = wuliuPhone;
+    }
+
+    public WuLiuTop(String goodsImage, String goodsName, String wuliuName, String wuliuNo, String wuliuPhone, String addredd) {
+        this.goodsImage = goodsImage;
+        this.goodsName = goodsName;
+        this.wuliuName = wuliuName;
+        this.wuliuNo = wuliuNo;
+        this.wuliuPhone = wuliuPhone;
+        this.addredd = addredd;
+    }
+
+    public String getAddredd() {
+        return addredd;
+    }
+
+    public void setAddredd(String addredd) {
+        this.addredd = addredd;
     }
 
     public String getGoodsImage() {

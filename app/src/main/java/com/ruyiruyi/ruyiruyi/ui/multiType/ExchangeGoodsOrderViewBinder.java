@@ -70,7 +70,7 @@ public class ExchangeGoodsOrderViewBinder extends ItemViewProvider<ExchangeGoods
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        listener.onWuliuClickListener(exchangeGoodsOrder.getGoodsName(),exchangeGoodsOrder.goodsImage,exchangeGoodsOrder.orderNo);
+                        listener.onWuliuClickListener(exchangeGoodsOrder.getGoodsName(),exchangeGoodsOrder.goodsImage,exchangeGoodsOrder.orderNo,exchangeGoodsOrder.orderReceivingAddressId);
                     }
                 });
 
@@ -103,6 +103,6 @@ public class ExchangeGoodsOrderViewBinder extends ItemViewProvider<ExchangeGoods
     }
 
     public interface OnOrderClickiListener{
-        void onWuliuClickListener(String goodsName,String goodsImage,String orderNo);
+        void onWuliuClickListener(String goodsName,String goodsImage,String orderNo,String addressId);
     }
 }

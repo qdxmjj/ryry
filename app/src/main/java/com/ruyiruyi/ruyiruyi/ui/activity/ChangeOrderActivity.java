@@ -114,6 +114,7 @@ public class ChangeOrderActivity extends RyBaseActivity implements ExchangeGoods
                             String orderTime = object.getString("orderTime");
                             String orderType = object.getString("orderType");
                             String orderStatus = object.getString("orderStatus");
+                            String orderReceivingAddressId = object.getString("orderReceivingAddressId");
 
                             JSONObject scoreSku = object.getJSONObject("scoreSku");
                             int id = scoreSku.getInt("id");
@@ -121,7 +122,7 @@ public class ChangeOrderActivity extends RyBaseActivity implements ExchangeGoods
                             String imgUrl = scoreSku.getString("imgUrl");
                             String score = scoreSku.getString("score");
                             String price = scoreSku.getString("price");
-                            ExchangeGoodsOrder exchangeGoodsOrder = new ExchangeGoodsOrder(id, orderTime, orderNo, imgUrl, goodsNamre, price, score, orderType, orderStatus);
+                            ExchangeGoodsOrder exchangeGoodsOrder = new ExchangeGoodsOrder(id, orderTime, orderNo, imgUrl, goodsNamre, price, score, orderType, orderStatus,orderReceivingAddressId);
                             orderList.add(exchangeGoodsOrder);
 
                         }
@@ -226,11 +227,12 @@ public class ChangeOrderActivity extends RyBaseActivity implements ExchangeGoods
     }
 
     @Override
-    public void onWuliuClickListener(String goodsName, String goodsImage, String orderNo) {
+    public void onWuliuClickListener(String goodsName, String goodsImage, String orderNo,String addressId) {
         Intent intent = new Intent(this,WuLiuActivity.class);
         intent.putExtra("GOODS_NAME",goodsName);
         intent.putExtra("GOODS_IMAGE",goodsImage);
         intent.putExtra("ORDER_NO",orderNo);
+        intent.putExtra("ADDRESS_ID",addressId);
         startActivity(intent);
     }
 }

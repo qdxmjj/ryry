@@ -39,7 +39,8 @@ public class WuLiuTopViewBinder extends ItemViewProvider<WuLiuTop, WuLiuTopViewB
         holder.goodsNameView.setText(wuLiuTop.getGoodsName());
         holder.wuliuNoView.setText(wuLiuTop.getWuliuName() + "    " + wuLiuTop.getWuliuNo());
         holder.wuliuPhoneView.setText("官方电话："  + wuLiuTop.getWuliuPhone());
-    }
+        holder.address_view.setText("收货地址: " + wuLiuTop.getAddredd());
+      }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -47,6 +48,7 @@ public class WuLiuTopViewBinder extends ItemViewProvider<WuLiuTop, WuLiuTopViewB
         private final TextView goodsNameView;
         private final TextView wuliuNoView;
         private final TextView wuliuPhoneView;
+        private final TextView address_view;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -54,6 +56,7 @@ public class WuLiuTopViewBinder extends ItemViewProvider<WuLiuTop, WuLiuTopViewB
             goodsNameView = ((TextView) itemView.findViewById(R.id.goods_name_view));
             wuliuNoView = ((TextView) itemView.findViewById(R.id.wuliu_no_view));
             wuliuPhoneView = ((TextView) itemView.findViewById(R.id.wuliu_phone_view));
+            address_view = ((TextView) itemView.findViewById(R.id.address_view));
         }
     }
 }

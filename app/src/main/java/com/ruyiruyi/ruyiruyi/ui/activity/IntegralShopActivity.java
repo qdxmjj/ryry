@@ -234,6 +234,8 @@ public class IntegralShopActivity extends RyBase1Activity implements GradationSc
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+
+
                         if (!judgeIsLogin()){
                             return;
                         }
