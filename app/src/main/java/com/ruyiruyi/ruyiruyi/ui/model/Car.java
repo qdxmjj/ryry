@@ -14,16 +14,39 @@ public class Car {
 
     public int moren;
 
-    public Car(int carId, int userCarId ,String carName, String carNumber, String carIcon, int moren) {
+    public int proveStatus ;
+
+    public Car(int carId, int userCarId, String carName, String carNumber, String carIcon, int moren) {
         this.carId = carId;
         this.userCarId = userCarId;
         this.carName = carName;
         this.carNumber = carNumber;
         this.carIcon = carIcon;
         this.moren = moren;
+
+        this.proveStatus = 0;//默认0未认证
+    }
+
+    public Car(int carId, int userCarId, String carName, String carNumber, String carIcon, int moren, int proveStatus) {
+        this.carId = carId;
+        this.userCarId = userCarId;
+        this.carName = carName;
+        this.carNumber = carNumber;
+        this.carIcon = carIcon;
+        this.moren = moren;
+        this.proveStatus = proveStatus;
     }
 
     public Car() {
+        this.proveStatus = 0;//默认0未认证
+    }
+
+    public int getProveStatus() {
+        return proveStatus;
+    }
+
+    public void setProveStatus(int proveStatus) {
+        this.proveStatus = proveStatus;
     }
 
     public int getUserCarId() {
