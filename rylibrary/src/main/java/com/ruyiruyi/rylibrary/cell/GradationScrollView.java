@@ -65,7 +65,7 @@ public class GradationScrollView extends ScrollView {
             case MotionEvent.ACTION_MOVE:
                 int moveY = (int) ev.getRawY();
                 // 判断是否滑动，若滑动就拦截事件
-                if (Math.abs(moveY - downY) > mTouchSlop) {
+                if (Math.abs(moveY - downY) > 30) {
                     return true;
                 }
                 break;

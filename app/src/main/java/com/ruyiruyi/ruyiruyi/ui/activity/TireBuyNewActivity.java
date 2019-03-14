@@ -392,6 +392,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
                     String msg = jsonObject1.getString("msg");
                     if (status.equals("1")){
                         tireInfoList.clear();
+
                         JSONArray data = jsonObject1.getJSONArray("data");
                         if (data.length() == 0){
                             Toast.makeText(TireBuyNewActivity.this, "您所需要的规格正在上架当中，请您耐心等待！", Toast.LENGTH_SHORT).show();
@@ -557,7 +558,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
                         intent.putExtra("CARNUMBER", platNumber);  //车牌号
                         intent.putExtra("TIREIMAGE", imgMiddleUrl);  //轮胎图片
                         intent.putExtra("SHOEID", Integer.parseInt(shoeId));  //轮胎id
-                        intent.putExtra("SERVICE_YEAR", currentServiceYear+"");  //轮胎id
+                        intent.putExtra("SERVICE_YEAR", currentServiceYear+"");  //服务年薪
                         startActivity(intent);
 
                     }

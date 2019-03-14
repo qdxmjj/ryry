@@ -255,7 +255,8 @@ public class LoginActivity extends RyBaseActivity {
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
                     Log.e(TAG, "onSuccess: " + status);
-                    if (status.equals("1")) {//用户信息不存在  跳转到注册界面
+                    if (status.equals("1")) {//
+
                         Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                         intent.putExtra("PHONE", phoneEdit.getText().toString());
                         intent.putExtra(LoginActivity.HEADURL, "");

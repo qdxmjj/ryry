@@ -96,6 +96,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
     private String city = "";
     private double jingdu = 0.00;
     private double weidu = 0.00;
+
     private int hasjingweidu = 10; //0来自fragment
     private Intent intent;
     private int ischoos = 0;
