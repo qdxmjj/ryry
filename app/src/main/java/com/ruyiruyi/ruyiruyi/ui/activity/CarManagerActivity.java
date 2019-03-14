@@ -110,19 +110,20 @@ public class CarManagerActivity extends RyBaseActivity {
                     if (status.equals("1")) {
                         JSONArray data = jsonObject1.getJSONArray("data");
                         carList.clear();
-                        if (data.length() == 0){
+                        if (data.length() == 0) {
                             User user = new DbConfig(getApplicationContext()).getUser();
                             user.setCarId(0);
                             saveUserIntoDb(user);
-                        }else {
+                        } else {
                             for (int i = 0; i < data.length(); i++) {
-                                ;
+
                                 int car_id = data.getJSONObject(i).getInt("car_id");
                                 int uesrCarId = data.getJSONObject(i).getInt("user_car_id");
                                 int moren = data.getJSONObject(i).getInt("is_default");
                                 String name = data.getJSONObject(i).getString("car_name");
                                 String number = data.getJSONObject(i).getString("plat_number");
                                 String icon = data.getJSONObject(i).getString("car_brand");
+//                                int proveStatus = data.getJSONObject(i).getInt("car_status");//TODO 是否认证
                                 carList.add(new Car(car_id, uesrCarId, name, number, icon, moren));
                                 if (moren == 1) {
                                     User user = new DbConfig(getApplicationContext()).getUser();
@@ -258,8 +259,7 @@ public class CarManagerActivity extends RyBaseActivity {
             }
         });
         deleteDialog.setNegativeButton("关闭",
-                new DialogInterface.OnClickListener()
-                {
+                new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -408,7 +408,7 @@ public class CarManagerActivity extends RyBaseActivity {
             Car car = carList.get(position);
 
             //赋值
-            cell.setValue(car.getCarIcon(), car.getCarName(), car.getCarNumber(), car.moren);
+            cell.setValue(car.getCarIcon(), car.getCarName(), car.getCarNumber(), car.moren, car.proveStatus);
             return convertView;
         }
     }

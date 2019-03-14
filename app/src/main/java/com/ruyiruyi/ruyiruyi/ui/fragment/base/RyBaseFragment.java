@@ -3,6 +3,7 @@ package com.ruyiruyi.ruyiruyi.ui.fragment.base;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -25,7 +26,7 @@ public class RyBaseFragment extends BaseFragment {
     public void showUserTokenDialog(String error) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_error, null);
-        TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
+        TextView error_text = dialogView.findViewById(R.id.error_text);
         error_text.setText(error);
         dialog.setTitle("如意如驿");
         dialog.setIcon(R.drawable.ic_logo_login);
@@ -48,7 +49,7 @@ public class RyBaseFragment extends BaseFragment {
                 try {
                     db.saveOrUpdate(user);
                 } catch (DbException e) {
-
+                    Log.e("RyBaseFragment", "onDismiss: catch Exception.toString() " + e.toString());
                 }
                 //即将跳转登录界面
                 getActivity().finish();
@@ -73,7 +74,7 @@ public class RyBaseFragment extends BaseFragment {
         if (!new DbConfig(getContext()).getIsLogin()) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
             View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_error, null);
-            TextView error_text = (TextView) dialogView.findViewById(R.id.error_text);
+            TextView error_text = dialogView.findViewById(R.id.error_text);
             error_text.setText("您还没有登录");
             dialog.setTitle("如意如驿");
             dialog.setIcon(R.drawable.ic_logo_login);
