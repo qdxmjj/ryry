@@ -101,7 +101,7 @@ public class CarManagerActivity extends RyBaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: " + result);
+                Log.e(TAG, "onSuccess result = : " + result);
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
@@ -122,8 +122,9 @@ public class CarManagerActivity extends RyBaseActivity {
                                 String name = data.getJSONObject(i).getString("car_name");
                                 String number = data.getJSONObject(i).getString("plat_number");
                                 String icon = data.getJSONObject(i).getString("car_brand");
-//                                int proveStatus = data.getJSONObject(i).getInt("car_status");//TODO 是否认证
-                                carList.add(new Car(car_id, uesrCarId, name, number, icon, moren));
+                                int proveStatus = data.getJSONObject(i).getInt("authenticatedState");// 是否认证 是否进行车主认证 (1 已认证 2 未认证)
+
+                                carList.add(new Car(car_id, uesrCarId, name, number, icon, moren, proveStatus));
                                 if (moren == 1) {
                                     User user = new DbConfig(getApplicationContext()).getUser();
                                     user.setCarId(uesrCarId);
@@ -187,8 +188,10 @@ public class CarManagerActivity extends RyBaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Car car = carList.get(position);
                 int uesrCarId = car.getUserCarId();
+                int proveStatus = car.getProveStatus();
                 Log.e(TAG, "onItemClick:------- " + uesrCarId);
                 Intent intent = new Intent(getApplicationContext(), CarInfoActivity.class);
+                intent.putExtra("PROVESTATUS", proveStatus);
                 intent.putExtra("USERCARID", uesrCarId);
                 intent.putExtra("FROM", 1);
                 intent.putExtra("CANCLICK", 1);

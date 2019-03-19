@@ -14,7 +14,8 @@ public class Car {
 
     public int moren;
 
-    public int proveStatus ;
+    public int proveStatus ; //是否进行车主认证 (1 已认证 2 未认证)
+
 
     public Car(int carId, int userCarId, String carName, String carNumber, String carIcon, int moren) {
         this.carId = carId;
@@ -24,7 +25,7 @@ public class Car {
         this.carIcon = carIcon;
         this.moren = moren;
 
-        this.proveStatus = 0;//默认0未认证
+        this.proveStatus = 2;//默认2未认证
     }
 
     public Car(int carId, int userCarId, String carName, String carNumber, String carIcon, int moren, int proveStatus) {
@@ -38,7 +39,7 @@ public class Car {
     }
 
     public Car() {
-        this.proveStatus = 0;//默认0未认证
+        this.proveStatus = 2;//默认2未认证
     }
 
     public int getProveStatus() {

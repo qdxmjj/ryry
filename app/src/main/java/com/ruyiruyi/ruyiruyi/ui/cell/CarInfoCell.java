@@ -94,7 +94,7 @@ public class CarInfoCell extends FrameLayout {
             morenView.setVisibility(GONE);
         }
         Log.e("check_proveStatus", "setValue: " + proveStatus );
-        if (proveStatus == 0) {
+        if (proveStatus == 2) { //是否进行车主认证 (1 已认证 2 未认证)
             proveIcon.setImageResource(R.drawable.ic_weirz);
             proveInLayout.setBackgroundResource(R.drawable.bg_noprove);
             proveText.setTextColor(getResources().getColor(R.color.c6));

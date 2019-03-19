@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#00ffffff">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#00ffffff"
+              android:orientation="vertical">
+
     <com.ruyiruyi.rylibrary.cell.ActionBar
         android:id="@+id/my_action"
         android:layout_width="match_parent"
@@ -12,49 +13,54 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="温馨提示：如驿如意为您的爱车提供个性化服务，需要了解车辆得详细信息，请如实填写"
+        android:background="#ECECEC"
+        android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:textSize="14sp"
-        android:background="#ECECEC"/>
+        android:text="温馨提示：如驿如意为您的爱车提供个性化服务，需要了解车辆得详细信息，请如实填写"
+        android:textSize="14sp"/>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="60dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="#00ffffff">
+                android:background="#00ffffff"
+                android:orientation="vertical">
 
                 <FrameLayout
                     android:id="@+id/car_type_choose_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="13dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="13dp"
-                    android:paddingBottom="13dp">
+                    android:paddingTop="13dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="车型"
                         android:layout_gravity="left"
-                        android:textSize="15sp"
-                        android:textColor="@color/c6"/>
+                        android:text="车型"
+                        android:textColor="@color/c6"
+                        android:textSize="15sp"/>
+
                     <TextView
                         android:id="@+id/car_type_choose"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
                         android:layout_gravity="right"
-                        android:textSize="15sp"
-                        android:textColor="@color/c5"/>
+                        android:text=""
+                        android:textColor="@color/c5"
+                        android:textSize="15sp"/>
                 </FrameLayout>
 
                 <View
@@ -66,22 +72,24 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="13dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="13dp"
-                    android:paddingBottom="13dp">
+                    android:paddingTop="13dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="是否是新能源汽车"
                         android:layout_gravity="left"
-                        android:textSize="15sp"
-                        android:textColor="@color/c6"/>
-                  <Switch
-                      android:id="@+id/car_is_energy"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_gravity="right"/>
+                        android:text="是否是新能源汽车"
+                        android:textColor="@color/c6"
+                        android:textSize="15sp"/>
+
+                    <Switch
+                        android:id="@+id/car_is_energy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"/>
                 </FrameLayout>
 
                 <View
@@ -94,25 +102,27 @@
                     android:id="@+id/car_number_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="13dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="13dp"
-                    android:paddingBottom="13dp">
+                    android:paddingTop="13dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="车牌号码"
                         android:layout_gravity="left"
-                        android:textSize="15sp"
-                        android:textColor="@color/c6"/>
+                        android:text="车牌号码"
+                        android:textColor="@color/c6"
+                        android:textSize="15sp"/>
+
                     <TextView
                         android:id="@+id/car_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
                         android:layout_gravity="right"
-                        android:textSize="15sp"
-                        android:textColor="@color/c5"/>
+                        android:text=""
+                        android:textColor="@color/c5"
+                        android:textSize="15sp"/>
                 </FrameLayout>
 
                 <View
@@ -125,25 +135,27 @@
                     android:id="@+id/province_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="13dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="13dp"
-                    android:paddingBottom="13dp">
+                    android:paddingTop="13dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="常驻地区"
                         android:layout_gravity="left"
-                        android:textSize="15sp"
-                        android:textColor="@color/c6"/>
+                        android:text="常驻地区"
+                        android:textColor="@color/c6"
+                        android:textSize="15sp"/>
+
                     <TextView
                         android:id="@+id/province_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:layout_marginLeft="100dp"
-                        android:textSize="15sp"
-                        android:textColor="@color/c5"/>
+                        android:textColor="@color/c5"
+                        android:textSize="15sp"/>
                 </FrameLayout>
 
                 <View
@@ -156,24 +168,26 @@
                     android:id="@+id/car_font_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="13dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="13dp"
-                    android:paddingBottom="13dp">
+                    android:paddingTop="13dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="前轮型号"
                         android:layout_gravity="left"
-                        android:textSize="15sp"
-                        android:textColor="@color/c6"/>
+                        android:text="前轮型号"
+                        android:textColor="@color/c6"
+                        android:textSize="15sp"/>
+
                     <TextView
                         android:id="@+id/car_font"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:textSize="15sp"
-                        android:textColor="@color/c5"/>
+                        android:textColor="@color/c5"
+                        android:textSize="15sp"/>
                 </FrameLayout>
 
                 <View
@@ -186,24 +200,26 @@
                     android:id="@+id/car_rear_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="13dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="13dp"
-                    android:paddingBottom="13dp">
+                    android:paddingTop="13dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="后轮型号"
                         android:layout_gravity="left"
-                        android:textSize="15sp"
-                        android:textColor="@color/c6"/>
+                        android:text="后轮型号"
+                        android:textColor="@color/c6"
+                        android:textSize="15sp"/>
+
                     <TextView
                         android:id="@+id/car_rear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:textSize="15sp"
-                        android:textColor="@color/c5"/>
+                        android:textColor="@color/c5"
+                        android:textSize="15sp"/>
                 </FrameLayout>
 
                 <View
@@ -212,31 +228,92 @@
                     android:layout_marginLeft="20dp"
                     android:background="@color/c3"/>
 
+                <!--行驶证注册日期-->
                 <FrameLayout
                     android:id="@+id/xsz_register_time_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="13dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:paddingBottom="13dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="行驶证注册日期"
-                        android:layout_gravity="left"
-                        android:textSize="15sp"
-                        android:textColor="@color/c6"/>
+                    android:paddingBottom="13dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="13dp">
+
                     <TextView
                         android:id="@+id/xsz_register_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
                         android:layout_gravity="right"
-                        android:textSize="15sp"
-                        android:textColor="@color/c5"/>
+                        android:text=""
+                        android:textColor="@color/c5"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="行驶证注册日期"
+                        android:textColor="@color/c6"
+                        android:textSize="15sp"/>
+                </FrameLayout>
+
+                <!--行驶证认证-->
+                <FrameLayout
+                    android:id="@+id/xsz_prove_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:paddingBottom="13dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="13dp">
+
+                    <TextView
+                        android:id="@+id/xsz_prove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="未认证"
+                        android:textColor="@color/c19"
+                        android:textSize="15sp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|left"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="行驶证认证"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp"/>
+
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="(非必填项)"
+                            android:textColor="@color/c6"
+                            android:textSize="12sp"/>
+
+                        <ImageView
+                            android:id="@+id/prove_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_question"/>
+
+                    </LinearLayout>
                 </FrameLayout>
 
                 <View
@@ -249,74 +326,84 @@
                     android:id="@+id/xsz_end_time_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="13dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="13dp"
-                    android:visibility="gone"
-                    android:paddingBottom="13dp">
+                    android:visibility="gone">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="服务年限"
                         android:layout_gravity="left"
-                        android:textSize="15sp"
-                        android:textColor="@color/c6"/>
+                        android:text="服务年限"
+                        android:textColor="@color/c6"
+                        android:textSize="15sp"/>
+
                     <TextView
                         android:id="@+id/xsz_end_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
                         android:layout_gravity="right"
-                        android:textSize="15sp"
-                        android:textColor="@color/c5"/>
+                        android:text=""
+                        android:textColor="@color/c5"
+                        android:textSize="15sp"/>
                 </FrameLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="20dp"
-                    android:background="@color/c3"/>
+                    android:background="@color/c3"
+                    android:visibility="gone"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:paddingBottom="13dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="13dp"
                     android:visibility="gone"
-                    android:paddingBottom="13dp"
                     >
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="上传行驶证照片"
                         android:layout_gravity="left"
-                        android:textSize="15sp"
-                        android:textColor="@color/c6"/>
+                        android:text="上传行驶证照片"
+                        android:textColor="@color/c6"
+                        android:textSize="15sp"/>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <FrameLayout
                             android:layout_width="150dp"
                             android:layout_height="100dp"
-                            android:background="@color/c2"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="10dp"
+                            android:background="@color/c2">
+
                             <ImageView
                                 android:id="@+id/zhuye_image"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:scaleType="fitXY"
                                 android:visibility="gone"/>
+
                             <ImageView
                                 android:id="@+id/zhuye_image_delete"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_delete"
-                                android:scaleType="fitXY"
                                 android:layout_gravity="right|top"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/ic_delete"
                                 android:visibility="gone"
                                 />
+
                             <LinearLayout
                                 android:id="@+id/add_zhuye_jiashizheng"
                                 android:layout_width="wrap_content"
@@ -325,16 +412,18 @@
                                 android:gravity="center_horizontal"
 
                                 android:orientation="vertical">
+
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:src="@drawable/ic_add_phone"
                                     />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="添加主页"
-                                    android:layout_marginTop="5dp"/>
+                                    android:layout_marginTop="5dp"
+                                    android:text="添加主页"/>
                             </LinearLayout>
                         </FrameLayout>
 
@@ -342,24 +431,27 @@
                             android:id="@+id/fu_ye_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="100dp"
-                            android:background="@color/c2"
                             android:layout_marginLeft="20dp"
                             android:layout_marginTop="10dp"
+                            android:background="@color/c2"
                             android:visibility="gone">
+
                             <ImageView
                                 android:id="@+id/fuye_image"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:scaleType="fitXY"
                                 android:visibility="gone"/>
+
                             <ImageView
                                 android:id="@+id/fuye_image_delete"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_delete"
                                 android:layout_gravity="right|top"
+                                android:src="@drawable/ic_delete"
                                 android:visibility="gone"
                                 />
+
                             <LinearLayout
                                 android:id="@+id/add_fuye_jiashizheng"
                                 android:layout_width="wrap_content"
@@ -367,50 +459,55 @@
                                 android:layout_gravity="center"
                                 android:gravity="center_horizontal"
                                 android:orientation="vertical">
+
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_add_phone"
                                     android:scaleType="fitXY"
+                                    android:src="@drawable/ic_add_phone"
                                     />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="添加副页"
-                                    android:layout_marginTop="5dp"/>
+                                    android:layout_marginTop="5dp"
+                                    android:text="添加副页"/>
                             </LinearLayout>
                         </FrameLayout>
                     </LinearLayout>
 
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:visibility="gone"
-                    android:background="@color/c3"/>
+                    android:background="@color/c3"
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:id="@+id/lichengbiao_is_use_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
+                    android:paddingBottom="13dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:gravity="center_vertical"
-                    android:visibility="gone"
                     android:paddingTop="13dp"
-                    android:paddingBottom="13dp">
+                    android:visibility="gone">
+
                     <ImageView
                         android:id="@+id/has_lichengbiao_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_check"/>
+
                     <TextView
                         android:id="@+id/has_lichengbiao_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="里程表损坏  (以下信息可以不填写)"
                         android:layout_marginLeft="10dp"
+                        android:text="里程表损坏  (以下信息可以不填写)"
                         android:textSize="15sp"/>
 
 
@@ -421,32 +518,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="13dp"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:paddingTop="13dp"
-                        android:paddingBottom="13dp">
+                        android:paddingTop="13dp">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="行驶里程"
                             android:layout_gravity="left"
-                            android:textSize="15sp"
-                            android:textColor="@color/c6"/>
+                            android:text="行驶里程"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp"/>
 
                         <EditText
                             android:id="@+id/licheng_edit"
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
-                            android:hint="请输入公里数，单位是公里"
-                            android:gravity="right"
-                            android:inputType="number"
-                            android:background="@drawable/edit_background_noline_white"
                             android:layout_gravity="right"
-                            android:textSize="15sp"
-                            android:textColor="@color/c5"/>
+                            android:background="@drawable/edit_background_noline_white"
+                            android:gravity="right"
+                            android:hint="请输入公里数，单位是公里"
+                            android:inputType="number"
+                            android:textColor="@color/c5"
+                            android:textSize="15sp"/>
                     </FrameLayout>
 
                     <LinearLayout
@@ -454,42 +553,48 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:paddingBottom="13dp"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
                         android:paddingTop="5dp"
-                        android:paddingBottom="13dp"
                         >
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="上传里程表照片"
                             android:layout_gravity="left"
-                            android:textSize="15sp"
-                            android:textColor="@color/c6"/>
+                            android:text="上传里程表照片"
+                            android:textColor="@color/c6"
+                            android:textSize="15sp"/>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
+
                             <FrameLayout
                                 android:layout_width="150dp"
                                 android:layout_height="100dp"
-                                android:background="@color/c2"
-                                android:layout_marginTop="10dp">
+                                android:layout_marginTop="10dp"
+                                android:background="@color/c2">
+
                                 <ImageView
                                     android:id="@+id/lichengbiao_image"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="fitXY"
                                     android:visibility="gone"/>
+
                                 <ImageView
                                     android:id="@+id/lichengbiao_image_delete"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_delete"
                                     android:layout_gravity="right|top"
                                     android:scaleType="fitXY"
+                                    android:src="@drawable/ic_delete"
                                     android:visibility="gone"
                                     />
+
                                 <LinearLayout
                                     android:id="@+id/add_lichengbiao"
                                     android:layout_width="wrap_content"
@@ -498,16 +603,18 @@
                                     android:gravity="center_horizontal"
 
                                     android:orientation="vertical">
+
                                     <ImageView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:src="@drawable/ic_add_phone"
                                         />
+
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="添加里程表"
-                                        android:layout_marginTop="5dp"/>
+                                        android:layout_marginTop="5dp"
+                                        android:text="添加里程表"/>
                                 </LinearLayout>
                             </FrameLayout>
 
@@ -519,62 +626,70 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="3dp"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="20dp"
                     android:background="@color/c3"/>
+
                 <FrameLayout
                     android:id="@+id/road_condition_choose_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="13dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="13dp"
-                    android:paddingBottom="13dp">
+                    android:paddingTop="13dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="行驶路况"
                         android:layout_gravity="left"
-                        android:textSize="15sp"
-                        android:textColor="@color/c6"/>
+                        android:text="行驶路况"
+                        android:textColor="@color/c6"
+                        android:textSize="15sp"/>
+
                     <TextView
                         android:id="@+id/road_condition_choose"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
                         android:layout_gravity="right"
-                        android:textSize="15sp"
                         android:maxLength="15"
-                        android:textColor="@color/c5"/>
+                        android:text=""
+                        android:textColor="@color/c5"
+                        android:textSize="15sp"/>
                 </FrameLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
                     android:background="@color/c3"/>
+
                 <FrameLayout
                     android:id="@+id/yaoqingma_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="13dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:paddingTop="13dp"
-                    android:paddingBottom="13dp">
+                    android:paddingTop="13dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="邀请码"
                         android:layout_gravity="left"
-                        android:textSize="15sp"
-                        android:textColor="@color/c6"/>
+                        android:text="邀请码"
+                        android:textColor="@color/c6"
+                        android:textSize="15sp"/>
+
                     <EditText
                         android:id="@+id/yaoqingma_text"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:hint="请输入邀请码"
                         android:layout_gravity="right"
-                        android:gravity="right"
                         android:background="@drawable/edit_background_noline_white"
-                        android:textSize="15sp"
-                        android:textColor="@color/c5"/>
+                        android:gravity="right"
+                        android:hint="请输入邀请码"
+                        android:textColor="@color/c5"
+                        android:textSize="15sp"/>
 
                 </FrameLayout>
 
@@ -590,22 +705,18 @@
             android:id="@+id/save_car"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bg_button"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:text="保存"
             android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:layout_gravity="bottom"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:gravity="center"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_button"/>
+            android:textSize="16sp"/>
     </FrameLayout>
-
-
-
-
 
 
 </LinearLayout>
