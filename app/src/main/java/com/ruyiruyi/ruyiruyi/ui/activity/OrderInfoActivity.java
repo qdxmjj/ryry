@@ -725,9 +725,9 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
    //     params.addBodyParameter("reqJson", object.toString());
         Log.e(TAG, "initHongbaoData: " + params);
         x.http().get(params, new Callback.CommonCallback<String>() {
-
             @Override
             public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: hongbao----" + result);
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = new JSONObject(result);

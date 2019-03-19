@@ -36,15 +36,16 @@
                     android:layout_gravity="left"
                     android:textSize="15sp"
                     android:textColor="@color/c6"/>
+
                 <TextView
                     android:id="@+id/user_name_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="有人爱吃手手"
                     android:layout_gravity="right"
-                    android:textSize="15sp"
-                    android:textColor="@color/c5"/>
-           </FrameLayout>
+                    android:text="有人爱吃手手"
+                    android:textColor="@color/c5"
+                    android:textSize="15sp" />
+            </FrameLayout>
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -29,5 +29,5 @@ public class LineViewBinder extends ItemViewProvider<Line, LineViewBinder.ViewHo
         ViewHolder(View itemView) {
             super(itemView);
         }
-    }
+     }
 }

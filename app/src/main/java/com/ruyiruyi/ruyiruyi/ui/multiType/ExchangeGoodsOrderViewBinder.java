@@ -51,13 +51,13 @@ public class ExchangeGoodsOrderViewBinder extends ItemViewProvider<ExchangeGoods
         if (exchangeGoodsOrder.getOrderType().equals("1")){     //1是商品
             holder.goods_desc_view.setVisibility(View.GONE);
             holder.get_wuliu_view.setVisibility(View.VISIBLE);
-            if (exchangeGoodsOrder.getOrderType().equals("1")){ //1 交易完成  5 待发货 2 待收货
+            if (exchangeGoodsOrder.getOrderState().equals("1")){ //1 交易完成  5 待发货 2 待收货
                 holder.order_type_view.setText("交易完成");
                 holder.get_wuliu_view.setVisibility(View.VISIBLE);
-            }else if (exchangeGoodsOrder.getOrderType().equals("5")){
+            }else if (exchangeGoodsOrder.getOrderState().equals("5")){
                 holder.order_type_view.setText("待发货");
                 holder.get_wuliu_view.setVisibility(View.GONE);
-            }else if (exchangeGoodsOrder.getOrderType().equals("2")){
+            }else if (exchangeGoodsOrder.getOrderState().equals("2")){
                 holder.order_type_view.setText("待收货");
                 holder.get_wuliu_view.setVisibility(View.VISIBLE);
             }

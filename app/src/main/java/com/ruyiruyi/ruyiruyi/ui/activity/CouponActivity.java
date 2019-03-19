@@ -145,6 +145,7 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
                         Log.e(TAG, "onSuccess: chooseType:" + chooseType);
                         for (int i = 0; i < availableList.length(); i++) {
                             JSONObject object = availableList.getJSONObject(i);
+                            Log.e(TAG, "onSuccess: --" + object.toString());
                             int id = object.getInt("id");
                             int userCarId = object.getInt("userCarId");
                             int type = object.getInt("type");
@@ -160,7 +161,7 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
                             String deduction  = "";
                             try {
                                 moneyFull = object.getString("moneyFull");
-                                moneyMinus = object.getString("noneyMinus");
+                                moneyMinus = object.getString("moneyMinus");
                                 needPay = object.getString("needPay");
                                 deduction = object.getString("deduction");
                             }catch (Exception e){
@@ -213,7 +214,7 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
                             String goodsName = object.getString("rule");
 
                             if (fromType == 0){//查看优惠券
-                                Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true,goodsName);
+                                Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true,goodsName,moneyFull,moneyMinus,needPay,deduction);
                                 useCouponList.add(coupon);
 
                             }else { //使用优惠券
@@ -241,7 +242,7 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
 
                                                 }
                                             }
-                                            if (ishasGoods  && userCarId == carId ){
+                                            if (ishasGoods  && userCarId == carId ){  //判断是否限制商品 跟 车辆
                                                 Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,true,goodsName);
                                                 useCouponList.add(coupon);
                                             }else {
@@ -274,6 +275,7 @@ public class CouponActivity extends RyBaseActivity implements ButtonViewBinder.O
                                                 Coupon coupon = new Coupon(id, couponName, type, viewTypeId, couponStatus, startTime, endTime,platNumber,false,storeNameList,goodsName);
                                                 noUseCouponList.add(coupon);
                                             }
+
                                         }
 
 

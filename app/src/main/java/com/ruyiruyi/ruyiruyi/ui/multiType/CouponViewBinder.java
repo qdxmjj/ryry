@@ -37,7 +37,18 @@ public class CouponViewBinder extends ItemViewProvider<Coupon, CouponViewBinder.
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull final Coupon coupon) {
 
-        holder.couponNameView.setText(coupon.getCouponName());
+        if (coupon.getCouponType() == 1){
+            holder.couponNameView.setText("服务券");
+        }else if (coupon.getCouponType() == 2){
+            holder.couponNameView.setText("现金券");
+        }else if (coupon.getCouponType() == 3){
+            holder.couponNameView.setText("满减券");
+        }else if (coupon.getCouponType() == 4){
+            holder.couponNameView.setText("小额券");
+        }else if (coupon.getCouponType() == 5){
+            holder.couponNameView.setText("抵扣券");
+        }
+
         holder.couponBigNameView.setText(coupon.getCouponName());
         holder.couponStartTimeView.setText("使用时间： " + coupon.getStartTime() + " ~ " + coupon.getEndTime());
         List<String> storeNameList = coupon.getStoreNameList();
