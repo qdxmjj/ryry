@@ -13,6 +13,9 @@ public class User {
     @Column(name = "carid")
     private int carId;        //用户名
 
+    @Column(name = "authenticatedstate")
+    private int authenticatedState;  //是否认证  1认证 2未认证
+
     @Column(name = "nick")
     private String nick;        //用户名
 
@@ -240,5 +243,13 @@ public class User {
 
     public void setFirstAddCar(int firstAddCar) {
         this.firstAddCar = firstAddCar;
+    }
+
+    public int getAuthenticatedState() {
+        return authenticatedState;
+    }
+
+    public void setAuthenticatedState(int authenticatedState) {
+        this.authenticatedState = authenticatedState;
     }
 }

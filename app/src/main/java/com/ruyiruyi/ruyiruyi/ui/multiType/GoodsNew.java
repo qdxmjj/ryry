@@ -11,7 +11,7 @@ public class GoodsNew implements Serializable {
     public int currentGoodsAmount;
     public int goodsClassId;
     public int serviceTypeId;
-    public int system;
+    public int system;      //  1是特殊商品  2 不是特殊商品
     public String serviceDesc;
     public int discountFlag;    //(是否折扣商品 0 不是 1 是)
     public String originalPrice;    //(原价)

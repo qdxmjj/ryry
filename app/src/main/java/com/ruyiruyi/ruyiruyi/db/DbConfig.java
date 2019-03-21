@@ -29,7 +29,7 @@ public class DbConfig {
                 .setAllowTransaction(true)
                 .setDbDir(context.getFilesDir())
               //  .setDbDir(Environment.getExternalStorageDirectory())
-                .setDbVersion(10);
+                .setDbVersion(11);
 
         return daoConfig;
     }

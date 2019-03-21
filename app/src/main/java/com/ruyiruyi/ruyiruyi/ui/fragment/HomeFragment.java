@@ -2,10 +2,12 @@ package com.ruyiruyi.ruyiruyi.ui.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -86,6 +88,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     private String fontSize;
     private String carName;
     private int carId;
+    private int carUUId;
+    private int authenticatedState;  //s是否认证  1已认证   2未认证
     private String carImage;
     private List<Lunbo> lunbos;
     private SwipeRefreshLayout refreshLayout;
@@ -110,6 +114,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     private String redpacketUrl;
     private String redpacketTitle;
     private String redpacketBody;
+    private AlertDialog carInfoDialog;
 
 
     public void setListener(OnIconClikc listener) {
@@ -137,6 +142,25 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         ischoos = bundle.getInt("ischoos", 0); //1是选择返回
 
         progressDialog = new ProgressDialog(getContext());
+
+        carInfoDialog = new AlertDialog.Builder(getContext())
+                .setTitle("请完善车辆信息")
+                .setMessage("是否前往完善信息界面")
+                .setIcon(R.mipmap.ic_logo)
+                .setPositiveButton("前往", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(getContext(), CarManagerActivity.class);
+                        intent.putExtra("FRAGMENT", "HOMEFRAGMENT");
+                        startActivityForResult(intent, MainActivity.HOMEFRAGMENT_RESULT);
+                    //    getActivity().finish();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                }).create();
 
 
         register();
@@ -175,7 +199,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         }
 
 
-        initdataFromService();
+       // initdataFromService();
     }
 
 
@@ -255,27 +279,37 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                         try {
                             JSONObject carObject = data.getJSONObject("androidHomeData_cars");
                             if (carObject != null) {
-                                carId = carObject.getInt("car_id");
-                                if (carId == 0){
+                                carUUId = carObject.getInt("car_id");
+
+                                if (carUUId == 0){
+                                    fontSize = carObject.getString("font");
+                                    tireSame = carObject.getBoolean("same");
+                                    rearSize = "";
+                                    carImage = "";
+                                    carName = "";
+                                    authenticatedState = carObject.getInt("authenticatedState");
+                                }else {
+                                    fontSize = carObject.getString("font");
+                                    tireSame = carObject.getBoolean("same");
+                                    rearSize = carObject.getString("rear");
+                                    carImage = carObject.getString("car_brand_url");
+                                    carName = carObject.getString("car_verhicle");
+                                    authenticatedState = carObject.getInt("authenticatedState");
 
                                 }
-                                carImage = carObject.getString("car_brand_url");
-                                carName = carObject.getString("car_verhicle");
-                                fontSize = carObject.getString("font");
-                                rearSize = carObject.getString("rear");
-                                tireSame = carObject.getBoolean("same");
-
                                 service_end_date = carObject.getString("service_end_date");
                                 service_year = carObject.getString("service_year");
                                 service_year_length = carObject.getString("service_year_length");
-                                uesrCarId = carObject.getInt("user_car_id");
+                                carId = carObject.getInt("user_car_id");
                                 User user = new DbConfig(getContext()).getUser();
-                                user.setCarId(uesrCarId);
+                                user.setCarId(carId);
+                                user.setAuthenticatedState(authenticatedState);
                                 saveUserIntoDb(user);
                             } else {
-                                int uesrCarId = 0;
+                                int carId = 0;
                                 User user = new DbConfig(getContext()).getUser();
-                                user.setCarId(uesrCarId);
+                                user.setCarId(carId);
+                                user.setAuthenticatedState(2);
                                 saveUserIntoDb(user);
                             }
                         } catch (JSONException e) {
@@ -387,9 +421,16 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             if (carId == 0) {
                 items.add(new Hometop(images, "添加我的宝驹", "邀请好友绑定车辆可免费洗车", 1, currentCity));
             } else {
-                Hometop carInfo = new Hometop(images, carName, "一次性购买四条轮胎送洗车券", 2, currentCity);
-                carInfo.setCarImage(carImage);
-                items.add(carInfo);
+                if (carUUId == 0){  //小程序购买轮胎 信息车辆不完整
+                    Hometop carInfo = new Hometop(images, "请完善车辆信息", "完善车辆信息后可享受特色服务", 3, currentCity);
+                    items.add(carInfo);
+
+                }else {
+                    Hometop carInfo = new Hometop(images, carName, "一次性购买四条轮胎送洗车券", 2, currentCity);
+                    carInfo.setCarImage(carImage);
+                    items.add(carInfo);
+                }
+
             }
         } else {//未登陆
             items.add(new Hometop(images, "新人注册享好礼", "购买轮胎即送畅行无忧", 0, currentCity));
@@ -492,7 +533,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             Intent intent = new Intent(getContext(), CarManagerActivity.class);
             intent.putExtra("FRAGMENT", "HOMEFRAGMENT");
             startActivityForResult(intent, MainActivity.HOMEFRAGMENT_RESULT);
-            getActivity().finish();
+        //    getActivity().finish();
         }
     }
 
@@ -503,6 +544,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     @Override
     public void onLunboClikcListener(int position) {
         Log.e(TAG, "onLunboClikcListener: " + position);
+
 
         if (position == -1) {
 
@@ -574,6 +616,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             intent.putExtra("SERVICE_END_YEAR", service_end_date);
             intent.putExtra("CARID", carId);
             intent.putExtra("USERCARID",uesrCarId);
+            intent.putExtra("CARUUID",carUUId);
             intent.putExtra(LunboContentActivity.LUNBO_POSITION, position);
             startActivity(intent);
         }
@@ -581,11 +624,15 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
 
     @Override
     public void onFunctionClickListener(int type) {
+        //判断是否登录（未登录提示登录）
+        if (!judgeIsLogin()) {
+            return;
+        }
+        if (carUUId == 0){
+            carInfoDialog.show();
+            return;
+        }
         if (type == 0) {//轮胎购买
-            //判断是否登录（未登录提示登录）
-            if (!judgeIsLogin()) {
-                return;
-            }
             if (carId == 0){
                 //点击轮胎购买，没有添加车辆，先跳转到添加车辆界面
                 Intent intent = new Intent(getContext(), CarInfoActivity.class);
@@ -610,6 +657,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     Intent intent = new Intent(getContext(), TireBuyNewActivity.class);
                     intent.putExtra("TIRESIZE", fontSize);
                     intent.putExtra("FONTREARFLAG", "0");
+
                     intent.putExtra("SERVICE_YEAR_MAX", service_year);
                     intent.putExtra("SERVICE_YEAR", service_year_length);
                     intent.putExtra("CHOOSE_SERVICE_YEAR", true);
@@ -630,10 +678,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             }
 
         } else if (type == 1) {//免费更换
-            //判断是否登录（未登录提示登录）
-            if (!judgeIsLogin()) {
-                return;
-            }
+
             if (carId == 0){
                 Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
                 return;
@@ -642,21 +687,13 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             intent.putExtra(TireChangeActivity.CHANGE_TIRE, 1);
             startActivity(intent);
         } else if (type == 2) {//轮胎修补
-            //判断是否登录（未登录提示登录）   `
-            if (!judgeIsLogin()) {
-                return;
-            }
             if (carId == 0){
                 Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
                 return;
             }
             startActivity(new Intent(getContext(), TireRepairActivity.class));
         } else if (type == 3) { //待更换轮胎
-           // listener.onShopClassClickListener();
-            //判断是否登录（未登录提示登录）
-            if (!judgeIsLogin()) {
-                return;
-            }
+
             Intent intent = new Intent(getContext(), TireWaitChangeActivity.class);
             intent.putExtra(MyFragment.FROM_FRAGMENT, "HOMEFRAGMENT");
             startActivity(intent);
@@ -982,4 +1019,6 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         super.onStop();
         Log.e(TAG, "onStart:onStop "  );
     }
+
+
 }

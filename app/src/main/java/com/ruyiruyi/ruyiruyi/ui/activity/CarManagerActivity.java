@@ -79,10 +79,16 @@ public class CarManagerActivity extends RyBaseActivity {
 
         initView();
 
-        initDataFromService();
+
         // initData();
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initDataFromService();
     }
 
     private void initDataFromService() {
@@ -418,9 +424,9 @@ public class CarManagerActivity extends RyBaseActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        /*Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra(MyFragment.FROM_FRAGMENT, fromFragment);
-        startActivity(intent);
+        startActivity(intent);*/
         finish();
     }
     /*
