@@ -255,12 +255,16 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                         try {
                             JSONObject carObject = data.getJSONObject("androidHomeData_cars");
                             if (carObject != null) {
+                                carId = carObject.getInt("car_id");
+                                if (carId == 0){
+
+                                }
                                 carImage = carObject.getString("car_brand_url");
                                 carName = carObject.getString("car_verhicle");
                                 fontSize = carObject.getString("font");
                                 rearSize = carObject.getString("rear");
                                 tireSame = carObject.getBoolean("same");
-                                carId = carObject.getInt("car_id");
+
                                 service_end_date = carObject.getString("service_end_date");
                                 service_year = carObject.getString("service_year");
                                 service_year_length = carObject.getString("service_year_length");
