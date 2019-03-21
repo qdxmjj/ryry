@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 tools:context="com.ruyiruyi.merchant.ui.activity.OrderConfirmFirstChangeActivity">
 
     <com.ruyiruyi.rylibrary.cell.ActionBar
@@ -15,8 +15,10 @@
         android:id="@+id/scrollView_"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/c1"
         android:layout_below="@+id/acbar"
-        android:background="@color/c1">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -519,7 +521,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
-                android:background="#ffffff">
+                android:background="#ffffff"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_licencepic_sample"
@@ -545,11 +548,13 @@
                     android:text="行驶证照片"/>
             </FrameLayout>
 
+            <!--行驶证照片 已删除-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:weightSum="3">
 
                 <FrameLayout
@@ -559,13 +564,13 @@
                     android:layout_weight="1">
 
                     <com.ruyiruyi.merchant.cell.CircleImageView
-                        app:roundHeight="3dp"
-                        app:roundWidth="3dp"
                         android:id="@+id/pic_xingshizheng"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/img_bg_dark"/>
+                        android:src="@drawable/img_bg_dark"
+                        app:roundHeight="3dp"
+                        app:roundWidth="3dp"/>
 
                     <ImageView
                         android:id="@+id/pic_xingshizheng_delete"
@@ -602,23 +607,70 @@
 
             </LinearLayout>
 
+            <!--行驶证认证-->
+            <FrameLayout
+                android:id="@+id/xsz_prove_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingBottom="13dp"
+                android:paddingLeft="36dp"
+                android:paddingRight="20dp"
+                android:paddingTop="13dp">
+
+                <TextView
+                    android:id="@+id/xsz_prove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:text="未认证"
+                    android:textColor="@color/c19"
+                    android:textSize="12sp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="行驶证认证"
+                        android:textColor="@color/c7"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="(必填项)"
+                        android:textColor="@color/c6"
+                        android:textSize="12sp"/>
+
+                    <ImageView
+                        android:id="@+id/prove_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_question"/>
+
+                </LinearLayout>
+            </FrameLayout>
+
             <View
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="2dp"
                 android:background="#ffffff"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#ffffff">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:background="@color/c1"/>
-            </LinearLayout>
 
             <!--车辆照片-->
             <!--标题加拍照示例-->
@@ -627,11 +679,6 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:background="#ffffff">
-
-                <TextView
-                    style="@style/public_oneitem_left"
-                    android:layout_marginLeft="36dp"
-                    android:text="车辆照片"/>
 
                 <TextView
                     android:id="@+id/tv_carpic_sample"
@@ -648,6 +695,12 @@
                     android:text="拍照示例"
                     android:textColor="@color/c6"
                     android:textSize="10sp"/>
+
+                <TextView
+                    android:id="@+id/textView6"
+                    style="@style/public_oneitem_left"
+                    android:layout_marginLeft="36dp"
+                    android:text="车辆照片"/>
             </FrameLayout>
 
             <LinearLayout
@@ -664,13 +717,13 @@
                     android:layout_weight="1">
 
                     <com.ruyiruyi.merchant.cell.CircleImageView
-                        app:roundHeight="3dp"
-                        app:roundWidth="3dp"
                         android:id="@+id/pic_car"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/img_bg_dark"/>
+                        android:src="@drawable/img_bg_dark"
+                        app:roundHeight="3dp"
+                        app:roundWidth="3dp"/>
 
                     <ImageView
                         android:id="@+id/pic_car_delete"

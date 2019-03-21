@@ -203,6 +203,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
     private static final int REQUEST_CODE_VEHICLE_LICENSE = 120;  //行驶证证识别
 
     private RyLiaTransparentDialog ryTransparentDialog;
+    private String drivingLicenseDate = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,7 +223,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
             }
         });
 
-        ryTransparentDialog = new RyLiaTransparentDialog(this, "");
+        ryTransparentDialog = new RyLiaTransparentDialog(this, "      未进行车辆认证不会影响其它功能的正常使用，免费认证后可享全部换胎补胎服务");
 
        /* //初始化百度 文字识别OCR单例
 
@@ -379,10 +380,9 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                         String font = data.getString("font");
                         String rear = data.getString("rear");
                         id = data.getInt("id");
-                        Long drivingLicenseDate = data.getLong("drivingLicenseDate");
-                        String xszRegisterTime = new UtilsRY().getTimestampToString(drivingLicenseDate);
-                        //  date = xszRegisterTime;
-                        date.append(xszRegisterTime);
+                        Long datess = data.getLong("drivingLicenseDate");
+                        drivingLicenseDate = new UtilsRY().getTimestampToString(datess);
+                        /*date.append(xszRegisterTime);*/
                         try {
                             Long serviceEndDate = data.getLong("serviceEndDate");
                             xszEndTime = new UtilsRY().getTimestampToString(serviceEndDate);
@@ -425,7 +425,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                         provinceText.setText(proCityName);
                         carFontText.setText(font);
                         carRearText.setText(rear);
-                        xszRegisterTimeText.setText(xszRegisterTime);
+                        /*xszRegisterTimeText.setText(xszRegisterTime);*/
                         xszEndTimeText.setText(serviceYear + "年");
                         hasZhuye = true;
                         initZhuyeLayou();
@@ -1112,7 +1112,7 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
             jsonObject.put("font", carFontText.getText().toString());
             jsonObject.put("rear", carRearText.getText().toString());
             if (proveStatus == 1) {//已认证（传入行驶证注册时间）
-                jsonObject.put("driving_license_date", xszRegisterTimeText.getText().toString());
+                jsonObject.put("driving_license_date", drivingLicenseDate);
             } else {//未认证（传默认时间）
                 jsonObject.put("driving_license_date", "2000-01-01");//TODO 默认时间
             }
@@ -1345,7 +1345,11 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
             jsonObject.put("proCityName", provinceText.getText());
             jsonObject.put("font", carFontText.getText().toString());
             jsonObject.put("rear", carRearText.getText().toString());
-            jsonObject.put("drivingLicenseDate", xszRegisterTimeText.getText().toString());
+            if (proveStatus == 1) {//已认证（传入行驶证注册时间）
+                jsonObject.put("drivingLicenseDate", drivingLicenseDate);
+            } else {//未认证（传默认时间）
+                jsonObject.put("drivingLicenseDate", "2000-01-01");//TODO 默认时间
+            }
             jsonObject.put("authenticatedState", proveStatus);// TODO 修改车辆
 
             jsonObject.put("serviceYearLength", serviceYear);
@@ -1590,17 +1594,67 @@ public class CarInfoActivity extends RyBaseActivity implements View.OnClickListe
                                             Toast.makeText(CarInfoActivity.this, "行驶证认证异常，请保证行驶证信息拍摄完整", Toast.LENGTH_SHORT).show();
                                             return;
                                         }
-                                        xszRegisterTimeText.setText(register_date.substring(0, 4) + "-" + register_date.substring(4, 6) + "-" + register_date.substring(6, 8));
+                                        drivingLicenseDate = register_date.substring(0, 4) + "-" + register_date.substring(4, 6) + "-" + register_date.substring(6, 8);
 
                                         if (provePlantnumber.equals(plantNumber)) {
-                                            //认证成功
-                                            Toast.makeText(CarInfoActivity.this, "认证成功!", Toast.LENGTH_SHORT).show();
-                                            ///切换成已认证状态
-                                            proveStatus = 1;//是否进行车主认证 (1 已认证 2 未认证)
-                                            xsz_prove.setText("已认证");
-                                            xsz_prove.setTextColor(getResources().getColor(R.color.c22));
-                                            xsz_prove.setClickable(false);//本次不可再次认证
-                                            carNumberLayout.setClickable(false);//认证后不可修改车牌号
+                                            if (currentType == 0) {//添加车辆
+                                                //认证成功
+                                                Toast.makeText(CarInfoActivity.this, "认证成功!", Toast.LENGTH_SHORT).show();
+                                                ///切换成已认证状态
+                                                proveStatus = 1;//是否进行车主认证 (1 已认证 2 未认证)
+                                                xsz_prove.setText("已认证");
+                                                xsz_prove.setTextColor(getResources().getColor(R.color.c22));
+                                                xsz_prove.setClickable(false);//本次不可再次认证
+                                                carNumberLayout.setClickable(false);//认证后不可修改车牌号
+                                            } else {//修改车辆信息 （需要调用认证接口）
+                                                RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "userCarInfo/updateAuthenticatedState");// TODO POST
+                                                params.addBodyParameter("id", userCarId + "");
+                                                params.addBodyParameter("drivingLicenseDateStr", drivingLicenseDate);
+                                                params.addBodyParameter("authenticatedState", "1");
+                                                Log.e(TAG, "onResult: 认证 params.toString() = " + params.toString() );
+                                                x.http().post(params, new Callback.CommonCallback<String>() {
+                                                    @Override
+                                                    public void onSuccess(String result) {
+                                                        Log.e(TAG, "onSuccess: 认证 result = " +  result);
+                                                        try {
+                                                            JSONObject jsonObject = new JSONObject(result);
+                                                            int status = jsonObject.getInt("status");
+                                                            String msg = jsonObject.getString("msg");
+                                                            Toast.makeText(CarInfoActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                                            if (status == 1) {//成功
+                                                                //认证成功
+                                                                Toast.makeText(CarInfoActivity.this, "认证成功!", Toast.LENGTH_SHORT).show();
+                                                                ///切换成已认证状态
+                                                                proveStatus = 1;//是否进行车主认证 (1 已认证 2 未认证)
+                                                                xsz_prove.setText("已认证");
+                                                                xsz_prove.setTextColor(getResources().getColor(R.color.c22));
+                                                                xsz_prove.setClickable(false);//本次不可再次认证
+                                                                carNumberLayout.setClickable(false);//认证后不可修改车牌号
+                                                            }
+
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onError(Throwable ex, boolean isOnCallback) {
+                                                        Log.e(TAG, "onError: 认证 ex.toString() = " + ex.toString() );
+                                                        Toast.makeText(CarInfoActivity.this, "认证失败，请检查网络", Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(CancelledException cex) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onFinished() {
+
+                                                    }
+                                                });
+
+                                            }
                                         } else {
                                             //认证失败
                                             Toast.makeText(CarInfoActivity.this, "行驶证认证失败，请检查车牌号", Toast.LENGTH_SHORT).show();

@@ -24,22 +24,30 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.ocr.sdk.OCR;
+import com.baidu.ocr.sdk.OnResultListener;
+import com.baidu.ocr.sdk.exception.OCRError;
+import com.baidu.ocr.sdk.model.AccessToken;
+import com.baidu.ocr.ui.camera.CameraActivity;
 import com.bumptech.glide.Glide;
 import com.ruyiruyi.merchant.MainActivity;
 import com.ruyiruyi.merchant.R;
 import com.ruyiruyi.merchant.bean.FreeChangeNewShoeBean;
 import com.ruyiruyi.merchant.bean.FreeChangeOldShoeBean;
 import com.ruyiruyi.merchant.bean.OldNewBarCode;
+import com.ruyiruyi.merchant.cell.CircleImageView;
 import com.ruyiruyi.merchant.db.DbConfig;
 import com.ruyiruyi.merchant.ui.activity.base.MerchantBaseActivity;
 import com.ruyiruyi.merchant.ui.multiType.PublicShoeFlag;
-import com.ruyiruyi.merchant.cell.CircleImageView;
+import com.ruyiruyi.merchant.ui.service.RecognizeService;
+import com.ruyiruyi.merchant.utils.FileUtil;
 import com.ruyiruyi.merchant.utils.UtilsRY;
 import com.ruyiruyi.merchant.utils.UtilsURL;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.image.ImageUtils;
 import com.ruyiruyi.rylibrary.ui.cell.WheelView;
+import com.ruyiruyi.rylibrary.utils.RyLiaTransparentDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -201,6 +209,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private String userPhone;
     private String platNumber;
     private String storeName;
+    private String userCarId;
     private boolean isShoeConsistent = false;  //轮胎是否一致标记 默认false不一致
     private int fiveYearsShoeAmount = 0;// 满五年更换的轮胎数 默认0
     private int noFiveYearsShoeAmount = 0;// 总轮胎数 默认0
@@ -270,6 +279,14 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
     private ProgressDialog mainDialog;
     private ScrollView scrollView_;
 
+    private static final int REQUEST_CODE_VEHICLE_LICENSE = 120;  //行驶证证识别 //TODO
+    private FrameLayout xsz_prove_layout;
+    private ImageView prove_icon;
+    private TextView xsz_prove;
+    private int proveStatus = 2; // 1 已认证 2 未认证（默认）
+    private RyLiaTransparentDialog ryTransparentDialog;
+    private String drivingLicenseTime = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -299,6 +316,23 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         scrollView_ = findViewById(R.id.scrollView_);
         showDialogProgress(mainDialog, "订单信息加载中...");
         scrollView_.setVisibility(View.INVISIBLE);
+
+
+        ryTransparentDialog = new RyLiaTransparentDialog(this, "      未进行车辆认证的车辆不可享受免费换胎补胎服务，请确保订单车辆完成车辆认证");
+        //TODO 行驶证识别调用initAccessToken方法，初始化OCR单例
+        OCR.getInstance(this).initAccessToken(new OnResultListener<AccessToken>() {
+            @Override
+            public void onResult(AccessToken result) {
+                // 调用成功，返回AccessToken对象
+                String token = result.getAccessToken();
+            }
+
+            @Override
+            public void onError(OCRError error) {
+                // 调用失败，返回OCRError子类SDKError对象
+            }
+        }, getApplicationContext());
+
 
         initView();
 
@@ -333,6 +367,37 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
 
             }
         });
+
+        //行驶证认证  //TODO
+        RxViewAction.clickNoDouble(xsz_prove).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                if (proveStatus == 1) {
+                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "该车辆已认证", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //TODO 行驶证识别拍摄
+                // 行驶证识别参数设置
+                Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
+                // 设置临时存储
+                intent.putExtra(CameraActivity.KEY_OUTPUT_FILE_PATH,
+                        FileUtil.getSaveFile(getApplication()).getAbsolutePath());
+                intent.putExtra(CameraActivity.KEY_CONTENT_TYPE,
+                        CameraActivity.CONTENT_TYPE_GENERAL);
+                startActivityForResult(intent, REQUEST_CODE_VEHICLE_LICENSE);
+
+            }
+        });
+        //认证问号提示//TODO
+        RxViewAction.clickNoDouble(prove_icon).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+
+                showDialogProgress(ryTransparentDialog, "");
+            }
+        });
+
         /* <--替换按钮监听 */
         RxViewAction.clickNoDouble(full_code_a_change).subscribe(new Action1<Void>() {
             @Override
@@ -995,10 +1060,10 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     showErrorDialog("请选择替换新轮胎条形码!");
                     return false;
                 }
-                if (!hasPic_license) {
+               /* if (!hasPic_license) {
                     showErrorDialog("请上传行驶证照片!");
                     return false;
-                }
+                }*///TODO
                 if (!hasPic_car) {
                     showErrorDialog("请上传车辆照片!");
                     return false;
@@ -1071,6 +1136,10 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                 showDialogProgress(progressDialog, "数据提交中...");
                 switch (type) {
                     case "1":
+                        if (proveStatus == 2) {//TODO
+                            Toast.makeText(OrderConfirmFreeChangeActivity.this, "请先进行车辆认证", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         //先处理提交数据
                         initBeforePost();
 
@@ -1087,7 +1156,8 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         params.addBodyParameter("reqJson", object.toString());
                         params.addBodyParameter("changeBarCodeVoList", oldNewBarCodeList.toString());
                         params.addBodyParameter("token", new DbConfig(getApplicationContext()).getToken());
-                        params.addBodyParameter("drivingLicenseImg", new File(path_licenseBitmap));
+                        /*params.addBodyParameter("drivingLicenseImg", new File(path_licenseBitmap));*///TODO
+                        params.addBodyParameter("drivingLicenseTime", drivingLicenseTime);//TODO
                         params.addBodyParameter("carImg", new File(path_carBitmap));
 /*                        if (hasPic_a_left) {    <!--(现版本去除  对应layout布局文件 )-->
                             params.addBodyParameter("shoe1Img", new File(path_shoeABitmap));
@@ -1268,7 +1338,7 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
             oldNewBarCodeList.add(oldNewBarCode);
         }
         //2.照片   最后在onDestroy中根据图片Path删除照片
-        path_licenseBitmap = ImageUtils.savePhoto(licenseBitmap, this.getObbDir().getAbsolutePath(), "licensePic");
+        /*path_licenseBitmap = ImageUtils.savePhoto(licenseBitmap, this.getObbDir().getAbsolutePath(), "licensePic");*///TODO
         path_carBitmap = ImageUtils.savePhoto(carBitmap, this.getObbDir().getAbsolutePath(), "carPic");
         if (hasPic_a_left) {
             path_shoeABitmap = ImageUtils.savePhoto(shoeAbitmap, this.getObbDir().getAbsolutePath(), "shoeAPic" + code_a_);
@@ -1401,6 +1471,87 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                     break;
                 case TAKE_PICTURE:
                     setImageToViewFromPhone(tempUri, true);
+                    break;
+                case REQUEST_CODE_VEHICLE_LICENSE://TODO
+                    RecognizeService.recVehicleLicense(this, FileUtil.getSaveFile(getApplicationContext()).getAbsolutePath(),
+                            new RecognizeService.ServiceListener() {
+                                @Override
+                                public void onResult(String result) {
+                                    Log.e(TAG, "onResult: 行驶证认证回调" + result);
+                                    try {
+                                        JSONObject tokenObj = new JSONObject(result);
+                                        JSONObject words_result = tokenObj.getJSONObject("words_result");
+                                        JSONObject obj = words_result.getJSONObject("号牌号码");
+                                        String provePlantnumber = obj.getString("words");
+
+                                        JSONObject obj_date = words_result.getJSONObject("注册日期");
+                                        String register_date = obj_date.getString("words");
+                                        if (register_date == null || register_date.length() == 0 || register_date.length() < 8) {
+                                            Toast.makeText(OrderConfirmFreeChangeActivity.this, "行驶证认证异常，请保证行驶证信息拍摄完整", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        drivingLicenseTime = register_date.substring(0, 4) + "-" + register_date.substring(4, 6) + "-" + register_date.substring(6, 8);
+                                        //TODO 用户比对确认处理
+                                        Log.e(TAG, "onResult: provePlantnumber = " + provePlantnumber + " register_date = " + register_date);
+                                        if (platNumber != null && platNumber.equals(provePlantnumber)) {
+                                            //TODO POST
+                                            RequestParams params = new RequestParams(UtilsURL.REQUEST_URL + "userCarInfo/updateAuthenticatedState");// TODO POST
+                                            params.addBodyParameter("id", userCarId + "");
+                                            params.addBodyParameter("drivingLicenseDateStr", drivingLicenseTime);
+                                            params.addBodyParameter("authenticatedState", "1");
+                                            Log.e(TAG, "onResult: 认证 params.toString() = " + params.toString() );
+                                            x.http().post(params, new Callback.CommonCallback<String>() {
+                                                @Override
+                                                public void onSuccess(String result) {
+                                                    Log.e(TAG, "onSuccess: 认证 result = " +  result);
+                                                    try {
+                                                        JSONObject jsonObject = new JSONObject(result);
+                                                        int status = jsonObject.getInt("status");
+                                                        String msg = jsonObject.getString("msg");
+                                                        Toast.makeText(OrderConfirmFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                                        if (status == 1) {//成功
+                                                            //认证成功
+                                                            Toast.makeText(OrderConfirmFreeChangeActivity.this, "认证成功!", Toast.LENGTH_SHORT).show();
+                                                            ///切换成已认证状态
+                                                            proveStatus = 1;//是否进行车主认证 (1 已认证 2 未认证)
+                                                            xsz_prove.setText("已认证");
+                                                            xsz_prove.setTextColor(getResources().getColor(R.color.c22));
+                                                            xsz_prove.setClickable(false);//本次不可再次认证
+                                                        }
+
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onError(Throwable ex, boolean isOnCallback) {
+                                                    Log.e(TAG, "onError: 认证 ex.toString() = " + ex.toString() );
+                                                    Toast.makeText(OrderConfirmFreeChangeActivity.this, "认证失败，请检查网络", Toast.LENGTH_SHORT).show();
+                                                }
+
+                                                @Override
+                                                public void onCancelled(CancelledException cex) {
+
+                                                }
+
+                                                @Override
+                                                public void onFinished() {
+
+                                                }
+                                            });
+
+                                        } else {
+                                            //认证失败
+                                            Toast.makeText(OrderConfirmFreeChangeActivity.this, "行驶证认证失败，请检查车牌号", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (JSONException e) {
+                                        Toast.makeText(OrderConfirmFreeChangeActivity.this, "行驶证认证异常，请保证行驶证信息拍摄完整", Toast.LENGTH_SHORT).show();
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                     break;
             }
         }
@@ -1974,6 +2125,8 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
                         userPhone = data.getString("userPhone");
                         platNumber = data.getString("platNumber");
                         storeName = data.getString("storeName");
+                        userCarId = data.getString("userCarId");
+                        //                        proveStatus = data.getInt("authenticatedState");//TODO
                         JSONArray freeChangeOrderVoList = data.getJSONArray("freeChangeOrderVoList");
                         for (int i = 0; i < freeChangeOrderVoList.length(); i++) {//存取前后胎更换位置数量list数据
                             PublicShoeFlag bean = null;
@@ -2122,6 +2275,18 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
             ll_pic_b.setVisibility(View.VISIBLE);
             ll_pic_c.setVisibility(View.VISIBLE);
             ll_pic_d.setVisibility(View.VISIBLE);
+        }
+
+        //设置认证状态 //TODO
+        if (proveStatus == 1){
+            //是否进行车主认证 (1 已认证 2 未认证)
+            xsz_prove.setText("已认证");
+            xsz_prove.setTextColor(getResources().getColor(R.color.c22));
+            xsz_prove.setClickable(false);//本次不可再次认证
+        }else {
+            xsz_prove.setText("未认证");
+            xsz_prove.setTextColor(getResources().getColor(R.color.c19));
+            xsz_prove.setClickable(true);//本次可认证
         }
 
     }
@@ -2438,6 +2603,10 @@ public class OrderConfirmFreeChangeActivity extends MerchantBaseActivity {
         tv_shoepic_sample = findViewById(R.id.tv_shoepic_sample);
         tv_licencepic_sample = findViewById(R.id.tv_licencepic_sample);
         tv_carpic_sample = findViewById(R.id.tv_carpic_sample);
+
+        xsz_prove_layout = findViewById(R.id.xsz_prove_layout);//TODO
+        prove_icon = findViewById(R.id.prove_icon);
+        xsz_prove = findViewById(R.id.xsz_prove);
 
         shoeFlagList = new ArrayList<>();
         oldShoeList = new ArrayList<>();

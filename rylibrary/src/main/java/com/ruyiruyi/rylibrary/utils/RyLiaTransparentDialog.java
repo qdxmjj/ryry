@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ruyiruyi.rylibrary.R;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -17,6 +18,8 @@ import rx.functions.Action1;
  */
 
 public class RyLiaTransparentDialog extends ProgressDialog {
+    private TextView txt;
+    private String content;
 
     private Context mContext;
 
@@ -25,6 +28,7 @@ public class RyLiaTransparentDialog extends ProgressDialog {
     public RyLiaTransparentDialog(Context context, String content) {
         super(context, R.style.myProgressDialog);//去除白色背景
         this.mContext = context;
+        this.content = content;
         setCanceledOnTouchOutside(false);
         /*//去除半透明灰色背景
         getWindow().setDimAmount(0f);*/
@@ -52,6 +56,9 @@ public class RyLiaTransparentDialog extends ProgressDialog {
 
     private void initView() {
         pop_close = (ImageView) findViewById(R.id.pop_close);
+        txt = (TextView) findViewById(R.id.txt);
+
+        txt.setText(content);
     }
 
 

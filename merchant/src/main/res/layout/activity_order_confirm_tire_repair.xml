@@ -1252,15 +1252,11 @@
                 </LinearLayout>
 
             </LinearLayout>
-            <!--线-->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="#ffffff"/>
 
             <!--行驶证照片-->
             <!--标题加拍照示例-->
             <FrameLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/public_lineheight"
                 android:layout_marginTop="5dp"
@@ -1290,6 +1286,7 @@
             </FrameLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
@@ -1346,9 +1343,67 @@
 
             </LinearLayout>
 
+            <!--行驶证认证-->
+            <FrameLayout
+                android:id="@+id/xsz_prove_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingBottom="13dp"
+                android:paddingLeft="36dp"
+                android:paddingRight="20dp"
+                android:paddingTop="13dp">
+
+                <TextView
+                    android:id="@+id/xsz_prove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="18dp"
+                    android:text="未认证"
+                    android:textColor="@color/c19"
+                    android:textSize="12sp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="行驶证认证"
+                        android:textColor="@color/c7"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="(必填项)"
+                        android:textColor="@color/c6"
+                        android:textSize="12sp"/>
+
+                    <ImageView
+                        android:id="@+id/prove_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_question"/>
+
+                </LinearLayout>
+            </FrameLayout>
+
             <View
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="2dp"
                 android:background="#ffffff"/>
 
             <!--车辆照片-->

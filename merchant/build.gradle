@@ -140,6 +140,8 @@ android {
 }
 
 dependencies {
+    compile project(':ocr_ui')
+    compile files('libs/ocr-sdk.jar')
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/BaiduLBS_Android.jar')
     def system_dependencies = rootProject.ext.system_dependencies
