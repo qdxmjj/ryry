@@ -66,6 +66,7 @@
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:hardwareAccelerated="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
 
             <!--
@@ -89,7 +90,8 @@
             android:exported="true"
             android:process="system"/>
 
-        <activity android:name=".ui.activity.LaunchActivity">
+        <activity android:name=".ui.activity.LaunchActivity"
+          >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

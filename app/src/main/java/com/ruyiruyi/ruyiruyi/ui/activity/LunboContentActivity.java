@@ -1,12 +1,15 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
@@ -29,6 +32,8 @@ public class LunboContentActivity extends RyBaseActivity {
     private String service_year_max;    //最大服务年限
     private String service_year;       //当前服务年限
     private String service_end_year;
+    private int carUUid;
+    private AlertDialog carInfoDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class LunboContentActivity extends RyBaseActivity {
             rearsize = intent.getStringExtra("REARSIZE");
         }
         carid = intent.getIntExtra("CARID",0);
+        carUUid = intent.getIntExtra("CARUUID",0);
         usercarid = intent.getIntExtra("USERCARID",0);
         service_year = intent.getStringExtra("SERVICE_YEAR");
         service_year_max = intent.getStringExtra("SERVICE_YEAR_MAX");
@@ -68,6 +74,24 @@ public class LunboContentActivity extends RyBaseActivity {
     private void intiView() {
         lunboImageView = (ImageView) findViewById(R.id.lunbo_image_content);
         lunboButton = (TextView) findViewById(R.id.lunbo_button);
+        carInfoDialog = new AlertDialog.Builder(this)
+                .setTitle("请完善车辆信息")
+                .setMessage("是否前往完善信息界面")
+                .setIcon(R.mipmap.ic_logo)
+                .setPositiveButton("前往", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(getApplicationContext(), CarManagerActivity.class);
+                        intent.putExtra("FRAGMENT", "HOMEFRAGMENT");
+                        startActivityForResult(intent, MainActivity.HOMEFRAGMENT_RESULT);
+                        finish();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                }).create();
 
 
         if (lunboPosition == 0){
@@ -85,6 +109,10 @@ public class LunboContentActivity extends RyBaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        if (carUUid == 0){
+                            carInfoDialog.show();
+                            return;
+                        }
                         if (lunboPosition == 0){    //购买轮胎
                             if (fontrearflag == 0) {  //前后轮一样
                                 if (service_end_year.equals("")){

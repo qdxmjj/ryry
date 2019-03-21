@@ -1,8 +1,10 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
@@ -69,6 +72,9 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
     private String moneyMinus;
     private String needPay;
     private String deduction;
+    private int authenticatedState;     //1认证 2 未认证
+    private AlertDialog carInfoDialog;
+    private AlertDialog carAddDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +122,7 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
         phone = user.getPhone();
         userId = user.getId();
         carId = user.getCarId();
+        authenticatedState = user.getAuthenticatedState();
         initView();
         initData();
         //sendDataToService();
@@ -142,10 +149,18 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                 isNomallGoods = true;
             }
         }
+        Log.e(TAG, "sendDataToService: authenticatedState--" + authenticatedState);
 
-        if (isNomallGoods && carId == 0){
-            Toast.makeText(this, "特殊商品，需要绑定车辆购买!", Toast.LENGTH_SHORT).show();
-            return;
+        if (isNomallGoods){
+            if (carId == 0){        //为添加车辆
+                carAddDialog.show();
+                return;
+            }else if (authenticatedState == 2){     //已添加车辆 未认证
+                carInfoDialog.show();
+                return;
+            }
+          /*  Toast.makeText(this, "特殊商品，需要绑定车辆购买!", Toast.LENGTH_SHORT).show();
+            return;*/
         }
 
 
@@ -251,6 +266,43 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                         sendDataToService();
                     }
                 });
+
+        carInfoDialog = new AlertDialog.Builder(this)
+                .setTitle("请完善车辆信息")
+                .setMessage("是否前往完善信息界面")
+                .setIcon(R.mipmap.ic_logo)
+                .setPositiveButton("前往", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(getApplicationContext(), CarManagerActivity.class);
+                        intent.putExtra("FRAGMENT", "HOMEFRAGMENT");
+                        startActivityForResult(intent, MainActivity.HOMEFRAGMENT_RESULT);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                }).create();
+
+        carAddDialog = new AlertDialog.Builder(this)
+                .setTitle("请添加车辆")
+                .setMessage("请前往添加车辆界面并认证后购买")
+                .setIcon(R.mipmap.ic_logo)
+                .setPositiveButton("前往", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(getApplicationContext(), CarInfoActivity.class);
+                        intent.putExtra("CANCLICK", 0);
+                        intent.putExtra("FROM", 4);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                }).create();
     }
 
     private void register() {

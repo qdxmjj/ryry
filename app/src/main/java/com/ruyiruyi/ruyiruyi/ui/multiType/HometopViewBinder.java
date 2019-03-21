@@ -80,6 +80,8 @@ public class HometopViewBinder extends ItemViewProvider<Hometop, HometopViewBind
             holder.carImage.setImageResource(R.drawable.ic_one_register);
         }else if (hometop.state == 1){  //未添加车辆
             holder.carImage.setImageResource(R.drawable.ic_add );
+        }else if (hometop.state == 3){
+            holder.carImage.setImageResource(R.drawable.ic_dairenzheng );
         }else {     //已添加车辆
             Glide.with(context).load(hometop.carImage).into(holder.carImage);
 
