@@ -220,7 +220,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                         platNumber = data.getString("platNumber");
                         storeName = data.getString("storeName");
                         userCarId = data.getInt("userCarId");
-//                        proveStatus = data.getInt("authenticatedState");//TODO
+                        proveStatus = data.getInt("authenticatedState");//TODO
                         JSONArray freeChangeOrderVoList = data.getJSONArray("firstChangeOrderVoList");
                         for (int i = 0; i < freeChangeOrderVoList.length(); i++) {//存取前后胎更换位置数量list数据
                             PublicShoeFlag bean = null;

@@ -306,7 +306,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                         platNumber = data.getString("platNumber");
                         storeName = data.getString("storeName");
                         userCarId = data.getInt("userCarId");
-                        //                        proveStatus = data.getInt("authenticatedState");//TODO
+                        proveStatus = data.getInt("authenticatedState");//TODO
                         JSONArray userCarShoeOldBarCodeList = data.getJSONArray("userCarShoeOldBarCodeList");
                         for (int i = 0; i < userCarShoeOldBarCodeList.length(); i++) {
                             JSONObject objBean = (JSONObject) userCarShoeOldBarCodeList.get(i);
@@ -1006,11 +1006,11 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
                                             params.addBodyParameter("id", userCarId + "");
                                             params.addBodyParameter("drivingLicenseDateStr", drivingLicenseTime);
                                             params.addBodyParameter("authenticatedState", "1");
-                                            Log.e(TAG, "onResult: 认证 params.toString() = " + params.toString() );
+                                            Log.e(TAG, "onResult: 认证 params.toString() = " + params.toString());
                                             x.http().post(params, new Callback.CommonCallback<String>() {
                                                 @Override
                                                 public void onSuccess(String result) {
-                                                    Log.e(TAG, "onSuccess: 认证 result = " +  result);
+                                                    Log.e(TAG, "onSuccess: 认证 result = " + result);
                                                     try {
                                                         JSONObject jsonObject = new JSONObject(result);
                                                         int status = jsonObject.getInt("status");
@@ -1033,7 +1033,7 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 
                                                 @Override
                                                 public void onError(Throwable ex, boolean isOnCallback) {
-                                                    Log.e(TAG, "onError: 认证 ex.toString() = " + ex.toString() );
+                                                    Log.e(TAG, "onError: 认证 ex.toString() = " + ex.toString());
                                                     Toast.makeText(OrderConfirmTireRepairActivity.this, "认证失败，请检查网络", Toast.LENGTH_SHORT).show();
                                                 }
 
@@ -1177,12 +1177,12 @@ public class OrderConfirmTireRepairActivity extends MerchantBaseActivity {
 
     private void setData() {
         //设置认证状态 //TODO
-        if (proveStatus == 1){
+        if (proveStatus == 1) {
             //是否进行车主认证 (1 已认证 2 未认证)
             xsz_prove.setText("已认证");
             xsz_prove.setTextColor(getResources().getColor(R.color.c22));
             xsz_prove.setClickable(false);//本次不可再次认证
-        }else {
+        } else {
             xsz_prove.setText("未认证");
             xsz_prove.setTextColor(getResources().getColor(R.color.c19));
             xsz_prove.setClickable(true);//本次可认证
