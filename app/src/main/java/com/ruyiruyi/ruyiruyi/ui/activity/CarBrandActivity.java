@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.github.promeg.pinyinhelper.Pinyin;
-import com.github.promeg.tinypinyin.lexicons.android.cncity.CnCityDict;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarBrand;
@@ -35,6 +33,7 @@ public class CarBrandActivity extends RyBaseActivity {
     private ActionBar actionBar;
     private IndexableLayout indexableLayout;
     private CarAdapter mAdapter;
+    private int from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +51,9 @@ public class CarBrandActivity extends RyBaseActivity {
                 }
             }
         });
+        Intent intent = getIntent();
+        from = intent.getIntExtra("FROM",0);
+
 
         initView();
         initAdapter();
@@ -65,6 +67,7 @@ public class CarBrandActivity extends RyBaseActivity {
             public void onItemClick(View v, int originalPosition, int currentPosition, CarModel entity) {
                 Intent intent = new Intent(getApplicationContext(),CarDemioActivity.class);
                 intent.putExtra("CARID",entity.getCarId());
+                intent.putExtra("FROM",from);
                 startActivity(intent);
                /* Log.e(TAG, "onItemClick: " + entity.getCarIcon());
                 Log.e(TAG, "onItemClick: " + entity.getCarName());

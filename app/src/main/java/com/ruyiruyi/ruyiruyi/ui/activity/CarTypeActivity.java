@@ -21,9 +21,7 @@ import com.ruyiruyi.rylibrary.cell.ActionBar;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.DbManager;
 import org.xutils.common.Callback;
-import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -49,6 +47,7 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
     public static String currentYear ;
     public static boolean ishave = false;
     private CarType carType;
+    private int from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +69,7 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
         carTireInfoList = new ArrayList<>();
         Intent intent = getIntent();
         vercicleid = intent.getIntExtra("VERCICLEID",0);
+        from = intent.getIntExtra("FROM",0);
         carType = new CarType();
 
         initView();
@@ -318,7 +318,12 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
                     intent.putExtra("FONT",font);
                     intent.putExtra("REAR",rear);
                     intent.putExtra("BRAND",brand);
-                    intent.putExtra("FROM",0);
+                    if (from == 4){
+                        intent.putExtra("FROM",5);
+                    }else {
+                        intent.putExtra("FROM",0);
+                    }
+
                     startActivity(intent);
                 }
             }

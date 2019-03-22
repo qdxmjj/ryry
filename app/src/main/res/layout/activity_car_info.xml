@@ -228,8 +228,9 @@
                     android:layout_marginLeft="20dp"
                     android:background="@color/c3"/>
 
-                <!--行驶证注册日期-->
+                <!--行驶证注册日期 已删除-->
                 <FrameLayout
+                    android:visibility="gone"
                     android:id="@+id/xsz_register_time_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -36,6 +36,7 @@ public class CarDemioActivity extends RyBaseActivity implements CarVersionViewBi
     private MultiTypeAdapter adapter;
     private Intent intent;
     private int carid;
+    private int from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class CarDemioActivity extends RyBaseActivity implements CarVersionViewBi
 
         intent = getIntent();
         carid = intent.getIntExtra("CARID",0);
+        from = intent.getIntExtra("FROM",0);
         initView();
         initData();
     }
@@ -129,6 +131,7 @@ public class CarDemioActivity extends RyBaseActivity implements CarVersionViewBi
     public void onCarVersionItemClickListener(int id) {
         Intent intent = new Intent(this, CarTypeActivity.class);
         intent.putExtra("VERCICLEID" ,id);
+        intent.putExtra("FROM",from);
         startActivity(intent);
     }
 }

@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.ruyiruyi.ruyiruyi.MainActivity;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
@@ -152,10 +151,15 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
         Log.e(TAG, "sendDataToService: authenticatedState--" + authenticatedState);
 
         if (isNomallGoods){
-            if (carId == 0){        //为添加车辆
+            User user = new DbConfig(getApplicationContext()).getUser();
+            int carIdss = user.getCarId();
+            int authenticatedStateSS = user.getAuthenticatedState();
+            Log.e(TAG, "sendDataToService:carIdss- " + carIdss );
+            Log.e(TAG, "sendDataToService:authenticatedStateSS- " + authenticatedStateSS );
+            if (carIdss == 0){        //为添加车辆
                 carAddDialog.show();
                 return;
-            }else if (authenticatedState == 2){     //已添加车辆 未认证
+            }else if (authenticatedStateSS == 2){     //已添加车辆 未认证
                 carInfoDialog.show();
                 return;
             }
@@ -268,15 +272,18 @@ public class OrderGoodsAffirmActivity extends RyBaseActivity implements InfoOneV
                 });
 
         carInfoDialog = new AlertDialog.Builder(this)
-                .setTitle("请完善车辆信息")
-                .setMessage("是否前往完善信息界面")
+                .setTitle("请进行车辆认证")
+                .setMessage("是否前往认证车辆")
                 .setIcon(R.mipmap.ic_logo)
                 .setPositiveButton("前往", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent(getApplicationContext(), CarManagerActivity.class);
-                        intent.putExtra("FRAGMENT", "HOMEFRAGMENT");
-                        startActivityForResult(intent, MainActivity.HOMEFRAGMENT_RESULT);
+
+                        Intent intent = new Intent(getApplicationContext(), CarInfoActivity.class);
+                        intent.putExtra("USERCARID", new DbConfig(getApplicationContext()).getUser().getCarId());
+                        intent.putExtra("PROVESTATUS", 2);
+                        intent.putExtra("FROM", 6);
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
