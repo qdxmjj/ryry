@@ -34,6 +34,8 @@ public class CarBrandActivity extends RyBaseActivity {
     private IndexableLayout indexableLayout;
     private CarAdapter mAdapter;
     private int from;
+    private int userCarId = 0;
+    private int proveStatus = 2;//是否进行车主认证 (1 已认证 2 未认证)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class CarBrandActivity extends RyBaseActivity {
         });
         Intent intent = getIntent();
         from = intent.getIntExtra("FROM",0);
+        userCarId = intent.getIntExtra("USERCARID", 0);
+        proveStatus = intent.getIntExtra("PROVESTATUS", 2);//是否进行车主认证 (1 已认证 2 未认证)
 
 
         initView();
@@ -68,6 +72,8 @@ public class CarBrandActivity extends RyBaseActivity {
                 Intent intent = new Intent(getApplicationContext(),CarDemioActivity.class);
                 intent.putExtra("CARID",entity.getCarId());
                 intent.putExtra("FROM",from);
+                intent.putExtra("USERCARID",userCarId);
+                intent.putExtra("PROVESTATUS",proveStatus);
                 startActivity(intent);
                /* Log.e(TAG, "onItemClick: " + entity.getCarIcon());
                 Log.e(TAG, "onItemClick: " + entity.getCarName());

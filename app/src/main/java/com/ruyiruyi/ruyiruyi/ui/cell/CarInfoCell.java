@@ -47,6 +47,7 @@ public class CarInfoCell extends FrameLayout {
         addView(contont, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 300));
 
         imageView = new ImageView(context);
+        imageView.setImageResource(R.mipmap.ic_logo);
         contont.addView(imageView, LayoutHelper.createFrame(200, 200, Gravity.CENTER_VERTICAL, 40, 0, 0, 0));
 
         textLayout = new LinearLayout(context);
@@ -61,6 +62,7 @@ public class CarInfoCell extends FrameLayout {
         titleText = new TextView(context);
         titleText.setTextColor(getResources().getColor(R.color.c6));
         titleText.setTextSize(16);
+        titleText.setText("请选择车型");
         proveLayout.addView(titleText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
 
 
@@ -85,7 +87,14 @@ public class CarInfoCell extends FrameLayout {
     }
 
     public void setValue(String icon, String title, String carBumber, int morenCar, int proveStatus) {
-        Glide.with(getContext()).load(icon).into(imageView);
+        if (icon.isEmpty()) {
+            imageView.setImageResource(R.drawable.ic_dairenzheng);
+        } else {
+            Glide.with(getContext()).load(icon).into(imageView);
+        }
+        if (title.isEmpty()) {
+            title = "待选择车型";
+        }
         titleText.setText(title);
         carNumberText.setText(carBumber);
         if (morenCar == 1) {
@@ -93,7 +102,7 @@ public class CarInfoCell extends FrameLayout {
         } else {
             morenView.setVisibility(GONE);
         }
-        Log.e("check_proveStatus", "setValue: " + proveStatus );
+        Log.e("check_proveStatus", "setValue: " + proveStatus);
         if (proveStatus == 2) { //是否进行车主认证 (1 已认证 2 未认证)
             proveIcon.setImageResource(R.drawable.ic_weirz);
             proveInLayout.setBackgroundResource(R.drawable.bg_noprove);

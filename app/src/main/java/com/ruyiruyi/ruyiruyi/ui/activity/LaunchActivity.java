@@ -53,6 +53,8 @@ public class LaunchActivity extends RyBaseActivity {
     private static final String TAG = LaunchActivity.class.getSimpleName();
     private ImageView launchImage;
     public String currentCity = "";
+    public String currentShi = "";
+    public String currentQu = "";
     private double jingdu = 0.00;
     private double weidu = 0.00;
     private LocationService locationService;
@@ -68,6 +70,7 @@ public class LaunchActivity extends RyBaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case GO_NEXT:
+                    initDingwei();
                     goNext();
                     break;
                 case GO_MAIN:
@@ -769,14 +772,22 @@ public class LaunchActivity extends RyBaseActivity {
                 locationService.unregisterListener(mListener); //注销掉监听
                 locationService.stop(); //停止定位服务
                 currentCity = location.getDistrict();
+                currentShi = location.getCity();
+                currentQu = location.getDistrict();
                 jingdu = location.getLongitude();
                 weidu = location.getLatitude();
-                Location location1 = new Location(1, currentCity, jingdu, weidu);
+                Location location1 = new Location(1, currentCity, jingdu, weidu, currentShi, currentQu);
                 DbManager db = new DbConfig(getApplicationContext()).getDbManager();
+                location1.setShi(location.getCity());//TODO 存储手机自动定位
+                location1.setQu(location.getDistrict());
+
+                Log.e(TAG, "initLocation Luncher" + "城市" + location.getCity() + "区县" + location.getDistrict());
+
                 try {
                     db.saveOrUpdate(location1);
+                    Log.e(TAG, "initLocation Luncher dbSave success");
                 } catch (DbException e) {
-
+                    Log.e(TAG, "initLocation Luncher dbSave defeate");
                 }
             }
         }

@@ -91,6 +91,7 @@ public class PutForwardActivity extends RyBaseActivity {
     private String mNickname;
     private String headimgurl;
     private boolean mLoginSuccess = false;
+    private  ProgressDialog waitDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,10 +260,10 @@ public class PutForwardActivity extends RyBaseActivity {
 
 
     private void judgeBeforePost() {
-        if (putforwardType == 2) { // TODO
+        /*if (putforwardType == 2) { // TODO 微信
             Toast.makeText(this, "微信提现即将开放,敬请期待!", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
         if (et_putforward.getText() == null || et_putforward.getText().length() == 0) {
             showMerchantErrorDialog("提现金额不能为空!");
             return;
@@ -656,6 +657,7 @@ public class PutForwardActivity extends RyBaseActivity {
                                         requestParams.addBodyParameter("realName", weixinRealName);//微信输入的真实姓名
                                     }
                                     Log.e(TAG, "onSuccess: requestParams.toString() = " + requestParams.toString());
+                                    showDialogProgress(waitDialog,"提现中...");
                                     x.http().post(requestParams, new CommonCallback<String>() {
                                         @Override
                                         public void onSuccess(String result) {
@@ -663,6 +665,7 @@ public class PutForwardActivity extends RyBaseActivity {
                                             try {
                                                 JSONObject obj = new JSONObject(result);
                                                 boolean isSuccess = obj.getBoolean("isSuccess");
+                                                hideDialogProgress(waitDialog);
                                                 if (isSuccess) {
                                                     Toast.makeText(PutForwardActivity.this, "提现申请已提交,请留意提现进度", Toast.LENGTH_LONG).show();
                                                     //结束提现页面
@@ -678,6 +681,7 @@ public class PutForwardActivity extends RyBaseActivity {
 
                                         @Override
                                         public void onError(Throwable ex, boolean isOnCallback) {
+                                            hideDialogProgress(waitDialog);
                                             Toast.makeText(PutForwardActivity.this, "提现申请提交失败,请检查网络", Toast.LENGTH_SHORT).show();
                                         }
 
@@ -893,6 +897,7 @@ public class PutForwardActivity extends RyBaseActivity {
         tv_weixin_phone = findViewById(R.id.tv_weixin_phone);
 
         startdialog = new ProgressDialog(PutForwardActivity.this);
+        waitDialog = new ProgressDialog(PutForwardActivity.this);
     }
 
 

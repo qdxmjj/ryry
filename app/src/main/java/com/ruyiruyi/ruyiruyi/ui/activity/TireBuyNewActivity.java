@@ -4,15 +4,11 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -23,9 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
+import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseActivity;
 import com.ruyiruyi.ruyiruyi.ui.cell.TSeekBar;
@@ -33,7 +29,6 @@ import com.ruyiruyi.ruyiruyi.ui.model.CxwyPrice;
 import com.ruyiruyi.ruyiruyi.ui.model.CxwyTimesPrice;
 import com.ruyiruyi.ruyiruyi.ui.model.CxwyYear;
 import com.ruyiruyi.ruyiruyi.ui.model.FlowModel;
-import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.model.TireInfo;
 import com.ruyiruyi.ruyiruyi.ui.model.TirePrice;
 import com.ruyiruyi.ruyiruyi.ui.model.TireRank;
@@ -49,11 +44,11 @@ import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.DbManager;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -81,7 +76,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
     private Dialog shopDialog;
     private View shopInflate;
 
-    public List<TireInfo> tireInfoList ;
+    public List<TireInfo> tireInfoList;
     private CustomBanner mBanner;
     public int currentTirePostition = 0;    //当前选择的花纹轮胎
     public int currentRankPostition = 0;    //当前选择的速度级别轮胎
@@ -152,7 +147,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
         progressDialog = new ProgressDialog(this);
         Intent intent = getIntent();
         tiresize = intent.getStringExtra("TIRESIZE");
-        isChooseServiceYear = intent.getBooleanExtra("CHOOSE_SERVICE_YEAR",false);
+        isChooseServiceYear = intent.getBooleanExtra("CHOOSE_SERVICE_YEAR", false);
         serviceYear = intent.getStringExtra("SERVICE_YEAR");
         serviceYearMax = intent.getStringExtra("SERVICE_YEAR_MAX");
         fontrearflag = intent.getStringExtra("FONTREARFLAG");
@@ -170,7 +165,6 @@ public class TireBuyNewActivity extends RyBaseActivity {
         initView();
 
         initDataFromService();
-
 
 
     }
@@ -207,7 +201,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
                 .startTurning(5000);
 
         //设置价格
-        if (isChoose){
+        if (isChoose) {
             List<TirePrice> tirePriceList = tireInfo.getTireRankList().get(currentRankPostition).getTirePriceList();
             for (int i = 0; i < tirePriceList.size(); i++) {
                 if (tirePriceList.get(i).getServiceYear() == currentServiceYear) {
@@ -215,14 +209,14 @@ public class TireBuyNewActivity extends RyBaseActivity {
                     tirePriceText.setText("￥" + tirePrice);
                 }
             }
-        }else {
+        } else {
             List<TirePrice> tirePriceList = tireInfo.getTireRankList().get(0).getTirePriceList();
             int tireMinPrice = 0;
             int tireMaxPrice = 0;
             for (int i = 0; i < tirePriceList.size(); i++) {
                 if (tirePriceList.get(i).getServiceYear() == 1) {
                     tireMinPrice = tirePriceList.get(i).getTirePrice();
-                }else if (tirePriceList.get(i).getServiceYear() == 15){
+                } else if (tirePriceList.get(i).getServiceYear() == 15) {
                     tireMaxPrice = tirePriceList.get(i).getTirePrice();
                 }
             }
@@ -232,13 +226,13 @@ public class TireBuyNewActivity extends RyBaseActivity {
         shoeTitle = tireInfo.getDetailStr();
         shoeTitleText.setText(shoeTitle);
         //设置规格  选择的轮胎数量跟畅行无忧数量
-        if (isChoose){
+        if (isChoose) {
 
             String figure = tireInfo.getFigure();
             TireRank tireRank = tireInfo.getTireRankList().get(currentRankPostition);
             String rankName = tireRank.getRankName();
-            tireRankCountText.setText("已选 " + figure + "," + rankName + "," + tireCount + "条" );
-            if (cxwwyCount > 0){
+            tireRankCountText.setText("已选 " + figure + "," + rankName + "," + tireCount + "条");
+            if (cxwwyCount > 0) {
                 cxwyChooseLayout.setVisibility(View.VISIBLE);
               /*  cxwyCountText.setText("畅行无忧" + cxwwyCount + "次");
                 List<CxwyTimesPrice> cxwyTimesPriceList = tireInfo.getCxwyTimesPriceList();
@@ -253,11 +247,11 @@ public class TireBuyNewActivity extends RyBaseActivity {
                 }*/
                 cxwyCountText.setText("畅行无忧" + cxwwyCount + "次");
                 cxwyPriceText.setText(" ￥" + cxwyAllPrice);
-            }else {
+            } else {
                 cxwyChooseLayout.setVisibility(View.GONE);
             }
 
-        }else {
+        } else {
             cxwyChooseLayout.setVisibility(View.GONE);
             tireRankCountText.setText("请选择轮胎规格");
         }
@@ -265,7 +259,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
         Glide.with(this).load(tireInfo.getImgMiddleUrl()).into(tireImageView);
     }
 
-    public void initFigureFlow(){
+    public void initFigureFlow() {
         TireInfo tireInfo = tireInfoList.get(currentTireChangePostition);
         figureFlowMode.clear();
         for (int i = 0; i < tireInfoList.size(); i++) {
@@ -282,7 +276,8 @@ public class TireBuyNewActivity extends RyBaseActivity {
             }
         });
     }
-    public void initRangkFlow(){
+
+    public void initRangkFlow() {
         TireInfo tireInfo = tireInfoList.get(currentTireChangePostition);
         rankFlowMode.clear();
         List<TireRank> tireRankList = tireInfo.getTireRankList();
@@ -302,7 +297,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
         });
     }
 
-    public void initDataTireDialog(){
+    public void initDataTireDialog() {
         TireInfo tireInfo = tireInfoList.get(currentTireChangePostition);
 
         //更改规格  与 价格
@@ -310,27 +305,27 @@ public class TireBuyNewActivity extends RyBaseActivity {
 
         String imgMiddleUrl = tireInfo.getImgMiddleUrl();
         Glide.with(this).load(imgMiddleUrl).into(tireImageView);
-               // .skipMemoryCache(true)
-             //   .diskCacheStrategy(DiskCacheStrategy.NONE)
-
-
+        // .skipMemoryCache(true)
+        //   .diskCacheStrategy(DiskCacheStrategy.NONE)
 
 
     }
+
     /**
      * 更改轮胎规格
      */
-    public void initDialogRank(){
+    public void initDialogRank() {
         //更改价格
         initDialogTirePrice();
 
         TireInfo tireInfo = tireInfoList.get(currentTireChangePostition);
-        if (isChooseRank){
+        if (isChooseRank) {
             String figure = tireInfo.getFigure();
             TireRank tireRank = tireInfo.getTireRankList().get(currentRankChangePostition);
             String rankName = tireRank.getRankName();
-            tireFigureRankDialgText.setText("已选 " + figure + "," + rankName);
-        }else {
+//            tireFigureRankDialgText.setText("已选 " + figure + "," + rankName);
+            tireFigureRankDialgText.setText("已选 " + tireInfo.getDetailStr());
+        } else {
             tireFigureRankDialgText.setText("请选择轮胎规格");
         }
     }
@@ -338,23 +333,23 @@ public class TireBuyNewActivity extends RyBaseActivity {
     /**
      * 更改D轮胎价格
      */
-    public void initDialogTirePrice(){
+    public void initDialogTirePrice() {
         TireInfo tireInfo = tireInfoList.get(currentTireChangePostition);
         List<TirePrice> tirePriceList = tireInfo.getTireRankList().get(currentRankChangePostition).getTirePriceList();
-        if (isChooseRank){
+        if (isChooseRank) {
             for (int i = 0; i < tirePriceList.size(); i++) {
-                if (tirePriceList.get(i).getServiceYear() == currentServiceYearChange){
+                if (tirePriceList.get(i).getServiceYear() == currentServiceYearChange) {
                     int tirePrice = tirePriceList.get(i).getTirePrice();
                     tirePriceDialogText.setText("￥" + tirePrice);
                 }
             }
-        }else {
+        } else {
             int tireMinPrice = 0;
             int tireMaxPrice = 0;
             for (int i = 0; i < tirePriceList.size(); i++) {
                 if (tirePriceList.get(i).getServiceYear() == 1) {
                     tireMinPrice = tirePriceList.get(i).getTirePrice();
-                }else if (tirePriceList.get(i).getServiceYear() == 15){
+                } else if (tirePriceList.get(i).getServiceYear() == 15) {
                     tireMaxPrice = tirePriceList.get(i).getTirePrice();
                 }
             }
@@ -364,16 +359,29 @@ public class TireBuyNewActivity extends RyBaseActivity {
     }
 
     private void initDataFromService() {
-        showDialogProgress(progressDialog,"加载中...");
+        showDialogProgress(progressDialog, "加载中...");
         User user = new DbConfig(this).getUser();
         int carId = user.getCarId();
         int userId = user.getId();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("shoeSize",tiresize);
+            jsonObject.put("shoeSize", tiresize);
             jsonObject.put("userId", userId);
             jsonObject.put("userCarId", carId);
-        } catch (JSONException e) {
+            DbManager db = new DbConfig(getApplicationContext()).getDbManager();//TODO 获取存储的(CityChooseActivity)手机自动定位
+            Location first = db.findFirst(Location.class);
+            if (first != null) {
+                jsonObject.put("city", first.getShi());
+                jsonObject.put("district", first.getQu());
+                Log.e(TAG, "initDataFromService: 城市:" + first.getShi() + "区县:" + first.getQu() + "city:" + first.getCity());
+            } else {
+                first = new Location();
+                jsonObject.put("city", "无");
+                jsonObject.put("district", "无");
+                Toast.makeText(TireBuyNewActivity.this, "定位初始化异常", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception e) {
         }
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "order/getShoeBySize");
         params.addBodyParameter("reqJson", jsonObject.toString());
@@ -384,17 +392,17 @@ public class TireBuyNewActivity extends RyBaseActivity {
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess: ------" +  result);
+                Log.e(TAG, "onSuccess: ------" + result);
 
                 try {
                     JSONObject jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
                     String msg = jsonObject1.getString("msg");
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         tireInfoList.clear();
 
                         JSONArray data = jsonObject1.getJSONArray("data");
-                        if (data.length() == 0){
+                        if (data.length() == 0) {
                             Toast.makeText(TireBuyNewActivity.this, "您所需要的规格正在上架当中，请您耐心等待！", Toast.LENGTH_SHORT).show();
                             finish();
                         }
@@ -439,7 +447,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
                                 String rate = cxwyObject.getString("rate");
                                 int id = cxwyObject.getInt("id");
                                 int times = cxwyObject.getInt("times");
-                                cxwyTimesPriceList.add(new CxwyTimesPrice(id,rate,times));
+                                cxwyTimesPriceList.add(new CxwyTimesPrice(id, rate, times));
                             }
                             //
                             JSONArray shoeSpeedLoadResultList = tireObject.getJSONArray("shoeSpeedLoadResultList");
@@ -447,7 +455,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
                             for (int j = 0; j < shoeSpeedLoadResultList.length(); j++) {
                                 JSONObject object = shoeSpeedLoadResultList.getJSONObject(j);
                                 String speedLoadStr = object.getString("speedLoadStr");
-                                String rankName = speedLoadStr.substring(0, speedLoadStr.indexOf("￥")-1);
+                                String rankName = speedLoadStr.substring(0, speedLoadStr.indexOf("￥") - 1);
                                 String shoeId = object.getString("shoeId");
                                 JSONObject priceMap = object.getJSONObject("priceMap");
                                 List<TirePrice> tirePriceList = new ArrayList<TirePrice>();
@@ -467,22 +475,22 @@ public class TireBuyNewActivity extends RyBaseActivity {
                                     Log.e(TAG, "onSuccess:cxwyYear--------------- " + f);
                                     for (int g = 1; g < 8; g++) {
                                         String cxwyTimesPrice = cxwyYearObject.getString(g + "");
-                                        Log.e(TAG, "onSuccess: cxwyTimesPrice ---" + cxwyTimesPrice );
-                                        cxwyPriceList.add(new CxwyPrice(g,cxwyTimesPrice));
+                                        Log.e(TAG, "onSuccess: cxwyTimesPrice ---" + cxwyTimesPrice);
+                                        cxwyPriceList.add(new CxwyPrice(g, cxwyTimesPrice));
                                     }
-                                    cxwyYearList.add(new CxwyYear(f,cxwyPriceList));
+                                    cxwyYearList.add(new CxwyYear(f, cxwyPriceList));
                                 }
-                                tireRankList.add(new TireRank(shoeId,rankName,tirePriceList,cxwyYearList));
+                                tireRankList.add(new TireRank(shoeId, rankName, tirePriceList, cxwyYearList));
                             }
-                            tireInfoList.add(new TireInfo(description,imgLeftUrl,imgMiddleUrl,imgRightUrl,shoeDownImg,shoeLeftImg,shoeMiddleImg,shoeRightImg,shoeUpImg,detailStr,
-                                    figure,shoeBasePrice,shoeFlgureName,cxwyTimesPriceList,tireRankList,platNumber));
+                            tireInfoList.add(new TireInfo(description, imgLeftUrl, imgMiddleUrl, imgRightUrl, shoeDownImg, shoeLeftImg, shoeMiddleImg, shoeRightImg, shoeUpImg, detailStr,
+                                    figure, shoeBasePrice, shoeFlgureName, cxwyTimesPriceList, tireRankList, platNumber));
 
                             initData();
                             initFigureFlow();
                             initRangkFlow();
 
                         }
-                    }else if (status.equals("-999")) {
+                    } else if (status.equals("-999")) {
                         showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                     } else {
                         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
@@ -529,8 +537,8 @@ public class TireBuyNewActivity extends RyBaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (tireCount == 0 || !isChooseRank ||!isChoose){
-                           // Toast.makeText(TireBuyNewActivity.this, "请选择轮胎规格", Toast.LENGTH_SHORT).show();
+                        if (tireCount == 0 || !isChooseRank || !isChoose) {
+                            // Toast.makeText(TireBuyNewActivity.this, "请选择轮胎规格", Toast.LENGTH_SHORT).show();
                             initDataTireDialog();
                             shopDialog.show();
                             return;
@@ -544,12 +552,12 @@ public class TireBuyNewActivity extends RyBaseActivity {
                         Intent intent = new Intent(getApplicationContext(), OrderAffirmActivity.class);
                         intent.putExtra("FONTREARFLAG", fontrearflag);   //前后轮标识
                         intent.putExtra("TIRECOUNT", tireCount);//轮胎数量
-                        intent.putExtra("TIREPRICE", tirePrice+"");     //轮胎单价
+                        intent.putExtra("TIREPRICE", tirePrice + "");     //轮胎单价
                         intent.putExtra("TIREPNAME", shoeTitle);  //轮胎名称
                         intent.putExtra("CXWYCOUNT", cxwwyCount);  //畅行无忧数量
-                        if (cxwyAllPrice!=null){
+                        if (cxwyAllPrice != null) {
                             intent.putExtra("CXWYPRICE", cxwyAllPrice);  //畅行无忧名称
-                        }else {
+                        } else {
                             intent.putExtra("CXWYPRICE", "0.0");  //畅行无忧名称
                         }
 
@@ -558,7 +566,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
                         intent.putExtra("CARNUMBER", platNumber);  //车牌号
                         intent.putExtra("TIREIMAGE", imgMiddleUrl);  //轮胎图片
                         intent.putExtra("SHOEID", Integer.parseInt(shoeId));  //轮胎id
-                        intent.putExtra("SERVICE_YEAR", currentServiceYear+"");  //服务年薪
+                        intent.putExtra("SERVICE_YEAR", currentServiceYear + "");  //服务年薪
                         startActivity(intent);
 
                     }
@@ -606,7 +614,6 @@ public class TireBuyNewActivity extends RyBaseActivity {
                 });
 
 
-
         /**
          * 品质服务dialog
          */
@@ -627,7 +634,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
          * 更换流程ialog
          */
         liuchengDialog = new Dialog(this, R.style.ActionSheetDialogStyle);
-        liuchengInflate = LayoutInflater.from(this).inflate(R.layout.dialog_liucheng,null);
+        liuchengInflate = LayoutInflater.from(this).inflate(R.layout.dialog_liucheng, null);
         liuchengInflate.setMinimumWidth(10000);
         liuchengImage = ((ImageView) liuchengInflate.findViewById(R.id.liucheng_image_dialog));
         liuchengLayout11 = ((LinearLayout) liuchengInflate.findViewById(R.id.liucheng_layout));
@@ -643,7 +650,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
          * 商品的dialog
          */
         shopDialog = new Dialog(this, R.style.ActionSheetDialogStyle);
-        shopInflate = LayoutInflater.from(this).inflate(R.layout.dialog_shop,null);
+        shopInflate = LayoutInflater.from(this).inflate(R.layout.dialog_shop, null);
         shopInflate.setMinimumWidth(10000);
         tireImageView = ((ImageView) shopInflate.findViewById(R.id.tire_image_view));
         tirePriceDialogText = ((TextView) shopInflate.findViewById(R.id.tire_price_dialog_text));
@@ -657,20 +664,20 @@ public class TireBuyNewActivity extends RyBaseActivity {
         cxwyPriceDIalogText = (TextView) shopInflate.findViewById(R.id.cxwy_price__dialog_text);
         tireChooseButton = (TextView) shopInflate.findViewById(R.id.tire_choose_button);
         serviceYearView = shopInflate.findViewById(R.id.service_year_view);
-        if (isChooseServiceYear){
+        if (isChooseServiceYear) {
             currentServiceYear = Integer.parseInt(serviceYear);
             currentServiceYearChange = Integer.parseInt(serviceYear);
             yearChooseSeekBar.setVisibility(View.GONE);
             serviceYearView.setVisibility(View.GONE);
             serviceYearText.setVisibility(View.GONE);
-        }else {
-          //  currentServiceYearChange = Integer.parseInt(serviceYearMax) + 1;
+        } else {
+            //  currentServiceYearChange = Integer.parseInt(serviceYearMax) + 1;
             yearChooseSeekBar.setVisibility(View.VISIBLE);
-            serviceYearView.setVisibility(View.VISIBLE);                                   
+            serviceYearView.setVisibility(View.VISIBLE);
             serviceYearText.setVisibility(View.VISIBLE);
 
-            yearChooseSeekBar.setMax(Integer.parseInt(serviceYearMax));
-           // yearChooseSeekBar.setProgress(100);
+            yearChooseSeekBar.setMax(Integer.parseInt(serviceYearMax) - 1);
+            // yearChooseSeekBar.setProgress(100);
         }
         tireFigureFlow.setMaxSelectCount(1);
         tireRankFlow.setMaxSelectCount(1);
@@ -704,6 +711,13 @@ public class TireBuyNewActivity extends RyBaseActivity {
                     initDataTireDialog();
                     initRangkFlow();
                 }
+
+                currentRankChangePostition = 0;
+                isChooseRank = true;
+                Log.e(TAG, "onSelected: currentRankChangePostition" + currentRankChangePostition);
+                initDialogRank();
+
+                initCxwyPrice();
             }
         });
 
@@ -782,7 +796,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
             public void onAmountChange(View view, int amount) {
                 TireInfo tireInfo = tireInfoList.get(currentTireChangePostition);
                 List<CxwyYear> cxwyYearList = tireInfo.getTireRankList().get(currentRankPostition).getCxwyYearList();
-             //   List<CxwyYear> cxwyYearList = tireInfo.getCxwyYearList();
+                //   List<CxwyYear> cxwyYearList = tireInfo.getCxwyYearList();
 
                 for (int i = 0; i < cxwyYearList.size(); i++) {
                     int serviceYear = cxwyYearList.get(i).getServiceYear();
@@ -790,7 +804,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
                     List<CxwyPrice> cxwyPriceList = cxwyYearList.get(i).getCxwyPriceList();
                     for (int j = 0; j < cxwyPriceList.size(); j++) {
 
-                        Log.e(TAG, "onAmountChange: +++" + cxwyPriceList.get(j).getCxwyPrice() );
+                        Log.e(TAG, "onAmountChange: +++" + cxwyPriceList.get(j).getCxwyPrice());
                     }
                 }
                 List<CxwyPrice> cxwyPriceList = new ArrayList<CxwyPrice>();
@@ -807,11 +821,11 @@ public class TireBuyNewActivity extends RyBaseActivity {
                     Toast.makeText(TireBuyNewActivity.this, "畅行无忧已达到购买上限", Toast.LENGTH_SHORT).show();
                 }
                 cxwwyCount = amount;
-                if (amount == 0){
+                if (amount == 0) {
                     cxwyAllPrice = 0 + "";
-                }else {
+                } else {
                     for (int i = 0; i < cxwyPriceList.size(); i++) {
-                        Log.e(TAG, "onAmountChange:--- " + cxwyPriceList.get(i).getCxwyPrice() );
+                        Log.e(TAG, "onAmountChange:--- " + cxwyPriceList.get(i).getCxwyPrice());
                         if (cxwyPriceList.get(i).getTimes() == cxwwyCount) {
                             String cxwyPrice = cxwyPriceList.get(i).getCxwyPrice();
                             cxwyAllPrice = cxwyPrice;
@@ -851,19 +865,19 @@ public class TireBuyNewActivity extends RyBaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (!isChooseRank){
+                        if (!isChooseRank) {
                          /*   initDataTireDialog();
                             shopDialog.show();*/
-                           Toast.makeText(TireBuyNewActivity.this, "请选择轮胎规格", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TireBuyNewActivity.this, "请选择轮胎规格", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        if (tireCount == 0){
+                        if (tireCount == 0) {
                             /*initDataTireDialog();
                             shopDialog.show();*/
-                           Toast.makeText(TireBuyNewActivity.this, "请选择轮胎数量", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TireBuyNewActivity.this, "请选择轮胎数量", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        currentTirePostition =  currentTireChangePostition;
+                        currentTirePostition = currentTireChangePostition;
                         currentRankPostition = currentRankChangePostition;
                         currentServiceYear = currentServiceYearChange;
                         Log.e(TAG, "call: ------------" + currentServiceYear);
@@ -877,11 +891,11 @@ public class TireBuyNewActivity extends RyBaseActivity {
     }
 
     /**
-     *  选择完年限  速度级别时更改畅行无忧价格
+     * 选择完年限  速度级别时更改畅行无忧价格
      */
     private void initCxwyPrice() {
         TireInfo tireInfo = tireInfoList.get(currentTireChangePostition);
-       // List<CxwyYear> cxwyYearList = tireInfo.getCxwyYearList();
+        // List<CxwyYear> cxwyYearList = tireInfo.getCxwyYearList();
         List<CxwyYear> cxwyYearList = tireInfo.getTireRankList().get(currentRankPostition).getCxwyYearList();
 
         for (int i = 0; i < cxwyYearList.size(); i++) {
@@ -890,7 +904,7 @@ public class TireBuyNewActivity extends RyBaseActivity {
             List<CxwyPrice> cxwyPriceList = cxwyYearList.get(i).getCxwyPriceList();
             for (int j = 0; j < cxwyPriceList.size(); j++) {
 
-                Log.e(TAG, "onAmountChange: +++" + cxwyPriceList.get(j).getCxwyPrice() );
+                Log.e(TAG, "onAmountChange: +++" + cxwyPriceList.get(j).getCxwyPrice());
             }
         }
         List<CxwyPrice> cxwyPriceList = new ArrayList<CxwyPrice>();
@@ -905,9 +919,9 @@ public class TireBuyNewActivity extends RyBaseActivity {
 
         if (cxwwyCount == 0) {
             cxwyAllPrice = "0";
-        }else {
+        } else {
             for (int i = 0; i < cxwyPriceList.size(); i++) {
-                Log.e(TAG, "onAmountChange:--- " + cxwyPriceList.get(i).getCxwyPrice() );
+                Log.e(TAG, "onAmountChange:--- " + cxwyPriceList.get(i).getCxwyPrice());
                 if (cxwyPriceList.get(i).getTimes() == cxwwyCount) {
                     String cxwyPrice = cxwyPriceList.get(i).getCxwyPrice();
                     cxwyAllPrice = cxwyPrice;

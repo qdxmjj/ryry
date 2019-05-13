@@ -37,6 +37,8 @@ public class CarDemioActivity extends RyBaseActivity implements CarVersionViewBi
     private Intent intent;
     private int carid;
     private int from;
+    private int userCarId = 0;
+    private int proveStatus = 2;//是否进行车主认证 (1 已认证 2 未认证)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,8 @@ public class CarDemioActivity extends RyBaseActivity implements CarVersionViewBi
         intent = getIntent();
         carid = intent.getIntExtra("CARID",0);
         from = intent.getIntExtra("FROM",0);
+        userCarId = intent.getIntExtra("USERCARID", 0);
+        proveStatus = intent.getIntExtra("PROVESTATUS", 2);//是否进行车主认证 (1 已认证 2 未认证)
         initView();
         initData();
     }
@@ -132,6 +136,8 @@ public class CarDemioActivity extends RyBaseActivity implements CarVersionViewBi
         Intent intent = new Intent(this, CarTypeActivity.class);
         intent.putExtra("VERCICLEID" ,id);
         intent.putExtra("FROM",from);
+        intent.putExtra("USERCARID",userCarId);
+        intent.putExtra("PROVESTATUS",proveStatus);
         startActivity(intent);
     }
 }

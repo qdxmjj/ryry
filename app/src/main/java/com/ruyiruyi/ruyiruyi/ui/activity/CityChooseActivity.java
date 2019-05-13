@@ -285,7 +285,7 @@ public class CityChooseActivity extends RyBaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //  intent.putExtra("city", list.get(position));
 
-                Location location1 = new Location(1, quList.get(position), jingdu, weidu);
+                Location location1 = new Location(1, quList.get(position), jingdu, weidu,currentCityName,quList.get(position));//TODO 存储手机自动定位
                 DbManager db = new DbConfig(getApplicationContext()).getDbManager();
                 try {
                     db.saveOrUpdate(location1);
@@ -329,7 +329,7 @@ public class CityChooseActivity extends RyBaseActivity {
                             Toast.makeText(CityChooseActivity.this, "请选择区县", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        Location location1 = new Location(1, currentCity, jingdu, weidu);
+                        Location location1 = new Location(1, currentCity, jingdu, weidu,currentCityName,currentCity);//TODO 存储手机自动定位
                         DbManager db = new DbConfig(getApplicationContext()).getDbManager();
                         try {
                             db.saveOrUpdate(location1);
@@ -527,6 +527,21 @@ public class CityChooseActivity extends RyBaseActivity {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
+
+            /*DbManager db = new DbConfig(getApplicationContext()).getDbManager();//TODO 存储手机自动定位(进入该页面暂不更新，暂在启动页更新定位)
+            try {
+                Location first = db.findFirst(Location.class);
+                if (first == null) {
+                    first = new Location();
+                }
+                Log.e(TAG, "initLocation:  location.getCity() = " + location.getCity() + "location.getDistrict() = " + location.getDistrict());
+                first.setShi(location.getCity());
+                first.setQu(location.getDistrict());
+                db.saveOrUpdate(first);
+
+            } catch (DbException e) {
+            }*/
+
             // TODO Auto-generated method stub
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 StringBuffer sb = new StringBuffer(256);

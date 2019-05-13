@@ -55,7 +55,6 @@ import com.ruyiruyi.ruyiruyi.ui.multiType.TwoEventViewBinder;
 import com.ruyiruyi.ruyiruyi.ui.service.LocationService;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.rylibrary.ui.viewpager.CustomBanner;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -419,7 +418,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
         if (!(user == null)) {
             //int firstAddCar1 = user.getFirstAddCar();
             if (carId == 0) {
-                items.add(new Hometop(images, "添加我的宝驹", "邀请好友绑定车辆可免费洗车", 1, currentCity));
+                items.add(new Hometop(images, "添加我的宝驹", "邀请好友绑定车辆可得现金券", 1, currentCity));
             } else {
                 if (carUUId == 0){  //小程序购买轮胎 信息车辆不完整
                     Hometop carInfo = new Hometop(images, "请完善车辆信息", "完善车辆信息后可享受特色服务", 3, currentCity);

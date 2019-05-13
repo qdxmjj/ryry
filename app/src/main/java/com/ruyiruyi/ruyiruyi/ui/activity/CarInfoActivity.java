@@ -173,11 +173,11 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
     private WheelView shiWv;
     private WheelView xianWv;
     private int areaId = 0;
-    private int userCarId;
+    private int userCarId = 0;
     private int proveStatus = 2;//是否进行车主认证 (1 已认证 2 未认证)
     private String plantNumber = "";
 
-    private int canClick = 0;
+    private int canClick = 0;   //0可修改  1不可修改
 
     private WheelView whv_lTime, whv_rTime;
     private String endYear;
@@ -197,7 +197,7 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
     private RecyclerView listView;
     private List<Object> items = new ArrayList<>();
     private MultiTypeAdapter adapter;
-    private int from;  //from 0车型选择   1是carManagetActivity返回    3首页进去   4商品确认添加车辆进入  5选择车型从商品界面进入到的  6从商品界面进入完善车辆信息
+    private int from;  //from 0车型选择   1是carManagetActivity返回    3首页进去   4商品确认添加车辆进入  5选择车型从商品界面进入到的  6从商品界面进入完善车辆信息   7车辆信息不完整 选择车型返回
 
     public List<CarCoupon> carCouponList;
     private static final int REQUEST_CODE_DRIVING_LICENSE = 121;  //驾驶证识别
@@ -224,7 +224,7 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
             }
         });
 
-        ryTransparentDialog = new RyLiaTransparentDialog(this, "      未进行车辆认证不会影响其它功能的正常使用，免费认证后可享全部换胎补胎服务");
+        ryTransparentDialog = new RyLiaTransparentDialog(this, "      未认证用户不影响轮胎和商品的购买，免费认证后可以享受特价洗车和一分钱补胎服务以及如驿如意赠送的其他服务");
 
        /* //初始化百度 文字识别OCR单例
 
@@ -264,9 +264,9 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
         Log.e(TAG, "onCreate: " + canClick);
         initView();
 
-         from = intent.getIntExtra("FROM", 0); // 0是车型选择返回  1是carManagetActivity返回
+        from = intent.getIntExtra("FROM", 0); // 0是车型选择返回  1是carManagetActivity返回
         Log.e(TAG, "jumpAndupdatauser: +++++" +from );
-        if (from == 0 || from == 5) { //车型选择
+        if (from == 0 || from == 5 ) { //车型选择
             carTiteInfoId = intent.getIntExtra("CARTIREIINFO", 0);
             font = intent.getStringExtra("FONT");
             rear = intent.getStringExtra("REAR");
@@ -277,6 +277,21 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
 
         } else if (from == 1 || from == 6) {//查看车辆信息
             currentType = 1;
+            userCarId = intent.getIntExtra("USERCARID", 0);
+            proveStatus = intent.getIntExtra("PROVESTATUS", 2);//是否进行车主认证 (1 已认证 2 未认证)
+            if (proveStatus == 1) {
+                xsz_prove.setText("已认证");
+                xsz_prove.setTextColor(getResources().getColor(R.color.c22));
+                xsz_prove.setClickable(false);//本次不可再次认证
+                carNumberLayout.setClickable(false);//认证后不可修改车牌号
+            }
+            initDataByUseridAndCarId();
+        }else if (from == 7){
+            currentType = 1;
+            carTiteInfoId = intent.getIntExtra("CARTIREIINFO", 0);
+            brand = intent.getStringExtra("BRAND");
+            carTypeChoose.setText(brand);
+
             userCarId = intent.getIntExtra("USERCARID", 0);
             proveStatus = intent.getIntExtra("PROVESTATUS", 2);//是否进行车主认证 (1 已认证 2 未认证)
             if (proveStatus == 1) {
@@ -375,15 +390,30 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
                     if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         String carName = data.getString("carName");
-                        carTiteInfoId = data.getInt("carId");
+                        if (from != 7){
+                            carTiteInfoId = data.getInt("carId");
+                        }
+
                         int isNewenergy = data.getInt("isNewenergy");
                         String platNumber = data.getString("platNumber");
                         String proCityName = data.getString("proCityName");
                         String font = data.getString("font");
                         String rear = data.getString("rear");
                         id = data.getInt("id");
-                        Long datess = data.getLong("drivingLicenseDate");
-                        drivingLicenseDate = new UtilsRY().getTimestampToString(datess);
+                        try {
+                            Long datess = data.getLong("drivingLicenseDate");
+                            drivingLicenseDate = new UtilsRY().getTimestampToString(datess);
+                        }catch (Exception e){
+                            drivingLicenseDate = "";
+                        }
+
+
+                        /*if (carTiteInfoId == 0){
+                            canClick = 3;
+                            from = 7;
+                        }*/
+
+
                         /*date.append(xszRegisterTime);*/
                         try {
                             Long serviceEndDate = data.getLong("serviceEndDate");
@@ -392,7 +422,12 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
                                 canClick = 0;
                                 saveCatButton.setText("保存");
                                 saveCatButton.setBackgroundResource(R.drawable.bg_button);
-                            } else {
+                            }else if (carTiteInfoId == 0 || from == 7){  //判断车辆信息如果不完善 可完善信息
+                                canClick = 3;
+                                saveCatButton.setText("保存");
+                                from = 7;
+                                saveCatButton.setBackgroundResource(R.drawable.bg_button);
+                            }else {
                                 canClick = 1;
                                 saveCatButton.setText("车辆信息不可修改");
                                 saveCatButton.setBackgroundResource(R.drawable.bg_button_noclick);
@@ -402,12 +437,20 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
                                 canClick = 0;
                                 saveCatButton.setText("保存");
                                 saveCatButton.setBackgroundResource(R.drawable.bg_button);
-                            } else {
+                            } else if (carTiteInfoId == 0){  //判断车辆信息如果不完善 可完善信息
+                                canClick = 3;
+                                saveCatButton.setText("保存");
+                                from = 7;
+                                saveCatButton.setBackgroundResource(R.drawable.bg_button);
+                            }else {
                                 canClick = 1;
                                 saveCatButton.setText("车辆信息不可修改");
                                 saveCatButton.setBackgroundResource(R.drawable.bg_button_noclick);
                             }
                         }
+                        Log.e(TAG, "onSuccess: umpAndupdatauser: +++++ carTiteInfoId -" +  carTiteInfoId);
+                        Log.e(TAG, "onSuccess: umpAndupdatauser: +++++ canClick -" +  canClick);
+                        Log.e(TAG, "onSuccess: umpAndupdatauser: +++++ from -" +  from);
                        /*Long serviceEndDate = data.getLong("serviceEndDate");
                         String xszEndTime = new UtilsRY().getTimestampToString(serviceEndDate); */
                         String traveledImgInverse = data.getString("traveledImgInverse");
@@ -417,7 +460,10 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
                         String maturityImg = data.getString("maturityImg");
                         roadTxt = data.getString("roadTxt");
                         serviceYear = data.getString("serviceYearLength");
-                        carTypeChoose.setText(carName);
+                        if (from != 7){
+                            carTypeChoose.setText(carName);
+                        }
+
                         if (isNewenergy == 0) {//燃油
                             isEnergySwich.setChecked(false);
                         } else {//xin能源
@@ -697,6 +743,10 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
                             Toast.makeText(CarInfoActivity.this, "请选择行驶路况", Toast.LENGTH_SHORT).show();
                             return;
                         }
+                        if (carRearText.getText().toString().isEmpty()){
+                            Toast.makeText(CarInfoActivity.this, "请选择后轮型号", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
                         if (currentType == 0) {
                             uploadPic();
@@ -712,6 +762,9 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
                     @Override
                     public void call(Void aVoid) {
                         if (canClick == 1) {
+                            return;
+                        }
+                        if (canClick == 3){
                             return;
                         }
                         if (carFontText.getText().toString().isEmpty()) {
@@ -732,7 +785,7 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
                         if (canClick == 1) {
                             return;
                         }
-                        if (carRearText.getText().toString().isEmpty()) {
+                       /* if (carRearText.getText().toString().isEmpty()) {
                             Toast.makeText(CarInfoActivity.this, "请先选择车型", Toast.LENGTH_SHORT).show();
                             return;
                         } else {
@@ -740,7 +793,11 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
                             intent.putExtra("WEIZHI", 1);
                             intent.putExtra("TIRE", carRearText.getText().toString());
                             startActivityForResult(intent, TIRE_SIZE);
-                        }
+                        }*/
+                        Intent intent = new Intent(getApplicationContext(), TireSizeActivity.class);
+                        intent.putExtra("WEIZHI", 1);
+                        intent.putExtra("TIRE", carRearText.getText().toString());
+                        startActivityForResult(intent, TIRE_SIZE);
 
                     }
                 });
@@ -787,11 +844,14 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        Log.e(TAG, "call: umpAndupdatauser: +++++carchoose--" + canClick);
                         if (canClick == 1) {
                             return;
                         }
                         Intent intent = new Intent(getApplicationContext(), CarBrandActivity.class);
                         intent.putExtra("FROM",from);
+                        intent.putExtra("USERCARID",userCarId);
+                        intent.putExtra("PROVESTATUS",proveStatus);
                         startActivity(intent);
                     }
                 });
@@ -1983,6 +2043,9 @@ public class  CarInfoActivity extends RyBaseActivity implements View.OnClickList
         switch (view.getId()) {
             case car_number_layout:
                 if (canClick == 1) {
+                    return;
+                }
+                if (canClick == 3){
                     return;
                 }
                 View outerView = LayoutInflater.from(this).inflate(R.layout.dialog_content_view, null);
