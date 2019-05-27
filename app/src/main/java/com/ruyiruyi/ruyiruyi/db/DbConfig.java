@@ -1,20 +1,17 @@
 package com.ruyiruyi.ruyiruyi.db;
 
         import android.content.Context;
-        import android.os.Environment;
 
-        import com.ruyiruyi.ruyiruyi.db.model.Location;
-        import com.ruyiruyi.ruyiruyi.db.model.Lunbo;
-        import com.ruyiruyi.ruyiruyi.db.model.TireType;
-        import com.ruyiruyi.ruyiruyi.db.model.User;
+import com.ruyiruyi.ruyiruyi.db.model.Location;
+import com.ruyiruyi.ruyiruyi.db.model.Lunbo;
+import com.ruyiruyi.ruyiruyi.db.model.User;
 
-        import org.xutils.DbManager;
-        import org.xutils.db.sqlite.WhereBuilder;
-        import org.xutils.ex.DbException;
-        import org.xutils.x;
+import org.xutils.DbManager;
+import org.xutils.ex.DbException;
+import org.xutils.x;
 
-        import java.util.ArrayList;
-        import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DbConfig {
     public Context context;
@@ -29,7 +26,7 @@ public class DbConfig {
                 .setAllowTransaction(true)
                 .setDbDir(context.getFilesDir())
               //  .setDbDir(Environment.getExternalStorageDirectory())
-                .setDbVersion(11);
+                .setDbVersion(12);
 
         return daoConfig;
     }
