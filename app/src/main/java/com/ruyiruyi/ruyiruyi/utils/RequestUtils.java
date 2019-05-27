@@ -21,7 +21,7 @@ public class RequestUtils {
 
 
     //http://192.168.0.105:8060/
-    public static String REQUEST_URL = REQUEST_URL__GONGLIN_TEST  ;
+    public static String REQUEST_URL = REQUEST_URL_RELEASE  ;
 
     public static String REQUEST_URL_JIFEN = REQUEST_URL_JIFEN_RELEASE;     //积分
 

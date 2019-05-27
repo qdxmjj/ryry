@@ -329,7 +329,8 @@ public class TireBuyNewActivity extends RyBaseActivity {
             String figure = tireInfo.getFigure();
             TireRank tireRank = tireInfo.getTireRankList().get(currentRankChangePostition);
             String rankName = tireRank.getRankName();
-            tireFigureRankDialgText.setText("已选 " + figure + "," + rankName);
+           // tireFigureRankDialgText.setText("已选 " + figure + "," + rankName);
+            tireFigureRankDialgText.setText("已选 " + tireInfo.getDetailStr());
         }else {
             tireFigureRankDialgText.setText("请选择轮胎规格");
         }
@@ -669,7 +670,8 @@ public class TireBuyNewActivity extends RyBaseActivity {
             serviceYearView.setVisibility(View.VISIBLE);                                   
             serviceYearText.setVisibility(View.VISIBLE);
 
-            yearChooseSeekBar.setMax(Integer.parseInt(serviceYearMax));
+            Log.e(TAG, "initView:serviceYearMax----- " + serviceYearMax);
+            yearChooseSeekBar.setMax(Integer.parseInt(serviceYearMax) - 1);
            // yearChooseSeekBar.setProgress(100);
         }
         tireFigureFlow.setMaxSelectCount(1);
@@ -692,6 +694,9 @@ public class TireBuyNewActivity extends RyBaseActivity {
             }
         });
 
+        /**
+         * 花纹选择
+         */
         tireFigureFlow.setOnSelectListener(new TagFlowLayout.OnSelectListener() {
             @Override
             public void onSelected(Set<Integer> selectPosSet) {

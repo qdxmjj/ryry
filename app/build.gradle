@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
-def VERSION_CODE = 22
-def VERSION_NAME = "3.4.0"
+def VERSION_CODE = 24
+def VERSION_NAME = "3.4.1"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''
@@ -43,6 +43,7 @@ android {
         versionName VERSION_NAME
         multiDexEnabled true
 
+        //配置so库cpu架构 （x86）
         ndk {
             //根据需要 自行选择添加的对应cpu类型的.so库。
             abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
@@ -56,6 +57,11 @@ android {
                 PACKAGE_NAME : "com.ruyiruyi.ruyiruyi",//小米配置包名
                 HW_APPID     : "100336339"//华为的APPID
         ]
+
+        //将svg图片生成为 指定纬度的PNG图片  5.0以下兼容适配
+        vectorDrawables.generatedDensities("xhdpi","xxhdpi","xxxhdpi")
+        //使用support-v7 兼容s
+        vectorDrawables.useSupportLibrary = true
     }
     dexOptions {
         jumboMode true
@@ -146,6 +152,7 @@ android {
     /*task clean(type: Delete) {
         delete rootProject.buildDir
     }*/
+    //将so库打包到apk中
     sourceSets {
         main {
             jniLibs.srcDir 'libs'
