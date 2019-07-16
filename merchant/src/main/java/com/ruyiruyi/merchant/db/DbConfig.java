@@ -1,20 +1,17 @@
 package com.ruyiruyi.merchant.db;
 
 import android.content.Context;
-import android.os.Environment;
-
-//import com.ruyiruyi.merchant.db.model.Lunbo;
-//import com.ruyiruyi.merchant.db.model.User;
 
 import com.ruyiruyi.merchant.db.model.User;
 
 import org.xutils.DbManager;
-import org.xutils.db.sqlite.WhereBuilder;
 import org.xutils.ex.DbException;
 import org.xutils.x;
 
-import java.util.ArrayList;
 import java.util.List;
+
+//import com.ruyiruyi.merchant.db.model.Lunbo;
+//import com.ruyiruyi.merchant.db.model.User;
 
 public class DbConfig {
     public Context context;
@@ -29,7 +26,7 @@ public class DbConfig {
                 .setDbName("merchant.db")
                 .setAllowTransaction(true)
                 .setDbDir(context.getFilesDir())
-                .setDbVersion(11);
+                .setDbVersion(14);
         return daoConfig;
     }
 

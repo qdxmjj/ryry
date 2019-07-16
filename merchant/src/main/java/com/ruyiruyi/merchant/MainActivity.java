@@ -79,6 +79,8 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
     private String versionCode;
     private String version;
     private String downloadUrl;
+    private int forceUpate = 0;  // 1强制更新 0不强制更新
+    private String updateContent;
     // 下载存储的文件名
     private static final String DOWNLOAD_NAME = "ryry_merchant";
     private CommonProgressDialog mBar;
@@ -171,39 +173,73 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
      * @param version
      * @param downloadUrl
      */
-    private void ShowDialog(String version, final String downloadUrl) {
-        new android.app.AlertDialog.Builder(this)
-                .setTitle("版本更新")
-                .setMessage("ryry_merchant" + version)
-                .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+    private void ShowDialog(String version, final String downloadUrl, final String updateContent, final int forceUpate) {
+        if (forceUpate == 0) { //不强制更新
+            new android.app.AlertDialog.Builder(this)
+                    .setTitle("版本更新")
+                    .setMessage(updateContent)
+                    .setPositiveButton("更新", new DialogInterface.OnClickListener() {
 
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.dismiss();
-                        mBar = new CommonProgressDialog(MainActivity.this);
-                        mBar.setCanceledOnTouchOutside(false);
-                        mBar.setTitle("正在下载");
-                        mBar.setCustomTitle(LayoutInflater.from(
-                                MainActivity.this).inflate(
-                                R.layout.title_dialog, null));
-                        mBar.setMessage("正在下载");
-                        mBar.setIndeterminate(true);
-                        mBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                        mBar.setCancelable(true);
-                        // downFile(URLData.DOWNLOAD_URL);
-                        final DownloadTask downloadTask = new DownloadTask(
-                                MainActivity.this);
-                        downloadTask.execute(downloadUrl);
-                        mBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                downloadTask.cancel(true);
-                            }
-                        });
-                    }
-                })
-                .show();
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+                            mBar = new CommonProgressDialog(MainActivity.this);
+                            mBar.setCanceledOnTouchOutside(false);
+                            mBar.setTitle("正在下载");
+                            mBar.setCustomTitle(LayoutInflater.from(
+                                    MainActivity.this).inflate(
+                                    R.layout.title_dialog, null));
+                            mBar.setMessage("正在下载");
+                            mBar.setIndeterminate(true);
+                            mBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                            mBar.setCancelable(true);
+                            // downFile(URLData.DOWNLOAD_URL);
+                            final DownloadTask downloadTask = new DownloadTask(
+                                    MainActivity.this);
+                            downloadTask.execute(downloadUrl);
+                            mBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    downloadTask.cancel(true);
+                                }
+                            });
+                        }
+                    })
+                    .show();
+        } else {
+            new android.app.AlertDialog.Builder(this)
+                    .setTitle("版本更新")
+                    .setMessage(updateContent)
+                    .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+                            mBar = new CommonProgressDialog(MainActivity.this);
+                            mBar.setCanceledOnTouchOutside(false);
+                            mBar.setTitle("正在下载");
+                            mBar.setCustomTitle(LayoutInflater.from(
+                                    MainActivity.this).inflate(
+                                    R.layout.title_dialog, null));
+                            mBar.setMessage("正在下载");
+                            mBar.setIndeterminate(true);
+                            mBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                            mBar.setCancelable(false);
+                            // downFile(URLData.DOWNLOAD_URL);
+                            final DownloadTask downloadTask = new DownloadTask(
+                                    MainActivity.this);
+                            downloadTask.execute(downloadUrl);
+                            mBar.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    downloadTask.cancel(true);
+                                }
+                            });
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
+        }
     }
 
 
@@ -415,7 +451,7 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 10086) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                ShowDialog(version, downloadUrl);
+                ShowDialog(version, downloadUrl, updateContent, forceUpate);
             } else {
                 Intent localIntent = new Intent();
                 localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -465,7 +501,9 @@ public class MainActivity extends MerchantBaseFragmentActivity implements StoreF
                         JSONObject data = jsonObject1.getJSONObject("data");
                         downloadUrl = data.getString("downloadUrl");
                         version = data.getString("version");
-                        ShowDialog(version, downloadUrl);
+                        updateContent = data.getString("content");
+                        forceUpate = data.getInt("forceUpdate"); //是否强制更新  1强制更新 0不强制更新
+                        ShowDialog(version, downloadUrl, updateContent, forceUpate);
                     }
                 } catch (JSONException e) {
 

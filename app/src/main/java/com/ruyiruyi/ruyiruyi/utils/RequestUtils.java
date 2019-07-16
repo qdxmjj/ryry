@@ -6,13 +6,13 @@ public class RequestUtils {
     public static String REQUEST_URL_NIAO_TEST = "http://192.168.0.96:10008/";      //积分测试 鸟
 
 
-    public static String REQUEST_URL__GONGLIN_TEST = "http://192.168.0.86:8060/";   //注册也是 龚
+    public static String REQUEST_URL__GONGLIN_TEST = "http://192.168.0.142:8060/";   //注册也是 龚
     public static String REQUEST_URL_RELEASE = "http://180.76.243.205:10002/xmjj-webservice/";   //主页正式
     public static String REQUEST_URL_JIFEN_RELEASE = "http://180.76.243.205:10008/";   //j积分正式
 
 
 
-    public static String REQUEST_URL_GONGLIN_FAHUO_TEST = "http://192.168.0.86:8030/";//龚林 测试 发货
+    public static String REQUEST_URL_GONGLIN_FAHUO_TEST = "http://192.168.0.142:8030/";//龚林 测试 发货
     public static String REQUEST_URL_FAHUO_RELEASE = "http://180.76.243.205:10004/";// 正式发货
 
 

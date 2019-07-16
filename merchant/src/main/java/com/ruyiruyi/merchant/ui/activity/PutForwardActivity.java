@@ -262,10 +262,10 @@ public class PutForwardActivity extends MerchantBaseActivity {
 
 
     private void judgeBeforePost() {
-        if (putforwardType == 2) { // TODO
+        /*if (putforwardType == 2) { // TODO
             Toast.makeText(this, "微信提现即将开放,敬请期待!", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
         if (et_putforward.getText() == null || et_putforward.getText().length() == 0) {
             showMerchantErrorDialog("提现金额不能为空!");
             return;
@@ -946,6 +946,7 @@ public class PutForwardActivity extends MerchantBaseActivity {
             Intent intent = new Intent(PutForwardActivity.this, PutForwardLoginWXActivity.class);
             intent.putExtra("mNickname", mNickname);
             intent.putExtra("headimgurl", headimgurl);
+            intent.putExtra("openId", openId);
             PutForwardActivity.this.startActivityForResult(intent, LOGIN_REQUEST_CODE);
         }
 

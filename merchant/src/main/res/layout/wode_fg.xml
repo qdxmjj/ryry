@@ -296,6 +296,49 @@
                 android:background="@color/c2"/>
 
             <RelativeLayout
+                android:id="@+id/rl_htqy"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <ImageView
+                    android:id="@+id/img_htqy"
+                    android:layout_width="@dimen/main_fg_my_itemimgHeight"
+                    android:layout_height="@dimen/main_fg_my_itemimgHeight"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_m_fahuo"/>
+
+                <TextView
+                    android:id="@+id/tv_htqy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/img_htqy"
+                    android:text="合同签约"
+                    android:textColor="@color/c6"
+                    android:textSize="@dimen/main_fg_my_itemTextSize"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_jiantou"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/c2"/>
+
+            <RelativeLayout
                 android:id="@+id/rl_wyzd"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

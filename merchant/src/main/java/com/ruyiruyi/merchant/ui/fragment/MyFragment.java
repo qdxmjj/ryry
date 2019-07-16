@@ -36,6 +36,7 @@ import com.ruyiruyi.merchant.ui.activity.MyGoodsActivity;
 import com.ruyiruyi.merchant.ui.activity.MyOrderActivity;
 import com.ruyiruyi.merchant.ui.activity.MyServiceActivity;
 import com.ruyiruyi.merchant.ui.activity.OrdersForShipmentActivity;
+import com.ruyiruyi.merchant.ui.activity.PdfSignActivity;
 import com.ruyiruyi.merchant.ui.activity.PromotionActivity;
 import com.ruyiruyi.merchant.ui.activity.SettingActivity;
 import com.ruyiruyi.merchant.ui.activity.StoreManageActivity;
@@ -74,6 +75,7 @@ public class MyFragment extends BaseFragment {
     private RelativeLayout rl_dzyhs; //店主有话说
     private RelativeLayout rl_shezhi; //设置
     private RelativeLayout rl_ddfh; //订单发货
+    private RelativeLayout rl_htqy; //合同签约
     private ImageView img_user_top;
     private RequestManager glideReq;
     private Boolean isLogin;
@@ -120,6 +122,15 @@ public class MyFragment extends BaseFragment {
     }
 
     private void bindView() {
+        //合同签约
+        RxViewAction.clickNoDouble(rl_htqy).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                Intent intent = new Intent(getContext(), PdfSignActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //订单发货
         RxViewAction.clickNoDouble(rl_ddfh).subscribe(new Action1<Void>() {
             @Override
@@ -281,6 +292,7 @@ public class MyFragment extends BaseFragment {
         rl_dzyhs = (RelativeLayout) getView().findViewById(R.id.rl_dzyhs);
         rl_shezhi = (RelativeLayout) getView().findViewById(R.id.rl_shezhi);
         rl_ddfh = (RelativeLayout) getView().findViewById(R.id.rl_ddfh);
+        rl_htqy = (RelativeLayout) getView().findViewById(R.id.rl_htqy);
         img_user_top = (ImageView) getView().findViewById(R.id.img_user_top);
 
     }

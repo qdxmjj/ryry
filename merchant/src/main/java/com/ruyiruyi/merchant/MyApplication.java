@@ -15,8 +15,8 @@ import cn.jpush.android.api.JPushInterface;
 public class MyApplication extends MultiDexApplication {
     private static MyApplication mInstance;
     public static IWXAPI mWxApi;
-    public static String WEIXIN_APP_ID = "wxe7d25890f6c97a1a";
-    public static String WEIXIN_APP_SECRET = "e1d142170ca69c78838af93dbcdc6b1e";
+    public static String WEIXIN_APP_ID = "wx50b5fdd4369dc4c4";
+    public static String WEIXIN_APP_SECRET = "5a938ff19c633856fba24ad9e421acc0";
 
     @Override
     public void onCreate() {
@@ -25,7 +25,7 @@ public class MyApplication extends MultiDexApplication {
         JPushInterface.init(this);
         x.Ext.init(this);
         x.Ext.setDebug(true);
-        SDKInitializer.initialize(getApplicationContext());
+        SDKInitializer.initialize(this);
         mInstance = this;
 
         // 将MultiDex注入到项目中

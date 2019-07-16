@@ -1,16 +1,14 @@
 apply plugin: 'com.android.application'
 
-def VERSION_CODE = 13
-def VERSION_NAME = "3.3.9"
+def VERSION_CODE = 16
+def VERSION_NAME = "3.4.1"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''
 def keystoreAliasPSW = ''
-// default keystore file, PLZ config file path in local.properties
 def keyfile = file('s.keystore.temp')
 
 Properties properties = new Properties()
-// local.properties file in the root director
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 keystoreFilepath = properties.getProperty("keystore.path")
 
@@ -22,7 +20,7 @@ if (keystoreFilepath) {
 }
 repositories {
     flatDir {
-        dir 'libs'
+        dirs 'libs'
     }
     jcenter()
 }
@@ -41,10 +39,10 @@ android {
             println("====== signingConfigs.config ======")
         }
         debug {
-            storeFile file('keystore.jks')//签名文件路径
+            storeFile file('keystore.jks')
             storePassword "qdxmjj"
             keyAlias "xiaomajiajiamerchant"
-            keyPassword "qdxmjj"  //签名密码
+            keyPassword "qdxmjj"
             println("====== signingConfigs.debug ======")
         }
     }
@@ -52,29 +50,24 @@ android {
     buildToolsVersion rootProject.buildToolsVersion
     defaultConfig {
         applicationId "com.ruyiruyi.merchant"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion rootProject.targetSdkVersion
         versionCode VERSION_CODE
         versionName VERSION_NAME
         ndk {
-            //设置支持的SO库架构
-            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'mips', 'arm64-v8a'//'x86_64'
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'mips', 'arm64-v8a'
         }
         manifestPlaceholders = [
                 JPUSH_PKGNAME: applicationId,
-                JPUSH_APPKEY : "58b63697b0ef833709106bac", //JPush上注册的包名对应的appkey.
-                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+                JPUSH_APPKEY : "58b63697b0ef833709106bac",
+                JPUSH_CHANNEL: "developer-default",
         ]
         multiDexEnabled true
 
     }
-    /*task clean(type: Delete) {
-        delete rootProject.buildDir
-    }*/
     sourceSets {
-        main {
+        main{
             jniLibs.srcDir 'libs'
-            jni.srcDirs = []
         }
         instrumentTest.setRoot('tests')
         debug.setRoot('build-types/debug')
@@ -82,13 +75,9 @@ android {
     }
     buildTypes {
         release {
-            //是否混淆
             minifyEnabled false
-            //是否移除无用资源
             zipAlignEnabled true
-            //混淆配置
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //签名文件存在，则签名
             if (keyfile.exists()) {
                 println("WITH -> buildTypes -> release: using jks key")
                 signingConfig signingConfigs.config
@@ -99,7 +88,6 @@ android {
                 variant.outputs.each { output ->
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                        // 输出apk名称为merchant_v1.0_wandoujia.apk
                         def fileName = "ryrymerchant_v${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
                         output.outputFile = new File(outputFile.parent, fileName)
                     }
@@ -145,25 +133,21 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/BaiduLBS_Android.jar')
     def system_dependencies = rootProject.ext.system_dependencies
-    //    compile system_dependencies.support_v4
     compile system_dependencies.appcompat_v7
     compile system_dependencies.cardview_v7
     compile system_dependencies.palette_v7
     compile system_dependencies.recyclerview_v7
     compile system_dependencies.design
     compile system_dependencies.xutils
-    /*微信*/
     compile project(':rylibrary')
-    compile files('libs/BaiduLBS_Android.jar')
 
-    // 此处以JPush 3.1.5 版本为例。
-    // 此处以JCore 1.2.2 版本为例。
-    // MultiDex的依赖
     compile files('libs/eventbus-3.0.0-sources.jar')
     compile files('libs/eventbus-3.0.0.jar')
-    /*compile 'com.tencent.bugly:crashreport_upgrade:1.3.5'
-    compile 'com.tencent.tinker:tinker-android-lib:1.9.6'
-    compile 'com.tencent.bugly:nativecrashreport:latest.release'*/
+
+
+
+    compile(name: 'FoxitRDK', ext: 'aar')
+    compile(name: 'FoxitRDKUIExtensions', ext: 'aar')
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     compile 'cn.jiguang.sdk:jpush:3.1.5'
@@ -171,6 +155,8 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'com.android.support:multidex:1.0.0'
     compile 'com.yalantis:ucrop:1.5.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:27.1.1'
+    compile 'com.android.support:appcompat-v7:27.1.1'
     testCompile 'junit:junit:4.12'
 }

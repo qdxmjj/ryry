@@ -399,10 +399,10 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
             @Override
             public void call(Void aVoid) {
                 if (judgeBeforeSave("1")) {//serviceType1:商家确认服务
-                    if (proveStatus == 2) {//TODO
+                    /*if (proveStatus == 2) {//TODO 认证暂删
                         Toast.makeText(OrderConfirmFirstChangeActivity.this, "请先进行车辆认证", Toast.LENGTH_SHORT).show();
                         return;
-                    }
+                    }*/
                     showOrderDialog("1");
                 }
             }
@@ -419,10 +419,10 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
             @Override
             public void call(Void aVoid) {//serviceType2:客户自提
                 if (judgeBeforeSave("3")) {
-                    if (proveStatus == 2) {//TODO
+                    /*if (proveStatus == 2) {//TODO 认证暂删
                         Toast.makeText(OrderConfirmFirstChangeActivity.this, "请先进行车辆认证", Toast.LENGTH_SHORT).show();
                         return;
-                    }
+                    }*/
                     showOrderDialog("3");
                 }
             }
@@ -584,10 +584,10 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                         });
                         break;
                     case "3":
-                        if (proveStatus == 2) {//TODO
+                        /*if (proveStatus == 2) {//TODO 认证暂删
                             Toast.makeText(OrderConfirmFirstChangeActivity.this, "请先进行车辆认证", Toast.LENGTH_SHORT).show();
                             return;
-                        }
+                        }*/
                         //客户自提
                         //先处理提交数据
                         initBeforePost();

@@ -607,8 +607,9 @@
 
             </LinearLayout>
 
-            <!--行驶证认证-->
+            <!--行驶证认证  暂时删除-->
             <FrameLayout
+                android:visibility="gone"
                 android:id="@+id/xsz_prove_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
