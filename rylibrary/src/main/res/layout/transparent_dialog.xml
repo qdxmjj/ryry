@@ -29,7 +29,7 @@
             android:padding="8dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
-            android:text="      未进行车辆认证不会影响其它功能的正常使用，免费认证后可享全部换胎补胎服务"
+            android:text="      未认证用户不影响轮胎和商品的购买，免费认证后可以享受特价洗车和一分钱补胎服务以及如驿如意赠送的其他服务"
             android:textColor="@color/c7"
             android:textSize="12sp"/>
 
@@ -39,7 +39,7 @@
         android:id="@+id/pop_close"
         android:layout_width="20dp"
         android:padding="3dp"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="180dp"
         android:layout_gravity="center_horizontal"
         android:layout_height="20dp"
         android:src="@mipmap/ic_cancel_popup"/>

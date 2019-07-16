@@ -48,6 +48,8 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
     public static boolean ishave = false;
     private CarType carType;
     private int from;
+    private int userCarId = 0;
+    private int proveStatus = 2;//是否进行车主认证 (1 已认证 2 未认证)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,8 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
         Intent intent = getIntent();
         vercicleid = intent.getIntExtra("VERCICLEID",0);
         from = intent.getIntExtra("FROM",0);
+        userCarId = intent.getIntExtra("USERCARID", 0);
+        proveStatus = intent.getIntExtra("PROVESTATUS", 2);//是否进行车主认证 (1 已认证 2 未认证)
         carType = new CarType();
 
         initView();
@@ -318,8 +322,12 @@ public class CarTypeActivity extends RyBaseActivity implements CarTypeViewBinder
                     intent.putExtra("FONT",font);
                     intent.putExtra("REAR",rear);
                     intent.putExtra("BRAND",brand);
+                    intent.putExtra("USERCARID",userCarId);
+                    intent.putExtra("PROVESTATUS",proveStatus);
                     if (from == 4){
                         intent.putExtra("FROM",5);
+                    }else if (from == 7){
+                        intent.putExtra("FROM", 7);
                     }else {
                         intent.putExtra("FROM",0);
                     }

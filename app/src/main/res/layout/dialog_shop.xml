@@ -81,9 +81,11 @@
                     android:layout_marginTop="8dp"
                     android:text="速度级别"
                     android:textColor="@color/c6"
+                    android:visibility="gone"
                     android:textSize="15sp" />
 
                 <com.ruyiruyi.rylibrary.cell.flowlayout.TagFlowLayout
+                    android:visibility="gone"
                     android:id="@+id/tire_rank_flow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,7 +99,7 @@
                     android:layout_marginTop="8dp"
                     android:text="服务年限"
                     android:textColor="@color/c6"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"/>
 
                 <com.ruyiruyi.ruyiruyi.ui.cell.TSeekBar
                     android:id="@+id/seekbar_year_choose"
@@ -115,7 +117,7 @@
                     android:thumb="@drawable/ic_xiaoyuan"
                     app:img="@drawable/ic_qipao"
                     app:textcolor="#fff"
-                    app:textsize="14dp" />
+                    app:textsize="14dp"/>
 
                 <View
                     android:id="@+id/service_year_view"

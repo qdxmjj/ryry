@@ -5,7 +5,7 @@ import org.xutils.db.annotation.Table;
 
 @Table(name = "location")
 public class Location {
-    @Column(name = "id",isId = true,autoGen = false)
+    @Column(name = "id", isId = true, autoGen = false)
     private int id;
 
     @Column(name = "city")
@@ -17,9 +17,20 @@ public class Location {
     @Column(name = "weidu")
     private Double weidu;
 
+    @Column(name = "shi")
+    private String shi;
+
+    @Column(name = "qu")
+    private String qu;
 
 
     public Location() {
+    }
+
+    public Location(int id, String shi, String qu) {
+        this.id = id;
+        this.shi = shi;
+        this.qu = qu;
     }
 
     public Location(int id, String city, Double jingdu, Double weidu) {
@@ -27,6 +38,31 @@ public class Location {
         this.city = city;
         this.jingdu = jingdu;
         this.weidu = weidu;
+    }
+
+    public Location(int id, String city, Double jingdu, Double weidu, String shi, String qu) {
+        this.id = id;
+        this.city = city;
+        this.jingdu = jingdu;
+        this.weidu = weidu;
+        this.shi = shi;
+        this.qu = qu;
+    }
+
+    public String getShi() {
+        return shi;
+    }
+
+    public void setShi(String shi) {
+        this.shi = shi;
+    }
+
+    public String getQu() {
+        return qu;
+    }
+
+    public void setQu(String qu) {
+        this.qu = qu;
     }
 
     public int getId() {

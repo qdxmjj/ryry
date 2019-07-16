@@ -2,7 +2,6 @@ package com.ruyiruyi.ruyiruyi.ui.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.ruyiruyi.ruyiruyi.MyApplication;
-import com.ruyiruyi.ruyiruyi.R;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.CarBrand;
 import com.ruyiruyi.ruyiruyi.db.model.CarFactory;
@@ -23,7 +21,6 @@ import com.ruyiruyi.ruyiruyi.db.model.CarVerhicle;
 import com.ruyiruyi.ruyiruyi.db.model.Location;
 import com.ruyiruyi.ruyiruyi.db.model.Province;
 import com.ruyiruyi.ruyiruyi.db.model.TireType;
-import com.ruyiruyi.ruyiruyi.ui.activity.GuideActivity;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
 import com.ruyiruyi.ruyiruyi.utils.UtilsRY;
 
@@ -688,7 +685,7 @@ public class LuncherDownlodeService extends Service {
                 currentCity = location.getDistrict();
                 jingdu = location.getLongitude();
                 weidu = location.getLatitude();
-                Location location1 = new Location(1, currentCity, jingdu, weidu);
+                Location location1 = new Location(1, currentCity, jingdu, weidu, location.getCity(), location.getDistrict());
                 DbManager db = new DbConfig(getApplicationContext()).getDbManager();
                 try {
                     db.saveOrUpdate(location1);

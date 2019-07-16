@@ -173,7 +173,7 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
         scrollView_.setVisibility(View.INVISIBLE);
 
 
-        ryTransparentDialog = new RyLiaTransparentDialog(this, "      未进行车辆认证的车辆不可享受免费换胎补胎服务，请确保订单车辆完成车辆认证");
+        ryTransparentDialog = new RyLiaTransparentDialog(this, "      未认证用户不影响轮胎和商品的购买，免费认证后可以享受特价洗车和一分钱补胎服务以及如驿如意赠送的其他服务");
         //TODO 行驶证识别调用initAccessToken方法，初始化OCR单例
         OCR.getInstance(this).initAccessToken(new OnResultListener<AccessToken>() {
             @Override
@@ -399,6 +399,10 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
             @Override
             public void call(Void aVoid) {
                 if (judgeBeforeSave("1")) {//serviceType1:商家确认服务
+                    if (proveStatus == 2) {//TODO
+                        Toast.makeText(OrderConfirmFirstChangeActivity.this, "请先进行车辆认证", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     showOrderDialog("1");
                 }
             }
@@ -415,6 +419,10 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
             @Override
             public void call(Void aVoid) {//serviceType2:客户自提
                 if (judgeBeforeSave("3")) {
+                    if (proveStatus == 2) {//TODO
+                        Toast.makeText(OrderConfirmFirstChangeActivity.this, "请先进行车辆认证", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     showOrderDialog("3");
                 }
             }
@@ -466,10 +474,6 @@ public class OrderConfirmFirstChangeActivity extends MerchantBaseActivity {
                 showDialogProgress(progressDialog, "数据提交中...");
                 switch (type) {
                     case "1":
-                        if (proveStatus == 2) {//TODO
-                            Toast.makeText(OrderConfirmFirstChangeActivity.this, "请先进行车辆认证", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
                         //先处理提交数据
                         initBeforePost();
 
