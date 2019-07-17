@@ -29,6 +29,7 @@ public class PutForwardLoginWXActivity extends MerchantBaseActivity {
 
     private String mNickname;
     private String headimgurl;
+    private String openId;
     private String weixinRealName;
 
     @Override
@@ -52,6 +53,7 @@ public class PutForwardLoginWXActivity extends MerchantBaseActivity {
         Intent intent = getIntent();
         mNickname = intent.getStringExtra("mNickname");
         headimgurl = intent.getStringExtra("headimgurl");
+        openId = intent.getStringExtra("openId");
 
         initView();
         bindView();

@@ -12,7 +12,7 @@ public class RequestUtils {
 
 
 
-    public static String REQUEST_URL_GONGLIN_FAHUO_TEST = "http://192.168.0.86:8030/";//龚林 测试 发货
+    public static String REQUEST_URL_GONGLIN_FAHUO_TEST = "http://192.168.0.142:8030/";//龚林 测试 发货
     public static String REQUEST_URL_FAHUO_RELEASE = "http://180.76.243.205:10004/";// 正式发货
 
 

@@ -35,7 +35,6 @@ import android.widget.Toast;
 import com.ruyiruyi.ruyiruyi.db.DbConfig;
 import com.ruyiruyi.ruyiruyi.db.model.User;
 import com.ruyiruyi.ruyiruyi.ui.activity.BottomEventActivity;
-import com.ruyiruyi.ruyiruyi.ui.activity.IntegralShopActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.base.RyBaseFragmentActivity;
 import com.ruyiruyi.ruyiruyi.ui.fragment.GoodsClassFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.HomeFragment;
@@ -134,10 +133,10 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         isGengxin = false;
         int sum = 10;
         for (int i = 0; i < 10; i++) {
-            sum = sum-- ;
+            sum = sum--;
         }
 
-        Log.e(TAG, "onCreate: ---------------------------" + sum );
+        Log.e(TAG, "onCreate: ---------------------------" + sum);
 
 
         /*//版本更新 (修改至首页弹窗后检测)
@@ -227,7 +226,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         SharedPreferences sf = getSharedPreferences("data", MODE_PRIVATE);//判断是否首页弹窗
         boolean isShow = sf.getBoolean("isShow", true);
         SharedPreferences.Editor editor = sf.edit();
-        if (isShow){
+        if (isShow) {
             initSignData();
         }
     }
@@ -238,9 +237,9 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
     private void initSignData() {
         User user = new DbConfig(this).getUser();
 
-        if (user!=null){
-            userId= user.getId();
-        }else {
+        if (user != null) {
+            userId = user.getId();
+        } else {
             return;
         }
 
@@ -252,10 +251,10 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         }*/
 
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_JIFEN + "score/info");
-        params.addBodyParameter("userId",userId + "");
+        params.addBodyParameter("userId", userId + "");
 
         String token = new DbConfig(this).getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         Log.e(TAG, "initSignData:---jifen-- " + params);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
@@ -267,16 +266,16 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                     String status = jsonObject1.getString("status");
 
 
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         String signState = data.getString("signState");
 
-                        if (signState.equals("0")){
+                        if (signState.equals("0")) {
                             goSign();
                         }
 
 
-                    }else {
+                    } else {
                         String msg = jsonObject1.getString("msg");
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
@@ -310,37 +309,38 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
     private void goSign() {
 
         RequestParams params = new RequestParams(RequestUtils.REQUEST_URL_JIFEN + "score/sign");
-        params.addBodyParameter("userId",userId + "");
+        params.addBodyParameter("userId", userId + "");
         String token = new DbConfig(this).getToken();
-        params.addParameter("token",token);
+        params.addParameter("token", token);
         Log.e(TAG, "goSign: ---jifen---" + params);
         x.http().post(params, new Callback.CommonCallback<String>() {
             private String addedScore;
             private String continuousMonth;
+
             @Override
             public void onSuccess(String result) {
-                Log.e(TAG, "onSuccess:---jifen--- " +result);
+                Log.e(TAG, "onSuccess:---jifen--- " + result);
                 JSONObject jsonObject1 = null;
                 try {
                     jsonObject1 = new JSONObject(result);
                     String status = jsonObject1.getString("status");
 
-                    if (status.equals("1")){
+                    if (status.equals("1")) {
                         JSONObject data = jsonObject1.getJSONObject("data");
                         continuousMonth = data.getString("continuousMonth");
                         addedScore = data.getString("addedScore");
                         JSONArray couponList = data.getJSONArray("couponList");
                         quanList.clear();
-                        if (couponList.length()>0){
+                        if (couponList.length() > 0) {
                             String couponName = couponList.getJSONObject(0).getString("couponName");
 
-                            Toast.makeText(MainActivity.this, "已连续签到" + continuousMonth + "次，本次签到获取" + addedScore +"积分，" + couponName, Toast.LENGTH_LONG).show();
-                        }else {
-                            Toast.makeText(MainActivity.this, "已连续签到" + continuousMonth + "次，本次签到获取" + addedScore +"积分", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "已连续签到" + continuousMonth + "次，本次签到获取" + addedScore + "积分，" + couponName, Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "已连续签到" + continuousMonth + "次，本次签到获取" + addedScore + "积分", Toast.LENGTH_LONG).show();
                         }
 
 
-                    }else {
+                    } else {
                         String msg = jsonObject1.getString("msg");
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
@@ -370,7 +370,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
         SharedPreferences sf = getSharedPreferences("data", MODE_PRIVATE);//判断是否首页弹窗
         boolean isShow = sf.getBoolean("isShow", true);
         SharedPreferences.Editor editor = sf.edit();
-        if (isShow) {     //若为true，则首页弹窗
+        if (isShow && advList.size() > 0) {     //若为true，则首页弹窗
             //显示首页弹窗
             showPop();
 
@@ -685,7 +685,7 @@ public class MainActivity extends RyBaseFragmentActivity implements HomeFragment
                                     downloadTask.cancel(true);
                                 }
                             });
-                         }
+                        }
                     })
                     .setCancelable(false)
                     .show();

@@ -4,6 +4,9 @@
     <color name="theme_primary">#fc6421</color>
     <color name="theme_primary_top">#f44d04</color>
 
+    <color name="arc_blue">#10a679</color>
+    <color name="color_fff">#ffffff</color>
+
     <color name="theme_primary_bg">#fc6421</color>
 
     <color name="no_color">#00000000</color>

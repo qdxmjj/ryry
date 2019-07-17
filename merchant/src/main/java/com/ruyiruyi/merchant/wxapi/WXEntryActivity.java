@@ -143,16 +143,15 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         String headimgurl = null;
                         try {
                             JSONObject jsonObject = new JSONObject(responses);
-                            Log.e(TAG, "onSuccess: response = " + response);
+                            Log.e(TAG, "onSuccess: response = " + responses);
 
                             openid = jsonObject.getString("openid");
                             nickName = jsonObject.getString("nickname");
-                            sex = jsonObject.getString("sex");
+                            /*sex = jsonObject.getString("sex");
                             city = jsonObject.getString("city");
                             province = jsonObject.getString("province");
-                            country = jsonObject.getString("country");
+                            country = jsonObject.getString("country");*/
                             headimgurl = jsonObject.getString("headimgurl");
-                            unionid = jsonObject.getString("unionid");
 
                             /*Toast.makeText(WXEntryActivity.this, "登录成功", Toast.LENGTH_SHORT).show();*/
 
