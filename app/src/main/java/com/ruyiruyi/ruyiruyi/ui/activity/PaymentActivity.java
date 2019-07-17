@@ -87,14 +87,16 @@ public class PaymentActivity extends RyBaseActivity {
             String resultStatus = payResult.getResultStatus();
             // 判断resultStatus 为9000则代表支付成功
             Log.e(TAG, "handleMessage: ------" + payResult.getResult());
+            Log.e(TAG, "handleMessage: resultStatus------" + resultStatus);
             if (TextUtils.equals(resultStatus, "9000")) {
-                // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                Toast.makeText(PaymentActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
                 //支付成功 跳转到待更换轮胎界面
                 Intent intent1 = new Intent(getApplicationContext(), PaySuccessActivity.class);
                 intent1.putExtra("ORDERTYPE", orderType);
                 intent1.putExtra(ORDER_STAGE, orderStage);
                 startActivity(intent1);
+                // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                Toast.makeText(PaymentActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+
 
             } else {
                 // 该笔订单真实的支付结果，需要依赖服务端的异步通知。

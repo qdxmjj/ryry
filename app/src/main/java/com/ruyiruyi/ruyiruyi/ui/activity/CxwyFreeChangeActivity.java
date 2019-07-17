@@ -1,14 +1,20 @@
 package com.ruyiruyi.ruyiruyi.ui.activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,10 +28,17 @@ import com.ruyiruyi.ruyiruyi.ui.fragment.MerchantFragment;
 import com.ruyiruyi.ruyiruyi.ui.fragment.OrderFragment;
 import com.ruyiruyi.ruyiruyi.ui.model.ServiceType;
 import com.ruyiruyi.ruyiruyi.ui.multiType.Shop;
+import com.ruyiruyi.ruyiruyi.utils.Constants;
 import com.ruyiruyi.ruyiruyi.utils.RequestUtils;
+import com.ruyiruyi.ruyiruyi.utils.Util;
 import com.ruyiruyi.rylibrary.android.rx.rxbinding.RxViewAction;
 import com.ruyiruyi.rylibrary.cell.ActionBar;
 import com.ruyiruyi.rylibrary.cell.AmountView;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,6 +86,12 @@ public class CxwyFreeChangeActivity extends RyBaseActivity {
     private TextView postOrder;
     private String cxwyListStr;
     private ProgressDialog progressDialog;
+    private int replaceStatus; //1已分享 0 未分享
+    private AlertDialog.Builder shareDialog;
+
+    private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
+    private static final int THUMB_SIZE = 150;
+    private IWXAPI api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +111,8 @@ public class CxwyFreeChangeActivity extends RyBaseActivity {
                 }
             }
         });
+        api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
+
         Intent intent = getIntent();
         fontFreeAmount = intent.getIntExtra("FONT_FREE_AMOUNT",0);
         rearFreeAmount = intent.getIntExtra("REAR_FREE_AMOUNT",0);
@@ -339,15 +360,209 @@ public class CxwyFreeChangeActivity extends RyBaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        if (currentRearCount + currentFontCount < isuseCount) {
-                            Toast.makeText(CxwyFreeChangeActivity.this, "您的轮胎还未全部选完！", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        freeChangeOrder();
+                        getShareState(); //获取分享状态
+
+
+                    }
+                });
+
+        shareDialog = new AlertDialog.Builder(this);
+        shareDialog.setIcon(R.mipmap.ic_logo);
+        shareDialog.setTitle("分享到朋友圈");
+        shareDialog.setMessage("立即分享到朋友圈，去安装新轮胎吧！");
+        shareDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showBottomShareMenu();
+                    }
+                });
+        shareDialog.setNegativeButton("关闭",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //...To-do
                     }
                 });
 
 
+    }
+
+
+    /**
+     * 显示底部分享菜单栏
+     */
+    private void showBottomShareMenu() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(CxwyFreeChangeActivity.this);
+        bottomSheetDialog.setCanceledOnTouchOutside(true);
+        View contentView = LayoutInflater.from(CxwyFreeChangeActivity.this).inflate(R.layout.bottomsheet_share, null, false);
+        LinearLayout ll_share_weixin = contentView.findViewById(R.id.ll_share_weixin);
+        RxViewAction.clickNoDouble(ll_share_weixin).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                //微信分享给好友
+                mTargetScene = SendMessageToWX.Req.WXSceneSession;
+
+                changeShareType();
+            }
+        });
+        LinearLayout ll_share_weixin_friend = contentView.findViewById(R.id.ll_share_weixin_friend);
+        RxViewAction.clickNoDouble(ll_share_weixin_friend).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                //微信分享至朋友圈
+                mTargetScene = SendMessageToWX.Req.WXSceneTimeline;
+                changeShareType();
+            }
+        });
+        bottomSheetDialog.setContentView(contentView);
+        //设置底部白色背景为透明
+        bottomSheetDialog.getDelegate().findViewById(android.support.design.R.id.design_bottom_sheet).setBackgroundColor(CxwyFreeChangeActivity.this.getResources().getColor(R.color.transparent));
+        bottomSheetDialog.show();
+    }
+
+    /**
+     * 更改分享状态
+     */
+    private void changeShareType() {
+        User user = new DbConfig(this).getUser();
+        int id = user.getId();
+        int userCarId = user.getCarId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", id);
+            jsonObject.put("userCarId", userCarId);
+            jsonObject.put("replaceStatus", 1);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "preferentialInfo/updateReplaceShareStatus");
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+
+
+            @Override
+            public void onSuccess(String result) {
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")) {
+                        shareToWexin();
+                    }else {
+                        Toast.makeText(CxwyFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 微信分享
+     */
+    private void shareToWexin() {
+        int id = new DbConfig(this).getId();
+        WXWebpageObject webpage = new WXWebpageObject();
+        webpage.webpageUrl = "https://mp.weixin.qq.com/s/WZHn3G0ZjiQD_5dS2Y76fA";
+        WXMediaMessage msg = new WXMediaMessage(webpage);
+        msg.title = "如驿如意";
+        msg.description = "1、快来，我在如驿如意免费换了新轮胎！\n" +
+                "2、轮胎撞坏了，在如驿如意免费换了新的~~";//分享活动介绍
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_logo);
+        Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+        bmp.recycle();
+        msg.thumbData = Util.bmpToByteArray(thumbBmp, true);
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = buildTransaction("webpage");
+        req.message = msg;
+        req.scene = mTargetScene;
+        api.sendReq(req);
+    }
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
+
+
+    private void getShareState() {
+        User user = new DbConfig(this).getUser();
+        int id = user.getId();
+        int userCarId = user.getCarId();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", id);
+            jsonObject.put("userCarId", userCarId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "preferentialInfo/getReplaceShareStatus");
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+
+
+            @Override
+            public void onSuccess(String result) {
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")) {
+                        JSONObject data = jsonObject1.getJSONObject("data");
+                        replaceStatus = data.getInt("replaceStatus");
+                        if (replaceStatus == 1){        //1是已分享
+
+                            if (currentRearCount + currentFontCount < isuseCount) {
+                                Toast.makeText(CxwyFreeChangeActivity.this, "您的轮胎还未全部选完！", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            freeChangeOrder();
+                        }else {
+                            shareDialog.show();
+                        }
+                    }else {
+                        Toast.makeText(CxwyFreeChangeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void freeChangeOrder() {

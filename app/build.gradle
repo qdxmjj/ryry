@@ -1,7 +1,8 @@
+
 apply plugin: 'com.android.application'
 
-def VERSION_CODE = 27
-def VERSION_NAME = "3.4.6"
+def VERSION_CODE = 31
+def VERSION_NAME = "3.5.0"
 def keystoreFilepath = ''
 def keystorePSW = ''
 def keystoreAlias = ''
@@ -59,7 +60,7 @@ android {
         ]
 
         //将svg图片生成为 指定纬度的PNG图片  5.0以下兼容适配
-        vectorDrawables.generatedDensities("xhdpi","xxhdpi","xxxhdpi")
+        vectorDrawables.generatedDensities("xhdpi", "xxhdpi", "xxxhdpi")
         //使用support-v7 兼容s
         vectorDrawables.useSupportLibrary = true
     }

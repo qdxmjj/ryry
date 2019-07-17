@@ -1,9 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.ruyiruyi.ruyiruyi.ui.activity.RenewActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/my_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/ic_quanyicard">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp">
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/logo" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="50dp"
+                        android:layout_gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="如驿如意"
+                            android:textSize="16sp"
+                            android:textColor="#635E58"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="轮胎服务"
+                            android:textSize="14sp"
+                            android:layout_marginTop="2dp"
+                            android:textColor="#635E58"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/service_end_year_renew_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="14sp"
+                        android:layout_marginTop="2dp"
+                        android:textColor="#635E58"
+                        android:layout_gravity="center_vertical|right"/>
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginLeft="30dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="15sp"
+                        android:textColor="#635E58"
+                        />
+                    <TextView
+                        android:id="@+id/have_day_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="20sp"
+                        android:textColor="#635E58"
+                        />
+                </LinearLayout>
+            </FrameLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/renew_listview"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/go_buy_button_rennew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="立即购买"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:paddingTop="10dp"
+            android:layout_gravity="bottom"
+            android:paddingBottom="10dp"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button"/>
+    </FrameLayout>
+
+
+
+</LinearLayout>

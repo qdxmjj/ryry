@@ -31,6 +31,7 @@ import com.ruyiruyi.ruyiruyi.ui.activity.CityChooseActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.GoodsShopActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.LoginActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.LunboContentActivity;
+import com.ruyiruyi.ruyiruyi.ui.activity.RightsActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.ShopGoodsNewActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireBuyNewActivity;
 import com.ruyiruyi.ruyiruyi.ui.activity.TireChangeActivity;
@@ -114,6 +115,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
     private String redpacketTitle;
     private String redpacketBody;
     private AlertDialog carInfoDialog;
+    private AlertDialog carAutoDialog;
 
 
     public void setListener(OnIconClikc listener) {
@@ -161,6 +163,25 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     }
                 }).create();
 
+        carAutoDialog = new AlertDialog.Builder(getContext())
+                .setTitle("请认证车辆")
+                .setMessage("你的车辆还未认证，是否前往认证车前？")
+                .setIcon(R.mipmap.ic_logo)
+                .setPositiveButton("前往", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(getContext(), CarManagerActivity.class);
+                        intent.putExtra("FRAGMENT", "HOMEFRAGMENT");
+                        startActivityForResult(intent, MainActivity.HOMEFRAGMENT_RESULT);
+                        //    getActivity().finish();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                }).create();
+
 
         register();
 
@@ -193,9 +214,12 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
             startActivity(new Intent(getContext(),CityChooseActivity.class));
         }
 
-        if (currentCity.equals("选择城市")){
-            startActivity(new Intent(getContext(),CityChooseActivity.class));
+        if (currentCity!=null){
+            if (currentCity.equals("选择城市")){
+                startActivity(new Intent(getContext(),CityChooseActivity.class));
+            }
         }
+
 
 
        // initdataFromService();
@@ -425,7 +449,7 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                     items.add(carInfo);
 
                 }else {
-                    Hometop carInfo = new Hometop(images, carName, "一次性购买四条轮胎送洗车券", 2, currentCity);
+                    Hometop carInfo = new Hometop(images, carName, "买轮胎即送畅行无忧", 2, currentCity);
                     carInfo.setCarImage(carImage);
                     items.add(carInfo);
                 }
@@ -437,6 +461,8 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
 
 
         items.add(new Function());
+
+        items.add(new OneEvent(new Event(1000,"","http://180.76.243.205:8111/images-new/activity/activity/ic_quanyi.png","","",4,"",1,"")));
 
         if (eventList.size()>0){
             for (int i = 0; i < eventList.size(); i++) {
@@ -682,15 +708,26 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Intent intent = new Intent(getContext(), TireFreeChangeActivity.class);
-            intent.putExtra(TireChangeActivity.CHANGE_TIRE, 1);
-            startActivity(intent);
+            if (authenticatedState  == 2){      //wei认证
+                carAutoDialog.show();
+            }else {
+                Intent intent = new Intent(getContext(), TireFreeChangeActivity.class);
+                intent.putExtra(TireChangeActivity.CHANGE_TIRE, 1);
+                startActivity(intent);
+            }
+
         } else if (type == 2) {//轮胎修补
             if (carId == 0){
                 Toast.makeText(getContext(), "您还未添加车辆，请添加默认车辆", Toast.LENGTH_SHORT).show();
                 return;
             }
-            startActivity(new Intent(getContext(), TireRepairActivity.class));
+
+            if (authenticatedState  == 2){      //wei认证
+                carAutoDialog.show();
+            }else {
+                startActivity(new Intent(getContext(), TireRepairActivity.class));
+            }
+
         } else if (type == 3) { //待更换轮胎
 
             Intent intent = new Intent(getContext(), TireWaitChangeActivity.class);
@@ -737,6 +774,11 @@ public class HomeFragment extends RyBaseFragment implements HometopViewBinder.On
                 return;
             }
             getStockInfo(stockId);      //前往查看门店详情
+        }else if (skip == 4){   //我的权益跳转
+            if (!judgeIsLogin()) {
+                return;
+            }
+           startActivity(new Intent(getContext(), RightsActivity.class));
         }
     }
 

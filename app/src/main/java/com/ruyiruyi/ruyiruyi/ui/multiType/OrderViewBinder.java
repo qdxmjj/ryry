@@ -74,8 +74,18 @@ public class OrderViewBinder extends ItemViewProvider<Order, OrderViewBinder.Vie
             }else {
                 holder.orderTypeText.setText("其他状态");
             }
-        }
-        else {//订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
+        }else if (order.getOrderType().equals("8")){ //订单状态 待支付 1 待审核 2 续保成功 3  续保失败 4
+            if (order.getOrderState().equals("1")) {
+                holder.orderTypeText.setText("待支付");
+            }else if (order.getOrderState().equals("2")){
+                holder.orderTypeText.setText("待审核");
+            }else if (order.getOrderState().equals("3")){
+                holder.orderTypeText.setText("续保成功");
+            }else if (order.getOrderState().equals("4")){
+                holder.orderTypeText.setText("续保失败");
+            }
+
+        }else {//订单状态(orderType::1 2 3 4 ): 1 交易完成 2 待收货 3 待商家确认服务 4 作废 5 待发货 6 待车主确认服务 7 待评价 8 待支付
 
             if (order.getOrderStage().equals("1")){  //orderStage:订单二段状态 1 默认(不需要支付差价)  2 待车主支付差价 3 已支付差价 4 待车主支付运费 5 已支付运费
                 if (order.getOrderState().equals("1")) {

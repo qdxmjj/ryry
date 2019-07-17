@@ -10,12 +10,15 @@ public class Event {
     public String imageUrl;
     public String positionIdList;
     public String positionNameList;
-    public int skip;     //0 skip 0 H5不到分享功能 webUrl   1是到H5带分享功能  webUrl  2 是到商品分类列表 serviceid   3是到门店商品界面 stockId
+    public int skip;     //0 skip 0 H5不到分享功能 webUrl   1是到H5带分享功能  webUrl  2 是到商品分类列表 serviceid   3是到门店商品界面 stockId  4app内活动跳转
     public String storeIdList;
     public int type;     //1是 一排一个活动  2是一排两个活动 3是一排三活动
     public String webUrl;
     public int stockId;
     public int serviceId;
+
+    public Event() {
+    }
 
     public Event(int id, String content, String imageUrl, String positionIdList, String positionNameList, int skip, String storeIdList, int type, String webUrl) {
         this.id = id;

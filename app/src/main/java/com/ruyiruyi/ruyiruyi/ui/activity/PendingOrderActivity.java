@@ -90,7 +90,9 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
 
                         if (orderType == 0){
                             cancleTireOrder();
-                        }  else {
+                        }else if (orderType == 8){
+                            cancleRenewalOrder();
+                        } else {
                             cancleOrder();
                         }
 
@@ -115,6 +117,62 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
 
         initView();
         initOrderFromService();
+    }
+
+    //取消续保订单
+    private void cancleRenewalOrder() {
+        int userId = new DbConfig(this).getId();
+        JSONObject jsonObject = new JSONObject();
+        Log.e(TAG, "initOrderFromService:--- " + orderType);
+        try {
+            jsonObject.put("orderNo", orderno);
+            jsonObject.put("userId", userId);
+        } catch (JSONException e) {
+        }
+        RequestParams params = new RequestParams(RequestUtils.REQUEST_URL + "renewalOrderInfo/cancelRenewalOrder");
+        Log.e(TAG, "initOrderFromService: -++-" + jsonObject.toString());
+        params.addBodyParameter("reqJson", jsonObject.toString());
+        String token = new DbConfig(this).getToken();
+        params.addParameter("token", token);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Log.e(TAG, "onSuccess: " + result);
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(result);
+                    String status = jsonObject1.getString("status");
+                    String msg = jsonObject1.getString("msg");
+                    if (status.equals("1")){
+                        Toast.makeText(PendingOrderActivity.this, "取消订单成功", Toast.LENGTH_SHORT).show();
+                        if (orderFrom == 0) {
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
+                        } else {
+                            finish();
+                        }
+                    }
+                } catch (JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     /**
@@ -271,32 +329,35 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                             userName = data.getString("userName");
                             userPhone = data.getString("userPhone");
                             JSONArray array = data.getJSONArray("shoeOrderVoList");
-                            for (int i = 0; i < array.length(); i++) {
-                                JSONObject object = array.getJSONObject(i);
-                                String cxwyAmount = object.getString("cxwyAmount");
-                                String cxwyPrice = object.getString("cxwyPrice");
-                                String cxwyTotalPrice = object.getString("cxwyTotalPrice");
-                                String fontRearFlag = object.getString("fontRearFlag");
-                                String tireName = "";
-                                String tireCount = "";
-                                Double tirePrice = 0.00;
-                                Double totalPrice = 0.00;
-                                if (fontRearFlag.equals("2")) { //后轮
-                                    tireName = object.getString("rearShoeName");
-                                    tireCount = object.getString("rearAmount");
-                                    tirePrice = object.getDouble("rearPrice");
-                                    totalPrice = object.getDouble("rearTotalPrice");
-                                } else { //前轮 或  前后轮
-                                    tireName = object.getString("fontShoeName");
-                                    tireCount = object.getString("fontAmount");
-                                    tirePrice = object.getDouble("fontPrice");
-                                    totalPrice = object.getDouble("fontTotalPrice");
-                                }
-                                tireInfo = new TireInfo(orderImg, tireName, Integer.parseInt(tireCount), tirePrice, fontRearFlag);
-                                if (Integer.parseInt(cxwyAmount) > 0) {
-                                    cxwyOrder = new CxwyOrder(Integer.parseInt(cxwyAmount), cxwyPrice);
+                            if (array!=null){
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject object = array.getJSONObject(i);
+                                    String cxwyAmount = object.getString("cxwyAmount");
+                                    String cxwyPrice = object.getString("cxwyPrice");
+                                    String cxwyTotalPrice = object.getString("cxwyTotalPrice");
+                                    String fontRearFlag = object.getString("fontRearFlag");
+                                    String tireName = "";
+                                    String tireCount = "";
+                                    Double tirePrice = 0.00;
+                                    Double totalPrice = 0.00;
+                                    if (fontRearFlag.equals("2")) { //后轮
+                                        tireName = object.getString("rearShoeName");
+                                        tireCount = object.getString("rearAmount");
+                                        tirePrice = object.getDouble("rearPrice");
+                                        totalPrice = object.getDouble("rearTotalPrice");
+                                    } else { //前轮 或  前后轮
+                                        tireName = object.getString("fontShoeName");
+                                        tireCount = object.getString("fontAmount");
+                                        tirePrice = object.getDouble("fontPrice");
+                                        totalPrice = object.getDouble("fontTotalPrice");
+                                    }
+                                    tireInfo = new TireInfo(orderImg, tireName, Integer.parseInt(tireCount), tirePrice, fontRearFlag);
+                                    if (Integer.parseInt(cxwyAmount) > 0) {
+                                        cxwyOrder = new CxwyOrder(Integer.parseInt(cxwyAmount), cxwyPrice);
+                                    }
                                 }
                             }
+
                             initData();
                         } else if (status.equals("-999")) {
                             showUserTokenDialog("您的账号在其它设备登录,请重新登录");
@@ -358,9 +419,23 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
                         } else if (status.equals("-999")) {
                             showUserTokenDialog("您的账号在其它设备登录,请重新登录");
                         }
-
-
-
+                    }else if (orderType == 8){      //续保订单
+                        jsonObject1 = new JSONObject(result);
+                        String status = jsonObject1.getString("status");
+                        String msg = jsonObject1.getString("msg");
+                        if (status.equals("1")) {
+                            JSONObject data = jsonObject1.getJSONObject("data");
+                            orderImg = data.getString("orderImg");
+                            orderTotalPrice = data.getString("orderTotalPrice");
+                            carNumber = data.getString("platNumber");
+                            storeId = data.getString("storeId");
+                            storeName = data.getString("storeName");
+                            userName = data.getString("userName");
+                            userPhone = data.getString("userPhone");
+                            initData();
+                        } else if (status.equals("-999")) {
+                            showUserTokenDialog("您的账号在其它设备登录,请重新登录");
+                        }
                     }
                 } catch (JSONException e) {
 
@@ -519,6 +594,12 @@ public class PendingOrderActivity extends RyBaseActivity implements InfoOneViewB
             }else {
                 items.add(new CountOne(cxwyCount,currentCxwyCount,priceList));
             }*/
+        }else if (orderType == 8){
+            items.add(new InfoOne("联系人", userName, false));
+            items.add(new InfoOne("联系电话", userPhone, false));
+            items.add(new InfoOne("车牌号", carNumber, false));
+            items.add(new InfoOne("服务项目", "续保订单", false));
+            items.add(new InfoOne("订单总价", "￥" + orderTotalPrice, true));
         }
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();

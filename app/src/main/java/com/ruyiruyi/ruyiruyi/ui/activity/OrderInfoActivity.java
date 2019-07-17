@@ -184,7 +184,15 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
             } else if (orderState == 9) {
                 actionBar.setTitle("订单已取消");
             }
-        } else {
+        }else if (orderType == 8){
+            if (orderState == 2) {
+                actionBar.setTitle("待审核");
+            } else if (orderState == 3) {
+                actionBar.setTitle("续保成功");
+            } else if (orderState == 4) {
+                actionBar.setTitle("续保失败");
+            }
+        }else {
             if (orderStage == 1) {
                 if (orderState == 5) {
                     actionBar.setTitle("待发货");
@@ -627,6 +635,15 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                             getFreeRepairOrderInfo(data);
                         } else if (orderType == 5) {
                             getLimitInfo(data);
+                        }else if (orderType == 8){
+                            orderImg = data.getString("orderImg");
+                            orderTotalPrice = data.getString("orderTotalPrice");
+                            carNumber = data.getString("platNumber");
+                            storeId = data.getString("storeId");
+                            storeName = data.getString("storeName");
+                            userName = data.getString("userName");
+                            userPhone = data.getString("userPhone");
+                            orderTotalPrice = data.getString("orderTotalPrice");
                         }
                         if (orderStage != 2) {
                             initData();
@@ -640,7 +657,7 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                     }
 
-                } catch (JSONException e) {
+                }  catch (JSONException e) {
 
                 }
             }
@@ -1310,6 +1327,12 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
             items.add(new InfoOne("车牌号", carNumber, false));
             items.add(new InfoOne("服务项目", "信用额度补差", false));
             items.add(new InfoOne("补差金额", orderTotalPrice + "", true));
+        }else if (orderType == 8) {
+            items.add(new InfoOne("联系人", userName, false));
+            items.add(new InfoOne("联系电话", userPhone, false));
+            items.add(new InfoOne("车牌号", carNumber, false));
+            items.add(new InfoOne("服务项目", "续保订单", false));
+            items.add(new InfoOne("续保金额", orderTotalPrice + "", true));
         }
         assertAllRegistered(adapter, items);
         adapter.notifyDataSetChanged();
@@ -1825,7 +1848,21 @@ public class OrderInfoActivity extends RyBaseActivity implements InfoOneViewBind
                     orderButton.setClickable(false);
                     orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
                 }
-            } else {
+            } else if (orderType == 8){
+                if (orderState == 2) {
+                    orderButton.setText("待审核");
+                    orderButton.setClickable(false);
+                    orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+                } else if (orderState == 3) {
+                    orderButton.setText("续保成功");
+                    orderButton.setClickable(false);
+                    orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+                }else if (orderState == 4) {
+                    orderButton.setText("续保失败");
+                    orderButton.setClickable(false);
+                    orderButton.setBackgroundResource(R.drawable.bg_button_noclick);
+                }
+            }else {
                 if (orderState == 5) {
                     orderButton.setText("等待发货");
                     orderButton.setClickable(false);

@@ -1,9 +1,276 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.ruyiruyi.ruyiruyi.ui.activity.RightsActivity">
 
-</android.support.constraint.ConstraintLayout>
+
+    <com.ruyiruyi.rylibrary.cell.ActionBar
+        android:id="@+id/my_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/vip">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="20dp">
+
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/logo" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginLeft="50dp"
+                            android:layout_gravity="center_vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="如驿如意"
+                                android:textSize="16sp"
+                                android:textColor="#635E58"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="轮胎服务"
+                                android:textSize="14sp"
+                                android:layout_marginTop="2dp"
+                                android:textColor="#635E58"/>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/service_end_year_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="14sp"
+                            android:layout_marginTop="2dp"
+                            android:textColor="#635E58"
+                            android:layout_gravity="center_vertical|right"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="100dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tire_first_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="10sp"
+                                android:maxEms="12"
+                                android:singleLine="true"
+                                android:ellipsize="middle"
+                                android:textColor="#635E58"
+                                android:text=""/>
+
+                            <TextView
+                                android:id="@+id/tire_two_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="10sp"
+                                android:maxEms="12"
+                                android:singleLine="true"
+                                android:ellipsize="middle"
+                                android:textColor="#635E58"
+                                android:layout_marginTop="10dp"
+                                android:text=" "/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tire_three_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="10sp"
+                                android:textColor="#635E58"
+                                android:maxEms="12"
+                                android:singleLine="true"
+                                android:ellipsize="middle"
+                                android:text=""/>
+
+                            <TextView
+                                android:id="@+id/tire_four_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="10sp"
+                                android:textColor="#635E58"
+                                android:layout_marginTop="10dp"
+                                android:maxEms="12"
+                                android:singleLine="true"
+                                android:ellipsize="middle"
+                                android:text=""/>
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="180dp"
+                        android:layout_gravity="center_horizontal">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center_horizontal">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_xiubu"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="免费修补"
+                                android:textSize="16sp"
+                                android:layout_marginTop="8dp"
+                                android:textColor="#ffffff"/>
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center_horizontal"
+                            android:layout_marginLeft="80dp">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_dingwei"/>
+
+                            <TextView
+                                android:id="@+id/textView10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="四轮定位"
+                                android:textColor="#ffffff"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginLeft="160dp"
+                            android:gravity="center_horizontal">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_huanxin"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="免费换新"
+                                android:textSize="16sp"
+                                android:layout_marginTop="8dp"
+                                android:textColor="#ffffff"/>
+                        </LinearLayout>
+                    </FrameLayout>
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="30dp"
+                        android:background="@drawable/ic_zhengwen">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="· 每条轮胎可以免费修补三处"
+                            android:textColor="@color/c7"
+                            android:layout_marginTop="80dp"
+                            android:textSize="15sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="· 一次性购买四条轮胎，每两年免费做一次四轮定位"
+                            android:textColor="@color/c7"
+                            android:layout_marginTop="20dp"
+                            android:textSize="15sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="· 轮胎花纹磨到损耗标志后免费换新胎"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/c7"
+                            android:textSize="15sp"/>
+                    </LinearLayout>
+
+
+                </FrameLayout>
+            </LinearLayout>
+        </ScrollView>
+
+
+        <TextView
+            android:id="@+id/go_buy_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="立即续费"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:paddingTop="10dp"
+            android:layout_gravity="bottom"
+            android:paddingBottom="10dp"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button"/>
+    </FrameLayout>
+
+
+
+
+</LinearLayout>
